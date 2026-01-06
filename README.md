@@ -4,6 +4,8 @@
 
 A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and battle your way through the guardians of each realm.
 
+**Note: This game is under development and not in a finished state currently.**
+
 ## How to Play
 
 1. Open `index.html` in your web browser
