@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Väsenväktaren</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Message Container for Toasts -->
+    <div id="message-container" class="message-container"></div>
+
+    <!-- Main Menu Screen -->
+    <div id="main-menu-screen" class="screen active">
+        <div class="main-menu-content">
+            <h1 class="game-title">Väsenväktaren</h1>
+            <p class="game-subtitle">Catch creatures of Swedish folklore</p>
+            <div class="menu-buttons">
+                <button id="new-game-btn" class="btn btn-primary">New Game</button>
+                <button id="continue-btn" class="btn btn-secondary">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Starter Selection Screen -->
+    <div id="starter-select-screen" class="screen">
+        <div class="starter-content">
+            <p class="starter-intro">You find yourself in a strange forest.</p>
+            <p class="starter-prompt">Choose who to befriend:</p>
+            <div id="starter-options" class="starter-options"></div>
+            <button id="confirm-starter-btn" class="btn btn-primary" disabled>Confirm</button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Header -->
+        <header class="game-header">
+            <div class="header-left">
+                <h1 class="header-title">Väsenväktaren</h1>
+                <span class="header-subtitle">Catch creatures of Swedish folklore</span>
+            </div>
+            <div class="header-center">
+                <div id="player-profile" class="player-profile" title="Click to view profile">
+                    <span id="player-name-display">Väktare</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="combat-tips-btn" class="btn btn-small">Combat Tips</button>
+                <button id="settings-btn" class="btn btn-small">Settings</button>
+            </div>
+        </header>
+
+        <!-- Main Game Content -->
+        <main class="game-main">
+            <!-- Left Panel - Inventory -->
+            <aside class="panel panel-left">
+                <div class="panel-tabs">
+                    <button id="tab-vasen" class="tab-btn active" data-tab="vasen">Väsen</button>
+                    <button id="tab-runes" class="tab-btn" data-tab="runes">Runes</button>
+                    <button id="tab-items" class="tab-btn" data-tab="items">Items</button>
+                </div>
+                <div class="panel-content">
+                    <!-- Väsen Tab -->
+                    <div id="inventory-vasen" class="tab-content active"></div>
+                    <!-- Runes Tab -->
+                    <div id="inventory-runes" class="tab-content"></div>
+                    <!-- Items Tab -->
+                    <div id="inventory-items" class="tab-content"></div>
+                </div>
+                <!-- Vasen Details Panel -->
+                <div id="vasen-details-panel" class="vasen-details-panel"></div>
+            </aside>
+
+            <!-- Middle Panel - World & Party -->
+            <section class="panel panel-middle">
+                <div class="party-section">
+                    <h3 class="section-title">Active Party</h3>
+                    <div class="party-slots">
+                        <div id="party-slot-0" class="party-slot" data-slot="0">
+                            <span class="slot-label">Lead</span>
+                            <div class="slot-content empty">Empty</div>
+                        </div>
+                        <div id="party-slot-1" class="party-slot" data-slot="1">
+                            <span class="slot-label">Slot 2</span>
+                            <div class="slot-content empty">Empty</div>
+                        </div>
+                        <div id="party-slot-2" class="party-slot" data-slot="2">
+                            <span class="slot-label">Slot 3</span>
+                            <div class="slot-content empty">Empty</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-section">
+                    <h3 class="section-title">Zones</h3>
+                    <div id="zone-list" class="zone-list"></div>
+                    <div class="zone-actions">
+                        <button id="explore-btn" class="btn btn-primary btn-large" disabled>Explore</button>
+                        <button id="challenge-btn" class="btn btn-secondary" disabled>Challenge Guardian</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel - Action/Combat Area -->
+            <section class="panel panel-right">
+                <div id="zone-description" class="zone-description">
+                    <p class="no-zone-msg">Select a zone to begin exploring.</p>
+                </div>
+                <div id="combat-area" class="combat-area" style="display: none;">
+                    <div class="combat-header">
+                        <span id="turn-counter" class="turn-counter">Turn 1</span>
+                    </div>
+                    <div id="combat-ui" class="combat-ui">
+                        <div class="combat-arena">
+                            <div id="player-panel" class="combatant-panel player-side"></div>
+                            <div class="combat-versus">VS</div>
+                            <div id="enemy-panel" class="combatant-panel enemy-side"></div>
+                        </div>
+                    </div>
+                    <div id="combat-log" class="combat-log"></div>
+                    <div id="ability-buttons" class="ability-buttons"></div>
+                    <div class="action-buttons">
+                        <button id="btn-swap" class="btn btn-action">Swap</button>
+                        <button id="btn-gift" class="btn btn-action">Gift Item</button>
+                        <button id="btn-ask" class="btn btn-action">Ask About Item</button>
+                        <button id="btn-pass" class="btn btn-action">Pass</button>
+                        <button id="btn-surrender" class="btn btn-danger">Surrender</button>
+                    </div>
+                    <div id="swap-options" class="swap-options" style="display: none;"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="game-footer">
+            <span>Developer: Mattias Milger</span>
+            <span class="footer-sep">|</span>
+            <a href="mailto:mattias.r.milger@gmail.com">mattias.r.milger@gmail.com</a>
+            <span class="footer-sep">|</span>
+            <a href="https://github.com/MattiasMilger" target="_blank" title="View source code and star the project on GitHub.">GitHub</a>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Dialogue Modal -->
+    <div id="dialogue-modal" class="modal">
+        <div class="modal-content modal-dialogue">
+            <h3 id="dialogue-title" class="modal-title"></h3>
+            <p id="dialogue-message" class="dialogue-message"></p>
+            <div id="dialogue-buttons" class="dialogue-buttons"></div>
+        </div>
+    </div>
+
+    <!-- Gift Item Modal -->
+    <div id="gift-modal" class="modal">
+        <div class="modal-content modal-gift">
+            <h3 class="modal-title">Gift Item</h3>
+            <div id="gift-item-list" class="gift-item-list"></div>
+            <button id="close-gift-modal" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Heal Väsen Modal -->
+    <div id="heal-vasen-modal" class="modal">
+        <div class="modal-content modal-heal">
+            <h3 class="modal-title">Use Item to Heal</h3>
+            <div id="heal-vasen-list" class="heal-vasen-list"></div>
+            <button id="close-heal-modal" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Knockout Swap Modal -->
+    <div id="knockout-swap-modal" class="modal">
+        <div class="modal-content modal-swap">
+            <h3 class="modal-title">Your Väsen has fainted! Select next Väsen:</h3>
+            <div id="knockout-swap-list" class="swap-vasen-list"></div>
+        </div>
+    </div>
+
+    <!-- Rune Equip Modal (select which vasen to equip rune to) -->
+    <div id="rune-equip-modal" class="modal">
+        <div class="modal-content modal-rune">
+            <h3 class="modal-title">Equip Rune to Party Väsen</h3>
+            <div id="rune-equip-list" class="rune-equip-list"></div>
+            <button id="close-rune-equip-modal" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Rune to Vasen Modal (manage runes on specific vasen) -->
+    <div id="rune-to-vasen-modal" class="modal">
+        <div class="modal-content modal-rune">
+            <h3 class="modal-title">Manage Runes</h3>
+            <div id="rune-to-vasen-list" class="rune-to-vasen-list"></div>
+            <button id="close-rune-to-vasen-modal" class="btn btn-secondary">Close</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content modal-settings">
+            <h3 class="modal-title">Settings</h3>
+            <div class="settings-section">
+                <h4>Save Management</h4>
+                <p class="settings-note">Game auto-saves.</p>
+                <div class="save-buttons">
+                    <button id="export-save-btn" class="btn btn-secondary">Export Save</button>
+                    <button id="import-save-btn" class="btn btn-secondary">Import Save</button>
+                </div>
+                <textarea id="import-save-data" class="import-textarea" placeholder="Paste save data here..." style="display: none;"></textarea>
+                <button id="reset-game-btn" class="btn btn-danger">Reset Game</button>
+            </div>
+            <button id="close-settings" class="btn btn-primary">Close</button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content modal-profile">
+            <h3 class="modal-title">Player Profile</h3>
+            <div id="profile-content" class="profile-content">
+                <!-- Profile content rendered by JS -->
+            </div>
+            <div class="profile-name-section">
+                <label for="profile-name-input">Name:</label>
+                <input type="text" id="profile-name-input" class="name-input" placeholder="Enter name...">
+                <button id="change-name-btn" class="btn btn-small">Save</button>
+            </div>
+            <button id="close-profile" class="btn btn-primary">Close</button>
+        </div>
+    </div>
+
+    <!-- Combat Tips  Modal -->
+    <div id="combat-tips-modal" class="modal">
+        <div class="modal-content modal-tips">
+            <h3 class="modal-title">Element Matchups</h3>
+            <div class="tips-content">
+                <dl class="element-matchups">
+                    <dt><span class="element-earth">Earth</span></dt>
+                    <dd>Potent against: <span class="element-fire">Fire</span>, <span class="element-wind">Wind</span></dd>
+                    <dd>Weak against: <span class="element-nature">Nature</span></dd>
+                    <dd>Neutral against: <span class="element-earth">Earth</span>, <span class="element-water">Water</span></dd>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                    <dt><span class="element-nature">Nature</span></dt>
+                    <dd>Potent against: <span class="element-earth">Earth</span>, <span class="element-water">Water</span></dd>
+                    <dd>Weak against: <span class="element-fire">Fire</span>, <span class="element-wind">Wind</span></dd>
+                    <dd>Neutral against: <span class="element-nature">Nature</span></dd>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->                    <dt><span class="element-water">Water</span></dt>
+                    <dd>Potent against: <span class="element-earth">Earth</span>, <span class="element-fire">Fire</span></dd>
+                    <dd>Weak against: <span class="element-wind">Wind</span></dd>
+                    <dd>Neutral against: <span class="element-water">Water</span>, <span class="element-nature">Nature</span></dd>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                    <dt><span class="element-fire">Fire</span></dt>
+                    <dd>Potent against: <span class="element-nature">Nature</span></dd>
+                    <dd>Weak against: <span class="element-earth">Earth</span>, <span class="element-water">Water</span></dd>
+                    <dd>Neutral against: <span class="element-fire">Fire</span>, <span class="element-wind">Wind</span></dd>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                    <dt><span class="element-wind">Wind</span></dt>
+                    <dd>Potent against: <span class="element-fire">Fire</span></dd>
+                    <dd>Weak against: <span class="element-earth">Earth</span>, <span class="element-nature">Nature</span>, <span class="element-water">Water</span></dd>
+                    <dd>Neutral against: <span class="element-wind">Wind</span></dd>
+                </dl>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                <h3>Attack and Damage</h3>
+                <p>Strength Attacks are resisted by the opponent's Defense. Wisdom Attacks use your are resisted by the opponent's Durability.</p>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                <h3>Megin</h3>
+                <p>Abilities of your own element cost 20% less Megin, and you regenerate 12% megin per round.</p>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                <h3>Move Priority</h3>
+                <p>Swapping > Utility Moves > Attack moves. Player has priority.</p>
+                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
+                <h3>Attributes stages</h3>
+                <p>Increase or decrease the attribute by 8% per stage, goes from -5 to +5</p>
+            </div>
+            <button id="close-combat-tips" class="btn btn-primary">Close</button>
+        </div>
+    </div>
+
+    <!-- Scripts loaded in dependency order -->
+    <script src="js/1-constants.js"></script>
+    <script src="js/2-data-abilities.js"></script>
+    <script src="js/3-data-vasen.js"></script>
+    <script src="js/4-data-items.js"></script>
+    <script src="js/5-vasen-instance.js"></script>
+    <script src="js/6-battle-system.js"></script>
+    <script src="js/7-game-state.js"></script>
+    <script src="js/8-ui-controller.js"></script>
+    <script src="js/9-main.js"></script>
+</body>
+</html>
