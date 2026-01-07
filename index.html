@@ -126,7 +126,7 @@
                         <button id="btn-pass" class="btn btn-action">Pass</button>
                         <button id="btn-surrender" class="btn btn-danger">Surrender</button>
                     </div>
-                    <div id="swap-options" class="swap-options" style="display: none;"></div>
+                    <div id="swap-options" class="swap-options"></div>
                 </div>
             </section>
         </main>
@@ -221,60 +221,87 @@
             <div id="profile-content" class="profile-content">
                 <!-- Profile content rendered by JS -->
             </div>
-            <div class="profile-name-section">
-                <label for="profile-name-input">Name:</label>
-                <input type="text" id="profile-name-input" class="name-input" placeholder="Enter name...">
-                <button id="change-name-btn" class="btn btn-small">Save</button>
-            </div>
+            <button id="change-name-btn" style="display: none;"></button>
             <button id="close-profile" class="btn btn-primary">Close</button>
         </div>
     </div>
 
-    <!-- Combat Tips  Modal -->
+    <!-- Combat Tips Modal -->
     <div id="combat-tips-modal" class="modal">
         <div class="modal-content modal-tips">
-            <h3 class="modal-title">Element Matchups</h3>
+            <h3 class="modal-title">Combat Tips</h3>
             <div class="tips-content">
-                <dl class="element-matchups">
-                    <dt><span class="element-earth">Earth</span></dt>
-                    <dd>Potent against: <span class="element-fire">Fire</span>, <span class="element-wind">Wind</span></dd>
-                    <dd>Weak against: <span class="element-nature">Nature</span></dd>
-                    <dd>Neutral against: <span class="element-earth">Earth</span>, <span class="element-water">Water</span></dd>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                    <dt><span class="element-nature">Nature</span></dt>
-                    <dd>Potent against: <span class="element-earth">Earth</span>, <span class="element-water">Water</span></dd>
-                    <dd>Weak against: <span class="element-fire">Fire</span>, <span class="element-wind">Wind</span></dd>
-                    <dd>Neutral against: <span class="element-nature">Nature</span></dd>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->                    <dt><span class="element-water">Water</span></dt>
-                    <dd>Potent against: <span class="element-earth">Earth</span>, <span class="element-fire">Fire</span></dd>
-                    <dd>Weak against: <span class="element-wind">Wind</span></dd>
-                    <dd>Neutral against: <span class="element-water">Water</span>, <span class="element-nature">Nature</span></dd>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                    <dt><span class="element-fire">Fire</span></dt>
-                    <dd>Potent against: <span class="element-nature">Nature</span></dd>
-                    <dd>Weak against: <span class="element-earth">Earth</span>, <span class="element-water">Water</span></dd>
-                    <dd>Neutral against: <span class="element-fire">Fire</span>, <span class="element-wind">Wind</span></dd>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                    <dt><span class="element-wind">Wind</span></dt>
-                    <dd>Potent against: <span class="element-fire">Fire</span></dd>
-                    <dd>Weak against: <span class="element-earth">Earth</span>, <span class="element-nature">Nature</span>, <span class="element-water">Water</span></dd>
-                    <dd>Neutral against: <span class="element-wind">Wind</span></dd>
-                </dl>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-            <h3 class="modal-title">Taming</h3>
-                <p>Tame a Väsen by gifting it the specific item they like, and then defeating it.</p>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                <h3>Attack and Damage</h3>
-                <p>Strength Attacks are resisted by the opponent's Defense. Wisdom Attacks use your are resisted by the opponent's Durability.</p>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                <h3>Megin</h3>
-                <p>Abilities of your own element cost 20% less Megin, and you regenerate 12% megin per round.</p>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                <h3>Move Priority</h3>
+                <h4>Taming</h4>
+                <p>Tame a Väsen by gifting it its desired item, and then defeating it. Find out the desired item by careful reading or asking the Väsen.</p>
+                
+                <h4>Element Matchups</h4>
+                <p class="matrix-legend"><span class="legend-potent">P = Potent (1.4x)</span> <span class="legend-neutral">N = Neutral (1.0x)</span> <span class="legend-weak">W = Weak (0.7x)</span></p>
+                <table class="element-matrix">
+                    <thead>
+                        <tr>
+                            <th>Atk ↓ Def →</th>
+                            <th class="element-earth">Earth</th>
+                            <th class="element-nature">Nature</th>
+                            <th class="element-water">Water</th>
+                            <th class="element-fire">Fire</th>
+                            <th class="element-wind">Wind</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="element-earth">Earth</th>
+                            <td class="neutral">N</td>
+                            <td class="weak">W</td>
+                            <td class="neutral">N</td>
+                            <td class="potent">P</td>
+                            <td class="potent">P</td>
+                        </tr>
+                        <tr>
+                            <th class="element-nature">Nature</th>
+                            <td class="potent">P</td>
+                            <td class="neutral">N</td>
+                            <td class="potent">P</td>
+                            <td class="weak">W</td>
+                            <td class="weak">W</td>
+                        </tr>
+                        <tr>
+                            <th class="element-water">Water</th>
+                            <td class="potent">P</td>
+                            <td class="neutral">N</td>
+                            <td class="neutral">N</td>
+                            <td class="potent">P</td>
+                            <td class="weak">W</td>
+                        </tr>
+                        <tr>
+                            <th class="element-fire">Fire</th>
+                            <td class="weak">W</td>
+                            <td class="potent">P</td>
+                            <td class="weak">W</td>
+                            <td class="neutral">N</td>
+                            <td class="neutral">N</td>
+                        </tr>
+                        <tr>
+                            <th class="element-wind">Wind</th>
+                            <td class="weak">W</td>
+                            <td class="weak">W</td>
+                            <td class="potent">P</td>
+                            <td class="potent">P</td>
+                            <td class="neutral">N</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Attack and Damage</h4>
+                <p>Strength Attacks are resisted by the opponent's Defense. Wisdom Attacks are resisted by the opponent's Durability.</p>
+                
+                <h4>Megin</h4>
+                <p>Abilities of your own element cost 15% less Megin, and you regenerate 12% Megin per round.</p>
+                
+                <h4>Move Priority</h4>
                 <p>Swapping > Utility Moves > Attack moves. Player has priority.</p>
-                    <dd class="spacer">&nbsp;</dd> <!-- empty line -->
-                <h3>Attributes stages</h3>
-                <p>Increase or decrease the attribute by 8% per stage, goes from -5 to +5</p>
+                
+                <h4>Attribute Stages</h4>
+                <p>Increase or decrease the attribute by 8% per stage, goes from -5 to +5.</p>
             </div>
             <button id="close-combat-tips" class="btn btn-primary">Close</button>
         </div>

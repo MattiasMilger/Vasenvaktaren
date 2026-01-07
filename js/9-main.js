@@ -203,7 +203,6 @@ class Game {
         ui.showCombatUI();
         ui.renderCombat(this.currentBattle);
         ui.addCombatLog(`A wild ${enemyVasen.getDisplayName()} appears!`, 'encounter');
-        ui.addCombatLog('Turn 1 begins.', 'turn');
     }
 
     // Start guardian battle
@@ -233,7 +232,6 @@ class Game {
         ui.renderCombat(this.currentBattle);
         ui.addCombatLog(`${guardian.name} challenges you!`, 'encounter');
         ui.addCombatLog(`${guardian.name} sends out ${enemyTeam[0].getDisplayName()}!`, 'swap');
-        ui.addCombatLog('Turn 1 begins.', 'turn');
     }
 
     // Handle ability use
@@ -645,7 +643,6 @@ class Game {
         } else {
             ui.addCombatLog(`${this.currentBattle.guardianName} challenges you!`, 'encounter');
         }
-        ui.addCombatLog('Turn 1 begins.', 'turn');
     }
 
     // Handle endless tower battle end

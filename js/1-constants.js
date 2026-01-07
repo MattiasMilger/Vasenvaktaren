@@ -11,13 +11,13 @@ const GAME_CONFIG = {
     ENEMY_MAX_LEVEL: 999,
     SAVE_KEY: 'vasenvaktaren_save',
     STARTER_LEVEL: 5,
-    BASE_MEGIN: 70,
+    BASE_MEGIN: 60,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,
     SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,
-    BASE_LEVEL_UP_EXP: 100,
+    BASE_LEVEL_UP_EXP: 70,
     LEVEL_UP_ACCELERATION: 5,
-    BASE_EXP_YIELD: 18,
+    BASE_EXP_YIELD: 25,
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
     POWER_CONSTANT: 250,
     DEFENSE_CONSTANT: 200,
@@ -212,14 +212,14 @@ const ZONES = {
             dialogue: {
                 challenge: 'The forest tests all who enter. Show me your Strength, little one.',
                 lose: 'You lack the true spirit of the woods. Train more, and perhaps this enchanted realm will accept you.',
-                win: 'Impressive. You have earned passage through this realm. The way to Folkets by is now open.'
+                win: 'Impressive. You have earned passage through this realm. The way to Folkets By is now open.'
             }
         },
         order: 0
     },
     FOLKETS_BY: {
         id: 'folkets_by',
-        name: 'Folkets by',
+        name: 'Folkets By',
         description: 'A cluster of quiet, humble settlements where ancient house spirits live side-by-side with humans. Tread carefully, for the peace is fragile, and the benevolent guardians turn fiercely protective when their homes are threatened.',
         levelRange: [5, 9],
         spawns: ['Gardstomte', 'Hustomte', 'Nattramn', 'Bortbyting', 'Gloson'],
@@ -254,14 +254,14 @@ const ZONES = {
             dialogue: {
                 challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
                 lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more Wisdom.',
-                win: 'Your effort is sharper than my ore. The path is clear. The flowing waters of Glimrande källan await.'
+                win: 'Your effort is sharper than my ore. The path is clear. The flowing waters of Glimrande Källan await.'
             }
         },
         order: 2
     },
     GLIMRANDE_KALLAN: {
         id: 'glimrande_kallan',
-        name: 'Glimrande källan',
+        name: 'Glimrande Källan',
         description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves.',
         levelRange: [15, 19],
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr'],

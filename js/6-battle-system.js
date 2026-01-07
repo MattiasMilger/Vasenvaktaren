@@ -350,7 +350,7 @@ class Battle {
         this.startTurn();
         
         const tamingItem = this.enemyActive.species.tamingItem;
-        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you like the most?`, 'dialogue');
+        this.addLog(`Tell me ${this.enemyActive.getName()}, what do you desire most?`, 'dialogue');
         this.addLog(`If you must know, ${tamingItem} is what I desire most.`, 'dialogue');
         
         // Enemy acts (player passes)

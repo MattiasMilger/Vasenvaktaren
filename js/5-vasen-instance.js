@@ -306,12 +306,13 @@ class VasenInstance {
         };
     }
     
-    // Get attack elements (for UI display)
+    // Get attack elements (for UI display) - only includes learned abilities
     getAttackElements() {
         const elements = new Set();
         elements.add(this.species.element); // Basic Strike uses own element
         
-        this.species.abilities.forEach(abilityName => {
+        const availableAbilities = this.getAvailableAbilities();
+        availableAbilities.forEach(abilityName => {
             const ability = ABILITIES[abilityName];
             if (ability && ability.type !== ATTACK_TYPES.UTILITY && ability.element) {
                 elements.add(ability.element);

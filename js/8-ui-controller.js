@@ -9,6 +9,7 @@ class UIController {
         this.selectedVasen = null;
         this.selectedPartySlot = null;
         this.combatLogMessages = [];
+        this.descriptionCollapsed = false; // Global state for väsen description fold
     }
 
     // Initialize UI elements
@@ -189,6 +190,8 @@ class UIController {
         card.dataset.vasenId = vasen.id;
 
         const isInParty = gameState.party.some(p => p && p.id === vasen.id);
+        const hasEmptySlot = gameState.party.some(p => p === null);
+        const canAdd = !isInParty && hasEmptySlot && !gameState.inCombat;
 
         card.innerHTML = `
             <div class="vasen-card-header">
@@ -197,6 +200,7 @@ class UIController {
                     <span class="vasen-name">${vasen.getDisplayName()}</span>
                     <span class="vasen-level">Lvl ${vasen.level}</span>
                 </div>
+                ${canAdd ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.addToParty('${vasen.id}')" title="Add to party">+</button>` : ''}
             </div>
             <div class="vasen-card-details">
                 <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
@@ -222,6 +226,14 @@ class UIController {
         this.renderVasenDetails(vasen);
     }
 
+    // Toggle description collapsed state
+    toggleDescription() {
+        this.descriptionCollapsed = !this.descriptionCollapsed;
+        if (this.selectedVasen) {
+            this.renderVasenDetails(this.selectedVasen);
+        }
+    }
+
     // Render Vasen details panel
     renderVasenDetails(vasen) {
         const panel = this.vasenDetailsPanel;
@@ -233,6 +245,8 @@ class UIController {
         const isInParty = gameState.party.some(p => p && p.id === vasen.id);
         const runeSlots = vasen.level >= 30 ? 2 : 1;
         const expProgress = vasen.getExpProgress();
+        const defensiveTooltip = this.getDefensiveMatchupTooltip(vasen.species.element);
+        const familyDescription = FAMILIES[vasen.species.family] || 'No description available';
 
         panel.innerHTML = `
             <div class="details-header">
@@ -240,15 +254,28 @@ class UIController {
                 <div class="details-identity">
                     <h3 class="details-name">${vasen.getDisplayName()}</h3>
                     <div class="details-meta">
-                        <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+                        <span class="element-badge element-${vasen.species.element.toLowerCase()}" title="${defensiveTooltip}">${vasen.species.element}</span>
                         <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
-                        <span class="family-badge" title="${FAMILIES[vasen.species.family] || ''}">${vasen.species.family}</span>
+                        <span class="family-badge" title="${familyDescription}">${vasen.species.family}</span>
                     </div>
                 </div>
             </div>
 
+            <div class="details-runes">
+                <h4>Runes (${vasen.runes.length}/${runeSlots})</h4>
+                <div class="rune-slots">
+                    ${this.renderRuneSlots(vasen)}
+                </div>
+            </div>
+
             <div class="details-description">
-                <p>${vasen.species.description}</p>
+                <h4 class="description-toggle" onclick="ui.toggleDescription()">
+                    <span class="toggle-icon">${this.descriptionCollapsed ? '▶' : '▼'}</span>
+                    Description
+                </h4>
+                <div class="description-content ${this.descriptionCollapsed ? 'collapsed' : ''}">
+                    <p>${vasen.species.description}</p>
+                </div>
             </div>
 
             <div class="details-level">
@@ -307,23 +334,11 @@ class UIController {
                 </span>
             </div>
 
-            <div class="details-runes">
-                <h4>Runes (${vasen.runes.length}/${runeSlots})</h4>
-                <div class="rune-slots">
-                    ${this.renderRuneSlots(vasen)}
-                </div>
-            </div>
-
             <div class="details-abilities">
                 <h4>Abilities</h4>
                 <div class="abilities-list">
                     ${this.renderAbilitiesList(vasen)}
                 </div>
-            </div>
-
-            <div class="details-element-matchups">
-                <h4>Element Matchups</h4>
-                ${this.renderElementMatchups(vasen.species.element)}
             </div>
 
             <div class="details-actions">
@@ -345,10 +360,9 @@ class UIController {
             if (runeId && RUNES[runeId]) {
                 const rune = RUNES[runeId];
                 html += `
-                    <div class="rune-slot filled" title="${rune.name}: ${rune.effect}">
+                    <div class="rune-slot filled" title="${rune.name}: ${rune.effect}" onclick="ui.showRuneOptions('${runeId}')">
                         <span class="rune-symbol">${rune.symbol}</span>
                         <span class="rune-name">${rune.name}</span>
-                        <button class="rune-remove-btn" onclick="ui.unequipRune('${vasen.id}', '${runeId}')">&times;</button>
                     </div>
                 `;
             } else {
@@ -382,18 +396,23 @@ class UIController {
             const learnLevel = ABILITY_LEARN_LEVELS[index];
             const isLearned = availableAbilities.includes(abilityName);
             const meginCost = vasen.getAbilityMeginCost(abilityName);
+            
+            // Handle Basic Strike's null element - use Väsen's element
+            const abilityElement = ability.element || vasen.species.element;
+            const elementTooltip = this.getElementMatchupTooltip(abilityElement);
 
             html += `
-                <div class="ability-item ${isLearned ? 'learned' : 'locked'}" title="${ability.description}">
+                <div class="ability-item ${isLearned ? 'learned' : 'locked'}">
                     <div class="ability-header">
                         <span class="ability-name">${ability.name}</span>
-                        <span class="ability-element element-${ability.element.toLowerCase()}">${ability.element}</span>
+                        <span class="ability-type-tag">${ability.type}</span>
                     </div>
-                    <div class="ability-details">
-                        <span class="ability-type">${ability.type}</span>
+                    <div class="ability-stats">
+                        <span class="ability-element element-${abilityElement.toLowerCase()}" title="${elementTooltip}">${abilityElement}</span>
                         ${ability.power ? `<span class="ability-power">Power: ${ability.power}</span>` : ''}
                         <span class="ability-cost">Megin: ${meginCost}</span>
                     </div>
+                    <p class="ability-description">${ability.description}</p>
                     ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}
                 </div>
             `;
@@ -465,7 +484,6 @@ class UIController {
             runeCard.innerHTML = `
                 <span class="rune-symbol">${rune.symbol}</span>
                 <span class="rune-name">${rune.name}</span>
-                <p class="rune-flavor">${rune.flavor}</p>
                 <p class="rune-effect">${rune.effect}</p>
                 ${equippedTo ? `<span class="equipped-to">Equipped to ${equippedTo.getName()}</span>` : ''}
             `;
@@ -512,7 +530,6 @@ class UIController {
                     <span class="item-name">${item.name}</span>
                     <span class="item-count">x${count}</span>
                 </div>
-                <p class="item-description">${item.tooltip}</p>
             `;
 
             itemCard.addEventListener('click', () => this.showItemOptions(itemId));
@@ -531,7 +548,7 @@ class UIController {
                     <div class="party-vasen element-${vasen.species.element.toLowerCase()}">
                         <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
                         <div class="party-vasen-info">
-                            <span class="party-vasen-name">${vasen.getName()}</span>
+                            <span class="party-vasen-name">${vasen.getDisplayName()}</span>
                             <span class="party-vasen-level">Lvl ${vasen.level}</span>
                         </div>
                         <div class="party-vasen-bars">
@@ -545,6 +562,12 @@ class UIController {
                         <div class="party-vasen-runes">
                             ${vasen.runes.map(r => RUNES[r] ? `<span class="mini-rune" title="${RUNES[r].name}: ${RUNES[r].effect}">${RUNES[r].symbol}</span>` : '').join('')}
                         </div>
+                        ${!gameState.inCombat ? `
+                        <div class="party-slot-actions">
+                            <button class="party-action-btn move-btn" onclick="event.stopPropagation(); ui.showMoveVasenOptions(${index})" title="Move to another slot">⇄</button>
+                            <button class="party-action-btn remove-btn" onclick="event.stopPropagation(); ui.removeFromParty('${vasen.id}')" title="Remove from party">✕</button>
+                        </div>
+                        ` : ''}
                     </div>
                 `;
                 slot.classList.add('filled');
@@ -564,6 +587,47 @@ class UIController {
         });
     }
 
+    // Show move väsen options
+    showMoveVasenOptions(fromSlot) {
+        if (gameState.inCombat) {
+            this.showMessage('Cannot move Väsen during combat.', 'error');
+            return;
+        }
+
+        const vasen = gameState.party[fromSlot];
+        if (!vasen) return;
+
+        const buttons = [];
+        
+        for (let i = 0; i < 3; i++) {
+            if (i === fromSlot) continue;
+            
+            const targetVasen = gameState.party[i];
+            const slotLabel = i === 0 ? 'Lead' : `Slot ${i + 1}`;
+            
+            buttons.push({
+                text: targetVasen ? `Swap with ${targetVasen.getName()} (${slotLabel})` : `Move to ${slotLabel} (Empty)`,
+                callback: () => {
+                    gameState.swapPartySlots(fromSlot, i);
+                    this.renderParty();
+                    this.showMessage(`Moved ${vasen.getName()} to ${slotLabel}.`);
+                }
+            });
+        }
+
+        buttons.push({
+            text: 'Cancel',
+            class: 'btn-secondary',
+            callback: null
+        });
+
+        this.showDialogue(
+            `Move ${vasen.getName()}`,
+            '<p>Select a slot to move to:</p>',
+            buttons
+        );
+    }
+
     // Handle party slot click
     handlePartySlotClick(slotIndex) {
         if (gameState.inCombat) return;
@@ -578,7 +642,22 @@ class UIController {
 
     // Add Vasen to party
     addToParty(vasenId, preferredSlot = null) {
-        const result = gameState.addToParty(vasenId, preferredSlot);
+        if (gameState.inCombat) {
+            this.showMessage('Cannot add Väsen during combat.', 'error');
+            return;
+        }
+        
+        // If no slot specified, find first available
+        let slotIndex = preferredSlot;
+        if (slotIndex === null) {
+            slotIndex = gameState.party.findIndex(p => p === null);
+            if (slotIndex === -1) {
+                this.showMessage('No empty party slots available.', 'error');
+                return;
+            }
+        }
+        
+        const result = gameState.addToParty(vasenId, slotIndex);
         if (result.success) {
             this.showMessage(result.message);
             this.renderParty();
@@ -593,7 +672,19 @@ class UIController {
 
     // Remove Vasen from party
     removeFromParty(vasenId) {
-        const result = gameState.removeFromParty(vasenId);
+        if (gameState.inCombat) {
+            this.showMessage('Cannot remove Väsen during combat.', 'error');
+            return;
+        }
+        
+        // Find the slot index for this vasen
+        const slotIndex = gameState.party.findIndex(v => v && v.id === vasenId);
+        if (slotIndex === -1) {
+            this.showMessage('Väsen not found in party.', 'error');
+            return;
+        }
+        
+        const result = gameState.removeFromParty(slotIndex);
         if (result.success) {
             this.showMessage(result.message);
             this.renderParty();
@@ -793,6 +884,14 @@ class UIController {
         const healthPercent = (vasen.currentHealth / vasen.maxHealth) * 100;
         const meginPercent = (vasen.currentMegin / vasen.maxMegin) * 100;
 
+        // Build runes HTML with "Rune:" label
+        const runesHtml = vasen.runes.length > 0 
+            ? `<span class="runes-label">Rune:</span> ${vasen.runes.map(r => RUNES[r] ? `<span class="combat-rune" title="${RUNES[r].name}: ${RUNES[r].effect}">${RUNES[r].symbol} ${RUNES[r].name}</span>` : '').join('')}`
+            : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
+
+        const defensiveTooltip = this.getDefensiveMatchupTooltip(vasen.species.element);
+        const temperamentTooltip = `${vasen.temperament.name}: +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} / -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}`;
+
         panel.innerHTML = `
             <div class="combatant-header">
                 <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
@@ -813,21 +912,37 @@ class UIController {
                 </div>
             </div>
             <div class="combatant-info">
-                <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
-                <span class="temperament-badge">${vasen.temperament.name}</span>
+                <span class="element-badge element-${vasen.species.element.toLowerCase()}" title="${defensiveTooltip}">${vasen.species.element}</span>
+                <span class="temperament-badge" title="${temperamentTooltip}">${vasen.temperament.name}</span>
+            </div>
+            <div class="combatant-attributes">
+                <div class="combat-attr" title="Damage modifier for Strength Attacks">
+                    <span class="combat-attr-name">Str</span>
+                    <span class="combat-attr-value">${vasen.calculateAttribute('strength')}</span>
+                </div>
+                <div class="combat-attr" title="Damage modifier for Wisdom Attacks">
+                    <span class="combat-attr-name">Wis</span>
+                    <span class="combat-attr-value">${vasen.calculateAttribute('wisdom')}</span>
+                </div>
+                <div class="combat-attr" title="Reduces damage from Strength Attacks">
+                    <span class="combat-attr-name">Def</span>
+                    <span class="combat-attr-value">${vasen.calculateAttribute('defense')}</span>
+                </div>
+                <div class="combat-attr" title="Reduces damage from Wisdom Attacks">
+                    <span class="combat-attr-name">Dur</span>
+                    <span class="combat-attr-value">${vasen.calculateAttribute('durability')}</span>
+                </div>
             </div>
             <div class="combatant-runes">
-                ${vasen.runes.map(r => RUNES[r] ? `<span class="combat-rune" title="${RUNES[r].name}: ${RUNES[r].effect}">${RUNES[r].symbol} ${RUNES[r].name}</span>` : '').join('')}
+                ${runesHtml}
             </div>
             <div class="combatant-stages">
                 ${this.renderAttributeStages(vasen)}
             </div>
-            ${side === 'enemy' ? `
-                <div class="enemy-attack-elements">
-                    <span class="elements-label">Attack Elements:</span>
-                    ${vasen.getAttackElements().map(e => `<span class="element-mini element-${e.toLowerCase()}" title="${this.getElementMatchupTooltip(e)}">${e}</span>`).join('')}
-                </div>
-            ` : ''}
+            <div class="combatant-attack-elements">
+                <span class="elements-label">Attack Elements:</span>
+                ${vasen.getAttackElements().map(e => `<span class="element-mini element-${e.toLowerCase()}" title="${this.getElementMatchupTooltip(e)}">${e}</span>`).join('')}
+            </div>
         `;
     }
 
@@ -845,7 +960,7 @@ class UIController {
             }
         });
 
-        return html || '<span class="no-stages">No stat changes</span>';
+        return html || '<span class="no-stages">No attribute changes</span>';
     }
 
     // Render swap options
@@ -887,19 +1002,21 @@ class UIController {
             
             // Handle Basic Strike's null element - use Väsen's element
             const abilityElement = ability.element || activeVasen.species.element;
+            const elementTooltip = this.getElementMatchupTooltip(abilityElement);
 
             const btn = document.createElement('button');
             btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
             btn.disabled = !canUse || !battle.waitingForPlayerAction;
             btn.innerHTML = `
                 <span class="ability-btn-name">${ability.name}</span>
-                <span class="ability-btn-info">
-                    <span class="ability-btn-element">${abilityElement}</span>
-                    ${ability.power ? `<span class="ability-btn-power">Pow: ${ability.power}</span>` : ''}
+                <span class="ability-btn-type">${ability.type}</span>
+                <span class="ability-btn-stats">
+                    <span class="ability-btn-element element-${abilityElement.toLowerCase()}" title="${elementTooltip}">${abilityElement}</span>
+                    ${ability.power ? `<span class="ability-btn-power">Power: ${ability.power}</span>` : ''}
                     <span class="ability-btn-cost">Megin: ${meginCost}</span>
                 </span>
+                <span class="ability-btn-desc">${ability.description}</span>
             `;
-            btn.title = ability.description;
             btn.onclick = () => game.handleAbilityUse(abilityName);
             actionsContainer.appendChild(btn);
         });
@@ -947,14 +1064,27 @@ class UIController {
         }
     }
 
-    // Get element matchup tooltip
+    // Get element matchup tooltip (offensive - what this element hits)
     getElementMatchupTooltip(element) {
         const matchups = ELEMENT_MATCHUPS[element];
         let text = `${element} Attacks:\n`;
         ELEMENT_LIST.forEach(e => {
-            const mult = matchups[e];
-            const result = mult > 1 ? 'Potent' : mult < 1 ? 'Weak' : 'Neutral';
-            text += `vs ${e}: ${result} (${mult}x)\n`;
+            const matchupType = matchups[e];
+            const multiplier = DAMAGE_MULTIPLIERS[matchupType];
+            const result = matchupType === 'POTENT' ? 'Potent' : matchupType === 'WEAK' ? 'Weak' : 'Neutral';
+            text += `vs ${e}: ${result} (${multiplier}x)\n`;
+        });
+        return text;
+    }
+
+    // Get defensive matchup tooltip (what hits this element)
+    getDefensiveMatchupTooltip(element) {
+        let text = `${element} Defense:\n`;
+        ELEMENT_LIST.forEach(attackingElement => {
+            const matchupType = ELEMENT_MATCHUPS[attackingElement][element];
+            const multiplier = DAMAGE_MULTIPLIERS[matchupType];
+            const result = matchupType === 'POTENT' ? 'Weak to' : matchupType === 'WEAK' ? 'Resists' : 'Neutral vs';
+            text += `${result} ${attackingElement} (${multiplier}x)\n`;
         });
         return text;
     }
@@ -1119,20 +1249,40 @@ class UIController {
         const item = TAMING_ITEMS[itemId];
         if (!item) return;
 
+        // Check if we can gift during combat
+        const canGift = gameState.inCombat && 
+                        game.currentBattle && 
+                        game.currentBattle.isWildEncounter && 
+                        game.currentBattle.waitingForPlayerAction &&
+                        game.currentBattle.giftsGiven < GAME_CONFIG.MAX_GIFTS_PER_COMBAT &&
+                        !game.currentBattle.correctItemGiven;
+
+        const buttons = [
+            {
+                text: 'Heal a Väsen',
+                callback: () => this.showHealVasenModal(itemId)
+            }
+        ];
+
+        // Add Gift Item button if in combat with wild encounter
+        if (canGift) {
+            buttons.push({
+                text: 'Gift Item',
+                class: 'btn-primary',
+                callback: () => game.handleGiftItem(itemId)
+            });
+        }
+
+        buttons.push({
+            text: 'Cancel',
+            class: 'btn-secondary',
+            callback: null
+        });
+
         this.showDialogue(
             item.name,
-            `<p>${item.tooltip}</p><p>Use on which Vasen?</p>`,
-            [
-                {
-                    text: 'Heal a Väsen',
-                    callback: () => this.showHealVasenModal(itemId)
-                },
-                {
-                    text: 'Cancel',
-                    class: 'btn-secondary',
-                    callback: null
-                }
-            ]
+            `<p>${item.description}</p>`,
+            buttons
         );
     }
 
@@ -1186,39 +1336,26 @@ class UIController {
         const rune = RUNES[runeId];
         const equippedTo = this.findRuneEquippedTo(runeId);
 
+        let message = `<p class="rune-flavor">${rune.flavor}</p><p class="rune-effect">${rune.effect}</p>`;
         if (equippedTo) {
-            this.showDialogue(
-                `${rune.symbol} ${rune.name}`,
-                `<p class="rune-flavor">${rune.flavor}</p><p class="rune-effect">${rune.effect}</p><p>Currently equipped to <strong>${equippedTo.getDisplayName()}</strong></p>`,
-                [
-                    {
-                        text: 'Unequip',
-                        callback: () => this.unequipRune(equippedTo.id, runeId)
-                    },
-                    {
-                        text: 'Cancel',
-                        class: 'btn-secondary',
-                        callback: null
-                    }
-                ]
-            );
-        } else {
-            this.showDialogue(
-                `${rune.symbol} ${rune.name}`,
-                `<p class="rune-flavor">${rune.flavor}</p><p class="rune-effect">${rune.effect}</p>`,
-                [
-                    {
-                        text: 'Equip to Väsen',
-                        callback: () => this.showRuneEquipToVasenModal(runeId)
-                    },
-                    {
-                        text: 'Cancel',
-                        class: 'btn-secondary',
-                        callback: null
-                    }
-                ]
-            );
+            message += `<p>Currently equipped to <strong>${equippedTo.getDisplayName()}</strong></p>`;
         }
+
+        this.showDialogue(
+            `${rune.symbol} ${rune.name}`,
+            message,
+            [
+                {
+                    text: 'Equip to Väsen',
+                    callback: () => this.showRuneEquipToVasenModal(runeId)
+                },
+                {
+                    text: 'Cancel',
+                    class: 'btn-secondary',
+                    callback: null
+                }
+            ]
+        );
     }
 
     // Show rune equip to vasen modal
@@ -1227,41 +1364,61 @@ class UIController {
         const vasenList = document.getElementById('rune-to-vasen-list');
         vasenList.innerHTML = '';
 
-        // Only party members can equip runes (runes are bound to party slots)
-        const eligibleVasen = gameState.party.filter(v => {
-            if (!v) return false;
-            const partySlotIndex = gameState.party.indexOf(v);
-            const currentRunes = gameState.partyRuneSlots[partySlotIndex].filter(r => r !== null);
-            const maxRunes = v.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
-            return currentRunes.length < maxRunes && !currentRunes.includes(runeId);
-        });
+        const currentOwner = this.findRuneEquippedTo(runeId);
+
+        // Show all party members (can equip to any, will auto-unequip from current)
+        const eligibleVasen = gameState.party.filter(v => v !== null);
 
         if (eligibleVasen.length === 0) {
-            vasenList.innerHTML = '<p class="empty-message">No Väsen in your party can equip this rune. Add a Väsen to your party first.</p>';
+            vasenList.innerHTML = '<p class="empty-message">No Väsen in your party. Add a Väsen to your party first.</p>';
         } else {
             eligibleVasen.forEach(vasen => {
                 const partySlotIndex = gameState.party.indexOf(vasen);
                 const currentRunes = gameState.partyRuneSlots[partySlotIndex].filter(r => r !== null);
+                const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+                const hasThisRune = currentRunes.includes(runeId);
+                
                 const vasenBtn = document.createElement('button');
-                vasenBtn.className = 'rune-to-vasen-btn';
+                vasenBtn.className = `rune-to-vasen-btn ${hasThisRune ? 'current-owner' : ''}`;
+                vasenBtn.disabled = hasThisRune;
                 vasenBtn.innerHTML = `
                     <img src="${vasen.species.image}" alt="${vasen.species.name}" class="rune-vasen-img">
                     <div class="rune-vasen-info">
                         <span class="rune-vasen-name">${vasen.getDisplayName()}</span>
                         <span class="rune-vasen-level">Lvl ${vasen.level}</span>
-                        <span class="rune-vasen-slots">${currentRunes.length}/${vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1} runes</span>
+                        <span class="rune-vasen-slots">${currentRunes.length}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}</span>
                     </div>
                 `;
-                vasenBtn.onclick = () => {
-                    modal.classList.remove('active');
-                    this.equipRune(vasen.id, runeId);
-                };
+                if (!hasThisRune) {
+                    vasenBtn.onclick = () => {
+                        modal.classList.remove('active');
+                        this.equipRuneToVasen(vasen.id, runeId);
+                    };
+                }
                 vasenList.appendChild(vasenBtn);
             });
         }
 
         document.getElementById('close-rune-to-vasen-modal').onclick = () => modal.classList.remove('active');
         modal.classList.add('active');
+    }
+
+    // Equip rune to väsen (with auto-unequip from previous owner)
+    equipRuneToVasen(vasenId, runeId) {
+        // First, unequip from current owner if any
+        const currentOwner = this.findRuneEquippedTo(runeId);
+        if (currentOwner) {
+            const currentOwnerSlot = gameState.party.findIndex(v => v && v.id === currentOwner.id);
+            if (currentOwnerSlot !== -1) {
+                const runeSlotIndex = gameState.partyRuneSlots[currentOwnerSlot].indexOf(runeId);
+                if (runeSlotIndex !== -1) {
+                    gameState.unequipRune(currentOwnerSlot, runeSlotIndex);
+                }
+            }
+        }
+
+        // Now equip to new owner
+        this.equipRune(vasenId, runeId);
     }
 
     // Settings methods
