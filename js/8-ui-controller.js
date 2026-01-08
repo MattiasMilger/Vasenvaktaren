@@ -92,11 +92,15 @@ class UIController {
         document.getElementById('close-profile').addEventListener('click', () => this.hideProfile());
         document.getElementById('change-name-btn').addEventListener('click', () => this.changeName());
 
-        // Close modals on backdrop click
+        // Close modals on backdrop click (only if dismissible)
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
-                    modal.classList.remove('active');
+                    // Check if modal is dismissible (default to true for non-dialogue modals)
+                    const isDismissible = modal.dataset.dismissible !== 'false';
+                    if (isDismissible) {
+                        modal.classList.remove('active');
+                    }
                 }
             });
         });
@@ -1090,10 +1094,13 @@ class UIController {
     }
 
     // Show dialogue modal
-    showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }]) {
+    showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true) {
         const modal = document.getElementById('dialogue-modal');
         document.getElementById('dialogue-title').textContent = title;
         document.getElementById('dialogue-message').innerHTML = message;
+
+        // Store dismissible state on the modal for backdrop click handler
+        modal.dataset.dismissible = dismissible ? 'true' : 'false';
 
         const btnContainer = document.getElementById('dialogue-buttons');
         btnContainer.innerHTML = '';
@@ -1704,7 +1711,7 @@ class UIController {
             message = `<p>${result.message}</p>`;
         }
 
-        this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons);
+        this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false);
     }
 
     // Show endless tower result
@@ -1715,7 +1722,7 @@ class UIController {
             message += `<p class="new-record">New Record!</p>`;
         }
 
-        this.showDialogue('Endless Tower', message, [{ text: 'Return', callback: () => game.exitEndlessTower() }]);
+        this.showDialogue('Endless Tower', message, [{ text: 'Return', callback: () => game.exitEndlessTower() }], false);
     }
 
     // Refresh all UI

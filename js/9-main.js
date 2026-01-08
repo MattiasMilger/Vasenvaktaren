@@ -333,7 +333,8 @@ class Game {
             ui.showDialogue(
                 'Defeat',
                 `<p>${result.message || 'Your party was overwhelmed!'}</p>`,
-                [{ text: 'Continue', callback: () => this.endBattle() }]
+                [{ text: 'Continue', callback: () => this.endBattle() }],
+                false
             );
             return;
         }
@@ -429,7 +430,8 @@ class Game {
             ui.showDialogue(
                 'Defeat',
                 `<p>${guardian.dialogue.lose}</p>`,
-                [{ text: 'Continue', callback: () => this.endBattle() }]
+                [{ text: 'Continue', callback: () => this.endBattle() }],
+                false
             );
             return;
         }
@@ -514,7 +516,7 @@ class Game {
             message += '<p><strong>Endless Tower</strong> unlocked!</p>';
         }
 
-        ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: () => this.endBattle() }]);
+        ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: () => this.endBattle() }], false);
 
         gameState.saveGame();
     }
