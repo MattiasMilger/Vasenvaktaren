@@ -269,7 +269,7 @@ const RUNES = {
         name: 'Hagal',
         fullName: 'Hagal',
         flavor: 'The rune of chaotic, natural destruction. It strips the elegance from arcane power, forcing the wielder\'s insightful attacks to rely instead on overwhelming physical impact.',
-        effect: 'When this Väsen is knocked out, the opponent gets all Attributes lowered by 1 stage (Defense, Durability, Strength, Wisdom)',
+        effect: 'When this Väsen is knocked out, the opponent gets all Attributes lowered by 1 stage',
         mechanic: { type: 'debuff_on_knockout' }
     },
     'NAUDIZ': {

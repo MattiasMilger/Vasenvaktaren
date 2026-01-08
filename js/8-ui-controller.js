@@ -1661,7 +1661,7 @@ class UIController {
 
             case 'well':
                 this.showDialogue(
-                    'Sacred Well!',
+                    'Sacred Well',
                     `<p>${result.dialogue}</p>`,
                     [{ text: 'Confirm', callback: null }]
                 );
