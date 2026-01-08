@@ -721,6 +721,7 @@ class GameState {
         this.currentEncounter = null;
         this.endlessTowerMode = null;
         this.endlessTowerFloor = 0;
+        this.inCombat = false;
     }
     
     // Get available temperaments for a species (ones not yet caught)

@@ -1990,6 +1990,11 @@ strong, b { color: var(--text-accent); }
     display: flex;
 }
 
+/* Dialogue modal appears on top of other modals (e.g., reset confirmation over settings) */
+#dialogue-modal {
+    z-index: 1100;
+}
+
 .modal-content {
     width: 90%;
     max-width: 500px;
@@ -2031,7 +2036,19 @@ strong, b { color: var(--text-accent); }
 .modal-footer {
     display: flex;
     gap: var(--spacing-sm);
-    justify-content: flex-end;
+    justify-content: center;
+}
+
+/* Center close buttons at bottom of modals */
+#close-settings,
+#close-profile,
+#close-combat-tips,
+#close-gift-modal,
+#close-heal-modal,
+#close-rune-equip-modal,
+#close-rune-to-vasen-modal {
+    display: block;
+    margin: var(--spacing-md) auto 0 auto;
 }
 
 /* Settings Modal */

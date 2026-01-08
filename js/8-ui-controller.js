@@ -1469,6 +1469,12 @@ class UIController {
                     class: 'btn-danger',
                     callback: () => {
                         gameState.resetGame();
+                        // Clear game controller combat state
+                        game.currentBattle = null;
+                        game.endlessTowerMode = null;
+                        game.endlessTowerFloor = 0;
+                        // Hide combat UI if visible
+                        this.hideCombatUI();
                         this.hideSettings();
                         game.showStarterSelection();
                         this.showMessage('Progress reset. You awaken again in the strange forest.');

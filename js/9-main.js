@@ -243,6 +243,8 @@ class Game {
     // Handle swap
     handleSwap(targetIndex) {
         if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
+        // Hide swap options after selecting
+        document.getElementById('swap-options').classList.remove('visible');
         this.currentBattle.executePlayerAction({ type: 'swap', targetIndex });
     }
 
@@ -435,14 +437,11 @@ class Game {
         // Victory!
         const wasFirstClear = !gameState.defeatedGuardians.has(gameState.currentZone);
 
-        // Mark zone as cleared
+        // Mark zone as cleared (this also unlocks the next zone via isZoneUnlocked check)
         gameState.defeatedGuardians.add(gameState.currentZone);
 
-        // Unlock next zone
+        // Get current zone index for messages
         const currentIndex = ZONE_ORDER.indexOf(gameState.currentZone);
-        if (currentIndex < ZONE_ORDER.length - 1) {
-            gameState.unlockedZones.add(ZONE_ORDER[currentIndex + 1]);
-        }
 
         // Check if this was the final guardian (Gylfe)
         if (gameState.currentZone === 'varldens-ande' && wasFirstClear) {
