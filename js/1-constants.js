@@ -126,10 +126,10 @@ const ENCOUNTER_RATES = {
 };
 
 const EXPLORATION_RATES = {
-    WILD_VASEN: 0.55,
-    ITEM: 0.25,
-    SACRED_WELL: 0.15,
-    RUNE: 0.05
+    WILD_VASEN: 0.53,
+    ITEM: 0.24,
+    SACRED_WELL: 0.13,
+    RUNE: 0.1
 };
 
 const FAMILIES = {
