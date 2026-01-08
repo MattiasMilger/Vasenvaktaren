@@ -11,12 +11,8 @@ class GameState {
         // Party: array of 3 slots, each can hold a VasenInstance or null
         this.party = [null, null, null];
         
-        // Rune slots bound to party positions (index 0-2)
-        this.partyRuneSlots = [
-            [null, null], // Slot 0: [rune1, rune2]
-            [null, null], // Slot 1: [rune1, rune2]
-            [null, null]  // Slot 2: [rune1, rune2]
-        ];
+        // Note: Runes are now bound to individual Väsen (stored in vasen.runes),
+        // not to party slots. This allows väsen to keep their runes when removed from party.
         
         // Collection of all caught Vasen (max 360)
         this.vasenCollection = [];
@@ -74,10 +70,9 @@ class GameState {
         // Add to first party slot
         this.party[0] = starter;
         
-        // Give starter rune (Uruz)
+        // Give starter rune (Uruz) - equip directly to the väsen
         this.collectedRunes.add('URUZ');
-        this.partyRuneSlots[0][0] = 'URUZ';
-        starter.runes = ['URUZ'];
+        starter.equipRune('URUZ');
         
         this.gameStarted = true;
         this.currentZone = 'TROLLSKOGEN';
@@ -147,10 +142,7 @@ class GameState {
             }
         }
         
-        // Assign runes from slot to Vasen
-        const runesInSlot = this.partyRuneSlots[slotIndex].filter(r => r !== null);
-        vasenInstance.runes = runesInSlot;
-        
+        // Väsen keeps their equipped runes (no longer assigned from party slots)
         this.party[slotIndex] = vasenInstance;
         this.saveGame();
         
@@ -163,11 +155,7 @@ class GameState {
             return { success: false, message: 'Invalid party slot.' };
         }
         
-        const vasen = this.party[slotIndex];
-        if (vasen) {
-            vasen.runes = [];
-        }
-        
+        // Väsen keeps their equipped runes when removed from party
         this.party[slotIndex] = null;
         this.saveGame();
         
@@ -180,88 +168,74 @@ class GameState {
             return { success: false, message: 'Invalid party slots.' };
         }
         
-        // Swap Vasen
+        // Swap Vasen - they keep their equipped runes
         const temp = this.party[slotA];
         this.party[slotA] = this.party[slotB];
         this.party[slotB] = temp;
-        
-        // Swap rune assignments
-        const tempRunes = this.partyRuneSlots[slotA];
-        this.partyRuneSlots[slotA] = this.partyRuneSlots[slotB];
-        this.partyRuneSlots[slotB] = tempRunes;
-        
-        // Update equipped runes on Vasen
-        if (this.party[slotA]) {
-            this.party[slotA].runes = this.partyRuneSlots[slotA].filter(r => r !== null);
-        }
-        if (this.party[slotB]) {
-            this.party[slotB].runes = this.partyRuneSlots[slotB].filter(r => r !== null);
-        }
         
         this.saveGame();
         return { success: true };
     }
     
-    // Equip rune to party slot
-    equipRune(runeId, partySlotIndex, runeSlotIndex = 0) {
+    // Equip rune to a specific väsen (by vasen ID)
+    equipRune(runeId, vasenId) {
         if (!this.collectedRunes.has(runeId)) {
             return { success: false, message: 'You do not own this rune.' };
         }
         
-        if (partySlotIndex < 0 || partySlotIndex >= GAME_CONFIG.MAX_TEAM_SIZE) {
-            return { success: false, message: 'Invalid party slot.' };
+        // Find the väsen in collection
+        const vasen = this.vasenCollection.find(v => v.id === vasenId);
+        if (!vasen) {
+            return { success: false, message: 'Väsen not found.' };
         }
         
-        const vasen = this.party[partySlotIndex];
+        // Check rune slot availability
+        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+        if (vasen.runes.length >= maxRunes && !vasen.runes.includes(runeId)) {
+            return { success: false, message: `${vasen.getDisplayName()} can only equip ${maxRunes} rune${maxRunes > 1 ? 's' : ''}.` };
+        }
         
-        // Check if rune is already equipped elsewhere
-        for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
-            for (let j = 0; j < 2; j++) {
-                if (this.partyRuneSlots[i][j] === runeId && !(i === partySlotIndex && j === runeSlotIndex)) {
-                    return { success: false, message: 'This rune is already equipped to another Väsen.' };
-                }
+        // Check if väsen already has this rune
+        if (vasen.runes.includes(runeId)) {
+            return { success: false, message: 'This Väsen already has this rune equipped.' };
+        }
+        
+        // Find if rune is equipped on another väsen and unequip it
+        for (const otherVasen of this.vasenCollection) {
+            if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
+                otherVasen.unequipRune(runeId);
+                break;
             }
         }
         
-        // Check second slot availability
-        if (runeSlotIndex === 1) {
-            if (!vasen || vasen.level < GAME_CONFIG.MAX_LEVEL) {
-                return { success: false, message: `${vasen ? vasen.displayName : 'This Väsen'} can only equip one rune.` };
-            }
-        }
-        
-        this.partyRuneSlots[partySlotIndex][runeSlotIndex] = runeId;
-        
-        // Update Vasen equipped runes
-        if (vasen) {
-            vasen.runes = this.partyRuneSlots[partySlotIndex].filter(r => r !== null);
-        }
+        // Equip the rune
+        vasen.equipRune(runeId);
         
         this.saveGame();
-        return { success: true, message: vasen ? `Rune equipped to ${vasen.displayName}.` : 'Rune equipped to slot.' };
+        return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
     }
     
-    // Unequip rune from party slot
-    unequipRune(partySlotIndex, runeSlotIndex) {
-        if (partySlotIndex < 0 || partySlotIndex >= GAME_CONFIG.MAX_TEAM_SIZE) {
-            return { success: false, message: 'Invalid party slot.' };
+    // Unequip rune from a specific väsen
+    unequipRune(vasenId, runeId) {
+        // Find the väsen in collection
+        const vasen = this.vasenCollection.find(v => v.id === vasenId);
+        if (!vasen) {
+            return { success: false, message: 'Väsen not found.' };
         }
         
-        const runeId = this.partyRuneSlots[partySlotIndex][runeSlotIndex];
-        if (!runeId) {
-            return { success: false, message: 'No rune in this slot.' };
+        if (!vasen.runes.includes(runeId)) {
+            return { success: false, message: 'This Väsen does not have this rune equipped.' };
         }
         
-        this.partyRuneSlots[partySlotIndex][runeSlotIndex] = null;
-        
-        // Update Vasen equipped runes
-        const vasen = this.party[partySlotIndex];
-        if (vasen) {
-            vasen.runes = this.partyRuneSlots[partySlotIndex].filter(r => r !== null);
-        }
+        vasen.unequipRune(runeId);
         
         this.saveGame();
-        return { success: true, message: vasen ? `Rune removed from ${vasen.displayName}.` : 'Rune removed from slot.' };
+        return { success: true, message: `Rune removed from ${vasen.getDisplayName()}.` };
+    }
+    
+    // Find which väsen has a rune equipped (searches entire collection)
+    findRuneOwner(runeId) {
+        return this.vasenCollection.find(v => v.runes.includes(runeId)) || null;
     }
     
     // Add item to inventory
@@ -308,15 +282,15 @@ class GameState {
         
         this.collectedRunes.add(runeId);
         
-        // Auto-equip to first empty slot
+        // Auto-equip to first party väsen that has an empty rune slot
         for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
-            if (this.partyRuneSlots[i][0] === null) {
-                this.partyRuneSlots[i][0] = runeId;
-                const vasen = this.party[i];
-                if (vasen) {
-                    vasen.runes = this.partyRuneSlots[i].filter(r => r !== null);
+            const vasen = this.party[i];
+            if (vasen) {
+                const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+                if (vasen.runes.length < maxRunes) {
+                    vasen.equipRune(runeId);
+                    break;
                 }
-                break;
             }
         }
         
@@ -568,7 +542,6 @@ class GameState {
             playerName: this.playerName,
             playerLevel: this.playerLevel,
             party: this.party.map(v => v ? v.serialize() : null),
-            partyRuneSlots: this.partyRuneSlots,
             vasenCollection: this.vasenCollection.map(v => v.serialize()),
             itemInventory: this.itemInventory,
             collectedRunes: Array.from(this.collectedRunes),
@@ -594,7 +567,7 @@ class GameState {
             this.playerName = data.playerName || '';
             this.playerLevel = data.playerLevel || 1;
             
-            // Restore Vasen collection first
+            // Restore Vasen collection first (runes are stored on each väsen)
             this.vasenCollection = (data.vasenCollection || []).map(vData => {
                 const vasen = VasenInstance.deserialize(vData);
                 return vasen;
@@ -607,7 +580,6 @@ class GameState {
                 return this.vasenCollection.find(v => v.id === vData.id) || null;
             });
             
-            this.partyRuneSlots = data.partyRuneSlots || [[null, null], [null, null], [null, null]];
             this.itemInventory = data.itemInventory || {};
             this.collectedRunes = new Set(data.collectedRunes || []);
             this.currentZone = data.currentZone || 'TROLLSKOGEN';
@@ -626,12 +598,8 @@ class GameState {
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
             
-            // Restore rune assignments to party Vasen
-            for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
-                if (this.party[i]) {
-                    this.party[i].runes = this.partyRuneSlots[i].filter(r => r !== null);
-                }
-            }
+            // Note: Runes are now stored directly on each väsen instance,
+            // so no need to reassign from party slots
             
             return true;
         } catch (e) {
@@ -698,7 +666,6 @@ class GameState {
         this.playerName = '';
         this.playerLevel = 1;
         this.party = [null, null, null];
-        this.partyRuneSlots = [[null, null], [null, null], [null, null]];
         this.vasenCollection = [];
         this.itemInventory = {};
         this.collectedRunes = new Set();

@@ -49,8 +49,8 @@ const ABILITIES = {
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 45,
-        effect: { type: 'buff', target: 'self', stat: 'strength', stages: 1 }
+        meginCost: 55,
+        effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
     },
 
     // Nature Abilities
@@ -135,8 +135,8 @@ const ABILITIES = {
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 45,
-        effect: { type: 'buff', target: 'self', stat: 'wisdom', stages: 1 }
+        meginCost: 55,
+        effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 }
     },
 
     // Fire Abilities
@@ -261,4 +261,11 @@ function getAbilityElement(abilityName, vasenElement) {
     const ability = ABILITIES[abilityName];
     if (!ability) return vasenElement;
     return ability.element || vasenElement;
+}
+
+// Helper function to check if ability requires ally targeting
+function abilityRequiresAllyTarget(abilityName) {
+    const ability = ABILITIES[abilityName];
+    if (!ability || !ability.effect) return false;
+    return ability.effect.type === 'buff' && ability.effect.target === 'ally';
 }

@@ -287,7 +287,7 @@ const RUNES = {
         name: 'Isaz',
         fullName: 'Isaz',
         flavor: 'The enduring patience and silence of concentrated ice. Utilizing water creates a moment of perfect clarity, simultaneously enhancing the wielder\'s body and mind.',
-        effect: 'This Väsen\'s Water hits have a 30% chance to raise its Wisdom and Strength attributes by 1 stage',
+        effect: 'This Väsen\'s Water abilities have a 30% chance to raise its Wisdom and Strength attributes by 1 stage',
         mechanic: { type: 'buff_on_element_hit', element: ELEMENTS.WATER, stats: ['wisdom', 'strength'], chance: 0.30 }
     },
     'JERA': {

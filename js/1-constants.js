@@ -10,7 +10,7 @@ const GAME_CONFIG = {
     MAX_LEVEL: 30,
     ENEMY_MAX_LEVEL: 999,
     SAVE_KEY: 'vasenvaktaren_save',
-    STARTER_LEVEL: 7,
+    STARTER_LEVEL: 6,
     BASE_MEGIN: 60,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,

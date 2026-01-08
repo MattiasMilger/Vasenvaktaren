@@ -101,6 +101,11 @@ class Game {
         // Add starting rune to collected
         gameState.collectedRunes.add('URUZ');
 
+        // Give a random starting taming item from zone 1
+        const zone1Items = ['Mossy Bark', 'Shed Antlers', 'Elderflower Sprig', 'Morning Dew', 'Shedded Scale', 'Festive Midsommarkrans'];
+        const startingItem = zone1Items[Math.floor(Math.random() * zone1Items.length)];
+        gameState.addItem(startingItem, 1);
+
         // Save and show game
         gameState.saveGame();
 
@@ -109,7 +114,8 @@ class Game {
             'Welcome, Väktare',
             `<p>The first rune has revealed itself to you: <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}</p>
              <p class="rune-hint">${RUNES.URUZ.effect}</p>
-             <p>Your <strong>${starter.getDisplayName()}</strong> stands ready at your side, equipped with the rune's power.</p>`,
+             <p>Your <strong>${starter.getDisplayName()}</strong> stands ready at your side, equipped with the rune's power.</p>
+             <p>You also found a <strong>${startingItem}</strong> to help you tame new Väsen.</p>`,
             [{ text: 'Begin Journey', callback: () => this.showGameScreen() }]
         );
     }
@@ -164,10 +170,13 @@ class Game {
 
         const guardian = zone.guardian;
         const isRematch = gameState.defeatedGuardians.has(gameState.currentZone);
+        const dialogueText = isRematch 
+            ? (guardian.dialogue.rematch || guardian.dialogue.challenge) 
+            : guardian.dialogue.challenge;
 
         ui.showDialogue(
             guardian.name,
-            `<p>${isRematch ? guardian.dialogue.rematch : guardian.dialogue.challenge}</p>`,
+            `<p>${dialogueText}</p>`,
             [
                 {
                     text: 'Fight!',
@@ -237,6 +246,15 @@ class Game {
     // Handle ability use
     handleAbilityUse(abilityName) {
         if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
+        
+        // Check if ability requires ally targeting
+        if (abilityRequiresAllyTarget(abilityName)) {
+            ui.showAllySelectionModal(this.currentBattle, abilityName, (allyIndex) => {
+                this.currentBattle.playerUseAbilityOnAlly(abilityName, allyIndex);
+            });
+            return;
+        }
+        
         this.currentBattle.executePlayerAction({ type: 'ability', abilityName });
     }
 
@@ -385,11 +403,17 @@ class Game {
         if (result.tamed && result.tamedVasen) {
             const newVasen = result.tamedVasen;
             
+            // Clear runes from tamed väsen - they join runeless
+            newVasen.runes = [];
+            
             // Heal to full before adding to collection
             newVasen.currentHealth = newVasen.maxHealth;
+            
+            // Recalculate megin since runes were cleared (in case it had Uruz)
+            newVasen.maxMegin = newVasen.calculateMaxMegin();
             newVasen.currentMegin = newVasen.maxMegin;
             
-            gameState.vasenCollection.push(newVasen);  // ← Now it's healed when added
+            gameState.vasenCollection.push(newVasen);
             ui.addCombatLog(`${newVasen.getDisplayName()} has joined your party!`, 'tame');
 
             // Check for achievements

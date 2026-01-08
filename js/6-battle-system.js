@@ -265,6 +265,65 @@ class Battle {
         return results;
     }
     
+    // Player action: use ability on specific ally (for ally-targeting buffs)
+    playerUseAbilityOnAlly(abilityName, allyIndex) {
+        if (this.isOver) return null;
+        if (this.playerActive.battleFlags.hasSwapSickness) {
+            this.addLog(`${this.playerActive.getName()} is preparing and cannot act this turn.`, 'status');
+            return this.enemyTurn();
+        }
+        
+        const ability = ABILITIES[abilityName];
+        if (!ability) return null;
+        
+        const meginCost = this.playerActive.getAbilityMeginCost(abilityName);
+        if (this.playerActive.currentMegin < meginCost) {
+            this.addLog('Not enough Megin.', 'error');
+            return null;
+        }
+        
+        // Get the ally target
+        const allyTarget = this.playerTeam[allyIndex];
+        if (!allyTarget || allyTarget.isKnockedOut()) {
+            this.addLog('Invalid target.', 'error');
+            return null;
+        }
+        
+        this.startTurn();
+        
+        // Determine turn order
+        const playerIsUtility = ability.type === ATTACK_TYPES.UTILITY;
+        const enemyAction = this.getEnemyAction();
+        const enemyAbility = ABILITIES[enemyAction.ability];
+        const enemyIsUtility = enemyAbility && enemyAbility.type === ATTACK_TYPES.UTILITY;
+        
+        // Priority: Player attacks first unless enemy uses utility and player doesn't
+        let playerFirst = true;
+        if (!playerIsUtility && enemyIsUtility) {
+            playerFirst = false;
+            this.addLog('The utility move goes first!', 'priority');
+        }
+        
+        const results = { player: null, enemy: null };
+        
+        if (playerFirst) {
+            results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
+            if (!this.enemyActive.isKnockedOut()) {
+                results.enemy = this.executeEnemyAction(enemyAction);
+            }
+        } else {
+            results.enemy = this.executeEnemyAction(enemyAction);
+            if (!this.playerActive.isKnockedOut()) {
+                results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
+            }
+        }
+        
+        this.handlePostTurn(results);
+        this.endTurn();
+        
+        return results;
+    }
+    
     // Player action: swap
     playerSwap(index) {
         if (this.isOver) return null;
@@ -382,7 +441,7 @@ class Battle {
     }
     
     // Execute an ability
-    executeAbility(attacker, defender, abilityName, isPlayer) {
+    executeAbility(attacker, defender, abilityName, isPlayer, selectedAllyTarget = null) {
         const ability = ABILITIES[abilityName];
         if (!ability) return null;
         
@@ -407,7 +466,7 @@ class Battle {
         
         // Handle utility abilities
         if (ability.type === ATTACK_TYPES.UTILITY) {
-            result.effects = this.applyUtilityEffect(attacker, defender, ability, isPlayer);
+            result.effects = this.applyUtilityEffect(attacker, defender, ability, isPlayer, selectedAllyTarget);
             
             // Mannaz: heal on utility
             if (attacker.hasRune('MANNAZ')) {
@@ -594,14 +653,22 @@ class Battle {
     }
     
     // Apply utility effect
-    applyUtilityEffect(user, target, ability, isPlayer) {
+    applyUtilityEffect(user, target, ability, isPlayer, selectedAllyTarget = null) {
         const effects = [];
         const effect = ability.effect;
         
         if (!effect) return effects;
         
         if (effect.type === 'buff') {
-            const targetVasen = effect.target === 'self' ? user : target;
+            let targetVasen;
+            if (effect.target === 'ally') {
+                // Use selected ally if provided, otherwise default to user (self)
+                targetVasen = selectedAllyTarget || user;
+            } else if (effect.target === 'self') {
+                targetVasen = user;
+            } else {
+                targetVasen = target;
+            }
             const stats = effect.stats || [effect.stat];
             
             stats.forEach(stat => {
@@ -620,7 +687,7 @@ class Battle {
                         
                         const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                         allies.forEach(ally => {
-                            if (ally !== user && !ally.isKnockedOut()) {
+                            if (ally !== targetVasen && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(stat, effect.stages);
                                 this.addLog(`${ally.getName()}'s ${stat} was also raised!`, 'buff');
                             }

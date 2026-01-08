@@ -2564,3 +2564,114 @@ textarea {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* =============================================================================
+   Ally Selection Modal (for buff abilities like Smithing)
+   ============================================================================= */
+.ally-select-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+}
+
+.ally-select-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+.ally-select-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.ally-select-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.ally-select-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ally-select-health {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.ally-select-stages {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+/* =============================================================================
+   Mini Stage Indicators (for party display during combat)
+   ============================================================================= */
+.party-vasen-stages {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    justify-content: center;
+}
+
+.mini-stage {
+    font-size: 0.65rem;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.mini-stage.positive {
+    background: rgba(106, 154, 90, 0.3);
+    color: #8aca7a;
+}
+
+.mini-stage.negative {
+    background: rgba(176, 106, 106, 0.3);
+    color: #da8a8a;
+}
+
+/* =============================================================================
+   Rune Status Indicators in Modal
+   ============================================================================= */
+.rune-equip-btn.equipped-here {
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: var(--accent-primary);
+    background: rgba(138, 154, 122, 0.15);
+}
+
+.rune-equip-btn.equipped-elsewhere {
+    border-left: 3px solid var(--accent-warning);
+}
+
+.rune-equip-btn .rune-status {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+}
+
+.rune-status.current {
+    background: rgba(138, 154, 122, 0.3);
+    color: var(--accent-primary);
+}
+
+.rune-status.other {
+    background: rgba(176, 154, 106, 0.3);
+    color: var(--accent-warning);
+}

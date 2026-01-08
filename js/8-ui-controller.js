@@ -196,6 +196,7 @@ class UIController {
         const isInParty = gameState.party.some(p => p && p.id === vasen.id);
         const hasEmptySlot = gameState.party.some(p => p === null);
         const canAdd = !isInParty && hasEmptySlot && !gameState.inCombat;
+        const canSwap = !isInParty && !hasEmptySlot && !gameState.inCombat;
 
         card.innerHTML = `
             <div class="vasen-card-header">
@@ -205,6 +206,7 @@ class UIController {
                     <span class="vasen-level">Lvl ${vasen.level}</span>
                 </div>
                 ${canAdd ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.addToParty('${vasen.id}')" title="Add to party">+</button>` : ''}
+                ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')" title="Swap with party member">+</button>` : ''}
             </div>
             <div class="vasen-card-details">
                 <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
@@ -364,7 +366,7 @@ class UIController {
             if (runeId && RUNES[runeId]) {
                 const rune = RUNES[runeId];
                 html += `
-                    <div class="rune-slot filled" title="${rune.name}: ${rune.effect}" onclick="ui.showRuneOptions('${runeId}')">
+                    <div class="rune-slot filled" title="${rune.name}: ${rune.effect}" onclick="ui.showRuneEquipModal('${vasen.id}')">
                         <span class="rune-symbol">${rune.symbol}</span>
                         <span class="rune-name">${rune.name}</span>
                     </div>
@@ -548,6 +550,13 @@ class UIController {
         this.partySlots.forEach((slot, index) => {
             const vasen = gameState.party[index];
             if (vasen) {
+                // Show stat stages during combat
+                const stagesHtml = gameState.inCombat ? `
+                    <div class="party-vasen-stages">
+                        ${this.renderMiniAttributeStages(vasen)}
+                    </div>
+                ` : '';
+                
                 slot.innerHTML = `
                     <div class="party-vasen element-${vasen.species.element.toLowerCase()}">
                         <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
@@ -563,6 +572,7 @@ class UIController {
                                 <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
                             </div>
                         </div>
+                        ${stagesHtml}
                         <div class="party-vasen-runes">
                             ${vasen.runes.map(r => RUNES[r] ? `<span class="mini-rune" title="${RUNES[r].name}: ${RUNES[r].effect}">${RUNES[r].symbol}</span>` : '').join('')}
                         </div>
@@ -589,6 +599,24 @@ class UIController {
 
             slot.onclick = () => this.handlePartySlotClick(index);
         });
+    }
+
+    // Render mini attribute stages for party display
+    renderMiniAttributeStages(vasen) {
+        const stages = vasen.attributeStages;
+        let html = '';
+
+        ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+            const stage = stages[attr];
+            if (stage !== 0) {
+                const stageClass = stage > 0 ? 'positive' : 'negative';
+                const stageText = stage > 0 ? `+${stage}` : stage;
+                const abbrev = attr.substring(0, 3).toUpperCase();
+                html += `<span class="mini-stage ${stageClass}" title="${capitalize(attr)}: ${stageText}">${abbrev}${stageText}</span>`;
+            }
+        });
+
+        return html || '';
     }
 
     // Show move väsen options
@@ -699,6 +727,54 @@ class UIController {
         } else {
             this.showMessage(result.message, 'error');
         }
+    }
+
+    // Show swap into party modal (when party is full)
+    showSwapIntoPartyModal(vasenId) {
+        if (gameState.inCombat) {
+            this.showMessage('Cannot swap Väsen during combat.', 'error');
+            return;
+        }
+
+        const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
+        if (!vasen) {
+            this.showMessage('Väsen not found.', 'error');
+            return;
+        }
+
+        const buttons = [];
+
+        gameState.party.forEach((partyVasen, index) => {
+            if (partyVasen) {
+                const slotLabel = index === 0 ? 'Lead' : `Slot ${index + 1}`;
+                buttons.push({
+                    text: `Replace ${partyVasen.getName()} (${slotLabel})`,
+                    callback: () => {
+                        // Remove the old väsen and add the new one
+                        gameState.removeFromParty(index);
+                        gameState.addToParty(vasenId, index);
+                        this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
+                        this.renderParty();
+                        this.refreshCurrentTab();
+                        if (this.selectedVasen) {
+                            this.renderVasenDetails(this.selectedVasen);
+                        }
+                    }
+                });
+            }
+        });
+
+        buttons.push({
+            text: 'Cancel',
+            class: 'btn-secondary',
+            callback: null
+        });
+
+        this.showDialogue(
+            `Add ${vasen.getName()} to Party`,
+            '<p>Your party is full. Select a Väsen to replace:</p>',
+            buttons
+        );
     }
 
     // Render zones
@@ -1135,6 +1211,7 @@ class UIController {
 
                 const itemBtn = document.createElement('button');
                 itemBtn.className = 'gift-item-btn';
+                itemBtn.title = item.description;
                 itemBtn.innerHTML = `
                     <span class="gift-item-name">${item.name}</span>
                     <span class="gift-item-count">x${count}</span>
@@ -1151,6 +1228,56 @@ class UIController {
         modal.classList.add('active');
     }
 
+    // Show ally selection modal for ally-targeting abilities
+    showAllySelectionModal(battle, abilityName, callback) {
+        const ability = ABILITIES[abilityName];
+        if (!ability) {
+            console.error('Ability not found:', abilityName);
+            return;
+        }
+        
+        const modal = document.getElementById('ally-select-modal');
+        if (!modal) {
+            console.error('ally-select-modal element not found in HTML');
+            // Fallback: just target self (active väsen)
+            callback(battle.playerActiveIndex);
+            return;
+        }
+        
+        const allyList = document.getElementById('ally-select-list');
+        const abilityNameSpan = document.getElementById('ally-select-ability-name');
+        
+        if (abilityNameSpan) {
+            abilityNameSpan.textContent = ability.name;
+        }
+        
+        allyList.innerHTML = '';
+
+        // Show all non-knocked-out allies (including the active one - you can buff yourself)
+        battle.playerTeam.forEach((vasen, index) => {
+            if (!vasen || vasen.isKnockedOut()) return;
+
+            const allyBtn = document.createElement('button');
+            allyBtn.className = 'ally-select-btn';
+            allyBtn.innerHTML = `
+                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="ally-select-img">
+                <div class="ally-select-info">
+                    <span class="ally-select-name">${vasen.getDisplayName()}</span>
+                    <span class="ally-select-health">${vasen.currentHealth}/${vasen.maxHealth} HP</span>
+                    <div class="ally-select-stages">${this.renderAttributeStages(vasen)}</div>
+                </div>
+            `;
+            allyBtn.onclick = () => {
+                modal.classList.remove('active');
+                callback(index);
+            };
+            allyList.appendChild(allyBtn);
+        });
+
+        document.getElementById('close-ally-select-modal').onclick = () => modal.classList.remove('active');
+        modal.classList.add('active');
+    }
+
     // Show rune equip modal
     showRuneEquipModal(vasenId) {
         const modal = document.getElementById('rune-equip-modal');
@@ -1160,30 +1287,45 @@ class UIController {
         const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
         if (!vasen) return;
 
-        const availableRunes = Array.from(gameState.collectedRunes).filter(runeId => {
-            // Check if already equipped to this vasen
-            if (vasen.runes.includes(runeId)) return false;
-            // Check if equipped to another vasen
-            const equippedTo = this.findRuneEquippedTo(runeId);
-            return !equippedTo;
-        });
+        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+        const canEquipMore = vasen.runes.length < maxRunes;
 
-        if (availableRunes.length === 0) {
-            runeList.innerHTML = '<p class="empty-message">No available runes to equip.</p>';
+        // Show ALL collected runes (including those equipped to other väsen)
+        const allRunes = Array.from(gameState.collectedRunes);
+
+        if (allRunes.length === 0) {
+            runeList.innerHTML = '<p class="empty-message">No runes collected yet.</p>';
         } else {
-            availableRunes.forEach(runeId => {
+            allRunes.forEach(runeId => {
                 const rune = RUNES[runeId];
+                const equippedTo = this.findRuneEquippedTo(runeId);
+                const isOnThisVasen = vasen.runes.includes(runeId);
+                const isOnOtherVasen = equippedTo && equippedTo.id !== vasenId;
+                
                 const runeBtn = document.createElement('button');
-                runeBtn.className = 'rune-equip-btn';
+                runeBtn.className = `rune-equip-btn ${isOnThisVasen ? 'equipped-here' : ''} ${isOnOtherVasen ? 'equipped-elsewhere' : ''}`;
+                
+                let statusText = '';
+                if (isOnThisVasen) {
+                    statusText = '<span class="rune-status current">(Equipped)</span>';
+                    runeBtn.disabled = true;
+                } else if (isOnOtherVasen) {
+                    statusText = `<span class="rune-status other">(On ${equippedTo.getName()})</span>`;
+                }
+                
                 runeBtn.innerHTML = `
                     <span class="rune-symbol">${rune.symbol}</span>
                     <span class="rune-name">${rune.name}</span>
+                    ${statusText}
                     <span class="rune-effect">${rune.effect}</span>
                 `;
-                runeBtn.onclick = () => {
-                    modal.classList.remove('active');
-                    this.equipRune(vasenId, runeId);
-                };
+                
+                if (!isOnThisVasen) {
+                    runeBtn.onclick = () => {
+                        modal.classList.remove('active');
+                        this.equipRune(vasenId, runeId);
+                    };
+                }
                 runeList.appendChild(runeBtn);
             });
         }
@@ -1194,30 +1336,14 @@ class UIController {
 
     // Equip rune
     equipRune(vasenId, runeId) {
-        // Find the party slot index for this vasen
-        const partySlotIndex = gameState.party.findIndex(v => v && v.id === vasenId);
-        if (partySlotIndex === -1) {
-            this.showMessage('No Väsen can equip this rune.', 'error');
+        // Find the väsen in collection
+        const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
+        if (!vasen) {
+            this.showMessage('Väsen not found.', 'error');
             return;
         }
         
-        // Find available rune slot (0 or 1 if level 30+)
-        const vasen = gameState.party[partySlotIndex];
-        let runeSlotIndex = 0;
-        
-        // Check if slot 0 is occupied
-        if (gameState.partyRuneSlots[partySlotIndex][0] !== null) {
-            // If level 30+ and slot 1 is empty, use slot 1
-            if (vasen.level >= GAME_CONFIG.MAX_LEVEL && gameState.partyRuneSlots[partySlotIndex][1] === null) {
-                runeSlotIndex = 1;
-            } else {
-                // Swap: unequip existing rune in slot 0 first
-                gameState.unequipRune(partySlotIndex, 0);
-                runeSlotIndex = 0;
-            }
-        }
-        
-        const result = gameState.equipRune(runeId, partySlotIndex, runeSlotIndex);
+        const result = gameState.equipRune(runeId, vasenId);
         this.showMessage(result.message, result.success ? 'info' : 'error');
         this.refreshCurrentTab();
         this.renderParty(); // Update party display to show new rune
@@ -1228,21 +1354,14 @@ class UIController {
 
     // Unequip rune
     unequipRune(vasenId, runeId) {
-        // Find the party slot index for this vasen
-        const partySlotIndex = gameState.party.findIndex(v => v && v.id === vasenId);
-        if (partySlotIndex === -1) {
-            this.showMessage('Väsen not found in party.', 'error');
+        // Find the väsen in collection
+        const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
+        if (!vasen) {
+            this.showMessage('Väsen not found.', 'error');
             return;
         }
         
-        // Find which rune slot has this rune
-        const runeSlotIndex = gameState.partyRuneSlots[partySlotIndex].indexOf(runeId);
-        if (runeSlotIndex === -1) {
-            this.showMessage('Rune not found on this Väsen.', 'error');
-            return;
-        }
-        
-        const result = gameState.unequipRune(partySlotIndex, runeSlotIndex);
+        const result = gameState.unequipRune(vasenId, runeId);
         this.showMessage(result.message, result.success ? 'info' : 'error');
         this.refreshCurrentTab();
         this.renderParty(); // Update party display
@@ -1371,19 +1490,19 @@ class UIController {
         const vasenList = document.getElementById('rune-to-vasen-list');
         vasenList.innerHTML = '';
 
-        const currentOwner = this.findRuneEquippedTo(runeId);
+        const currentOwner = gameState.findRuneOwner(runeId);
 
-        // Show all party members (can equip to any, will auto-unequip from current)
-        const eligibleVasen = gameState.party.filter(v => v !== null);
+        // Show all väsen in collection (runes are bound to individual väsen, not party slots)
+        const eligibleVasen = gameState.vasenCollection;
 
         if (eligibleVasen.length === 0) {
-            vasenList.innerHTML = '<p class="empty-message">No Väsen in your party. Add a Väsen to your party first.</p>';
+            vasenList.innerHTML = '<p class="empty-message">No Väsen in your collection.</p>';
         } else {
             eligibleVasen.forEach(vasen => {
-                const partySlotIndex = gameState.party.indexOf(vasen);
-                const currentRunes = gameState.partyRuneSlots[partySlotIndex].filter(r => r !== null);
+                const currentRunes = vasen.runes;
                 const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
                 const hasThisRune = currentRunes.includes(runeId);
+                const isInParty = gameState.party.some(p => p && p.id === vasen.id);
                 
                 const vasenBtn = document.createElement('button');
                 vasenBtn.className = `rune-to-vasen-btn ${hasThisRune ? 'current-owner' : ''}`;
@@ -1391,7 +1510,7 @@ class UIController {
                 vasenBtn.innerHTML = `
                     <img src="${vasen.species.image}" alt="${vasen.species.name}" class="rune-vasen-img">
                     <div class="rune-vasen-info">
-                        <span class="rune-vasen-name">${vasen.getDisplayName()}</span>
+                        <span class="rune-vasen-name">${vasen.getDisplayName()}${isInParty ? ' ★' : ''}</span>
                         <span class="rune-vasen-level">Lvl ${vasen.level}</span>
                         <span class="rune-vasen-slots">${currentRunes.length}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}</span>
                     </div>
@@ -1410,21 +1529,9 @@ class UIController {
         modal.classList.add('active');
     }
 
-    // Equip rune to väsen (with auto-unequip from previous owner)
+    // Equip rune to väsen (with auto-unequip from previous owner - handled by gameState.equipRune)
     equipRuneToVasen(vasenId, runeId) {
-        // First, unequip from current owner if any
-        const currentOwner = this.findRuneEquippedTo(runeId);
-        if (currentOwner) {
-            const currentOwnerSlot = gameState.party.findIndex(v => v && v.id === currentOwner.id);
-            if (currentOwnerSlot !== -1) {
-                const runeSlotIndex = gameState.partyRuneSlots[currentOwnerSlot].indexOf(runeId);
-                if (runeSlotIndex !== -1) {
-                    gameState.unequipRune(currentOwnerSlot, runeSlotIndex);
-                }
-            }
-        }
-
-        // Now equip to new owner
+        // The new gameState.equipRune handles auto-unequipping from previous owner
         this.equipRune(vasenId, runeId);
     }
 
