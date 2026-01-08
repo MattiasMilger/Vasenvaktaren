@@ -661,16 +661,22 @@ class UIController {
     }
 
     // Handle party slot click
-    handlePartySlotClick(slotIndex) {
-        if (gameState.inCombat) return;
+handlePartySlotClick(slotIndex) {
+    const vasen = gameState.party[slotIndex];
 
-        const vasen = gameState.party[slotIndex];
-        if (vasen) {
-            this.selectVasen(vasen);
-        } else if (this.selectedVasen) {
-            this.addToParty(this.selectedVasen.id, slotIndex);
-        }
+    if (vasen) {
+        // Allow selecting a väsen to view its details, regardless of combat state
+        this.selectVasen(vasen);
     }
+    
+    // If in combat, stop here to prevent other actions (like adding to an empty slot)
+    if (gameState.inCombat) return; 
+
+    // Non-combat logic: if the slot is empty and a vasen is selected from inventory, add it.
+    if (!vasen && this.selectedVasen) {
+        this.addToParty(this.selectedVasen.id, slotIndex);
+    }
+}
 
     // Add Vasen to party
     addToParty(vasenId, preferredSlot = null) {

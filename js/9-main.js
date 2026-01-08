@@ -280,13 +280,32 @@ class Game {
         this.currentBattle.executePlayerAction({ type: 'gift', itemId });
     }
 
-    // Handle ask about item
-    handleAskItem() {
-        if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-        if (!this.currentBattle.isWildEncounter) return;
+    // Handle ask about item confirmation
+handleAskItem() {
+    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
+    if (!this.currentBattle.isWildEncounter) return;
 
-        this.currentBattle.executePlayerAction({ type: 'ask' });
-    }
+    // Show the confirmation dialog
+    ui.showDialogue(
+        'Asking About Item',
+        '<p>Beware, this action will pass your turn.</p>',
+        [
+            {
+                text: 'Confirm',
+                class: 'btn-primary',
+                callback: () => {
+                    // Execute the action if confirmed
+                    this.currentBattle.executePlayerAction({ type: 'ask' });
+                }
+            },
+            {
+                text: 'Close',
+                class: 'btn-secondary',
+                // callback: null will close the modal without executing the action
+            }
+        ]
+    );
+}
 
     // Handle pass
     handlePass() {

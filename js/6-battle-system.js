@@ -885,9 +885,9 @@ class Battle {
             if (tracker.dealtKillingBlow) {
                 expPercent = 1.0; // 100%
             } else if (tracker.turnsOnField > 0) {
-                expPercent = 0.6; // 60% for participated
+                expPercent = 0.7; // 70% for participated
             } else if (tracker.participated) {
-                expPercent = 0.3; // 30% for in party but not on field
+                expPercent = 0.5; // 50% for in party but not on field
             }
             
             const expGained = Math.floor(totalEnemyExp * expPercent);
@@ -1028,7 +1028,7 @@ class EnemyAI {
     }
     
     scoreSwap(target) {
-        let score = 25;
+        let score = 5;
         
         // Low health bonus
         if (this.vasen.currentHealth < this.vasen.maxHealth * 0.3) {
