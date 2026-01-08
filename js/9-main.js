@@ -530,17 +530,26 @@ class Game {
 
         // Show result
         let message = `<p>${guardian.dialogue.win}</p>`;
+        let callback = () => this.endBattle(); // Default callback to just return to game screen
 
         if (wasFirstClear && currentIndex < ZONE_ORDER.length - 1) {
-            const nextZone = ZONES[ZONE_ORDER[currentIndex + 1]];
+            const nextZoneId = ZONE_ORDER[currentIndex + 1];
+            const nextZone = ZONES[nextZoneId];
+
             message += `<p><strong>${nextZone.name}</strong> unlocked!</p>`;
+
+            // Custom callback to switch zone instantly
+            callback = () => {
+                gameState.currentZone = nextZoneId; // <--- MODIFICATION: Set current zone to the new zone
+                this.endBattle();
+            };
         }
 
         if (gameState.currentZone === 'varldens-ande' && wasFirstClear) {
             message += '<p><strong>Endless Tower</strong> unlocked!</p>';
         }
 
-        ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: () => this.endBattle() }], false);
+        ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: callback }], false);
 
         gameState.saveGame();
     }
