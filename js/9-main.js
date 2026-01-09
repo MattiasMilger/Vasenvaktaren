@@ -163,20 +163,22 @@ class Game {
             : guardian.dialogue.challenge;
 
         ui.showDialogue(
-            guardian.name,
-            `<p>${dialogueText}</p>`,
-            [
-                {
-                    text: 'Fight!',
-                    callback: () => this.startGuardianBattle(guardian)
-                },
-                {
-                    text: 'Not yet',
-                    class: 'btn-secondary',
-                    callback: null
-                }
-            ]
-        );
+    guardian.name,
+    `<p>${dialogueText}</p>`,
+    [
+        {
+            text: 'Fight!',
+            callback: () => this.startGuardianBattle(guardian)
+        },
+        {
+            text: 'Not yet',
+            class: 'btn-secondary',
+            callback: null
+        }
+    ],
+    false // non‑dismissible
+);
+
     }
 
     // Start battle with wild Vasen
@@ -603,6 +605,18 @@ const game = new Game();
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     game.init();
+
+    // Global UI Lock  
+    document.addEventListener('click', (e) => {
+        if (gameState.uiLocked) {
+            // Allow clicks inside any modal
+            if (e.target.closest('.modal')) return;
+
+            // Block everything else
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    });
 
     // Set up global button handlers
     document.getElementById('explore-btn').addEventListener('click', () => game.explore());

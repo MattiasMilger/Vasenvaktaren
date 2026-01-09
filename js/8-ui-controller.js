@@ -1667,82 +1667,94 @@ handlePartySlotClick(slotIndex) {
 
     // Show knockout swap modal
     showKnockoutSwapModal(battle, callback) {
-        const modal = document.getElementById('knockout-swap-modal');
-        const vasenList = document.getElementById('knockout-swap-list');
-        vasenList.innerHTML = '';
+    GameState.uiLocked = true;
 
-        const availableVasen = battle.playerTeam.filter((v, i) => i !== battle.playerActiveIndex && !v.isKnockedOut());
+    const modal = document.getElementById('knockout-swap-modal');
+    modal.dataset.dismissible = 'false'; // cannot skip
 
-        if (availableVasen.length === 0) {
-            // No one to swap to - battle lost
-            modal.classList.remove('active');
-            callback(null);
-            return;
-        }
+    const vasenList = document.getElementById('knockout-swap-list');
+    vasenList.innerHTML = '';
 
-        availableVasen.forEach((vasen, idx) => {
-            const actualIndex = battle.playerTeam.indexOf(vasen);
-            const vasenBtn = document.createElement('button');
-            vasenBtn.className = 'knockout-swap-btn';
-            vasenBtn.innerHTML = `
-                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="swap-img">
-                <div class="swap-info">
-                    <span class="swap-name">${vasen.getDisplayName()}</span>
-                    <span class="swap-health">${vasen.currentHealth}/${vasen.maxHealth} HP</span>
-                </div>
-            `;
-            vasenBtn.onclick = () => {
-                modal.classList.remove('active');
-                callback(actualIndex);
-            };
-            vasenList.appendChild(vasenBtn);
-        });
+    const availableVasen = battle.playerTeam.filter((v, i) =>
+        i !== battle.playerActiveIndex && !v.isKnockedOut()
+    );
 
-        // Auto-select if only one option
-        if (availableVasen.length === 1) {
-            const actualIndex = battle.playerTeam.indexOf(availableVasen[0]);
-            modal.classList.remove('active');
-            callback(actualIndex);
-            return;
-        }
-
-        modal.classList.add('active');
+    if (availableVasen.length === 0) {
+        modal.classList.remove('active');
+        GameState.uiLocked = false;
+        callback(null);
+        return;
     }
+
+    availableVasen.forEach(vasen => {
+        const actualIndex = battle.playerTeam.indexOf(vasen);
+        const vasenBtn = document.createElement('button');
+        vasenBtn.className = 'knockout-swap-btn';
+        vasenBtn.innerHTML = `
+            <img src="${vasen.species.image}" alt="${vasen.species.name}" class="swap-img">
+            <div class="swap-info">
+                <span class="swap-name">${vasen.getDisplayName()}</span>
+                <span class="swap-health">${vasen.currentHealth}/${vasen.maxHealth} HP</span>
+            </div>
+        `;
+        vasenBtn.onclick = () => {
+            modal.classList.remove('active');
+            GameState.uiLocked = false;
+            callback(actualIndex);
+        };
+        vasenList.appendChild(vasenBtn);
+    });
+
+    if (availableVasen.length === 1) {
+        const actualIndex = battle.playerTeam.indexOf(availableVasen[0]);
+        modal.classList.remove('active');
+        GameState.uiLocked = false;
+        callback(actualIndex);
+        return;
+    }
+
+    modal.classList.add('active');
+}
 
     // Show encounter result
     showEncounterResult(result) {
         switch (result.type) {
             case 'vasen':
                 this.showDialogue(
-                    'Wild Encounter!',
-                    `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
-                    [{ text: 'Battle!', callback: () => game.startBattle(result.vasen) }]
-                );
+    'Wild Encounter!',
+    `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
+    [{ text: 'Battle!', callback: () => game.startBattle(result.vasen) }],
+    false // <— non‑dismissible
+);
                 break;
 
             case 'item':
                 this.showDialogue(
-                    'Item Found!',
-                    `<p>${result.dialogue}</p>`,
-                    [{ text: 'Confirm', callback: null }]
-                );
+    'Item Found!',
+    `<p>${result.dialogue}</p>`,
+    [{ text: 'Confirm', callback: null }],
+    false
+);
                 break;
 
             case 'well':
                 this.showDialogue(
-                    'Sacred Well',
-                    `<p>${result.dialogue}</p>`,
-                    [{ text: 'Confirm', callback: null }]
-                );
+    'Sacred Well',
+    `<p>${result.dialogue}</p>`,
+    [{ text: 'Confirm', callback: null }],
+    false
+);
+
                 break;
 
             case 'rune':
                 this.showDialogue(
-                    'Rune Discovered!',
-                    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p>`,
-                    [{ text: 'Confirm', callback: null }]
-                );
-                break;
+    'Rune Discovered!',
+    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p>`,
+    [{ text: 'Confirm', callback: null }],
+    false
+);
+
         }
     }
 

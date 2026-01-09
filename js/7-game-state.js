@@ -40,6 +40,9 @@ class GameState {
         // Current battle state (not saved)
         this.currentBattle = null;
         this.currentEncounter = null;
+
+        // UI lock (not saved)
+        this.uiLocked = false;
     }
     
     // Initialize new game with starter Vasen
@@ -157,42 +160,46 @@ class GameState {
     }
     
     // Equip rune to a specific väsen (by vasen ID)
-    equipRune(runeId, vasenId) {
-        if (!this.collectedRunes.has(runeId)) {
-            return { success: false, message: 'You do not own this rune.' };
-        }
-        
-        // Find the väsen in collection
-        const vasen = this.vasenCollection.find(v => v.id === vasenId);
-        if (!vasen) {
-            return { success: false, message: 'Väsen not found.' };
-        }
-        
-        // Check rune slot availability
-        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
-        if (vasen.runes.length >= maxRunes && !vasen.runes.includes(runeId)) {
-            return { success: false, message: `${vasen.getDisplayName()} can only equip ${maxRunes} rune${maxRunes > 1 ? 's' : ''}.` };
-        }
-        
-        // Check if väsen already has this rune
-        if (vasen.runes.includes(runeId)) {
-            return { success: false, message: 'This Väsen already has this rune equipped.' };
-        }
-        
-        // Find if rune is equipped on another väsen and unequip it
-        for (const otherVasen of this.vasenCollection) {
-            if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
-                otherVasen.unequipRune(runeId);
-                break;
-            }
-        }
-        
-        // Equip the rune
-        vasen.equipRune(runeId);
-        
-        this.saveGame();
-        return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
+equipRune(runeId, vasenId) {
+    if (!this.collectedRunes.has(runeId)) {
+        return { success: false, message: 'You do not own this rune.' };
     }
+
+    // Find the väsen in collection
+    const vasen = this.vasenCollection.find(v => v.id === vasenId);
+    if (!vasen) {
+        return { success: false, message: 'Väsen not found.' };
+    }
+
+    // Determine rune slot limit
+    const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+
+    // Already has this rune?
+    if (vasen.runes.includes(runeId)) {
+        return { success: false, message: 'This Väsen already has this rune equipped.' };
+    }
+
+    // If rune slots are full, replace the first rune
+    if (vasen.runes.length >= maxRunes) {
+        const removedRune = vasen.runes[0];
+        vasen.unequipRune(removedRune);
+    }
+
+    // If another väsen has this rune, unequip it
+    for (const otherVasen of this.vasenCollection) {
+        if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
+            otherVasen.unequipRune(runeId);
+            break;
+        }
+    }
+
+    // Equip the new rune
+    vasen.equipRune(runeId);
+
+    this.saveGame();
+    return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
+}
+
     
     // Unequip rune from a specific väsen
     unequipRune(vasenId, runeId) {
