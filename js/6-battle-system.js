@@ -695,11 +695,8 @@ class Battle {
                 }
             });
         } else if (effect.type === 'debuff') {
-            } else if (effect.type === 'debuff') {
-        // If the effect targets 'enemy', the target is always the defender (opponent).
-        // Otherwise, the target defaults to the user (self).
-        const targetVasen = effect.target === 'enemy' ? defender : user;
-        const stats = effect.stats || [effect.stat];
+            const opponent = isPlayer ? target : this.playerActive; const targetVasen = effect.target === 'enemy' ? opponent : user;
+            const stats = effect.stats || [effect.stat];
             
             // Wynja: block first debuff
             if (!targetVasen.battleFlags.wynjaTriggered && targetVasen.hasRune('WYNJA')) {
