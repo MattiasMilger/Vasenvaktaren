@@ -1364,7 +1364,7 @@ handlePartySlotClick(slotIndex) {
         if (!item) return;
 
         // Check if we can offer during combat
-        const canOffer = gameState.inCombat && 
+        const canGift = gameState.inCombat && 
                         game.currentBattle && 
                         game.currentBattle.isWildEncounter && 
                         game.currentBattle.waitingForPlayerAction &&
@@ -1379,7 +1379,7 @@ handlePartySlotClick(slotIndex) {
         ];
 
         // Add Offer Item button if in combat with wild encounter
-        if (canOffer) {
+        if (canGift) {
             buttons.push({
                 text: 'Offer Item',
                 class: 'btn-primary',
