@@ -54,7 +54,7 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 - **Abilities**: Use learned attacks (cost Megin)
 - **Basic Strike**: Free attack using your element
 - **Swap**: Change active Väsen (causes Swap Sickness)
-- **Gift Item**: Offer taming items to wild Väsen
+- **Offer Item**: Offer taming items to wild Väsen
 - **Ask About Item**: Learn what item the Väsen wants
 - **Pass**: Skip your turn
 - **Surrender**: Exit combat (reduces party to 5% health)
