@@ -4,9 +4,9 @@
 
 const GAME_CONFIG = {
     MAX_TEAM_SIZE: 3,
-    MAX_INVENTORY_SIZE: 360,
+    MAX_INVENTORY_SIZE: 99,
     MAX_ITEM_STACK: 99,
-    MAX_BATTLE_LOG: 100,
+    MAX_BATTLE_LOG: 99,
     MAX_LEVEL: 30,
     ENEMY_MAX_LEVEL: 999,
     SAVE_KEY: 'vasenvaktaren_save',
@@ -335,20 +335,9 @@ const ZONES = {
 
 const ZONE_ORDER = ['TROLLSKOGEN', 'FOLKETS_BY', 'DJUPA_GRUVAN', 'GLIMRANDE_KALLAN', 'URBERGEN', 'VARLDENS_ANDE', 'GINNUNGAGAP'];
 
-const ENDLESS_TOWER_GUARDIAN_NAMES = [
-    'Gunnar', 'Egil', 'Sten', 'Torsten', 'Freja', 'Tora', 'Alva', 'Ingrid',
-    'Björn', 'Astrid', 'Liv', 'Erik', 'Sven', 'Rune', 'Idun', 'Torbjörn',
-    'Gustav', 'Harald', 'Leif', 'Embla', 'Ask', 'Börje', 'Ulf', 'Torvald',
-    'Tyra', 'Hjalmar', 'Vale', 'Anders', 'Ragnhild', 'Knut', 'Lars', 'Olof',
-    'Henrik', 'Rolf', 'Folke', 'Arvid', 'Ivar', 'Åke', 'Vidar', 'Ylva',
-    'Saga', 'Signe', 'Sverker'
-];
-
 const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },
     RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
-    GRINDER: { id: 'grinder', name: 'Grinder', description: 'Tame a copy of each väsen' },
-    MEGA_GRINDER: { id: 'mega_grinder', name: 'Mega Grinder', description: 'Tame a copy of each väsen with every temperament' }
 };
 
 // Helper functions for constants

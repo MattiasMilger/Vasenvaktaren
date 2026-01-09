@@ -1,7 +1,5 @@
 # Väsenväktaren
 
-**Note: This game is under development and not currently in a finished state.**
-
 **Catch creatures of Swedish folklore**
 
 A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and battle your way through the guardians of each realm.
@@ -14,7 +12,6 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 4. Explore zones to encounter wild Väsen, find items, discover runes, or encounter sacred wells
 5. Battle and tame Väsen to build your collection
 6. Defeat zone guardians to unlock new areas
-7. Complete the Endless Tower for the ultimate challenge
 
 ## Game Features
 
@@ -45,11 +42,6 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 5. **Urbergen** (Levels 20-24) - Frozen peaks
 6. **Världens Ände** (Levels 25-29) - Edge of reality
 7. **Ginnungagap** (Level 30) - Primordial void
-
-### Endless Tower
-- **Wild Mode**: Face increasingly stronger wild Väsen
-- **Guardian Mode**: Battle randomized guardians with reset health between floors
-- Track your highest floor reached
 
 ## Controls
 
@@ -130,6 +122,12 @@ Vasenvaktaren/
     └── vasen/
         └── [30 Väsen images]
 ```
+
+## Feature roadmap
+
+- Finish Main Functionality (50%)
+- Make mobile friendly (0%)
+- introduce endgame system Endless Tower (0%)
 
 ## Credits
 

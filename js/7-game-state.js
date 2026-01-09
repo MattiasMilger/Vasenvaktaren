@@ -26,20 +26,11 @@ class GameState {
         // Zone progression
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
-        this.endlessTowerUnlocked = false;
-        
-        // Endless Tower records
-        this.endlessTowerRecords = {
-            wild: { floor: 0, team: [] },
-            guardian: { floor: 0, team: [] }
-        };
         
         // Achievements
         this.achievements = {
             champion: false,
             rune_master: false,
-            grinder: false,
-            mega_grinder: false
         };
         
         // Game flags
@@ -49,8 +40,6 @@ class GameState {
         // Current battle state (not saved)
         this.currentBattle = null;
         this.currentEncounter = null;
-        this.endlessTowerMode = null;
-        this.endlessTowerFloor = 0;
     }
     
     // Initialize new game with starter Vasen
@@ -86,17 +75,7 @@ class GameState {
         if (this.vasenCollection.length >= GAME_CONFIG.MAX_INVENTORY_SIZE) {
             return { success: false, message: 'Collection full. You cannot tame more Väsen.' };
         }
-        
-        // Check if this specific temperament + species combo exists
-        const exists = this.vasenCollection.some(v => 
-            v.speciesId === vasenInstance.speciesId && 
-            v.temperament === vasenInstance.temperament
-        );
-        
-        if (exists) {
-            return { success: false, message: 'You already have this Väsen with this temperament.' };
-        }
-        
+
         // Heal to full before adding
         vasenInstance.currentHealth = vasenInstance.maxHealth;
         vasenInstance.currentMegin = vasenInstance.maxMegin;
@@ -323,11 +302,6 @@ class GameState {
             // Zone is automatically available once guardian is defeated
         }
         
-        // Check for endless tower unlock
-        if (zoneId === 'varldens_ande') {
-            this.endlessTowerUnlocked = true;
-        }
-        
         this.checkAchievements();
         this.saveGame();
     }
@@ -489,25 +463,6 @@ class GameState {
         };
     }
     
-    // Update endless tower record
-    updateEndlessTowerRecord(mode, floor) {
-        const currentRecord = this.endlessTowerRecords[mode].floor;
-        
-        if (floor > currentRecord) {
-            this.endlessTowerRecords[mode] = {
-                floor: floor,
-                team: this.getActiveParty().map(v => ({
-                    name: v.displayName,
-                    level: v.level,
-                    runes: v.runes.map(r => RUNES[r].symbol + ' ' + RUNES[r].name)
-                }))
-            };
-            this.saveGame();
-            return true;
-        }
-        return false;
-    }
-    
     // Check and update achievements
     checkAchievements() {
         // Champion - Defeat all zone guardians
@@ -520,19 +475,6 @@ class GameState {
         if (this.hasAllRunes()) {
             this.achievements.rune_master = true;
         }
-        
-        // Grinder - Tame one of each Vasen species
-        const speciesCount = new Set(this.vasenCollection.map(v => v.speciesId));
-        if (speciesCount.size >= Object.keys(VASEN_SPECIES).length) {
-            this.achievements.grinder = true;
-        }
-        
-        // Mega Grinder - Tame all Vasen with all temperaments
-        if (this.vasenCollection.length >= GAME_CONFIG.MAX_INVENTORY_SIZE) {
-            this.achievements.mega_grinder = true;
-        }
-        
-        this.saveGame();
     }
     
     // Serialize game state for saving
@@ -547,8 +489,6 @@ class GameState {
             collectedRunes: Array.from(this.collectedRunes),
             currentZone: this.currentZone,
             defeatedGuardians: Array.from(this.defeatedGuardians),
-            endlessTowerUnlocked: this.endlessTowerUnlocked,
-            endlessTowerRecords: this.endlessTowerRecords,
             achievements: this.achievements,
             gameStarted: this.gameStarted,
             runeMenuFirstOpen: this.runeMenuFirstOpen,
@@ -584,16 +524,9 @@ class GameState {
             this.collectedRunes = new Set(data.collectedRunes || []);
             this.currentZone = data.currentZone || 'TROLLSKOGEN';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
-            this.endlessTowerUnlocked = data.endlessTowerUnlocked || false;
-            this.endlessTowerRecords = data.endlessTowerRecords || {
-                wild: { floor: 0, team: [] },
-                guardian: { floor: 0, team: [] }
-            };
             this.achievements = data.achievements || {
                 champion: false,
                 rune_master: false,
-                grinder: false,
-                mega_grinder: false
             };
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
@@ -671,23 +604,14 @@ class GameState {
         this.collectedRunes = new Set();
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
-        this.endlessTowerUnlocked = false;
-        this.endlessTowerRecords = {
-            wild: { floor: 0, team: [] },
-            guardian: { floor: 0, team: [] }
-        };
         this.achievements = {
             champion: false,
             rune_master: false,
-            grinder: false,
-            mega_grinder: false
         };
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;
         this.currentBattle = null;
         this.currentEncounter = null;
-        this.endlessTowerMode = null;
-        this.endlessTowerFloor = 0;
         this.inCombat = false;
     }
     

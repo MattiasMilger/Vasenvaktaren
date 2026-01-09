@@ -5,8 +5,6 @@
 const BATTLE_TYPES = {
     WILD: 'wild',
     GUARDIAN: 'guardian',
-    ENDLESS_WILD: 'endless_wild',
-    ENDLESS_GUARDIAN: 'endless_guardian'
 };
 
 class Battle {

@@ -815,25 +815,6 @@ handlePartySlotClick(slotIndex) {
             this.zoneList.appendChild(zoneBtn);
         });
 
-        // Add Endless Tower if unlocked
-        if (gameState.endlessTowerUnlocked) {
-            const divider = document.createElement('div');
-            divider.className = 'zone-divider';
-            divider.textContent = 'Endless Tower';
-            this.zoneList.appendChild(divider);
-
-            ['endless-wild', 'endless-guardian'].forEach(mode => {
-                const btn = document.createElement('button');
-                btn.className = `zone-btn endless ${gameState.currentZone === mode ? 'selected' : ''}`;
-                btn.innerHTML = `
-                    <span class="zone-name">${mode === 'endless-wild' ? 'Wild Challenge' : 'Guardian Challenge'}</span>
-                    <span class="zone-levels">Lvl 30+</span>
-                `;
-                btn.onclick = () => this.selectZone(mode);
-                this.zoneList.appendChild(btn);
-            });
-        }
-
         this.updateExploreButton();
     }
 
@@ -855,20 +836,6 @@ handlePartySlotClick(slotIndex) {
     // Update zone description
     updateZoneDescription() {
         const zone = ZONES[gameState.currentZone];
-        if (!zone) {
-            if (gameState.currentZone === 'endless-wild') {
-                this.zoneDescription.innerHTML = `
-                    <h3>Endless Tower - Wild</h3>
-                    <p>Each floor brings stronger wild Vasen. Levels increase with every victory. Taming is disabled and attribute changes persist between floors.</p>
-                `;
-            } else if (gameState.currentZone === 'endless-guardian') {
-                this.zoneDescription.innerHTML = `
-                    <h3>Endless Tower - Guardian</h3>
-                    <p>Each floor brings a stronger Guardian. Health and attribute changes are reset between floors.</p>
-                `;
-            }
-            return;
-        }
 
         this.zoneDescription.innerHTML = `
             <h3>${zone.name}</h3>
@@ -885,20 +852,12 @@ handlePartySlotClick(slotIndex) {
         const zone = ZONES[gameState.currentZone];
         const hasParty = gameState.party.some(p => p !== null);
 
-        // Check if it's endless tower mode
-        if (gameState.currentZone === 'endless-wild' || gameState.currentZone === 'endless-guardian') {
-            this.exploreBtn.textContent = 'Enter Tower';
-            this.exploreBtn.disabled = !hasParty || gameState.inCombat;
-            this.challengeBtn.style.display = 'none';
-            return;
-        }
-
         if (zone) {
             this.exploreBtn.innerHTML = `Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
             this.exploreBtn.disabled = !hasParty || gameState.inCombat;
 
             // Show/hide challenge button
-            if (zone.guardian && !gameState.currentZone.startsWith('endless')) {
+            if (zone.guardian) {
                 this.challengeBtn.style.display = 'block';
                 this.challengeBtn.innerHTML = `Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
@@ -1591,8 +1550,6 @@ handlePartySlotClick(slotIndex) {
                         gameState.resetGame();
                         // Clear game controller combat state
                         game.currentBattle = null;
-                        game.endlessTowerMode = null;
-                        game.endlessTowerFloor = 0;
                         // Hide combat UI if visible
                         this.hideCombatUI();
                         this.hideSettings();
@@ -1645,35 +1602,6 @@ handlePartySlotClick(slotIndex) {
         });
         achievementsHtml += '</div></div>';
 
-        // Endless Tower records
-        let recordsHtml = '<div class="records-section"><h4>Endless Tower Records</h4>';
-
-        if (gameState.endlessTowerRecords.wild.floor > 0) {
-            const wild = gameState.endlessTowerRecords.wild;
-            recordsHtml += `
-                <div class="record-entry">
-                    <span class="record-mode">Wild: Floor ${wild.floor}</span>
-                    <span class="record-team">${wild.team.map(t => `Lvl ${t.level} ${t.temperament} ${t.species} ${t.runes.map(r => RUNES[r]?.symbol || '').join('')}`).join(', ')}</span>
-                </div>
-            `;
-        } else {
-            recordsHtml += '<p class="no-record">No Wild record yet</p>';
-        }
-
-        if (gameState.endlessTowerRecords.guardian.floor > 0) {
-            const guardian = gameState.endlessTowerRecords.guardian;
-            recordsHtml += `
-                <div class="record-entry">
-                    <span class="record-mode">Guardian: Floor ${guardian.floor}</span>
-                    <span class="record-team">${guardian.team.map(t => `Lvl ${t.level} ${t.temperament} ${t.species} ${t.runes.map(r => RUNES[r]?.symbol || '').join('')}`).join(', ')}</span>
-                </div>
-            `;
-        } else {
-            recordsHtml += '<p class="no-record">No Guardian record yet</p>';
-        }
-
-        recordsHtml += '</div>';
-
         content.innerHTML = `
             <div class="profile-name-section">
                 <label for="profile-name-input">Player Name:</label>
@@ -1681,12 +1609,10 @@ handlePartySlotClick(slotIndex) {
                 <button id="save-name-btn" class="btn btn-small">Save</button>
             </div>
             <div class="profile-stats">
-                <p>Väsen Variants Caught: ${gameState.vasenCollection.length} / ${GAME_CONFIG.MAX_INVENTORY_SIZE}</p>
                 <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
                 <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.length}</p>
             </div>
             ${achievementsHtml}
-            ${recordsHtml}
         `;
         
         // Add save name listener
@@ -1825,17 +1751,6 @@ handlePartySlotClick(slotIndex) {
         }
 
         this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false);
-    }
-
-    // Show endless tower result
-    showEndlessTowerResult(result) {
-        let message = `<p>Run ended. Reached floor ${result.floor} in Endless Tower ${result.mode === 'wild' ? 'Wild' : 'Guardian'}.</p>`;
-
-        if (result.newRecord) {
-            message += `<p class="new-record">New Record!</p>`;
-        }
-
-        this.showDialogue('Endless Tower', message, [{ text: 'Return', callback: () => game.exitEndlessTower() }], false);
     }
 
     // Refresh all UI

@@ -5,8 +5,6 @@
 class Game {
     constructor() {
         this.currentBattle = null;
-        this.endlessTowerMode = null;
-        this.endlessTowerFloor = 0;
     }
 
     // Initialize the game
@@ -136,16 +134,6 @@ class Game {
         if (gameState.inCombat) return;
         if (!gameState.party.some(p => p !== null)) {
             ui.showMessage('Form a party with at least one Väsen to explore.', 'error');
-            return;
-        }
-
-        // Check for endless tower modes
-        if (gameState.currentZone === 'endless-wild') {
-            this.startEndlessTower('wild');
-            return;
-        }
-        if (gameState.currentZone === 'endless-guardian') {
-            this.startEndlessTower('guardian');
             return;
         }
 
@@ -490,8 +478,6 @@ handleAskItem() {
 
         // Check if this was the final guardian (Gylfe)
         if (gameState.currentZone === 'varldens-ande' && wasFirstClear) {
-            gameState.endlessTowerUnlocked = true;
-            ui.addCombatLog('Endless Tower unlocked: Wild and Guardian modes available.', 'unlock');
         }
 
         // Calculate experience
@@ -564,10 +550,6 @@ handleAskItem() {
             };
         }
 
-        if (gameState.currentZone === 'varldens-ande' && wasFirstClear) {
-            message += '<p><strong>Endless Tower</strong> unlocked!</p>';
-        }
-
         ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: callback }], false);
 
         gameState.saveGame();
@@ -612,198 +594,6 @@ handleAskItem() {
         ui.showMessage(`${vasen.getName()} health restored ${Math.round(healPercent * 100)}%. (+${healed} HP)`);
         this.refreshUI();
         gameState.saveGame();
-    }
-
-    // Start endless tower
-    startEndlessTower(mode) {
-        this.endlessTowerMode = mode;
-        this.endlessTowerFloor = 1;
-
-        ui.showDialogue(
-            `Endless Tower - ${mode === 'wild' ? 'Wild' : 'Guardian'}`,
-            mode === 'wild' ?
-                '<p>Each floor brings stronger wild Väsen. Levels increase with every victory. Taming is disabled and attribute changes persist between floors. Prepare your party carefully.</p>' :
-                '<p>Each floor brings a stronger Guardian. Health and attribute changes are reset between floors.</p>',
-            [
-                {
-                    text: 'Enter',
-                    callback: () => this.startEndlessTowerFloor()
-                },
-                {
-                    text: 'Cancel',
-                    class: 'btn-secondary',
-                    callback: () => {
-                        this.endlessTowerMode = null;
-                        this.endlessTowerFloor = 0;
-                    }
-                }
-            ]
-        );
-    }
-
-    // Start endless tower floor
-    startEndlessTowerFloor() {
-        gameState.inCombat = true;
-
-        const level = 29 + this.endlessTowerFloor; // Starts at 30
-
-        // Get player team
-        const playerTeam = gameState.party.filter(p => p !== null);
-
-        if (this.endlessTowerMode === 'wild') {
-            // Create random wild vasen
-            const speciesName = getRandomSpawnFromZone('GINNUNGAGAP');
-            const enemyVasen = createWildVasen(speciesName, level);
-            enemyVasen.resetBattleState();
-
-            // Don't reset player battle state in wild mode (persists)
-            if (this.endlessTowerFloor === 1) {
-                playerTeam.forEach(v => v.resetBattleState());
-            }
-
-            this.currentBattle = new Battle(playerTeam, [enemyVasen], BATTLE_TYPES.ENDLESS_WILD);
-            this.currentBattle.isEndlessTower = true;
-            this.currentBattle.endlessTowerMode = 'wild';
-        } else {
-            // Create random guardian team
-            const enemyTeam = createRandomGuardianTeam(level);
-            enemyTeam.forEach(v => v.resetBattleState());
-            playerTeam.forEach(v => {
-                v.resetBattleState();
-                v.currentHealth = v.maxHealth;
-                v.currentMegin = v.maxMegin;
-            });
-
-            this.currentBattle = new Battle(playerTeam, enemyTeam, BATTLE_TYPES.ENDLESS_GUARDIAN);
-            this.currentBattle.isEndlessTower = true;
-            this.currentBattle.endlessTowerMode = 'guardian';
-            this.currentBattle.guardianName = ENDLESS_TOWER_NAMES[Math.floor(Math.random() * ENDLESS_TOWER_NAMES.length)];
-        }
-
-        this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
-        this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
-        this.currentBattle.onHit = (side) => ui.flashCombatant(side);
-        this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
-        this.currentBattle.onEnd = (result) => this.handleEndlessTowerBattleEnd(result);
-
-        ui.showCombatUI();
-        ui.clearCombatLog();
-        ui.renderCombat(this.currentBattle);
-        ui.addCombatLog(`Floor ${this.endlessTowerFloor}`, 'floor');
-
-        if (this.endlessTowerMode === 'wild') {
-            ui.addCombatLog(`A wild ${this.currentBattle.enemyTeam[0].getDisplayName()} appears!`, 'encounter');
-        } else {
-            ui.addCombatLog(`${this.currentBattle.guardianName} challenges you!`, 'encounter');
-        }
-    }
-
-    // Handle endless tower battle end
-    handleEndlessTowerBattleEnd(result) {
-        if (result.surrendered || !result.victory) {
-            // Record the run
-            const teamData = gameState.party.filter(p => p !== null).map(v => ({
-                species: v.speciesName,
-                level: v.level,
-                temperament: v.temperament.name,
-                runes: v.runes.slice()
-            }));
-
-            const recordKey = this.endlessTowerMode;
-            const currentRecord = gameState.endlessTowerRecords[recordKey];
-            const isNewRecord = this.endlessTowerFloor > currentRecord.floor;
-
-            if (isNewRecord) {
-                gameState.endlessTowerRecords[recordKey] = {
-                    floor: this.endlessTowerFloor,
-                    team: teamData
-                };
-                gameState.saveGame();
-            }
-
-            // Heal party
-            gameState.party.forEach(v => {
-                if (v) {
-                    v.currentHealth = v.maxHealth;
-                    v.currentMegin = v.maxMegin;
-                    v.resetBattleState();
-                }
-            });
-
-            ui.showEndlessTowerResult({
-                floor: this.endlessTowerFloor,
-                mode: this.endlessTowerMode,
-                newRecord: isNewRecord
-            });
-
-            return;
-        }
-
-        // Victory - continue to next floor
-        this.endlessTowerFloor++;
-
-        // Check for max floor
-        if (this.endlessTowerFloor > 999) {
-            // Record and exit
-            const teamData = gameState.party.filter(p => p !== null).map(v => ({
-                species: v.speciesName,
-                level: v.level,
-                temperament: v.temperament.name,
-                runes: v.runes.slice()
-            }));
-
-            gameState.endlessTowerRecords[this.endlessTowerMode] = {
-                floor: 999,
-                team: teamData
-            };
-
-            gameState.party.forEach(v => {
-                if (v) {
-                    v.currentHealth = v.maxHealth;
-                    v.currentMegin = v.maxMegin;
-                    v.resetBattleState();
-                }
-            });
-
-            ui.showEndlessTowerResult({
-                floor: 999,
-                mode: this.endlessTowerMode,
-                newRecord: true
-            });
-
-            gameState.saveGame();
-            return;
-        }
-
-        ui.addCombatLog(`Floor ${this.endlessTowerFloor - 1} cleared.`, 'victory');
-
-        // For guardian mode, heal between floors
-        if (this.endlessTowerMode === 'guardian') {
-            gameState.party.forEach(v => {
-                if (v) {
-                    v.currentHealth = v.maxHealth;
-                    v.currentMegin = v.maxMegin;
-                }
-            });
-        }
-
-        // Small delay then start next floor
-        setTimeout(() => {
-            ui.addCombatLog(`Preparing floor ${this.endlessTowerFloor}...`, 'system');
-            setTimeout(() => this.startEndlessTowerFloor(), 500);
-        }, 1000);
-    }
-
-    // Exit endless tower
-    exitEndlessTower() {
-        this.endlessTowerMode = null;
-        this.endlessTowerFloor = 0;
-        this.currentBattle = null;
-        gameState.inCombat = false;
-
-        ui.hideCombatUI();
-        ui.showMessage('Your party is fully healed.');
-        this.refreshUI();
     }
 }
 
