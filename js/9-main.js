@@ -266,8 +266,8 @@ class Game {
         this.currentBattle.executePlayerAction({ type: 'swap', targetIndex });
     }
 
-    // Handle gift item
-    handleGiftItem(itemId) {
+    // Handle offer item
+    handleOfferItem(itemId) {
         if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
         if (!this.currentBattle.isWildEncounter) return;
 
@@ -277,7 +277,7 @@ class Game {
             return;
         }
 
-        this.currentBattle.executePlayerAction({ type: 'gift', itemId });
+        this.currentBattle.executePlayerAction({ type: 'offer', itemId });
     }
 
     // Handle ask about item confirmation
@@ -337,11 +337,11 @@ handleAskItem() {
         );
     }
 
-    // Show gift modal
-    showGiftModal() {
+    // Show offer modal
+    showOfferModal() {
         if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
         if (!this.currentBattle.isWildEncounter) return;
-        ui.showGiftModal(this.currentBattle);
+        ui.showOfferModal(this.currentBattle);
     }
 
     // Handle battle end
@@ -822,7 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-swap').addEventListener('click', () => {
         document.getElementById('swap-options').classList.toggle('visible');
     });
-    document.getElementById('btn-gift').addEventListener('click', () => game.showGiftModal());
+    document.getElementById('btn-offer').addEventListener('click', () => game.showOfferModal());
     document.getElementById('btn-ask').addEventListener('click', () => game.handleAskItem());
     document.getElementById('btn-pass').addEventListener('click', () => game.handlePass());
     document.getElementById('btn-surrender').addEventListener('click', () => game.handleSurrender());

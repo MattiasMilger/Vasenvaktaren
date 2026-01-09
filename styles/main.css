@@ -2043,7 +2043,7 @@ strong, b { color: var(--text-accent); }
 #close-settings,
 #close-profile,
 #close-combat-tips,
-#close-gift-modal,
+#close-offer-modal,
 #close-heal-modal,
 #close-rune-equip-modal,
 #close-rune-to-vasen-modal {
@@ -2233,8 +2233,8 @@ textarea {
     margin-top: var(--spacing-md);
 }
 
-/* Gift/Heal/Swap Modals */
-.gift-item-btn,
+/* Offer/Heal/Swap Modals */
+.offer-item-btn,
 .heal-vasen-btn,
 .knockout-swap-btn,
 .rune-equip-btn,
@@ -2253,7 +2253,7 @@ textarea {
     text-align: left;
 }
 
-.gift-item-btn:hover,
+.offer-item-btn:hover,
 .heal-vasen-btn:hover,
 .knockout-swap-btn:hover,
 .rune-equip-btn:hover,

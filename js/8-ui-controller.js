@@ -1109,7 +1109,7 @@ handlePartySlotClick(slotIndex) {
 
         // Update other action buttons
         document.getElementById('btn-swap').disabled = !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
-        document.getElementById('btn-gift').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.giftsGiven >= GAME_CONFIG.MAX_GIFTS_PER_COMBAT || battle.correctItemGiven;
+        document.getElementById('btn-offer').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.offerssGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
         document.getElementById('btn-ask').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || activeVasen.battleFlags.hasSwapSickness;
         document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction;
         document.getElementById('btn-surrender').disabled = false;
@@ -1201,36 +1201,36 @@ handlePartySlotClick(slotIndex) {
         modal.classList.add('active');
     }
 
-    // Show gift item modal
-    showGiftModal(battle) {
-        const modal = document.getElementById('gift-modal');
-        const itemList = document.getElementById('gift-item-list');
+    // Show offer item modal
+    showOfferModal(battle) {
+        const modal = document.getElementById('offer-modal');
+        const itemList = document.getElementById('offer-item-list');
         itemList.innerHTML = '';
 
         const items = Object.entries(gameState.itemInventory);
         if (items.length === 0) {
-            itemList.innerHTML = '<p class="empty-message">You have no items to gift.</p>';
+            itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {
             items.forEach(([itemId, count]) => {
                 const item = TAMING_ITEMS[itemId];
                 if (!item) return;
 
                 const itemBtn = document.createElement('button');
-                itemBtn.className = 'gift-item-btn';
+                itemBtn.className = 'offer-item-btn';
                 itemBtn.title = item.description;
                 itemBtn.innerHTML = `
-                    <span class="gift-item-name">${item.name}</span>
-                    <span class="gift-item-count">x${count}</span>
+                    <span class="offer-item-name">${item.name}</span>
+                    <span class="offer-item-count">x${count}</span>
                 `;
                 itemBtn.onclick = () => {
                     modal.classList.remove('active');
-                    game.handleGiftItem(itemId);
+                    game.handleOfferItem(itemId);
                 };
                 itemList.appendChild(itemBtn);
             });
         }
 
-        document.getElementById('close-gift-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-offer-modal').onclick = () => modal.classList.remove('active');
         modal.classList.add('active');
     }
 
@@ -1381,12 +1381,12 @@ handlePartySlotClick(slotIndex) {
         const item = TAMING_ITEMS[itemId];
         if (!item) return;
 
-        // Check if we can gift during combat
-        const canGift = gameState.inCombat && 
+        // Check if we can offer during combat
+        const canOffer = gameState.inCombat && 
                         game.currentBattle && 
                         game.currentBattle.isWildEncounter && 
                         game.currentBattle.waitingForPlayerAction &&
-                        game.currentBattle.giftsGiven < GAME_CONFIG.MAX_GIFTS_PER_COMBAT &&
+                        game.currentBattle.offerssGiven < GAME_CONFIG.MAX_OFFERS_PER_COMBAT &&
                         !game.currentBattle.correctItemGiven;
 
         const buttons = [
@@ -1396,12 +1396,12 @@ handlePartySlotClick(slotIndex) {
             }
         ];
 
-        // Add Gift Item button if in combat with wild encounter
+        // Add Offer Item button if in combat with wild encounter
         if (canGift) {
             buttons.push({
-                text: 'Gift Item',
+                text: 'Offer Item',
                 class: 'btn-primary',
-                callback: () => game.handleGiftItem(itemId)
+                callback: () => game.handleOfferItem(itemId)
             });
         }
 

@@ -27,7 +27,7 @@ class Battle {
         this.winner = null;
         
         // Taming state
-        this.giftsGiven = 0;
+        this.offersGiven = 0;
         this.correctItemGiven = false;
         this.canTame = battleType === BATTLE_TYPES.WILD;
         this.isWildEncounter = battleType === BATTLE_TYPES.WILD;
@@ -59,8 +59,8 @@ class Battle {
                 return this.playerUseAbility(action.abilityName);
             case 'swap':
                 return this.playerSwap(action.targetIndex);
-            case 'gift':
-                return this.giftItem(action.itemId);
+            case 'offer':
+                return this.offerItem(action.itemId);
             case 'ask':
                 return this.askAboutItem();
             case 'pass':
@@ -368,15 +368,16 @@ class Battle {
         return results;
     }
     
-    // Player action: gift item
-    giftItem(itemName) {
+    // Player action: offer item
+    offerItem(itemName) {
         if (!this.canTame) {
             this.addLog('This Väsen can not be tamed!', 'error');
             if (this.onUpdate) this.onUpdate();
             return { success: false, correct: false };
         }
         
-        if (this.giftsGiven >= GAME_CONFIG.MAX_GIFTS_PER_COMBAT) {
+        if (this.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
+            this.addLog('Enough, no more items!', 'dialogue');
             return { success: false, correct: false };
         }
         
@@ -384,8 +385,8 @@ class Battle {
             return { success: false, correct: false };
         }
         
-        this.giftsGiven++;
-        this.addLog(`${itemName} was gifted to ${this.enemyActive.getName()}.`, 'gift');
+        this.offersGiven++;
+        this.addLog(`${itemName} was offered to ${this.enemyActive.getName()}.`, 'offer');
         
         const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
         
@@ -396,7 +397,7 @@ class Battle {
             this.addLog('What am I supposed to do with this?', 'dialogue');
         }
         
-        // Update UI (gift is a free action, don't end turn)
+        // Update UI (offer is a free action, don't end turn)
         if (this.onUpdate) this.onUpdate();
         
         return { success: true, correct: isCorrect };
