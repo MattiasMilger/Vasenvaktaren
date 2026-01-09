@@ -1091,7 +1091,7 @@ handlePartySlotClick(slotIndex) {
 
         // Update other action buttons
         document.getElementById('btn-swap').disabled = !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
-        document.getElementById('btn-offer').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.offerssGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
+        document.getElementById('btn-offer').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
         document.getElementById('btn-ask').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || activeVasen.battleFlags.hasSwapSickness;
         document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction;
         document.getElementById('btn-surrender').disabled = false;
@@ -1368,7 +1368,7 @@ handlePartySlotClick(slotIndex) {
                         game.currentBattle && 
                         game.currentBattle.isWildEncounter && 
                         game.currentBattle.waitingForPlayerAction &&
-                        game.currentBattle.offerssGiven < GAME_CONFIG.MAX_OFFERS_PER_COMBAT &&
+                        game.currentBattle.offersGiven <= GAME_CONFIG.MAX_OFFERS_PER_COMBAT &&
                         !game.currentBattle.correctItemGiven;
 
         const buttons = [

@@ -368,38 +368,55 @@ class Battle {
     
     // Player action: offer item
     offerItem(itemName) {
-        if (!this.canTame) {
-            this.addLog('This Väsen can not be tamed!', 'error');
-            if (this.onUpdate) this.onUpdate();
-            return { success: false, correct: false };
-        }
-        
-        if (this.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
-            this.addLog('Enough, no more items!', 'dialogue');
-            return { success: false, correct: false };
-        }
-        
-        if (this.correctItemGiven) {
-            return { success: false, correct: false };
-        }
-        
-        this.offersGiven++;
-        this.addLog(`${itemName} was offered to ${this.enemyActive.getName()}.`, 'offer');
-        
-        const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
-        
-        if (isCorrect) {
-            this.correctItemGiven = true;
-            this.addLog('Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.', 'dialogue');
-        } else {
-            this.addLog('What am I supposed to do with this?', 'dialogue');
-        }
-        
-        // Update UI (offer is a free action, don't end turn)
+    if (!this.canTame) {
+        this.addLog('This Väsen can not be tamed!', 'error');
         if (this.onUpdate) this.onUpdate();
-        
-        return { success: true, correct: isCorrect };
+        return { success: false, correct: false };
     }
+
+    // Increment first
+    this.offersGiven++;
+
+    // If this was the final allowed offer, show the message and STOP
+    if (this.offersGiven === GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
+        this.addLog('Enough, no more items!', 'dialogue');
+        if (this.onUpdate) this.onUpdate();
+        return { success: false, correct: false };
+    }
+
+    // If somehow exceeded (should never happen), block silently
+    if (this.offersGiven > GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
+        if (this.onUpdate) this.onUpdate();
+        return { success: false, correct: false };
+    }
+
+    // If correct item already given, no more offers allowed
+    if (this.correctItemGiven) {
+        if (this.onUpdate) this.onUpdate();
+        return { success: false, correct: false };
+    }
+
+    // Normal offer logic
+    this.addLog(`${itemName} was offered to ${this.enemyActive.getName()}.`, 'offer');
+
+    const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
+
+    if (isCorrect) {
+        this.correctItemGiven = true;
+        this.addLog(
+            'Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.',
+            'dialogue'
+        );
+    } else {
+        this.addLog('What am I supposed to do with this?', 'dialogue');
+    }
+
+    if (this.onUpdate) this.onUpdate();
+
+    return { success: true, correct: isCorrect };
+}
+
+
     
     // Player action: ask about item
     askAboutItem() {
