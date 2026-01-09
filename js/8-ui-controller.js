@@ -163,11 +163,10 @@ class UIController {
         sortedFamilies.forEach(family => {
             const familySection = document.createElement('div');
             familySection.className = 'family-section';
-
             const familyHeader = document.createElement('h4');
             familyHeader.className = 'family-header';
             familyHeader.textContent = family;
-            familyHeader.title = FAMILIES[family] || '';
+            familyHeader.title = FAMILY_DESCRIPTIONS[family] || 'No description available';
             familySection.appendChild(familyHeader);
 
             // Sort vasen in family alphabetically by species, then by temperament
@@ -180,6 +179,10 @@ class UIController {
 
             sortedVasen.forEach(vasen => {
                 const card = this.createVasenCard(vasen);
+                // Highlight if currently selected
+                if (this.selectedVasen && this.selectedVasen.id === vasen.id) {
+                    card.classList.add('selected');
+                }
                 familySection.appendChild(card);
             });
 
@@ -187,7 +190,7 @@ class UIController {
         });
     }
 
-    // Create a Vasen card
+    // Create a Väsen card
     createVasenCard(vasen, showActions = true) {
         const card = document.createElement('div');
         card.className = `vasen-card element-${vasen.species.element.toLowerCase()}`;
@@ -209,7 +212,12 @@ class UIController {
                 ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')" title="Swap with party member">+</button>` : ''}
             </div>
             <div class="vasen-card-details">
-                <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+                <span 
+                    class="element-badge element-${vasen.species.element.toLowerCase()}"
+                    title="${this.getDefensiveMatchupTooltip(vasen.species.element)}"
+                >
+                    ${vasen.species.element}
+                </span>
                 <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
                 ${isInParty ? '<span class="party-badge">In Party</span>' : ''}
             </div>
@@ -228,8 +236,16 @@ class UIController {
 
     // Select a Väsen to show details
     selectVasen(vasen) {
-        this.selectedVasen = vasen;
-        this.renderVasenDetails(vasen);
+        if (this.selectedVasen && this.selectedVasen.id === vasen.id) {
+            // If the same väsen is clicked again, deselect it
+            this.selectedVasen = null;
+        } else {
+            // Otherwise, select the new väsen
+            this.selectedVasen = vasen;
+        }
+        
+        this.renderVasenDetails(this.selectedVasen);
+        this.renderVasenInventory(); // Rerender inventory to update 'selected' class
     }
 
     // Toggle description collapsed state
@@ -244,6 +260,7 @@ class UIController {
     renderVasenDetails(vasen) {
         const panel = this.vasenDetailsPanel;
         if (!vasen) {
+            // Clear the panel if no väsen is selected
             panel.innerHTML = '<p class="empty-message">Select a Väsen to view details</p>';
             return;
         }
@@ -252,7 +269,7 @@ class UIController {
         const runeSlots = vasen.level >= 30 ? 2 : 1;
         const expProgress = vasen.getExpProgress();
         const defensiveTooltip = this.getDefensiveMatchupTooltip(vasen.species.element);
-        const familyDescription = FAMILIES[vasen.species.family] || 'No description available';
+        const familyDescription = FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available';
 
         panel.innerHTML = `
             <div class="details-header">
@@ -486,6 +503,7 @@ class UIController {
             const equippedTo = this.findRuneEquippedTo(runeId);
 
             const runeCard = document.createElement('div');
+            runeCard.title = rune.flavor;
             runeCard.className = `rune-card ${equippedTo ? 'equipped' : ''}`;
             runeCard.innerHTML = `
                 <span class="rune-symbol">${rune.symbol}</span>
@@ -526,11 +544,16 @@ class UIController {
         grid.className = 'item-grid';
 
         itemEntries.forEach(([itemId, count]) => {
-            const item = TAMING_ITEMS[itemId];
+            // Note: This relies on TAMING_ITEMS, ensure your item data is in that object.
+            const item = TAMING_ITEMS[itemId]; 
             if (!item) return;
 
             const itemCard = document.createElement('div');
             itemCard.className = 'item-card';
+            
+            // Description Tooltip
+            itemCard.title = item.description; 
+            
             itemCard.innerHTML = `
                 <div class="item-header">
                     <span class="item-name">${item.name}</span>
@@ -1356,7 +1379,7 @@ handlePartySlotClick(slotIndex) {
         ];
 
         // Add Offer Item button if in combat with wild encounter
-        if (canGift) {
+        if (canOffer) {
             buttons.push({
                 text: 'Offer Item',
                 class: 'btn-primary',
@@ -1764,9 +1787,16 @@ handlePartySlotClick(slotIndex) {
         if (this.selectedVasen) {
             const updatedVasen = gameState.vasenCollection.find(v => v.id === this.selectedVasen.id);
             if (updatedVasen) {
-                this.selectedVasen = updatedVasen;
+                // Ensure selectedVasen always points to the live object
+                this.selectedVasen = updatedVasen; 
                 this.renderVasenDetails(updatedVasen);
+            } else {
+                 // The selected väsen might have been removed (e.g., reset)
+                 this.selectedVasen = null;
+                 this.renderVasenDetails(null);
             }
+        } else {
+            this.renderVasenDetails(null);
         }
     }
 }
