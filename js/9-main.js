@@ -287,8 +287,8 @@ handleAskItem() {
 
     // Show the confirmation dialog
     ui.showDialogue(
-        'Asking About Item',
-        '<p>Beware, this action will pass your turn.</p>',
+        'Ask About Item',
+        '<p>Beware, this action will cost a turn.</p>',
         [
             {
                 text: 'Confirm',
