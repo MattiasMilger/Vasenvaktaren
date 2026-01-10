@@ -885,39 +885,41 @@ this.showMessage('Väsen released.', 'info');
     }
 
     // Render zones
-    renderZones() {
-        this.zoneList.innerHTML = '';
+renderZones() {
+    this.zoneList.innerHTML = '';
 
-        ZONE_ORDER.forEach(zoneId => {
-            const zone = ZONES[zoneId];
-            const isUnlocked = gameState.isZoneUnlocked(zoneId);
-            const isSelected = gameState.currentZone === zoneId;
-            const isCleared = gameState.defeatedGuardians.has(zoneId);
+    ZONE_ORDER.forEach(zoneId => {
+        const zone = ZONES[zoneId];
+        const isUnlocked = gameState.isZoneUnlocked(zoneId);
+        const isSelected = gameState.currentZone === zoneId;
+        const isCleared = gameState.defeatedGuardians.has(zoneId);
 
-            const zoneBtn = document.createElement('button');
-            zoneBtn.className = `zone-btn ${isUnlocked ? '' : 'locked'} ${isSelected ? 'selected' : ''} ${isCleared ? 'cleared' : ''}`;
-            zoneBtn.disabled = !isUnlocked;
+        // FIX: use zone-item instead of zone-btn
+        const zoneBtn = document.createElement('button');
+        zoneBtn.className = `zone-item ${isUnlocked ? '' : 'locked'} ${isSelected ? 'selected' : ''} ${isCleared ? 'cleared' : ''}`;
+        zoneBtn.disabled = !isUnlocked;
 
-            if (isUnlocked) {
-                zoneBtn.innerHTML = `
-                    <span class="zone-name">${zone.name}</span>
-                    <span class="zone-levels">Lvl ${zone.levelRange[0]}-${zone.levelRange[1]}</span>
-                    ${isCleared ? '<span class="zone-cleared-badge">Cleared</span>' : ''}
-                `;
-                zoneBtn.onclick = () => this.selectZone(zoneId);
-            } else {
-                const prevZone = this.getPreviousZone(zoneId);
-                zoneBtn.innerHTML = `
-                    <span class="zone-name">${zone.name}</span>
-                    <span class="zone-locked">Defeat ${prevZone ? ZONES[prevZone].guardian?.name || 'Guardian' : 'Guardian'} to unlock</span>
-                `;
-            }
+        if (isUnlocked) {
+            zoneBtn.innerHTML = `
+                <span class="zone-name">${zone.name}</span>
+                <span class="zone-level">Lvl ${zone.levelRange[0]}-${zone.levelRange[1]}</span>
+                ${isCleared ? '<span class="zone-status cleared">Cleared</span>' : ''}
+            `;
+            zoneBtn.onclick = () => this.selectZone(zoneId);
+        } else {
+            const prevZone = this.getPreviousZone(zoneId);
+            zoneBtn.innerHTML = `
+                <span class="zone-name">${zone.name}</span>
+                <span class="zone-status locked">Defeat ${prevZone ? ZONES[prevZone].guardian?.name || 'Guardian' : 'Guardian'} to unlock</span>
+            `;
+        }
 
-            this.zoneList.appendChild(zoneBtn);
-        });
+        this.zoneList.appendChild(zoneBtn);
+    });
 
-        this.updateExploreButton();
-    }
+    this.updateExploreButton();
+}
+
 
     // Get previous zone
     getPreviousZone(zoneId) {
