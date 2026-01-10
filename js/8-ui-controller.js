@@ -711,18 +711,11 @@ handlePartySlotClick(slotIndex) {
     if (gameState.inCombat) return;
 
     // Non-combat logic: empty slot behavior
-if (!vasen) {
-    if (this.selectedVasen) {
-        // Existing behavior: add selected väsen
-        this.addToParty(this.selectedVasen.id, slotIndex);
-    } else {
-        // NEW behavior: open menu to choose a väsen
+    if (!vasen) {
+        // Always open the choose-a-väsen menu
         this.showAddVasenMenu(slotIndex);
+        return;
     }
-    return;
-}
-
-
 }
 
     // Add Vasen to party
