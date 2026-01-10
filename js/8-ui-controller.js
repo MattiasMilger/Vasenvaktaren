@@ -1853,12 +1853,15 @@ if (firstButton) firstButton.focus();
         const content = document.getElementById('profile-content');
 
         // Achievements
-        let achievementsHtml = '<div class="achievements-section"><h4>Achievements</h4><div class="achievements-grid">';
+
+        let achievementsHtml = '<div class="achievements-section"><h4>Achievements:</h4><div class="achievements-grid">';
+        
         Object.values(ACHIEVEMENTS).forEach(achievement => {
             // Check if achievement is earned
             const earned = gameState.achievements[achievement.id] === true;
             achievementsHtml += `
                 <div class="achievement ${earned ? 'earned' : 'locked'}">
+                
                     <span class="achievement-name">${achievement.name}</span>
                     <span class="achievement-desc">${achievement.description}</span>
                 </div>
@@ -1873,9 +1876,11 @@ if (firstButton) firstButton.focus();
                 <button id="save-name-btn" class="btn btn-small">Save</button>
             </div>
 <div class="profile-stats">
+    <br>
     <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
     <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.length}</p>
     <p>Väsen Types Tamed: ${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</p>
+    <br>
 </div>
 
             ${achievementsHtml}

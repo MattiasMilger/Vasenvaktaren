@@ -2638,6 +2638,12 @@ img {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     margin-bottom: var(--spacing-xs);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.item-card:hover {
+    background: var(--bg-hover);
 }
 
 .item-info {
@@ -3008,4 +3014,36 @@ img {
 .swap-into-party-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
     background: var(--bg-hover);
     border-color: var(--accent-primary);
+}
+
+.achievement {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.achievement.earned {
+    border-color: var(--accent-primary);
+    background: var(--bg-tertiary);
+}
+
+.achievement.locked {
+    opacity: 0.5;
+}
+
+.achievement-name {
+    display: block;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.achievement-desc {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
 }
