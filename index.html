@@ -23,14 +23,15 @@
     </div>
 
     <!-- Starter Selection Screen -->
-    <div id="starter-select-screen" class="screen">
-        <div class="starter-content">
-            <p class="starter-intro">You find yourself in a strange forest.</p>
-            <p class="starter-prompt">Choose who to befriend:</p>
-            <div id="starter-options" class="starter-options"></div>
-            <button id="confirm-starter-btn" class="btn btn-primary" disabled>Confirm</button>
-        </div>
-    </div>
+<div id="starter-select-screen" class="screen active">
+  <div class="starter-content">
+    <p class="starter-intro">You find yourself in a strange forest.</p>
+    <p class="starter-prompt">Choose who to befriend:</p>
+    <div id="starter-options" class="starter-options"></div>
+    <button id="confirm-starter-btn" class="btn btn-primary" disabled>Confirm</button>
+  </div>
+</div>
+
 
     <!-- Game Screen -->
     <div id="game-screen" class="screen">
@@ -131,14 +132,6 @@
             </section>
         </main>
 
-        <!-- Footer -->
-        <footer class="game-footer">
-            <span>Developer: Mattias Milger</span>
-            <span class="footer-sep">|</span>
-            <a href="mailto:mattias.r.milger@gmail.com">mattias.r.milger@gmail.com</a>
-            <span class="footer-sep">|</span>
-            <a href="https://github.com/MattiasMilger/Vasenvaktaren" target="_blank" title="View source code and star the project on GitHub.">GitHub</a>
-        </footer>
     </div>
 
     <!-- Modals -->
@@ -231,25 +224,49 @@
     </div>
 </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal">
-        <div class="modal-content modal-settings">
-            <h3 class="modal-title">Settings</h3>
-            <div class="settings-section">
-                <h4>Save Management</h4>
-                <p class="settings-note">Game auto-saves.</p>
-                <div class="save-buttons">
-                    <button id="export-save-btn" class="btn btn-secondary">Export Save</button>
-                    <button id="import-save-btn" class="btn btn-secondary">Import Save</button>
-                </div>
-                <textarea id="import-save-data" class="import-textarea" placeholder="Paste save data here..." style="display: none;"></textarea>
-                <button id="confirm-import-btn" class="btn btn-primary" style="display:none;">Import Now</button>
+<!-- Settings Modal -->
+<div id="settings-modal" class="modal">
+    <div class="modal-content modal-settings">
+        <h3 class="modal-title">Settings</h3>
 
-                <button id="reset-game-btn" class="btn btn-danger">Reset Game</button>
+        <!-- Save Management -->
+        <div class="settings-section">
+            <h4>Save Management</h4>
+            <p class="settings-note">Game auto-saves.</p>
+
+            <div class="save-buttons">
+                <button id="export-save-btn" class="btn btn-secondary">Export Save</button>
+                <button id="import-save-btn" class="btn btn-secondary">Import Save</button>
             </div>
-            <button id="close-settings" class="btn btn-primary">Close</button>
+
+            <textarea id="import-save-data" class="import-textarea" 
+                      placeholder="Paste save data here..." 
+                      style="display: none;"></textarea>
+
+            <button id="confirm-import-btn" class="btn btn-primary" style="display:none;">
+                Import Now
+            </button>
+
+            <button id="reset-game-btn" class="btn btn-danger">Reset Game</button>
         </div>
+
+        <!-- Credits Section -->
+        <div class="settings-section">
+            <h4>Credits</h4>
+            <p>Developer: Mattias Milger</p>
+            </p>
+            <p>
+                <a href="https://github.com/MattiasMilger/Vasenvaktaren" 
+                   target="_blank" 
+                   title="View source code and star the project on GitHub.">
+                    GitHub Repository
+                </a>
+            </p>
+        </div>
+
+        <button id="close-settings" class="btn btn-primary">Close</button>
     </div>
+</div>
 
     <!-- Profile Modal -->
     <div id="profile-modal" class="modal">

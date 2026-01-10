@@ -92,9 +92,9 @@ body {
 /* Tablet and Mobile: locked viewport, scrolling handled per-screen */
 @media (max-width: 1024px) {
     html, body {
-        height: 100%;
-        overflow: hidden;
-    }
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto; /* allow vertical scrolling */}
 }
 
 a {
@@ -213,9 +213,8 @@ img {
    Starter Selection Screen
    ========================= */
 #starter-select-screen {
-    justify-content: center;
-    align-items: center;
-    padding: var(--spacing-md);
+    padding: var(--spacing-xl);
+    display: block; /* restores natural flow */
 }
 
 .starter-content {
@@ -307,9 +306,8 @@ img {
    Game Screen Layout
    ========================= */
 #game-screen {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Desktop: fixed viewport */
@@ -2895,4 +2893,43 @@ img {
     height: 100%;
     background: var(--megin-fill);
     transition: width 0.3s;
+}
+
+@media (max-width: 1024px) {
+    .screen {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: auto; /* important */
+        min-height: 100vh; /* ensures full-screen feel */
+    }
+}
+
+.screen:not(.active) {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .game-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    overflow: visible;
+  }
+
+  .panel-left,
+  .panel-middle,
+  .panel-right {
+    width: 100%;
+    min-height: auto;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+#dialogue-modal {
+    z-index: 2000;
 }

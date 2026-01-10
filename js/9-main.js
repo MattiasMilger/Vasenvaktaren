@@ -127,6 +127,7 @@ class Game {
                 // Start the game for real
                 gameState.gameStarted = true;
                 gameState.saveGame();
+
                 game.showGameScreen();
             }
         },
