@@ -1,5 +1,7 @@
 # Väsenväktaren
 
+If you enjoyed Väsenväktaren, please consider starring the repository!
+
 **Catch creatures of Swedish folklore**
 
 A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and battle your way through the guardians of each realm.
@@ -126,8 +128,9 @@ Vasenvaktaren/
 
 ## Feature roadmap
 
-- Finish Main Functionality (50%)
+- Finish Main Functionality (90%)
 - Make mobile friendly (0%)
+- Game Balance (0%)
 - introduce endgame system Endless Tower (0%)
 
 ## Credits
@@ -139,7 +142,3 @@ Vasenvaktaren/
 ## License
 
 All rights reserved. This game and its assets are the property of Mattias Milger.
-
----
-
-*If you enjoyed Väsenväktaren, please consider starring the repository on GitHub!*

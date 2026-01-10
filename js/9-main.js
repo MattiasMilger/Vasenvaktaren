@@ -109,13 +109,39 @@ class Game {
 
         // Show intro dialogue
         ui.showDialogue(
-            'Welcome, Väktare',
-            `<p>The first rune has revealed itself to you: <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}</p>
-             <p class="rune-hint">${RUNES.URUZ.effect}</p>
-             <p>Your <strong>${starter.getDisplayName()}</strong> stands ready at your side, equipped with the rune's power.</p>
-             <p>You also found a <strong>${startingItem}</strong> to help you tame new Väsen.</p>`,
-            [{ text: 'Begin Journey', callback: () => this.showGameScreen() }]
-        );
+    'Welcome, Väktare',
+    `
+        <p>The first rune has revealed itself to you: 
+            <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}
+        </p>
+        <p class="rune-hint">${RUNES.URUZ.effect}</p>
+        <p>Your <strong>${starter.getDisplayName()}</strong> stands ready at your side, 
+           equipped with the rune's power.</p>
+        <p>You also found a <strong>${startingItem}</strong> to help you tame new Väsen.</p>
+    `,
+    [
+        {
+            text: 'Begin Journey',
+            class: 'btn-primary',
+            callback: () => {
+                // Start the game for real
+                gameState.gameStarted = true;
+                gameState.saveGame();
+                game.showGameScreen();
+            }
+        },
+        {
+            text: 'Cancel',
+            class: 'btn-secondary',
+            callback: () => {
+                // Close popup and return to starter selection
+                ui.hideDialogue();
+            }
+        }
+    ],
+    false // non‑dismissible
+);
+
     }
 
     // Show main game screen

@@ -77,33 +77,60 @@ class UIController {
         });
 
         // Settings
-        document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
-        document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
-        document.getElementById('export-save-btn').addEventListener('click', () => this.exportSave());
-        document.getElementById('import-save-btn').addEventListener('click', () => this.importSave());
-        document.getElementById('reset-game-btn').addEventListener('click', () => this.confirmReset());
+document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
+document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
+document.getElementById('export-save-btn').addEventListener('click', () => this.exportSave());
 
-        // Combat tips
-        document.getElementById('combat-tips-btn').addEventListener('click', () => this.showCombatTips());
-        document.getElementById('close-combat-tips').addEventListener('click', () => this.hideCombatTips());
+// IMPORT SAVE
+const importTextarea = document.getElementById('import-save-data');
+const confirmImportBtn = document.getElementById('confirm-import-btn');
 
-        // Profile
-        document.getElementById('player-profile').addEventListener('click', () => this.showProfile());
-        document.getElementById('close-profile').addEventListener('click', () => this.hideProfile());
-        document.getElementById('change-name-btn').addEventListener('click', () => this.changeName());
+document.getElementById('import-save-btn').addEventListener('click', () => {
+    const isHidden = importTextarea.style.display === 'none';
 
-        // Close modals on backdrop click (only if dismissible)
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    // Check if modal is dismissible (default to true for non-dialogue modals)
-                    const isDismissible = modal.dataset.dismissible !== 'false';
-                    if (isDismissible) {
-                        modal.classList.remove('active');
-                    }
-                }
-            });
-        });
+    importTextarea.style.display = isHidden ? 'block' : 'none';
+    confirmImportBtn.style.display = isHidden ? 'block' : 'none';
+
+    if (isHidden) {
+        importTextarea.focus();
+    }
+});
+
+// Ctrl+Enter or Cmd+Enter to import
+importTextarea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        this.importSave();
+    }
+});
+
+// Click "Import Now" button
+confirmImportBtn.addEventListener('click', () => {
+    this.importSave();
+});
+
+document.getElementById('reset-game-btn').addEventListener('click', () => this.confirmReset());
+
+// Combat tips
+document.getElementById('combat-tips-btn').addEventListener('click', () => this.showCombatTips());
+document.getElementById('close-combat-tips').addEventListener('click', () => this.hideCombatTips());
+
+// Profile
+document.getElementById('player-profile').addEventListener('click', () => this.showProfile());
+document.getElementById('close-profile').addEventListener('click', () => this.hideProfile());
+document.getElementById('change-name-btn').addEventListener('click', () => this.changeName());
+
+// Close modals on backdrop click (only if dismissible)
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            const isDismissible = modal.dataset.dismissible !== 'false';
+            if (isDismissible) {
+                modal.classList.remove('active');
+            }
+        }
+    });
+});
+
     }
 
     // Screen management
@@ -671,11 +698,11 @@ class UIController {
             <span>Swap with ${targetVasen.getName()} (${slotLabel})</span>
         </div>
     ` : `
-        <div class="swap-option">
-            <img src="assets/ui/empty-slot.png" alt="Empty">
-            <span>Move to ${slotLabel} (Empty)</span>
-        </div>
-    `,
+    <div class="swap-option">
+        <span>Move to ${slotLabel} (Empty)</span>
+    </div>
+`,
+
     callback: () => {
         gameState.swapPartySlots(fromSlot, i);
         this.renderParty();
@@ -1293,30 +1320,51 @@ renderActionButtons(battle) {
     }
 
     // Show dialogue modal
-    showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true) {
-        const modal = document.getElementById('dialogue-modal');
-        document.getElementById('dialogue-title').textContent = title;
-        document.getElementById('dialogue-message').innerHTML = message;
+showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true) {
+    const modal = document.getElementById('dialogue-modal');
+    document.getElementById('dialogue-title').textContent = title;
+    document.getElementById('dialogue-message').innerHTML = message;
 
-        // Store dismissible state on the modal for backdrop click handler
-        modal.dataset.dismissible = dismissible ? 'true' : 'false';
+    // Lock UI so gameplay actions cannot fire
+    gameState.uiLocked = true;
 
-        const btnContainer = document.getElementById('dialogue-buttons');
-        btnContainer.innerHTML = '';
+    // Store dismissible state on the modal for backdrop click handler
+    modal.dataset.dismissible = dismissible ? 'true' : 'false';
 
-        buttons.forEach(btn => {
-            const button = document.createElement('button');
-            button.className = `btn ${btn.class || 'btn-primary'}`;
-            button.innerHTML = btn.text;
-            button.onclick = () => {
-                modal.classList.remove('active');
-                if (btn.callback) btn.callback();
-            };
-            btnContainer.appendChild(button);
-        });
+    const btnContainer = document.getElementById('dialogue-buttons');
+    btnContainer.innerHTML = '';
 
-        modal.classList.add('active');
-    }
+    buttons.forEach(btn => {
+        const button = document.createElement('button');
+        button.className = `btn ${btn.class || 'btn-primary'}`;
+        button.innerHTML = btn.text;
+
+        button.onclick = () => {
+            modal.classList.remove('active');
+            gameState.uiLocked = false; // unlock UI when popup closes
+
+            // Restore focus to Explore button (optional but clean)
+            const exploreBtn = document.getElementById('explore-btn');
+            if (exploreBtn) exploreBtn.focus();
+
+            if (btn.callback) btn.callback();
+        };
+
+        btnContainer.appendChild(button);
+    });
+
+    // Remove focus from Explore button so Enter can't trigger it
+    const exploreBtn = document.getElementById('explore-btn');
+    if (exploreBtn) exploreBtn.blur();
+
+    // Show modal
+    modal.classList.add('active');
+
+    // Move keyboard focus into the modal (first button)
+    const firstButton = btnContainer.querySelector('button');
+    if (firstButton) firstButton.focus();
+}
+
 
     // Confirm Releasing Väsen
 
@@ -1716,21 +1764,30 @@ renderActionButtons(battle) {
     }
 
     importSave() {
-        const saveData = document.getElementById('import-save-data').value.trim();
-        if (!saveData) {
-            this.showMessage('Please paste save data first.', 'error');
-            return;
-        }
-
-        const result = gameState.importSave(saveData);
-        if (result.success) {
-            this.showMessage(result.message);
-            this.hideSettings();
-            game.refreshUI();
-        } else {
-            this.showMessage(result.message, 'error');
-        }
+    const saveData = document.getElementById('import-save-data').value.trim();
+    if (!saveData) {
+        this.showMessage('Please paste save data first.', 'error');
+        return;
     }
+
+    const success = gameState.importSave(saveData);
+
+    if (success) {
+        this.showMessage('Save imported successfully!');
+        this.hideSettings();
+
+        // Clear combat state
+        game.currentBattle = null;
+        this.hideCombatUI();
+
+        // Reinitialize UI exactly like Game.init()
+        ui.init();
+        game.showGameScreen();   // <-- THIS is the correct call
+        
+    } else {
+        this.showMessage('Invalid or corrupted save data.', 'error');
+    }
+}
 
     confirmReset() {
         this.showDialogue(
