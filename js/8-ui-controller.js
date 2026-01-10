@@ -365,11 +365,15 @@ class UIController {
             </div>
 
             <div class="details-actions">
-                ${isInParty ? 
-                    `<button class="btn btn-danger" onclick="ui.removeFromParty('${vasen.id}')">Remove from Party</button>` :
-                    `<button class="btn btn-primary" onclick="ui.addToParty('${vasen.id}')">Add to Party</button>`
-                }
-            </div>
+    ${isInParty ? 
+        `<button class="btn btn-danger" onclick="ui.removeFromParty('${vasen.id}')">Remove from Party</button>` :
+        `<button class="btn btn-primary" onclick="ui.addToParty('${vasen.id}')">Add to Party</button>`
+    }
+
+    <button class="btn btn-danger release-btn" onclick="ui.confirmReleaseVasen('${vasen.id}')">
+    Release
+</button>
+
         `;
     }
 
@@ -737,7 +741,7 @@ handlePartySlotClick(slotIndex) {
             this.showMessage('Cannot remove Väsen during combat.', 'error');
             return;
         }
-        
+
         // Find the slot index for this vasen
         const slotIndex = gameState.party.findIndex(v => v && v.id === vasenId);
         if (slotIndex === -1) {
@@ -757,6 +761,32 @@ handlePartySlotClick(slotIndex) {
             this.showMessage(result.message, 'error');
         }
     }
+
+    // Release Väsen from inventory
+    releaseVasen(vasenId) {
+    // Remove from party if present
+    gameState.party = gameState.party.map(p => p && p.id === vasenId ? null : p);
+
+    // Remove from collection
+    gameState.vasenCollection = gameState.vasenCollection.filter(v => v.id !== vasenId);
+
+    // Clear selection
+    this.selectedVasen = null;
+
+    // Clear selection and reset tab
+this.selectedVasen = null;
+this.currentTab = 'vasen';
+
+// Full UI rebuild
+this.switchTab('vasen');   // <-- forces full re-render of inventory + details
+this.renderParty();        // <-- re-renders party slots
+
+// Save AFTER UI is stable
+gameState.saveGame();
+
+this.showMessage('Väsen released.', 'info');
+
+}
 
     // Show swap into party modal (when party is full)
     showSwapIntoPartyModal(vasenId) {
@@ -1227,6 +1257,40 @@ renderActionButtons(battle) {
 
         modal.classList.add('active');
     }
+
+    // Confirm Releasing Väsen
+
+    confirmReleaseVasen(vasenId) {
+    if (gameState.inCombat) {
+        this.showMessage("You cannot release a Väsen during combat.", "error");
+        return;
+    }
+
+    const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
+
+    if (!vasen) {
+        this.showMessage('Väsen not found.', 'error');
+        return;
+    }
+
+    this.showDialogue(
+        `Release ${vasen.getName()}?`,
+        `<p>Are you sure you want to release <strong>${vasen.getDisplayName()}</strong>?<br>
+        This action cannot be undone.</p>`,
+        [
+            {
+                text: 'Release',
+                class: 'btn-danger',
+                callback: () => this.releaseVasen(vasenId)
+            },
+            {
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: null
+            }
+        ]
+    );
+}
 
     // Show offer item modal
     showOfferModal(battle) {
