@@ -983,19 +983,19 @@ handlePartySlotClick(slotIndex) {
             <div class="combatant-attributes">
                 <div class="combat-attr" title="Damage modifier for Strength Attacks">
                     <span class="combat-attr-name">Str</span>
-                    <span class="combat-attr-value">${vasen.calculateAttribute('strength')}</span>
+                    <span class="combat-attr-value">${vasen.getAttribute('strength')}</span>
                 </div>
                 <div class="combat-attr" title="Damage modifier for Wisdom Attacks">
                     <span class="combat-attr-name">Wis</span>
-                    <span class="combat-attr-value">${vasen.calculateAttribute('wisdom')}</span>
+                    <span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span>
                 </div>
                 <div class="combat-attr" title="Reduces damage from Strength Attacks">
                     <span class="combat-attr-name">Def</span>
-                    <span class="combat-attr-value">${vasen.calculateAttribute('defense')}</span>
+                    <span class="combat-attr-value">${vasen.getAttribute('defense')}</span>
                 </div>
                 <div class="combat-attr" title="Reduces damage from Wisdom Attacks">
                     <span class="combat-attr-name">Dur</span>
-                    <span class="combat-attr-value">${vasen.calculateAttribute('durability')}</span>
+                    <span class="combat-attr-value">${vasen.getAttribute('durability')}</span>
                 </div>
             </div>
             <div class="combatant-runes">
