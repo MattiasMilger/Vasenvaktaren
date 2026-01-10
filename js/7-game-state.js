@@ -14,7 +14,7 @@ class GameState {
         // Note: Runes are now bound to individual Väsen (stored in vasen.runes),
         // not to party slots. This allows väsen to keep their runes when removed from party.
         
-        // Collection of all caught Vasen (max 360)
+        // Collection of all caught Vasen (max 99)
         this.vasenCollection = [];
         
         // Inventory of taming items: { itemId: count }
@@ -31,6 +31,7 @@ class GameState {
         this.achievements = {
             champion: false,
             rune_master: false,
+            hoarder: false,
         };
         
         // Game flags
@@ -45,6 +46,13 @@ class GameState {
         this.uiLocked = false;
     }
     
+    // count väsen types tamed
+    getUniqueSpeciesTamed() {
+    const set = new Set();
+    this.vasenCollection.forEach(v => set.add(v.speciesName));
+    return set.size;
+}
+    
     // Initialize new game with starter Vasen
     startNewGame(starterSpeciesId, starterTemperament) {
         const speciesData = VASEN_SPECIES[starterSpeciesId];
@@ -58,6 +66,7 @@ class GameState {
         
         // Add to collection
         this.vasenCollection.push(starter);
+        this.checkAchievements();
         
         // Add to first party slot
         this.party[0] = starter;
@@ -472,17 +481,23 @@ equipRune(runeId, vasenId) {
     
     // Check and update achievements
     checkAchievements() {
-        // Champion - Defeat all zone guardians
-        const allGuardians = Object.keys(ZONES).filter(z => ZONES[z].guardian);
-        if (allGuardians.every(z => this.defeatedGuardians.has(z))) {
-            this.achievements.champion = true;
-        }
-        
-        // Rune Master - Collect all runes
-        if (this.hasAllRunes()) {
-            this.achievements.rune_master = true;
-        }
+    // Champion - Defeat all zone guardians
+    const allGuardians = Object.keys(ZONES).filter(z => ZONES[z].guardian);
+    if (allGuardians.every(z => this.defeatedGuardians.has(z))) {
+        this.achievements.champion = true;
     }
+    
+    // Rune Master - Collect all runes
+    if (this.hasAllRunes()) {
+        this.achievements.rune_master = true;
+    }
+
+    // Hoarder - Tame every Väsen type
+    const totalSpecies = Object.keys(VASEN_SPECIES).length;
+    if (this.getUniqueSpeciesTamed() === totalSpecies) {
+        this.achievements.hoarder = true;
+    }
+}
     
     // Serialize game state for saving
     serialize() {
@@ -620,21 +635,6 @@ equipRune(runeId, vasenId) {
         this.currentBattle = null;
         this.currentEncounter = null;
         this.inCombat = false;
-    }
-    
-    // Get available temperaments for a species (ones not yet caught)
-    getAvailableTemperaments(speciesId) {
-        const caughtTemperaments = this.vasenCollection
-            .filter(v => v.speciesId === speciesId)
-            .map(v => v.temperament);
-        
-        return Object.keys(TEMPERAMENTS).filter(t => !caughtTemperaments.includes(t));
-    }
-    
-    // Check if can catch more of a species
-    canCatchSpecies(speciesId) {
-        const available = this.getAvailableTemperaments(speciesId);
-        return available.length > 0 && this.vasenCollection.length < GAME_CONFIG.MAX_INVENTORY_SIZE;
     }
 }
 

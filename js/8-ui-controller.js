@@ -665,13 +665,24 @@ class UIController {
             const slotLabel = i === 0 ? 'Lead' : `Slot ${i + 1}`;
             
             buttons.push({
-                text: targetVasen ? `Swap with ${targetVasen.getName()} (${slotLabel})` : `Move to ${slotLabel} (Empty)`,
-                callback: () => {
-                    gameState.swapPartySlots(fromSlot, i);
-                    this.renderParty();
-                    this.showMessage(`Moved ${vasen.getName()} to ${slotLabel}.`);
-                }
-            });
+    text: targetVasen ? `
+        <div class="swap-option">
+            <img src="${targetVasen.species.image}" alt="${targetVasen.getName()}">
+            <span>Swap with ${targetVasen.getName()} (${slotLabel})</span>
+        </div>
+    ` : `
+        <div class="swap-option">
+            <img src="assets/ui/empty-slot.png" alt="Empty">
+            <span>Move to ${slotLabel} (Empty)</span>
+        </div>
+    `,
+    callback: () => {
+        gameState.swapPartySlots(fromSlot, i);
+        this.renderParty();
+        this.showMessage(`Moved ${vasen.getName()} to ${slotLabel}.`);
+    }
+});
+
         }
 
         buttons.push({
@@ -687,7 +698,7 @@ class UIController {
         );
     }
 
-    // Handle party slot click
+// Handle party slot click
 handlePartySlotClick(slotIndex) {
     const vasen = gameState.party[slotIndex];
 
@@ -695,14 +706,23 @@ handlePartySlotClick(slotIndex) {
         // Allow selecting a väsen to view its details, regardless of combat state
         this.selectVasen(vasen);
     }
-    
-    // If in combat, stop here to prevent other actions (like adding to an empty slot)
-    if (gameState.inCombat) return; 
 
-    // Non-combat logic: if the slot is empty and a vasen is selected from inventory, add it.
-    if (!vasen && this.selectedVasen) {
+    // If in combat, stop here to prevent other actions (like adding to an empty slot)
+    if (gameState.inCombat) return;
+
+    // Non-combat logic: empty slot behavior
+if (!vasen) {
+    if (this.selectedVasen) {
+        // Existing behavior: add selected väsen
         this.addToParty(this.selectedVasen.id, slotIndex);
+    } else {
+        // NEW behavior: open menu to choose a väsen
+        this.showAddVasenMenu(slotIndex);
     }
+    return;
+}
+
+
 }
 
     // Add Vasen to party
@@ -713,14 +733,17 @@ handlePartySlotClick(slotIndex) {
         }
         
         // If no slot specified, find first available
-        let slotIndex = preferredSlot;
-        if (slotIndex === null) {
-            slotIndex = gameState.party.findIndex(p => p === null);
-            if (slotIndex === -1) {
-                this.showMessage('No empty party slots available.', 'error');
-                return;
-            }
-        }
+let slotIndex = preferredSlot;
+if (slotIndex === null) {
+    slotIndex = gameState.party.findIndex(p => p === null);
+
+    if (slotIndex === -1) {
+        // Party is full → open swap modal
+        this.showSwapIntoPartyModal(vasenId);
+        return;
+    }
+}
+
         
         const result = gameState.addToParty(vasenId, slotIndex);
         if (result.success) {
@@ -807,19 +830,24 @@ this.showMessage('Väsen released.', 'info');
             if (partyVasen) {
                 const slotLabel = index === 0 ? 'Lead' : `Slot ${index + 1}`;
                 buttons.push({
-                    text: `Replace ${partyVasen.getName()} (${slotLabel})`,
-                    callback: () => {
-                        // Remove the old väsen and add the new one
-                        gameState.removeFromParty(index);
-                        gameState.addToParty(vasenId, index);
-                        this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
-                        this.renderParty();
-                        this.refreshCurrentTab();
-                        if (this.selectedVasen) {
-                            this.renderVasenDetails(this.selectedVasen);
-                        }
-                    }
-                });
+    text: `
+        <div class="swap-option">
+            <img src="${partyVasen.species.image}" alt="${partyVasen.getName()}">
+            <span>Replace ${partyVasen.getName()} (${slotLabel})</span>
+        </div>
+    `,
+    callback: () => {
+        gameState.removeFromParty(index);
+        gameState.addToParty(vasenId, index);
+        this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
+        this.renderParty();
+        this.refreshCurrentTab();
+        if (this.selectedVasen) {
+            this.renderVasenDetails(this.selectedVasen);
+        }
+    }
+});
+
             }
         });
 
@@ -970,6 +998,45 @@ this.showMessage('Väsen released.', 'info');
         // Update party display
         this.renderParty();
     }
+
+    // Show väsen menu
+    showAddVasenMenu(slotIndex) {
+    const modal = document.getElementById('add-vasen-modal');
+    const list = document.getElementById('add-vasen-list');
+    list.innerHTML = '';
+
+    // Sort like inventory: by family, then name
+    const sorted = [...gameState.vasenCollection].sort((a, b) => {
+        if (a.species.family !== b.species.family)
+            return a.species.family.localeCompare(b.species.family);
+        return a.getDisplayName().localeCompare(b.getDisplayName());
+    });
+
+    sorted.forEach(vasen => {
+        const btn = document.createElement('button');
+        btn.className = 'rune-to-vasen-btn';
+
+        btn.innerHTML = `
+            <div class="swap-option">
+                <img src="${vasen.species.image}" alt="${vasen.getDisplayName()}" class="rune-vasen-img">
+                <div class="rune-vasen-info">
+                    <span class="rune-vasen-name">${vasen.getDisplayName()}</span>
+                    <span class="rune-vasen-level">Lvl ${vasen.level}</span>
+                </div>
+            </div>
+        `;
+
+        btn.onclick = () => {
+            modal.classList.remove('active');
+            this.addToParty(vasen.id, slotIndex);
+        };
+
+        list.appendChild(btn);
+    });
+
+    document.getElementById('close-add-vasen-modal').onclick = () => modal.classList.remove('active');
+    modal.classList.add('active');
+}
 
     // Render combatant panel
     renderCombatantPanel(side, vasen, battle) {
@@ -1247,7 +1314,7 @@ renderActionButtons(battle) {
         buttons.forEach(btn => {
             const button = document.createElement('button');
             button.className = `btn ${btn.class || 'btn-primary'}`;
-            button.textContent = btn.text;
+            button.innerHTML = btn.text;
             button.onclick = () => {
                 modal.classList.remove('active');
                 if (btn.callback) btn.callback();
@@ -1555,6 +1622,7 @@ renderActionButtons(battle) {
         modal.classList.add('active');
     }
 
+
     // Show rune options
     showRuneOptions(runeId) {
         const rune = RUNES[runeId];
@@ -1741,10 +1809,12 @@ renderActionButtons(battle) {
                 <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20">
                 <button id="save-name-btn" class="btn btn-small">Save</button>
             </div>
-            <div class="profile-stats">
-                <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
-                <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.length}</p>
-            </div>
+<div class="profile-stats">
+    <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
+    <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.length}</p>
+    <p>Väsen Types Tamed: ${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</p>
+</div>
+
             ${achievementsHtml}
         `;
         
