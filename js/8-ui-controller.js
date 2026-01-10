@@ -719,10 +719,12 @@ document.querySelectorAll('.modal').forEach(modal => {
         });
 
         this.showDialogue(
-            `Move ${vasen.getName()}`,
-            '<p>Select a slot to move to:</p>',
-            buttons
-        );
+    `Move ${vasen.getName()}`,
+    '<p>Select a slot to move to:</p>',
+    buttons,
+    true,
+    'move-vasen-dialogue'
+);
     }
 
 // Handle party slot click
@@ -878,10 +880,12 @@ this.showMessage('Väsen released.', 'info');
         });
 
         this.showDialogue(
-            `Add ${vasen.getName()} to Party`,
-            '<p>Your party is full. Select a Väsen to replace:</p>',
-            buttons
-        );
+    `Add ${vasen.getName()} to Party`,
+    '<p>Your party is full. Select a Väsen to replace:</p>',
+    buttons,
+    true,
+    'swap-into-party-dialogue'
+);
     }
 
     // Render zones
@@ -1322,15 +1326,12 @@ renderActionButtons(battle) {
     }
 
     // Show dialogue modal
-showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true) {
+showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true, extraClass = null) {
     const modal = document.getElementById('dialogue-modal');
     document.getElementById('dialogue-title').textContent = title;
     document.getElementById('dialogue-message').innerHTML = message;
 
-    // Lock UI so gameplay actions cannot fire
     gameState.uiLocked = true;
-
-    // Store dismissible state on the modal for backdrop click handler
     modal.dataset.dismissible = dismissible ? 'true' : 'false';
 
     const btnContainer = document.getElementById('dialogue-buttons');
@@ -1343,9 +1344,9 @@ showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], di
 
         button.onclick = () => {
             modal.classList.remove('active');
-            gameState.uiLocked = false; // unlock UI when popup closes
+            if (extraClass) modal.classList.remove(extraClass);
+            gameState.uiLocked = false;
 
-            // Restore focus to Explore button (optional but clean)
             const exploreBtn = document.getElementById('explore-btn');
             if (exploreBtn) exploreBtn.focus();
 
@@ -1355,17 +1356,27 @@ showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], di
         btnContainer.appendChild(button);
     });
 
-    // Remove focus from Explore button so Enter can't trigger it
     const exploreBtn = document.getElementById('explore-btn');
-    if (exploreBtn) exploreBtn.blur();
+if (exploreBtn) exploreBtn.blur();
 
-    // Show modal
-    modal.classList.add('active');
+// Always reset old dialogue classes
+modal.classList.remove(
+    'move-vasen-dialogue',
+    'swap-into-party-dialogue'
+);
 
-    // Move keyboard focus into the modal (first button)
-    const firstButton = btnContainer.querySelector('button');
-    if (firstButton) firstButton.focus();
+// Add new class if provided
+if (extraClass) {
+    modal.classList.add(extraClass);
 }
+
+modal.classList.add('active');
+
+const firstButton = btnContainer.querySelector('button');
+if (firstButton) firstButton.focus();
+
+}
+
 
 
     // Confirm Releasing Väsen

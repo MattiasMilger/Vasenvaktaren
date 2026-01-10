@@ -2933,3 +2933,79 @@ img {
 #dialogue-modal {
     z-index: 2000;
 }
+
+/* Add Vasen to Party Modal – list buttons */
+#add-vasen-list button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+#add-vasen-list button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+#add-vasen-list button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Manage Runes Modal – list buttons */
+#rune-to-vasen-list button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+#rune-to-vasen-list button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+#rune-to-vasen-list button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Only grey out buttons in the Move Väsen dialogue */
+.move-vasen-dialogue .dialogue-buttons .btn-primary {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.move-vasen-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+/* Grey list-style buttons for Swap-Into-Party dialogue */
+.swap-into-party-dialogue .dialogue-buttons .btn-primary {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.swap-into-party-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
