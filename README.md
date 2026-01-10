@@ -1,10 +1,10 @@
 # Väsenväktaren
 
-If you enjoyed Väsenväktaren, please consider starring the repository!
-
 **Catch creatures of Swedish folklore**
 
 A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and battle your way through the guardians of each realm.
+
+If you enjoyed Väsenväktaren, please consider starring the repository!
 
 ## How to Play
 
