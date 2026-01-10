@@ -2865,3 +2865,27 @@ img {
     color: var(--text-primary);
     white-space: nowrap;
 }
+
+/* =========================
+   Combat Health & Megin Bars
+   ========================= */
+.health-bar,
+.megin-bar {
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: var(--spacing-xs);
+}
+
+.health-fill {
+    height: 100%;
+    background: var(--health-fill);
+    transition: width 0.3s;
+}
+
+.megin-fill {
+    height: 100%;
+    background: var(--megin-fill);
+    transition: width 0.3s;
+}
