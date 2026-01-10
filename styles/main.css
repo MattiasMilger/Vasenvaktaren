@@ -89,13 +89,11 @@ body {
     }
 }
 
-/* Tablet and Mobile: scrollable */
+/* Tablet and Mobile: locked viewport, scrolling handled per-screen */
 @media (max-width: 1024px) {
     html, body {
-        height: auto;
-        min-height: 100vh;
-        overflow-x: hidden;
-        overflow-y: auto;
+        height: 100%;
+        overflow: hidden;
     }
 }
 
@@ -319,6 +317,15 @@ img {
     #game-screen {
         height: 100vh;
         overflow: hidden;
+    }
+}
+
+/* Tablet and Mobile: game screen scrollable */
+@media (max-width: 1024px) {
+    #game-screen {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 }
 
