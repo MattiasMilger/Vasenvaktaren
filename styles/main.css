@@ -93,6 +93,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
 }
 
+
 h1 { font-size: var(--font-size-2xl); }
 h2 { font-size: var(--font-size-xl); }
 h3 { font-size: var(--font-size-lg); }
@@ -2272,6 +2273,12 @@ textarea {
     background: rgba(138, 154, 122, 0.1);
 }
 
+/* swap and ally select modal */
+#swap-modal .modal-header h3,
+#ally-select-modal .modal-header h3 {
+    color: var(--text-primary); /* white */
+}
+
 .heal-vasen-img,
 .rune-vasen-img,
 .swap-img {
@@ -2674,4 +2681,44 @@ textarea {
 .rune-status.other {
     background: rgba(176, 154, 106, 0.3);
     color: var(--accent-warning);
+}
+
+
+/* =============================================================================
+   Health and megin Swap menu
+   ============================================================================= */
+
+.swap-megin {
+    color: var(--megin-color);
+}
+.swap-health {
+    color: var(--health-color);
+}
+
+.ally-health {
+    color: var(--health-color);
+    font-size: var(--font-size-xs);
+}
+
+.ally-megin {
+    color: var(--megin-color);
+    font-size: var(--font-size-xs);
+}
+
+/* Health/Megin colors in selection/swap modals */
+.swap-health,
+.ally-select-health {
+    color: var(--health-color);
+    font-size: var(--font-size-xs);
+}
+
+.swap-megin,
+.ally-select-megin {
+    color: var(--megin-color);
+    font-size: var(--font-size-xs);
+}
+
+.knockout-swap-btn .swap-health {
+    margin-left: 0;
+    color: var(--health-color);
 }

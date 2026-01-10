@@ -934,9 +934,6 @@ handlePartySlotClick(slotIndex) {
         // Render enemy side
         this.renderCombatantPanel('enemy', battle.enemyTeam[battle.enemyActiveIndex], battle);
 
-        // Render swap options
-        this.renderSwapOptions(battle);
-
         // Render action buttons
         this.renderActionButtons(battle);
 
@@ -1032,70 +1029,118 @@ handlePartySlotClick(slotIndex) {
     }
 
     // Render swap options
-    renderSwapOptions(battle) {
-        const swapContainer = document.getElementById('swap-options');
-        swapContainer.innerHTML = '';
+renderSwapOptions(battle) {
+    const modal = document.getElementById('swap-modal');
+    const list = document.getElementById('swap-modal-list');
 
-        battle.playerTeam.forEach((vasen, index) => {
-            if (index === battle.playerActiveIndex || vasen.isKnockedOut()) return;
+    list.innerHTML = '';
 
-            const btn = document.createElement('button');
-            btn.className = 'swap-btn';
-            btn.innerHTML = `
-                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="swap-thumb">
-                <span>${vasen.getName()}</span>
-                <span class="swap-health">${vasen.currentHealth}/${vasen.maxHealth}</span>
-            `;
-            btn.onclick = () => game.handleSwap(index);
-            swapContainer.appendChild(btn);
-        });
-    }
+    battle.playerTeam.forEach((vasen, index) => {
+        if (index === battle.playerActiveIndex || vasen.isKnockedOut()) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'ally-select-btn';
+
+        const img = document.createElement('img');
+        img.className = 'ally-select-img';
+        img.src = vasen.species.image;
+
+        const info = document.createElement('div');
+        info.className = 'ally-select-info';
+
+        const name = document.createElement('div');
+        name.className = 'ally-select-name';
+        name.textContent = vasen.getName();
+
+        const hp = document.createElement('div');
+        hp.className = 'ally-select-health';
+        hp.textContent = `${vasen.currentHealth}/${vasen.maxHealth} Health`;
+
+        const megin = document.createElement('div');
+        megin.className = 'swap-megin';
+        megin.textContent = `Megin: ${vasen.currentMegin}/${vasen.maxMegin}`;
+        const stages = document.createElement('div');
+        stages.className = 'swap-stages';
+        stages.innerHTML = this.renderAttributeStages(vasen);
+
+        info.appendChild(name);
+        info.appendChild(hp);
+        info.appendChild(megin);
+        info.appendChild(stages);
+        btn.appendChild(img);
+        btn.appendChild(info);
+
+        btn.onclick = () => {
+            modal.classList.remove('active');
+            game.handleSwap(index);
+        };
+
+        list.appendChild(btn);
+    });
+
+    document.getElementById('close-swap-modal').onclick =
+        () => modal.classList.remove('active');
+
+    modal.classList.add('active');
+}
+
 
     // Render action buttons
-    renderActionButtons(battle) {
-        const actionsContainer = document.getElementById('ability-buttons');
-        actionsContainer.innerHTML = '';
+renderActionButtons(battle) {
+    const actionsContainer = document.getElementById('ability-buttons');
+    actionsContainer.innerHTML = '';
 
-        const activeVasen = battle.playerTeam[battle.playerActiveIndex];
-        if (!activeVasen || activeVasen.isKnockedOut()) return;
+    const activeVasen = battle.playerTeam[battle.playerActiveIndex];
+    if (!activeVasen || activeVasen.isKnockedOut()) return;
 
-        const abilities = activeVasen.getAvailableAbilities();
+    const abilities = activeVasen.getAvailableAbilities();
 
-        abilities.forEach(abilityName => {
-            const ability = ABILITIES[abilityName];
-            if (!ability) return;
+    abilities.forEach(abilityName => {
+        const ability = ABILITIES[abilityName];
+        if (!ability) return;
 
-            const meginCost = activeVasen.getAbilityMeginCost(abilityName);
-            const canUse = activeVasen.canUseAbility(abilityName) && !activeVasen.battleFlags.hasSwapSickness;
-            
-            // Handle Basic Strike's null element - use Väsen's element
-            const abilityElement = ability.element || activeVasen.species.element;
-            const elementTooltip = this.getElementMatchupTooltip(abilityElement);
+        const meginCost = activeVasen.getAbilityMeginCost(abilityName);
+        const canUse = activeVasen.canUseAbility(abilityName) && !activeVasen.battleFlags.hasSwapSickness;
+        
+        const abilityElement = ability.element || activeVasen.species.element;
+        const elementTooltip = this.getElementMatchupTooltip(abilityElement);
 
-            const btn = document.createElement('button');
-            btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
-            btn.disabled = !canUse || !battle.waitingForPlayerAction;
-            btn.innerHTML = `
-                <span class="ability-btn-name">${ability.name}</span>
-                <span class="ability-btn-type">${ability.type}</span>
-                <span class="ability-btn-stats">
-                    <span class="ability-btn-element element-${abilityElement.toLowerCase()}" title="${elementTooltip}">${abilityElement}</span>
-                    ${ability.power ? `<span class="ability-btn-power">Power: ${ability.power}</span>` : ''}
-                    <span class="ability-btn-cost">Megin: ${meginCost}</span>
-                </span>
-                <span class="ability-btn-desc">${ability.description}</span>
-            `;
-            btn.onclick = () => game.handleAbilityUse(abilityName);
-            actionsContainer.appendChild(btn);
-        });
+        const btn = document.createElement('button');
+        btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
+        btn.disabled = !canUse || !battle.waitingForPlayerAction;
+        btn.innerHTML = `
+            <span class="ability-btn-name">${ability.name}</span>
+            <span class="ability-btn-type">${ability.type}</span>
+            <span class="ability-btn-stats">
+                <span class="ability-btn-element element-${abilityElement.toLowerCase()}" title="${elementTooltip}">${abilityElement}</span>
+                ${ability.power ? `<span class="ability-btn-power">Power: ${ability.power}</span>` : ''}
+                <span class="ability-btn-cost">Megin: ${meginCost}</span>
+            </span>
+            <span class="ability-btn-desc">${ability.description}</span>
+        `;
+        btn.onclick = () => game.handleAbilityUse(abilityName);
+        actionsContainer.appendChild(btn);
+    });
 
-        // Update other action buttons
-        document.getElementById('btn-swap').disabled = !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
-        document.getElementById('btn-offer').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
-        document.getElementById('btn-ask').disabled = !battle.waitingForPlayerAction || !battle.isWildEncounter || activeVasen.battleFlags.hasSwapSickness;
-        document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction;
-        document.getElementById('btn-surrender').disabled = false;
-    }
+    // Update other action buttons
+    document.getElementById('btn-swap').disabled =
+        !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
+    document.getElementById('btn-offer').disabled =
+        !battle.waitingForPlayerAction || !battle.isWildEncounter ||
+        battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
+    document.getElementById('btn-ask').disabled =
+        !battle.waitingForPlayerAction || !battle.isWildEncounter ||
+        activeVasen.battleFlags.hasSwapSickness;
+    document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction;
+    document.getElementById('btn-surrender').disabled = false;
+
+    // Swap button opens the modal
+    document.getElementById('btn-swap').onclick = () => {
+        if (!battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness) return;
+        this.renderSwapOptions(battle);
+    };
+}
+
 
     // Add combat log message
     addCombatLog(message, type = 'normal') {
@@ -1251,7 +1296,8 @@ handlePartySlotClick(slotIndex) {
                 <img src="${vasen.species.image}" alt="${vasen.species.name}" class="ally-select-img">
                 <div class="ally-select-info">
                     <span class="ally-select-name">${vasen.getDisplayName()}</span>
-                    <span class="ally-select-health">${vasen.currentHealth}/${vasen.maxHealth} HP</span>
+                    <span class="ally-select-health">${vasen.currentHealth}/${vasen.maxHealth} Health</span>
+                    <span class="ally-select-megin">${vasen.currentMegin}/${vasen.maxMegin} Megin</span>
                     <div class="ally-select-stages">${this.renderAttributeStages(vasen)}</div>
                 </div>
             `;
@@ -1429,8 +1475,8 @@ handlePartySlotClick(slotIndex) {
                     <img src="${vasen.species.image}" alt="${vasen.species.name}" class="heal-vasen-img">
                     <div class="heal-vasen-info">
                         <span class="heal-vasen-name">${vasen.getDisplayName()}</span>
-                        <span class="heal-vasen-health">${vasen.currentHealth}/${vasen.maxHealth} HP</span>
-                        <span class="heal-amount">+${Math.floor(vasen.maxHealth * healPercent)} HP</span>
+                        <span class="heal-vasen-health">${vasen.currentHealth}/${vasen.maxHealth} Health</span>
+                        <span class="heal-amount">+${Math.floor(vasen.maxHealth * healPercent)} Health</span>
                     </div>
                 `;
                 vasenBtn.onclick = () => {
@@ -1666,7 +1712,7 @@ handlePartySlotClick(slotIndex) {
     }
 
     // Show knockout swap modal
-    showKnockoutSwapModal(battle, callback) {
+showKnockoutSwapModal(battle, callback) {
     GameState.uiLocked = true;
 
     const modal = document.getElementById('knockout-swap-modal');
@@ -1679,6 +1725,7 @@ handlePartySlotClick(slotIndex) {
         i !== battle.playerActiveIndex && !v.isKnockedOut()
     );
 
+    // No available allies → battle ends or whatever your logic is
     if (availableVasen.length === 0) {
         modal.classList.remove('active');
         GameState.uiLocked = false;
@@ -1686,25 +1733,7 @@ handlePartySlotClick(slotIndex) {
         return;
     }
 
-    availableVasen.forEach(vasen => {
-        const actualIndex = battle.playerTeam.indexOf(vasen);
-        const vasenBtn = document.createElement('button');
-        vasenBtn.className = 'knockout-swap-btn';
-        vasenBtn.innerHTML = `
-            <img src="${vasen.species.image}" alt="${vasen.species.name}" class="swap-img">
-            <div class="swap-info">
-                <span class="swap-name">${vasen.getDisplayName()}</span>
-                <span class="swap-health">${vasen.currentHealth}/${vasen.maxHealth} HP</span>
-            </div>
-        `;
-        vasenBtn.onclick = () => {
-            modal.classList.remove('active');
-            GameState.uiLocked = false;
-            callback(actualIndex);
-        };
-        vasenList.appendChild(vasenBtn);
-    });
-
+    // If only one ally is alive → auto swap (your existing logic)
     if (availableVasen.length === 1) {
         const actualIndex = battle.playerTeam.indexOf(availableVasen[0]);
         modal.classList.remove('active');
@@ -1713,8 +1742,67 @@ handlePartySlotClick(slotIndex) {
         return;
     }
 
+    // Build buttons for each available Väsen
+    availableVasen.forEach(vasen => {
+        const actualIndex = battle.playerTeam.indexOf(vasen);
+
+        const vasenBtn = document.createElement('button');
+        vasenBtn.className = 'knockout-swap-btn';
+
+        // IMAGE
+        const img = document.createElement('img');
+        img.src = vasen.species.image;
+        img.alt = vasen.species.name;
+        img.className = 'swap-img';
+
+        // INFO CONTAINER
+        const info = document.createElement('div');
+        info.className = 'swap-info';
+
+        // NAME
+        const name = document.createElement('span');
+        name.className = 'swap-name';
+        name.textContent = vasen.getDisplayName();
+
+        // HEALTH
+        const health = document.createElement('span');
+        health.className = 'swap-health';
+        health.textContent = `Health: ${vasen.currentHealth}/${vasen.maxHealth}`;
+
+        // MEGIN
+        const megin = document.createElement('span');
+        megin.className = 'swap-megin';
+        megin.textContent = `Megin: ${vasen.currentMegin}/${vasen.maxMegin}`;
+
+        // attribute changes
+        const stages = document.createElement('div');
+        stages.className = 'swap-stages';
+        stages.innerHTML = this.renderAttributeStages(vasen);
+
+
+        // Assemble info block
+        info.appendChild(name);
+        info.appendChild(health);
+        info.appendChild(megin);
+        info.appendChild(stages);
+        
+        // Assemble button
+        vasenBtn.appendChild(img);
+        vasenBtn.appendChild(info);
+
+        // Click handler
+        vasenBtn.onclick = () => {
+            modal.classList.remove('active');
+            GameState.uiLocked = false;
+            callback(actualIndex);
+        };
+
+        vasenList.appendChild(vasenBtn);
+    });
+
     modal.classList.add('active');
 }
+
 
     // Show encounter result
     showEncounterResult(result) {
