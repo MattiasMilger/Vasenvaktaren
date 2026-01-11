@@ -129,9 +129,9 @@ Vasenvaktaren/
 ## Feature roadmap
 
 - [ ] Finish Main Functionality (90%)
-- [x] Make mobile friendly – Completed in v0.45-alpha
-- [ ] Game Balance
-- [ ] Introduce endgame system: Endless Tower
+- [ ] Make mobile friendly (60%)
+- [ ] Game Balance (20%)
+- [ ] Introduce endgame system (0%)
 
 ## Credits
 
