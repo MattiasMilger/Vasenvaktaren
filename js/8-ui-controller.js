@@ -384,6 +384,12 @@ document.querySelectorAll('.modal').forEach(modal => {
                 </span>
             </div>
 
+                    <div class="details-taming-item">
+            <h4>Taming Item</h4>
+            <span class="taming-item-name">${vasen.species.tamingItem}</span>
+        </div>
+        <br>
+
             <div class="details-abilities">
                 <h4>Abilities</h4>
                 <div class="abilities-list">

@@ -170,6 +170,9 @@ class GameState {
     
     // Equip rune to a specific väsen (by vasen ID)
 equipRune(runeId, vasenId) {
+    if (this.currentBattle || this.inCombat) {
+    return { success: false, message: 'You cannot change runes during combat.' };
+}
     if (!this.collectedRunes.has(runeId)) {
         return { success: false, message: 'You do not own this rune.' };
     }
@@ -212,6 +215,9 @@ equipRune(runeId, vasenId) {
     
     // Unequip rune from a specific väsen
     unequipRune(vasenId, runeId) {
+        if (this.currentBattle || this.inCombat) {
+    return { success: false, message: 'You cannot change runes during combat.' };
+}
         // Find the väsen in collection
         const vasen = this.vasenCollection.find(v => v.id === vasenId);
         if (!vasen) {

@@ -823,10 +823,16 @@ img {
 .details-description h4,
 .details-attributes h4,
 .details-temperament h4,
+.details-taming-item h4,
 .details-abilities h4 {
     font-size: var(--font-size-sm);
     color: var(--text-muted);
     margin-bottom: var(--spacing-xs);
+}
+
+.taming-item-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
 }
 
 .rune-slots {
@@ -3047,3 +3053,25 @@ img {
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
 }
+
+.game-message {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    animation: slideIn 0.3s ease;
+}
+
+.game-message.error {
+    border-color: var(--accent-danger);
+    background: rgba(176, 106, 106, 0.18);
+    color: var(--accent-danger);
+}
+
+.game-message.success {
+    border-color: var(--accent-primary);
+    background: rgba(138, 154, 122, 0.18);
+    color: var(--accent-primary);
+}
+
