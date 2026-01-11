@@ -617,7 +617,7 @@ handleAskItem() {
 
         // Calculate heal
         const isCorrectItem = vasen.species.tamingItem === itemId;
-        const healPercent = isCorrectItem ? 0.8 : 0.4;
+        const healPercent = isCorrectItem ? 0.8 : 0.5;
         const healed = vasen.healPercent(healPercent);
 
         ui.showMessage(`${vasen.getName()} health restored ${Math.round(healPercent * 100)}%. (+${healed} HP)`);
