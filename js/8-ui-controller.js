@@ -508,7 +508,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                 <span class="rune-symbol">${rune.symbol}</span>
                 <span class="rune-name">${rune.name}</span>
                 <p class="rune-effect">${rune.effect}</p>
-                ${equippedTo ? `<span class="equipped-to">Equipped to ${equippedTo.getName()}</span>` : ''}
+                ${equippedTo ? `<span class="rune-card-equipped">Equipped to ${equippedTo.getName()}</span>` : ''}
             `;
 
             runeCard.addEventListener('click', () => this.showRuneOptions(runeId));
