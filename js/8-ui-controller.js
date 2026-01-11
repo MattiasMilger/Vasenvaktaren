@@ -481,44 +481,6 @@ document.querySelectorAll('.modal').forEach(modal => {
         return html;
     }
 
-    // Render element matchups
-    renderElementMatchups(element) {
-        const matchups = ELEMENT_MATCHUPS[element];
-        let attackHtml = '<div class="matchup-section"><h5>Attacks:</h5><div class="matchup-grid">';
-        let defenseHtml = '<div class="matchup-section"><h5>Defends:</h5><div class="matchup-grid">';
-
-        Object.values(ELEMENTS).forEach(targetElement => {
-            const effectivenessType = matchups[targetElement];
-            const effectiveness = DAMAGE_MULTIPLIERS[effectivenessType];
-            const effectClass = effectivenessType.toLowerCase();
-            const effectText = effectivenessType === 'POTENT' ? 'Potent' : effectivenessType === 'WEAK' ? 'Weak' : 'Neutral';
-
-            attackHtml += `
-                <div class="matchup-item ${effectClass}">
-                    <span class="matchup-element element-${targetElement.toLowerCase()}">${targetElement}</span>
-                    <span class="matchup-result">${effectText} (${effectiveness}x)</span>
-                </div>
-            `;
-
-            // For defense, check what hits this element
-            const incomingMatchupType = ELEMENT_MATCHUPS[targetElement][element];
-            const incomingMatchup = DAMAGE_MULTIPLIERS[incomingMatchupType];
-            const incomingClass = incomingMatchupType === 'POTENT' ? 'weak' : incomingMatchupType === 'WEAK' ? 'potent' : 'neutral';
-            const incomingText = incomingMatchupType === 'POTENT' ? 'Weak' : incomingMatchupType === 'WEAK' ? 'Resists' : 'Neutral';
-
-            defenseHtml += `
-                <div class="matchup-item ${incomingClass}">
-                    <span class="matchup-element element-${targetElement.toLowerCase()}">${targetElement}</span>
-                    <span class="matchup-result">${incomingText} (${incomingMatchup}x)</span>
-                </div>
-            `;
-        });
-
-        attackHtml += '</div></div>';
-        defenseHtml += '</div></div>';
-
-        return attackHtml + defenseHtml;
-    }
 
     // Render Rune inventory
     renderRuneInventory() {

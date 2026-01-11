@@ -608,6 +608,9 @@ img {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-left: 3px solid var(--border-color);
+    border-right: 3px solid var(--border-color);
+    border-top: 3px solid var(--border-color);
+    border-bottom: 4px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
@@ -623,13 +626,6 @@ img {
     border-color: var(--accent-primary);
     background: var(--bg-hover);
 }
-
-/* Element-colored left border only for vasen cards */
-.vasen-card.element-earth { border-left-color: var(--element-earth); }
-.vasen-card.element-nature { border-left-color: var(--element-nature); }
-.vasen-card.element-water { border-left-color: var(--element-water); }
-.vasen-card.element-fire { border-left-color: var(--element-fire); }
-.vasen-card.element-wind { border-left-color: var(--element-wind); }
 
 .vasen-card-header {
     display: flex;
@@ -3075,3 +3071,17 @@ img {
     color: var(--accent-primary);
 }
 
+/* for element matrix */
+:root {
+    --matrix-element-earth: #8B7355;
+    --matrix-element-nature: #6B8E23;
+    --matrix-element-water: #4682B4;
+    --matrix-element-fire: #CD5C5C;
+    --matrix-element-wind: #9898b0;
+}
+
+.matrix-element-earth  { color: var(--matrix-element-earth); }
+.matrix-element-nature { color: var(--matrix-element-nature); }
+.matrix-element-water  { color: var(--matrix-element-water); }
+.matrix-element-fire   { color: var(--matrix-element-fire); }
+.matrix-element-wind   { color: var(--matrix-element-wind); }
