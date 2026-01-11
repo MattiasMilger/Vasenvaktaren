@@ -1936,6 +1936,35 @@ showKnockoutSwapModal(battle, callback) {
         callback(actualIndex);
         return;
     }
+    
+    // --- Temperament Dropdown Rendering ---
+document.addEventListener("DOMContentLoaded", () => {
+    const listContainer = document.getElementById("temperament-list");
+    if (!listContainer) return;
+
+    // Build temperament list dynamically
+    Object.values(TEMPERAMENTS).forEach(t => {
+        const entry = document.createElement("p");
+        entry.innerHTML = `
+            <strong>${t.name}</strong><br>
+            +${t.modifier}% ${t.positive}<br>
+            -${t.modifier}% ${t.negative}
+        `;
+        listContainer.appendChild(entry);
+    });
+
+    // Dropdown toggle
+    const toggleBtn = document.querySelector(".dropdown-toggle");
+    toggleBtn.addEventListener("click", () => {
+        const content = document.querySelector(".dropdown-content");
+        const isOpen = content.style.display === "block";
+
+        content.style.display = isOpen ? "none" : "block";
+        toggleBtn.textContent = isOpen
+            ? "Show Temperament List ▼"
+            : "Hide Temperament List ▲";
+    });
+});
 
     // Build buttons for each available Väsen
     availableVasen.forEach(vasen => {
