@@ -281,6 +281,7 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     }
 
+
     // Render Vasen details panel
     renderVasenDetails(vasen) {
         const panel = this.vasenDetailsPanel;
@@ -1037,9 +1038,26 @@ renderZones() {
         const meginPercent = (vasen.currentMegin / vasen.maxMegin) * 100;
 
         // Build runes HTML with "Rune:" label
-        const runesHtml = vasen.runes.length > 0 
-            ? `<span class="runes-label">Rune:</span> ${vasen.runes.map(r => RUNES[r] ? `<span class="combat-rune">${RUNES[r].symbol} ${RUNES[r].name}</span>` : '').join('')}`
-            : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
+const runesHtml = vasen.runes.length > 0
+    ? `<span class="runes-label">Rune:</span>
+       ${vasen.runes.map(r => {
+            const rune = RUNES[r];
+            if (!rune) return '';
+
+            return `
+                <div class="rune-collapsible open">
+                    <div class="rune-collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+                        ${rune.symbol} ${rune.name}
+                    </div>
+                    <div class="rune-collapsible-body">
+                        ${rune.effect}
+                    </div>
+                </div>
+            `;
+       }).join('')}`
+    : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
+
+
 
         panel.innerHTML = `
             <div class="combatant-header">

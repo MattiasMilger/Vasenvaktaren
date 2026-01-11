@@ -3124,3 +3124,41 @@ img {
     pointer-events: none;
     z-index: 10;
 }
+
+/* Rune collapsible wrapper */
+.rune-collapsible {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    margin-top: var(--spacing-xs);
+    overflow: hidden;
+}
+
+/* Header (clickable) */
+.rune-collapsible-header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.rune-collapsible-header:hover {
+    background: var(--bg-hover);
+}
+
+/* Body (hidden unless open) */
+.rune-collapsible-body {
+    padding: var(--spacing-sm);
+    display: none;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Open state */
+.rune-collapsible.open .rune-collapsible-body {
+    display: block;
+}
