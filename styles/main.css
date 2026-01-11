@@ -1009,6 +1009,22 @@ img {
     cursor: help;
 }
 
+.temperament-info {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.temperament-details {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
 /* Abilities List */
 .abilities-list {
     display: flex;
@@ -1020,7 +1036,10 @@ img {
     padding: var(--spacing-sm);
     background: var(--bg-card);
     border-radius: var(--border-radius-sm);
-    border-left: 3px solid var(--accent-primary);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .ability-item.locked {
@@ -2884,7 +2903,7 @@ img {
    ========================= */
 .health-bar,
 .megin-bar {
-    height: 8px;
+    height: 18px;
     background: var(--bg-primary);
     border-radius: 4px;
     overflow: hidden;
@@ -3085,3 +3104,23 @@ img {
 .matrix-element-water  { color: var(--matrix-element-water); }
 .matrix-element-fire   { color: var(--matrix-element-fire); }
 .matrix-element-wind   { color: var(--matrix-element-wind); }
+
+.combat-bar {
+    position: relative;
+}
+
+.combat-bar-text {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: normal;
+    pointer-events: none;
+    z-index: 10;
+}

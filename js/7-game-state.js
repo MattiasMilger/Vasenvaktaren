@@ -399,7 +399,7 @@ equipRune(runeId, vasenId) {
             case 'well': {
                 const anyHealed = this.applySacredWellHealing();
                 const dialogue = anyHealed 
-                    ? 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your Väsen drink deeply and feel renewed. All tamed Väsen are healed by 70%.'
+                    ? 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your Väsen drink deeply and feel renewed. All tamed Väsen are healed by 80%.'
                     : 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your tamed Väsen are already at full vigor, but the sacred waters shimmer with approval.';
                 return { type: 'well', dialogue };
             }
@@ -446,7 +446,7 @@ equipRune(runeId, vasenId) {
         this.saveGame();
     }
     
-    // Apply Sacred Well healing (70% to all Vasen)
+    // Apply Sacred Well healing (80% to all Vasen)
     applySacredWellHealing() {
         let anyHealed = false;
         

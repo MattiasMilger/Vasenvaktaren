@@ -34,7 +34,7 @@ const VASEN_SPECIES = {
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
         abilities: ['Torch Strike', 'Wailing Cry', 'Skald\'s Mead', 'Flaming Skewer'],
-        tamingItem: 'Warm Tomtegrot',
+        tamingItem: 'Warm Tomtegröt',
         image: 'assets/vasen/hustomte.png'
     },
 

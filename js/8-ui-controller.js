@@ -378,11 +378,16 @@ document.querySelectorAll('.modal').forEach(modal => {
             </div>
 
             <div class="details-temperament">
-                <h4>Temperament</h4>
-                <span class="temperament-name" title="+${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} / -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}">
-                    ${vasen.temperament.name}
-                </span>
-            </div>
+    <h4>Temperament</h4>
+    <span class="temperament-info">
+        ${vasen.temperament.name}
+    </span>
+    <span class="temperament-details">
+        +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} /
+        -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}
+    </span>
+</div>
+
 
                     <div class="details-taming-item">
             <h4>Taming Item</h4>
@@ -1047,7 +1052,6 @@ renderZones() {
 
         const defensiveTooltip = this.getDefensiveMatchupTooltip(vasen.species.element);
         const temperamentTooltip = `${vasen.temperament.name}: +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} / -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}`;
-
         panel.innerHTML = `
             <div class="combatant-header">
                 <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
@@ -1058,18 +1062,18 @@ renderZones() {
                 ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness" title="Swap Sickness: Cannot Act">Preparing</span>' : ''}
             </div>
             <div class="combatant-bars">
-                <div class="combat-bar health-bar">
-                    <div class="combat-bar-fill health-fill" style="width: ${healthPercent}%"></div>
-                    <span class="combat-bar-text">${vasen.currentHealth} / ${vasen.maxHealth}</span>
-                </div>
-                <div class="combat-bar megin-bar">
-                    <div class="combat-bar-fill megin-fill" style="width: ${meginPercent}%"></div>
-                    <span class="combat-bar-text">${vasen.currentMegin} / ${vasen.maxMegin}</span>
-                </div>
-            </div>
+    <div class="combat-bar health-bar">
+        <div class="combat-bar-fill health-fill" style="width: ${healthPercent}%"></div>
+        <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
+    </div>
+    <div class="combat-bar megin-bar">
+        <div class="combat-bar-fill megin-fill" style="width: ${meginPercent}%"></div>
+        <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
+    </div>
+</div>
+
             <div class="combatant-info">
                 <span class="element-badge element-${vasen.species.element.toLowerCase()}" title="${defensiveTooltip}">${vasen.species.element}</span>
-                <span class="temperament-badge" title="${temperamentTooltip}">${vasen.temperament.name}</span>
             </div>
             <div class="combatant-attributes">
                 <div class="combat-attr" title="Damage modifier for Strength Attacks">
@@ -1403,9 +1407,30 @@ if (firstButton) firstButton.focus();
                     <span class="offer-item-count">x${count}</span>
                 `;
                 itemBtn.onclick = () => {
-                    modal.classList.remove('active');
-                    game.handleOfferItem(itemId);
-                };
+    modal.classList.remove('active');
+
+    this.showDialogue(
+        `Offer ${item.name}?`,
+        `<p>${item.description}</p>
+         <p>Are you sure you want to offer this item?</p>`,
+        [
+            {
+                text: 'Confirm',
+                class: 'btn-primary',
+                callback: () => game.handleOfferItem(itemId)
+            },
+            {
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: () => {
+                    // Reopen the offer modal
+                    modal.classList.add('active');
+                }
+            }
+        ]
+    );
+};
+
                 itemList.appendChild(itemBtn);
             });
         }
@@ -1650,7 +1675,7 @@ if (firstButton) firstButton.focus();
         const rune = RUNES[runeId];
         const equippedTo = this.findRuneEquippedTo(runeId);
 
-        let message = `<p class="rune-flavor">${rune.flavor}</p><p class="rune-effect">${rune.effect}</p>`;
+        let message = `<br><p class="rune-flavor">${rune.flavor}</p><br><p class="rune-effect">${rune.effect}</p>`;
         if (equippedTo) {
             message += `<p>Currently equipped to <strong>${equippedTo.getDisplayName()}</strong></p>`;
         }
@@ -1786,7 +1811,7 @@ if (firstButton) firstButton.focus();
                         this.hideCombatUI();
                         this.hideSettings();
                         game.showStarterSelection();
-                        this.showMessage('Progress reset. You awaken again in the strange forest.');
+                        this.showMessage('Progress reset.');
                     }
                 },
                 {
