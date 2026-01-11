@@ -42,12 +42,12 @@
                 <span class="header-subtitle">Catch creatures of Swedish folklore</span>
             </div>
             <div class="header-center">
-                <div id="player-profile" class="player-profile" title="Click to view profile">
+                <div id="player-profile" class="player-profile">
                     <span id="player-name-display">Väktare</span>
                 </div>
             </div>
             <div class="header-right">
-                <button id="combat-tips-btn" class="btn btn-small">Combat Tips</button>
+                <button id="combat-tips-btn" class="btn btn-small">Game Guide</button>
                 <button id="settings-btn" class="btn btn-small">Settings</button>
             </div>
         </header>
@@ -189,38 +189,47 @@
         </div>
     </div>
 
+    <!-- Rune Equip Modal -->
+    <div id="rune-equip-modal" class="modal">
+        <div class="modal-content modal-rune">
+            <h3 class="modal-title">Equip Rune</h3>
+            <div id="rune-equip-list" class="rune-equip-list"></div>
+            <button id="close-rune-modal" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
     <!-- Knockout Swap Modal -->
     <div id="knockout-swap-modal" class="modal">
         <div class="modal-content modal-swap">
-            <h3 class="modal-title">Your Väsen has fainted! Select next Väsen:</h3>
+            <h3 class="modal-title">Choose Next Väsen</h3>
+            <p class="modal-subtitle">Your active Väsen was knocked out!</p>
             <div id="knockout-swap-list" class="swap-vasen-list"></div>
         </div>
     </div>
 
-    <!-- Rune Equip Modal (select which vasen to equip rune to) -->
-    <div id="rune-equip-modal" class="modal">
-        <div class="modal-content modal-rune">
-            <h3 class="modal-title">Equip Rune to Party Väsen</h3>
-            <div id="rune-equip-list" class="rune-equip-list"></div>
-            <button id="close-rune-equip-modal" class="btn btn-secondary">Cancel</button>
+<!-- Rune Equip to Väsen Modal -->
+<div id="rune-to-vasen-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Equip Rune to Väsen</h3>
+            <button id="close-rune-to-vasen-modal" class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="rune-to-vasen-list"></div>
         </div>
     </div>
+</div>
 
-    <!-- Rune to Vasen Modal (manage runes on specific vasen) -->
-    <div id="rune-to-vasen-modal" class="modal">
-        <div class="modal-content modal-rune">
-            <h3 class="modal-title">Manage Runes</h3>
-            <div id="rune-to-vasen-list" class="rune-to-vasen-list"></div>
-            <button id="close-rune-to-vasen-modal" class="btn btn-secondary">Close</button>
-        </div>
-    </div>
-
-    <!-- Add Vasen to Party Modal -->
+<!-- Add Väsen to Party Modal -->
 <div id="add-vasen-modal" class="modal">
-    <div class="modal-content modal-rune">
-        <h3 class="modal-title">Choose a Väsen</h3>
-        <div id="add-vasen-list" class="rune-to-vasen-list"></div>
-        <button id="close-add-vasen-modal" class="btn btn-secondary">Close</button>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Väsen to Party</h3>
+            <button id="close-add-vasen-modal" class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="add-vasen-list"></div>
+        </div>
     </div>
 </div>
 
@@ -280,83 +289,18 @@
         </div>
     </div>
 
-    <!-- Combat Tips Modal -->
+    <!-- Game Guide Modal -->
     <div id="combat-tips-modal" class="modal">
         <div class="modal-content modal-tips">
-            <h3 class="modal-title">Combat Tips:</h3> <br>
+            <h3 class="modal-title">Game Guide</h3> <br>
             <div class="tips-content">
                 <h4>Taming</h4>
                 <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by careful reading or asking the Väsen.</p>
                 <h4>Runes</h4>
                 <p>Equip runes to your Väsen for powerful effects. At lvl 30, they gain the ability to equip two runes.</p>
                 
-                <h4>Element Matchups</h4>
-                <p class="matrix-legend">
-
-<table class="element-matrix">
-    <thead>
-        <tr>
-            <th>
-                <span class="legend-potent">P = Potent (1.4x)</span><br>
-                <span class="legend-neutral">N = Neutral (1.0x)</span><br>
-                <span class="legend-weak">W = Weak (0.7x)</span>
-            </th>
-            <th colspan="5" class="matrix-label-defender"><br>DEFENDER →</th>
-        </tr>
-        <tr>
-            <th class="matrix-label-attacker">ATTACKER ↓</th>
-            <th class="matrix-element-earth">Earth</th>
-            <th class="matrix-element-nature">Nature</th>
-            <th class="matrix-element-water">Water</th>
-            <th class="matrix-element-fire">Fire</th>
-            <th class="matrix-element-wind">Wind</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <tr>
-            <th class="matrix-element-earth">Earth</th>
-            <td class="legend-neutral">N</td>
-            <td class="legend-weak">W</td>
-            <td class="legend-neutral">N</td>
-            <td class="legend-potent">P</td>
-            <td class="legend-potent">P</td>
-        </tr>
-        <tr>
-            <th class="matrix-element-nature">Nature</th>
-            <td class="legend-potent">P</td>
-            <td class="legend-neutral">N</td>
-            <td class="legend-potent">P</td>
-            <td class="legend-weak">W</td>
-            <td class="legend-weak">W</td>
-        </tr>
-        <tr>
-            <th class="matrix-element-water">Water</th>
-            <td class="legend-potent">P</td>
-            <td class="legend-neutral">N</td>
-            <td class="legend-neutral">N</td>
-            <td class="legend-potent">P</td>
-            <td class="legend-weak">W</td>
-        </tr>
-        <tr>
-            <th class="matrix-element-fire">Fire</th>
-            <td class="legend-weak">W</td>
-            <td class="legend-potent">P</td>
-            <td class="legend-weak">W</td>
-            <td class="legend-neutral">N</td>
-            <td class="legend-neutral">N</td>
-        </tr>
-        <tr>
-            <th class="matrix-element-wind">Wind</th>
-            <td class="legend-weak">W</td>
-            <td class="legend-weak">W</td>
-            <td class="legend-potent">P</td>
-            <td class="legend-potent">P</td>
-            <td class="legend-neutral">N</td>
-        </tr>
-    </tbody>
-</table>
-
+                <!-- Dynamic Element Matchups Section -->
+                <div id="dynamic-element-matchups"></div>
 
                 <h4>Megin</h4>
                 <p>Megin is the flowing inner force your väsen draw upon to act. Abilities aligned with their own element cost 15% less Megin, and they naturally restore 12% Megin each round.</p>
@@ -367,27 +311,8 @@
                 <h4>Attack and Damage</h4>
                 <p>Strength Attacks are resisted by the opponent's Defense. Wisdom Attacks are resisted by the opponent's Durability.</p>
 
-
-                <div class="temperament-list">
-    <h4>Temperaments</h4>
-
-    <p><strong>Ferocious</strong> +5 Strength, -5 Health</p>
-    <p><strong>Brutal</strong> +5 Strength, -5 Defense</p>
-    <p><strong>Savage</strong> +5 Strength, -5 Durability</p>
-
-    <p><strong>Alert</strong> +5 Wisdom, -5 Health</p>
-    <p><strong>Thoughtful</strong> +5 Wisdom, -5 Defense</p>
-    <p><strong>Focused</strong> +5 Wisdom, -5 Durability</p>
-
-    <p><strong>Resilient</strong> +5 Health, -5 Defense</p>
-    <p><strong>Healthy</strong> +5 Health, -5 Durability</p>
-
-    <p><strong>Wary</strong> +5 Defense, -5 Health</p>
-    <p><strong>Stalwart</strong> +5 Defense, -5 Durability</p>
-
-    <p><strong>Enduring</strong> +5 Durability, -5 Health</p>
-    <p><strong>Vigilant</strong> +5 Durability, -5 Defense</p>
-</div>
+                <!-- Dynamic Temperaments Section -->
+                <div id="dynamic-temperaments"></div>
 
                 <h4>Attribute Stages</h4>
                 <p>Some abilities and runes raise or lower attribute stages. They Increase or decrease the affected attribute by 10% per stage, stages go from -5 to +5.</p>

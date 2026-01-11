@@ -193,7 +193,6 @@ document.querySelectorAll('.modal').forEach(modal => {
             const familyHeader = document.createElement('h4');
             familyHeader.className = 'family-header';
             familyHeader.textContent = family;
-            familyHeader.title = FAMILY_DESCRIPTIONS[family] || 'No description available';
             familySection.appendChild(familyHeader);
 
             // Sort vasen in family alphabetically by species, then by temperament
@@ -235,13 +234,12 @@ document.querySelectorAll('.modal').forEach(modal => {
                     <span class="vasen-name">${vasen.getDisplayName()}</span>
                     <span class="vasen-level">Lvl ${vasen.level}</span>
                 </div>
-                ${canAdd ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.addToParty('${vasen.id}')" title="Add to party">+</button>` : ''}
-                ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')" title="Swap with party member">+</button>` : ''}
+                ${canAdd ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.addToParty('${vasen.id}')">+</button>` : ''}
+                ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')">+</button>` : ''}
             </div>
             <div class="vasen-card-details">
                 <span 
                     class="element-badge element-${vasen.species.element.toLowerCase()}"
-                    title="${this.getDefensiveMatchupTooltip(vasen.species.element)}"
                 >
                     ${vasen.species.element}
                 </span>
@@ -295,8 +293,6 @@ document.querySelectorAll('.modal').forEach(modal => {
         const isInParty = gameState.party.some(p => p && p.id === vasen.id);
         const runeSlots = vasen.level >= 30 ? 2 : 1;
         const expProgress = vasen.getExpProgress();
-        const defensiveTooltip = this.getDefensiveMatchupTooltip(vasen.species.element);
-        const familyDescription = FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available';
 
         panel.innerHTML = `
             <div class="details-header">
@@ -304,9 +300,9 @@ document.querySelectorAll('.modal').forEach(modal => {
                 <div class="details-identity">
                     <h3 class="details-name">${vasen.getDisplayName()}</h3>
                     <div class="details-meta">
-                        <span class="element-badge element-${vasen.species.element.toLowerCase()}" title="${defensiveTooltip}">${vasen.species.element}</span>
+                        <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
                         <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
-                        <span class="family-badge" title="${familyDescription}">${vasen.species.family}</span>
+                        <span class="family-badge">${vasen.species.family}</span>
                     </div>
                 </div>
             </div>
@@ -358,19 +354,19 @@ document.querySelectorAll('.modal').forEach(modal => {
             <div class="details-attributes">
                 <h4>Attributes</h4>
                 <div class="attribute-grid">
-                    <div class="attribute-item" title="Damage modifier for Strength Attacks">
+                    <div class="attribute-item">
                         <span class="attr-name">Strength</span>
                         <span class="attr-value">${vasen.calculateAttribute('strength')}</span>
                     </div>
-                    <div class="attribute-item" title="Damage modifier for Wisdom Attacks">
+                    <div class="attribute-item">
                         <span class="attr-name">Wisdom</span>
                         <span class="attr-value">${vasen.calculateAttribute('wisdom')}</span>
                     </div>
-                    <div class="attribute-item" title="Reduces damage from Strength Attacks">
+                    <div class="attribute-item">
                         <span class="attr-name">Defense</span>
                         <span class="attr-value">${vasen.calculateAttribute('defense')}</span>
                     </div>
-                    <div class="attribute-item" title="Reduces damage from Wisdom Attacks">
+                    <div class="attribute-item">
                         <span class="attr-name">Durability</span>
                         <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
                     </div>
@@ -389,7 +385,7 @@ document.querySelectorAll('.modal').forEach(modal => {
 </div>
 
 
-                    <div class="details-taming-item">
+                <div class="details-taming-item">
             <h4>Taming Item</h4>
             <span class="taming-item-name">${vasen.species.tamingItem}</span>
         </div>
@@ -425,7 +421,7 @@ document.querySelectorAll('.modal').forEach(modal => {
             if (runeId && RUNES[runeId]) {
                 const rune = RUNES[runeId];
                 html += `
-                    <div class="rune-slot filled" title="${rune.name}: ${rune.effect}" onclick="ui.showRuneEquipModal('${vasen.id}')">
+                    <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}')">
                         <span class="rune-symbol">${rune.symbol}</span>
                         <span class="rune-name">${rune.name}</span>
                     </div>
@@ -440,7 +436,7 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
 
         if (maxSlots < 2) {
-            html += `<div class="rune-slot locked" title="Reach level 30 to unlock second rune slot">
+            html += `<div class="rune-slot locked">
                 <span class="rune-placeholder">Locked</span>
             </div>`;
         }
@@ -464,7 +460,6 @@ document.querySelectorAll('.modal').forEach(modal => {
             
             // Handle Basic Strike's null element - use Väsen's element
             const abilityElement = ability.element || vasen.species.element;
-            const elementTooltip = this.getElementMatchupTooltip(abilityElement);
 
             html += `
                 <div class="ability-item ${isLearned ? 'learned' : 'locked'}">
@@ -473,7 +468,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                         <span class="ability-type-tag">${ability.type}</span>
                     </div>
                     <div class="ability-stats">
-                        <span class="ability-element element-${abilityElement.toLowerCase()}" title="${elementTooltip}">${abilityElement}</span>
+                        <span class="ability-element element-${abilityElement.toLowerCase()}">${abilityElement}</span>
                         ${ability.power ? `<span class="ability-power">Power: ${ability.power}</span>` : ''}
                         <span class="ability-cost">Megin: ${meginCost}</span>
                     </div>
@@ -507,7 +502,6 @@ document.querySelectorAll('.modal').forEach(modal => {
             const equippedTo = this.findRuneEquippedTo(runeId);
 
             const runeCard = document.createElement('div');
-            runeCard.title = rune.flavor;
             runeCard.className = `rune-card ${equippedTo ? 'equipped' : ''}`;
             runeCard.innerHTML = `
                 <span class="rune-symbol">${rune.symbol}</span>
@@ -555,9 +549,6 @@ document.querySelectorAll('.modal').forEach(modal => {
             const itemCard = document.createElement('div');
             itemCard.className = 'item-card';
             
-            // Description Tooltip
-            itemCard.title = item.description; 
-            
             itemCard.innerHTML = `
                 <div class="item-header">
                     <span class="item-name">${item.name}</span>
@@ -601,12 +592,12 @@ document.querySelectorAll('.modal').forEach(modal => {
                         </div>
                         ${stagesHtml}
                         <div class="party-vasen-runes">
-                            ${vasen.runes.map(r => RUNES[r] ? `<span class="mini-rune" title="${RUNES[r].name}: ${RUNES[r].effect}">${RUNES[r].symbol}</span>` : '').join('')}
+                            ${vasen.runes.map(r => RUNES[r] ? `<span class="mini-rune">${RUNES[r].symbol}</span>` : '').join('')}
                         </div>
                         ${!gameState.inCombat ? `
                         <div class="party-slot-actions">
-                            <button class="party-action-btn move-btn" onclick="event.stopPropagation(); ui.showMoveVasenOptions(${index})" title="Move to another slot">⇄</button>
-                            <button class="party-action-btn remove-btn" onclick="event.stopPropagation(); ui.removeFromParty('${vasen.id}')" title="Remove from party">✕</button>
+                            <button class="party-action-btn move-btn" onclick="event.stopPropagation(); ui.showMoveVasenOptions(${index})">⇄</button>
+                            <button class="party-action-btn remove-btn" onclick="event.stopPropagation(); ui.removeFromParty('${vasen.id}')">✕</button>
                         </div>
                         ` : ''}
                     </div>
@@ -639,7 +630,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                 const stageClass = stage > 0 ? 'positive' : 'negative';
                 const stageText = stage > 0 ? `+${stage}` : stage;
                 const abbrev = attr.substring(0, 3).toUpperCase();
-                html += `<span class="mini-stage ${stageClass}" title="${capitalize(attr)}: ${stageText}">${abbrev}${stageText}</span>`;
+                html += `<span class="mini-stage ${stageClass}">${abbrev}${stageText}</span>`;
             }
         });
 
@@ -1047,11 +1038,9 @@ renderZones() {
 
         // Build runes HTML with "Rune:" label
         const runesHtml = vasen.runes.length > 0 
-            ? `<span class="runes-label">Rune:</span> ${vasen.runes.map(r => RUNES[r] ? `<span class="combat-rune" title="${RUNES[r].name}: ${RUNES[r].effect}">${RUNES[r].symbol} ${RUNES[r].name}</span>` : '').join('')}`
+            ? `<span class="runes-label">Rune:</span> ${vasen.runes.map(r => RUNES[r] ? `<span class="combat-rune">${RUNES[r].symbol} ${RUNES[r].name}</span>` : '').join('')}`
             : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
 
-        const defensiveTooltip = this.getDefensiveMatchupTooltip(vasen.species.element);
-        const temperamentTooltip = `${vasen.temperament.name}: +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} / -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}`;
         panel.innerHTML = `
             <div class="combatant-header">
                 <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
@@ -1059,7 +1048,7 @@ renderZones() {
             </div>
             <div class="combatant-image-container">
                 <img src="${vasen.species.image}" alt="${vasen.species.name}" class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
-                ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness" title="Swap Sickness: Cannot Act">Preparing</span>' : ''}
+                ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
             </div>
             <div class="combatant-bars">
     <div class="combat-bar health-bar">
@@ -1073,22 +1062,22 @@ renderZones() {
 </div>
 
             <div class="combatant-info">
-                <span class="element-badge element-${vasen.species.element.toLowerCase()}" title="${defensiveTooltip}">${vasen.species.element}</span>
+                <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
             </div>
             <div class="combatant-attributes">
-                <div class="combat-attr" title="Damage modifier for Strength Attacks">
+                <div class="combat-attr">
                     <span class="combat-attr-name">Str</span>
                     <span class="combat-attr-value">${vasen.getAttribute('strength')}</span>
                 </div>
-                <div class="combat-attr" title="Damage modifier for Wisdom Attacks">
+                <div class="combat-attr">
                     <span class="combat-attr-name">Wis</span>
                     <span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span>
                 </div>
-                <div class="combat-attr" title="Reduces damage from Strength Attacks">
+                <div class="combat-attr">
                     <span class="combat-attr-name">Def</span>
                     <span class="combat-attr-value">${vasen.getAttribute('defense')}</span>
                 </div>
-                <div class="combat-attr" title="Reduces damage from Wisdom Attacks">
+                <div class="combat-attr">
                     <span class="combat-attr-name">Dur</span>
                     <span class="combat-attr-value">${vasen.getAttribute('durability')}</span>
                 </div>
@@ -1101,7 +1090,7 @@ renderZones() {
             </div>
             <div class="combatant-attack-elements">
                 <span class="elements-label">Attack Elements:</span>
-                ${vasen.getAttackElements().map(e => `<span class="element-mini element-${e.toLowerCase()}" title="${this.getElementMatchupTooltip(e)}">${e}</span>`).join('')}
+                ${vasen.getAttackElements().map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join('')}
             </div>
         `;
     }
@@ -1116,7 +1105,7 @@ renderZones() {
             if (stage !== 0) {
                 const stageClass = stage > 0 ? 'positive' : 'negative';
                 const stageText = stage > 0 ? `+${stage}` : stage;
-                html += `<span class="stage-indicator ${stageClass}" title="${capitalize(attr)}: ${stageText} ${Math.abs(stage) === 1 ? 'stage' : 'stages'}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
+                html += `<span class="stage-indicator ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
             }
         });
 
@@ -1198,7 +1187,6 @@ renderActionButtons(battle) {
         const canUse = activeVasen.canUseAbility(abilityName) && !activeVasen.battleFlags.hasSwapSickness;
         
         const abilityElement = ability.element || activeVasen.species.element;
-        const elementTooltip = this.getElementMatchupTooltip(abilityElement);
 
         const btn = document.createElement('button');
         btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
@@ -1207,7 +1195,7 @@ renderActionButtons(battle) {
             <span class="ability-btn-name">${ability.name}</span>
             <span class="ability-btn-type">${ability.type}</span>
             <span class="ability-btn-stats">
-                <span class="ability-btn-element element-${abilityElement.toLowerCase()}" title="${elementTooltip}">${abilityElement}</span>
+                <span class="ability-btn-element element-${abilityElement.toLowerCase()}">${abilityElement}</span>
                 ${ability.power ? `<span class="ability-btn-power">Power: ${ability.power}</span>` : ''}
                 <span class="ability-btn-cost">Megin: ${meginCost}</span>
             </span>
@@ -1270,31 +1258,6 @@ renderActionButtons(battle) {
             image.classList.add('hit-flash');
             setTimeout(() => image.classList.remove('hit-flash'), 200);
         }
-    }
-
-    // Get element matchup tooltip (offensive - what this element hits)
-    getElementMatchupTooltip(element) {
-        const matchups = ELEMENT_MATCHUPS[element];
-        let text = `${element} Attacks:\n`;
-        ELEMENT_LIST.forEach(e => {
-            const matchupType = matchups[e];
-            const multiplier = DAMAGE_MULTIPLIERS[matchupType];
-            const result = matchupType === 'POTENT' ? 'Potent' : matchupType === 'WEAK' ? 'Weak' : 'Neutral';
-            text += `vs ${e}: ${result} (${multiplier}x)\n`;
-        });
-        return text;
-    }
-
-    // Get defensive matchup tooltip (what hits this element)
-    getDefensiveMatchupTooltip(element) {
-        let text = `${element} Defense:\n`;
-        ELEMENT_LIST.forEach(attackingElement => {
-            const matchupType = ELEMENT_MATCHUPS[attackingElement][element];
-            const multiplier = DAMAGE_MULTIPLIERS[matchupType];
-            const result = matchupType === 'POTENT' ? 'Weak to' : matchupType === 'WEAK' ? 'Resists' : 'Neutral vs';
-            text += `${result} ${attackingElement} (${multiplier}x)\n`;
-        });
-        return text;
     }
 
     // Show dialogue modal
@@ -1401,7 +1364,6 @@ if (firstButton) firstButton.focus();
 
                 const itemBtn = document.createElement('button');
                 itemBtn.className = 'offer-item-btn';
-                itemBtn.title = item.description;
                 itemBtn.innerHTML = `
                     <span class="offer-item-name">${item.name}</span>
                     <span class="offer-item-count">x${count}</span>
@@ -1823,13 +1785,97 @@ if (firstButton) firstButton.focus();
         );
     }
 
-    // Combat tips
+    // Game Guide (Combat tips)
     showCombatTips() {
+        // Render dynamic content before showing
+        this.renderGameGuideContent();
         this.combatTipsModal.classList.add('active');
     }
 
     hideCombatTips() {
         this.combatTipsModal.classList.remove('active');
+    }
+
+    // Render dynamic Game Guide content (Element Matchups and Temperaments)
+    renderGameGuideContent() {
+        // Render Element Matchups
+        const elementMatchupsContainer = document.getElementById('dynamic-element-matchups');
+        if (elementMatchupsContainer) {
+            elementMatchupsContainer.innerHTML = this.generateElementMatchupsHTML();
+        }
+
+        // Render Temperaments
+        const temperamentsContainer = document.getElementById('dynamic-temperaments');
+        if (temperamentsContainer) {
+            temperamentsContainer.innerHTML = this.generateTemperamentsHTML();
+        }
+    }
+
+    // Generate Element Matchups HTML from ELEMENT_MATCHUPS constant
+    generateElementMatchupsHTML() {
+        const elements = Object.keys(ELEMENT_MATCHUPS);
+        
+        let html = `
+            <h4>Element Matchups</h4>
+            <p class="matrix-legend">
+            <table class="element-matrix">
+                <thead>
+                    <tr>
+                        <th>
+                            <span class="legend-potent">P = Potent (${DAMAGE_MULTIPLIERS.POTENT}x)</span><br>
+                            <span class="legend-neutral">N = Neutral (${DAMAGE_MULTIPLIERS.NEUTRAL}x)</span><br>
+                            <span class="legend-weak">W = Weak (${DAMAGE_MULTIPLIERS.WEAK}x)</span>
+                        </th>
+                        <th colspan="${elements.length}" class="matrix-label-defender"><br>DEFENDER →</th>
+                    </tr>
+                    <tr>
+                        <th class="matrix-label-attacker">ATTACKER ↓</th>
+        `;
+
+        // Header row with defender elements
+        elements.forEach(element => {
+            html += `<th class="matrix-element-${element.toLowerCase()}">${element}</th>`;
+        });
+
+        html += `
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        // Data rows
+        elements.forEach(attacker => {
+            html += `<tr><th class="matrix-element-${attacker.toLowerCase()}">${attacker}</th>`;
+            
+            elements.forEach(defender => {
+                const matchupType = ELEMENT_MATCHUPS[attacker][defender];
+                const letter = matchupType === 'POTENT' ? 'P' : matchupType === 'WEAK' ? 'W' : 'N';
+                const cellClass = matchupType === 'POTENT' ? 'legend-potent' : matchupType === 'WEAK' ? 'legend-weak' : 'legend-neutral';
+                html += `<td class="${cellClass}">${letter}</td>`;
+            });
+            
+            html += `</tr>`;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        return html;
+    }
+
+    // Generate Temperaments HTML from TEMPERAMENTS constant
+    generateTemperamentsHTML() {
+        let html = `<div class="temperament-list"><h4>Temperaments</h4>`;
+
+        Object.values(TEMPERAMENTS).forEach(temperament => {
+            html += `<p><strong>${temperament.name}</strong> +${temperament.modifier} ${capitalize(temperament.positive)}, -${temperament.modifier} ${capitalize(temperament.negative)}</p>`;
+        });
+
+        html += `</div>`;
+
+        return html;
     }
 
     // Profile
