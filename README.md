@@ -106,10 +106,8 @@ Vasenvaktaren/
 │   ├── 8-ui-controller.js
 │   └── 9-main.js
 └── assets/
-    ├── vasen/
-    │   └── [30 Väsen images]
-    └── zones/
-        └── [7 zone images]
+    └── vasen/
+        └── [30 Väsen images]
 ```
 
 ## Feature roadmap
