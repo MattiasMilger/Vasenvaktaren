@@ -1428,14 +1428,14 @@ if (firstButton) firstButton.focus();
     }
 
     // Show ally select modal (for target selection)
-    showAllySelectionModal(ability, callback) {
+    showAllySelectionModal(battle, abilityName, callback) {
         const modal = document.getElementById('ally-select-modal');
-        document.getElementById('ally-select-ability-name').textContent = ability.name;
+        const ability = ABILITIES[abilityName];
+        document.getElementById('ally-select-ability-name').textContent = ability ? ability.name : abilityName;
 
         const list = document.getElementById('ally-select-list');
         list.innerHTML = '';
 
-        const battle = game.currentBattle;
         if (!battle) return;
 
         battle.playerTeam.forEach((vasen, index) => {
@@ -2014,35 +2014,6 @@ showKnockoutSwapModal(battle, callback) {
         callback(actualIndex);
         return;
     }
-    
-    // --- Temperament Dropdown Rendering ---
-document.addEventListener("DOMContentLoaded", () => {
-    const listContainer = document.getElementById("temperament-list");
-    if (!listContainer) return;
-
-    // Build temperament list dynamically
-    Object.values(TEMPERAMENTS).forEach(t => {
-        const entry = document.createElement("p");
-        entry.innerHTML = `
-            <strong>${t.name}</strong><br>
-            +${t.modifier}% ${t.positive}<br>
-            -${t.modifier}% ${t.negative}
-        `;
-        listContainer.appendChild(entry);
-    });
-
-    // Dropdown toggle
-    const toggleBtn = document.querySelector(".dropdown-toggle");
-    toggleBtn.addEventListener("click", () => {
-        const content = document.querySelector(".dropdown-content");
-        const isOpen = content.style.display === "block";
-
-        content.style.display = isOpen ? "none" : "block";
-        toggleBtn.textContent = isOpen
-            ? "Show Temperament List ▼"
-            : "Hide Temperament List ▲";
-    });
-});
 
     // Build buttons for each available Väsen
     availableVasen.forEach(vasen => {
