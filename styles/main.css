@@ -3170,17 +3170,21 @@ img {
 @media (max-width: 768px) {
     .element-matchup-collapsible .matchup-details {
         position: fixed;
+        top: 50%;
         left: 50% !important;
         right: auto !important;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         max-width: 90vw;
+        z-index: 9999;
     }
     
     .element-guide-collapsible .element-guide-details {
         position: fixed;
+        top: 50%;
         left: 50% !important;
         right: auto !important;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         max-width: 90vw;
+        z-index: 9999;
     }
 }
