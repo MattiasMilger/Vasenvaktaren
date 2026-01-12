@@ -916,6 +916,7 @@ renderZones() {
         const zone = ZONES[gameState.currentZone];
 
         this.zoneDescription.innerHTML = `
+            ${zone.image ? `<img src="${zone.image}" alt="${zone.name}" class="zone-image">` : ''}
             <h3>${zone.name}</h3>
             <p>${zone.description}</p>
             <div class="zone-meta">

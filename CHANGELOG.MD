@@ -6,6 +6,10 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.46-alpha – Zone Images (2026-01-12)
+- UI scaling fixes
+- Added zone images displayed in zone description panel
+
 ## v0.45-alpha – Mobile-friendly UI (2026-01-10)
 - Introduced mobile-friendly UI
 - Improved layout scaling

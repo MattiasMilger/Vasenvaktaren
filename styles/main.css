@@ -1480,6 +1480,17 @@ img {
     margin-bottom: 0;
 }
 
+/* Zone Image */
+.zone-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 720 / 340;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
 /* =============================================================================
    20. COMBAT AREA
    ============================================================================= */
