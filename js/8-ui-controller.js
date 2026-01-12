@@ -252,6 +252,12 @@ document.querySelectorAll('.modal').forEach(modal => {
                 </div>
                 <span class="mini-health-text">${vasen.currentHealth}/${vasen.maxHealth}</span>
             </div>
+            <div class="vasen-card-megin">
+                <div class="mini-megin-bar">
+                    <div class="mini-megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                </div>
+                <span class="mini-megin-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
+            </div>
         `;
 
         card.addEventListener('click', () => this.selectVasen(vasen));
@@ -270,6 +276,13 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
         
         this.renderVasenDetails(this.selectedVasen);
+        this.renderVasenInventory(); // Rerender inventory to update 'selected' class
+    }
+
+        // Close the väsen details panel
+    closeVasenDetails() {
+        this.selectedVasen = null;
+        this.renderVasenDetails(null);
         this.renderVasenInventory(); // Rerender inventory to update 'selected' class
     }
 
@@ -352,6 +365,7 @@ document.querySelectorAll('.modal').forEach(modal => {
         const expProgress = vasen.getExpProgress();
 
         panel.innerHTML = `
+            <button class="details-close-btn" onclick="ui.closeVasenDetails()">×</button>
             <div class="details-header">
                 <img src="${vasen.species.image}" alt="${vasen.species.name}" class="details-image">
                 <div class="details-identity">
@@ -654,11 +668,17 @@ document.querySelectorAll('.modal').forEach(modal => {
                             <span class="party-vasen-level">Lvl ${vasen.level}</span>
                         </div>
                         <div class="party-vasen-bars">
-                            <div class="mini-bar health">
-                                <div class="mini-bar-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                            <div class="mini-bar-row">
+                                <div class="mini-bar health">
+                                    <div class="mini-bar-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                                </div>
+                                <span class="mini-bar-text">${vasen.currentHealth}/${vasen.maxHealth}</span>
                             </div>
-                            <div class="mini-bar megin">
-                                <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                            <div class="mini-bar-row">
+                                <div class="mini-bar megin">
+                                    <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                                </div>
+                                <span class="mini-bar-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
                             </div>
                         </div>
                         ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
