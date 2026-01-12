@@ -1514,7 +1514,7 @@ if (firstButton) firstButton.focus();
             });
         }
 
-        document.getElementById('close-rune-equip-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-rune-modal').onclick = () => modal.classList.remove('active');
         modal.classList.add('active');
     }
 
