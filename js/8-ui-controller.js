@@ -641,73 +641,88 @@ renderVasenDetails(vasen) {
     }
 
     // Render party
-    renderParty() {
-        gameState.party.forEach((vasen, index) => {
-            const slot = this.partySlots[index];
-            const slotContent = slot.querySelector('.slot-content');
+renderParty() {
+    gameState.party.forEach((vasen, index) => {
+        const slot = this.partySlots[index];
+        const slotContent = slot.querySelector('.slot-content');
 
-            if (vasen) {
-                slot.classList.add('filled');
-                slotContent.classList.remove('empty');
-                
-                let stagesHtml = '';
-                ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
-                    const stage = vasen.attributeStages[attr];
-                    if (stage !== 0) {
-                        const stageClass = stage > 0 ? 'positive' : 'negative';
-                        const stageText = stage > 0 ? `+${stage}` : stage;
-                        stagesHtml += `<span class="mini-stage ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
-                    }
-                });
-                
-                let runesHtml = '';
-                if (vasen.runes.length > 0) {
-                    runesHtml = vasen.runes.map(runeId => {
-                        const rune = RUNES[runeId];
-                        return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
-                    }).join('');
+        if (vasen) {
+            slot.classList.add('filled');
+            slotContent.classList.remove('empty');
+            
+            let stagesHtml = '';
+            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+                const stage = vasen.attributeStages[attr];
+                if (stage !== 0) {
+                    const stageClass = stage > 0 ? 'positive' : 'negative';
+                    const stageText = stage > 0 ? `+${stage}` : stage;
+                    stagesHtml += `<span class="mini-stage ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
                 }
-
-                slotContent.innerHTML = `
-                    <div class="party-vasen">
-                        <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
-                        <div class="party-vasen-info">
-                            <span class="party-vasen-name">${vasen.getDisplayName()}</span>
-                            <span class="party-vasen-level">Lvl ${vasen.level}</span>
-                        </div>
-                        <div class="party-vasen-bars">
-                            <div class="mini-bar-row">
-                                <div class="mini-bar health">
-                                    <div class="mini-bar-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
-                                </div>
-                                <span class="mini-bar-text">${vasen.currentHealth}/${vasen.maxHealth}</span>
-                            </div>
-                            <div class="mini-bar-row">
-                                <div class="mini-bar megin">
-                                    <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
-                                </div>
-                                <span class="mini-bar-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
-                            </div>
-                        </div>
-                        ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
-                        ${runesHtml ? `<div class="party-vasen-runes">${runesHtml}</div>` : ''}
-                    </div>
-                `;
-            } else {
-                slot.classList.remove('filled');
-                slotContent.classList.add('empty');
-                slotContent.innerHTML = `
-                    <div class="party-empty">
-                        <span>Empty</span>
-                        <span class="party-hint">Click to add</span>
-                    </div>
-                `;
+            });
+            
+            let runesHtml = '';
+            if (vasen.runes.length > 0) {
+                runesHtml = vasen.runes.map(runeId => {
+                    const rune = RUNES[runeId];
+                    return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
+                }).join('');
             }
 
-            // Update click handler for slot
-            slot.onclick = () => this.handlePartySlotClick(index);
-        });
-    }
+            slotContent.innerHTML = `
+                <div class="party-vasen">
+                    <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
+
+                    <div class="party-vasen-info">
+                        <span class="party-vasen-name">${vasen.getDisplayName()}</span>
+                        <span class="party-vasen-level">Lvl ${vasen.level}</span>
+
+                        <div class="party-vasen-tags">
+                            <span 
+                                class="element-badge element-${vasen.species.element.toLowerCase()}"
+                            >
+                                ${vasen.species.element}
+                            </span>
+                            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">
+                                ${vasen.species.rarity}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="party-vasen-bars">
+                        <div class="mini-bar-row">
+                            <div class="mini-bar health">
+                                <div class="mini-bar-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                            </div>
+                            <span class="mini-bar-text">${vasen.currentHealth}/${vasen.maxHealth}</span>
+                        </div>
+                        <div class="mini-bar-row">
+                            <div class="mini-bar megin">
+                                <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                            </div>
+                            <span class="mini-bar-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
+                        </div>
+                    </div>
+
+                    ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
+                    ${runesHtml ? `<div class="party-vasen-runes">${runesHtml}</div>` : ''}
+                </div>
+            `;
+        } else {
+            slot.classList.remove('filled');
+            slotContent.classList.add('empty');
+            slotContent.innerHTML = `
+                <div class="party-empty">
+                    <span>Empty</span>
+                    <span class="party-hint">Click to add</span>
+                </div>
+            `;
+        }
+
+        // Update click handler for slot
+        slot.onclick = () => this.handlePartySlotClick(index);
+    });
+}
+
 
     // Handle party slot click
     handlePartySlotClick(slotIndex) {
