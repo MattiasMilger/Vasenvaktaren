@@ -44,6 +44,12 @@ class GameState {
 
         // UI lock (not saved)
         this.uiLocked = false;
+        
+        // Exploration pity counters (anti-grief system)
+        this.battleCounter = 0;      // Increments on non-combat, resets on combat
+        this.itemCounter = 0;        // Increments on non-item, resets on item
+        this.runeCounter = 0;        // Increments on non-rune, resets on rune
+        this.sacredWellCounter = 0;  // Increments on battles only, resets on Sacred Well
     }
     
     // count väsen types tamed
@@ -372,34 +378,86 @@ equipRune(runeId, vasenId) {
         return false;
     }
     
-    // Explore current zone - returns encounter result
+    // Explore current zone - returns encounter result with anti-grief pity system
     explore() {
         const zone = ZONES[this.currentZone];
         if (!zone) return null;
         
-        // Roll for encounter type
-        const roll = Math.random();
-        let encounterType;
-        
-        // Check if all runes collected - if so, rune chance becomes vasen chance
+        // Check if all runes collected
         const allRunesCollected = this.collectedRunes.size >= RUNE_LIST.length;
         
-        if (roll < EXPLORATION_RATES.WILD_VASEN + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
-            encounterType = 'vasen';
-        } else if (roll < EXPLORATION_RATES.WILD_VASEN + EXPLORATION_RATES.ITEM + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
-            encounterType = 'item';
-        } else if (roll < EXPLORATION_RATES.WILD_VASEN + EXPLORATION_RATES.ITEM + EXPLORATION_RATES.SACRED_WELL + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+        let encounterType;
+        
+        // Priority 1: Sacred Well pity (triggers after threshold battles without a well)
+        if (this.sacredWellCounter >= GAME_CONFIG.PITY_SACRED_WELL_THRESHOLD) {
             encounterType = 'well';
-        } else {
+        }
+        // Priority 2: Battle pity (triggers after threshold explores without combat)
+        else if (this.battleCounter >= GAME_CONFIG.PITY_BATTLE_THRESHOLD) {
+            encounterType = 'vasen';
+        }
+        // Priority 3: Item pity (triggers after threshold explores without an item)
+        else if (this.itemCounter >= GAME_CONFIG.PITY_ITEM_THRESHOLD) {
+            encounterType = 'item';
+        }
+        // Priority 4: Rune pity (triggers after threshold explores without a rune, only if runes remain)
+        else if (!allRunesCollected && this.runeCounter >= GAME_CONFIG.PITY_RUNE_THRESHOLD) {
             encounterType = 'rune';
         }
+        // Priority 5: Normal RNG
+        else {
+            const roll = Math.random();
+            
+            // If all runes collected, rune chance is added to vasen chance
+            if (roll < EXPLORATION_RATES.WILD_VASEN + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+                encounterType = 'vasen';
+            } else if (roll < EXPLORATION_RATES.WILD_VASEN + EXPLORATION_RATES.ITEM + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+                encounterType = 'item';
+            } else if (roll < EXPLORATION_RATES.WILD_VASEN + EXPLORATION_RATES.ITEM + EXPLORATION_RATES.SACRED_WELL + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+                encounterType = 'well';
+            } else {
+                encounterType = 'rune';
+            }
+        }
+        
+        // Update pity counters based on encounter type
+        switch (encounterType) {
+            case 'vasen':
+                this.battleCounter = 0;       // Reset: got combat
+                this.itemCounter++;           // Increment: not an item
+                this.runeCounter++;           // Increment: not a rune
+                this.sacredWellCounter++;     // Increment: battle occurred
+                break;
+            case 'item':
+                this.battleCounter++;         // Increment: not combat
+                this.itemCounter = 0;         // Reset: got item
+                this.runeCounter++;           // Increment: not a rune
+                // sacredWellCounter unchanged: only increments on battles
+                break;
+            case 'well':
+                this.battleCounter++;         // Increment: not combat
+                this.itemCounter++;           // Increment: not an item
+                this.runeCounter++;           // Increment: not a rune
+                this.sacredWellCounter = 0;   // Reset: got Sacred Well
+                break;
+            case 'rune':
+                this.battleCounter++;         // Increment: not combat
+                this.itemCounter++;           // Increment: not an item
+                this.runeCounter = 0;         // Reset: got rune
+                // sacredWellCounter unchanged: only increments on battles
+                break;
+        }
+        
+        // Process encounter and return result
+        let result;
         
         switch (encounterType) {
             case 'vasen': {
                 const speciesName = getRandomSpawnFromZone(this.currentZone);
                 const level = getRandomLevelForZone(this.currentZone);
                 const vasen = createWildVasen(speciesName, level);
-                return { type: 'vasen', vasen };
+                result = { type: 'vasen', vasen };
+                break;
             }
             
             case 'item': {
@@ -415,7 +473,8 @@ equipRune(runeId, vasenId) {
                 const itemData = TAMING_ITEMS[randomItem];
                 const dialogue = itemData?.foundText || `You found a ${randomItem}!`;
                 
-                return { type: 'item', itemId: randomItem, dialogue };
+                result = { type: 'item', itemId: randomItem, dialogue };
+                break;
             }
             
             case 'well': {
@@ -423,14 +482,15 @@ equipRune(runeId, vasenId) {
                 const dialogue = anyHealed 
                     ? 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your Väsen drink deeply and feel renewed. All tamed Väsen are healed by 80%.'
                     : 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your tamed Väsen are already at full vigor, but the sacred waters shimmer with approval.';
-                return { type: 'well', dialogue };
+                result = { type: 'well', dialogue };
+                break;
             }
             
             case 'rune': {
                 // Get uncollected runes
                 const uncollectedRunes = RUNE_LIST.filter(r => !this.collectedRunes.has(r));
                 if (uncollectedRunes.length === 0) {
-                    // Fallback to vasen if somehow all runes collected
+                    // Fallback to vasen if somehow all runes collected (shouldn't happen due to check above)
                     return this.explore();
                 }
                 
@@ -441,9 +501,13 @@ equipRune(runeId, vasenId) {
                 const runeData = RUNES[randomRune];
                 const dialogue = `The wind carries the scent of old magic. Another rune has chosen to reveal itself to you. You discovered ${runeData.symbol} ${runeData.name}.`;
                 
-                return { type: 'rune', runeId: randomRune, dialogue };
+                result = { type: 'rune', runeId: randomRune, dialogue };
+                break;
             }
         }
+        
+        this.saveGame();
+        return result;
     }
     
     // Get active party (non-null members)
@@ -542,7 +606,12 @@ equipRune(runeId, vasenId) {
             achievements: this.achievements,
             gameStarted: this.gameStarted,
             runeMenuFirstOpen: this.runeMenuFirstOpen,
-            settings: this.settings
+            settings: this.settings,
+            // Pity counters for exploration anti-grief system
+            battleCounter: this.battleCounter,
+            itemCounter: this.itemCounter,
+            runeCounter: this.runeCounter,
+            sacredWellCounter: this.sacredWellCounter
         };
     }
     
@@ -580,6 +649,12 @@ equipRune(runeId, vasenId) {
             };
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
+            
+            // Restore pity counters (default to 0 for backwards compatibility)
+            this.battleCounter = data.battleCounter || 0;
+            this.itemCounter = data.itemCounter || 0;
+            this.runeCounter = data.runeCounter || 0;
+            this.sacredWellCounter = data.sacredWellCounter || 0;
             
             // Note: Runes are now stored directly on each väsen instance,
             // so no need to reassign from party slots
@@ -663,6 +738,12 @@ equipRune(runeId, vasenId) {
         this.currentBattle = null;
         this.currentEncounter = null;
         this.inCombat = false;
+        
+        // Reset pity counters
+        this.battleCounter = 0;
+        this.itemCounter = 0;
+        this.runeCounter = 0;
+        this.sacredWellCounter = 0;
     }
 }
 

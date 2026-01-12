@@ -28,7 +28,12 @@ const GAME_CONFIG = {
     MAX_OFFERS_PER_COMBAT: 3,
     MAX_ATTRIBUTE_STAGE: 5,
     MIN_ATTRIBUTE_STAGE: -5,
-    ATTRIBUTE_STAGE_MODIFIER: 0.1
+    ATTRIBUTE_STAGE_MODIFIER: 0.1,
+    // Pity thresholds for exploration anti-grief system
+    PITY_BATTLE_THRESHOLD: 4,
+    PITY_ITEM_THRESHOLD: 5,
+    PITY_RUNE_THRESHOLD: 20,
+    PITY_SACRED_WELL_THRESHOLD: 4
 };
 
 // Starter Väsen options (species keys from VASEN_SPECIES)
