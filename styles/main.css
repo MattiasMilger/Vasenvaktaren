@@ -3283,26 +3283,3 @@ img {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-.combatant-panels-scroll {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-md);
-    overflow-x: auto;
-    overflow-y: hidden;
-    max-width: 100%;
-    scrollbar-width: thin;
-}
-
-.combatant-panels-scroll::-webkit-scrollbar {
-    height: 6px;
-}
-
-.combatant-panels-scroll::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 3px;
-}
-
-.combatant-panel {
-    flex: 0 0 auto; /* prevents shrinking, preserves your layout */
-}
