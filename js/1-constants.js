@@ -187,16 +187,15 @@ const TEMPERAMENTS = {
     FEROCIOUS: { name: 'Ferocious', positive: 'strength', negative: 'health', modifier: 5 },
     BRUTAL: { name: 'Brutal', positive: 'strength', negative: 'defense', modifier: 5 },
     SAVAGE: { name: 'Savage', positive: 'strength', negative: 'durability', modifier: 5 },
-    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'strength', modifier: 5 },
-    STALWART: { name: 'Stalwart', positive: 'health', negative: 'wisdom', modifier: 5 },
-    RESILIENT: { name: 'Resilient', positive: 'health', negative: 'durability', modifier: 5 },
-    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom', negative: 'strength', modifier: 5 },
+    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom', negative: 'defense', modifier: 5 },
     FOCUSED: { name: 'Focused', positive: 'wisdom', negative: 'health', modifier: 5 },
-    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'defense', modifier: 5 },
-    WARY: { name: 'Wary', positive: 'defense', negative: 'strength', modifier: 5 },
-    GUARDED: { name: 'Guarded', positive: 'defense', negative: 'wisdom', modifier: 5 },
+    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'durability', modifier: 5 },
+    STALWART: { name: 'Stalwart', positive: 'defense', negative: 'durability', modifier: 5 },
+    WARY: { name: 'Wary', positive: 'defense', negative: 'health', modifier: 5 },
     ENDURING: { name: 'Enduring', positive: 'durability', negative: 'health', modifier: 5 },
-    VIGILANT: { name: 'Vigilant', positive: 'durability', negative: 'defense', modifier: 5 }
+    VIGILANT: { name: 'Vigilant', positive: 'durability', negative: 'defense', modifier: 5 },
+    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'durability', modifier: 5 },
+    RESILIENT: { name: 'Resilient', positive: 'health', negative: 'defense', modifier: 5 },
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);

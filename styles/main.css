@@ -628,7 +628,6 @@ img {
 .family-badge {
     background: var(--bg-tertiary);
     color: var(--text-muted);
-    cursor: help;
 }
 
 /* =============================================================================
@@ -646,7 +645,6 @@ img {
     background: var(--bg-tertiary);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--spacing-xs);
-    cursor: help;
 }
 
 /* Vasen Cards */
@@ -1062,7 +1060,6 @@ img {
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
-    cursor: help;
 }
 
 .temperament-info {
