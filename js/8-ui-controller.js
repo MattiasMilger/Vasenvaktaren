@@ -1037,6 +1037,7 @@ renderZones() {
         const healthPercent = (vasen.currentHealth / vasen.maxHealth) * 100;
         const meginPercent = (vasen.currentMegin / vasen.maxMegin) * 100;
 
+
         // Build runes HTML with "Rune:" label
 const runesHtml = vasen.runes.length > 0
     ? `<span class="runes-label">Rune:</span>
@@ -1057,60 +1058,70 @@ const runesHtml = vasen.runes.length > 0
        }).join('')}`
     : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
 
-
-
-        panel.innerHTML = `
-            <div class="combatant-header">
-                <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
-                <span class="combatant-level">Lvl ${vasen.level}</span>
-            </div>
-            <div class="combatant-image-container">
-                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
-                ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
-            </div>
-            <div class="combatant-bars">
-    <div class="combat-bar health-bar">
-        <div class="combat-bar-fill health-fill" style="width: ${healthPercent}%"></div>
-        <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
+// Build combatant panel
+panel.innerHTML = `
+    <div class="combatant-header">
+        <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
+        <span class="combatant-level">Lvl ${vasen.level}</span>
     </div>
-    <div class="combat-bar megin-bar">
-        <div class="combat-bar-fill megin-fill" style="width: ${meginPercent}%"></div>
-        <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
-    </div>
-</div>
 
-            <div class="combatant-info">
-                <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+    <div class="combatant-image-container">
+        <img src="${vasen.species.image}" alt="${vasen.species.name}" 
+             class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
+        ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
+    </div>
+
+    <div class="combatant-bars">
+        <div class="combat-bar health-bar">
+            <div class="combat-bar-fill health-fill" style="width: ${healthPercent}%"></div>
+            <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
+        </div>
+        <div class="combat-bar megin-bar">
+            <div class="combat-bar-fill megin-fill" style="width: ${meginPercent}%"></div>
+            <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
+        </div>
+    </div>
+
+    <div class="combatant-info">
+        <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+    </div>
+
+    <div class="combatant-attributes">
+        <div class="combat-attr"><span class="combat-attr-name">Str</span><span class="combat-attr-value">${vasen.getAttribute('strength')}</span></div>
+        <div class="combat-attr"><span class="combat-attr-name">Wis</span><span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span></div>
+        <div class="combat-attr"><span class="combat-attr-name">Def</span><span class="combat-attr-value">${vasen.getAttribute('defense')}</span></div>
+        <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
+    </div>
+
+    <div class="combatant-runes">
+        ${runesHtml}
+    </div>
+
+    <div class="combatant-stages">
+        ${this.renderAttributeStages(vasen)}
+    </div>
+
+    <div class="combatant-attack-elements">
+        <span class="elements-label">Attack Elements:</span>
+        ${vasen.getAttackElements().map(e => `
+            <span class="element-mini element-${e.toLowerCase()}">${e}</span>
+        `).join('')}
+    </div>
+
+    <!-- NEW DESCRIPTION COLLAPSIBLE (closed by default) -->
+    <div class="combatant-description">
+        <div class="rune-collapsible">
+            <div class="rune-collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+                <span class="toggle-icon">▶</span>
+                Description
             </div>
-            <div class="combatant-attributes">
-                <div class="combat-attr">
-                    <span class="combat-attr-name">Str</span>
-                    <span class="combat-attr-value">${vasen.getAttribute('strength')}</span>
-                </div>
-                <div class="combat-attr">
-                    <span class="combat-attr-name">Wis</span>
-                    <span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span>
-                </div>
-                <div class="combat-attr">
-                    <span class="combat-attr-name">Def</span>
-                    <span class="combat-attr-value">${vasen.getAttribute('defense')}</span>
-                </div>
-                <div class="combat-attr">
-                    <span class="combat-attr-name">Dur</span>
-                    <span class="combat-attr-value">${vasen.getAttribute('durability')}</span>
-                </div>
+            <div class="rune-collapsible-body">
+                ${vasen.species.description}
             </div>
-            <div class="combatant-runes">
-                ${runesHtml}
-            </div>
-            <div class="combatant-stages">
-                ${this.renderAttributeStages(vasen)}
-            </div>
-            <div class="combatant-attack-elements">
-                <span class="elements-label">Attack Elements:</span>
-                ${vasen.getAttackElements().map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join('')}
-            </div>
-        `;
+        </div>
+    </div>
+`;
+
     }
 
     // Render attribute stages
