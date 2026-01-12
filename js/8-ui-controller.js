@@ -352,138 +352,146 @@ document.querySelectorAll('.modal').forEach(modal => {
 
 
     // Render Vasen details panel
-    renderVasenDetails(vasen) {
-        const panel = this.vasenDetailsPanel;
-        if (!vasen) {
-            // Clear the panel if no väsen is selected
-            panel.innerHTML = '<p class="empty-message">Select a Väsen to view details</p>';
-            return;
-        }
+renderVasenDetails(vasen) {
+    const panel = this.vasenDetailsPanel;
+    if (!vasen) {
+        panel.innerHTML = '<p class="empty-message">Select a Väsen to view details</p>';
+        return;
+    }
 
-        const isInParty = gameState.party.some(p => p && p.id === vasen.id);
-        const runeSlots = vasen.level >= 30 ? 2 : 1;
-        const expProgress = vasen.getExpProgress();
+    // Party logic (safe)
+    const isInParty = gameState.party.some(p => p && p.id === vasen.id);
+    const hasEmptySlot = gameState.party.some(p => p === null);
+    const canAdd = !isInParty && hasEmptySlot && !gameState.inCombat;
+    const canSwap = !isInParty && !hasEmptySlot && !gameState.inCombat;
 
-        panel.innerHTML = `
-            <button class="details-close-btn" onclick="ui.closeVasenDetails()">×</button>
-            <div class="details-header">
-                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="details-image">
-                <div class="details-identity">
-                    <h3 class="details-name">${vasen.getDisplayName()}</h3>
-                    <div class="details-meta">
-                        <div class="element-matchup-collapsible">
-                            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${vasen.species.element}</span>
-                            ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
-                        </div>
-                        <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
-                        <span class="family-badge">${vasen.species.family}</span>
+    const runeSlots = vasen.level >= 30 ? 2 : 1;
+    const expProgress = vasen.getExpProgress();
+
+    panel.innerHTML = `
+        <button class="details-close-btn" onclick="ui.closeVasenDetails()">×</button>
+        <div class="details-header">
+            <img src="${vasen.species.image}" alt="${vasen.species.name}" class="details-image">
+            <div class="details-identity">
+                <h3 class="details-name">${vasen.getDisplayName()}</h3>
+                <div class="details-meta">
+                    <div class="element-matchup-collapsible">
+                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${vasen.species.element}</span>
+                        ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
+                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
+                    <span class="family-badge">${vasen.species.family}</span>
                 </div>
             </div>
+        </div>
 
-            <div class="details-runes">
-                <h4>Runes (${vasen.runes.length}/${runeSlots})</h4>
-                <div class="rune-slots">
-                    ${this.renderRuneSlots(vasen)}
+        <div class="details-runes">
+            <h4>Runes (${vasen.runes.length}/${runeSlots})</h4>
+            <div class="rune-slots">
+                ${this.renderRuneSlots(vasen)}
+            </div>
+        </div>
+
+        <div class="details-description">
+            <h4 class="description-toggle" onclick="ui.toggleDescription()">
+                <span class="toggle-icon">${this.descriptionCollapsed ? '▶' : '▼'}</span>
+                Description
+            </h4>
+            <div class="description-content ${this.descriptionCollapsed ? 'collapsed' : ''}">
+                <p>${vasen.species.description}</p>
+            </div>
+        </div>
+
+        <div class="details-level">
+            <span>Level ${vasen.level}</span>
+            ${vasen.level < GAME_CONFIG.MAX_LEVEL ? `
+                <div class="exp-bar">
+                    <div class="exp-fill" style="width: ${expProgress.percent}%"></div>
+                </div>
+                <span class="exp-text">${expProgress.current} / ${expProgress.required} EXP</span>
+            ` : '<span class="max-level-badge">MAX LEVEL</span>'}
+        </div>
+
+        <div class="details-resources">
+            <div class="resource-bar health-bar-container">
+                <span class="resource-label">Health</span>
+                <div class="resource-bar-bg">
+                    <div class="resource-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                </div>
+                <span class="resource-value">${vasen.currentHealth} / ${vasen.maxHealth}</span>
+            </div>
+            <div class="resource-bar megin-bar-container">
+                <span class="resource-label">Megin</span>
+                <div class="resource-bar-bg">
+                    <div class="resource-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                </div>
+                <span class="resource-value">${vasen.currentMegin} / ${vasen.maxMegin}</span>
+            </div>
+        </div>
+
+        <div class="details-attributes">
+            <h4>Attributes</h4>
+            <div class="attribute-grid">
+                <div class="attribute-item">
+                    <span class="attr-name">Strength</span>
+                    <span class="attr-value">${vasen.calculateAttribute('strength')}</span>
+                </div>
+                <div class="attribute-item">
+                    <span class="attr-name">Wisdom</span>
+                    <span class="attr-value">${vasen.calculateAttribute('wisdom')}</span>
+                </div>
+                <div class="attribute-item">
+                    <span class="attr-name">Defense</span>
+                    <span class="attr-value">${vasen.calculateAttribute('defense')}</span>
+                </div>
+                <div class="attribute-item">
+                    <span class="attr-name">Durability</span>
+                    <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
                 </div>
             </div>
+        </div>
 
-            <div class="details-description">
-                <h4 class="description-toggle" onclick="ui.toggleDescription()">
-                    <span class="toggle-icon">${this.descriptionCollapsed ? '▶' : '▼'}</span>
-                    Description
-                </h4>
-                <div class="description-content ${this.descriptionCollapsed ? 'collapsed' : ''}">
-                    <p>${vasen.species.description}</p>
-                </div>
-            </div>
+        <div class="details-temperament">
+            <h4>Temperament</h4>
+            <span class="temperament-info">
+                ${vasen.temperament.name}
+            </span>
+            <span class="temperament-details">
+                +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} /
+                -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}
+            </span>
+        </div>
 
-            <div class="details-level">
-                <span>Level ${vasen.level}</span>
-                ${vasen.level < GAME_CONFIG.MAX_LEVEL ? `
-                    <div class="exp-bar">
-                        <div class="exp-fill" style="width: ${expProgress.percent}%"></div>
-                    </div>
-                    <span class="exp-text">${expProgress.current} / ${expProgress.required} EXP</span>
-                ` : '<span class="max-level-badge">MAX LEVEL</span>'}
-            </div>
-
-            <div class="details-resources">
-                <div class="resource-bar health-bar-container">
-                    <span class="resource-label">Health</span>
-                    <div class="resource-bar-bg">
-                        <div class="resource-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
-                    </div>
-                    <span class="resource-value">${vasen.currentHealth} / ${vasen.maxHealth}</span>
-                </div>
-                <div class="resource-bar megin-bar-container">
-                    <span class="resource-label">Megin</span>
-                    <div class="resource-bar-bg">
-                        <div class="resource-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
-                    </div>
-                    <span class="resource-value">${vasen.currentMegin} / ${vasen.maxMegin}</span>
-                </div>
-            </div>
-
-            <div class="details-attributes">
-                <h4>Attributes</h4>
-                <div class="attribute-grid">
-                    <div class="attribute-item">
-                        <span class="attr-name">Strength</span>
-                        <span class="attr-value">${vasen.calculateAttribute('strength')}</span>
-                    </div>
-                    <div class="attribute-item">
-                        <span class="attr-name">Wisdom</span>
-                        <span class="attr-value">${vasen.calculateAttribute('wisdom')}</span>
-                    </div>
-                    <div class="attribute-item">
-                        <span class="attr-name">Defense</span>
-                        <span class="attr-value">${vasen.calculateAttribute('defense')}</span>
-                    </div>
-                    <div class="attribute-item">
-                        <span class="attr-name">Durability</span>
-                        <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="details-temperament">
-    <h4>Temperament</h4>
-    <span class="temperament-info">
-        ${vasen.temperament.name}
-    </span>
-    <span class="temperament-details">
-        +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} /
-        -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}
-    </span>
-</div>
-
-
-                <div class="details-taming-item">
+        <div class="details-taming-item">
             <h4>Taming Item</h4>
             <span class="taming-item-name">${vasen.species.tamingItem}</span>
         </div>
         <br>
 
-            <div class="details-abilities">
-                <h4>Abilities</h4>
-                <div class="abilities-list">
-                    ${this.renderAbilitiesList(vasen)}
-                </div>
+        <div class="details-abilities">
+            <h4>Abilities</h4>
+            <div class="abilities-list">
+                ${this.renderAbilitiesList(vasen)}
             </div>
+        </div>
 
-            <div class="details-actions">
-    ${isInParty ? 
-        `<button class="btn btn-danger" onclick="ui.removeFromParty('${vasen.id}')">Remove from Party</button>` :
-        `<button class="btn btn-primary" onclick="ui.addToParty('${vasen.id}')">Add to Party</button>`
-    }
+        <div class="details-actions">
+            ${
+                isInParty
+                    ? `<button class="btn btn-danger" onclick="ui.removeFromParty('${vasen.id}')">Remove from Party</button>`
+                    : canAdd
+                        ? `<button class="btn btn-primary" onclick="ui.addToParty('${vasen.id}')">Add to Party</button>`
+                        : canSwap
+                            ? `<button class="btn btn-primary" onclick="ui.showSwapIntoPartyModal('${vasen.id}')">Swap Into Party</button>`
+                            : ''
+            }
 
-    <button class="btn btn-danger release-btn" onclick="ui.confirmReleaseVasen('${vasen.id}')">
-    Release
-</button>
-
-        `;
-    }
+            <button class="btn btn-danger release-btn" onclick="ui.confirmReleaseVasen('${vasen.id}')">
+                Release
+            </button>
+        </div>
+    `;
+}
 
     // Render rune slots for details panel
     renderRuneSlots(vasen) {

@@ -448,6 +448,9 @@ handleAskItem() {
             // Recalculate megin since runes were cleared (in case it had Uruz)
             newVasen.maxMegin = newVasen.calculateMaxMegin();
             newVasen.currentMegin = newVasen.maxMegin;
+
+            // Reset attribute changes
+            newVasen.resetBattleState();
             
             gameState.vasenCollection.push(newVasen);
             ui.addCombatLog(`${newVasen.getDisplayName()} has joined your party!`, 'tame');
