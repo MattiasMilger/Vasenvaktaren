@@ -1,39 +1,46 @@
 /* =============================================================================
-   main.css - Väsenväktaren Styles (COMPLETE RESPONSIVE)
+   main.css - Väsenväktaren Styles
    ============================================================================= */
 
-/* =========================
-   CSS Variables
-   ========================= */
+/* =============================================================================
+   1. CSS VARIABLES
+   ============================================================================= */
 :root {
+    /* Background Colors */
     --bg-primary: #1a1a1f;
     --bg-secondary: #252530;
     --bg-tertiary: #2d2d3a;
     --bg-card: #323240;
     --bg-hover: #3a3a4a;
 
+    /* Text Colors */
     --text-primary: #f0f0f4;
     --text-secondary: #c8c8d8;
     --text-muted: #9090a0;
     --text-accent: #d8c8a6;
 
+    /* Accent Colors */
     --accent-primary: #8a9a7a;
     --accent-secondary: #7a8a9a;
     --accent-danger: #b06a6a;
     --accent-warning: #c9a227;
 
+    /* Border Colors */
     --border-color: #505060;
     --border-light: #606070;
 
+    /* Border Radius */
     --border-radius: 8px;
     --border-radius-sm: 4px;
 
+    /* Spacing */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 24px;
     --spacing-xl: 32px;
 
+    /* Typography */
     --font-family: 'Segoe UI', 'Roboto', sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
@@ -60,10 +67,12 @@
     --megin-fill: #6a7a9a;
 }
 
-/* =========================
-   Reset & Base
-   ========================= */
-*, *::before, *::after {
+/* =============================================================================
+   2. RESET & BASE STYLES
+   ============================================================================= */
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -81,22 +90,6 @@ body {
     line-height: 1.5;
 }
 
-/* Desktop: viewport-locked game style */
-@media (min-width: 1025px) {
-    html, body {
-        height: 100%;
-        overflow: hidden;
-    }
-}
-
-/* Tablet and Mobile: locked viewport, scrolling handled per-screen */
-@media (max-width: 1024px) {
-    html, body {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto; /* allow vertical scrolling */}
-}
-
 a {
     color: var(--accent-secondary);
     text-decoration: none;
@@ -111,9 +104,68 @@ img {
     height: auto;
 }
 
-/* =========================
-   Message Container (Toasts)
-   ========================= */
+/* Scrollbars - Webkit */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-light);
+}
+
+/* Scrollbars - Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--bg-primary);
+}
+
+/* =============================================================================
+   3. UTILITY CLASSES
+   ============================================================================= */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* =============================================================================
+   4. ANIMATIONS
+   ============================================================================= */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes combatFlash {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.5); }
+}
+
+/* =============================================================================
+   5. MESSAGE CONTAINER (TOASTS)
+   ============================================================================= */
 .message-container {
     position: fixed;
     top: var(--spacing-md);
@@ -143,20 +195,96 @@ img {
     border-color: var(--accent-danger);
 }
 
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+.game-message {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    animation: slideIn 0.3s ease;
 }
 
-/* =========================
-   Screens
-   ========================= */
+.game-message.error {
+    border-color: var(--accent-danger);
+    background: rgba(176, 106, 106, 0.18);
+    color: var(--accent-danger);
+}
+
+.game-message.success {
+    border-color: var(--accent-primary);
+    background: rgba(138, 154, 122, 0.18);
+    color: var(--accent-primary);
+}
+
+/* =============================================================================
+   6. BUTTONS
+   ============================================================================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) {
+    background: var(--bg-hover);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.btn-danger {
+    background: var(--accent-danger);
+    border-color: var(--accent-danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+.btn-action {
+    background: var(--bg-card);
+}
+
+.btn-small {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+}
+
+.btn-large {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+}
+
+/* =============================================================================
+   7. SCREENS
+   ============================================================================= */
 .screen {
     display: none;
     width: 100%;
@@ -168,9 +296,16 @@ img {
     flex-direction: column;
 }
 
-/* =========================
-   Main Menu Screen
-   ========================= */
+.screen:not(.active) {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+/* =============================================================================
+   8. MAIN MENU SCREEN
+   ============================================================================= */
 #main-menu-screen {
     justify-content: center;
     align-items: center;
@@ -209,12 +344,12 @@ img {
     font-size: var(--font-size-lg);
 }
 
-/* =========================
-   Starter Selection Screen
-   ========================= */
+/* =============================================================================
+   9. STARTER SELECTION SCREEN
+   ============================================================================= */
 #starter-select-screen {
     padding: var(--spacing-xl);
-    display: block; /* restores natural flow */
+    display: block;
 }
 
 .starter-content {
@@ -302,34 +437,17 @@ img {
     line-height: 1.4;
 }
 
-/* =========================
-   Game Screen Layout
-   ========================= */
+/* =============================================================================
+   10. GAME SCREEN LAYOUT
+   ============================================================================= */
 #game-screen {
     height: 100vh;
     overflow: hidden;
 }
 
-/* Desktop: fixed viewport */
-@media (min-width: 1025px) {
-    #game-screen {
-        height: 100vh;
-        overflow: hidden;
-    }
-}
-
-/* Tablet and Mobile: game screen scrollable */
-@media (max-width: 1024px) {
-    #game-screen {
-        height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-}
-
-/* =========================
-   Header
-   ========================= */
+/* =============================================================================
+   11. HEADER
+   ============================================================================= */
 .game-header {
     display: flex;
     justify-content: space-between;
@@ -384,109 +502,22 @@ img {
     flex-shrink: 0;
 }
 
-/* Mobile header adjustments */
-@media (max-width: 768px) {
-    .game-header {
-        flex-wrap: wrap;
-        padding: var(--spacing-sm);
-    }
-
-    .header-left {
-        flex: 1 1 100%;
-        order: 1;
-        margin-bottom: var(--spacing-xs);
-    }
-
-    .header-title {
-        font-size: var(--font-size-base);
-    }
-
-    .header-subtitle {
-        display: none;
-    }
-
-    .header-center {
-        order: 2;
-        flex: 1;
-    }
-
-    .header-right {
-        order: 3;
-        flex: 0 0 auto;
-    }
-}
-
-/* =========================
-   Main Game Area
-   ========================= */
+/* =============================================================================
+   12. MAIN GAME AREA
+   ============================================================================= */
 .game-main {
     display: grid;
     flex: 1;
     min-height: 0;
 }
 
-/* Desktop: 3-column layout */
-@media (min-width: 1025px) {
-    .game-main {
-        grid-template-columns: 300px 1fr 1fr;
-        overflow: hidden;
-    }
-}
-
-/* Tablet: 2-column layout */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .game-main {
-        grid-template-columns: 280px 1fr;
-        grid-template-rows: auto auto;
-        overflow: visible;
-    }
-
-    .panel-left {
-        grid-column: 1;
-        grid-row: 1 / 3;
-    }
-
-    .panel-middle {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-    .panel-right {
-        grid-column: 2;
-        grid-row: 2;
-    }
-}
-
-/* Mobile: single column, stacked */
-@media (max-width: 768px) {
-    .game-main {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        overflow: visible;
-    }
-}
-
-/* =========================
-   Panels
-   ========================= */
+/* =============================================================================
+   13. PANELS
+   ============================================================================= */
 .panel {
     display: flex;
     flex-direction: column;
     min-height: 0;
-}
-
-/* Desktop: panels scroll internally */
-@media (min-width: 1025px) {
-    .panel {
-        overflow: hidden;
-    }
-}
-
-/* Tablet and Mobile: panels expand naturally */
-@media (max-width: 1024px) {
-    .panel {
-        overflow: visible;
-    }
 }
 
 .panel-left {
@@ -503,18 +534,7 @@ img {
     background: var(--bg-primary);
 }
 
-@media (max-width: 768px) {
-    .panel-left,
-    .panel-middle,
-    .panel-right {
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-}
-
-/* =========================
-   Panel Tabs (Left Panel)
-   ========================= */
+/* Panel Tabs */
 .panel-tabs {
     display: flex;
     background: var(--bg-tertiary);
@@ -544,28 +564,11 @@ img {
     border-bottom-color: var(--accent-primary);
 }
 
-/* =========================
-   Panel Content
-   ========================= */
+/* Panel Content */
 .panel-content {
     flex: 1;
     min-height: 0;
     position: relative;
-}
-
-/* Desktop: scrollable panel content */
-@media (min-width: 1025px) {
-    .panel-content {
-        overflow-y: auto;
-    }
-}
-
-/* Mobile: natural height */
-@media (max-width: 1024px) {
-    .panel-content {
-        overflow: visible;
-        min-height: 200px;
-    }
 }
 
 .tab-content {
@@ -584,9 +587,54 @@ img {
     font-style: italic;
 }
 
-/* =========================
-   Family Sections (Vasen Inventory)
-   ========================= */
+/* =============================================================================
+   14. BADGES
+   ============================================================================= */
+.element-badge,
+.rarity-badge,
+.party-badge,
+.family-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+}
+
+.element-badge {
+    color: #fff;
+}
+
+.element-badge.element-earth { background: var(--element-earth); }
+.element-badge.element-nature { background: var(--element-nature); }
+.element-badge.element-water { background: var(--element-water); }
+.element-badge.element-fire { background: var(--element-fire); }
+.element-badge.element-wind { background: var(--element-wind); }
+
+.rarity-badge {
+    background: var(--bg-tertiary);
+    border: 1px solid;
+}
+
+.rarity-common { border-color: var(--rarity-common); color: var(--rarity-common); }
+.rarity-uncommon { border-color: var(--rarity-uncommon); color: var(--rarity-uncommon); }
+.rarity-rare { border-color: var(--rarity-rare); color: var(--rarity-rare); }
+.rarity-legendary { border-color: var(--rarity-legendary); color: var(--rarity-legendary); }
+
+.party-badge {
+    background: var(--accent-primary);
+    color: #fff;
+}
+
+.family-badge {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    cursor: help;
+}
+
+/* =============================================================================
+   15. VASEN INVENTORY
+   ============================================================================= */
+/* Family Sections */
 .family-section {
     margin-bottom: var(--spacing-md);
 }
@@ -601,9 +649,7 @@ img {
     cursor: help;
 }
 
-/* =========================
-   Vasen Cards
-   ========================= */
+/* Vasen Cards */
 .vasen-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -712,66 +758,15 @@ img {
     white-space: nowrap;
 }
 
-/* =========================
-   Badges
-   ========================= */
-.element-badge,
-.rarity-badge,
-.party-badge,
-.family-badge {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-xs);
-}
-
-.element-badge {
-    color: #fff;
-}
-
-.element-badge.element-earth { background: var(--element-earth); }
-.element-badge.element-nature { background: var(--element-nature); }
-.element-badge.element-water { background: var(--element-water); }
-.element-badge.element-fire { background: var(--element-fire); }
-.element-badge.element-wind { background: var(--element-wind); }
-
-.rarity-badge {
-    background: var(--bg-tertiary);
-    border: 1px solid;
-}
-
-.rarity-common { border-color: var(--rarity-common); color: var(--rarity-common); }
-.rarity-uncommon { border-color: var(--rarity-uncommon); color: var(--rarity-uncommon); }
-.rarity-rare { border-color: var(--rarity-rare); color: var(--rarity-rare); }
-.rarity-legendary { border-color: var(--rarity-legendary); color: var(--rarity-legendary); }
-
-.party-badge {
-    background: var(--accent-primary);
-    color: #fff;
-}
-
-.family-badge {
-    background: var(--bg-tertiary);
-    color: var(--text-muted);
-    cursor: help;
-}
-
-/* =========================
-   Vasen Details Panel
-   ========================= */
+/* =============================================================================
+   16. VASEN DETAILS PANEL
+   ============================================================================= */
 .vasen-details-panel {
     background: var(--bg-tertiary);
     border-top: 1px solid var(--border-color);
     padding: var(--spacing-sm);
     max-height: 50%;
     overflow-y: auto;
-}
-
-@media (max-width: 1024px) {
-    .vasen-details-panel {
-        max-height: none;
-        overflow: visible;
-    }
 }
 
 .details-header {
@@ -831,6 +826,7 @@ img {
     color: var(--text-secondary);
 }
 
+/* Rune Slots */
 .rune-slots {
     display: flex;
     gap: var(--spacing-xs);
@@ -880,6 +876,7 @@ img {
     color: var(--text-muted);
 }
 
+/* Description Toggle */
 .description-toggle {
     cursor: pointer;
     display: flex;
@@ -958,11 +955,11 @@ img {
     transition: width 0.3s;
 }
 
-.health-fill {
+.resource-bar-fill.health-fill {
     background: var(--health-fill);
 }
 
-.megin-fill {
+.resource-bar-fill.megin-fill {
     background: var(--megin-fill);
 }
 
@@ -1036,10 +1033,7 @@ img {
     padding: var(--spacing-sm);
     background: var(--bg-card);
     border-radius: var(--border-radius-sm);
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    border: 1px solid var(--border-color);
 }
 
 .ability-item.locked {
@@ -1115,9 +1109,9 @@ img {
     margin-left: auto;
 }
 
-/* =========================
-   Party Section (Middle Panel)
-   ========================= */
+/* =============================================================================
+   17. PARTY SECTION
+   ============================================================================= */
 .party-section {
     padding: var(--spacing-md);
     border-bottom: 1px solid var(--border-color);
@@ -1132,12 +1126,6 @@ img {
 .party-slots {
     display: flex;
     gap: var(--spacing-sm);
-}
-
-@media (max-width: 480px) {
-    .party-slots {
-        flex-direction: column;
-    }
 }
 
 .party-slot {
@@ -1342,21 +1330,15 @@ img {
     margin-top: var(--spacing-xs);
 }
 
-/* =========================
-   Zone Section (Middle Panel)
-   ========================= */
+/* =============================================================================
+   18. ZONE SECTION
+   ============================================================================= */
 .zone-section {
     padding: var(--spacing-md);
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 0;
-}
-
-@media (max-width: 1024px) {
-    .zone-section {
-        min-height: auto;
-    }
 }
 
 .zone-list {
@@ -1367,112 +1349,7 @@ img {
     flex-direction: column;
 }
 
-@media (max-width: 1024px) {
-    .zone-list {
-        overflow: visible;
-        max-height: none;
-    }
-}
-
-/* =========================
-   Zone Section (Middle Panel)
-   ========================= */
-.zone-section {
-    padding: var(--spacing-md);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-@media (max-width: 1024px) {
-    .zone-section {
-        min-height: auto;
-    }
-}
-
-.zone-list {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: var(--spacing-md);
-    display: flex;
-    flex-direction: column;
-}
-
-@media (max-width: 1024px) {
-    .zone-list {
-        overflow: visible;
-        max-height: none;
-    }
-}
-
-/* =========================
-   Zone Section (Middle Panel)
-   ========================= */
-.zone-section {
-    padding: var(--spacing-md);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-@media (max-width: 1024px) {
-    .zone-section {
-        min-height: auto;
-    }
-}
-
-.zone-list {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: var(--spacing-md);
-    display: flex;
-    flex-direction: column;
-}
-
-@media (max-width: 1024px) {
-    .zone-list {
-        overflow: visible;
-        max-height: none;
-    }
-}
-
-/* =========================
-   Zone Section (Middle Panel)
-   ========================= */
-.zone-section {
-    padding: var(--spacing-md);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-@media (max-width: 1024px) {
-    .zone-section {
-        min-height: auto;
-    }
-}
-
-.zone-list {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: var(--spacing-md);
-    display: flex;
-    flex-direction: column;
-}
-
-@media (max-width: 1024px) {
-    .zone-list {
-        overflow: visible;
-        max-height: none;
-    }
-}
-
-/* =========================
-   Zone Items (Fixed Colors)
-   ========================= */
+/* Zone Items */
 .zone-item {
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--bg-card);
@@ -1484,8 +1361,6 @@ img {
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--spacing-xs);
-
-    /* FORCE TEXT COLOR ALWAYS */
     color: var(--text-primary);
 }
 
@@ -1496,12 +1371,9 @@ img {
 .zone-item.selected {
     background: var(--bg-tertiary);
     border-color: var(--accent-primary);
-
-    /* FORCE TEXT COLOR ON SELECTED */
     color: var(--text-primary);
 }
 
-/* Ensure children inherit the forced color */
 .zone-item .zone-name,
 .zone-item .zone-level,
 .zone-item .zone-status {
@@ -1517,9 +1389,7 @@ img {
     border-color: var(--border-color);
 }
 
-/* =========================
-   Zone Text
-   ========================= */
+/* Zone Text */
 .zone-name {
     font-size: var(--font-size-sm);
     font-weight: 500;
@@ -1543,15 +1413,12 @@ img {
     font-style: italic;
 }
 
-/* Checkmark for cleared zones */
 .zone-name .zone-check {
     color: var(--accent-primary);
     margin-left: var(--spacing-xs);
 }
 
-/* =========================
-   Zone Actions
-   ========================= */
+/* Zone Actions */
 .zone-actions {
     display: flex;
     flex-direction: column;
@@ -1578,17 +1445,9 @@ img {
     border-color: var(--border-color);
 }
 
-@media (max-width: 768px) {
-    .zone-actions .btn {
-        width: 100%;
-        padding: var(--spacing-md);
-    }
-}
-
-
-/* =========================
-   Right Panel - Zone Description & Combat
-   ========================= */
+/* =============================================================================
+   19. ZONE DESCRIPTION & COMBAT AREA
+   ============================================================================= */
 .zone-description {
     padding: var(--spacing-md);
     border-bottom: 1px solid var(--border-color);
@@ -1614,21 +1473,15 @@ img {
     margin-bottom: 0;
 }
 
-/* =========================
-   Combat Area
-   ========================= */
+/* =============================================================================
+   20. COMBAT AREA
+   ============================================================================= */
 .combat-area {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding: var(--spacing-md);
     min-height: 0;
-}
-
-@media (max-width: 1024px) {
-    .combat-area {
-        min-height: auto;
-    }
 }
 
 .combat-header {
@@ -1659,13 +1512,6 @@ img {
     margin-bottom: var(--spacing-md);
 }
 
-@media (max-width: 600px) {
-    .combat-arena {
-        flex-direction: column;
-        gap: var(--spacing-sm);
-    }
-}
-
 .combatant-panel {
     flex: 1;
     max-width: 220px;
@@ -1673,13 +1519,6 @@ img {
     background: var(--bg-card);
     border-radius: var(--border-radius);
     text-align: center;
-}
-
-@media (max-width: 600px) {
-    .combatant-panel {
-        max-width: 100%;
-        width: 100%;
-    }
 }
 
 .combatant-panel.player-side {
@@ -1692,11 +1531,6 @@ img {
 
 .combatant-panel.flash {
     animation: combatFlash 0.3s ease;
-}
-
-@keyframes combatFlash {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.5); }
 }
 
 .combatant-img {
@@ -1722,6 +1556,48 @@ img {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
+}
+
+/* Combat Bars */
+.combat-bar {
+    position: relative;
+}
+
+.combat-bar-text {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: normal;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.health-bar,
+.megin-bar {
+    height: 18px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: var(--spacing-xs);
+}
+
+.health-fill {
+    height: 100%;
+    background: var(--health-fill);
+    transition: width 0.3s;
+}
+
+.megin-fill {
+    height: 100%;
+    background: var(--megin-fill);
+    transition: width 0.3s;
 }
 
 /* Combatant Attributes */
@@ -1807,6 +1683,7 @@ img {
 .element-mini.element-fire { background: var(--element-fire); }
 .element-mini.element-wind { background: var(--element-wind); }
 
+/* Bar Container (alternate bar style) */
 .bar-container {
     display: flex;
     align-items: center;
@@ -1866,12 +1743,6 @@ img {
     font-size: var(--font-size-sm);
 }
 
-@media (max-width: 1024px) {
-    .combat-log {
-        max-height: 150px;
-    }
-}
-
 .combat-log-entry {
     padding: 2px 0;
     border-bottom: 1px solid var(--border-color);
@@ -1881,40 +1752,14 @@ img {
     border-bottom: none;
 }
 
-.combat-log-entry.damage {
-    color: var(--accent-danger);
-}
-
-.combat-log-entry.heal {
-    color: var(--accent-primary);
-}
-
-.combat-log-entry.buff {
-    color: var(--accent-warning);
-}
-
-.combat-log-entry.system {
-    color: var(--text-muted);
-    font-style: italic;
-}
-
-.combat-log-entry.encounter {
-    color: var(--text-accent);
-}
-
-.combat-log-entry.exp {
-    color: var(--accent-warning);
-}
-
-.combat-log-entry.levelup {
-    color: var(--accent-primary);
-    font-weight: bold;
-}
-
-.combat-log-entry.tame {
-    color: var(--accent-primary);
-    font-weight: bold;
-}
+.combat-log-entry.damage { color: var(--accent-danger); }
+.combat-log-entry.heal { color: var(--accent-primary); }
+.combat-log-entry.buff { color: var(--accent-warning); }
+.combat-log-entry.system { color: var(--text-muted); font-style: italic; }
+.combat-log-entry.encounter { color: var(--text-accent); }
+.combat-log-entry.exp { color: var(--accent-warning); }
+.combat-log-entry.levelup { color: var(--accent-primary); font-weight: bold; }
+.combat-log-entry.tame { color: var(--accent-primary); font-weight: bold; }
 
 /* Ability Buttons */
 .ability-buttons {
@@ -2007,16 +1852,6 @@ img {
     justify-content: center;
 }
 
-@media (max-width: 480px) {
-    .action-buttons {
-        flex-direction: column;
-    }
-
-    .action-buttons .btn {
-        width: 100%;
-    }
-}
-
 /* Swap Options */
 .swap-options {
     display: none;
@@ -2054,9 +1889,66 @@ img {
     cursor: not-allowed;
 }
 
-/* =========================
-   Footer
-   ========================= */
+/* Swap Option (dialogue buttons) */
+.swap-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.swap-option img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.swap-option span {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+/* =============================================================================
+   21. RUNE COLLAPSIBLE
+   ============================================================================= */
+.rune-collapsible {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    margin-top: var(--spacing-xs);
+    overflow: hidden;
+}
+
+.rune-collapsible-header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.rune-collapsible-header:hover {
+    background: var(--bg-hover);
+}
+
+.rune-collapsible-body {
+    padding: var(--spacing-sm);
+    display: none;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.rune-collapsible.open .rune-collapsible-body {
+    display: block;
+}
+
+/* =============================================================================
+   22. FOOTER
+   ============================================================================= */
 .game-footer {
     display: flex;
     justify-content: center;
@@ -2074,86 +1966,9 @@ img {
     color: var(--border-color);
 }
 
-@media (max-width: 480px) {
-    .game-footer {
-        flex-wrap: wrap;
-        text-align: center;
-    }
-
-    .footer-sep {
-        display: none;
-    }
-}
-
-/* =========================
-   Buttons
-   ========================= */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-family: inherit;
-    transition: all 0.2s;
-    white-space: nowrap;
-}
-
-.btn:hover:not(:disabled) {
-    background: var(--bg-hover);
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-primary {
-    background: var(--accent-primary);
-    border-color: var(--accent-primary);
-}
-
-.btn-primary:hover:not(:disabled) {
-    filter: brightness(1.1);
-}
-
-.btn-secondary {
-    background: var(--bg-secondary);
-    border-color: var(--border-color);
-}
-
-.btn-danger {
-    background: var(--accent-danger);
-    border-color: var(--accent-danger);
-}
-
-.btn-danger:hover:not(:disabled) {
-    filter: brightness(1.1);
-}
-
-.btn-action {
-    background: var(--bg-card);
-}
-
-.btn-small {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-xs);
-}
-
-.btn-large {
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: var(--font-size-base);
-}
-
-/* =========================
-   Modals
-   ========================= */
+/* =============================================================================
+   23. MODALS
+   ============================================================================= */
 .modal {
     display: none;
     position: fixed;
@@ -2171,6 +1986,10 @@ img {
 
 .modal.active {
     display: flex;
+}
+
+#dialogue-modal {
+    z-index: 2000;
 }
 
 .modal-content {
@@ -2215,6 +2034,12 @@ img {
     margin-bottom: var(--spacing-md);
 }
 
+.modal-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
 /* Dialogue Modal */
 .modal-dialogue {
     text-align: center;
@@ -2228,9 +2053,32 @@ img {
 
 .dialogue-buttons {
     display: flex;
+    flex-direction: column;
     gap: var(--spacing-sm);
+    width: 100%;
+    margin-top: var(--spacing-md);
+}
+
+.dialogue-buttons .btn {
+    width: 100%;
+    display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* Move/Swap dialogue button styles */
+.move-vasen-dialogue .dialogue-buttons .btn-primary,
+.swap-into-party-dialogue .dialogue-buttons .btn-primary {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.move-vasen-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled),
+.swap-into-party-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
 }
 
 /* Settings Modal */
@@ -2326,6 +2174,38 @@ img {
     opacity: 0.5;
 }
 
+.achievement {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.achievement.earned {
+    border-color: var(--accent-primary);
+    background: var(--bg-tertiary);
+}
+
+.achievement.locked {
+    opacity: 0.5;
+}
+
+.achievement-name {
+    display: block;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.achievement-desc {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
 /* Combat Tips Modal */
 .modal-tips {
     max-width: 600px;
@@ -2385,6 +2265,13 @@ img {
 .element-matrix .potent { background: rgba(106, 154, 106, 0.3); }
 .element-matrix .neutral { background: var(--bg-card); }
 .element-matrix .weak { background: rgba(176, 106, 106, 0.3); }
+
+/* Matrix Element Colors (for text) */
+.matrix-element-earth { color: var(--element-earth); }
+.matrix-element-nature { color: var(--element-nature); }
+.matrix-element-water { color: var(--element-water); }
+.matrix-element-fire { color: var(--element-fire); }
+.matrix-element-wind { color: var(--element-wind); }
 
 /* Swap Modal */
 .modal-swap {
@@ -2602,9 +2489,61 @@ img {
     font-style: italic;
 }
 
-/* =========================
-   Rune Inventory
-   ========================= */
+/* Add Vasen Modal list buttons */
+#add-vasen-list button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+#add-vasen-list button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+#add-vasen-list button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Rune to Vasen Modal list buttons */
+#rune-to-vasen-list button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+#rune-to-vasen-list button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+#rune-to-vasen-list button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =============================================================================
+   24. RUNE INVENTORY
+   ============================================================================= */
 .rune-card {
     display: flex;
     align-items: center;
@@ -2647,9 +2586,9 @@ img {
     color: var(--accent-primary);
 }
 
-/* =========================
-   Item Inventory
-   ========================= */
+/* =============================================================================
+   25. ITEM INVENTORY
+   ============================================================================= */
 .item-card {
     display: flex;
     align-items: center;
@@ -2695,9 +2634,9 @@ img {
     margin-left: var(--spacing-sm);
 }
 
-/* =========================
-   Attribute Stages Display
-   ========================= */
+/* =============================================================================
+   26. ATTRIBUTE STAGES DISPLAY
+   ============================================================================= */
 .stage-display {
     display: inline-flex;
     gap: 2px;
@@ -2712,67 +2651,49 @@ img {
     color: var(--accent-danger);
 }
 
-/* =========================
-   Scrollbars
-   ========================= */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+/* =============================================================================
+   27. RESPONSIVE - DESKTOP (1025px+)
+   ============================================================================= */
+@media (min-width: 1025px) {
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    #game-screen {
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .game-main {
+        grid-template-columns: 300px 1fr 1fr;
+        overflow: hidden;
+    }
+
+    .panel {
+        overflow: hidden;
+    }
+
+    .panel-content {
+        overflow-y: auto;
+    }
 }
 
-::-webkit-scrollbar-track {
-    background: var(--bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--border-light);
-}
-
-/* Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-color) var(--bg-primary);
-}
-
-/* =========================
-   Utility Classes
-   ========================= */
-.hidden {
-    display: none !important;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-muted {
-    color: var(--text-muted);
-}
-
-/* =========================
-   Responsive Adjustments
-   ========================= */
-
-/* Large Desktop (1440p+) */
+/* Large Desktop (1440px+) */
 @media (min-width: 1440px) {
     .game-main {
         grid-template-columns: 320px 1fr 1fr;
     }
 }
 
-/* Standard Desktop */
+/* Standard Desktop (1025-1439px) */
 @media (min-width: 1025px) and (max-width: 1439px) {
     .game-main {
         grid-template-columns: 280px minmax(300px, 400px) 1fr;
     }
 }
 
-/* Laptop (1366x768) */
+/* Laptop (short screens) */
 @media (min-width: 1025px) and (max-height: 800px) {
     .vasen-details-panel {
         max-height: 40%;
@@ -2783,10 +2704,197 @@ img {
     }
 }
 
-/* Tablet Portrait */
+/* =============================================================================
+   28. RESPONSIVE - TABLET (769-1024px)
+   ============================================================================= */
 @media (min-width: 769px) and (max-width: 1024px) {
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #game-screen {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .game-main {
+        grid-template-columns: 280px 1fr;
+        grid-template-rows: auto auto;
+        overflow: visible;
+    }
+
+    .panel {
+        overflow: visible;
+    }
+
+    .panel-left {
+        grid-column: 1;
+        grid-row: 1 / 3;
+    }
+
+    .panel-middle {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .panel-right {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .panel-content {
+        overflow: visible;
+        min-height: 200px;
+    }
+
+    .vasen-details-panel {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .zone-section {
+        min-height: auto;
+    }
+
+    .zone-list {
+        overflow: visible;
+        max-height: none;
+    }
+
+    .combat-area {
+        min-height: auto;
+    }
+
+    .combat-log {
+        max-height: 150px;
+    }
+
+    .screen {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: auto;
+        min-height: 100vh;
+    }
+
     .starter-options {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =============================================================================
+   29. RESPONSIVE - MOBILE (768px and below)
+   ============================================================================= */
+@media (max-width: 768px) {
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #game-screen {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .game-header {
+        flex-wrap: wrap;
+        padding: var(--spacing-sm);
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+        order: 1;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .header-title {
+        font-size: var(--font-size-base);
+    }
+
+    .header-subtitle {
+        display: none;
+    }
+
+    .header-center {
+        order: 2;
+        flex: 1;
+    }
+
+    .header-right {
+        order: 3;
+        flex: 0 0 auto;
+    }
+
+    .game-main {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: var(--spacing-sm);
+        overflow: visible;
+    }
+
+    .panel {
+        overflow: visible;
+    }
+
+    .panel-left,
+    .panel-middle,
+    .panel-right {
+        width: 100%;
+        min-height: auto;
+        overflow: visible;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .panel-content {
+        overflow: visible;
+        min-height: 200px;
+    }
+
+    .vasen-details-panel {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .zone-section {
+        min-height: auto;
+    }
+
+    .zone-list {
+        overflow: visible;
+        max-height: none;
+    }
+
+    .zone-actions .btn {
+        width: 100%;
+        padding: var(--spacing-md);
+    }
+
+    .combat-area {
+        min-height: auto;
+    }
+
+    .combat-log {
+        max-height: 150px;
+    }
+
+    .screen {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .dialogue-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }
 
@@ -2801,7 +2909,48 @@ img {
     }
 }
 
-/* Small Mobile */
+/* Small screens (600px and below) */
+@media (max-width: 600px) {
+    .combat-arena {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .combatant-panel {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Small Mobile (480px and below) */
+@media (max-width: 480px) {
+    .party-slots {
+        flex-direction: column;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+    }
+
+    .game-footer {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .footer-sep {
+        display: none;
+    }
+
+    .dialogue-buttons {
+        flex-direction: column;
+    }
+}
+
+/* Very Small Mobile (380px and below) */
 @media (max-width: 380px) {
     :root {
         --spacing-md: 12px;
@@ -2817,6 +2966,9 @@ img {
     }
 }
 
+/* =============================================================================
+   30. ACCESSIBILITY
+   ============================================================================= */
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
     .btn {
@@ -2843,322 +2995,4 @@ img {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-}
-
-/* =========================
-   Dialogue Buttons Layout
-   ========================= */
-.dialogue-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    width: 100%;
-    margin-top: var(--spacing-md);
-}
-
-/* On wider screens, place options side-by-side */
-@media (min-width: 480px) {
-    .dialogue-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
-/* =========================
-   Swap Option Buttons
-   ========================= */
-.dialogue-buttons .btn {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: var(--spacing-sm) var(--spacing-md);
-}
-
-/* Inner layout: image + text aligned */
-.swap-option {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-}
-
-/* Image sizing */
-.swap-option img {
-    width: 32px;
-    height: 32px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-/* Text styling */
-.swap-option span {
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    white-space: nowrap;
-}
-
-/* =========================
-   Combat Health & Megin Bars
-   ========================= */
-.health-bar,
-.megin-bar {
-    height: 18px;
-    background: var(--bg-primary);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: var(--spacing-xs);
-}
-
-.health-fill {
-    height: 100%;
-    background: var(--health-fill);
-    transition: width 0.3s;
-}
-
-.megin-fill {
-    height: 100%;
-    background: var(--megin-fill);
-    transition: width 0.3s;
-}
-
-@media (max-width: 1024px) {
-    .screen {
-        overflow-y: auto;
-        overflow-x: hidden;
-        height: auto; /* important */
-        min-height: 100vh; /* ensures full-screen feel */
-    }
-}
-
-.screen:not(.active) {
-    display: none !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-}
-
-@media (max-width: 768px) {
-  .game-main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    overflow: visible;
-  }
-
-  .panel-left,
-  .panel-middle,
-  .panel-right {
-    width: 100%;
-    min-height: auto;
-    overflow: visible;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
-}
-
-#dialogue-modal {
-    z-index: 2000;
-}
-
-/* Add Vasen to Party Modal – list buttons */
-#add-vasen-list button {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s;
-}
-
-#add-vasen-list button:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-}
-
-#add-vasen-list button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Manage Runes Modal – list buttons */
-#rune-to-vasen-list button {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s;
-}
-
-#rune-to-vasen-list button:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-}
-
-#rune-to-vasen-list button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Only grey out buttons in the Move Väsen dialogue */
-.move-vasen-dialogue .dialogue-buttons .btn-primary {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-}
-
-.move-vasen-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-}
-
-/* Grey list-style buttons for Swap-Into-Party dialogue */
-.swap-into-party-dialogue .dialogue-buttons .btn-primary {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-}
-
-.swap-into-party-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-}
-
-.achievement {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
-    transition: background 0.2s, border-color 0.2s;
-}
-
-.achievement.earned {
-    border-color: var(--accent-primary);
-    background: var(--bg-tertiary);
-}
-
-.achievement.locked {
-    opacity: 0.5;
-}
-
-.achievement-name {
-    display: block;
-    font-weight: 600;
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-xs);
-}
-
-.achievement-desc {
-    display: block;
-    font-size: var(--font-size-xs);
-    color: var(--text-secondary);
-}
-
-.game-message {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    animation: slideIn 0.3s ease;
-}
-
-.game-message.error {
-    border-color: var(--accent-danger);
-    background: rgba(176, 106, 106, 0.18);
-    color: var(--accent-danger);
-}
-
-.game-message.success {
-    border-color: var(--accent-primary);
-    background: rgba(138, 154, 122, 0.18);
-    color: var(--accent-primary);
-}
-
-/* for element matrix */
-:root {
-    --matrix-element-earth: #8B7355;
-    --matrix-element-nature: #6B8E23;
-    --matrix-element-water: #4682B4;
-    --matrix-element-fire: #CD5C5C;
-    --matrix-element-wind: #9898b0;
-}
-
-.matrix-element-earth  { color: var(--matrix-element-earth); }
-.matrix-element-nature { color: var(--matrix-element-nature); }
-.matrix-element-water  { color: var(--matrix-element-water); }
-.matrix-element-fire   { color: var(--matrix-element-fire); }
-.matrix-element-wind   { color: var(--matrix-element-wind); }
-
-.combat-bar {
-    position: relative;
-}
-
-.combat-bar-text {
-    position: absolute;
-    top: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 60%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: normal;
-    pointer-events: none;
-    z-index: 10;
-}
-
-/* Rune collapsible wrapper */
-.rune-collapsible {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    margin-top: var(--spacing-xs);
-    overflow: hidden;
-}
-
-/* Header (clickable) */
-.rune-collapsible-header {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s ease;
-}
-
-.rune-collapsible-header:hover {
-    background: var(--bg-hover);
-}
-
-/* Body (hidden unless open) */
-.rune-collapsible-body {
-    padding: var(--spacing-sm);
-    display: none;
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    line-height: 1.4;
-}
-
-/* Open state */
-.rune-collapsible.open .rune-collapsible-body {
-    display: block;
 }

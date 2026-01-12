@@ -2137,7 +2137,7 @@ document.addEventListener("DOMContentLoaded", () => {
             case 'rune':
                 this.showDialogue(
     'Rune Discovered!',
-    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p>`,
+    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p><p class="rune-effect">${RUNES[result.runeId].effect}</p>`,  
     [{ text: 'Confirm', callback: null }],
     false
 );

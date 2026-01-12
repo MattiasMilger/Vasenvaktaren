@@ -224,7 +224,7 @@ const RUNES = {
         name: 'Ansuz',
         fullName: 'Ansuz',
         flavor: 'The voice of the Gods or the Vanir. It transforms the brute force of the wielder\'s body into a calculated, insightful display of esoteric power.',
-        effect: 'This Väsen\'s Strength attacks are considered Wisdom Attacks',
+        effect: 'This Väsen\'s Strength attacks are considered Wisdom Attacks (They use Wisdom and are checked against Durability)',
         mechanic: { type: 'convert_strength_to_wisdom' }
     },
     'RAIDO': {
@@ -233,7 +233,7 @@ const RUNES = {
         name: 'Raido',
         fullName: 'Raido',
         flavor: 'The guiding force of one\'s path and fate. As the wielder strides onto the field, the momentum of their journey grants them swift healing and temporary resilience.',
-        effect: 'This Väsen\'s Wisdom attacks are considered Strength Attacks',
+        effect: 'This Väsen\'s Wisdom attacks are considered Strength Attacks (They use Strength and are checked against Defense)',
         mechanic: { type: 'convert_wisdom_to_strength' }
     },
     'KAUNAN': {
