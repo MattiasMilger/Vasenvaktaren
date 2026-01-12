@@ -2996,3 +2996,191 @@ img {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* =============================================================================
+   31. ELEMENT MATCHUP COLLAPSIBLES
+   ============================================================================= */
+
+/* Clickable element badge styling */
+.clickable-element {
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.clickable-element:hover {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+}
+
+/* Element matchup collapsible container */
+.element-matchup-collapsible {
+    position: relative;
+    display: inline-block;
+}
+
+/* Inline collapsible for combat attack elements */
+.element-matchup-collapsible.inline-collapsible {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Matchup details dropdown */
+.element-matchup-collapsible .matchup-details {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    min-width: 180px;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: var(--spacing-xs);
+}
+
+.element-matchup-collapsible.open .matchup-details {
+    display: block;
+}
+
+/* Matchup row styling */
+.matchup-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+}
+
+.matchup-row:last-child {
+    margin-bottom: 0;
+}
+
+.matchup-label {
+    color: var(--text-muted);
+    min-width: 80px;
+}
+
+/* Matchup type colors */
+.matchup-row.potent .matchup-label {
+    color: var(--accent-primary);
+}
+
+.matchup-row.vulnerable .matchup-label {
+    color: var(--accent-danger);
+}
+
+.matchup-row.weak .matchup-label {
+    color: var(--accent-danger);
+}
+
+.matchup-row.resists .matchup-label {
+    color: var(--accent-primary);
+}
+
+.matchup-row.neutral .matchup-label {
+    color: var(--text-muted);
+}
+
+/* Game Guide element collapsibles */
+.element-guide-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.element-guide-collapsible {
+    position: relative;
+}
+
+.element-guide-collapsible .element-guide-details {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    min-width: 220px;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: var(--spacing-xs);
+}
+
+.element-guide-collapsible.open .element-guide-details {
+    display: block;
+}
+
+.guide-matchup-section {
+    margin-bottom: var(--spacing-sm);
+}
+
+.guide-matchup-section:last-child {
+    margin-bottom: 0;
+}
+
+.guide-matchup-section strong {
+    display: block;
+    color: var(--text-accent);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
+.matchup-instruction {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Adjustments for combatant info element badge */
+.combatant-info .element-matchup-collapsible {
+    display: inline-block;
+}
+
+.combatant-info .matchup-details {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Adjustments for details meta element badge */
+.details-meta .element-matchup-collapsible {
+    display: inline-block;
+}
+
+/* Adjustments for ability stats element badge */
+.ability-stats .element-matchup-collapsible {
+    display: inline-block;
+}
+
+/* Adjustments for combat attack elements */
+.combatant-attack-elements .element-matchup-collapsible {
+    margin-right: 2px;
+}
+
+.combatant-attack-elements .matchup-details {
+    left: auto;
+    right: 0;
+}
+
+/* Ensure matchup details stay visible within viewport */
+@media (max-width: 768px) {
+    .element-matchup-collapsible .matchup-details {
+        position: fixed;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%);
+        max-width: 90vw;
+    }
+    
+    .element-guide-collapsible .element-guide-details {
+        position: fixed;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%);
+        max-width: 90vw;
+    }
+}

@@ -281,6 +281,62 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     }
 
+    // Helper: Generate attacking matchups HTML for an element
+    generateAttackingMatchupsHTML(element) {
+        const matchups = ELEMENT_MATCHUPS[element];
+        if (!matchups) return '';
+
+        let potent = [];
+        let neutral = [];
+        let weak = [];
+
+        Object.entries(matchups).forEach(([defElement, matchupType]) => {
+            if (matchupType === 'POTENT') potent.push(defElement);
+            else if (matchupType === 'WEAK') weak.push(defElement);
+            else neutral.push(defElement);
+        });
+
+        let html = '<div class="matchup-details">';
+        if (potent.length > 0) {
+            html += `<div class="matchup-row potent"><span class="matchup-label">Potent vs:</span> ${potent.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        }
+        if (neutral.length > 0) {
+            html += `<div class="matchup-row neutral"><span class="matchup-label">Neutral vs:</span> ${neutral.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        }
+        if (weak.length > 0) {
+            html += `<div class="matchup-row weak"><span class="matchup-label">Weak vs:</span> ${weak.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        }
+        html += '</div>';
+        return html;
+    }
+
+    // Helper: Generate defensive matchups HTML for an element
+    generateDefensiveMatchupsHTML(element) {
+        let resists = [];   // Takes less damage from (attacker is WEAK against this defender)
+        let neutral = [];
+        let vulnerable = []; // Takes more damage from (attacker is POTENT against this defender)
+
+        Object.entries(ELEMENT_MATCHUPS).forEach(([attackerElement, matchups]) => {
+            const matchupType = matchups[element];
+            if (matchupType === 'POTENT') vulnerable.push(attackerElement);
+            else if (matchupType === 'WEAK') resists.push(attackerElement);
+            else neutral.push(attackerElement);
+        });
+
+        let html = '<div class="matchup-details">';
+        if (vulnerable.length > 0) {
+            html += `<div class="matchup-row vulnerable"><span class="matchup-label">Vulnerable to:</span> ${vulnerable.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        }
+        if (neutral.length > 0) {
+            html += `<div class="matchup-row neutral"><span class="matchup-label">Neutral against:</span> ${neutral.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        }
+        if (resists.length > 0) {
+            html += `<div class="matchup-row resists"><span class="matchup-label">Resists:</span> ${resists.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        }
+        html += '</div>';
+        return html;
+    }
+
 
     // Render Vasen details panel
     renderVasenDetails(vasen) {
@@ -301,7 +357,10 @@ document.querySelectorAll('.modal').forEach(modal => {
                 <div class="details-identity">
                     <h3 class="details-name">${vasen.getDisplayName()}</h3>
                     <div class="details-meta">
-                        <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+                        <div class="element-matchup-collapsible">
+                            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${vasen.species.element}</span>
+                            ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
+                        </div>
                         <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
                         <span class="family-badge">${vasen.species.family}</span>
                     </div>
@@ -469,7 +528,10 @@ document.querySelectorAll('.modal').forEach(modal => {
                         <span class="ability-type-tag">${ability.type}</span>
                     </div>
                     <div class="ability-stats">
-                        <span class="ability-element element-${abilityElement.toLowerCase()}">${abilityElement}</span>
+                        <div class="element-matchup-collapsible">
+                            <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); this.parentElement.classList.toggle('open')">${abilityElement}</span>
+                            ${this.generateAttackingMatchupsHTML(abilityElement)}
+                        </div>
                         ${ability.power ? `<span class="ability-power">Power: ${ability.power}</span>` : ''}
                         <span class="ability-cost">Megin: ${meginCost}</span>
                     </div>
@@ -502,30 +564,27 @@ document.querySelectorAll('.modal').forEach(modal => {
             const rune = RUNES[runeId];
             const equippedTo = this.findRuneEquippedTo(runeId);
 
-            const runeCard = document.createElement('div');
-            runeCard.className = `rune-card ${equippedTo ? 'equipped' : ''}`;
-            runeCard.innerHTML = `
-                <span class="rune-symbol">${rune.symbol}</span>
-                <span class="rune-name">${rune.name}</span>
-                <p class="rune-effect">${rune.effect}</p>
-                ${equippedTo ? `<span class="rune-card-equipped">Equipped to ${equippedTo.getName()}</span>` : ''}
+            const card = document.createElement('div');
+            card.className = 'rune-card';
+            card.innerHTML = `
+                <span class="rune-card-symbol">${rune.symbol}</span>
+                <div class="rune-card-info">
+                    <span class="rune-card-name">${rune.name}</span>
+                    <span class="rune-card-effect">${rune.effect}</span>
+                    ${equippedTo ? `<span class="rune-card-equipped">Equipped to ${equippedTo.getName()}</span>` : ''}
+                </div>
             `;
+            card.onclick = () => this.showRuneOptions(runeId);
 
-            runeCard.addEventListener('click', () => this.showRuneOptions(runeId));
-            grid.appendChild(runeCard);
+            grid.appendChild(card);
         });
 
         container.appendChild(grid);
     }
 
-    // Find which Vasen has a rune equipped
+    // Find which Väsen has a rune equipped
     findRuneEquippedTo(runeId) {
-        for (const vasen of gameState.vasenCollection) {
-            if (vasen.runes.includes(runeId)) {
-                return vasen;
-            }
-        }
-        return null;
+        return gameState.vasenCollection.find(v => v.runes.includes(runeId));
     }
 
     // Render Item inventory
@@ -535,52 +594,62 @@ document.querySelectorAll('.modal').forEach(modal => {
 
         const itemEntries = Object.entries(gameState.itemInventory);
         if (itemEntries.length === 0) {
-            container.innerHTML = '<p class="empty-message">You have no items. Explore to find them.</p>';
+            container.innerHTML = '<p class="empty-message">You have no items. Explore to find some.</p>';
             return;
         }
 
-        const grid = document.createElement('div');
-        grid.className = 'item-grid';
-
         itemEntries.forEach(([itemId, count]) => {
-            // Note: This relies on TAMING_ITEMS, ensure your item data is in that object.
-            const item = TAMING_ITEMS[itemId]; 
-            if (!item) return;
+            const item = TAMING_ITEMS[itemId];
+            if (!item || count <= 0) return;
 
-            const itemCard = document.createElement('div');
-            itemCard.className = 'item-card';
-            
-            itemCard.innerHTML = `
-                <div class="item-header">
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+                <div class="item-info">
                     <span class="item-name">${item.name}</span>
-                    <span class="item-count">x${count}</span>
+                    <span class="item-desc">${item.description}</span>
                 </div>
+                <span class="item-count">x${count}</span>
             `;
+            card.onclick = () => this.showItemOptions(itemId);
 
-            itemCard.addEventListener('click', () => this.showItemOptions(itemId));
-            grid.appendChild(itemCard);
+            container.appendChild(card);
         });
-
-        container.appendChild(grid);
     }
 
-    // Render party slots
+    // Render party
     renderParty() {
-        this.partySlots.forEach((slot, index) => {
-            const vasen = gameState.party[index];
+        gameState.party.forEach((vasen, index) => {
+            const slot = this.partySlots[index];
+            const slotContent = slot.querySelector('.slot-content');
+
             if (vasen) {
-                // Show stat stages during combat
-                const stagesHtml = gameState.inCombat ? `
-                    <div class="party-vasen-stages">
-                        ${this.renderMiniAttributeStages(vasen)}
-                    </div>
-                ` : '';
+                slot.classList.add('filled');
+                slotContent.classList.remove('empty');
                 
-                slot.innerHTML = `
-                    <div class="party-vasen element-${vasen.species.element.toLowerCase()}">
+                let stagesHtml = '';
+                ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+                    const stage = vasen.attributeStages[attr];
+                    if (stage !== 0) {
+                        const stageClass = stage > 0 ? 'positive' : 'negative';
+                        const stageText = stage > 0 ? `+${stage}` : stage;
+                        stagesHtml += `<span class="mini-stage ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
+                    }
+                });
+                
+                let runesHtml = '';
+                if (vasen.runes.length > 0) {
+                    runesHtml = vasen.runes.map(runeId => {
+                        const rune = RUNES[runeId];
+                        return rune ? `<span class="mini-rune" title="${rune.name}: ${rune.effect}">${rune.symbol}</span>` : '';
+                    }).join('');
+                }
+
+                slotContent.innerHTML = `
+                    <div class="party-vasen">
                         <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
                         <div class="party-vasen-info">
-                            <span class="party-vasen-name">${vasen.getDisplayName()}</span>
+                            <span class="party-vasen-name">${vasen.getName()}</span>
                             <span class="party-vasen-level">Lvl ${vasen.level}</span>
                         </div>
                         <div class="party-vasen-bars">
@@ -591,153 +660,94 @@ document.querySelectorAll('.modal').forEach(modal => {
                                 <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
                             </div>
                         </div>
-                        ${stagesHtml}
-                        <div class="party-vasen-runes">
-                            ${vasen.runes.map(r => RUNES[r] ? `<span class="mini-rune">${RUNES[r].symbol}</span>` : '').join('')}
-                        </div>
-                        ${!gameState.inCombat ? `
-                        <div class="party-slot-actions">
-                            <button class="party-action-btn move-btn" onclick="event.stopPropagation(); ui.showMoveVasenOptions(${index})">⇄</button>
-                            <button class="party-action-btn remove-btn" onclick="event.stopPropagation(); ui.removeFromParty('${vasen.id}')">✕</button>
-                        </div>
-                        ` : ''}
+                        ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
+                        ${runesHtml ? `<div class="party-vasen-runes">${runesHtml}</div>` : ''}
                     </div>
                 `;
-                slot.classList.add('filled');
-                slot.classList.remove('empty');
             } else {
-                slot.innerHTML = `
+                slot.classList.remove('filled');
+                slotContent.classList.add('empty');
+                slotContent.innerHTML = `
                     <div class="party-empty">
-                        <span>Empty Slot</span>
-                        <span class="party-hint">${index === 0 ? 'Lead' : 'Backup'}</span>
+                        <span>Empty</span>
+                        <span class="party-hint">Click to add</span>
                     </div>
                 `;
-                slot.classList.remove('filled');
-                slot.classList.add('empty');
             }
 
+            // Update click handler for slot
             slot.onclick = () => this.handlePartySlotClick(index);
         });
     }
 
-    // Render mini attribute stages for party display
-    renderMiniAttributeStages(vasen) {
-        const stages = vasen.attributeStages;
-        let html = '';
+    // Handle party slot click
+    handlePartySlotClick(slotIndex) {
+        const vasen = gameState.party[slotIndex];
 
-        ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
-            const stage = stages[attr];
-            if (stage !== 0) {
-                const stageClass = stage > 0 ? 'positive' : 'negative';
-                const stageText = stage > 0 ? `+${stage}` : stage;
-                const abbrev = attr.substring(0, 3).toUpperCase();
-                html += `<span class="mini-stage ${stageClass}">${abbrev}${stageText}</span>`;
+        if (vasen) {
+            // If slot has väsen, show options
+            const buttons = [
+                {
+                    text: 'View Details',
+                    callback: () => {
+                        this.switchTab('vasen');
+                        this.selectVasen(vasen);
+                    }
+                },
+                {
+                    text: 'Remove from Party',
+                    class: 'btn-danger',
+                    callback: () => {
+                        this.removeFromParty(vasen.id);
+                    }
+                }
+            ];
+
+            // Add move options if there are other slots
+            if (slotIndex > 0) {
+                buttons.splice(1, 0, {
+                    text: `Move to Lead`,
+                    callback: () => this.moveInParty(slotIndex, 0)
+                });
             }
-        });
 
-        return html || '';
-    }
-
-    // Show move väsen options
-    showMoveVasenOptions(fromSlot) {
-        if (gameState.inCombat) {
-            this.showMessage('Cannot move Väsen during combat.', 'error');
-            return;
-        }
-
-        const vasen = gameState.party[fromSlot];
-        if (!vasen) return;
-
-        const buttons = [];
-        
-        for (let i = 0; i < 3; i++) {
-            if (i === fromSlot) continue;
-            
-            const targetVasen = gameState.party[i];
-            const slotLabel = i === 0 ? 'Lead' : `Slot ${i + 1}`;
-            
             buttons.push({
-    text: targetVasen ? `
-        <div class="swap-option">
-            <img src="${targetVasen.species.image}" alt="${targetVasen.getName()}">
-            <span>Swap with ${targetVasen.getName()} (${slotLabel})</span>
-        </div>
-    ` : `
-    <div class="swap-option">
-        <span>Move to ${slotLabel} (Empty)</span>
-    </div>
-`,
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: null
+            });
 
-    callback: () => {
-        gameState.swapPartySlots(fromSlot, i);
-        this.renderParty();
-        this.showMessage(`Moved ${vasen.getName()} to ${slotLabel}.`);
-    }
-});
-
+            this.showDialogue(vasen.getName(), '', buttons, true, 'move-vasen-dialogue');
+        } else {
+            // If slot is empty, show add väsen menu
+            this.showAddVasenMenu(slotIndex);
         }
-
-        buttons.push({
-            text: 'Cancel',
-            class: 'btn-secondary',
-            callback: null
-        });
-
-        this.showDialogue(
-    `Move ${vasen.getName()}`,
-    '<p>Select a slot to move to:</p>',
-    buttons,
-    true,
-    'move-vasen-dialogue'
-);
     }
 
-// Handle party slot click
-handlePartySlotClick(slotIndex) {
-    const vasen = gameState.party[slotIndex];
-
-    if (vasen) {
-        // Allow selecting a väsen to view its details, regardless of combat state
-        this.selectVasen(vasen);
+    // Move väsen within party
+    moveInParty(fromSlot, toSlot) {
+        const temp = gameState.party[toSlot];
+        gameState.party[toSlot] = gameState.party[fromSlot];
+        gameState.party[fromSlot] = temp;
+        
+        this.renderParty();
+        gameState.saveGame();
+        this.showMessage(`${gameState.party[toSlot].getName()} is now the lead!`);
     }
 
-    // If in combat, stop here to prevent other actions (like adding to an empty slot)
-    if (gameState.inCombat) return;
-
-    // Non-combat logic: empty slot behavior
-    if (!vasen) {
-        // Always open the choose-a-väsen menu
-        this.showAddVasenMenu(slotIndex);
-        return;
-    }
-}
-
-    // Add Vasen to party
-    addToParty(vasenId, preferredSlot = null) {
+    // Add väsen to party
+    addToParty(vasenId, slotIndex = null) {
         if (gameState.inCombat) {
             this.showMessage('Cannot add Väsen during combat.', 'error');
             return;
         }
-        
-        // If no slot specified, find first available
-let slotIndex = preferredSlot;
-if (slotIndex === null) {
-    slotIndex = gameState.party.findIndex(p => p === null);
 
-    if (slotIndex === -1) {
-        // Party is full → open swap modal
-        this.showSwapIntoPartyModal(vasenId);
-        return;
-    }
-}
-
-        
         const result = gameState.addToParty(vasenId, slotIndex);
         if (result.success) {
             this.showMessage(result.message);
             this.renderParty();
             this.refreshCurrentTab();
-            if (this.selectedVasen) {
+            if (this.selectedVasen && this.selectedVasen.id === vasenId) {
                 this.renderVasenDetails(this.selectedVasen);
             }
         } else {
@@ -745,26 +755,19 @@ if (slotIndex === null) {
         }
     }
 
-    // Remove Vasen from party
+    // Remove väsen from party
     removeFromParty(vasenId) {
         if (gameState.inCombat) {
             this.showMessage('Cannot remove Väsen during combat.', 'error');
             return;
         }
 
-        // Find the slot index for this vasen
-        const slotIndex = gameState.party.findIndex(v => v && v.id === vasenId);
-        if (slotIndex === -1) {
-            this.showMessage('Väsen not found in party.', 'error');
-            return;
-        }
-        
-        const result = gameState.removeFromParty(slotIndex);
+        const result = gameState.removeFromPartyById(vasenId);
         if (result.success) {
             this.showMessage(result.message);
             this.renderParty();
             this.refreshCurrentTab();
-            if (this.selectedVasen) {
+            if (this.selectedVasen && this.selectedVasen.id === vasenId) {
                 this.renderVasenDetails(this.selectedVasen);
             }
         } else {
@@ -772,31 +775,33 @@ if (slotIndex === null) {
         }
     }
 
-    // Release Väsen from inventory
     releaseVasen(vasenId) {
+    const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
+    if (!vasen) {
+        this.showMessage('Väsen not found.', 'error');
+        return;
+    }
+
     // Remove from party if present
-    gameState.party = gameState.party.map(p => p && p.id === vasenId ? null : p);
+    const partyIndex = gameState.party.findIndex(p => p && p.id === vasenId);
+    if (partyIndex !== -1) {
+        gameState.party[partyIndex] = null;
+    }
 
     // Remove from collection
     gameState.vasenCollection = gameState.vasenCollection.filter(v => v.id !== vasenId);
 
-    // Clear selection
-    this.selectedVasen = null;
+    // Clear selection if it was selected
+    if (this.selectedVasen && this.selectedVasen.id === vasenId) {
+        this.selectedVasen = null;
+        this.renderVasenDetails(null);
+    }
 
-    // Clear selection and reset tab
-this.selectedVasen = null;
-this.currentTab = 'vasen';
-
-// Full UI rebuild
-this.switchTab('vasen');   // <-- forces full re-render of inventory + details
-this.renderParty();        // <-- re-renders party slots
-
-// Save AFTER UI is stable
-gameState.saveGame();
-
-this.showMessage('Väsen released.', 'info');
-
+    gameState.saveGame();
+    this.refreshAll();
+    this.showMessage(`${vasen.getName()} was released.`);
 }
+
 
     // Show swap into party modal (when party is full)
     showSwapIntoPartyModal(vasenId) {
@@ -1058,6 +1063,17 @@ const runesHtml = vasen.runes.length > 0
        }).join('')}`
     : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
 
+// Build attacking matchups for attack elements
+const attackElements = vasen.getAttackElements();
+const attackElementsHtml = attackElements.map(e => {
+    return `
+        <div class="element-matchup-collapsible inline-collapsible">
+            <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${e}</span>
+            ${this.generateAttackingMatchupsHTML(e)}
+        </div>
+    `;
+}).join('');
+
 // Build combatant panel
 panel.innerHTML = `
     <div class="combatant-header">
@@ -1083,7 +1099,10 @@ panel.innerHTML = `
     </div>
 
     <div class="combatant-info">
-        <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+        <div class="element-matchup-collapsible">
+            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${vasen.species.element}</span>
+            ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
+        </div>
     </div>
 
     <div class="combatant-attributes">
@@ -1103,9 +1122,7 @@ panel.innerHTML = `
 
     <div class="combatant-attack-elements">
         <span class="elements-label">Attack Elements:</span>
-        ${vasen.getAttackElements().map(e => `
-            <span class="element-mini element-${e.toLowerCase()}">${e}</span>
-        `).join('')}
+        ${attackElementsHtml}
     </div>
 
     <!-- NEW DESCRIPTION COLLAPSIBLE (closed by default) -->
@@ -1398,30 +1415,9 @@ if (firstButton) firstButton.focus();
                     <span class="offer-item-count">x${count}</span>
                 `;
                 itemBtn.onclick = () => {
-    modal.classList.remove('active');
-
-    this.showDialogue(
-        `Offer ${item.name}?`,
-        `<p>${item.description}</p>
-         <p>Are you sure you want to offer this item?</p>`,
-        [
-            {
-                text: 'Confirm',
-                class: 'btn-primary',
-                callback: () => game.handleOfferItem(itemId)
-            },
-            {
-                text: 'Cancel',
-                class: 'btn-secondary',
-                callback: () => {
-                    // Reopen the offer modal
-                    modal.classList.add('active');
-                }
-            }
-        ]
-    );
-};
-
+                    modal.classList.remove('active');
+                    game.handleOfferItem(itemId);
+                };
                 itemList.appendChild(itemBtn);
             });
         }
@@ -1430,55 +1426,43 @@ if (firstButton) firstButton.focus();
         modal.classList.add('active');
     }
 
-    // Show ally selection modal for ally-targeting abilities
-    showAllySelectionModal(battle, abilityName, callback) {
-        const ability = ABILITIES[abilityName];
-        if (!ability) {
-            console.error('Ability not found:', abilityName);
-            return;
-        }
-        
+    // Show ally select modal (for target selection)
+    showAllySelectModal(ability, callback) {
         const modal = document.getElementById('ally-select-modal');
-        if (!modal) {
-            console.error('ally-select-modal element not found in HTML');
-            // Fallback: just target self (active väsen)
-            callback(battle.playerActiveIndex);
-            return;
-        }
-        
-        const allyList = document.getElementById('ally-select-list');
-        const abilityNameSpan = document.getElementById('ally-select-ability-name');
-        
-        if (abilityNameSpan) {
-            abilityNameSpan.textContent = ability.name;
-        }
-        
-        allyList.innerHTML = '';
+        document.getElementById('ally-select-ability-name').textContent = ability.name;
 
-        // Show all non-knocked-out allies (including the active one - you can buff yourself)
+        const list = document.getElementById('ally-select-list');
+        list.innerHTML = '';
+
+        const battle = game.currentBattle;
+        if (!battle) return;
+
         battle.playerTeam.forEach((vasen, index) => {
-            if (!vasen || vasen.isKnockedOut()) return;
+            if (vasen.isKnockedOut()) return;
 
-            const allyBtn = document.createElement('button');
-            allyBtn.className = 'ally-select-btn';
-            allyBtn.innerHTML = `
+            const btn = document.createElement('button');
+            btn.className = 'ally-select-btn';
+            btn.innerHTML = `
                 <img src="${vasen.species.image}" alt="${vasen.species.name}" class="ally-select-img">
                 <div class="ally-select-info">
-                    <span class="ally-select-name">${vasen.getDisplayName()}</span>
-                    <span class="ally-select-health">${vasen.currentHealth}/${vasen.maxHealth} Health</span>
-                    <span class="ally-select-megin">${vasen.currentMegin}/${vasen.maxMegin} Megin</span>
-                    <div class="ally-select-stages">${this.renderAttributeStages(vasen)}</div>
+                    <div class="ally-select-name">${vasen.getName()}</div>
+                    <div class="ally-select-health">${vasen.currentHealth}/${vasen.maxHealth} Health</div>
                 </div>
             `;
-            allyBtn.onclick = () => {
+            btn.onclick = () => {
                 modal.classList.remove('active');
                 callback(index);
             };
-            allyList.appendChild(allyBtn);
+            list.appendChild(btn);
         });
 
         document.getElementById('close-ally-select-modal').onclick = () => modal.classList.remove('active');
         modal.classList.add('active');
+    }
+
+    // Find rune owner helper
+    findRuneOwner(runeId) {
+        return gameState.vasenCollection.find(v => v.runes.includes(runeId));
     }
 
     // Show rune equip modal
@@ -1490,12 +1474,8 @@ if (firstButton) firstButton.focus();
         const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
         if (!vasen) return;
 
-        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
-        const canEquipMore = vasen.runes.length < maxRunes;
-
-        // Show ALL collected runes (including those equipped to other väsen)
         const allRunes = Array.from(gameState.collectedRunes);
-
+        
         if (allRunes.length === 0) {
             runeList.innerHTML = '<p class="empty-message">No runes collected yet.</p>';
         } else {
@@ -1798,11 +1778,8 @@ if (firstButton) firstButton.focus();
                         gameState.resetGame();
                         // Clear game controller combat state
                         game.currentBattle = null;
-                        // Hide combat UI if visible
                         this.hideCombatUI();
-                        this.hideSettings();
-                        game.showStarterSelection();
-                        this.showMessage('Progress reset.');
+                        location.reload();
                     }
                 },
                 {
@@ -1814,9 +1791,7 @@ if (firstButton) firstButton.focus();
         );
     }
 
-    // Game Guide (Combat tips)
     showCombatTips() {
-        // Render dynamic content before showing
         this.renderGameGuideContent();
         this.combatTipsModal.classList.add('active');
     }
@@ -1846,6 +1821,33 @@ if (firstButton) firstButton.focus();
         
         let html = `
             <h4>Element Matchups</h4>
+            <p class="matchup-instruction">Click an element to see its matchups:</p>
+            <div class="element-guide-list">
+        `;
+
+        // Create a collapsible for each element
+        elements.forEach(element => {
+            html += `
+                <div class="element-guide-collapsible">
+                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${element}</span>
+                    <div class="element-guide-details">
+                        <div class="guide-matchup-section">
+                            <strong>Attacking:</strong>
+                            ${this.generateAttackingMatchupsHTML(element)}
+                        </div>
+                        <div class="guide-matchup-section">
+                            <strong>Defending:</strong>
+                            ${this.generateDefensiveMatchupsHTML(element)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+
+        // Also keep the original matrix table
+        html += `
             <p class="matrix-legend">
             <table class="element-matrix">
                 <thead>
