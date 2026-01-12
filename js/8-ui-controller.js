@@ -1428,7 +1428,7 @@ if (firstButton) firstButton.focus();
     }
 
     // Show ally select modal (for target selection)
-    showAllySelectModal(ability, callback) {
+    showAllySelectionModal(ability, callback) {
         const modal = document.getElementById('ally-select-modal');
         document.getElementById('ally-select-ability-name').textContent = ability.name;
 
