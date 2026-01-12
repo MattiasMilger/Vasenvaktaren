@@ -2684,6 +2684,18 @@ img {
     .panel-content {
         overflow-y: auto;
     }
+
+    .panel-left {
+        grid-column: 1;
+    }
+
+    .panel-middle {
+        grid-column: 2;
+    }
+
+    .panel-right {
+        grid-column: 3;
+    }
 }
 
 /* Large Desktop (1440px+) */
@@ -2745,6 +2757,7 @@ img {
     .panel-middle {
         grid-column: 2;
         grid-row: 1;
+        min-height: 450px;
     }
 
     .panel-right {
@@ -2763,12 +2776,20 @@ img {
     }
 
     .zone-section {
-        min-height: auto;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
     }
 
     .zone-list {
-        overflow: visible;
-        max-height: none;
+        flex: 1;
+        overflow-y: auto;
+        min-height: 80px;
+        max-height: 200px;
+    }
+
+    .zone-actions {
+        flex-shrink: 0;
     }
 
     .combat-area {
@@ -2870,12 +2891,20 @@ img {
     }
 
     .zone-section {
-        min-height: auto;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
     }
 
     .zone-list {
-        overflow: visible;
-        max-height: none;
+        flex: 1;
+        overflow-y: auto;
+        min-height: 80px;
+        max-height: 200px;
+    }
+
+    .zone-actions {
+        flex-shrink: 0;
     }
 
     .zone-actions .btn {
@@ -3194,4 +3223,86 @@ img {
         max-width: 90vw;
         z-index: 9999;
     }
+}
+
+.panel-right {
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* critical */
+    min-height: 0;     /* prevents flex overflow */
+}
+
+
+.combat-ui {
+    flex: 0 1 auto;
+    overflow: visible;
+}
+
+.combat-log {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.combat-arena {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* prevent wrapping */
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    width: 100%;
+    flex-shrink: 1;
+}
+
+
+.combatant-panel {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.combat-ui {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.combat-log,
+.ability-buttons,
+.action-buttons {
+    flex-shrink: 0;
+}
+
+.combat-bar-text {
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.combatant-panels-scroll {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-md);
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    scrollbar-width: thin;
+}
+
+.combatant-panels-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.combatant-panels-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.combatant-panel {
+    flex: 0 0 auto; /* prevents shrinking, preserves your layout */
 }

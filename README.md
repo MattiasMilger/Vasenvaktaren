@@ -4,7 +4,7 @@
 
 A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and battle your way through the guardians of each realm.
 
-If you enjoyed Väsenväktaren, please consider starring the repository!
+**If you enjoyed Väsenväktaren, please consider starring the repository!**
 
 ## How to Play
 
@@ -26,35 +26,23 @@ If you enjoyed Väsenväktaren, please consider starring the repository!
 - 4 rarities: Common, Uncommon, Rare, Mythical
 - 12 temperaments affecting stats
 
-### Combat System
-- Turn-based battles with move priority
-- Element matchups (Potent/Neutral/Weak)
-- Megin resource management
-- Attribute stages (-5 to +5)
-- 24 unique abilities plus Basic Strike
-
 ### Runes
 - 24 equippable runes with unique effects
 - One rune slot (two at level 30)
 - Strategic combinations for different builds
 
-### Zones
-1. **Trollskogen** (Levels 1-4) - Enchanted forest
-2. **Folkets by** (Levels 5-9) - Quiet settlements
-3. **Djupa Gruvan** (Levels 10-14) - Deep mines
-4. **Glimrande källan** (Levels 15-19) - Crystal waters
-5. **Urbergen** (Levels 20-24) - Frozen peaks
-6. **Världens Ände** (Levels 25-29) - Edge of reality
-7. **Ginnungagap** (Level 30) - Primordial void
-
-## Controls
-
 ### Exploration
+
 - Select a zone from the zone list
 - Click "Explore" to search the zone
 - Click "Challenge Guardian" to face the zone boss
 
-### Combat
+### Combat System
+- Turn-based battles with move priority
+- Element matchups
+- Resource management
+- Attribute buffs and debuffs
+- 24 unique abilities plus Basic Strike
 - **Abilities**: Use learned attacks (cost Megin)
 - **Basic Strike**: Free attack using your element
 - **Swap**: Change active Väsen (causes Swap Sickness)
@@ -74,21 +62,17 @@ If you enjoyed Väsenväktaren, please consider starring the repository!
 - Click items to heal your Väsen outside combat
 - Click runes to equip them to party members
 
-## Element Matchups
+## Elements
 
-| Attacker | Earth | Nature | Water | Fire | Wind |
-|----------|-------|--------|-------|------|------|
-| Earth    | 1x    | 0.7x   | 1x    | 1.4x | 1.4x |
-| Nature   | 1.4x  | 1x     | 1.4x  | 0.7x | 0.7x |
-| Water    | 1.4x  | 1x     | 1x    | 1.4x | 0.7x |
-| Fire     | 0.7x  | 1.4x   | 0.7x  | 1x   | 1x   |
-| Wind     | 0.7x  | 1x     | 1x    | 1.4x | 1x   |
+Earth
+Nature
+Water
+Fire
+Wind
 
 ## Achievements
 
-- **Champion**: Defeat all zone guardians
-- **Rune Master**: Collect all 24 runes
-- **Hoarder**: Tame one of each Väsen type
+Collection based achievements
 
 ## Save System
 
