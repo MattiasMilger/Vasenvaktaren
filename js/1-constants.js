@@ -28,12 +28,7 @@ const GAME_CONFIG = {
     MAX_OFFERS_PER_COMBAT: 3,
     MAX_ATTRIBUTE_STAGE: 5,
     MIN_ATTRIBUTE_STAGE: -5,
-    ATTRIBUTE_STAGE_MODIFIER: 0.1,
-    // Pity thresholds for exploration anti-grief system
-    PITY_BATTLE_THRESHOLD: 4,
-    PITY_ITEM_THRESHOLD: 5,
-    PITY_RUNE_THRESHOLD: 20,
-    PITY_SACRED_WELL_THRESHOLD: 4
+    ATTRIBUTE_STAGE_MODIFIER: 0.1
 };
 
 // Starter Väsen options (species keys from VASEN_SPECIES)
@@ -187,15 +182,15 @@ const TEMPERAMENTS = {
     FEROCIOUS: { name: 'Ferocious', positive: 'strength', negative: 'health', modifier: 5 },
     BRUTAL: { name: 'Brutal', positive: 'strength', negative: 'defense', modifier: 5 },
     SAVAGE: { name: 'Savage', positive: 'strength', negative: 'durability', modifier: 5 },
+    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'health', modifier: 5 },
     THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom', negative: 'defense', modifier: 5 },
-    FOCUSED: { name: 'Focused', positive: 'wisdom', negative: 'health', modifier: 5 },
-    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'durability', modifier: 5 },
-    STALWART: { name: 'Stalwart', positive: 'defense', negative: 'durability', modifier: 5 },
-    WARY: { name: 'Wary', positive: 'defense', negative: 'health', modifier: 5 },
-    ENDURING: { name: 'Enduring', positive: 'durability', negative: 'health', modifier: 5 },
-    VIGILANT: { name: 'Vigilant', positive: 'durability', negative: 'defense', modifier: 5 },
-    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'durability', modifier: 5 },
+    FOCUSED: { name: 'Focused', positive: 'wisdom', negative: 'durability', modifier: 5 },
     RESILIENT: { name: 'Resilient', positive: 'health', negative: 'defense', modifier: 5 },
+    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'durability', modifier: 5 },
+    WARY: { name: 'Wary', positive: 'defense', negative: 'health', modifier: 5 },
+    STALWART: { name: 'Stalwart', positive: 'defense', negative: 'durability', modifier: 5 },
+    ENDURING: { name: 'Enduring', positive: 'durability', negative: 'health', modifier: 5 },
+    VIGILANT: { name: 'Vigilant', positive: 'durability', negative: 'defense', modifier: 5 }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);
@@ -205,6 +200,7 @@ const ZONES = {
         id: 'trollskogen',
         name: 'Trollskogen',
         description: 'An enchanted forest where the ancient canopy chokes out the sun. The air is thick with the scent of damp moss, and the unseen inhabitants constantly watch you from the gloom.',
+        image: 'assets/zones/trollskogen.png',
         levelRange: [1, 4],
         spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv'],
         guardian: {
@@ -226,6 +222,7 @@ const ZONES = {
         id: 'folkets_by',
         name: 'Folkets By',
         description: 'A cluster of quiet, humble settlements where ancient house spirits live side-by-side with humans. Tread carefully, for the peace is fragile, and the benevolent guardians turn fiercely protective when their homes are threatened.',
+        image: 'assets/zones/folketsby.png',
         levelRange: [5, 9],
         spawns: ['Gardstomte', 'Hustomte', 'Nattramn', 'Bortbyting', 'Gloson'],
         guardian: {
@@ -247,6 +244,7 @@ const ZONES = {
         id: 'djupa_gruvan',
         name: 'Djupa Gruvan',
         description: 'An endless labyrinth of cold, black tunnels carved by greed. Only the muffled echo of a pickaxe and the hungry glow of rare ore disturb the crushing silence, guarded by unforgiving spirits who despise light and trespassers.',
+        image: 'assets/zones/djupagruvan.png',
         levelRange: [10, 14],
         spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner'],
         guardian: {
@@ -268,6 +266,7 @@ const ZONES = {
         id: 'glimrande_kallan',
         name: 'Glimrande Källan',
         description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves.',
+        image: 'assets/zones/glimrandekallan.png',
         levelRange: [15, 19],
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr'],
         guardian: {
@@ -289,6 +288,7 @@ const ZONES = {
         id: 'urbergen',
         name: 'Urbergen',
         description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants battle the very elements that forged them.',
+        image: 'assets/zones/urbergen.png',
         levelRange: [20, 24],
         spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs'],
         guardian: {
@@ -310,6 +310,7 @@ const ZONES = {
         id: 'varldens_ande',
         name: 'Världens Ände',
         description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos.',
+        image: 'assets/zones/varldensande.png',
         levelRange: [25, 29],
         spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg'],
         guardian: {
@@ -331,6 +332,7 @@ const ZONES = {
         id: 'ginnungagap',
         name: 'Ginnungagap',
         description: 'The vast, primordial void that preceded all creation. It is an unending, echoing expanse of pure potential and ultimate challenge, containing every creature from the realms for those who seek the peak of mastery.',
+        image: 'assets/zones/ginnungagap.png',
         levelRange: [30, 30],
         spawns: 'ALL',
         guardian: null,
