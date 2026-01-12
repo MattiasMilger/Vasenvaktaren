@@ -101,10 +101,6 @@ class GameState {
     
     // Add Vasen to party slot
     addToParty(vasenIdOrInstance, slotIndex) {
-        if (slotIndex < 0 || slotIndex >= GAME_CONFIG.MAX_TEAM_SIZE) {
-            return { success: false, message: 'Invalid party slot.' };
-        }
-        
         // Accept either an ID or an instance
         let vasenInstance;
         if (typeof vasenIdOrInstance === 'string') {
@@ -118,9 +114,25 @@ class GameState {
         
         // Check if already in party
         const existingSlot = this.party.findIndex(v => v && v.id === vasenInstance.id);
-        if (existingSlot !== -1 && existingSlot !== slotIndex) {
-            // Move from existing slot
+        if (existingSlot !== -1) {
+            // Already in party
+            if (slotIndex === null || slotIndex === undefined || existingSlot === slotIndex) {
+                return { success: false, message: `${vasenInstance.displayName} is already in party.` };
+            }
+            // Moving to different slot - remove from existing
             this.party[existingSlot] = null;
+        }
+        
+        // If slotIndex is null, find first empty slot
+        if (slotIndex === null || slotIndex === undefined) {
+            slotIndex = this.party.findIndex(p => p === null);
+            if (slotIndex === -1) {
+                return { success: false, message: 'Party is full.' };
+            }
+        }
+        
+        if (slotIndex < 0 || slotIndex >= GAME_CONFIG.MAX_TEAM_SIZE) {
+            return { success: false, message: 'Invalid party slot.' };
         }
         
         // Check mythical limit
@@ -140,7 +152,7 @@ class GameState {
         return { success: true, message: `${vasenInstance.displayName} added to party.` };
     }
     
-    // Remove Vasen from party
+    // Remove Vasen from party by slot index
     removeFromParty(slotIndex) {
         if (slotIndex < 0 || slotIndex >= GAME_CONFIG.MAX_TEAM_SIZE) {
             return { success: false, message: 'Invalid party slot.' };
@@ -151,6 +163,16 @@ class GameState {
         this.saveGame();
         
         return { success: true, message: 'Väsen removed from party.' };
+    }
+    
+    // Remove Vasen from party by ID
+    removeFromPartyById(vasenId) {
+        const slotIndex = this.party.findIndex(v => v && v.id === vasenId);
+        if (slotIndex === -1) {
+            return { success: false, message: 'Väsen not found in party.' };
+        }
+        
+        return this.removeFromParty(slotIndex);
     }
     
     // Swap party slots

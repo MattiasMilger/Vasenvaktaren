@@ -484,6 +484,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                     <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}')">
                         <span class="rune-symbol">${rune.symbol}</span>
                         <span class="rune-name">${rune.name}</span>
+                        <span class="rune-effect">${rune.effect}</span>
                     </div>
                 `;
             } else {
@@ -641,7 +642,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                 if (vasen.runes.length > 0) {
                     runesHtml = vasen.runes.map(runeId => {
                         const rune = RUNES[runeId];
-                        return rune ? `<span class="mini-rune" title="${rune.name}: ${rune.effect}">${rune.symbol}</span>` : '';
+                        return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
                     }).join('');
                 }
 
@@ -649,7 +650,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                     <div class="party-vasen">
                         <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
                         <div class="party-vasen-info">
-                            <span class="party-vasen-name">${vasen.getName()}</span>
+                            <span class="party-vasen-name">${vasen.getDisplayName()}</span>
                             <span class="party-vasen-level">Lvl ${vasen.level}</span>
                         </div>
                         <div class="party-vasen-bars">
