@@ -60,7 +60,7 @@
     --rarity-common: #9090a0;
     --rarity-uncommon: #6B8E23;
     --rarity-rare: #4682B4;
-    --rarity-legendary: #9932CC;
+    --rarity-mythical: #9932CC;
 
     /* Health/Megin Colors */
     --health-fill: #6a9a6a;
@@ -618,7 +618,7 @@ img {
 .rarity-common { border-color: var(--rarity-common); color: var(--rarity-common); }
 .rarity-uncommon { border-color: var(--rarity-uncommon); color: var(--rarity-uncommon); }
 .rarity-rare { border-color: var(--rarity-rare); color: var(--rarity-rare); }
-.rarity-legendary { border-color: var(--rarity-legendary); color: var(--rarity-legendary); }
+.rarity-mythical { border-color: var(--rarity-mythical); color: var(--rarity-mythical); }
 
 .party-badge {
     background: var(--accent-primary);
