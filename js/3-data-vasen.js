@@ -67,7 +67,7 @@ const VASEN_SPECIES = {
         description: 'A ghastly, hovering light that leads travelers astray into bogs and darkness. Said to be the souls of greedy men trapped between realms.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.FIRE,
-        rarity: RARITIES.COMMON,
+        rarity: RARITIES.UNCOMMON,
         abilities: ['Elven Light', 'Drown', 'Wailing Cry', 'Fire Breath'],
         tamingItem: 'Ghastly Lantern',
         image: 'assets/vasen/irrbloss.png'
