@@ -23,6 +23,9 @@ class GameState {
         // Set of collected rune IDs
         this.collectedRunes = new Set();
         
+        // Set of favorite väsen IDs (shown first in inventory)
+        this.favoriteVasen = new Set();
+        
         // Zone progression
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
@@ -58,6 +61,24 @@ class GameState {
     this.vasenCollection.forEach(v => set.add(v.speciesName));
     return set.size;
 }
+    
+    // Toggle favorite status for a väsen
+    toggleFavorite(vasenId) {
+        if (this.favoriteVasen.has(vasenId)) {
+            this.favoriteVasen.delete(vasenId);
+            this.saveGame();
+            return false; // No longer favorite
+        } else {
+            this.favoriteVasen.add(vasenId);
+            this.saveGame();
+            return true; // Now favorite
+        }
+    }
+    
+    // Check if a väsen is favorited
+    isFavorite(vasenId) {
+        return this.favoriteVasen.has(vasenId);
+    }
     
     // Initialize new game with starter Vasen
     startNewGame(starterSpeciesId, starterTemperament) {
@@ -601,6 +622,7 @@ equipRune(runeId, vasenId) {
             vasenCollection: this.vasenCollection.map(v => v.serialize()),
             itemInventory: this.itemInventory,
             collectedRunes: Array.from(this.collectedRunes),
+            favoriteVasen: Array.from(this.favoriteVasen),
             currentZone: this.currentZone,
             defeatedGuardians: Array.from(this.defeatedGuardians),
             achievements: this.achievements,
@@ -641,6 +663,7 @@ equipRune(runeId, vasenId) {
             
             this.itemInventory = data.itemInventory || {};
             this.collectedRunes = new Set(data.collectedRunes || []);
+            this.favoriteVasen = new Set(data.favoriteVasen || []);
             this.currentZone = data.currentZone || 'TROLLSKOGEN';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
             this.achievements = data.achievements || {
@@ -727,6 +750,7 @@ equipRune(runeId, vasenId) {
         this.vasenCollection = [];
         this.itemInventory = {};
         this.collectedRunes = new Set();
+        this.favoriteVasen = new Set();
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
         this.achievements = {

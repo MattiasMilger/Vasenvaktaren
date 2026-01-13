@@ -185,21 +185,54 @@ document.querySelectorAll('.modal').forEach(modal => {
             'Mythical': 3
         };
 
+        // Helper to compare favorites first, then by secondary criteria
+        const compareFavorites = (a, b) => {
+            const aFav = gameState.isFavorite(a.id) ? 1 : 0;
+            const bFav = gameState.isFavorite(b.id) ? 1 : 0;
+            return bFav - aFav; // Favorites first
+        };
+
         switch (this.vasenSortBy) {
             case 'level':
-                return collection.sort((a, b) => b.level - a.level);
+                return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
+                    return b.level - a.level;
+                });
             case 'health':
-                return collection.sort((a, b) => b.maxHealth - a.maxHealth);
+                return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
+                    return b.maxHealth - a.maxHealth;
+                });
             case 'defense':
-                return collection.sort((a, b) => b.calculateAttribute('defense') - a.calculateAttribute('defense'));
+                return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
+                    return b.calculateAttribute('defense') - a.calculateAttribute('defense');
+                });
             case 'durability':
-                return collection.sort((a, b) => b.calculateAttribute('durability') - a.calculateAttribute('durability'));
+                return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
+                    return b.calculateAttribute('durability') - a.calculateAttribute('durability');
+                });
             case 'strength':
-                return collection.sort((a, b) => b.calculateAttribute('strength') - a.calculateAttribute('strength'));
+                return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
+                    return b.calculateAttribute('strength') - a.calculateAttribute('strength');
+                });
             case 'wisdom':
-                return collection.sort((a, b) => b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom'));
+                return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
+                    return b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom');
+                });
             case 'rarity':
                 return collection.sort((a, b) => {
+                    const favDiff = compareFavorites(a, b);
+                    if (favDiff !== 0) return favDiff;
                     const rarityDiff = rarityOrder[b.species.rarity] - rarityOrder[a.species.rarity];
                     if (rarityDiff !== 0) return rarityDiff;
                     // Secondary sort by level if same rarity
@@ -275,8 +308,14 @@ document.querySelectorAll('.modal').forEach(modal => {
             familyHeader.textContent = family;
             familySection.appendChild(familyHeader);
 
-            // Sort vasen in family alphabetically by species, then by temperament
+            // Sort vasen in family: favorites first, then alphabetically by species, then by temperament
             const sortedVasen = byFamily[family].sort((a, b) => {
+                // Favorites first
+                const aFav = gameState.isFavorite(a.id) ? 1 : 0;
+                const bFav = gameState.isFavorite(b.id) ? 1 : 0;
+                if (aFav !== bFav) return bFav - aFav;
+                
+                // Then by species name
                 if (a.speciesName !== b.speciesName) {
                     return a.speciesName.localeCompare(b.speciesName);
                 }
@@ -323,9 +362,13 @@ document.querySelectorAll('.modal').forEach(modal => {
         const hasEmptySlot = gameState.party.some(p => p === null);
         const canAdd = !isInParty && hasEmptySlot && !gameState.inCombat;
         const canSwap = !isInParty && !hasEmptySlot && !gameState.inCombat;
+        const isFavorite = gameState.isFavorite(vasen.id);
 
         card.innerHTML = `
             <div class="vasen-card-header">
+                <button class="vasen-favorite-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); ui.toggleFavorite('${vasen.id}')">
+                    ${isFavorite ? '★' : '☆'}
+                </button>
                 <img src="${vasen.species.image}" alt="${vasen.species.name}" class="vasen-thumb">
                 <div class="vasen-card-info">
                     <span class="vasen-name">${vasen.getDisplayName()}</span>
@@ -380,6 +423,24 @@ document.querySelectorAll('.modal').forEach(modal => {
         
         this.renderVasenDetails(this.selectedVasen);
         this.renderVasenInventory(); // Rerender inventory to update 'selected' class
+    }
+
+    // Toggle favorite status for a väsen
+    toggleFavorite(vasenId) {
+        const isFavorite = gameState.toggleFavorite(vasenId);
+        const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
+        const name = vasen ? vasen.getDisplayName() : 'Väsen';
+        
+        if (isFavorite) {
+            this.showMessage(`${name} added to favorites.`);
+        } else {
+            this.showMessage(`${name} removed from favorites.`);
+        }
+        
+        this.renderVasenInventory();
+        if (this.selectedVasen && this.selectedVasen.id === vasenId) {
+            this.renderVasenDetails(this.selectedVasen);
+        }
     }
 
         // Close the väsen details panel
@@ -467,6 +528,7 @@ renderVasenDetails(vasen) {
     const hasEmptySlot = gameState.party.some(p => p === null);
     const canAdd = !isInParty && hasEmptySlot && !gameState.inCombat;
     const canSwap = !isInParty && !hasEmptySlot && !gameState.inCombat;
+    const isFavorite = gameState.isFavorite(vasen.id);
 
     const runeSlots = vasen.level >= 30 ? 2 : 1;
     const expProgress = vasen.getExpProgress();
@@ -476,7 +538,12 @@ renderVasenDetails(vasen) {
         <div class="details-header">
             <img src="${vasen.species.image}" alt="${vasen.species.name}" class="details-image">
             <div class="details-identity">
-                <h3 class="details-name">${vasen.getDisplayName()}</h3>
+                <div class="details-name-row">
+                    <h3 class="details-name">${vasen.getDisplayName()}</h3>
+                    <button class="details-favorite-btn ${isFavorite ? 'active' : ''}" onclick="ui.toggleFavorite('${vasen.id}')">
+                        ${isFavorite ? '★' : '☆'}
+                    </button>
+                </div>
                 <div class="details-meta">
                     <div class="element-matchup-collapsible">
                         <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${vasen.species.element}</span>
@@ -1149,8 +1216,13 @@ renderZones() {
     const list = document.getElementById('add-vasen-list');
     list.innerHTML = '';
 
-    // Sort like inventory: by family, then name
+    // Sort: favorites first, then by family, then name
     const sorted = [...gameState.vasenCollection].sort((a, b) => {
+        // Favorites first
+        const aFav = gameState.isFavorite(a.id) ? 1 : 0;
+        const bFav = gameState.isFavorite(b.id) ? 1 : 0;
+        if (aFav !== bFav) return bFav - aFav;
+        
         if (a.species.family !== b.species.family)
             return a.species.family.localeCompare(b.species.family);
         return a.getDisplayName().localeCompare(b.getDisplayName());
@@ -1159,13 +1231,16 @@ renderZones() {
     sorted.forEach(vasen => {
         const btn = document.createElement('button');
         btn.className = 'rune-to-vasen-btn';
+        const isFavorite = gameState.isFavorite(vasen.id);
+        const isInParty = gameState.party.some(p => p && p.id === vasen.id);
 
         btn.innerHTML = `
             <div class="swap-option">
+                ${isFavorite ? '<span class="swap-favorite-star">★</span>' : ''}
                 <img src="${vasen.species.image}" alt="${vasen.getDisplayName()}" class="rune-vasen-img">
                 <div class="rune-vasen-info">
                     <span class="rune-vasen-name">${vasen.getDisplayName()}</span>
-                    <span class="rune-vasen-level">Lvl ${vasen.level}</span>
+                    <span class="rune-vasen-level">Lvl ${vasen.level}${isInParty ? ' - In Party' : ''}</span>
                 </div>
             </div>
         `;
