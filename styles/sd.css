@@ -1412,16 +1412,6 @@ img {
     color: var(--text-primary);
 }
 
-/* Ensure consistent 3-column layout even when status is missing */
-.zone-item::after {
-    content: '';
-    flex: 1;
-}
-
-.zone-item:has(.zone-status)::after {
-    display: none;
-}
-
 .zone-item:hover {
     background: var(--bg-hover);
 }
@@ -1451,22 +1441,15 @@ img {
 .zone-name {
     font-size: var(--font-size-sm);
     font-weight: 500;
-    flex: 1;
-    text-align: left;
 }
 
 .zone-level {
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
-    width: 80px;
-    text-align: center;
-    flex-shrink: 0;
 }
 
 .zone-status {
     font-size: var(--font-size-xs);
-    flex: 1;
-    text-align: right;
 }
 
 .zone-status.cleared {
