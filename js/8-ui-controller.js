@@ -10,6 +10,7 @@ class UIController {
         this.selectedPartySlot = null;
         this.combatLogMessages = [];
         this.descriptionCollapsed = false; // Global state for väsen description fold
+        this.vasenSortBy = 'family'; // Sort option for väsen inventory: family, level, health, defense, durability, strength, wisdom, rarity
     }
 
     // Initialize UI elements
@@ -166,6 +167,50 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     }
 
+    // Handle väsen sort change
+    handleVasenSortChange(sortBy) {
+        this.vasenSortBy = sortBy;
+        this.renderVasenInventory();
+    }
+
+    // Get sorted väsen collection based on current sort option
+    getSortedVasenCollection() {
+        const collection = [...gameState.vasenCollection];
+        
+        // Rarity order for sorting (higher index = rarer)
+        const rarityOrder = {
+            'Common': 0,
+            'Uncommon': 1,
+            'Rare': 2,
+            'Mythical': 3
+        };
+
+        switch (this.vasenSortBy) {
+            case 'level':
+                return collection.sort((a, b) => b.level - a.level);
+            case 'health':
+                return collection.sort((a, b) => b.maxHealth - a.maxHealth);
+            case 'defense':
+                return collection.sort((a, b) => b.calculateAttribute('defense') - a.calculateAttribute('defense'));
+            case 'durability':
+                return collection.sort((a, b) => b.calculateAttribute('durability') - a.calculateAttribute('durability'));
+            case 'strength':
+                return collection.sort((a, b) => b.calculateAttribute('strength') - a.calculateAttribute('strength'));
+            case 'wisdom':
+                return collection.sort((a, b) => b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom'));
+            case 'rarity':
+                return collection.sort((a, b) => {
+                    const rarityDiff = rarityOrder[b.species.rarity] - rarityOrder[a.species.rarity];
+                    if (rarityDiff !== 0) return rarityDiff;
+                    // Secondary sort by level if same rarity
+                    return b.level - a.level;
+                });
+            case 'family':
+            default:
+                return null; // Return null to indicate family grouping should be used
+        }
+    }
+
     // Render Vasen inventory
     renderVasenInventory() {
         const container = this.tabContents.vasen;
@@ -176,6 +221,41 @@ document.querySelectorAll('.modal').forEach(modal => {
             return;
         }
 
+        // Add sort controls
+        const sortControls = document.createElement('div');
+        sortControls.className = 'vasen-sort-controls';
+        sortControls.innerHTML = `
+            <label for="vasen-sort-select">Sort by:</label>
+            <select id="vasen-sort-select" class="vasen-sort-select">
+                <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
+                <option value="level" ${this.vasenSortBy === 'level' ? 'selected' : ''}>Level</option>
+                <option value="health" ${this.vasenSortBy === 'health' ? 'selected' : ''}>Health</option>
+                <option value="defense" ${this.vasenSortBy === 'defense' ? 'selected' : ''}>Defense</option>
+                <option value="durability" ${this.vasenSortBy === 'durability' ? 'selected' : ''}>Durability</option>
+                <option value="strength" ${this.vasenSortBy === 'strength' ? 'selected' : ''}>Strength</option>
+                <option value="wisdom" ${this.vasenSortBy === 'wisdom' ? 'selected' : ''}>Wisdom</option>
+                <option value="rarity" ${this.vasenSortBy === 'rarity' ? 'selected' : ''}>Rarity</option>
+            </select>
+        `;
+        container.appendChild(sortControls);
+
+        // Add event listener for sort select
+        const sortSelect = sortControls.querySelector('#vasen-sort-select');
+        sortSelect.addEventListener('change', (e) => this.handleVasenSortChange(e.target.value));
+
+        const sortedCollection = this.getSortedVasenCollection();
+
+        if (sortedCollection === null) {
+            // Family grouping (original behavior)
+            this.renderVasenByFamily(container);
+        } else {
+            // Flat list sorted by selected attribute
+            this.renderVasenFlat(container, sortedCollection);
+        }
+    }
+
+    // Render väsen grouped by family (original behavior)
+    renderVasenByFamily(container) {
         // Group by family
         const byFamily = {};
         gameState.vasenCollection.forEach(vasen => {
@@ -214,6 +294,23 @@ document.querySelectorAll('.modal').forEach(modal => {
 
             container.appendChild(familySection);
         });
+    }
+
+    // Render väsen as flat sorted list
+    renderVasenFlat(container, sortedCollection) {
+        const vasenListSection = document.createElement('div');
+        vasenListSection.className = 'vasen-list-section';
+
+        sortedCollection.forEach(vasen => {
+            const card = this.createVasenCard(vasen);
+            // Highlight if currently selected
+            if (this.selectedVasen && this.selectedVasen.id === vasen.id) {
+                card.classList.add('selected');
+            }
+            vasenListSection.appendChild(card);
+        });
+
+        container.appendChild(vasenListSection);
     }
 
     // Create a Väsen card
@@ -257,6 +354,12 @@ document.querySelectorAll('.modal').forEach(modal => {
                     <div class="mini-megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
                 </div>
                 <span class="mini-megin-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
+            </div>
+            <div class="vasen-card-attributes">
+                <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.calculateAttribute('strength')}</span>
+                <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.calculateAttribute('wisdom')}</span>
+                <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.calculateAttribute('defense')}</span>
+                <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durability')}</span>
             </div>
         `;
 
