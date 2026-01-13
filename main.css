@@ -60,7 +60,7 @@
     --rarity-common: #9090a0;
     --rarity-uncommon: #6B8E23;
     --rarity-rare: #4682B4;
-    --rarity-legendary: #9932CC;
+    --rarity-mythical: #9932CC;
 
     /* Health/Megin Colors */
     --health-fill: #6a9a6a;
@@ -618,7 +618,7 @@ img {
 .rarity-common { border-color: var(--rarity-common); color: var(--rarity-common); }
 .rarity-uncommon { border-color: var(--rarity-uncommon); color: var(--rarity-uncommon); }
 .rarity-rare { border-color: var(--rarity-rare); color: var(--rarity-rare); }
-.rarity-legendary { border-color: var(--rarity-legendary); color: var(--rarity-legendary); }
+.rarity-mythical { border-color: var(--rarity-mythical); color: var(--rarity-mythical); }
 
 .party-badge {
     background: var(--accent-primary);
@@ -628,6 +628,7 @@ img {
 .family-badge {
     background: var(--bg-tertiary);
     color: var(--text-muted);
+    cursor: help;
 }
 
 /* =============================================================================
@@ -645,6 +646,7 @@ img {
     background: var(--bg-tertiary);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--spacing-xs);
+    cursor: help;
 }
 
 /* Vasen Cards */
@@ -933,34 +935,6 @@ img {
     color: var(--text-muted);
 }
 
-/* Description Toggle */
-.description-toggle {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-}
-
-.description-toggle:hover {
-    color: var(--text-primary);
-}
-
-.toggle-icon {
-    font-size: var(--font-size-xs);
-}
-
-.description-content {
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-}
-
-.description-content.collapsed {
-    display: none;
-}
-
 /* Experience Bar */
 .exp-bar {
     height: 8px;
@@ -1060,6 +1034,7 @@ img {
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
+    cursor: help;
 }
 
 .temperament-info {
@@ -1544,6 +1519,17 @@ img {
 
 .zone-description p:last-child {
     margin-bottom: 0;
+}
+
+/* Zone Image */
+.zone-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 720 / 340;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+    display: block;
 }
 
 /* =============================================================================
@@ -3289,6 +3275,15 @@ img {
         max-width: 90vw;
         z-index: 9999;
     }
+    
+    /* Keep matchup dropdowns inline (not centered) in väsen details panel */
+    .vasen-details-panel .element-matchup-collapsible .matchup-details {
+        position: absolute;
+        top: 100%;
+        left: 0 !important;
+        transform: none;
+        margin-top: var(--spacing-xs);
+    }
 }
 
 .panel-right {
@@ -3348,4 +3343,30 @@ img {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.toggle-icon {
+    font-size: var(--font-size-xs);
+    transition: transform 0.2s;
+}
+
+.description-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 200px;
+    opacity: 1;
+}
+
+.description-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.description-content p {
+    margin: 0;
+}
+
+.toggle-icon {
+    font-size: var(--font-size-xs);
+    transition: transform 0.2s;
 }
