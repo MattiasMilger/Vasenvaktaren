@@ -9,7 +9,7 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 ## How to Play
 
 1. Web hosted: visit https://mattiasmilger.github.io/Vasenvaktaren/
-   Local: Save the files and open `index.html` in your web browser
+   (alternatively run locally: Save the files and open `index.html` with your web browser)
 
 2. Click "New Game" to start
 3. Choose your starter Väsen from three options

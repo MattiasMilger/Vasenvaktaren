@@ -162,13 +162,13 @@ const FAMILY_DESCRIPTIONS = {
 };
 
 const BASE_ATTRIBUTES = {
-    [FAMILIES.VATTE]: { strength: 70, wisdom: 45, health: 55, defense: 55, durability: 80 },
-    [FAMILIES.VALNAD]: { strength: 45, wisdom: 70, health: 55, defense: 80, durability: 55 },
+    [FAMILIES.VATTE]: { strength: 70, wisdom: 50, health: 55, defense: 55, durability: 80 },
+    [FAMILIES.VALNAD]: { strength: 50, wisdom: 70, health: 55, defense: 80, durability: 55 },
     [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 45 },
-    [FAMILIES.TROLL]: { strength: 55, wisdom: 55, health: 70, defense: 70, durability: 60 },
-    [FAMILIES.RA]: { strength: 45, wisdom: 80, health: 60, defense: 65, durability: 60 },
-    [FAMILIES.ALV]: { strength: 50, wisdom: 85, health: 60, defense: 55, durability: 60 },
-    [FAMILIES.ANDE]: { strength: 50, wisdom: 75, health: 55, defense: 85, durability: 50 },
+    [FAMILIES.TROLL]: { strength: 60, wisdom: 55, health: 70, defense: 70, durability: 60 },
+    [FAMILIES.RA]: { strength: 50, wisdom: 80, health: 60, defense: 65, durability: 60 },
+    [FAMILIES.ALV]: { strength: 55, wisdom: 85, health: 60, defense: 55, durability: 60 },
+    [FAMILIES.ANDE]: { strength: 55, wisdom: 75, health: 55, defense: 85, durability: 50 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 50, health: 85, defense: 55, durability: 50 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };

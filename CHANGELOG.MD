@@ -9,6 +9,7 @@ This project follows a simple semantic versioning pattern during Alpha developme
 ## v0.47-alpha – UI Updates and misc (2026-01-13)
 - UI updates
 - Irrbloss is now uncommon
+- Balancing of base attributes
 
 ## v0.46-alpha – Zone Images (2026-01-12)
 - UI scaling fixes
