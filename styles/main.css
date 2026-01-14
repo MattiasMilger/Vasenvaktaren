@@ -3363,34 +3363,27 @@ img {
     right: 0;
 }
 
-/* Ensure matchup details stay visible within viewport */
+/* Ensure matchup details stay static (not fixed) on mobile */
 @media (max-width: 768px) {
     .element-matchup-collapsible .matchup-details {
-        position: fixed;
-        top: 50%;
-        left: 50% !important;
-        right: auto !important;
-        transform: translate(-50%, -50%);
-        max-width: 90vw;
-        z-index: 9999;
-    }
-    
-    .element-guide-collapsible .element-guide-details {
-        position: fixed;
-        top: 50%;
-        left: 50% !important;
-        right: auto !important;
-        transform: translate(-50%, -50%);
-        max-width: 90vw;
-        z-index: 9999;
-    }
-    
-    /* Keep matchup dropdowns inline (not centered) in väsen details panel */
-    .vasen-details-panel .element-matchup-collapsible .matchup-details {
         position: absolute;
         top: 100%;
         left: 0 !important;
+        right: auto !important;
         transform: none;
+        max-width: 90vw;
+        z-index: 9999;
+        margin-top: var(--spacing-xs);
+    }
+    
+    .element-guide-collapsible .element-guide-details {
+        position: absolute;
+        top: 100%;
+        left: 0 !important;
+        right: auto !important;
+        transform: none;
+        max-width: 90vw;
+        z-index: 9999;
         margin-top: var(--spacing-xs);
     }
 }
