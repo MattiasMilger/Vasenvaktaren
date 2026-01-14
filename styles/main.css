@@ -1242,9 +1242,14 @@ img {
 .ability-element.element-fire { background: var(--element-fire); }
 .ability-element.element-wind { background: var(--element-wind); }
 
-.ability-power,
+.ability-power {
+    color: #e8e8f0;
+    font-weight: 600;
+}
+
 .ability-cost {
-    color: var(--text-muted);
+    color: #6a9aff;
+    font-weight: 600;
 }
 
 .ability-description {
@@ -2028,7 +2033,8 @@ img {
 
 .ability-btn-cost {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: #6a9aff;
+    font-weight: 600;
 }
 
 .ability-btn-element {
@@ -2047,8 +2053,14 @@ img {
 
 .ability-btn-power {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: #e8e8f0;
+    font-weight: 600;
     margin-left: var(--spacing-xs);
+}
+
+.ability-highlight {
+    color: #e8e8f0;
+    font-weight: 600;
 }
 
 /* Action Buttons (Combat) */
