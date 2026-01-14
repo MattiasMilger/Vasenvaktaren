@@ -1216,9 +1216,6 @@ renderZones() {
     renderCombat(battle) {
         if (!battle) return;
 
-        // Update turn counter
-        document.getElementById('turn-counter').textContent = `Turn ${battle.turnCount}`;
-
         // Render player side
         this.renderCombatantPanel('player', battle.playerTeam[battle.playerActiveIndex], battle);
 
