@@ -133,10 +133,10 @@ const TAMING_ITEMS = {
         foundText: 'You found a fragrant Elderflower Sprig. Its scent is protective, a necessary offering for the fierce, watchful spirit of the Elder Tree.',
         tamingTarget: 'Hyllemor'
     },
-    'Mead Horn': {
-        name: 'Mead Horn',
-        description: 'A chipped Mead Horn. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla. It can either be offered to wild väsen to tame them or your own väsen to heal them. Be careful, only some väsen like this.',
-        foundText: 'You found a chipped Mead Horn. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla.',
+    'Valhalla Pork': {
+        name: 'Valhalla Pork',
+        description: 'A savory portion from the legendary boar Särimner, served nightly in Valhalla. Though he is slain each evening, Särimner rises anew by dawn, and his ever‑renewing flesh is said to restore body and spirit alike.',
+        foundText: 'You found a tempting piece of Valhalla Pork. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla.',
         tamingTarget: 'Einharje'
     },
     'Shield Fragment': {

@@ -250,12 +250,12 @@ const VASEN_SPECIES = {
     'Einharje': {
         name: 'Einhärje',
         internalName: 'Einharje',
-        description: 'The valiant, deceased warriors dwelling in Valhalla. They spend their days in endless feasting and fierce training, preparing for the final battle of Ragnarök.',
+        description: 'The valiant, deceased warriors dwelling in Valhalla. They spend their days in endless feasting upon the ever renewing boar Särimner and in fierce training, preparing for the final battle of Ragnarök.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
         abilities: ['Ground Stomp', 'Flaming Skewer', 'Skald\'s Mead', 'Boulder Toss'],
-        tamingItem: 'Mead Horn',
+        tamingItem: 'Valhalla Pork',
         image: 'assets/vasen/einharje.png'
     },
     'Valkyria': {
