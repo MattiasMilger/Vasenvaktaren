@@ -64,10 +64,10 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 
 ## Elements
 
-Earth
-Nature
-Water
-Fire
+Earth,
+Nature,
+Water,
+Fire,
 Wind
 
 ## Achievements

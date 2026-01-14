@@ -387,16 +387,16 @@ document.querySelectorAll('.modal').forEach(modal => {
                 ${isInParty ? '<span class="party-badge">In Party</span>' : ''}
             </div>
             <div class="vasen-card-health">
-                <div class="mini-health-bar">
-                    <div class="mini-health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                <div class="combat-bar combat-bar-small health-bar">
+                    <div class="combat-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                    <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
                 </div>
-                <span class="mini-health-text">${vasen.currentHealth}/${vasen.maxHealth}</span>
             </div>
             <div class="vasen-card-megin">
-                <div class="mini-megin-bar">
-                    <div class="mini-megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                <div class="combat-bar combat-bar-small megin-bar">
+                    <div class="combat-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                    <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
                 </div>
-                <span class="mini-megin-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
             </div>
             <div class="vasen-card-attributes">
                 <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.calculateAttribute('strength')}</span>
@@ -583,19 +583,13 @@ renderVasenDetails(vasen) {
         </div>
 
         <div class="details-resources">
-            <div class="resource-bar health-bar-container">
-                <span class="resource-label">Health</span>
-                <div class="resource-bar-bg">
-                    <div class="resource-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
-                </div>
-                <span class="resource-value">${vasen.currentHealth} / ${vasen.maxHealth}</span>
+            <div class="combat-bar health-bar">
+                <div class="combat-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
             </div>
-            <div class="resource-bar megin-bar-container">
-                <span class="resource-label">Megin</span>
-                <div class="resource-bar-bg">
-                    <div class="resource-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
-                </div>
-                <span class="resource-value">${vasen.currentMegin} / ${vasen.maxMegin}</span>
+            <div class="combat-bar megin-bar">
+                <div class="combat-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
             </div>
         </div>
 
@@ -888,17 +882,13 @@ renderParty() {
                     </div>
 
                     <div class="party-vasen-bars">
-                        <div class="mini-bar-row">
-                            <div class="mini-bar health">
-                                <div class="mini-bar-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
-                            </div>
-                            <span class="mini-bar-text">${vasen.currentHealth}/${vasen.maxHealth}</span>
+                        <div class="combat-bar combat-bar-small health-bar">
+                            <div class="combat-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                            <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
                         </div>
-                        <div class="mini-bar-row">
-                            <div class="mini-bar megin">
-                                <div class="mini-bar-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
-                            </div>
-                            <span class="mini-bar-text">${vasen.currentMegin}/${vasen.maxMegin}</span>
+                        <div class="combat-bar combat-bar-small megin-bar">
+                            <div class="combat-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                            <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
                         </div>
                     </div>
 
