@@ -2441,45 +2441,6 @@ img {
     margin-bottom: var(--spacing-sm);
 }
 
-/* Element Matrix Table */
-.element-matrix {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-size-xs);
-    margin: var(--spacing-sm) 0;
-}
-
-.element-matrix th,
-.element-matrix td {
-    padding: var(--spacing-xs);
-    text-align: center;
-    border: 1px solid var(--border-color);
-}
-
-.element-matrix th {
-    background: var(--bg-tertiary);
-}
-
-.matrix-legend {
-    font-size: var(--font-size-xs);
-    margin-bottom: var(--spacing-sm);
-}
-
-.legend-potent { color: var(--accent-primary); }
-.legend-neutral { color: var(--text-muted); }
-.legend-weak { color: var(--accent-danger); }
-
-.element-matrix .potent { background: rgba(106, 154, 106, 0.3); }
-.element-matrix .neutral { background: var(--bg-card); }
-.element-matrix .weak { background: rgba(176, 106, 106, 0.3); }
-
-/* Matrix Element Colors (for text) */
-.matrix-element-earth { color: var(--element-earth); }
-.matrix-element-nature { color: var(--element-nature); }
-.matrix-element-water { color: var(--element-water); }
-.matrix-element-fire { color: var(--element-fire); }
-.matrix-element-wind { color: var(--element-wind); }
-
 /* Swap Modal */
 .modal-swap {
     max-width: 400px;

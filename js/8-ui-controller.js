@@ -546,7 +546,7 @@ renderVasenDetails(vasen) {
                 </div>
                 <div class="details-meta">
                     <div class="element-matchup-collapsible">
-                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${vasen.species.element}</span>
+                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this)">${vasen.species.element}</span>
                         ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
                     <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
@@ -722,7 +722,7 @@ renderVasenDetails(vasen) {
                     </div>
                     <div class="ability-stats">
                         <div class="element-matchup-collapsible">
-                            <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); this.parentElement.classList.toggle('open')">${abilityElement}</span>
+                            <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this)">${abilityElement}</span>
                             ${this.generateAttackingMatchupsHTML(abilityElement)}
                         </div>
                         ${ability.power ? `<span class="ability-power">Power: ${ability.power}</span>` : ''}
@@ -1043,9 +1043,12 @@ renderParty() {
         </div>
     `,
     callback: () => {
-        gameState.removeFromParty(index);
-        gameState.addToParty(vasenId, index);
-        this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
+        const result = gameState.addToParty(vasenId, index);
+        if (result.success) {
+            this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
+        } else {
+            this.showMessage(result.message, 'error');
+        }
         this.renderParty();
         this.refreshCurrentTab();
         if (this.selectedVasen) {
@@ -1290,7 +1293,7 @@ renderCombatantPanel(side, vasen, battle) {
     const attackElementsHtml = attackElements.map(e => {
         return `
             <div class="element-matchup-collapsible inline-collapsible">
-                <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${e}</span>
+                <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this)">${e}</span>
                 ${this.generateAttackingMatchupsHTML(e)}
             </div>
         `;
@@ -1324,7 +1327,7 @@ renderCombatantPanel(side, vasen, battle) {
             <div class="element-matchup-collapsible">
 
                 <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element"
-                      onclick="this.parentElement.classList.toggle('open')">
+                      onclick="toggleElementMatchup(this)">
                     ${vasen.species.element}
                 </span>
 
@@ -2058,7 +2061,7 @@ if (firstButton) firstButton.focus();
         elements.forEach(element => {
             html += `
                 <div class="element-guide-collapsible">
-                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="this.parentElement.classList.toggle('open')">${element}</span>
+                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this)">${element}</span>
                     <div class="element-guide-details">
                         <div class="guide-matchup-section">
                             <strong>Attacking:</strong>
@@ -2074,53 +2077,6 @@ if (firstButton) firstButton.focus();
         });
 
         html += `</div>`;
-
-        // Also keep the original matrix table
-        html += `
-            <p class="matrix-legend">
-            <table class="element-matrix">
-                <thead>
-                    <tr>
-                        <th>
-                            <span class="legend-potent">P = Potent (${DAMAGE_MULTIPLIERS.POTENT}x)</span><br>
-                            <span class="legend-neutral">N = Neutral (${DAMAGE_MULTIPLIERS.NEUTRAL}x)</span><br>
-                            <span class="legend-weak">W = Weak (${DAMAGE_MULTIPLIERS.WEAK}x)</span>
-                        </th>
-                        <th colspan="${elements.length}" class="matrix-label-defender"><br>DEFENDER →</th>
-                    </tr>
-                    <tr>
-                        <th class="matrix-label-attacker">ATTACKER ↓</th>
-        `;
-
-        // Header row with defender elements
-        elements.forEach(element => {
-            html += `<th class="matrix-element-${element.toLowerCase()}">${element}</th>`;
-        });
-
-        html += `
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        // Data rows
-        elements.forEach(attacker => {
-            html += `<tr><th class="matrix-element-${attacker.toLowerCase()}">${attacker}</th>`;
-            
-            elements.forEach(defender => {
-                const matchupType = ELEMENT_MATCHUPS[attacker][defender];
-                const letter = matchupType === 'POTENT' ? 'P' : matchupType === 'WEAK' ? 'W' : 'N';
-                const cellClass = matchupType === 'POTENT' ? 'legend-potent' : matchupType === 'WEAK' ? 'legend-weak' : 'legend-neutral';
-                html += `<td class="${cellClass}">${letter}</td>`;
-            });
-            
-            html += `</tr>`;
-        });
-
-        html += `
-                </tbody>
-            </table>
-        `;
 
         return html;
     }
@@ -2405,6 +2361,22 @@ showKnockoutSwapModal(battle, callback) {
 // Helper function
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Helper function to toggle element matchup collapsibles (closes others when one opens)
+function toggleElementMatchup(element) {
+    const parent = element.parentElement;
+    const isOpening = !parent.classList.contains('open');
+    
+    // Close all other element matchup collapsibles (both types)
+    document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+    
+    // If we're opening this one, add the open class
+    if (isOpening) {
+        parent.classList.add('open');
+    }
 }
 
 // Create global instance
