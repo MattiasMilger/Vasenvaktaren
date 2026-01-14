@@ -1154,7 +1154,7 @@ img {
 
 .ability-type-tag {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: #e8e8f0;
     padding: 1px 4px;
     background: var(--bg-tertiary);
     border-radius: 2px;
@@ -1926,7 +1926,7 @@ img {
 .ability-btn-type {
     display: block;
     font-size: var(--font-size-xs);
-    color: var(--text-secondary);
+    color: #e8e8f0;
 }
 
 .ability-btn-stats {
