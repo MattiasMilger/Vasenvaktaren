@@ -49,7 +49,7 @@ const ABILITIES = {
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 55,
+        meginCost: 50,
         effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
     },
 
@@ -135,7 +135,7 @@ const ABILITIES = {
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 55,
+        meginCost: 50,
         effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 }
     },
 

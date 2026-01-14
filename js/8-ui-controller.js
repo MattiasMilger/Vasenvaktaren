@@ -2191,7 +2191,7 @@ if (firstButton) firstButton.focus();
 <div class="profile-stats">
     <br>
     <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
-    <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.length}</p>
+    <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</p>
     <p>Väsen Types Tamed: ${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</p>
     <br>
 </div>
