@@ -3054,8 +3054,10 @@ img {
     }
 
     .panel-content {
-        overflow: visible;
+        overflow-y: auto;
+        overflow-x: hidden;
         min-height: 200px;
+        max-height: 800px;
     }
 
     .vasen-details-panel {
