@@ -56,7 +56,7 @@ const VASEN_SPECIES = {
         description: 'A perpetually wailing, agonized spirit of a forsaken infant, abandoned or wrongfully slain before receiving a proper burial.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.EARTH,
-        rarity: RARITIES.COMMON,
+        rarity: RARITIES.UNCOMMON,
         abilities: ['Wailing Cry', 'Sinkhole', 'Ethereal Melody', 'Landslide'],
         tamingItem: 'Burial Flowers',
         image: 'assets/vasen/myling.png'
@@ -91,7 +91,7 @@ const VASEN_SPECIES = {
         description: 'A deceptive, shimmering white horse that offers a tempting ride. Once mounted, it gallops into the deep current to ensure its victim drowns.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WATER,
-        rarity: RARITIES.COMMON,
+        rarity: RARITIES.UNCOMMON,
         abilities: ['Drown', 'Ground Stomp', 'Thick Coat', 'Tidal Wave'],
         tamingItem: 'Drenched Saddle',
         image: 'assets/vasen/backahast.png'
@@ -194,7 +194,7 @@ const VASEN_SPECIES = {
         description: 'A male water spirit who plays enchanting, sorrowful tunes on his fiddle. His music lures victims into watery graves, and only knowing his songs grants safety.',
         family: FAMILIES.RA,
         element: ELEMENTS.WATER,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.RARE,
         abilities: ['Drown', 'Elven Light', 'Ethereal Melody', 'Tidal Wave'],
         tamingItem: 'Waterlogged Violin',
         image: 'assets/vasen/nacken.png'

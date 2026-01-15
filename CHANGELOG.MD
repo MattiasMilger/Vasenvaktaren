@@ -6,6 +6,13 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.48-alpha - UI Updates
+- standardized modals
+- Bäckahäst is now uncommon
+- Näcken is now rare
+- Myling is now Uncommon
+- Smithing and Skald's mead's Megin cost reduced to 40
+
 ## v0.47-alpha – UI Updates and misc (2026-01-13)
 - UI updates
 - Irrbloss is now uncommon

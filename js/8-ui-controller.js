@@ -10,7 +10,7 @@ class UIController {
         this.selectedPartySlot = null;
         this.combatLogMessages = [];
         this.descriptionCollapsed = false; // Global state for väsen description fold
-        this.vasenSortBy = 'family'; // Sort option for väsen inventory: family, level, health, defense, durability, strength, wisdom, rarity
+        this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
     // Initialize UI elements
@@ -258,16 +258,16 @@ document.querySelectorAll('.modal').forEach(modal => {
         const sortControls = document.createElement('div');
         sortControls.className = 'vasen-sort-controls';
         sortControls.innerHTML = `
-            <label for="vasen-sort-select">Sort by:</label>
+            <label for="vasen-sort-select">Sort:</label>
             <select id="vasen-sort-select" class="vasen-sort-select">
-                <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
                 <option value="level" ${this.vasenSortBy === 'level' ? 'selected' : ''}>Level</option>
+                <option value="rarity" ${this.vasenSortBy === 'rarity' ? 'selected' : ''}>Rarity</option>
                 <option value="health" ${this.vasenSortBy === 'health' ? 'selected' : ''}>Health</option>
                 <option value="defense" ${this.vasenSortBy === 'defense' ? 'selected' : ''}>Defense</option>
                 <option value="durability" ${this.vasenSortBy === 'durability' ? 'selected' : ''}>Durability</option>
                 <option value="strength" ${this.vasenSortBy === 'strength' ? 'selected' : ''}>Strength</option>
                 <option value="wisdom" ${this.vasenSortBy === 'wisdom' ? 'selected' : ''}>Wisdom</option>
-                <option value="rarity" ${this.vasenSortBy === 'rarity' ? 'selected' : ''}>Rarity</option>
+                <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
             </select>
         `;
         container.appendChild(sortControls);
@@ -384,6 +384,7 @@ document.querySelectorAll('.modal').forEach(modal => {
                     ${vasen.species.element}
                 </span>
                 <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
+                <span class="family-badge">${vasen.species.family}</span>
                 ${isInParty ? '<span class="party-badge">In Party</span>' : ''}
             </div>
             <div class="vasen-card-health">
@@ -404,6 +405,14 @@ document.querySelectorAll('.modal').forEach(modal => {
                 <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.calculateAttribute('defense')}</span>
                 <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durability')}</span>
             </div>
+            ${vasen.runes && vasen.runes.length > 0 ? `
+            <div class="vasen-card-runes">
+                ${vasen.runes.map(runeId => {
+                    const rune = RUNES[runeId];
+                    return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
+                }).join('')}
+            </div>
+            ` : ''}
         `;
 
         card.addEventListener('click', () => this.selectVasen(vasen));
@@ -550,7 +559,12 @@ renderVasenDetails(vasen) {
                         ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
                     <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
-                    <span class="family-badge">${vasen.species.family}</span>
+                    <div class="family-matchup-collapsible">
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${vasen.species.family}</span>
+                        <div class="family-description-popup">
+                            <p>${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -878,6 +892,9 @@ renderParty() {
                             <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">
                                 ${vasen.species.rarity}
                             </span>
+                            <span class="family-badge">
+                                ${vasen.species.family}
+                            </span>
                         </div>
                     </div>
 
@@ -890,6 +907,13 @@ renderParty() {
                             <div class="combat-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
                             <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
                         </div>
+                    </div>
+
+                    <div class="party-vasen-attributes">
+                        <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.getAttribute('strength')}</span>
+                        <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.getAttribute('wisdom')}</span>
+                        <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.getAttribute('defense')}</span>
+                        <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.getAttribute('durability')}</span>
                     </div>
 
                     ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
@@ -1049,33 +1073,36 @@ renderParty() {
             return;
         }
 
+        // Create a temporary modal-like dialogue with standardized cards
         const buttons = [];
 
         gameState.party.forEach((partyVasen, index) => {
             if (partyVasen) {
                 const slotLabel = index === 0 ? 'Lead' : `Slot ${index + 1}`;
+                // Use standardized card HTML (with combat info since party shows current stats)
                 buttons.push({
-    text: `
-        <div class="swap-option">
-            <img src="${partyVasen.species.image}" alt="${partyVasen.getName()}">
-            <span>Replace ${partyVasen.getName()} (${slotLabel})</span>
-        </div>
-    `,
-    callback: () => {
-        const result = gameState.addToParty(vasenId, index);
-        if (result.success) {
-            this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
-        } else {
-            this.showMessage(result.message, 'error');
-        }
-        this.renderParty();
-        this.refreshCurrentTab();
-        if (this.selectedVasen) {
-            this.renderVasenDetails(this.selectedVasen);
-        }
-    }
-});
-
+                    text: `
+                        <div class="swap-party-card-wrapper">
+                            <span class="swap-party-slot-label">${slotLabel}</span>
+                            <div class="swap-party-card">
+                                ${this.createStandardVasenCardHTML(partyVasen, true)}
+                            </div>
+                        </div>
+                    `,
+                    callback: () => {
+                        const result = gameState.addToParty(vasenId, index);
+                        if (result.success) {
+                            this.showMessage(`${vasen.getName()} swapped in for ${partyVasen.getName()}.`);
+                        } else {
+                            this.showMessage(result.message, 'error');
+                        }
+                        this.renderParty();
+                        this.refreshCurrentTab();
+                        if (this.selectedVasen) {
+                            this.renderVasenDetails(this.selectedVasen);
+                        }
+                    }
+                });
             }
         });
 
@@ -1086,12 +1113,12 @@ renderParty() {
         });
 
         this.showDialogue(
-    `Add ${vasen.getName()} to Party`,
-    '<p>Your party is full. Select a Väsen to replace:</p>',
-    buttons,
-    true,
-    'swap-into-party-dialogue'
-);
+            `Add ${vasen.getName()} to Party`,
+            '<p>Your party is full. Select a Väsen to replace:</p>',
+            buttons,
+            true,
+            'swap-into-party-dialogue'
+        );
     }
 
     // Render zones
@@ -1249,19 +1276,14 @@ renderZones() {
 
     sorted.forEach(vasen => {
         const btn = document.createElement('button');
-        btn.className = 'rune-to-vasen-btn';
+        btn.className = 'add-vasen-btn';
         const isFavorite = gameState.isFavorite(vasen.id);
         const isInParty = gameState.party.some(p => p && p.id === vasen.id);
 
         btn.innerHTML = `
-            <div class="swap-option">
-                ${isFavorite ? '<span class="swap-favorite-star">★</span>' : ''}
-                <img src="${vasen.species.image}" alt="${vasen.getDisplayName()}" class="rune-vasen-img">
-                <div class="rune-vasen-info">
-                    <span class="rune-vasen-name">${vasen.getDisplayName()}</span>
-                    <span class="rune-vasen-level">Lvl ${vasen.level}${isInParty ? ' - In Party' : ''}</span>
-                </div>
-            </div>
+            ${isFavorite ? '<span class="add-vasen-favorite-star">★</span>' : ''}
+            ${this.createStandardVasenCardHTML(vasen, false)}
+            ${isInParty ? '<span class="add-vasen-in-party-badge">In Party</span>' : ''}
         `;
 
         btn.onclick = () => {
@@ -1353,6 +1375,13 @@ renderCombatantPanel(side, vasen, battle) {
 
                 ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
             </div>
+            
+            <div class="family-matchup-collapsible">
+                <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${vasen.species.family}</span>
+                <div class="family-description-popup">
+                    <p>${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
+                </div>
+            </div>
         </div>
 
         <div class="combatant-attributes">
@@ -1406,6 +1435,70 @@ renderCombatantPanel(side, vasen, battle) {
         return html || '<span class="no-stages">No attribute changes</span>';
     }
 
+    // Create standardized väsen card info HTML
+    // showCombatInfo: if true, uses current combat stats (with stages) and shows stage indicators
+    //                 if false, uses base stats (with runes only, no stages)
+    createStandardVasenCardHTML(vasen, showCombatInfo = false) {
+        // Build runes HTML
+        let runesHtml = '';
+        if (vasen.runes && vasen.runes.length > 0) {
+            runesHtml = vasen.runes.map(runeId => {
+                const rune = RUNES[runeId];
+                return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
+            }).join('');
+        }
+
+        // Build attribute stages HTML (only for combat info)
+        let stagesHtml = '';
+        if (showCombatInfo) {
+            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+                const stage = vasen.attributeStages[attr];
+                if (stage !== 0) {
+                    const stageClass = stage > 0 ? 'positive' : 'negative';
+                    const stageText = stage > 0 ? `+${stage}` : stage;
+                    stagesHtml += `<span class="mini-stage ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
+                }
+            });
+        }
+
+        // For combat displays, use getAttribute (includes stages)
+        // For non-combat displays, use calculateAttribute (base + runes only)
+        const getAttrValue = (attr) => showCombatInfo ? vasen.getAttribute(attr) : vasen.calculateAttribute(attr);
+
+        return `
+            <img src="${vasen.species.image}" alt="${vasen.species.name}" class="standard-vasen-img">
+            <div class="standard-vasen-info">
+                <div class="standard-vasen-header">
+                    <span class="standard-vasen-name">${vasen.getDisplayName()}</span>
+                    <span class="standard-vasen-level">Lvl ${vasen.level}</span>
+                </div>
+                <div class="standard-vasen-badges">
+                    <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
+                    <span class="family-badge">${vasen.species.family}</span>
+                </div>
+                <div class="standard-vasen-bars">
+                    <div class="combat-bar combat-bar-small health-bar">
+                        <div class="combat-bar-fill health-fill" style="width: ${(vasen.currentHealth / vasen.maxHealth) * 100}%"></div>
+                        <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
+                    </div>
+                    <div class="combat-bar combat-bar-small megin-bar">
+                        <div class="combat-bar-fill megin-fill" style="width: ${(vasen.currentMegin / vasen.maxMegin) * 100}%"></div>
+                        <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
+                    </div>
+                </div>
+                <div class="standard-vasen-attributes">
+                    <span class="mini-attr"><span class="attr-label">STR</span> ${getAttrValue('strength')}</span>
+                    <span class="mini-attr"><span class="attr-label">WIS</span> ${getAttrValue('wisdom')}</span>
+                    <span class="mini-attr"><span class="attr-label">DEF</span> ${getAttrValue('defense')}</span>
+                    <span class="mini-attr"><span class="attr-label">DUR</span> ${getAttrValue('durability')}</span>
+                </div>
+                ${stagesHtml ? `<div class="standard-vasen-stages">${stagesHtml}</div>` : ''}
+                ${runesHtml ? `<div class="standard-vasen-runes">${runesHtml}</div>` : ''}
+            </div>
+        `;
+    }
+
     // Render swap options
 renderSwapOptions(battle) {
     const modal = document.getElementById('swap-modal');
@@ -1417,36 +1510,8 @@ renderSwapOptions(battle) {
         if (index === battle.playerActiveIndex || vasen.isKnockedOut()) return;
 
         const btn = document.createElement('button');
-        btn.className = 'ally-select-btn';
-
-        const img = document.createElement('img');
-        img.className = 'ally-select-img';
-        img.src = vasen.species.image;
-
-        const info = document.createElement('div');
-        info.className = 'ally-select-info';
-
-        const name = document.createElement('div');
-        name.className = 'ally-select-name';
-        name.textContent = vasen.getName();
-
-        const hp = document.createElement('div');
-        hp.className = 'ally-select-health';
-        hp.textContent = `${vasen.currentHealth}/${vasen.maxHealth} Health`;
-
-        const megin = document.createElement('div');
-        megin.className = 'swap-megin';
-        megin.textContent = `Megin: ${vasen.currentMegin}/${vasen.maxMegin}`;
-        const stages = document.createElement('div');
-        stages.className = 'swap-stages';
-        stages.innerHTML = this.renderAttributeStages(vasen);
-
-        info.appendChild(name);
-        info.appendChild(hp);
-        info.appendChild(megin);
-        info.appendChild(stages);
-        btn.appendChild(img);
-        btn.appendChild(info);
+        btn.className = 'swap-modal-btn';
+        btn.innerHTML = this.createStandardVasenCardHTML(vasen, true); // true = show combat info
 
         btn.onclick = () => {
             modal.classList.remove('active');
@@ -1719,13 +1784,7 @@ if (firstButton) firstButton.focus();
 
             const btn = document.createElement('button');
             btn.className = 'ally-select-btn';
-            btn.innerHTML = `
-                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="ally-select-img">
-                <div class="ally-select-info">
-                    <div class="ally-select-name">${vasen.getName()}</div>
-                    <div class="ally-select-health">${vasen.currentHealth}/${vasen.maxHealth} Health</div>
-                </div>
-            `;
+            btn.innerHTML = this.createStandardVasenCardHTML(vasen, true); // true = show combat info
             btn.onclick = () => {
                 modal.classList.remove('active');
                 callback(index);
@@ -2085,6 +2144,12 @@ if (firstButton) firstButton.focus();
             elementMatchupsContainer.innerHTML = this.generateElementMatchupsHTML();
         }
 
+        // Render Families
+        const familiesContainer = document.getElementById('dynamic-families');
+        if (familiesContainer) {
+            familiesContainer.innerHTML = this.generateFamiliesHTML();
+        }
+
         // Render Temperaments
         const temperamentsContainer = document.getElementById('dynamic-temperaments');
         if (temperamentsContainer) {
@@ -2098,7 +2163,6 @@ if (firstButton) firstButton.focus();
         
         let html = `
             <h4>Element Matchups</h4>
-            <p class="matchup-instruction">Click an element to see its matchups:</p>
             <div class="element-guide-list">
         `;
 
@@ -2132,6 +2196,30 @@ if (firstButton) firstButton.focus();
 
         Object.values(TEMPERAMENTS).forEach(temperament => {
             html += `<p><strong>${temperament.name}</strong> +${temperament.modifier} ${capitalize(temperament.positive)}, -${temperament.modifier} ${capitalize(temperament.negative)}</p>`;
+        });
+
+        html += `</div>`;
+
+        return html;
+    }
+
+    // Generate Families HTML from FAMILIES and FAMILY_DESCRIPTIONS constants
+    generateFamiliesHTML() {
+        let html = `
+            <h4>Families</h4>
+            <div class="family-guide-list">
+        `;
+
+        Object.values(FAMILIES).forEach(family => {
+            const description = FAMILY_DESCRIPTIONS[family] || 'No description available.';
+            html += `
+                <div class="family-guide-collapsible">
+                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${family}</span>
+                    <div class="family-description-popup">
+                        <p>${description}</p>
+                    </div>
+                </div>
+            `;
         });
 
         html += `</div>`;
@@ -2250,47 +2338,7 @@ showKnockoutSwapModal(battle, callback) {
 
         const vasenBtn = document.createElement('button');
         vasenBtn.className = 'knockout-swap-btn';
-
-        // IMAGE
-        const img = document.createElement('img');
-        img.src = vasen.species.image;
-        img.alt = vasen.species.name;
-        img.className = 'swap-img';
-
-        // INFO CONTAINER
-        const info = document.createElement('div');
-        info.className = 'swap-info';
-
-        // NAME
-        const name = document.createElement('span');
-        name.className = 'swap-name';
-        name.textContent = vasen.getDisplayName();
-
-        // HEALTH
-        const health = document.createElement('span');
-        health.className = 'swap-health';
-        health.textContent = `Health: ${vasen.currentHealth}/${vasen.maxHealth}`;
-
-        // MEGIN
-        const megin = document.createElement('span');
-        megin.className = 'swap-megin';
-        megin.textContent = `Megin: ${vasen.currentMegin}/${vasen.maxMegin}`;
-
-        // attribute changes
-        const stages = document.createElement('div');
-        stages.className = 'swap-stages';
-        stages.innerHTML = this.renderAttributeStages(vasen);
-
-
-        // Assemble info block
-        info.appendChild(name);
-        info.appendChild(health);
-        info.appendChild(megin);
-        info.appendChild(stages);
-        
-        // Assemble button
-        vasenBtn.appendChild(img);
-        vasenBtn.appendChild(info);
+        vasenBtn.innerHTML = this.createStandardVasenCardHTML(vasen, true); // true = show combat info
 
         // Click handler
         vasenBtn.onclick = () => {
@@ -2415,6 +2463,22 @@ function toggleElementMatchup(element) {
     
     // Close all other element matchup collapsibles (both types)
     document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+    
+    // If we're opening this one, add the open class
+    if (isOpening) {
+        parent.classList.add('open');
+    }
+}
+
+// Helper function to toggle family description collapsibles
+function toggleFamilyDescription(element) {
+    const parent = element.parentElement;
+    const isOpening = !parent.classList.contains('open');
+    
+    // Close all other family collapsibles (both types)
+    document.querySelectorAll('.family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
         el.classList.remove('open');
     });
     
