@@ -596,8 +596,9 @@ button {
 }
 
 /* =============================================================================
-   14. BADGES
+   14. BADGES – Progressive rarity shimmer effects
    ============================================================================= */
+
 .element-badge,
 .rarity-badge,
 .party-badge,
@@ -606,6 +607,8 @@ button {
     padding: 2px 6px;
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-xs);
+    position: relative;
+    overflow: hidden;
 }
 
 .element-badge {
@@ -623,15 +626,58 @@ button {
     border: 1px solid;
 }
 
-.rarity-common { border-color: var(--rarity-common); color: var(--rarity-common); }
-.rarity-uncommon { border-color: var(--rarity-uncommon); color: var(--rarity-uncommon); }
-
-.rarity-rare {
+/* ── COMMON ── ultra-subtle slow horizontal pass */
+.rarity-common {
+    border-color: var(--rarity-common);
+    color: var(--rarity-common);
     position: relative;
     overflow: hidden;
+}
+
+.rarity-common::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.035) 48%,
+        rgba(255,255,255,0.07) 52%,
+        transparent 100%
+    );
+    animation: commonShimmer 14s linear infinite;
+    pointer-events: none;
+}
+
+/* ── UNCOMMON ── gentle slow horizontal shine */
+.rarity-uncommon {
+    border-color: var(--rarity-uncommon);
+    color: var(--rarity-uncommon);
+    position: relative;
+    overflow: hidden;
+}
+
+.rarity-uncommon::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.09) 45%,
+        rgba(255,255,255,0.18) 55%,
+        transparent 100%
+    );
+    animation: uncommonShimmer 7s cubic-bezier(0.45,0,0.55,1) infinite;
+    pointer-events: none;
+}
+
+/* ── RARE ── noticeable breathing diagonal micro-shimmer */
+.rarity-rare {
     border-color: var(--rarity-rare);
     color: var(--rarity-rare);
-    background: var(--bg-tertiary);
+    position: relative;
+    overflow: hidden;
 }
 
 .rarity-rare::before {
@@ -644,44 +690,27 @@ button {
     background: linear-gradient(
         135deg,
         transparent 40%,
-        rgba(82, 114, 255, 0.555) 50%,
+        rgba(82, 114, 255, 0.48) 50%,
         transparent 60%
     );
-    animation: rareMicroShine 6s ease-in-out infinite;
-    opacity: 0.6;
+    animation: rareMicroShine 5.2s ease-in-out infinite;
+    opacity: 0.65;
     pointer-events: none;
 }
 
-.rarity-mythical { 
-    border-color: var(--rarity-mythical); 
+/* ── MYTHICAL ── intense magical sweep + strong pulsing glow */
+.rarity-mythical {
+    border-color: var(--rarity-mythical);
     color: var(--rarity-mythical);
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, 
         var(--bg-tertiary) 0%, 
-        rgba(153, 50, 204, 0.15) 50%, 
+        rgba(153, 50, 204, 0.18) 50%, 
         var(--bg-tertiary) 100%
     );
 }
 
-.family-badge {
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-}
-
-.clickable-family {
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.clickable-family:hover {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-    color: var(--text-primary);
-}
-
-/* Mythical badge shimmer effect – just a tad slower */
 .rarity-mythical::before {
     content: '';
     position: absolute;
@@ -692,65 +721,106 @@ button {
     background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(153, 50, 204, 0.1) 25%,
-        rgba(186, 85, 211, 0.3) 50%,
-        rgba(153, 50, 204, 0.1) 75%,
+        rgba(186, 85, 211, 0.12) 30%,
+        rgba(186, 85, 211, 0.45) 50%,
+        rgba(186, 85, 211, 0.12) 70%,
         transparent 100%
     );
-    animation: mythicalShine 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: mythicalShine 2.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     pointer-events: none;
 }
 
-/* Mythical badge glow effect – slightly slower pulse */
 .rarity-mythical::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: var(--border-radius-sm);
     box-shadow: 
-        inset 0 0 8px rgba(153, 50, 204, 0.2),
-        0 0 12px rgba(153, 50, 204, 0.15);
-    animation: mythicalGlow 1.7s ease-in-out infinite alternate;
+        inset 0 0 8px rgba(153, 50, 204, 0.25),
+        0 0 14px rgba(153, 50, 204, 0.2);
+    animation: mythicalGlow 1.6s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
-/* Animations */
-@keyframes rareMicroShine {
-    0%   { transform: translateX(-30%) translateY(-30%) rotate(20deg); }
-    50%  { transform: translateX(30%)  translateY(30%)  rotate(20deg); }
-    100% { transform: translateX(-30%) translateY(-30%) rotate(20deg); }
+/* ── FAMILY ── subtle textured noble feel, fits the theme ───────────────────── */
+.family-badge {
+    background: var(--bg-card);
+    color: #fff;                           /* same as element badges */
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 
+        inset 0 1px 2px rgba(255,255,255,0.06),
+        inset 0 -1px 2px rgba(0,0,0,0.35);
+    font-weight: 500;
+    text-shadow: 0 1px 1.5px rgba(0,0,0,0.6);
+    position: relative;
+    overflow: hidden;
 }
 
-@keyframes mythicalShine {
-    0% {
-        transform: translateX(-100%) rotate(45deg);
-    }
-    100% {
-        transform: translateX(100%) rotate(45deg);
-    }
+/* Very subtle static texture (faint crafted feel) */
+.family-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 30% 40%, rgba(255,255,255,0.04) 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03) 0%, transparent 50%);
+    opacity: 0.8;
+    pointer-events: none;
+    mix-blend-mode: overlay;
 }
 
-@keyframes mythicalGlow {
-    0% {
-        box-shadow: 
-            inset 0 0 8px rgba(153, 50, 204, 0.2),
-            0 0 12px rgba(153, 50, 204, 0.15);
-    }
-    100% {
-        box-shadow: 
-            inset 0 0 12px rgba(153, 50, 204, 0.35),
-            0 0 18px rgba(153, 50, 204, 0.25);
-    }
-}
-
+/* ── PARTY ── */
 .party-badge {
     background: var(--accent-primary);
     color: #fff;
 }
 
-.family-badge {
-    background: var(--bg-tertiary);
-    color: var(--text-muted);
+/* ── Clickable family enhancement ── */
+.clickable-family {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clickable-family:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: #fff;
+}
+
+/* ── ANIMATIONS ────────────────────────────────────────────────────────────── */
+
+@keyframes commonShimmer {
+    0%   { transform: translateX(-140%); }
+    100% { transform: translateX(140%);  }
+}
+
+@keyframes uncommonShimmer {
+    0%   { transform: translateX(-120%); }
+    100% { transform: translateX(120%);  }
+}
+
+@keyframes rareMicroShine {
+    0%   { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
+    50%  { transform: translateX(35%)  translateY(35%)  rotate(20deg); }
+    100% { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
+}
+
+@keyframes mythicalShine {
+    0%   { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%)  rotate(45deg); }
+}
+
+@keyframes mythicalGlow {
+    0% {
+        box-shadow: 
+            inset 0 0 8px  rgba(153, 50, 204, 0.25),
+            0 0 14px rgba(153, 50, 204, 0.2);
+    }
+    100% {
+        box-shadow: 
+            inset 0 0 14px rgba(153, 50, 204, 0.5),
+            0 0 22px rgba(153, 50, 204, 0.35);
+    }
 }
 
 /* =============================================================================

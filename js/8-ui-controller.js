@@ -837,7 +837,6 @@ renderVasenDetails(vasen) {
             card.innerHTML = `
                 <div class="item-info">
                     <span class="item-name">${item.name}</span>
-                    <span class="item-desc">${item.description}</span>
                 </div>
                 <span class="item-count">x${count}</span>
             `;
