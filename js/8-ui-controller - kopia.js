@@ -938,61 +938,48 @@ renderParty() {
 
 
     // Handle party slot click
-handlePartySlotClick(slotIndex) {
-    const vasen = gameState.party[slotIndex];
+    handlePartySlotClick(slotIndex) {
+        const vasen = gameState.party[slotIndex];
 
-    if (vasen) {
-        // If slot has väsen, show options
-        const buttons = [
-            {
-                text: 'View Details',
-                callback: () => {
-                    this.switchTab('vasen');
-                    this.selectVasen(vasen);
+        if (vasen) {
+            // If slot has väsen, show options
+            const buttons = [
+                {
+                    text: 'View Details',
+                    callback: () => {
+                        this.switchTab('vasen');
+                        this.selectVasen(vasen);
+                    }
+                },
+                {
+                    text: 'Remove from Party',
+                    class: 'btn-danger',
+                    callback: () => {
+                        this.removeFromParty(vasen.id);
+                    }
                 }
-            },
-            {
-                text: 'Replace',
-                callback: () => {
-                    this.showReplaceMenu(slotIndex);
-                }
-            },
-            {
-                text: 'Remove from Party',
-                class: 'btn-danger',
-                callback: () => {
-                    this.removeFromParty(vasen.id);
-                }
+            ];
+
+            // Add move options if there are other slots
+            if (slotIndex > 0) {
+                buttons.splice(1, 0, {
+                    text: `Move to Lead`,
+                    callback: () => this.moveInParty(slotIndex, 0)
+                });
             }
-        ];
 
-        // Add move options if there are other slots
-        if (slotIndex > 0) {
-            buttons.splice(2, 0, {
-                text: `Move to Lead`,
-                callback: () => this.moveInParty(slotIndex, 0)
+            buttons.push({
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: null
             });
+
+            this.showDialogue(vasen.getName(), '', buttons, true, 'move-vasen-dialogue');
+        } else {
+            // If slot is empty, show add väsen menu
+            this.showAddVasenMenu(slotIndex);
         }
-
-        buttons.push({
-            text: 'Cancel',
-            class: 'btn-secondary',
-            callback: null
-        });
-
-        this.showDialogue(
-            vasen.getName(),
-            '',
-            buttons,
-            true,
-            'move-vasen-dialogue'
-        );
-
-    } else {
-        // If slot is empty, show add väsen menu
-        this.showAddVasenMenu(slotIndex);
     }
-}
 
     // Move väsen within party
     moveInParty(fromSlot, toSlot) {
@@ -1025,28 +1012,6 @@ handlePartySlotClick(slotIndex) {
         }
     }
 
-    // Replace in party
-
-    replaceInParty(vasenId, slotIndex) {
-    if (gameState.inCombat) {
-        this.showMessage('Cannot replace Väsen during combat.', 'error');
-        return;
-    }
-
-    const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
-    if (!vasen) {
-        this.showMessage('Väsen not found.', 'error');
-        return;
-    }
-
-    gameState.party[slotIndex] = vasen;
-
-    this.renderParty();
-    this.refreshCurrentTab();
-    gameState.saveGame();
-
-    this.showMessage(`${vasen.getName()} replaced the previous Väsen.`);
-}
     // Remove väsen from party
     removeFromParty(vasenId) {
         if (gameState.inCombat) {
@@ -1066,57 +1031,6 @@ handlePartySlotClick(slotIndex) {
             this.showMessage(result.message, 'error');
         }
     }
-
-    // Replace Väsen
-    showReplaceMenu(fromSlot) {
-    const modal = document.getElementById('add-vasen-modal');
-    const list = document.getElementById('add-vasen-list');
-    list.innerHTML = '';
-
-    // Show ALL väsen in collection, just like Add to Party
-    const sorted = [...gameState.vasenCollection].sort((a, b) => {
-        const aFav = gameState.isFavorite(a.id) ? 1 : 0;
-        const bFav = gameState.isFavorite(b.id) ? 1 : 0;
-        if (aFav !== bFav) return bFav - aFav;
-
-        if (a.species.family !== b.species.family)
-            return a.species.family.localeCompare(b.species.family);
-
-        return a.getDisplayName().localeCompare(b.getDisplayName());
-    });
-
-    sorted.forEach(vasen => {
-        const btn = document.createElement('button');
-        btn.className = 'add-vasen-btn';
-
-        const isInParty = gameState.party.some(p => p && p.id === vasen.id);
-
-        btn.innerHTML = `
-            ${this.createStandardVasenCardHTML(vasen, false)}
-            <span class="add-vasen-in-party-badge">Replace with</span>
-        `;
-
-        btn.onclick = () => {
-            modal.classList.remove('active');
-
-            if (isInParty) {
-                // Swap positions
-                const toSlot = gameState.party.findIndex(p => p && p.id === vasen.id);
-                this.moveInParty(fromSlot, toSlot);
-            } else {
-                // Replace with new väsen
-                this.replaceInParty(vasen.id, fromSlot);
-            }
-        };
-
-        list.appendChild(btn);
-    });
-
-    document.getElementById('close-add-vasen-modal').onclick = () =>
-        modal.classList.remove('active');
-
-    modal.classList.add('active');
-}
 
     releaseVasen(vasenId) {
     const vasen = gameState.vasenCollection.find(v => v.id === vasenId);

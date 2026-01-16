@@ -404,8 +404,8 @@ const RUNES = {
         name: 'Odal',
         fullName: 'Odal',
         flavor: 'The ancestral strength passed down through lineage. The wielder\'s most familiar, low-cost actions are imbued with deep, inherited knowledge, granting a significant boost.',
-        effect: 'This Väsen\'s abilities that cost 30 Megin or less deal 12% more damage',
-        mechanic: { type: 'low_cost_damage_bonus', maxCost: 30, value: 0.12 }
+        effect: 'This Väsen\'s abilities that cost 30 Megin or less deal 10% more damage',
+        mechanic: { type: 'low_cost_damage_bonus', maxCost: 30, value: 0.1 }
     }
 };
 

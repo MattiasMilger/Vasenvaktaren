@@ -56,7 +56,7 @@ const VASEN_SPECIES = {
         description: 'A perpetually wailing, agonized spirit of a forsaken infant, abandoned or wrongfully slain before receiving a proper burial.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.EARTH,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.COMMON,
         abilities: ['Wailing Cry', 'Sinkhole', 'Ethereal Melody', 'Landslide'],
         tamingItem: 'Burial Flowers',
         image: 'assets/vasen/myling.png'
@@ -208,7 +208,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Sky Dive', 'Ethereal Melody', 'Moon Beam'],
+        abilities: ['Elven Light', 'Moon Beam', 'Ethereal Melody', 'Sky Dive'],
         tamingItem: 'Morning Dew',
         image: 'assets/vasen/alva.png'
     },

@@ -6,13 +6,15 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.49-alpha - UI Updates
+- Älva learns Moon Beam at lvl 5
+- Odal buff from 12% to 10%
+
 ## v0.48-alpha - UI Updates
 - standardized modals
 - Bäckahäst is now uncommon
 - Näcken is now rare
-- Myling is now Uncommon
 - Smithing and Skald's mead's Megin cost reduced to 40
-- Mythical badge animation
 
 ## v0.47-alpha – UI Updates and misc (2026-01-13)
 - UI updates
