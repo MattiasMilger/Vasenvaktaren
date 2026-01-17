@@ -2326,21 +2326,20 @@ if (firstButton) firstButton.focus();
         const content = document.getElementById('profile-content');
 
         // Achievements
+let achievementsHtml = '<div class="achievements-section"><h4>Achievements:</h4><div class="achievements-grid">';
 
-        let achievementsHtml = '<div class="achievements-section"><h4>Achievements:</h4><div class="achievements-grid">';
-        
-        Object.values(ACHIEVEMENTS).forEach(achievement => {
-            // Check if achievement is earned
-            const earned = gameState.achievements[achievement.id] === true;
-            achievementsHtml += `
-                <div class="achievement ${earned ? 'earned' : 'locked'}">
-                
-                    <span class="achievement-name">${achievement.name}</span>
-                    <span class="achievement-desc">${achievement.description}</span>
-                </div>
-            `;
-        });
-        achievementsHtml += '</div></div>';
+Object.values(ACHIEVEMENTS).forEach(achievement => {
+    const earned = gameState.achievements[achievement.id] === true;
+    achievementsHtml += `
+        <div class="achievement ${earned ? 'earned' : 'locked'}">
+            <div class="achievement-content">
+                <span class="achievement-name">${achievement.name}</span>
+                <span class="achievement-desc">${achievement.description}</span>
+            </div>
+        </div>
+    `;
+});
+achievementsHtml += '</div></div>';
 
         content.innerHTML = `
             <div class="profile-name-section">
