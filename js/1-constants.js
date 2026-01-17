@@ -350,7 +350,7 @@ const ZONE_ORDER = ['TROLLSKOGEN', 'FOLKETS_BY', 'DJUPA_GRUVAN', 'GLIMRANDE_KALL
 const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },
     RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
-    HOARDER: { id: 'hoarder', name: 'hoarder', description: 'Tame every Väsen type' },
+    HOARDER: { id: 'hoarder', name: 'Hoarder', description: 'Tame every Väsen type' },
 };
 
 // Helper functions for constants
