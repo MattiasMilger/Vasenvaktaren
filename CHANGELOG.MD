@@ -6,6 +6,10 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.50-alpha - Balance
+- Älva now learns wind gust at lvl 5
+
+
 ## v0.49-alpha - UI Updates
 - Älva learns Moon Beam at lvl 5
 - Odal buff from 12% to 10%

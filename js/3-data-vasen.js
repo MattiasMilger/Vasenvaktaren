@@ -208,7 +208,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Moon Beam', 'Ethereal Melody', 'Sky Dive'],
+        abilities: ['Elven Light', 'Wind Gust', 'Ethereal Melody', 'Moon Beam'],
         tamingItem: 'Morning Dew',
         image: 'assets/vasen/alva.png'
     },
