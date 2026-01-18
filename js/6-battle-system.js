@@ -48,33 +48,237 @@ class Battle {
         this.setEnemyActive(0);
     }
     
+    // =============================================================================
+    // FAMILY PASSIVE SYSTEM
+    // =============================================================================
+    
+    // Apply family passive based on event
+    applyFamilyPassive(event, context) {
+        const { vasen, isPlayer } = context;
+        const family = vasen.species.family;
+        
+        switch (event) {
+            case 'onEnterBattlefield':
+                this.handleAndePassive(vasen, isPlayer);
+                break;
+            case 'onTakeDamage':
+                this.handleRaPassive(vasen, context.attacker, isPlayer);
+                this.handleDrakePassive(vasen, isPlayer);
+                break;
+            case 'onUseAbility':
+                this.handleTrollPassive(vasen, context.target, isPlayer);
+                break;
+            case 'onSwapOut':
+                this.handleVattePassive(vasen, context.incomingVasen, isPlayer);
+                break;
+            case 'onKnockout':
+                return this.handleValnadPassive(vasen, isPlayer);
+            case 'onTurnStart':
+                this.handleOdjurPassive(vasen, isPlayer);
+                break;
+        }
+        return false; // Default: no special handling
+    }
+    
+    // Ande: Ethereal Surge - raises one random attribute when entering battlefield
+    handleAndePassive(vasen, isPlayer) {
+        if (vasen.species.family !== FAMILIES.ANDE) return;
+        if (vasen.battleFlags.andePassiveTriggered) return;
+        
+        vasen.battleFlags.andePassiveTriggered = true;
+        
+        const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+        const randomAttr = attributes[Math.floor(Math.random() * attributes.length)];
+        
+        vasen.modifyAttributeStage(randomAttr, FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES);
+        
+        this.addLog(`[Family Passive] ${FAMILIES.ANDE} surges with ethereal energy!`, 'passive');
+        this.addLog(`${vasen.getName()}'s ${randomAttr} was raised ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage!`, 'buff');
+        
+        // Gifu: share the Ande buff with allies
+        if (!vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
+            vasen.battleFlags.gifuTriggered = true;
+            this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+            
+            const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+            allies.forEach(ally => {
+                if (ally !== vasen && !ally.isKnockedOut()) {
+                    ally.modifyAttributeStage(randomAttr, FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES);
+                    this.addLog(`${ally.getName()}'s ${randomAttr} was also raised!`, 'buff');
+                }
+            });
+        }
+    }
+    
+    // Drake: Draconic Resilience - gain Defense and Durability when health falls to 50% or lower
+    handleDrakePassive(vasen, isPlayer) {
+        if (vasen.species.family !== FAMILIES.DRAKE) return;
+        if (vasen.battleFlags.drakePassiveTriggered) return;
+        
+        const healthPercent = vasen.currentHealth / vasen.maxHealth;
+        if (healthPercent > FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD) return;
+        
+        vasen.battleFlags.drakePassiveTriggered = true;
+        
+        vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
+        vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
+        
+        this.addLog(`[Family Passive] ${FAMILIES.DRAKE} resilience activates!`, 'passive');
+        this.addLog(`${vasen.getName()}'s Defense and Durability were raised!`, 'buff');
+    }
+    
+    // Odjur: Bestial Rage - gain Strength and Wisdom after spending 2 full turns on battlefield
+    handleOdjurPassive(vasen, isPlayer) {
+        if (vasen.species.family !== FAMILIES.ODJUR) return;
+        if (vasen.battleFlags.odjurPassiveTriggered) return;
+        if (vasen.battleFlags.turnsOnField < FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) return;
+        
+        vasen.battleFlags.odjurPassiveTriggered = true;
+        
+        vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
+        vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
+        
+        this.addLog(`[Family Passive] ${FAMILIES.ODJUR} enters a bestial rage!`, 'passive');
+        this.addLog(`${vasen.getName()}'s Strength and Wisdom were raised!`, 'buff');
+    }
+    
+    // Rå: Malicious Retaliation - lowers two random enemy attributes when hit
+    handleRaPassive(vasen, attacker, isPlayer) {
+        if (vasen.species.family !== FAMILIES.RA) return;
+        if (vasen.battleFlags.raPassiveTriggered) return;
+        if (!attacker) return;
+        
+        vasen.battleFlags.raPassiveTriggered = true;
+        
+        const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+        const selectedAttributes = [];
+        
+        // Select two random attributes
+        for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
+            const availableAttributes = attributes.filter(attr => !selectedAttributes.includes(attr));
+            if (availableAttributes.length === 0) break;
+            const randomAttr = availableAttributes[Math.floor(Math.random() * availableAttributes.length)];
+            selectedAttributes.push(randomAttr);
+            attacker.modifyAttributeStage(randomAttr, -FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES);
+        }
+        
+        this.addLog(`[Family Passive] ${FAMILIES.RA} retaliates maliciously!`, 'passive');
+        this.addLog(`${attacker.getName()}'s ${selectedAttributes.join(' and ')} were lowered!`, 'debuff');
+    }
+    
+    // Troll: Troll Theft - steals one positive attribute stage when using an ability
+    handleTrollPassive(vasen, target, isPlayer) {
+        if (vasen.species.family !== FAMILIES.TROLL) return;
+        if (vasen.battleFlags.trollPassiveTriggered) return;
+        if (!target) return;
+        
+        // Find a positive stage to steal
+        const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+        const positiveAttributes = attributes.filter(attr => target.attributeStages[attr] > 0);
+        
+        if (positiveAttributes.length === 0) return; // No positive stages to steal
+        
+        vasen.battleFlags.trollPassiveTriggered = true;
+        
+        const stolenAttr = positiveAttributes[Math.floor(Math.random() * positiveAttributes.length)];
+        target.modifyAttributeStage(stolenAttr, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
+        vasen.modifyAttributeStage(stolenAttr, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
+        
+        this.addLog(`[Family Passive] ${FAMILIES.TROLL} steals power!`, 'passive');
+        this.addLog(`${vasen.getName()} stole ${stolenAttr} from ${target.getName()}!`, 'buff');
+    }
+    
+    // Vätte: Tag Team - incoming ally gains damage boost when swapping out
+    handleVattePassive(vasen, incomingVasen, isPlayer) {
+        if (vasen.species.family !== FAMILIES.VATTE) return;
+        if (!incomingVasen) return;
+        
+        incomingVasen.battleFlags.vattePassiveDamageBoost = FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST;
+        
+        this.addLog(`[Family Passive] ${FAMILIES.VATTE} empowers its ally!`, 'passive');
+        this.addLog(`${incomingVasen.getName()} gains a ${Math.floor(FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST * 100)}% damage boost!`, 'buff');
+    }
+    
+    // Vålnad: Deathless - revives with 10% of max health upon knockout
+    handleValnadPassive(vasen, isPlayer) {
+        if (vasen.species.family !== FAMILIES.VALNAD) return false;
+        if (vasen.battleFlags.valnadPassiveTriggered) return false;
+        
+        vasen.battleFlags.valnadPassiveTriggered = true;
+        
+        const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
+        vasen.currentHealth = reviveHealth;
+        
+        this.addLog(`[Family Passive] ${FAMILIES.VALNAD} refuses to fall!`, 'passive');
+        this.addLog(`${vasen.getName()} revives with ${reviveHealth} health!`, 'heal');
+        
+        return true; // Indicate that knockout was prevented
+    }
+    
+    // =============================================================================
+    // END FAMILY PASSIVE SYSTEM
+    // =============================================================================
+    
     // Execute player action (dispatcher method)
     executePlayerAction(action) {
         if (!action || !action.type) return null;
         
+        // Disable player input immediately
+        this.waitingForPlayerAction = false;
+        
+        let result = null;
+        
         switch (action.type) {
             case 'ability':
-                return this.playerUseAbility(action.abilityName);
+                result = this.playerUseAbility(action.abilityName);
+                break;
             case 'swap':
-                return this.playerSwap(action.targetIndex);
+                result = this.playerSwap(action.targetIndex);
+                break;
             case 'offer':
-                return this.offerItem(action.itemId);
+                result = this.offerItem(action.itemId);
+                break;
             case 'ask':
-                return this.askAboutItem();
+                result = this.askAboutItem();
+                break;
             case 'pass':
-                return this.playerPass();
+                result = this.playerPass();
+                break;
             case 'surrender':
-                return this.surrender();
+                result = this.surrender();
+                break;
             default:
                 console.error('Unknown action type:', action.type);
+                this.waitingForPlayerAction = true; // Re-enable on error
                 return null;
         }
+        
+        // Re-enable player input after delay (if battle is not over)
+        setTimeout(() => {
+            if (!this.isOver) {
+                this.waitingForPlayerAction = true;
+                if (this.onUpdate) {
+                    this.onUpdate();
+                }
+            }
+        }, GAME_CONFIG.BATTLE_INPUT_DELAY);
+        
+        return result;
     }
     
     // Set player's active Väsen
     setPlayerActive(index, isSwap = false) {
         const vasen = this.playerTeam[index];
         if (!vasen || vasen.isKnockedOut()) return false;
+        
+        // Handle Vätte passive for outgoing Väsen
+        if (isSwap && this.playerActive && this.playerActive.species.family === FAMILIES.VATTE) {
+            this.applyFamilyPassive('onSwapOut', { 
+                vasen: this.playerActive, 
+                incomingVasen: vasen,
+                isPlayer: true 
+            });
+        }
         
         if (this.playerActive) {
             this.playerActive.battleFlags.hasSwapSickness = false;
@@ -89,6 +293,11 @@ class Battle {
             vasen.battleFlags.turnsOnField = 0;
         }
         
+        // Trigger Ande passive when entering battlefield (via swap OR at battle start)
+        if (isSwap || !this.playerActive.battleFlags.andePassiveTriggered) {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: true });
+        }
+        
         // Initialize exp tracking
         if (!this.expTracker.has(vasen.id)) {
             this.expTracker.set(vasen.id, { participated: true, turnsOnField: 0, dealtKillingBlow: false });
@@ -100,9 +309,18 @@ class Battle {
     }
     
     // Set enemy's active Väsen
-    setEnemyActive(index) {
+    setEnemyActive(index, isSwap = false) {
         const vasen = this.enemyTeam[index];
         if (!vasen || vasen.isKnockedOut()) return false;
+        
+        // Handle Vätte passive for outgoing Väsen
+        if (isSwap && this.enemyActive && this.enemyActive.species.family === FAMILIES.VATTE) {
+            this.applyFamilyPassive('onSwapOut', { 
+                vasen: this.enemyActive, 
+                incomingVasen: vasen,
+                isPlayer: false 
+            });
+        }
         
         if (this.enemyActive) {
             this.enemyActive.battleFlags.hasSwapSickness = false;
@@ -112,6 +330,11 @@ class Battle {
         this.enemyActiveIndex = index;
         vasen.battleFlags.isFirstRound = true;
         vasen.battleFlags.turnsOnField = 0;
+        
+        // Trigger Ande passive when entering battlefield (via swap OR at battle start)
+        if (isSwap || !this.enemyActive.battleFlags.andePassiveTriggered) {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: false });
+        }
         
         return true;
     }
@@ -137,6 +360,14 @@ class Battle {
         if (this.playerActive && !this.playerActive.isKnockedOut()) {
             const tracker = this.expTracker.get(this.playerActive.id);
             if (tracker) tracker.turnsOnField++;
+            
+            // Trigger Odjur passive if conditions met
+            this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
+        }
+        
+        if (this.enemyActive && !this.enemyActive.isKnockedOut()) {
+            // Trigger Odjur passive for enemy
+            this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
         }
     }
     
@@ -497,6 +728,9 @@ class Battle {
             return result;
         }
         
+        // Trigger Troll passive when using an ability
+        this.applyFamilyPassive('onUseAbility', { vasen: attacker, target: defender, isPlayer });
+        
         // Calculate and apply damage
         const damageResult = this.calculateDamage(attacker, defender, abilityName);
         result.damage = damageResult.damage;
@@ -519,27 +753,38 @@ class Battle {
             this.addLog('Weak hit!', 'weak');
         }
         
+        // Trigger Rå passive when defender takes damage
+        if (actualDamage > 0) {
+            this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
+        }
+        
         // Handle rune effects for hits
         this.applyHitRuneEffects(attacker, defender, damageResult, result, isPlayer);
         
         // Check knockout
         if (defender.isKnockedOut()) {
-            if (isPlayer) {
-                this.addLog(`${defender.getName()} collapses!`, 'knockout');
-                // Mark killing blow
-                const tracker = this.expTracker.get(attacker.id);
-                if (tracker) tracker.dealtKillingBlow = true;
-            } else {
-                this.addLog(`${defender.getName()} has fainted!`, 'knockout');
-            }
-            
-            // Hagal: debuff on knockout
+            // Hagal: debuff on knockout (triggers BEFORE revival)
             if (defender.hasRune('HAGAL')) {
                 this.addLog(`${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
                 ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
                     attacker.modifyAttributeStage(stat, -1);
                 });
                 this.addLog(`${attacker.getName()}'s attributes were lowered!`, 'debuff');
+            }
+            
+            // Try Vålnad passive revival
+            const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
+            
+            if (!revived) {
+                // Vålnad didn't trigger or already used - process knockout normally
+                if (isPlayer) {
+                    this.addLog(`${defender.getName()} collapses!`, 'knockout');
+                    // Mark killing blow
+                    const tracker = this.expTracker.get(attacker.id);
+                    if (tracker) tracker.dealtKillingBlow = true;
+                } else {
+                    this.addLog(`${defender.getName()} has fainted!`, 'knockout');
+                }
             }
         }
         
@@ -622,9 +867,16 @@ class Battle {
             runeMod *= 0.90;
         }
         
+        // Vätte family passive: Tag Team damage boost
+        if (attacker.battleFlags.vattePassiveDamageBoost > 0) {
+            runeMod += attacker.battleFlags.vattePassiveDamageBoost;
+            // Reset the boost after use (only applies to current turn)
+            attacker.battleFlags.vattePassiveDamageBoost = 0;
+        }
+        
         // Calculate damage based on attack type
         let totalDamage = 0;
-        const power = ability.power;
+        const power = getAbilityPower(abilityName, attacker.species.family);
         
         if (ability.type === ATTACK_TYPES.MIXED) {
             // 50% Strength, 50% Wisdom

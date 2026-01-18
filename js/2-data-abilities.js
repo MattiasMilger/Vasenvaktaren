@@ -256,6 +256,19 @@ function getAbilityMeginCost(abilityName, vasenElement) {
     return basesCost;
 }
 
+// Helper function to get ability power (handles Jätte family passive for Basic Strike)
+function getAbilityPower(abilityName, vasenFamily) {
+    const ability = ABILITIES[abilityName];
+    if (!ability) return 0;
+    
+    // Jätte family passive: Basic Strike always has 35 power
+    if (abilityName === 'Basic Strike' && vasenFamily === FAMILIES.JATTE) {
+        return FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER;
+    }
+    
+    return ability.power;
+}
+
 // Helper to get ability element (handles Basic Strike case)
 function getAbilityElement(abilityName, vasenElement) {
     const ability = ABILITIES[abilityName];

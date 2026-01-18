@@ -33,7 +33,44 @@ const GAME_CONFIG = {
     PITY_BATTLE_THRESHOLD: 4,
     PITY_ITEM_THRESHOLD: 5,
     PITY_RUNE_THRESHOLD: 20,
-    PITY_SACRED_WELL_THRESHOLD: 4
+    PITY_SACRED_WELL_THRESHOLD: 4,
+    // Input delay after each battle action to prevent spamming through turns (in milliseconds)
+    BATTLE_INPUT_DELAY: 800
+};
+
+// Family Passive Configuration
+const FAMILY_PASSIVE_CONFIG = {
+    // Alv: Innate Megin - increases max Megin by 14%
+    ALV_MEGIN_BOOST: 0.14,
+    
+    // Ande: Ethereal Surge - raises one random attribute by 1 stage when entering battlefield
+    ANDE_ATTRIBUTE_STAGES: 1,
+    
+    // Drake: Draconic Resilience - gain Defense and Durability stages when health falls to 50% or lower
+    DRAKE_HEALTH_THRESHOLD: 0.50,
+    DRAKE_DEFENSE_STAGES: 1,
+    DRAKE_DURABILITY_STAGES: 1,
+    
+    // Jätte: Colossal Power - Basic Strike always has 35 power
+    JATTE_BASIC_STRIKE_POWER: 35,
+    
+    // Odjur: Bestial Rage - gain Strength and Wisdom stages after spending 2 full turns on battlefield
+    ODJUR_TURNS_REQUIRED: 2,
+    ODJUR_STRENGTH_STAGES: 1,
+    ODJUR_WISDOM_STAGES: 1,
+    
+    // Rå: Malicious Retaliation - lowers two random enemy attributes by 1 stage when hit
+    RA_DEBUFF_COUNT: 2,
+    RA_DEBUFF_STAGES: 1,
+    
+    // Troll: Troll Theft - steals one positive attribute stage when using an ability
+    TROLL_STAGE_STEAL: 1,
+    
+    // Vätte: Tag Team - incoming ally gains 30% damage bonus for current turn when swapping out
+    VATTE_DAMAGE_BOOST: 0.30,
+    
+    // Vålnad: Deathless - revives with 10% of max health upon knockout
+    VALNAD_REVIVE_HEALTH_PERCENT: 0.10
 };
 
 // Starter Väsen options (species keys from VASEN_SPECIES)
@@ -161,6 +198,46 @@ const FAMILY_DESCRIPTIONS = {
     [FAMILIES.DRAKE]: 'Colossal, serpentine creatures of immense magical power, often linked to cosmic forces and the destruction of the world tree.'
 };
 
+// Family Passive Descriptions (mechanical, player-facing)
+const FAMILY_PASSIVES = {
+    [FAMILIES.ALV]: {
+        name: 'Innate Megin',
+        description: 'Increases max Megin by 14%.'
+    },
+    [FAMILIES.ANDE]: {
+        name: 'Ethereal Surge',
+        description: 'When entering the battlefield, raises one random attribute by 1 stage (once per battle).'
+    },
+    [FAMILIES.DRAKE]: {
+        name: 'Draconic Resilience',
+        description: 'When current health falls to 50% or lower, gain +1 Defense stage and +1 Durability stage (once per battle).'
+    },
+    [FAMILIES.JATTE]: {
+        name: 'Colossal Power',
+        description: 'Basic Strike always has 35 power instead of its default power.'
+    },
+    [FAMILIES.ODJUR]: {
+        name: 'Bestial Rage',
+        description: 'After spending 2 full turns on the battlefield, gain +1 Strength stage and +1 Wisdom stage (once per battle).'
+    },
+    [FAMILIES.RA]: {
+        name: 'Malicious Retaliation',
+        description: 'When hit by an enemy attack, lowers two random enemy attributes by 1 stage each (once per battle).'
+    },
+    [FAMILIES.TROLL]: {
+        name: 'Troll Theft',
+        description: 'When using an ability, steals one positive attribute stage from the enemy (once per battle).'
+    },
+    [FAMILIES.VATTE]: {
+        name: 'Tag Team',
+        description: 'When swapping out, the incoming ally gains +30% damage for the current turn.'
+    },
+    [FAMILIES.VALNAD]: {
+        name: 'Deathless',
+        description: 'Upon knockout, revives with 10% of max health (once per battle).'
+    }
+};
+
 const BASE_ATTRIBUTES = {
     [FAMILIES.VATTE]: { strength: 70, wisdom: 50, health: 55, defense: 55, durability: 80 },
     [FAMILIES.VALNAD]: { strength: 55, wisdom: 70, health: 55, defense: 75, durability: 55 },
@@ -184,18 +261,18 @@ const ELEMENT_BONUSES = {
 const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
 
 const TEMPERAMENTS = {
-    FEROCIOUS: { name: 'Ferocious', positive: 'strength', negative: 'health', modifier: 5 },
-    BRUTAL: { name: 'Brutal', positive: 'strength', negative: 'defense', modifier: 5 },
-    SAVAGE: { name: 'Savage', positive: 'strength', negative: 'durability', modifier: 5 },
-    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'health', modifier: 5 },
-    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom', negative: 'defense', modifier: 5 },
-    FOCUSED: { name: 'Focused', positive: 'wisdom', negative: 'durability', modifier: 5 },
-    RESILIENT: { name: 'Resilient', positive: 'health', negative: 'defense', modifier: 5 },
-    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'durability', modifier: 5 },
-    WARY: { name: 'Wary', positive: 'defense', negative: 'health', modifier: 5 },
-    STALWART: { name: 'Stalwart', positive: 'defense', negative: 'durability', modifier: 5 },
-    ENDURING: { name: 'Enduring', positive: 'durability', negative: 'health', modifier: 5 },
-    VIGILANT: { name: 'Vigilant', positive: 'durability', negative: 'defense', modifier: 5 }
+    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'wisdom', modifier: 6 },
+    ENDURING: { name: 'Enduring', positive: 'durability', negative: 'wisdom', modifier: 6 },
+    STALWART: { name: 'Stalwart', positive: 'defense', negative: 'wisdom', modifier: 6 },
+    RESILIENT: { name: 'Resilient', positive: 'defense', negative: 'strength', modifier: 6 },
+    BRUTAL: { name: 'Brutal', positive: 'strength', negative: 'defense', modifier: 6 },
+    SAVAGE: { name: 'Savage', positive: 'strength', negative: 'durability', modifier: 6 },
+    FEROCIOUS: { name: 'Ferocious', positive: 'strength', negative: 'wisdom', modifier: 6 },
+    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom', negative: 'strength', modifier: 6 },
+    FOCUSED: { name: 'Focused', positive: 'wisdom', negative: 'health', modifier: 6 },
+    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'defense', modifier: 6 },
+    VIGILANT: { name: 'Vigilant', positive: 'defense', negative: 'health', modifier: 6 },
+    WARY: { name: 'Wary', positive: 'durability', negative: 'health', modifier: 6 }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);

@@ -40,7 +40,15 @@ class VasenInstance {
             turnsOnField: 0,
             isFirstRound: true,
             gifuTriggered: false,
-            wynjaTriggered: false
+            wynjaTriggered: false,
+            // Family passive flags
+            andePassiveTriggered: false,
+            drakePassiveTriggered: false,
+            odjurPassiveTriggered: false,
+            raPassiveTriggered: false,
+            trollPassiveTriggered: false,
+            valnадPassiveTriggered: false,
+            vattePassiveDamageBoost: 0 // Stores damage boost percentage
         };
     }
     
@@ -104,6 +112,11 @@ class VasenInstance {
         // Check for Uruz rune
         if (this.hasRune('URUZ')) {
             megin = Math.floor(megin * 1.20);
+        }
+        
+        // Alv family passive: Innate Megin
+        if (this.species.family === FAMILIES.ALV) {
+            megin = Math.floor(megin * (1 + FAMILY_PASSIVE_CONFIG.ALV_MEGIN_BOOST));
         }
         
         return megin;
@@ -250,7 +263,15 @@ class VasenInstance {
             turnsOnField: 0,
             isFirstRound: true,
             gifuTriggered: false,
-            wynjaTriggered: false
+            wynjaTriggered: false,
+            // Family passive flags
+            andePassiveTriggered: false,
+            drakePassiveTriggered: false,
+            odjurPassiveTriggered: false,
+            raPassiveTriggered: false,
+            trollPassiveTriggered: false,
+            valnadPassiveTriggered: false,
+            vattePassiveDamageBoost: 0
         };
     }
     

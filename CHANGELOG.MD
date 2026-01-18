@@ -6,15 +6,29 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
-## v0.50-alpha - Balance
+## v0.51-alpha - Family Passives (2026-01-18)
+- **NEW FEATURE: Family Passives** - Each of the 9 Väsen families now has a unique passive ability
+  - **Alv**: Innate Megin - Increases max Megin by 14%
+  - **Ande**: Ethereal Surge - Raises one random attribute by 1 stage when entering battlefield (works with Gifu rune)
+  - **Drake**: Draconic Resilience - Gain +1 Defense and +1 Durability when health falls to 50% or lower
+  - **Jätte**: Colossal Power - Basic Strike has 35 power instead of 20
+  - **Odjur**: Bestial Rage - Gain +1 Strength and +1 Wisdom after spending 2 full turns on battlefield
+  - **Rå**: Malicious Retaliation - Lowers two random enemy attributes by 1 stage when hit
+  - **Troll**: Troll Theft - Steals one positive attribute stage from enemy when using an ability
+  - **Vätte**: Tag Team - Incoming ally gains +30% damage for current turn when swapping out
+  - **Vålnad**: Deathless - Revives with 10% of max health upon knockout (once per battle)
+**Input Delay**
+- Introduced input delay to combat so you can't spam
+
+## v0.50-alpha - Balance (2026-01-17)
 - Älva now learns wind gust at lvl 5
 
 
-## v0.49-alpha - UI Updates
+## v0.49-alpha - UI Updates (2026-01-15)
 - Älva learns Moon Beam at lvl 5
 - Odal buff from 12% to 10%
 
-## v0.48-alpha - UI Updates
+## v0.48-alpha - UI Updates (2026-01-14)
 - standardized modals
 - Bäckahäst is now uncommon
 - Näcken is now rare

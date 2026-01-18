@@ -562,6 +562,11 @@ renderVasenDetails(vasen) {
                     <div class="family-matchup-collapsible">
                         <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${vasen.species.family}</span>
                         <div class="family-description-popup">
+                            ${FAMILY_PASSIVES[vasen.species.family] ? `
+                                <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
+                                ${FAMILY_PASSIVES[vasen.species.family].description}</p>
+                                <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                            ` : ''}
                             <p>${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
                         </div>
                     </div>
@@ -762,7 +767,7 @@ renderVasenDetails(vasen) {
                             <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this)">${abilityElement}</span>
                             ${this.generateAttackingMatchupsHTML(abilityElement)}
                         </div>
-                        ${ability.power ? `<span class="ability-power">Power: ${ability.power}</span>` : ''}
+                        ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
                         <span class="ability-cost">Megin: ${meginCost}</span>
                     </div>
                     <p class="ability-description">${highlightDescription(ability.description)}</p>
@@ -1464,6 +1469,11 @@ renderCombatantPanel(side, vasen, battle) {
             <div class="family-matchup-collapsible">
                 <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${vasen.species.family}</span>
                 <div class="family-description-popup">
+                    ${FAMILY_PASSIVES[vasen.species.family] ? `
+                        <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
+                        ${FAMILY_PASSIVES[vasen.species.family].description}</p>
+                        <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                    ` : ''}
                     <p>${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
                 </div>
             </div>
@@ -1669,7 +1679,7 @@ renderActionButtons(battle) {
             <span class="ability-btn-type">${ability.type}</span>
             <span class="ability-btn-stats">
                 <span class="ability-btn-element element-${abilityElement.toLowerCase()}">${abilityElement}</span>
-                ${ability.power ? `<span class="ability-btn-power">Power: ${ability.power}</span>` : ''}
+                ${ability.power ? `<span class="ability-btn-power">Power: ${getAbilityPower(abilityName, activeVasen.species.family)}</span>` : ''}
                 <span class="ability-btn-cost">Megin: ${meginCost}</span>
             </span>
             <span class="ability-btn-desc">${highlightDescription(ability.description)}</span>
@@ -1749,6 +1759,12 @@ showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], di
         const button = document.createElement('button');
         button.className = `btn ${btn.class || 'btn-primary'}`;
         button.innerHTML = btn.text;
+        
+        // Handle disabled state
+        if (btn.disabled) {
+            button.disabled = true;
+            button.classList.add('disabled');
+        }
 
         button.onclick = () => {
             modal.classList.remove('active');
@@ -1780,7 +1796,7 @@ if (extraClass) {
 
 modal.classList.add('active');
 
-const firstButton = btnContainer.querySelector('button');
+const firstButton = btnContainer.querySelector('button:not([disabled])');
 if (firstButton) firstButton.focus();
 
 }
@@ -2297,10 +2313,16 @@ if (firstButton) firstButton.focus();
 
         Object.values(FAMILIES).forEach(family => {
             const description = FAMILY_DESCRIPTIONS[family] || 'No description available.';
+            const passive = FAMILY_PASSIVES[family];
             html += `
                 <div class="family-guide-collapsible">
                     <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${family}</span>
                     <div class="family-description-popup">
+                        ${passive ? `
+                            <p><strong>Passive: ${passive.name}</strong><br>
+                            ${passive.description}</p>
+                            <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                        ` : ''}
                         <p>${description}</p>
                     </div>
                 </div>
@@ -2483,7 +2505,11 @@ showKnockoutSwapModal(battle, callback) {
     // Show battle result
     showBattleResult(result) {
         let message = '';
-        let buttons = [{ text: 'Continue', callback: () => game.endBattle() }];
+        let buttons = [{ 
+            text: 'Continue (2)', 
+            callback: () => game.endBattle(),
+            disabled: true // Initially disabled to prevent spam clicking
+        }];
 
         if (result.victory) {
             message = '<p>Your party triumphs!</p>';
@@ -2508,6 +2534,33 @@ showKnockoutSwapModal(battle, callback) {
         }
 
         this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false);
+        
+        // Countdown timer for the button
+        let remainingSeconds = Math.ceil(GAME_CONFIG.BATTLE_RESULT_BUTTON_DELAY / 1000);
+        const countdownInterval = setInterval(() => {
+            remainingSeconds--;
+            const dialogueButtons = document.querySelectorAll('#dialogue-buttons button');
+            dialogueButtons.forEach(btn => {
+                if (btn.textContent.startsWith('Continue')) {
+                    if (remainingSeconds > 0) {
+                        btn.textContent = `Continue (${remainingSeconds})`;
+                    }
+                }
+            });
+        }, 1000);
+        
+        // Enable the continue button after a delay to prevent spam clicking
+        setTimeout(() => {
+            clearInterval(countdownInterval);
+            const dialogueButtons = document.querySelectorAll('#dialogue-buttons button');
+            dialogueButtons.forEach(btn => {
+                if (btn.textContent.startsWith('Continue')) {
+                    btn.disabled = false;
+                    btn.classList.remove('disabled');
+                    btn.textContent = 'Continue';
+                }
+            });
+        }, GAME_CONFIG.BATTLE_RESULT_BUTTON_DELAY);
     }
 
     // Refresh all UI
