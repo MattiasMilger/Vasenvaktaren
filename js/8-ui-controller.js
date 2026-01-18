@@ -1759,12 +1759,6 @@ showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], di
         const button = document.createElement('button');
         button.className = `btn ${btn.class || 'btn-primary'}`;
         button.innerHTML = btn.text;
-        
-        // Handle disabled state
-        if (btn.disabled) {
-            button.disabled = true;
-            button.classList.add('disabled');
-        }
 
         button.onclick = () => {
             modal.classList.remove('active');
@@ -1796,7 +1790,7 @@ if (extraClass) {
 
 modal.classList.add('active');
 
-const firstButton = btnContainer.querySelector('button:not([disabled])');
+const firstButton = btnContainer.querySelector('button');
 if (firstButton) firstButton.focus();
 
 }
@@ -2505,11 +2499,7 @@ showKnockoutSwapModal(battle, callback) {
     // Show battle result
     showBattleResult(result) {
         let message = '';
-        let buttons = [{ 
-            text: 'Continue (2)', 
-            callback: () => game.endBattle(),
-            disabled: true // Initially disabled to prevent spam clicking
-        }];
+        let buttons = [{ text: 'Continue', callback: () => game.endBattle() }];
 
         if (result.victory) {
             message = '<p>Your party triumphs!</p>';
@@ -2534,33 +2524,6 @@ showKnockoutSwapModal(battle, callback) {
         }
 
         this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false);
-        
-        // Countdown timer for the button
-        let remainingSeconds = Math.ceil(GAME_CONFIG.BATTLE_RESULT_BUTTON_DELAY / 1000);
-        const countdownInterval = setInterval(() => {
-            remainingSeconds--;
-            const dialogueButtons = document.querySelectorAll('#dialogue-buttons button');
-            dialogueButtons.forEach(btn => {
-                if (btn.textContent.startsWith('Continue')) {
-                    if (remainingSeconds > 0) {
-                        btn.textContent = `Continue (${remainingSeconds})`;
-                    }
-                }
-            });
-        }, 1000);
-        
-        // Enable the continue button after a delay to prevent spam clicking
-        setTimeout(() => {
-            clearInterval(countdownInterval);
-            const dialogueButtons = document.querySelectorAll('#dialogue-buttons button');
-            dialogueButtons.forEach(btn => {
-                if (btn.textContent.startsWith('Continue')) {
-                    btn.disabled = false;
-                    btn.classList.remove('disabled');
-                    btn.textContent = 'Continue';
-                }
-            });
-        }, GAME_CONFIG.BATTLE_RESULT_BUTTON_DELAY);
     }
 
     // Refresh all UI
