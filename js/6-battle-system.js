@@ -223,23 +223,47 @@ class Battle {
     executePlayerAction(action) {
         if (!action || !action.type) return null;
         
+        // Disable player input immediately
+        this.waitingForPlayerAction = false;
+        
+        let result = null;
+        
         switch (action.type) {
             case 'ability':
-                return this.playerUseAbility(action.abilityName);
+                result = this.playerUseAbility(action.abilityName);
+                break;
             case 'swap':
-                return this.playerSwap(action.targetIndex);
+                result = this.playerSwap(action.targetIndex);
+                break;
             case 'offer':
-                return this.offerItem(action.itemId);
+                result = this.offerItem(action.itemId);
+                break;
             case 'ask':
-                return this.askAboutItem();
+                result = this.askAboutItem();
+                break;
             case 'pass':
-                return this.playerPass();
+                result = this.playerPass();
+                break;
             case 'surrender':
-                return this.surrender();
+                result = this.surrender();
+                break;
             default:
                 console.error('Unknown action type:', action.type);
+                this.waitingForPlayerAction = true; // Re-enable on error
                 return null;
         }
+        
+        // Re-enable player input after delay (if battle is not over)
+        setTimeout(() => {
+            if (!this.isOver) {
+                this.waitingForPlayerAction = true;
+                if (this.onUpdate) {
+                    this.onUpdate();
+                }
+            }
+        }, GAME_CONFIG.BATTLE_INPUT_DELAY);
+        
+        return result;
     }
     
     // Set player's active Väsen

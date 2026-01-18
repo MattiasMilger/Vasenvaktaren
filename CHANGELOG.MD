@@ -17,6 +17,8 @@ This project follows a simple semantic versioning pattern during Alpha developme
   - **Troll**: Troll Theft - Steals one positive attribute stage from enemy when using an ability
   - **Vätte**: Tag Team - Incoming ally gains +30% damage for current turn when swapping out
   - **Vålnad**: Deathless - Revives with 10% of max health upon knockout (once per battle)
+**Input Delay**
+- Introduced input delay to combat so you can't spam
 
 ## v0.50-alpha - Balance (2026-01-17)
 - Älva now learns wind gust at lvl 5

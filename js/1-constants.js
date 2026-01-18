@@ -33,7 +33,9 @@ const GAME_CONFIG = {
     PITY_BATTLE_THRESHOLD: 4,
     PITY_ITEM_THRESHOLD: 5,
     PITY_RUNE_THRESHOLD: 20,
-    PITY_SACRED_WELL_THRESHOLD: 4
+    PITY_SACRED_WELL_THRESHOLD: 4,
+    // Input delay after each battle action to prevent spamming through turns (in milliseconds)
+    BATTLE_INPUT_DELAY: 800
 };
 
 // Family Passive Configuration
