@@ -41,9 +41,17 @@ class GameState {
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;
         
+        // Endless Tower tracking
+        this.endlessTowerRecord = {
+            highestFloor: 0,
+            team: [], // Array of { speciesName, level, temperamentKey, runes }
+            timestamp: null
+        };
+        
         // Current battle state (not saved)
         this.currentBattle = null;
         this.currentEncounter = null;
+        this.inCombat = false;
 
         // UI lock (not saved)
         this.uiLocked = false;
@@ -592,6 +600,24 @@ equipRune(runeId, vasenId) {
         };
     }
     
+    // Update Endless Tower record
+    updateEndlessTowerRecord(floor, team) {
+        if (floor > this.endlessTowerRecord.highestFloor) {
+            this.endlessTowerRecord.highestFloor = floor;
+            this.endlessTowerRecord.timestamp = Date.now();
+            // Save team composition
+            this.endlessTowerRecord.team = team.map(vasen => ({
+                speciesName: vasen.speciesName,
+                level: vasen.level,
+                temperamentKey: vasen.temperamentKey,
+                runes: vasen.runes.slice()
+            }));
+            this.saveGame();
+            return true;
+        }
+        return false;
+    }
+    
     // Check and update achievements
     checkAchievements() {
     // Champion - Defeat all zone guardians
@@ -629,6 +655,7 @@ equipRune(runeId, vasenId) {
             gameStarted: this.gameStarted,
             runeMenuFirstOpen: this.runeMenuFirstOpen,
             settings: this.settings,
+            endlessTowerRecord: this.endlessTowerRecord,
             // Pity counters for exploration anti-grief system
             battleCounter: this.battleCounter,
             itemCounter: this.itemCounter,
@@ -672,6 +699,13 @@ equipRune(runeId, vasenId) {
             };
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
+            
+            // Restore Endless Tower record
+            this.endlessTowerRecord = data.endlessTowerRecord || {
+                highestFloor: 0,
+                team: [],
+                timestamp: null
+            };
             
             // Restore pity counters (default to 0 for backwards compatibility)
             this.battleCounter = data.battleCounter || 0;
@@ -762,6 +796,13 @@ equipRune(runeId, vasenId) {
         this.currentBattle = null;
         this.currentEncounter = null;
         this.inCombat = false;
+        
+        // Reset Endless Tower record
+        this.endlessTowerRecord = {
+            highestFloor: 0,
+            team: [],
+            timestamp: null
+        };
         
         // Reset pity counters
         this.battleCounter = 0;

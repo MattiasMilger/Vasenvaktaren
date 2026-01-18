@@ -208,6 +208,223 @@ class Game {
 
     }
 
+    // Challenge Endless Tower
+    challengeEndlessTower() {
+        if (gameState.inCombat) return;
+        if (!gameState.party.some(p => p !== null)) {
+            ui.showMessage('Form a party with at least one Väsen to challenge.', 'error');
+            return;
+        }
+
+        ui.showDialogue(
+            'Endless Tower',
+            `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength.</p>
+             <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor.</p>
+             <p><strong>Warning:</strong> Väsen cannot be tamed in this mode. Victory or defeat will end your run.</p>
+             ${gameState.endlessTowerRecord.highestFloor > 0 
+                ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>` 
+                : ''}`,
+            [
+                {
+                    text: 'Begin Challenge',
+                    callback: () => this.startEndlessTowerRun()
+                },
+                {
+                    text: 'Not yet',
+                    class: 'btn-secondary',
+                    callback: null
+                }
+            ],
+            false
+        );
+    }
+
+    // Start Endless Tower run
+    startEndlessTowerRun() {
+        this.endlessTowerCurrentFloor = 1;
+        this.startEndlessTowerBattle();
+    }
+
+    // Start an Endless Tower battle
+    startEndlessTowerBattle() {
+        gameState.inCombat = true;
+
+        const floor = this.endlessTowerCurrentFloor;
+        const enemyLevel = GAME_CONFIG.ENDLESS_TOWER_START_LEVEL + (floor - 1);
+
+        // Get random species from all available
+        const allSpecies = Object.keys(VASEN_SPECIES);
+        const randomSpecies = allSpecies[Math.floor(Math.random() * allSpecies.length)];
+
+        // Create enemy
+        const enemyVasen = createWildVasen(randomSpecies, enemyLevel);
+
+        // Get player team
+        const playerTeam = gameState.party.filter(p => p !== null);
+
+        if (floor === 1) {
+            // First floor - reset battle state and create new battle
+            playerTeam.forEach(v => v.resetBattleState());
+            enemyVasen.resetBattleState();
+
+            this.currentBattle = new Battle(playerTeam, [enemyVasen], BATTLE_TYPES.ENDLESS_TOWER);
+            this.currentBattle.currentFloor = floor;
+            this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
+            this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
+            this.currentBattle.onHit = (side) => ui.flashCombatant(side);
+            this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
+            this.currentBattle.onEnd = (result) => this.handleEndlessTowerBattleEnd(result);
+
+            ui.showCombatUI();
+            ui.renderCombat(this.currentBattle);
+            
+            // Add initial input delay at battle start
+            this.currentBattle.waitingForPlayerAction = false;
+            setTimeout(() => {
+                if (this.currentBattle && !this.currentBattle.isOver) {
+                    this.currentBattle.waitingForPlayerAction = true;
+                    ui.renderCombat(this.currentBattle);
+                }
+            }, GAME_CONFIG.BATTLE_INPUT_DELAY);
+        } else {
+            // Subsequent floors - preserve player state, only reset enemy
+            enemyVasen.resetBattleState();
+            
+            // Update the battle with new enemy
+            this.currentBattle.enemyTeam = [enemyVasen];
+            this.currentBattle.setEnemyActive(0);
+            this.currentBattle.currentFloor = floor;
+            this.currentBattle.isOver = false;
+            this.currentBattle.winner = null;
+            this.currentBattle.waitingForPlayerAction = true;
+            
+            // Reset offers but keep taming disabled
+            this.currentBattle.offersGiven = 0;
+            this.currentBattle.correctItemGiven = false;
+            
+            ui.renderCombat(this.currentBattle);
+        }
+        
+        ui.addCombatLog(`Floor ${floor}: A wild ${enemyVasen.getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');
+    }
+
+    // Handle Endless Tower battle end
+    handleEndlessTowerBattleEnd(result) {
+        const floor = this.endlessTowerCurrentFloor;
+
+        // Handle surrender
+        if (result.surrendered) {
+            gameState.inCombat = false;
+            
+            // Apply post-battle healing
+            gameState.applyPostBattleHealing();
+            
+            // Update record - reached floor before surrendering
+            const playerTeam = gameState.party.filter(p => p !== null);
+            const reachedFloor = floor - 1; // They were on this floor but didn't complete it
+            const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
+            
+            const recordMessage = newRecord 
+                ? `<p class="record-new">New Record: Floor ${reachedFloor}!</p>` 
+                : gameState.endlessTowerRecord.highestFloor > 0
+                    ? `<p>Your record remains Floor ${gameState.endlessTowerRecord.highestFloor}.</p>`
+                    : '';
+            
+            ui.showDialogue(
+                'Tower Run Ended',
+                `<p>You surrendered on Floor ${floor}.</p>
+                 ${reachedFloor > 0 ? `<p>You reached Floor ${reachedFloor}.</p>` : ''}
+                 ${recordMessage}`,
+                [{
+                    text: 'Return',
+                    callback: () => {
+                        ui.hideCombatUI();
+                        this.refreshUI();
+                    }
+                }],
+                false
+            );
+            return;
+        }
+
+        if (result.victory) {
+            // Player won this floor
+            
+            // Check if reached max floor
+            if (floor >= GAME_CONFIG.ENDLESS_TOWER_MAX_FLOOR) {
+                // Reached the cap!
+                gameState.inCombat = false;
+                
+                // Apply post-battle healing
+                gameState.applyPostBattleHealing();
+                
+                // Update record
+                const playerTeam = gameState.party.filter(p => p !== null);
+                gameState.updateEndlessTowerRecord(floor, playerTeam);
+                
+                ui.showDialogue(
+                    'Tower Conquered!',
+                    `<p>Incredible! You have reached Floor ${GAME_CONFIG.ENDLESS_TOWER_MAX_FLOOR}, the pinnacle of the Endless Tower!</p>
+                     <p>This achievement will be recorded in legend.</p>`,
+                    [{
+                        text: 'Return',
+                        callback: () => {
+                            ui.hideCombatUI();
+                            this.refreshUI();
+                        }
+                    }],
+                    false
+                );
+                return;
+            }
+            
+            // Continue to next floor automatically
+            this.endlessTowerCurrentFloor++;
+            const nextFloor = this.endlessTowerCurrentFloor;
+            
+            // Add log message for floor completion
+            ui.addCombatLog(`Floor ${floor} complete! Advancing to Floor ${nextFloor}...`, 'victory');
+            
+            // Small delay before next floor for readability
+            setTimeout(() => {
+                // No healing in Endless Tower - pure endurance challenge
+                this.startEndlessTowerBattle();
+            }, 1500);
+        } else {
+            // Player lost - entire team was defeated
+            gameState.inCombat = false;
+            
+            // Apply post-battle healing
+            gameState.applyPostBattleHealing();
+            
+            // Update record with floors completed (current floor was not completed)
+            const playerTeam = gameState.party.filter(p => p !== null);
+            const reachedFloor = floor - 1;
+            const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
+            
+            const recordMessage = newRecord 
+                ? `<p class="record-new">New Record: Floor ${reachedFloor}!</p>` 
+                : gameState.endlessTowerRecord.highestFloor > 0
+                    ? `<p>Your record remains Floor ${gameState.endlessTowerRecord.highestFloor}.</p>`
+                    : '';
+            
+            ui.showDialogue(
+                'Tower Run Ended',
+                `<p>You were defeated on Floor ${floor}.</p>
+                 ${reachedFloor > 0 ? `<p>You reached Floor ${reachedFloor}.</p>` : ''}
+                 ${recordMessage}`,
+                [{
+                    text: 'Return',
+                    callback: () => {
+                        ui.hideCombatUI();
+                        this.refreshUI();
+                    }
+                }],
+                false
+            );
+        }
+    }
+
     // Start battle with wild Vasen
     startBattle(enemyVasen) {
         gameState.inCombat = true;
@@ -650,7 +867,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up global button handlers
     document.getElementById('explore-btn').addEventListener('click', () => game.explore());
-    document.getElementById('challenge-btn').addEventListener('click', () => game.challengeGuardian());
+    document.getElementById('challenge-btn').addEventListener('click', () => {
+        // Check if we're in Ginnungagap for Endless Tower, otherwise challenge guardian
+        if (gameState.currentZone === 'GINNUNGAGAP') {
+            game.challengeEndlessTower();
+        } else {
+            game.challengeGuardian();
+        }
+    });
 
     // Combat action buttons
     document.getElementById('btn-swap').addEventListener('click', () => {

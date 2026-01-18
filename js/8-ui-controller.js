@@ -1292,6 +1292,11 @@ renderZones() {
                 this.challengeBtn.style.display = 'block';
                 this.challengeBtn.innerHTML = `Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
+            } else if (gameState.currentZone === 'GINNUNGAGAP') {
+                // Show Endless Tower button in Ginnungagap
+                this.challengeBtn.style.display = 'block';
+                this.challengeBtn.innerHTML = `Challenge Endless Tower <span class="btn-hint">(Starts at Lvl 30)</span>`;
+                this.challengeBtn.disabled = !hasParty || gameState.inCombat;
             } else {
                 this.challengeBtn.style.display = 'none';
             }
@@ -1338,6 +1343,17 @@ renderZones() {
 
         // Render enemy side
         this.renderCombatantPanel('enemy', battle.enemyTeam[battle.enemyActiveIndex], battle);
+
+        // Render Endless Tower floor display if applicable
+        const versusDiv = document.querySelector('.combat-versus');
+        if (battle.isEndlessTower && battle.currentFloor) {
+            versusDiv.innerHTML = `
+                <div class="endless-tower-floor">Floor ${battle.currentFloor}</div>
+                <div>VS</div>
+            `;
+        } else {
+            versusDiv.innerHTML = 'VS';
+        }
 
         // Render action buttons
         this.renderActionButtons(battle);
@@ -2335,6 +2351,58 @@ if (firstButton) firstButton.focus();
     }
 
     // Profile
+    // Render Endless Tower record
+    renderEndlessTowerRecord() {
+        const record = gameState.endlessTowerRecord;
+        const hasRecord = record && record.highestFloor > 0;
+        
+        if (!hasRecord) {
+            return `
+                <div class="endless-tower-record locked">
+                    <h4>Endless Tower Record</h4>
+                    <p class="record-placeholder">Challenge the Endless Tower in Ginnungagap to set a record</p>
+                </div>
+            `;
+        }
+        
+        let teamHtml = '';
+        if (record.team && record.team.length > 0) {
+            teamHtml = '<div class="record-team">';
+            record.team.forEach(member => {
+                const species = VASEN_SPECIES[member.speciesName];
+                const temperament = TEMPERAMENTS[member.temperamentKey];
+                if (species && temperament) {
+                    const runesHtml = member.runes.map(runeId => {
+                        const rune = RUNES[runeId];
+                        return rune ? `${rune.symbol}` : '';
+                    }).join(' ');
+                    
+                    teamHtml += `
+                        <div class="record-vasen">
+                            <span class="record-vasen-name">${temperament.name} ${species.name}</span>
+                            <span class="record-vasen-level">Lvl ${member.level}</span>
+                            ${runesHtml ? `<span class="record-vasen-runes">${runesHtml}</span>` : ''}
+                        </div>
+                    `;
+                }
+            });
+            teamHtml += '</div>';
+        }
+        
+        const dateStr = record.timestamp 
+            ? new Date(record.timestamp).toLocaleDateString()
+            : 'Unknown';
+        
+        return `
+            <div class="endless-tower-record achieved">
+                <h4>Endless Tower Record</h4>
+                <p class="record-floor">Highest Floor: <strong>${record.highestFloor}</strong></p>
+                <p class="record-date">Achieved: ${dateStr}</p>
+                ${teamHtml}
+            </div>
+        `;
+    }
+
     showProfile() {
         this.profileModal.classList.add('active');
         this.renderProfile();
@@ -2378,6 +2446,8 @@ achievementsHtml += '</div></div>';
 </div>
 
             ${achievementsHtml}
+            
+            ${this.renderEndlessTowerRecord()}
         `;
         
         // Add save name listener

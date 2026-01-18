@@ -7,6 +7,7 @@ This project follows a simple semantic versioning pattern during Alpha developme
 ---
 
 ## v0.51-alpha - Family Passives (2026-01-18)
+- **NEW FEATURE: Endless Tower** - Endgame Game-mode, test your väsen against endless waves. Unlocked from Ginnungagap.
 - **NEW FEATURE: Family Passives** - Each of the 9 Väsen families now has a unique passive ability
   - **Alv**: Innate Megin - Increases max Megin by 14%
   - **Ande**: Ethereal Surge - Raises one random attribute by 1 stage when entering battlefield (works with Gifu rune)

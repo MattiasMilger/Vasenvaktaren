@@ -3,7 +3,7 @@
 // =============================================================================
 
 class VasenInstance {
-    constructor(speciesName, level = 1, temperamentKey = null, runes = []) {
+    constructor(speciesName, level = 1, temperamentKey = null, runes = [], isEnemy = false) {
         const species = VASEN_SPECIES[speciesName];
         if (!species) {
             throw new Error(`Unknown species: ${speciesName}`);
@@ -12,7 +12,9 @@ class VasenInstance {
         this.id = generateUniqueId();
         this.speciesName = speciesName;
         this.species = species;
-        this.level = Math.min(Math.max(1, level), GAME_CONFIG.MAX_LEVEL);
+        // Use higher level cap for enemies
+        const maxLevel = isEnemy ? GAME_CONFIG.ENEMY_MAX_LEVEL : GAME_CONFIG.MAX_LEVEL;
+        this.level = Math.min(Math.max(1, level), maxLevel);
         this.temperamentKey = temperamentKey || getRandomTemperament();
         this.temperament = TEMPERAMENTS[this.temperamentKey];
         this.runes = runes.slice(0, this.level >= 30 ? 2 : 1);
@@ -386,7 +388,7 @@ function getRandomTemperament() {
 
 // Create a wild Väsen for encounters
 function createWildVasen(speciesName, level) {
-    const vasen = new VasenInstance(speciesName, level);
+    const vasen = new VasenInstance(speciesName, level, null, [], true); // Mark as enemy
     
     // Assign random rune(s)
     const numRunes = level >= 30 ? 2 : 1;

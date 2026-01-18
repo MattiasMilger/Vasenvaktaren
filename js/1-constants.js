@@ -35,7 +35,10 @@ const GAME_CONFIG = {
     PITY_RUNE_THRESHOLD: 20,
     PITY_SACRED_WELL_THRESHOLD: 4,
     // Input delay after each battle action to prevent spamming through turns (in milliseconds)
-    BATTLE_INPUT_DELAY: 800
+    BATTLE_INPUT_DELAY: 800,
+    // Endless Tower configuration
+    ENDLESS_TOWER_START_LEVEL: 30,
+    ENDLESS_TOWER_MAX_FLOOR: 999
 };
 
 // Family Passive Configuration

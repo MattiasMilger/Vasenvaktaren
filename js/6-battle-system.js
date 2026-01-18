@@ -5,6 +5,7 @@
 const BATTLE_TYPES = {
     WILD: 'wild',
     GUARDIAN: 'guardian',
+    ENDLESS_TOWER: 'endless_tower',
 };
 
 class Battle {
@@ -29,6 +30,10 @@ class Battle {
         this.correctItemGiven = false;
         this.canTame = battleType === BATTLE_TYPES.WILD;
         this.isWildEncounter = battleType === BATTLE_TYPES.WILD;
+        
+        // Endless Tower state
+        this.isEndlessTower = battleType === BATTLE_TYPES.ENDLESS_TOWER;
+        this.currentFloor = null; // Set externally when starting tower
         
         // Experience tracking
         this.expTracker = new Map(); // vasen id -> { participated: boolean, turnsOnField: number, dealtKillingBlow: boolean }
