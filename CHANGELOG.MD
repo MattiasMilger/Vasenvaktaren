@@ -6,6 +6,9 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.52-alpha - Family Passives (2026-01-19)
+**Battle Animations**
+
 ## v0.51-alpha - Family Passives (2026-01-18)
 - **NEW FEATURE: Endless Tower** - Endgame Game-mode, test your väsen against endless waves. Unlocked from Ginnungagap.
 - **NEW FEATURE: Family Passives** - Each of the 9 Väsen families now has a unique passive ability

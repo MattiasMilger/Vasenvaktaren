@@ -42,6 +42,7 @@ class Battle {
         this.onLog = null;
         this.onUpdate = null;
         this.onHit = null;
+        this.onAttack = null;
         this.onKnockoutSwap = null;
         this.onEnd = null;
         
@@ -571,6 +572,12 @@ class Battle {
         
         // Swap has highest priority
         this.addLog(`${target.getName()} enters the fray!`, 'swap');
+        
+        // Trigger utility animation for swap
+        if (this.onAttack) {
+            this.onAttack('player', ATTACK_TYPES.UTILITY);
+        }
+        
         this.setPlayerActive(index, true);
         
         // Enemy still acts
@@ -702,6 +709,11 @@ class Battle {
         
         // Log ability use
         this.addLog(`${attacker.getName()} uses ${ability.name}!`, 'action');
+        
+        // Trigger animation based on ability type
+        if (this.onAttack) {
+            this.onAttack(isPlayer ? 'player' : 'enemy', ability.type);
+        }
         
         if (meginCost > 0) {
             this.addLog(`${attacker.getName()} used ${meginCost} Megin!`, 'megin');
@@ -1088,6 +1100,12 @@ class Battle {
             const index = this.enemyTeam.indexOf(action.target);
             if (index !== -1) {
                 this.addLog(`The Guardian calls forth ${action.target.getName()}!`, 'swap');
+                
+                // Trigger utility animation for swap
+                if (this.onAttack) {
+                    this.onAttack('enemy', ATTACK_TYPES.UTILITY);
+                }
+                
                 this.setEnemyActive(index);
                 return { action: 'swap', target: action.target };
             }

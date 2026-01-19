@@ -1527,6 +1527,9 @@ renderCombatantPanel(side, vasen, battle) {
             </div>
         </div>
     `;
+    
+    // Reapply any active animations after re-render
+    this.reapplyAnimations(side);
 }
 
     // Render attribute stages
@@ -1752,10 +1755,112 @@ renderActionButtons(battle) {
     // Flash combatant (when hit)
     flashCombatant(side) {
         const panel = document.getElementById(`${side}-panel`);
-        const image = panel.querySelector('.combatant-image');
-        if (image) {
-            image.classList.add('hit-flash');
-            setTimeout(() => image.classList.remove('hit-flash'), 200);
+        if (!panel) return;
+        
+        // Store animation state
+        panel.dataset.hitAnimation = 'true';
+        panel.dataset.hitAnimationTime = Date.now();
+        
+        const imageContainer = panel.querySelector('.combatant-image-container');
+        if (imageContainer) {
+            imageContainer.classList.add('hit');
+        }
+        
+        setTimeout(() => {
+            const panel = document.getElementById(`${side}-panel`);
+            if (panel) {
+                delete panel.dataset.hitAnimation;
+                delete panel.dataset.hitAnimationTime;
+                const imageContainer = panel.querySelector('.combatant-image-container');
+                if (imageContainer) {
+                    imageContainer.classList.remove('hit');
+                }
+            }
+        }, 400);
+    }
+    
+    // Trigger attack animation
+    triggerAttackAnimation(side, abilityType) {
+        const panel = document.getElementById(`${side}-panel`);
+        if (!panel) return;
+        
+        // Determine animation type based on ability type
+        let animationClass = '';
+        let duration = 0;
+        
+        if (abilityType === ATTACK_TYPES.UTILITY) {
+            animationClass = 'using-utility';
+            duration = 600;
+        } else if (abilityType === ATTACK_TYPES.STRENGTH || 
+                   abilityType === ATTACK_TYPES.WISDOM || 
+                   abilityType === ATTACK_TYPES.MIXED) {
+            animationClass = side === 'player' ? 'attacking-player' : 'attacking-enemy';
+            duration = 500;
+        } else {
+            // No animation for non-ability actions (pass, swap, etc.)
+            return;
+        }
+        
+        // Store animation state
+        panel.dataset.attackAnimation = 'true';
+        panel.dataset.attackAnimationTime = Date.now();
+        panel.dataset.attackAnimationClass = animationClass;
+        
+        const imageContainer = panel.querySelector('.combatant-image-container');
+        if (imageContainer) {
+            imageContainer.classList.add(animationClass);
+        }
+        
+        setTimeout(() => {
+            const panel = document.getElementById(`${side}-panel`);
+            if (panel) {
+                delete panel.dataset.attackAnimation;
+                delete panel.dataset.attackAnimationTime;
+                const storedClass = panel.dataset.attackAnimationClass;
+                delete panel.dataset.attackAnimationClass;
+                const imageContainer = panel.querySelector('.combatant-image-container');
+                if (imageContainer && storedClass) {
+                    imageContainer.classList.remove(storedClass);
+                }
+            }
+        }, duration);
+    }
+    
+    // Reapply active animations after panel re-render
+    reapplyAnimations(side) {
+        const panel = document.getElementById(`${side}-panel`);
+        if (!panel) return;
+        
+        const now = Date.now();
+        
+        // Reapply attack/utility animation if still active
+        if (panel.dataset.attackAnimation === 'true') {
+            const elapsed = now - parseInt(panel.dataset.attackAnimationTime || 0);
+            const animationClass = panel.dataset.attackAnimationClass;
+            
+            // Determine max duration based on animation type
+            let maxDuration = 500; // default for attack animations
+            if (animationClass === 'using-utility') {
+                maxDuration = 600;
+            }
+            
+            if (elapsed < maxDuration && animationClass) {
+                const imageContainer = panel.querySelector('.combatant-image-container');
+                if (imageContainer) {
+                    imageContainer.classList.add(animationClass);
+                }
+            }
+        }
+        
+        // Reapply hit animation if still active
+        if (panel.dataset.hitAnimation === 'true') {
+            const elapsed = now - parseInt(panel.dataset.hitAnimationTime || 0);
+            if (elapsed < 400) {
+                const imageContainer = panel.querySelector('.combatant-image-container');
+                if (imageContainer) {
+                    imageContainer.classList.add('hit');
+                }
+            }
         }
     }
 

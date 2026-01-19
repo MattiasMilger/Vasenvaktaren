@@ -272,6 +272,7 @@ class Game {
             this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
             this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
             this.currentBattle.onHit = (side) => ui.flashCombatant(side);
+            this.currentBattle.onAttack = (side, abilityType) => ui.triggerAttackAnimation(side, abilityType);
             this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
             this.currentBattle.onEnd = (result) => this.handleEndlessTowerBattleEnd(result);
 
@@ -471,6 +472,7 @@ class Game {
         this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
         this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
         this.currentBattle.onHit = (side) => ui.flashCombatant(side);
+        this.currentBattle.onAttack = (side, abilityType) => ui.triggerAttackAnimation(side, abilityType);
         this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
         this.currentBattle.onEnd = (result) => this.handleBattleEnd(result);
 
@@ -499,6 +501,7 @@ class Game {
         this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
         this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
         this.currentBattle.onHit = (side) => ui.flashCombatant(side);
+        this.currentBattle.onAttack = (side, abilityType) => ui.triggerAttackAnimation(side, abilityType);
         this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
         this.currentBattle.onEnd = (result) => this.handleGuardianBattleEnd(result, guardian);
 
