@@ -808,11 +808,16 @@ class Battle {
             }
         }
         
-        // Thurs: damage reflect (only if not knocked out)
+        // Thurs: damage reflect as Mixed hit (only if not knocked out)
         if (!attacker.isKnockedOut() && defender.hasRune('THURS') && result.damage > 0) {
-            const reflectDamage = Math.floor(result.damage * 0.20);
+            this.addLog(`${RUNES.THURS.symbol} ${RUNES.THURS.name} was activated!`, 'rune');
+            
+            // Calculate reflected damage as Mixed-type attack
+            // The defender (Thurs user) becomes the "attacker" for the reflection
+            // The original attacker becomes the "target" for the reflection
+            const reflectDamage = this.calculateThursReflection(defender, attacker, result.damage);
+            
             if (reflectDamage > 0) {
-                this.addLog(`${RUNES.THURS.symbol} ${RUNES.THURS.name} was activated!`, 'rune');
                 attacker.takeDamage(reflectDamage);
                 this.addLog(`${attacker.getName()} took ${reflectDamage} reflected damage!`, 'damage');
                 result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectDamage}` });
@@ -820,6 +825,29 @@ class Battle {
         }
         
         return result;
+    }
+    
+    // Calculate Thurs reflection damage as a Mixed-type hit
+    calculateThursReflection(thursUser, reflectTarget, originalDamage) {
+        // Base reflected damage is defined in the rune's mechanic value
+        const reflectPercent = RUNES.THURS.mechanic.value;
+        const baseReflectDamage = originalDamage * reflectPercent;
+        
+        // Apply as Mixed hit: 50% checked against Defense, 50% checked against Durability
+        // Defense reduction
+        const defenseReduction = 1 - (reflectTarget.getAttribute('defense') / 
+            (reflectTarget.getAttribute('defense') + GAME_CONFIG.DEFENSE_CONSTANT));
+        const defensePortionDamage = (baseReflectDamage * 0.5) * defenseReduction;
+        
+        // Durability reduction
+        const durabilityReduction = 1 - (reflectTarget.getAttribute('durability') / 
+            (reflectTarget.getAttribute('durability') + GAME_CONFIG.DEFENSE_CONSTANT));
+        const durabilityPortionDamage = (baseReflectDamage * 0.5) * durabilityReduction;
+        
+        // Total Mixed-type damage
+        const totalDamage = defensePortionDamage + durabilityPortionDamage;
+        
+        return Math.floor(Math.max(1, totalDamage));
     }
     
     // Calculate damage

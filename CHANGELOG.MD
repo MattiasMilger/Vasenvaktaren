@@ -7,7 +7,8 @@ This project follows a simple semantic versioning pattern during Alpha developme
 ---
 
 ## v0.52-alpha - Family Passives (2026-01-19)
-**Battle Animations**
+- **Battle Animations introduced**
+- Thurs now reads "This väsen returns 40% of the damage taken as mixed damage"
 
 ## v0.51-alpha - Family Passives (2026-01-18)
 - **NEW FEATURE: Endless Tower** - Endgame Game-mode, test your väsen against endless waves. Unlocked from Ginnungagap.
