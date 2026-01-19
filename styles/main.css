@@ -355,7 +355,9 @@ button {
    ============================================================================= */
 #starter-select-screen {
     padding: var(--spacing-xl);
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .starter-content {
