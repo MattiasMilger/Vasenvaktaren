@@ -38,6 +38,9 @@ class Battle {
         // Experience tracking
         this.expTracker = new Map(); // vasen id -> { participated: boolean, turnsOnField: number, dealtKillingBlow: boolean }
         
+        // Enemy utility ability usage tracking (fix for infinite utility spam)
+        this.enemyUtilityUsage = new Map(); // vasen id -> Map(abilityName -> usageCount)
+        
         // Callbacks for UI updates
         this.onLog = null;
         this.onUpdate = null;
@@ -1112,10 +1115,35 @@ class Battle {
         }
         
         if (action.type === 'ability') {
+            // Track utility ability usage for enemy AI
+            const ability = ABILITIES[action.ability];
+            if (ability && ability.type === ATTACK_TYPES.UTILITY) {
+                this.trackEnemyUtilityUsage(this.enemyActive, action.ability);
+            }
+            
             return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false);
         }
         
         return null;
+    }
+    
+    // Track enemy utility ability usage
+    trackEnemyUtilityUsage(vasen, abilityName) {
+        if (!this.enemyUtilityUsage.has(vasen.id)) {
+            this.enemyUtilityUsage.set(vasen.id, new Map());
+        }
+        
+        const vasenUsage = this.enemyUtilityUsage.get(vasen.id);
+        const currentCount = vasenUsage.get(abilityName) || 0;
+        vasenUsage.set(abilityName, currentCount + 1);
+    }
+    
+    // Get enemy utility ability usage count
+    getEnemyUtilityUsageCount(vasen, abilityName) {
+        if (!this.enemyUtilityUsage.has(vasen.id)) return 0;
+        
+        const vasenUsage = this.enemyUtilityUsage.get(vasen.id);
+        return vasenUsage.get(abilityName) || 0;
     }
     
     // Handle post-turn effects and knockouts
@@ -1256,7 +1284,19 @@ class EnemyAI {
         
         // Base score
         if (ability.type === ATTACK_TYPES.UTILITY) {
-            score += 30;
+            // Check usage count for utility abilities
+            const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
+            
+            if (usageCount === 0) {
+                // First use - decent score
+                score += 30;
+            } else if (usageCount === 1) {
+                // Second use - reduced score
+                score += 10;
+            } else {
+                // Third+ use - very low score (make it almost never chosen)
+                score -= 80;
+            }
         } else {
             score += 20;
         }
@@ -1291,11 +1331,15 @@ class EnemyAI {
                 score += this.scoreRuneSynergy(abilityName);
             }
         } else {
-            // Utility scoring
-            if (ability.effect && ability.effect.type === 'buff') {
-                score += 40;
-            } else if (ability.effect && ability.effect.type === 'debuff') {
-                score += 30;
+            // Utility scoring - only apply bonuses if not overused
+            const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
+            
+            if (usageCount < 2) {
+                if (ability.effect && ability.effect.type === 'buff') {
+                    score += 40;
+                } else if (ability.effect && ability.effect.type === 'debuff') {
+                    score += 30;
+                }
             }
         }
         
