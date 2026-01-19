@@ -316,12 +316,25 @@ class Game {
         if (result.surrendered) {
             gameState.inCombat = false;
             
-            // Apply post-battle healing
-            gameState.applyPostBattleHealing();
-            
-            // Update record - reached floor before surrendering
+            // Calculate reached floor
             const playerTeam = gameState.party.filter(p => p !== null);
             const reachedFloor = floor - 1; // They were on this floor but didn't complete it
+            
+            // Apply full heal if they completed at least floor 1 (the first floor)
+            if (reachedFloor >= 1) {
+                gameState.party.forEach(v => {
+                    if (v) {
+                        v.restoreFully();
+                    }
+                });
+                ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
+                ui.showMessage('Your party was healed to full!', 'success');
+            } else {
+                // Apply normal post-battle healing
+                gameState.applyPostBattleHealing();
+            }
+            
+            // Update record - reached floor before surrendering
             const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
             
             const recordMessage = newRecord 
@@ -355,8 +368,14 @@ class Game {
                 // Reached the cap!
                 gameState.inCombat = false;
                 
-                // Apply post-battle healing
-                gameState.applyPostBattleHealing();
+                // Apply full heal for conquering the tower
+                gameState.party.forEach(v => {
+                    if (v) {
+                        v.restoreFully();
+                    }
+                });
+                ui.addCombatLog('Your party has been fully restored after conquering the tower!', 'heal');
+                ui.showMessage('Your party was healed to full!', 'success');
                 
                 // Update record
                 const playerTeam = gameState.party.filter(p => p !== null);
@@ -394,12 +413,24 @@ class Game {
             // Player lost - entire team was defeated
             gameState.inCombat = false;
             
-            // Apply post-battle healing
-            gameState.applyPostBattleHealing();
-            
             // Update record with floors completed (current floor was not completed)
             const playerTeam = gameState.party.filter(p => p !== null);
             const reachedFloor = floor - 1;
+            
+            // Apply full heal if they completed at least floor 1 (the first floor)
+            if (reachedFloor >= 1) {
+                gameState.party.forEach(v => {
+                    if (v) {
+                        v.restoreFully();
+                    }
+                });
+                ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
+                ui.showMessage('Your party was healed to full!', 'success');
+            } else {
+                // Apply normal post-battle healing
+                gameState.applyPostBattleHealing();
+            }
+            
             const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
             
             const recordMessage = newRecord 
@@ -484,7 +515,20 @@ class Game {
         // Check if ability requires ally targeting
         if (abilityRequiresAllyTarget(abilityName)) {
             ui.showAllySelectionModal(this.currentBattle, abilityName, (allyIndex) => {
+                // Disable input immediately
+                this.currentBattle.waitingForPlayerAction = false;
+                ui.renderCombat(this.currentBattle);
+                
+                // Execute the ability
                 this.currentBattle.playerUseAbilityOnAlly(abilityName, allyIndex);
+                
+                // Re-enable input after delay
+                setTimeout(() => {
+                    if (this.currentBattle && !this.currentBattle.isOver) {
+                        this.currentBattle.waitingForPlayerAction = true;
+                        ui.renderCombat(this.currentBattle);
+                    }
+                }, GAME_CONFIG.BATTLE_INPUT_DELAY);
             });
             return;
         }
@@ -771,13 +815,23 @@ handleAskItem() {
             }
         });
 
-        // Apply post-battle heal
-        gameState.party.forEach(v => {
-            if (v) {
-                v.healPercent(GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
-                v.currentMegin = v.maxMegin;
-            }
-        });
+        // Apply post-battle heal (full heal for first-time guardian clear)
+        if (wasFirstClear) {
+            gameState.party.forEach(v => {
+                if (v) {
+                    v.restoreFully();
+                }
+            });
+            ui.addCombatLog('Your party has been fully restored by the guardian\'s blessing!', 'heal');
+            ui.showMessage('Your party was healed to full!', 'success');
+        } else {
+            gameState.party.forEach(v => {
+                if (v) {
+                    v.healPercent(GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
+                    v.currentMegin = v.maxMegin;
+                }
+            });
+        }
 
         // Check achievements
         gameState.checkAchievements();
