@@ -1049,7 +1049,7 @@ button {
     border-left: 3px solid var(--border-color);
     border-right: 3px solid var(--border-color);
     border-top: 3px solid var(--border-color);
-    border-bottom: 4px solid var(--border-color);
+    border-bottom: 3px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
