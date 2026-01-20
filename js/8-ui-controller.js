@@ -1757,9 +1757,13 @@ renderActionButtons(battle) {
         const panel = document.getElementById(`${side}-panel`);
         if (!panel) return;
         
-        // Store animation state
+        // Clear any existing animations (hit has highest priority)
+        this.clearAllAnimations(panel);
+        
+        // Store animation state with priority
         panel.dataset.hitAnimation = 'true';
         panel.dataset.hitAnimationTime = Date.now();
+        panel.dataset.animationPriority = '1'; // Highest priority
         
         const imageContainer = panel.querySelector('.combatant-image-container');
         if (imageContainer) {
@@ -1771,6 +1775,7 @@ renderActionButtons(battle) {
             if (panel) {
                 delete panel.dataset.hitAnimation;
                 delete panel.dataset.hitAnimationTime;
+                delete panel.dataset.animationPriority;
                 const imageContainer = panel.querySelector('.combatant-image-container');
                 if (imageContainer) {
                     imageContainer.classList.remove('hit');
@@ -1783,6 +1788,18 @@ renderActionButtons(battle) {
     triggerAttackAnimation(side, abilityType) {
         const panel = document.getElementById(`${side}-panel`);
         if (!panel) return;
+        
+        // Check if higher priority animation is playing
+        const currentPriority = parseInt(panel.dataset.animationPriority || '999');
+        const newPriority = (abilityType === ATTACK_TYPES.UTILITY) ? 3 : 2;
+        
+        // Block if higher or equal priority animation is playing
+        if (currentPriority <= newPriority) {
+            return; // Don't play this animation
+        }
+        
+        // Clear any lower priority animations
+        this.clearAllAnimations(panel);
         
         // Determine animation type based on ability type
         let animationClass = '';
@@ -1797,14 +1814,15 @@ renderActionButtons(battle) {
             animationClass = side === 'player' ? 'attacking-player' : 'attacking-enemy';
             duration = 500;
         } else {
-            // No animation for non-ability actions (pass, swap, etc.)
+            // No animation for non-ability actions (pass, offer, ask, surrender)
             return;
         }
         
-        // Store animation state
+        // Store animation state with priority
         panel.dataset.attackAnimation = 'true';
         panel.dataset.attackAnimationTime = Date.now();
         panel.dataset.attackAnimationClass = animationClass;
+        panel.dataset.animationPriority = newPriority.toString();
         
         const imageContainer = panel.querySelector('.combatant-image-container');
         if (imageContainer) {
@@ -1818,12 +1836,32 @@ renderActionButtons(battle) {
                 delete panel.dataset.attackAnimationTime;
                 const storedClass = panel.dataset.attackAnimationClass;
                 delete panel.dataset.attackAnimationClass;
+                delete panel.dataset.animationPriority;
                 const imageContainer = panel.querySelector('.combatant-image-container');
                 if (imageContainer && storedClass) {
                     imageContainer.classList.remove(storedClass);
                 }
             }
         }, duration);
+    }
+    
+    // Clear all animations from a panel
+    clearAllAnimations(panel) {
+        if (!panel) return;
+        
+        const imageContainer = panel.querySelector('.combatant-image-container');
+        if (imageContainer) {
+            // Remove all possible animation classes
+            imageContainer.classList.remove('hit', 'attacking-player', 'attacking-enemy', 'using-utility');
+        }
+        
+        // Clear all animation data attributes
+        delete panel.dataset.hitAnimation;
+        delete panel.dataset.hitAnimationTime;
+        delete panel.dataset.attackAnimation;
+        delete panel.dataset.attackAnimationTime;
+        delete panel.dataset.attackAnimationClass;
+        delete panel.dataset.animationPriority;
     }
     
     // Reapply active animations after panel re-render
@@ -1833,7 +1871,19 @@ renderActionButtons(battle) {
         
         const now = Date.now();
         
-        // Reapply attack/utility animation if still active
+        // Check for hit animation first (highest priority)
+        if (panel.dataset.hitAnimation === 'true') {
+            const elapsed = now - parseInt(panel.dataset.hitAnimationTime || 0);
+            if (elapsed < 400) {
+                const imageContainer = panel.querySelector('.combatant-image-container');
+                if (imageContainer) {
+                    imageContainer.classList.add('hit');
+                }
+                return; // Don't check other animations if hit is active
+            }
+        }
+        
+        // Check for attack/utility animation (lower priority)
         if (panel.dataset.attackAnimation === 'true') {
             const elapsed = now - parseInt(panel.dataset.attackAnimationTime || 0);
             const animationClass = panel.dataset.attackAnimationClass;
@@ -1848,17 +1898,6 @@ renderActionButtons(battle) {
                 const imageContainer = panel.querySelector('.combatant-image-container');
                 if (imageContainer) {
                     imageContainer.classList.add(animationClass);
-                }
-            }
-        }
-        
-        // Reapply hit animation if still active
-        if (panel.dataset.hitAnimation === 'true') {
-            const elapsed = now - parseInt(panel.dataset.hitAnimationTime || 0);
-            if (elapsed < 400) {
-                const imageContainer = panel.querySelector('.combatant-image-container');
-                if (imageContainer) {
-                    imageContainer.classList.add('hit');
                 }
             }
         }
