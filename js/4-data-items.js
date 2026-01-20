@@ -368,7 +368,7 @@ const RUNES = {
         name: 'Mannaz',
         fullName: 'Mannaz',
         flavor: 'The quiet strength of self-reflection and intellect. Taking a measured pause for a non-offensive action allows the wielder to collect their fragmented spirit and mend damage.',
-        effect: 'When this väsen uses a non damaging ability it gets healed by 8%',
+        effect: 'When this väsen uses a utility ability it heals by 8%',
         mechanic: { type: 'heal_on_utility', healPercent: 0.08 }
     },
     'LAGUZ': {

@@ -2767,7 +2767,7 @@ showKnockoutSwapModal(battle, callback) {
             message = '<p>Your party triumphs!</p>';
 
             if (result.tamed) {
-                message += `<p><strong>${result.tamedVasen.getDisplayName()}</strong> has joined your party!</p>`;
+                message += `<p><strong>${result.tamedVasen.getDisplayName()}</strong> has joined you!</p>`;
             }
 
             if (result.expGained && result.expGained.length > 0) {
