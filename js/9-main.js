@@ -547,8 +547,6 @@ class Game {
     // Handle swap
     handleSwap(targetIndex) {
         if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-        // Hide swap options after selecting
-        document.getElementById('swap-options').classList.remove('visible');
         this.currentBattle.executePlayerAction({ type: 'swap', targetIndex });
     }
 
@@ -939,9 +937,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Combat action buttons
-    document.getElementById('btn-swap').addEventListener('click', () => {
-        document.getElementById('swap-options').classList.toggle('visible');
-    });
     document.getElementById('btn-offer').addEventListener('click', () => game.showOfferModal());
     document.getElementById('btn-ask').addEventListener('click', () => game.handleAskItem());
     document.getElementById('btn-pass').addEventListener('click', () => game.handlePass());

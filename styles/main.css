@@ -2603,63 +2603,6 @@ button {
     justify-content: center;
 }
 
-/* Swap Options */
-.swap-options {
-    display: none;
-    padding: var(--spacing-md);
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    margin-top: var(--spacing-md);
-}
-
-.swap-options.visible {
-    display: block;
-}
-
-.swap-option-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    width: 100%;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    cursor: pointer;
-    margin-bottom: var(--spacing-xs);
-    text-align: left;
-}
-
-.swap-option-btn:hover:not(:disabled) {
-    background: var(--bg-hover);
-}
-
-.swap-option-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Swap Option (dialogue buttons) */
-.swap-option {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-}
-
-.swap-option img {
-    width: 32px;
-    height: 32px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.swap-option span {
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    white-space: nowrap;
-}
-
 /* =============================================================================
    21. RUNE COLLAPSIBLE
    ============================================================================= */
