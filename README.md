@@ -114,10 +114,10 @@ Vasenvaktaren/
 
 ## Feature roadmap
 
-- [ ] Finish Main Functionality (90%)
-- [ ] Make mobile friendly (60%)
+- [x] Finish Main Functionality (100%)
+- [ ] Make mobile friendly (80%)
 - [ ] Game Balance (20%)
-- [ ] Introduce endgame system (0%)
+- [x] Introduce endgame system (100%)
 
 ## Credits
 
