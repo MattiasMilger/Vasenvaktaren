@@ -3005,6 +3005,7 @@ button {
 }
 
 .heal-vasen-btn {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
@@ -3020,6 +3021,64 @@ button {
 
 .heal-vasen-btn:hover {
     background: var(--bg-hover);
+}
+
+.heal-amount-overlay {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-card);
+    border: 1px solid var(--border-success);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.heal-amount {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-success);
+}
+
+.rune-to-vasen-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rune-to-vasen-btn:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+.rune-to-vasen-btn.current-owner {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.rune-status-overlay {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.rune-status {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
 }
 
 /* Rune Modals */

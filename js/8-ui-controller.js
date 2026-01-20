@@ -2235,6 +2235,13 @@ if (firstButton) firstButton.focus();
             return v.currentHealth < v.maxHealth;
         });
 
+        // Sort to show active party members first
+        healableVasen.sort((a, b) => {
+            const aInParty = gameState.party.some(p => p && p.id === a.id) ? 1 : 0;
+            const bInParty = gameState.party.some(p => p && p.id === b.id) ? 1 : 0;
+            return bInParty - aInParty;
+        });
+
         if (healableVasen.length === 0) {
             vasenList.innerHTML = '<p class="empty-message">No Väsen need healing, or all are in active combat.</p>';
         } else {
@@ -2246,12 +2253,8 @@ if (firstButton) firstButton.focus();
                 const vasenBtn = document.createElement('button');
                 vasenBtn.className = 'heal-vasen-btn';
                 vasenBtn.innerHTML = `
-                    <div class="heal-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
-                        <img src="${vasen.species.image}" alt="${vasen.species.name}" class="heal-vasen-img">
-                    </div>
-                    <div class="heal-vasen-info">
-                        <span class="heal-vasen-name">${vasen.getDisplayName()}</span>
-                        <span class="heal-vasen-health">${vasen.currentHealth}/${vasen.maxHealth} Health</span>
+                    ${this.createStandardVasenCardHTML(vasen, false)}
+                    <div class="heal-amount-overlay">
                         <span class="heal-amount">+${Math.floor(vasen.maxHealth * healPercent)} Health</span>
                     </div>
                 `;
@@ -2304,7 +2307,14 @@ if (firstButton) firstButton.focus();
         const currentOwner = gameState.findRuneOwner(runeId);
 
         // Show all väsen in collection (runes are bound to individual väsen, not party slots)
-        const eligibleVasen = gameState.vasenCollection;
+        const eligibleVasen = [...gameState.vasenCollection];
+
+        // Sort to show active party members first
+        eligibleVasen.sort((a, b) => {
+            const aInParty = gameState.party.some(p => p && p.id === a.id) ? 1 : 0;
+            const bInParty = gameState.party.some(p => p && p.id === b.id) ? 1 : 0;
+            return bInParty - aInParty;
+        });
 
         if (eligibleVasen.length === 0) {
             vasenList.innerHTML = '<p class="empty-message">No Väsen in your collection.</p>';
@@ -2319,13 +2329,9 @@ if (firstButton) firstButton.focus();
                 vasenBtn.className = `rune-to-vasen-btn ${hasThisRune ? 'current-owner' : ''}`;
                 vasenBtn.disabled = hasThisRune;
                 vasenBtn.innerHTML = `
-                    <div class="rune-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
-                        <img src="${vasen.species.image}" alt="${vasen.species.name}" class="rune-vasen-img">
-                    </div>
-                    <div class="rune-vasen-info">
-                        <span class="rune-vasen-name">${vasen.getDisplayName()}${isInParty ? ' ★' : ''}</span>
-                        <span class="rune-vasen-level">Lvl ${vasen.level}</span>
-                        <span class="rune-vasen-slots">${currentRunes.length}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}</span>
+                    ${this.createStandardVasenCardHTML(vasen, false)}
+                    <div class="rune-status-overlay">
+                        <span class="rune-status">${currentRunes.length}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}${isInParty ? ' ★' : ''}</span>
                     </div>
                 `;
                 if (!hasThisRune) {
