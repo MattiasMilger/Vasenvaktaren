@@ -88,6 +88,11 @@ body {
     color: var(--text-primary);
     font-family: var(--font-family);
     line-height: 1.5;
+    outline: none;
+}
+
+body:focus {
+    outline: none;
 }
 
 a {
@@ -405,17 +410,36 @@ button {
     box-shadow: 0 0 10px rgba(138, 154, 122, 0.3);
 }
 
+.starter-image-container {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto var(--spacing-sm) auto;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .starter-image {
     width: 96px;
     height: 96px;
     image-rendering: pixelated;
-    margin-bottom: var(--spacing-sm);
+    display: block;
 }
 
 .starter-name {
     font-size: var(--font-size-lg);
     color: var(--text-primary);
     margin-bottom: var(--spacing-xs);
+}
+
+.starter-badges {
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-sm);
 }
 
 .starter-family {
@@ -1080,6 +1104,7 @@ button {
     height: 48px;
     image-rendering: pixelated;
     flex-shrink: 0;
+    display: block;
 }
 
 .vasen-card-info {
@@ -1275,10 +1300,11 @@ button {
 }
 
 .details-image {
-    width: 64px;
-    height: 64px;
+    width: 96px;
+    height: 96px;
     image-rendering: pixelated;
     flex-shrink: 0;
+    display: block;
 }
 
 .details-identity {
@@ -1669,6 +1695,7 @@ button {
     width: 48px;
     height: 48px;
     image-rendering: pixelated;
+    display: block;
 }
 
 .party-vasen-info {
@@ -1785,6 +1812,7 @@ button {
     height: 64px;
     image-rendering: pixelated;
     flex-shrink: 0;
+    display: block;
 }
 
 .standard-vasen-info {
@@ -1857,7 +1885,9 @@ button {
 .add-vasen-btn {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--spacing-sm);
     width: 100%;
     padding: var(--spacing-sm);
     background: var(--bg-tertiary);
@@ -1868,6 +1898,15 @@ button {
     margin-bottom: var(--spacing-xs);
     transition: all 0.2s;
     position: relative;
+}
+
+/* Ensure info sections are also centered */
+.ally-select-btn .standard-vasen-info,
+.swap-modal-btn .standard-vasen-info,
+.knockout-swap-btn .standard-vasen-info,
+.add-vasen-btn .standard-vasen-info {
+    text-align: center;
+    width: 100%;
 }
 
 .ally-select-btn:hover,
@@ -1938,7 +1977,9 @@ button {
 .swap-party-card {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--spacing-sm);
     flex: 1;
 }
 
@@ -2193,6 +2234,7 @@ button {
     height: 64px;
     image-rendering: pixelated;
     transition: transform 0.1s ease, filter 0.1s ease;
+    display: block;
 }
 
 .combatant-image.knocked-out {
@@ -2205,7 +2247,10 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: var(--spacing-sm);
+    margin: 0 auto var(--spacing-sm) auto;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
 }
 
 /* Animation classes for combat */
@@ -4238,3 +4283,265 @@ button {
     color: var(--text-secondary);
 }
 
+/* =============================================================================
+   HOLOGRAPHIC PORTRAIT EFFECTS - Rarity-based effects for väsen images
+   ============================================================================= */
+
+/* Container wrappers for holo effects */
+.vasen-thumb-container,
+.party-vasen-img-container,
+.standard-vasen-img-container,
+.details-image-container,
+.heal-vasen-img-container,
+.rune-vasen-img-container {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vasen-thumb-container {
+    width: 48px;
+    height: 48px;
+}
+
+.party-vasen-img-container {
+    width: 48px;
+    height: 48px;
+}
+
+.standard-vasen-img-container {
+    width: 64px;
+    height: 64px;
+}
+
+.details-image-container {
+    width: 96px;
+    height: 96px;
+}
+
+.heal-vasen-img-container,
+.rune-vasen-img-container {
+    width: 48px;
+    height: 48px;
+}
+
+/* Ensure images display properly */
+.heal-vasen-img,
+.rune-vasen-img {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+    display: block;
+}
+
+/* The combatant-image-container already exists in the CSS, just needs holo applied to it */
+
+/* ── COMMON HOLO ── Smooth gray gradient sweep */
+.vasen-thumb-container.holo-common::before,
+.party-vasen-img-container.holo-common::before,
+.standard-vasen-img-container.holo-common::before,
+.details-image-container.holo-common::before,
+.combatant-image-container.holo-common::before,
+.heal-vasen-img-container.holo-common::before,
+.rune-vasen-img-container.holo-common::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(144, 144, 160, 0.2) 50%,
+        transparent 75%,
+        transparent 100%
+    );
+    animation: holoSweep 5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── UNCOMMON HOLO ── Smooth green gradient sweep */
+.vasen-thumb-container.holo-uncommon::before,
+.party-vasen-img-container.holo-uncommon::before,
+.standard-vasen-img-container.holo-uncommon::before,
+.details-image-container.holo-uncommon::before,
+.combatant-image-container.holo-uncommon::before,
+.heal-vasen-img-container.holo-uncommon::before,
+.rune-vasen-img-container.holo-uncommon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(107, 142, 35, 0.25) 50%,
+        transparent 75%,
+        transparent 100%
+    );
+    animation: holoSweep 4.5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── RARE HOLO ── Smooth blue gradient sweep */
+.vasen-thumb-container.holo-rare::before,
+.party-vasen-img-container.holo-rare::before,
+.standard-vasen-img-container.holo-rare::before,
+.details-image-container.holo-rare::before,
+.combatant-image-container.holo-rare::before,
+.heal-vasen-img-container.holo-rare::before,
+.rune-vasen-img-container.holo-rare::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 20%,
+        rgba(70, 130, 180, 0.35) 50%,
+        transparent 80%,
+        transparent 100%
+    );
+    animation: holoSweep 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── MYTHICAL HOLO ── Smooth purple gradient sweep (NO second layer) */
+.vasen-thumb-container.holo-mythical::before,
+.party-vasen-img-container.holo-mythical::before,
+.standard-vasen-img-container.holo-mythical::before,
+.details-image-container.holo-mythical::before,
+.combatant-image-container.holo-mythical::before,
+.heal-vasen-img-container.holo-mythical::before,
+.rune-vasen-img-container.holo-mythical::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 15%,
+        rgba(212, 125, 255, 0.45) 50%,
+        transparent 85%,
+        transparent 100%
+    );
+    animation: holoSweep 3.5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── HOLO ANIMATIONS ── */
+
+@keyframes holoSweep {
+    0% { 
+        transform: translateX(-150%);
+    }
+    100% { 
+        transform: translateX(150%);
+    }
+}
+
+/* Override container in modal buttons to center the portrait */
+.ally-select-btn .standard-vasen-img-container,
+.swap-modal-btn .standard-vasen-img-container,
+.knockout-swap-btn .standard-vasen-img-container,
+.add-vasen-btn .standard-vasen-img-container {
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+/* Ensure the image itself is not clipped */
+.ally-select-btn .standard-vasen-img,
+.swap-modal-btn .standard-vasen-img,
+.knockout-swap-btn .standard-vasen-img,
+.add-vasen-btn .standard-vasen-img {
+    width: 64px;
+    height: 64px;
+    display: block;
+}
+
+/* Center portraits in swap party cards */
+.swap-party-card .standard-vasen-img-container {
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.swap-party-card .standard-vasen-img {
+    width: 64px;
+    height: 64px;
+    display: block;
+}
+
+.swap-party-card .standard-vasen-info {
+    text-align: center;
+    width: 100%;
+}
+
+/* Holo effects for starter selection images */
+.starter-image-container.holo-common::before,
+.starter-image-container.holo-uncommon::before,
+.starter-image-container.holo-rare::before,
+.starter-image-container.holo-mythical::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.starter-image-container.holo-common::before {
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(144, 144, 160, 0.2) 50%,
+        transparent 75%,
+        transparent 100%
+    );
+    animation: holoSweep 5s ease-in-out infinite;
+}
+
+.starter-image-container.holo-uncommon::before {
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(107, 142, 35, 0.25) 50%,
+        transparent 75%,
+        transparent 100%
+    );
+    animation: holoSweep 4.5s ease-in-out infinite;
+}
+
+.starter-image-container.holo-rare::before {
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 20%,
+        rgba(70, 130, 180, 0.35) 50%,
+        transparent 80%,
+        transparent 100%
+    );
+    animation: holoSweep 4s ease-in-out infinite;
+}
+
+.starter-image-container.holo-mythical::before {
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 15%,
+        rgba(212, 125, 255, 0.45) 50%,
+        transparent 85%,
+        transparent 100%
+    );
+    animation: holoSweep 3.5s ease-in-out infinite;
+}

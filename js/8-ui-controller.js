@@ -369,7 +369,9 @@ document.querySelectorAll('.modal').forEach(modal => {
                 <button class="vasen-favorite-btn ${isFavorite ? 'active' : ''}" onclick="event.stopPropagation(); ui.toggleFavorite('${vasen.id}')">
                     ${isFavorite ? '★' : '☆'}
                 </button>
-                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="vasen-thumb">
+                <div class="vasen-thumb-container holo-${vasen.species.rarity.toLowerCase()}">
+                    <img src="${vasen.species.image}" alt="${vasen.species.name}" class="vasen-thumb">
+                </div>
                 <div class="vasen-card-info">
                     <span class="vasen-name">${vasen.getDisplayName()}</span>
                     <span class="vasen-level">Lvl ${vasen.level}</span>
@@ -545,7 +547,9 @@ renderVasenDetails(vasen) {
     panel.innerHTML = `
         <button class="details-close-btn" onclick="ui.closeVasenDetails()">×</button>
         <div class="details-header">
-            <img src="${vasen.species.image}" alt="${vasen.species.name}" class="details-image">
+            <div class="details-image-container holo-${vasen.species.rarity.toLowerCase()}">
+                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="details-image">
+            </div>
             <div class="details-identity">
                 <div class="details-name-row">
                     <h3 class="details-name">${vasen.getDisplayName()}</h3>
@@ -881,7 +885,9 @@ renderParty() {
 
             slotContent.innerHTML = `
                 <div class="party-vasen">
-                    <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
+                    <div class="party-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
+                        <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
+                    </div>
 
                     <div class="party-vasen-info">
                         <span class="party-vasen-name">${vasen.getDisplayName()}</span>
@@ -1400,7 +1406,10 @@ renderZones() {
         list.appendChild(btn);
     });
 
-    document.getElementById('close-add-vasen-modal').onclick = () => modal.classList.remove('active');
+    document.getElementById('close-add-vasen-modal').onclick = () => {
+        modal.classList.remove('active');
+        document.activeElement.blur();
+    };
     modal.classList.add('active');
 }
 
@@ -1450,7 +1459,7 @@ renderCombatantPanel(side, vasen, battle) {
             <span class="combatant-level">Lvl ${vasen.level}</span>
         </div>
 
-        <div class="combatant-image-container">
+        <div class="combatant-image-container ${vasen.isKnockedOut() ? '' : 'holo-' + vasen.species.rarity.toLowerCase()}">
             <img src="${vasen.species.image}" alt="${vasen.species.name}" 
                  class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
             ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
@@ -1580,7 +1589,9 @@ renderCombatantPanel(side, vasen, battle) {
         const getAttrValue = (attr) => showCombatInfo ? vasen.getAttribute(attr) : vasen.calculateAttribute(attr);
 
         return `
-            <img src="${vasen.species.image}" alt="${vasen.species.name}" class="standard-vasen-img">
+            <div class="standard-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
+                <img src="${vasen.species.image}" alt="${vasen.species.name}" class="standard-vasen-img">
+            </div>
             <div class="standard-vasen-info">
                 <div class="standard-vasen-header">
                     <span class="standard-vasen-name">${vasen.getDisplayName()}</span>
@@ -1629,6 +1640,13 @@ renderSwapOptions(battle) {
 
         btn.onclick = () => {
             modal.classList.remove('active');
+            // Prevent focus issues
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+            // Focus on a non-input element to prevent cursor
+            document.body.focus();
+            setTimeout(() => document.body.blur(), 0);
             game.handleSwap(index);
         };
 
@@ -1636,7 +1654,14 @@ renderSwapOptions(battle) {
     });
 
     document.getElementById('close-swap-modal').onclick =
-        () => modal.classList.remove('active');
+        () => {
+            modal.classList.remove('active');
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+            document.body.focus();
+            setTimeout(() => document.body.blur(), 0);
+        };
 
     modal.classList.add('active');
 }
@@ -2053,7 +2078,10 @@ if (firstButton) firstButton.focus();
             list.appendChild(btn);
         });
 
-        document.getElementById('close-ally-select-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-ally-select-modal').onclick = () => {
+            modal.classList.remove('active');
+            document.activeElement.blur();
+        };
         modal.classList.add('active');
     }
 
@@ -2218,7 +2246,9 @@ if (firstButton) firstButton.focus();
                 const vasenBtn = document.createElement('button');
                 vasenBtn.className = 'heal-vasen-btn';
                 vasenBtn.innerHTML = `
-                    <img src="${vasen.species.image}" alt="${vasen.species.name}" class="heal-vasen-img">
+                    <div class="heal-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
+                        <img src="${vasen.species.image}" alt="${vasen.species.name}" class="heal-vasen-img">
+                    </div>
                     <div class="heal-vasen-info">
                         <span class="heal-vasen-name">${vasen.getDisplayName()}</span>
                         <span class="heal-vasen-health">${vasen.currentHealth}/${vasen.maxHealth} Health</span>
@@ -2289,7 +2319,9 @@ if (firstButton) firstButton.focus();
                 vasenBtn.className = `rune-to-vasen-btn ${hasThisRune ? 'current-owner' : ''}`;
                 vasenBtn.disabled = hasThisRune;
                 vasenBtn.innerHTML = `
-                    <img src="${vasen.species.image}" alt="${vasen.species.name}" class="rune-vasen-img">
+                    <div class="rune-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
+                        <img src="${vasen.species.image}" alt="${vasen.species.name}" class="rune-vasen-img">
+                    </div>
                     <div class="rune-vasen-info">
                         <span class="rune-vasen-name">${vasen.getDisplayName()}${isInParty ? ' ★' : ''}</span>
                         <span class="rune-vasen-level">Lvl ${vasen.level}</span>

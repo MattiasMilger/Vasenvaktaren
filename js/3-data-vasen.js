@@ -18,7 +18,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A watchful, fickle warden dwelling near the hearth. It keeps the home safe, and aids the family, but absolutely hates dirt and laziness.',
+        description: 'A sharp‑eyed, temperamental guardian of the yard, barns, and gardens. It tends animals and tools, rewarding tidy grounds and punishing neglect.',
         family: FAMILIES.VATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -29,7 +29,7 @@ const VASEN_SPECIES = {
     'Hustomte': {
         name: 'Hustomte',
         internalName: 'Hustomte',
-        description: 'A watchful steward dwelling in the house, often near the hearth. It keeps the home safe, and aids the family, but hates dirt and laziness. Offerings of porridge ensure its loyalty.',
+        description: 'A watchful steward dwelling in the house, often near the hearth. It keeps the home safe, but hates dirt and laziness. Offerings of porridge ensure its loyalty.',
         family: FAMILIES.VATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,

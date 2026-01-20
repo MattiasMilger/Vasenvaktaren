@@ -51,12 +51,17 @@ class Game {
             if (!species) return;
 
             const card = document.createElement('div');
-            card.className = `starter-card element-${species.element.toLowerCase()}`;
+            card.className = 'starter-card';
             card.innerHTML = `
-                <img src="${species.image}" alt="${species.name}" class="starter-image">
+                <div class="starter-image-container holo-${species.rarity.toLowerCase()}">
+                    <img src="${species.image}" alt="${species.name}" class="starter-image">
+                </div>
                 <h3 class="starter-name">${species.name}</h3>
-                <p class="starter-family">${species.family}</p>
-                <span class="starter-element element-${species.element.toLowerCase()}">${species.element}</span>
+                <div class="starter-badges">
+                    <span class="element-badge element-${species.element.toLowerCase()}">${species.element}</span>
+                    <span class="rarity-badge rarity-${species.rarity.toLowerCase()}">${species.rarity}</span>
+                    <span class="family-badge">${species.family}</span>
+                </div>
                 <p class="starter-description">${species.description}</p>
             `;
             card.onclick = () => this.selectStarter(speciesName, card);
