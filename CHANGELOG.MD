@@ -6,6 +6,14 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.53-alpha - Empowerment System (2026-01-21)
+- **NEW FEATURE: Empowerment System** - Low-tier attacks now grant a damage buff
+  - All low-tier attacks (30 megin cost, 50 power) now grant empowerment after use
+  - Empowered attacks deal 8% bonus damage
+  - Empowerment persists through successive low-tier attacks, creating a perpetual buff
+  - Affected abilities: Ground Stomp, Sinkhole, Vine Whip, Elven Light, Drown, Hail Storm, Torch Strike, Fire Breath, Storm Claw, and Wailing Cry
+  - Enemy AI now strategically uses low-tier attacks to set up empowered high-damage abilities
+
 ## v0.52-alpha - Family Passives (2026-01-19)
 - **Battle Animations introduced**
 - Thurs now reads "This väsen returns 40% of the damage taken as mixed damage"

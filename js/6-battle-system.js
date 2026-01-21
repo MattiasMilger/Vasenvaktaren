@@ -759,7 +759,24 @@ class Battle {
         
         // Apply damage
         const actualDamage = defender.takeDamage(result.damage);
+        
+        // Log empowerment if it was active
+        if (attacker.battleFlags.isEmpowered) {
+            this.addLog(`${attacker.getName()}'s empowered attack strikes!`, 'buff');
+        }
+        
         this.addLog(`${attacker.getName()} deals ${actualDamage} damage to ${defender.getName()}!`, 'damage');
+        
+        // Consume empowerment after using it
+        if (attacker.battleFlags.isEmpowered) {
+            attacker.battleFlags.isEmpowered = false;
+        }
+        
+        // Grant empowerment if ability has that property
+        if (abilityGrantsEmpowerment(abilityName)) {
+            attacker.battleFlags.isEmpowered = true;
+            this.addLog(`${attacker.getName()}'s next attack is empowered!`, 'buff');
+        }
         
         // Flash the defender (hit effect)
         if (this.onHit) {
@@ -920,6 +937,11 @@ class Battle {
             runeMod += attacker.battleFlags.vattePassiveDamageBoost;
             // Reset the boost after use (only applies to current turn)
             attacker.battleFlags.vattePassiveDamageBoost = 0;
+        }
+        
+        // Empowerment system: boost damage if empowered
+        if (attacker.battleFlags.isEmpowered) {
+            runeMod += GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST;
         }
         
         // Calculate damage based on attack type
@@ -1339,6 +1361,17 @@ class EnemyAI {
                 score += 50; // High damage bonus
             }
             
+            // Empowerment strategy: 
+            // If not empowered and ability grants empowerment, give bonus for setting up
+            // If empowered and ability is high-power, give bonus for using empowerment
+            if (!this.vasen.battleFlags.isEmpowered && abilityGrantsEmpowerment(abilityName)) {
+                // Give bonus to low-tier attacks if we're not empowered (setup for next turn)
+                score += 15;
+            } else if (this.vasen.battleFlags.isEmpowered && !abilityGrantsEmpowerment(abilityName) && ability.power >= 65) {
+                // Give significant bonus to high-power attacks if we're empowered
+                score += 35;
+            }
+            
             // Element bonus
             const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
             const matchup = getMatchupType(abilityElement, this.target.species.element);
@@ -1419,7 +1452,12 @@ class EnemyAI {
         // Simplified damage prediction
         const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
         const matchup = getMatchupType(abilityElement, this.target.species.element);
-        const elementMod = DAMAGE_MULTIPLIERS[matchup];
+        let elementMod = DAMAGE_MULTIPLIERS[matchup];
+        
+        // Account for empowerment boost
+        if (this.vasen.battleFlags.isEmpowered) {
+            elementMod *= (1 + GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST);
+        }
         
         const power = ability.power;
         const attackStat = ability.type === ATTACK_TYPES.WISDOM ? 

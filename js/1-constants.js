@@ -38,7 +38,9 @@ const GAME_CONFIG = {
     BATTLE_INPUT_DELAY: 800,
     // Endless Tower configuration
     ENDLESS_TOWER_START_LEVEL: 30,
-    ENDLESS_TOWER_MAX_FLOOR: 999
+    ENDLESS_TOWER_MAX_FLOOR: 999,
+    // Empowerment system for low-tier attacks
+    EMPOWERMENT_DAMAGE_BOOST: 0.08
 };
 
 // Family Passive Configuration
@@ -241,6 +243,7 @@ const FAMILY_PASSIVES = {
     }
 };
 
+// Base attributes for each family
 const BASE_ATTRIBUTES = {
     [FAMILIES.VATTE]: { strength: 70, wisdom: 50, health: 55, defense: 55, durability: 80 },
     [FAMILIES.VALNAD]: { strength: 55, wisdom: 70, health: 55, defense: 75, durability: 55 },

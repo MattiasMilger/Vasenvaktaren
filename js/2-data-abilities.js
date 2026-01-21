@@ -13,11 +13,12 @@ const ABILITIES = {
     // Earth Abilities
     'Ground Stomp': {
         name: 'Ground Stomp',
-        description: 'Slams the ground with immense force, sending a stunning shockwave through the bedrock',
+        description: 'Slams the ground with immense force, sending a stunning shockwave through the bedrock. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Boulder Toss': {
         name: 'Boulder Toss',
@@ -29,11 +30,12 @@ const ABILITIES = {
     },
     'Sinkhole': {
         name: 'Sinkhole',
-        description: 'The earth softens and collapses, opening a treacherous pit beneath the enemy',
+        description: 'The earth softens and collapses, opening a treacherous pit beneath the enemy. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Landslide': {
         name: 'Landslide',
@@ -56,11 +58,12 @@ const ABILITIES = {
     // Nature Abilities
     'Vine Whip': {
         name: 'Vine Whip',
-        description: 'Swift, thorny vines lash out from the wilderness, tangling and striking the target',
+        description: 'Swift, thorny vines lash out from the wilderness, tangling and striking the target. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Wild Bite': {
         name: 'Wild Bite',
@@ -72,11 +75,12 @@ const ABILITIES = {
     },
     'Elven Light': {
         name: 'Elven Light',
-        description: 'Focuses a faint, mesmerizing beam drawn from the magic of the twilight mist',
+        description: 'Focuses a faint, mesmerizing beam drawn from the magic of the twilight mist. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Moon Beam': {
         name: 'Moon Beam',
@@ -99,11 +103,12 @@ const ABILITIES = {
     // Water Abilities
     'Drown': {
         name: 'Drown',
-        description: 'Violently drags the opponent down, mimicking the crushing pressure of deep water',
+        description: 'Violently drags the opponent down, mimicking the crushing pressure of deep water. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Icicle Spear': {
         name: 'Icicle Spear',
@@ -115,11 +120,12 @@ const ABILITIES = {
     },
     'Hail Storm': {
         name: 'Hail Storm',
-        description: 'A sudden, freezing downpour of stinging ice and freezing wind',
+        description: 'A sudden, freezing downpour of stinging ice and freezing wind. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Tidal Wave': {
         name: 'Tidal Wave',
@@ -142,11 +148,12 @@ const ABILITIES = {
     // Fire Abilities
     'Torch Strike': {
         name: 'Torch Strike',
-        description: 'A searing blow with a burning torch, delivering simple, raw heat',
+        description: 'A searing blow with a burning torch, delivering simple, raw heat. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Flaming Skewer': {
         name: 'Flaming Skewer',
@@ -158,11 +165,12 @@ const ABILITIES = {
     },
     'Fire Breath': {
         name: 'Fire Breath',
-        description: 'Exhales a short, scorching gust of flame from the creature\'s core',
+        description: 'Exhales a short, scorching gust of flame from the creature\'s core. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Lava Jet': {
         name: 'Lava Jet',
@@ -185,11 +193,12 @@ const ABILITIES = {
     // Wind Abilities
     'Storm Claw': {
         name: 'Storm Claw',
-        description: 'A quick, brutal strike delivered with claws riding the speed of a gale',
+        description: 'A quick, brutal strike delivered with claws riding the speed of a gale. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Sky Dive': {
         name: 'Sky Dive',
@@ -201,11 +210,12 @@ const ABILITIES = {
     },
     'Wailing Cry': {
         name: 'Wailing Cry',
-        description: 'Unleashes an agonizing, ghostly shriek that assails the opponent\'s senses',
+        description: 'Unleashes an agonizing, ghostly shriek that assails the opponent\'s senses. Next attack is empowered and deals 8% more damage',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        meginCost: 30
+        meginCost: 30,
+        grantsEmpowerment: true
     },
     'Wind Gust': {
         name: 'Wind Gust',
@@ -240,6 +250,12 @@ const ABILITIES = {
 function isAbilityDamaging(abilityName) {
     const ability = ABILITIES[abilityName];
     return ability && ability.type !== ATTACK_TYPES.UTILITY;
+}
+
+// Helper function to check if an ability grants empowerment
+function abilityGrantsEmpowerment(abilityName) {
+    const ability = ABILITIES[abilityName];
+    return ability && ability.grantsEmpowerment === true;
 }
 
 // Helper function to get ability's actual megin cost for a specific element

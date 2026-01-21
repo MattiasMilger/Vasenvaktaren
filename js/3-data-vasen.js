@@ -335,7 +335,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Icicle Spear', 'Wild Bite', 'Tidal Wave', 'Landslide'],
+        abilities: ['Drown', 'Wild Bite', 'Tidal Wave', 'Landslide'],
         tamingItem: 'Fishing Hook',
         image: 'assets/vasen/jormungandr.png'
     },

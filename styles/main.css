@@ -3815,15 +3815,17 @@ button {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
-    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
     min-width: 180px;
     padding: var(--spacing-sm);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    margin-top: var(--spacing-xs);
+    margin-top: 2px;
+    pointer-events: auto;
 }
 
 .element-matchup-collapsible.open .matchup-details {
@@ -3970,8 +3972,11 @@ button {
 /* Wrapper for fixed positioning - the popup will calculate its position via JS or we use a portal pattern */
 .family-matchup-collapsible .family-description-popup {
     display: none;
-    position: fixed; /* Changed to fixed to escape all overflow containers */
-    z-index: 10000; /* High z-index to ensure it appears above everything */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
     min-width: 250px;
     max-width: 350px;
     padding: var(--spacing-sm);
@@ -3979,14 +3984,10 @@ button {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    margin-top: var(--spacing-xs);
+    margin-top: 2px;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     line-height: 1.4;
-    /* Position will need to be calculated by JS, but let's provide a default */
-    top: auto;
-    left: auto;
-    transform: translateX(-50%);
     pointer-events: auto;
 }
 
