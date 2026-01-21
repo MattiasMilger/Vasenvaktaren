@@ -149,7 +149,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Hail Storm', 'Thick Coat', 'Wild Bite'],
+        abilities: ['Vine Whip', 'Wild Bite', 'Thick Coat', 'Hail Storm'],
         tamingItem: 'Mossy Bark',
         image: 'assets/vasen/skogstroll.png'
     },
@@ -243,7 +243,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Hail Storm', 'Moon Beam', 'Landslide'],
+        abilities: ['Vine Whip', 'Moon Beam', 'Landslide', 'Hail Storm'],
         tamingItem: 'Elderflower Sprig',
         image: 'assets/vasen/hyllemor.png'
     },
@@ -265,7 +265,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Wind Gust', 'Icicle Spear', 'Smithing', 'Sky Dive'],
+        abilities: ['Wailing Cry', 'Sky Dive', 'Smithing', 'Icicle Spear'],
         tamingItem: 'Shield Fragment',
         image: 'assets/vasen/valkyria.png'
     },
@@ -289,7 +289,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Lava Jet', 'Flaming Skewer', 'Landslide'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Landslide', 'Lava Jet'],
         tamingItem: 'Glowing Coal',
         image: 'assets/vasen/eldturs.png'
     },
@@ -324,7 +324,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Storm Claw', 'Fire Breath', 'Lava Jet', 'Wild Bite'],
+        abilities: ['Fire Breath', 'Lava Jet', 'Wild Bite', 'Storm Claw'],
         tamingItem: 'Gold Coin',
         image: 'assets/vasen/fafner.png'
     },
@@ -346,7 +346,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Wild Bite', 'Sky Dive', 'Fire Breath', 'Landslide'],
+        abilities: ['Fire Breath', 'Landslide', 'Wild Bite', 'Sky Dive'],
         tamingItem: 'Yggdrasil Root',
         image: 'assets/vasen/nidhogg.png'
     }

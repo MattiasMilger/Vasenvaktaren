@@ -19,6 +19,9 @@ class Game {
             // No save - show main menu
             this.showMainMenu();
         }
+
+        // Remove loading class to reveal the correct screen
+        document.body.classList.remove('loading');
     }
 
     // Show main menu

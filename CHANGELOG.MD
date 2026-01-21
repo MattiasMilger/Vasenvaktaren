@@ -14,7 +14,9 @@ This project follows a simple semantic versioning pattern during Alpha developme
   - Affected abilities: Ground Stomp, Sinkhole, Vine Whip, Elven Light, Drown, Hail Storm, Torch Strike, Fire Breath, Storm Claw, and Wailing Cry
   - Enemy AI now strategically uses low-tier attacks to set up empowered high-damage abilities
   - Jörmungandr - Replaced Icicle Spear with Drown
-  - Rimturs - Changed order which abilities are learned
+  - Valkyria - Replaced Wind Gust with Wailing Cry
+  - Changed ability learning order that makes more sense with väsen playstyles
+  - Fixed AI "new game" flashing upon page refresh
 
 ## v0.52-alpha - Family Passives (2026-01-19)
 - **Battle Animations introduced**

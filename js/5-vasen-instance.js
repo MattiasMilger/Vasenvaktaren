@@ -173,7 +173,7 @@ class VasenInstance {
         // Recalculate megin if Uruz
         if (runeId === 'URUZ') {
             this.maxMegin = this.calculateMaxMegin();
-            this.currentMegin = Math.min(this.currentMegin, this.maxMegin);
+            this.currentMegin = this.maxMegin;
         }
         return true;
     }

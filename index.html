@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Väsenväktaren</title>
     <link rel="stylesheet" href="styles/main.css">
+    <style>
+        /* Prevent flash on page load - hide all screens until JS initializes */
+        body.loading .screen {
+            display: none !important;
+        }
+    </style>
 </head>
-<body>
+<body class="loading">
     <!-- Message Container for Toasts -->
     <div id="message-container" class="message-container"></div>
 
@@ -23,7 +29,7 @@
     </div>
 
     <!-- Starter Selection Screen -->
-<div id="starter-select-screen" class="screen active">
+<div id="starter-select-screen" class="screen">
   <div class="starter-content">
     <p class="starter-intro">You find yourself in a strange forest.</p>
     <p class="starter-prompt">Choose who to befriend:</p>
