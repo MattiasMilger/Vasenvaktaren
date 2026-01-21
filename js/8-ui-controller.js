@@ -2871,9 +2871,41 @@ function toggleFamilyDescription(element) {
         el.classList.remove('open');
     });
     
-    // If we're opening this one, add the open class
+    // If we're opening this one, add the open class and position the popup
     if (isOpening) {
         parent.classList.add('open');
+        
+        // Position the popup using fixed positioning to escape overflow containers
+        const popup = parent.querySelector('.family-description-popup');
+        if (popup) {
+            // Get the bounding rect of the clicked element
+            const rect = element.getBoundingClientRect();
+            
+            // Calculate popup position
+            // Position below the element, centered horizontally
+            let top = rect.bottom + 4; // 4px gap
+            let left = rect.left + (rect.width / 2);
+            
+            // Check if popup would go off the right edge of the screen
+            const popupWidth = 300; // approximate width
+            if (left + (popupWidth / 2) > window.innerWidth) {
+                left = window.innerWidth - (popupWidth / 2) - 10;
+            }
+            // Check if popup would go off the left edge
+            if (left - (popupWidth / 2) < 10) {
+                left = (popupWidth / 2) + 10;
+            }
+            
+            // Check if popup would go off the bottom of the screen
+            const popupHeight = 200; // approximate height
+            if (top + popupHeight > window.innerHeight) {
+                // Position above the element instead
+                top = rect.top - popupHeight - 4;
+            }
+            
+            popup.style.top = `${top}px`;
+            popup.style.left = `${left}px`;
+        }
     }
 }
 

@@ -550,13 +550,11 @@ button {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: visible; /* Allow child popups to overflow */
 }
 
 .panel-left {
     background: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
-    overflow: visible; /* Allow popups to overflow */
 }
 
 .panel-middle {
@@ -603,7 +601,6 @@ button {
     flex: 1;
     min-height: 0;
     position: relative;
-    overflow: visible; /* Allow popups to overflow */
 }
 
 .tab-content {
@@ -1302,7 +1299,6 @@ button {
     display: flex;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-md);
-    overflow: visible; /* Allow popups to overflow */
 }
 
 .details-image {
@@ -1316,7 +1312,6 @@ button {
 .details-identity {
     flex: 1;
     min-width: 0;
-    overflow: visible; /* Allow popups to overflow */
 }
 
 .details-name {
@@ -3967,11 +3962,13 @@ button {
     display: inline-block;
 }
 
-/* Wrapper for fixed positioning - the popup will calculate its position via JS or we use a portal pattern */
 .family-matchup-collapsible .family-description-popup {
     display: none;
-    position: fixed; /* Changed to fixed to escape all overflow containers */
-    z-index: 10000; /* High z-index to ensure it appears above everything */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000; /* Increased z-index to ensure it appears above everything */
     min-width: 250px;
     max-width: 350px;
     padding: var(--spacing-sm);
@@ -3983,11 +3980,6 @@ button {
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     line-height: 1.4;
-    /* Position will need to be calculated by JS, but let's provide a default */
-    top: auto;
-    left: auto;
-    transform: translateX(-50%);
-    pointer-events: auto;
 }
 
 .family-matchup-collapsible.open .family-description-popup {
