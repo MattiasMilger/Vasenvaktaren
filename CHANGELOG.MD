@@ -13,6 +13,8 @@ This project follows a simple semantic versioning pattern during Alpha developme
   - Empowerment persists through successive low-tier attacks, creating a perpetual buff
   - Affected abilities: Ground Stomp, Sinkhole, Vine Whip, Elven Light, Drown, Hail Storm, Torch Strike, Fire Breath, Storm Claw, and Wailing Cry
   - Enemy AI now strategically uses low-tier attacks to set up empowered high-damage abilities
+  - Jörmungandr - Replaced Icicle Spear with Drown
+  - Rimturs - Changed order which abilities are learned
 
 ## v0.52-alpha - Family Passives (2026-01-19)
 - **Battle Animations introduced**

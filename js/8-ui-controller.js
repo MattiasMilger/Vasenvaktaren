@@ -132,6 +132,21 @@ document.querySelectorAll('.modal').forEach(modal => {
     });
 });
 
+// Close element and family collapsibles when clicking anywhere outside them
+document.addEventListener('click', (e) => {
+    // Check if the click was on a clickable element/family badge or inside a collapsible
+    const isClickableElement = e.target.closest('.clickable-element');
+    const isClickableFamily = e.target.closest('.clickable-family');
+    const isInsideCollapsible = e.target.closest('.element-matchup-collapsible, .element-guide-collapsible, .family-matchup-collapsible, .family-guide-collapsible');
+    
+    // If the click was not on a clickable badge and not inside any collapsible, close all
+    if (!isClickableElement && !isClickableFamily && !isInsideCollapsible) {
+        document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open, .family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
+            el.classList.remove('open');
+        });
+    }
+});
+
     }
 
     // Screen management
@@ -559,12 +574,12 @@ renderVasenDetails(vasen) {
                 </div>
                 <div class="details-meta">
                     <div class="element-matchup-collapsible">
-                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this)">${vasen.species.element}</span>
+                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${vasen.species.element}</span>
                         ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
                     <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
                     <div class="family-matchup-collapsible">
-                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${vasen.species.family}</span>
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
                         <div class="family-description-popup">
                             ${FAMILY_PASSIVES[vasen.species.family] ? `
                                 <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
@@ -768,7 +783,7 @@ renderVasenDetails(vasen) {
                     </div>
                     <div class="ability-stats">
                         <div class="element-matchup-collapsible">
-                            <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this)">${abilityElement}</span>
+                            <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event)">${abilityElement}</span>
                             ${this.generateAttackingMatchupsHTML(abilityElement)}
                         </div>
                         ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
@@ -1446,7 +1461,7 @@ renderCombatantPanel(side, vasen, battle) {
     const attackElementsHtml = attackElements.map(e => {
         return `
             <div class="element-matchup-collapsible inline-collapsible">
-                <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this)">${e}</span>
+                <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${e}</span>
                 ${this.generateAttackingMatchupsHTML(e)}
             </div>
         `;
@@ -1480,7 +1495,7 @@ renderCombatantPanel(side, vasen, battle) {
             <div class="element-matchup-collapsible">
 
                 <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element"
-                      onclick="toggleElementMatchup(this)">
+                      onclick="toggleElementMatchup(this, event)">
                     ${vasen.species.element}
                 </span>
 
@@ -1492,7 +1507,7 @@ renderCombatantPanel(side, vasen, battle) {
             </div>
             
             <div class="family-matchup-collapsible">
-                <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${vasen.species.family}</span>
+                <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
                 <div class="family-description-popup">
                     ${FAMILY_PASSIVES[vasen.species.family] ? `
                         <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
@@ -2469,7 +2484,7 @@ if (firstButton) firstButton.focus();
         elements.forEach(element => {
             html += `
                 <div class="element-guide-collapsible">
-                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this)">${element}</span>
+                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${element}</span>
                     <div class="element-guide-details">
                         <div class="guide-matchup-section">
                             <strong>Attacking:</strong>
@@ -2509,12 +2524,15 @@ if (firstButton) firstButton.focus();
             <div class="family-guide-list">
         `;
 
-        Object.values(FAMILIES).forEach(family => {
+        const families = Object.values(FAMILIES);
+        const halfPoint = Math.ceil(families.length / 2); // Split in half (5 and 4)
+
+        families.forEach((family, index) => {
             const description = FAMILY_DESCRIPTIONS[family] || 'No description available.';
             const passive = FAMILY_PASSIVES[family];
             html += `
                 <div class="family-guide-collapsible">
-                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this)">${family}</span>
+                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${family}</span>
                     <div class="family-description-popup">
                         ${passive ? `
                             <p><strong>Passive: ${passive.name}</strong><br>
@@ -2525,9 +2543,17 @@ if (firstButton) firstButton.focus();
                     </div>
                 </div>
             `;
+            
+            // Add a line break after the first half
+            if (index === halfPoint - 1) {
+                html += `
+            </div>
+            <div class="family-guide-list">
+                `;
+            }
         });
 
-        html += `</div>`;
+        html += `</div>`; 
 
         return html;
     }
@@ -2846,12 +2872,22 @@ function capitalize(str) {
 }
 
 // Helper function to toggle element matchup collapsibles (closes others when one opens)
-function toggleElementMatchup(element) {
+function toggleElementMatchup(element, event) {
+    // Stop propagation to prevent global click handler from closing immediately
+    if (event) {
+        event.stopPropagation();
+    }
+    
     const parent = element.parentElement;
     const isOpening = !parent.classList.contains('open');
     
-    // Close all other element matchup collapsibles (both types)
+    // Close all element matchup collapsibles (both types)
     document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+    
+    // Close all family collapsibles to make them mutually exclusive
+    document.querySelectorAll('.family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
         el.classList.remove('open');
     });
     
@@ -2862,12 +2898,22 @@ function toggleElementMatchup(element) {
 }
 
 // Helper function to toggle family description collapsibles
-function toggleFamilyDescription(element) {
+function toggleFamilyDescription(element, event) {
+    // Stop propagation to prevent global click handler from closing immediately
+    if (event) {
+        event.stopPropagation();
+    }
+    
     const parent = element.parentElement;
     const isOpening = !parent.classList.contains('open');
     
-    // Close all other family collapsibles (both types)
+    // Close all family collapsibles (both types)
     document.querySelectorAll('.family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+    
+    // Close all element collapsibles to make them mutually exclusive
+    document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open').forEach(el => {
         el.classList.remove('open');
     });
     

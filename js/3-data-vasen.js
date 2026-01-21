@@ -300,7 +300,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
-        abilities: ['Icicle Spear', 'Hail Storm', 'Wind Gust', 'Thick Coat'],
+        abilities: ['Hail Storm', 'Icicle Spear', 'Thick Coat', 'Wind Gust'],
         tamingItem: 'Ice Crystal',
         image: 'assets/vasen/rimturs.png'
     },
