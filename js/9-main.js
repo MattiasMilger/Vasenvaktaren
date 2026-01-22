@@ -29,17 +29,6 @@ class Game {
         ui.showScreen('mainMenu');
 
         document.getElementById('new-game-btn').onclick = () => this.showStarterSelection();
-        document.getElementById('continue-btn').onclick = () => {
-            if (gameState.loadGame()) {
-                this.showGameScreen();
-            } else {
-                ui.showMessage('No save data found.', 'error');
-            }
-        };
-
-        // Update continue button state
-        const hasSave = localStorage.getItem(GAME_CONFIG.SAVE_KEY) !== null;
-        document.getElementById('continue-btn').disabled = !hasSave;
     }
 
     // Show starter selection
@@ -89,33 +78,10 @@ class Game {
     confirmStarter() {
         if (!this.selectedStarter) return;
 
-        // Initialize new game
-        gameState.resetGame();
+        // Store the selected starter temporarily (don't create anything yet)
+        const selectedStarterName = this.selectedStarter;
 
-        // Create starter Vasen at level 5
-        const starter = new VasenInstance(this.selectedStarter, GAME_CONFIG.STARTER_LEVEL);
-
-        // Give starting rune (Uruz)
-        starter.equipRune('URUZ');
-        starter.maxMegin = starter.calculateMaxMegin();
-        starter.currentMegin = starter.maxMegin;
-
-        // Add to collection and party
-        gameState.vasenCollection.push(starter);
-        gameState.party[0] = starter;
-
-        // Add starting rune to collected
-        gameState.collectedRunes.add('URUZ');
-
-        // Give a random starting taming item from zone 1
-        const zone1Items = ['Mossy Bark', 'Shed Antlers', 'Elderflower Sprig', 'Morning Dew', 'Shedded Scale', 'Festive Midsommarkrans'];
-        const startingItem = zone1Items[Math.floor(Math.random() * zone1Items.length)];
-        gameState.addItem(startingItem, 1);
-
-        // Save and show game
-        gameState.saveGame();
-
-        // Show intro dialogue
+        // Show intro dialogue FIRST, before creating anything
         ui.showDialogue(
     'Welcome, Väktare',
     `
@@ -123,15 +89,38 @@ class Game {
             <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}
         </p>
         <p class="rune-hint">${RUNES.URUZ.effect}</p>
-        <p>Your <strong>${starter.getDisplayName()}</strong> stands ready at your side, 
+        <p>Your chosen companion stands ready at your side, 
            equipped with the rune's power.</p>
-        <p>You also found a <strong>${startingItem}</strong> to help you tame new Väsen.</p>
+        <p>You will also find an item to help you tame new Väsen.</p>
     `,
     [
         {
             text: 'Begin Journey',
             class: 'btn-primary',
             callback: () => {
+                // NOW initialize new game and create everything
+                gameState.resetGame();
+
+                // Create starter Vasen at level 5
+                const starter = new VasenInstance(selectedStarterName, GAME_CONFIG.STARTER_LEVEL);
+
+                // Give starting rune (Uruz)
+                starter.equipRune('URUZ');
+                starter.maxMegin = starter.calculateMaxMegin();
+                starter.currentMegin = starter.maxMegin;
+
+                // Add to collection and party
+                gameState.vasenCollection.push(starter);
+                gameState.party[0] = starter;
+
+                // Add starting rune to collected
+                gameState.collectedRunes.add('URUZ');
+
+                // Give a random starting taming item from zone 1
+                const zone1Items = ['Mossy Bark', 'Shed Antlers', 'Elderflower Sprig', 'Morning Dew', 'Shedded Scale', 'Festive Midsommarkrans'];
+                const startingItem = zone1Items[Math.floor(Math.random() * zone1Items.length)];
+                gameState.addItem(startingItem, 1);
+
                 // Start the game for real
                 gameState.gameStarted = true;
                 gameState.saveGame();
