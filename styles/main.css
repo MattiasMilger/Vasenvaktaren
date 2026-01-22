@@ -4053,6 +4053,28 @@ button {
         z-index: 9999;
         margin-top: var(--spacing-xs);
     }
+    
+    /* Enable horizontal scrolling for family/passive descriptions in combatant cards */
+    .family-matchup-collapsible .family-description-popup {
+        position: absolute;
+        width: 280px;
+        padding: var(--spacing-md);
+        overflow-x: scroll;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .family-matchup-collapsible .family-description-popup > * {
+        width: 450px;
+        min-width: 450px;
+    }
+    
+    .family-matchup-collapsible .family-description-popup p {
+        white-space: normal;
+        word-wrap: break-word;
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.6;
+    }
 }
 
 /* Three-box layout (desktop) - Make right panel scrollable */

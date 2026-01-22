@@ -680,25 +680,29 @@ handleAskItem() {
         this.currentBattle.playerTeam.forEach((vasen, index) => {
             if (vasen.isKnockedOut()) return;
 
-            let expMultiplier = 0.3; // Base party exp
+            let expMultiplier = 0.6; // Base party exp (updated from 0.3)
             if (vasen.battleFlags.turnsOnField > 0) {
-                expMultiplier = 0.6; // Participated
+                expMultiplier = 0.8; // Participated (updated from 0.6)
             }
             if (index === this.currentBattle.playerActiveIndex) {
                 expMultiplier = 1.0; // Dealt killing blow
             }
 
             const expAmount = Math.floor(expYield * expMultiplier);
+            // Check if väsen is at max level before displaying experience
+            const isMaxLevel = vasen.level >= GAME_CONFIG.MAX_LEVEL;
+            const displayExpAmount = isMaxLevel ? 0 : expAmount;
+            
             if (expAmount > 0) {
                 const levelResult = vasen.addExperience(expAmount);
                 battleResult.expGained.push({
                     name: vasen.getDisplayName(),
-                    amount: expAmount,
+                    amount: displayExpAmount, // Show 0 if at max level
                     leveledUp: levelResult.leveledUp,
                     newLevel: levelResult.newLevel
                 });
 
-                ui.addCombatLog(`${vasen.getName()} gained ${expAmount} experience!`, 'exp');
+                ui.addCombatLog(`${vasen.getName()} gained ${displayExpAmount} experience!`, 'exp');
                 if (levelResult.leveledUp) {
                     ui.addCombatLog(`${vasen.getName()} reached level ${levelResult.newLevel}!`, 'levelup');
                 }
@@ -794,10 +798,13 @@ handleAskItem() {
             this.currentBattle.playerTeam.forEach((vasen, index) => {
                 if (vasen.isKnockedOut()) return;
 
-                let expMultiplier = 0.3;
-                if (vasen.battleFlags.turnsOnField > 0) expMultiplier = 0.6;
+                let expMultiplier = 0.6; // Base party exp (updated from 0.3)
+                if (vasen.battleFlags.turnsOnField > 0) expMultiplier = 0.8; // Participated (updated from 0.6)
 
                 const expAmount = Math.floor(expYield * expMultiplier);
+                // Check if väsen is at max level
+                const isMaxLevel = vasen.level >= GAME_CONFIG.MAX_LEVEL;
+                
                 if (expAmount > 0) {
                     const levelResult = vasen.addExperience(expAmount);
 
@@ -807,7 +814,10 @@ handleAskItem() {
                         entry = { name: vasen.getDisplayName(), amount: 0, leveledUp: false, newLevel: vasen.level };
                         battleResult.expGained.push(entry);
                     }
-                    entry.amount += expAmount;
+                    // Only add to display amount if not at max level
+                    if (!isMaxLevel) {
+                        entry.amount += expAmount;
+                    }
                     if (levelResult.leveledUp) {
                         entry.leveledUp = true;
                         entry.newLevel = levelResult.newLevel;

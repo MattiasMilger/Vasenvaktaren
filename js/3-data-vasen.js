@@ -92,7 +92,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Drown', 'Ground Stomp', 'Thick Coat', 'Tidal Wave'],
+        abilities: ['Drown', 'Ground Stomp', 'Thick Coat', 'Wild Bite'],
         tamingItem: 'Drenched Saddle',
         image: 'assets/vasen/backahast.png'
     },
@@ -278,7 +278,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Boulder Toss', 'Ground Stomp', 'Skald\'s Mead', 'Burning Insult'],
+        abilities: ['Ground Stomp', 'Boulder Toss', 'Burning Insult', 'Skald\'s Mead'],
         tamingItem: 'Giant Rock',
         image: 'assets/vasen/jotun.png'
     },
@@ -289,7 +289,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Landslide', 'Lava Jet'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Boulder Toss', 'Lava Jet'],
         tamingItem: 'Glowing Coal',
         image: 'assets/vasen/eldturs.png'
     },
