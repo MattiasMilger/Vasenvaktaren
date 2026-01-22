@@ -4583,3 +4583,62 @@ button {
     );
     animation: holoSweep 3.5s ease-in-out infinite;
 }
+
+/* =============================================================================
+   COLLAPSIBLE INVENTORY (Mobile Only)
+   ============================================================================= */
+
+/* Hide toggle button on desktop */
+.inventory-toggle-btn {
+    display: none;
+}
+
+/* Mobile-only collapsible inventory styles */
+@media (max-width: 768px) {
+    .inventory-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: var(--spacing-md);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        color: var(--text-primary);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: var(--spacing-sm);
+        transition: background 0.2s ease;
+    }
+
+    .inventory-toggle-btn:hover {
+        background: var(--bg-hover);
+    }
+
+    .inventory-toggle-btn:active {
+        background: var(--bg-tertiary);
+    }
+
+    .toggle-icon {
+        font-size: var(--font-size-lg);
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+
+    .inventory-collapsible {
+        max-height: 2000px; /* Large enough for any content */
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .inventory-collapsible.collapsed {
+        max-height: 0;
+    }
+
+    /* Rotate icon when collapsed */
+    .inventory-toggle-btn.collapsed .toggle-icon {
+        transform: rotate(-90deg);
+    }
+}
+

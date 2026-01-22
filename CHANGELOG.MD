@@ -6,6 +6,10 @@ This project follows a simple semantic versioning pattern during Alpha developme
 
 ---
 
+## v0.54-alpha - hide inventory
+- implemented hide inventory for mobile
+
+
 ## v0.53-alpha - Empowerment System (2026-01-21)
 - **NEW FEATURE: Empowerment System** - Low-tier attacks now grant a damage buff
   - All low-tier attacks (30 megin cost, 50 power) now grant empowerment after use

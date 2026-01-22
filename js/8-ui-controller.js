@@ -132,6 +132,12 @@ document.querySelectorAll('.modal').forEach(modal => {
     });
 });
 
+// Inventory toggle for mobile
+const inventoryToggleBtn = document.getElementById('inventory-toggle-btn');
+if (inventoryToggleBtn) {
+    inventoryToggleBtn.addEventListener('click', () => this.toggleInventory());
+}
+
 // Close element and family collapsibles when clicking anywhere outside them
 document.addEventListener('click', (e) => {
     // Check if the click was on a clickable element/family badge or inside a collapsible
@@ -2448,6 +2454,25 @@ if (firstButton) firstButton.focus();
 
     hideCombatTips() {
         this.combatTipsModal.classList.remove('active');
+    }
+
+    // Toggle inventory visibility (mobile only)
+    toggleInventory() {
+        const toggleBtn = document.getElementById('inventory-toggle-btn');
+        const collapsible = document.getElementById('inventory-collapsible');
+        const toggleText = toggleBtn.querySelector('.toggle-text');
+        
+        if (collapsible.classList.contains('collapsed')) {
+            // Expand
+            collapsible.classList.remove('collapsed');
+            toggleBtn.classList.remove('collapsed');
+            toggleText.textContent = 'Hide Inventory';
+        } else {
+            // Collapse
+            collapsible.classList.add('collapsed');
+            toggleBtn.classList.add('collapsed');
+            toggleText.textContent = 'Show Inventory';
+        }
     }
 
     // Render dynamic Game Guide content (Element Matchups and Temperaments)
