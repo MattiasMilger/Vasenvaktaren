@@ -4593,6 +4593,14 @@ button {
     display: none;
 }
 
+/* Desktop: inventory-collapsible maintains flex layout */
+.inventory-collapsible {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
 /* Mobile-only collapsible inventory styles */
 @media (max-width: 768px) {
     .inventory-toggle-btn {
@@ -4627,6 +4635,7 @@ button {
     }
 
     .inventory-collapsible {
+        display: block; /* Override flex on mobile */
         max-height: 2000px; /* Large enough for any content */
         overflow: hidden;
         transition: max-height 0.3s ease;
