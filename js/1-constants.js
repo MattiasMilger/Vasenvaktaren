@@ -245,13 +245,13 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.VATTE]: { strength: 70, wisdom: 50, health: 55, defense: 55, durability: 80 },
-    [FAMILIES.VALNAD]: { strength: 55, wisdom: 70, health: 55, defense: 75, durability: 55 },
-    [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 45 },
-    [FAMILIES.TROLL]: { strength: 60, wisdom: 55, health: 70, defense: 70, durability: 60 },
+    [FAMILIES.VATTE]: { strength: 70, wisdom: 62, health: 55, defense: 55, durability: 80 },
+    [FAMILIES.VALNAD]: { strength: 62, wisdom: 72, health: 58, defense: 75, durability: 55 },
+    [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 46 },
+    [FAMILIES.TROLL]: { strength: 65, wisdom: 60, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 50, wisdom: 80, health: 60, defense: 65, durability: 60 },
     [FAMILIES.ALV]: { strength: 55, wisdom: 85, health: 60, defense: 55, durability: 60 },
-    [FAMILIES.ANDE]: { strength: 70, wisdom: 70, health: 55, defense: 80, durability: 50 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 57, defense: 80, durability: 50 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 50, health: 85, defense: 55, durability: 50 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
@@ -267,18 +267,18 @@ const ELEMENT_BONUSES = {
 const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
 
 const TEMPERAMENTS = {
-    HEALTHY: { name: 'Healthy', positive: 'health', negative: 'wisdom', modifier: 5 },
-    ENDURING: { name: 'Enduring', positive: 'durability', negative: 'wisdom', modifier: 5 },
-    STALWART: { name: 'Stalwart', positive: 'defense', negative: 'wisdom', modifier: 5 },
-    RESILIENT: { name: 'Resilient', positive: 'defense', negative: 'strength', modifier: 5 },
-    BRUTAL: { name: 'Brutal', positive: 'strength', negative: 'defense', modifier: 5 },
-    SAVAGE: { name: 'Savage', positive: 'strength', negative: 'durability', modifier: 5 },
-    FEROCIOUS: { name: 'Ferocious', positive: 'strength', negative: 'wisdom', modifier: 5 },
-    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom', negative: 'strength', modifier: 5 },
-    FOCUSED: { name: 'Focused', positive: 'wisdom', negative: 'health', modifier: 5 },
-    ALERT: { name: 'Alert', positive: 'wisdom', negative: 'defense', modifier: 5 },
-    VIGILANT: { name: 'Vigilant', positive: 'defense', negative: 'health', modifier: 5 },
-    WARY: { name: 'Wary', positive: 'durability', negative: 'health', modifier: 5 }
+    FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },
+    BRUTAL:     { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: 5 },
+    SAVAGE:     { name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: 5 },
+    ALERT:      { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: 5 },
+    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: 5 },
+    FOCUSED:    { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: 5 },
+    RESILIENT:  { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: 5 },
+    HEALTHY:    { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: 5 },
+    WARY:       { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: 5 },
+    STALWART:   { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: 5 },
+    ENDURING:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: 5 },
+    VIGILANT:   { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: 5 }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);

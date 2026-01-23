@@ -1,10 +1,28 @@
 # Changelog
 
 All notable changes to **Väsenväktaren** will be documented in this file.  
-This project follows a simple semantic versioning pattern during Alpha development:  
-`v0.xx-alpha` for feature updates and improvements.
 
 ---
+
+## beta 1.0 – Major Visual & Gameplay Update (2026‑01‑23)
+
+A broad upgrade to Väsenväktaren’s presentation and overall feel.  
+This update introduces a fully redesigned interface, improved readability, smoother transitions, and more polished interactions across combat, zones, inventory, and modals.
+
+Gameplay clarity and flow have also been improved, with better visual feedback, cleaner animations, and more consistent UI behavior on both desktop and mobile.
+
+### Highlights
+- Complete visual overhaul with a unified Dark Nordic Fantasy theme  
+- Improved combat interface, readability, and feedback  
+- Updated styling for zones, party, inventory, and collection  
+- Smoother animations and more consistent modal behavior  
+- Accessibility improvements and general polish  
+- Technical cleanup of CSS variables, transitions, and UI logic  
+- **Upcoming: Full ability‑learning overhaul for all väsen**  
+  - Rebalancing progression
+  - More thematic and immersive move sets
+  - Better alignment with family identity and gameplay roles
+
 
 ## v0.54-alpha - hide inventory
 - implemented hide inventory for mobile
