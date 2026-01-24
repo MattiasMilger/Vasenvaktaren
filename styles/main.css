@@ -4581,6 +4581,14 @@ button:focus-visible,
     display: inline-block;
 }
 
+/* Ensure family descriptions in details panel don't clip on desktop */
+.details-meta .family-matchup-collapsible .family-description-popup {
+    left: auto;
+    right: 0;
+    transform: none;
+    max-width: min(350px, calc(100vw - 32px));
+}
+
 /* Adjustments for ability stats element badge */
 .ability-stats .element-matchup-collapsible {
     display: inline-block;
