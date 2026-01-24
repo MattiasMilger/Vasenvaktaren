@@ -899,7 +899,7 @@ class Battle {
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
         // Damage range
-        const damageRange = 1 + (Math.random() * 0.1);
+        const damageRange = 1 + (Math.random() * GAME_CONFIG.DAMAGE_RANGE_VARIANCE);
         
         // Rune damage modifiers
         let runeMod = 1;
@@ -914,22 +914,22 @@ class Battle {
         };
         
         if (elementBonusRunes[abilityElement] && attacker.hasRune(elementBonusRunes[abilityElement])) {
-            runeMod += 0.12;
+            runeMod += GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST;
         }
         
         // Odal: low cost bonus
-        if (attacker.hasRune('ODAL') && ability.meginCost <= 30) {
-            runeMod += 0.12;
+        if (attacker.hasRune('ODAL') && ability.meginCost <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+            runeMod += GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST;
         }
         
         // Dagaz: first round bonus
         if (attacker.hasRune('DAGAZ') && attacker.battleFlags.isFirstRound) {
-            runeMod += 0.20;
+            runeMod += GAME_CONFIG.RUNE_DAGAZ_DAMAGE_BOOST;
         }
         
         // Fehu: reduce potent damage taken
         if (matchup === 'POTENT' && defender.hasRune('FEHU')) {
-            runeMod *= 0.90;
+            runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
         }
         
         // Vätte family passive: Tag Team damage boost
@@ -953,12 +953,12 @@ class Battle {
             const strengthDamage = this.calculateSingleTypeDamage(
                 power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
                 damageRange, elementMod, runeMod
-            ) * 0.5;
+            ) * GAME_CONFIG.MIXED_ATTACK_STRENGTH_PORTION;
             
             const wisdomDamage = this.calculateSingleTypeDamage(
                 power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
                 damageRange, elementMod, runeMod
-            ) * 0.5;
+            ) * GAME_CONFIG.MIXED_ATTACK_WISDOM_PORTION;
             
             totalDamage = strengthDamage + wisdomDamage;
         } else if (useStrength) {
@@ -1079,7 +1079,7 @@ class Battle {
         };
         
         if (elementAbilityBuffs[abilityElement] && attacker.hasRune(elementAbilityBuffs[abilityElement].rune)) {
-            if (Math.random() < 0.30) {
+            if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
                 const buffData = elementAbilityBuffs[abilityElement];
                 this.addLog(`${RUNES[buffData.rune].symbol} ${RUNES[buffData.rune].name} was activated!`, 'rune');
                 buffData.stats.forEach(stat => {
@@ -1092,8 +1092,8 @@ class Battle {
         
         // Algiz: Nature ability heal
         if (abilityElement === ELEMENTS.NATURE && attacker.hasRune('ALGIZ')) {
-            if (Math.random() < 0.30) {
-                const healAmount = attacker.healPercent(0.08);
+            if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
+                const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     this.addLog(`${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
                     this.addLog(`${attacker.getName()} gained ${healAmount} health!`, 'heal');
@@ -1103,9 +1103,9 @@ class Battle {
         }
         
         // Jera: low cost heal
-        if (attacker.hasRune('JERA') && ability.meginCost <= 30) {
-            if (Math.random() < 0.30) {
-                const healAmount = attacker.healPercent(0.08);
+        if (attacker.hasRune('JERA') && ability.meginCost <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+            if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
+                const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                 if (healAmount > 0) {
                     this.addLog(`${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
                     this.addLog(`${attacker.getName()} gained ${healAmount} health!`, 'heal');
@@ -1132,8 +1132,8 @@ class Battle {
             // Inguz: megin drain on weak hit
             if (attacker.hasRune('INGUZ')) {
                 this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                defender.spendMegin(18);
-                this.addLog(`${defender.getName()} lost 18 Megin!`, 'megin');
+                defender.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
+                this.addLog(`${defender.getName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin' });
             }
         }
@@ -1252,11 +1252,11 @@ class Battle {
             let expPercent = 0;
             
             if (tracker.dealtKillingBlow) {
-                expPercent = 1.0; // 100%
+                expPercent = GAME_CONFIG.EXP_KILLING_BLOW; // 100%
             } else if (tracker.turnsOnField > 0) {
-                expPercent = 0.7; // 70% for participated
+                expPercent = GAME_CONFIG.EXP_PARTICIPATED_ON_FIELD; // 70% for participated
             } else if (tracker.participated) {
-                expPercent = 0.5; // 50% for in party but not on field
+                expPercent = GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED; // 50% for in party but not on field
             }
             
             const expGained = Math.floor(totalEnemyExp * expPercent);
@@ -1339,16 +1339,16 @@ class EnemyAI {
             
             if (usageCount === 0) {
                 // First use - decent score
-                score += 30;
+                score += GAME_CONFIG.AI_UTILITY_FIRST_USE_SCORE;
             } else if (usageCount === 1) {
                 // Second use - reduced score
-                score += 10;
+                score += GAME_CONFIG.AI_UTILITY_SECOND_USE_SCORE;
             } else {
                 // Third+ use - very low score (make it almost never chosen)
-                score -= 80;
+                score += GAME_CONFIG.AI_UTILITY_THIRD_USE_PENALTY;
             }
         } else {
-            score += 20;
+            score += GAME_CONFIG.AI_NON_UTILITY_BASE_SCORE;
         }
         
         // Damage bonus
@@ -1356,9 +1356,9 @@ class EnemyAI {
             const predictedDamage = this.predictDamage(abilityName);
             
             if (predictedDamage >= this.target.currentHealth) {
-                score += 100; // Knockout bonus
-            } else if (predictedDamage >= this.target.maxHealth * 0.5) {
-                score += 50; // High damage bonus
+                score += GAME_CONFIG.AI_KNOCKOUT_BONUS; // Knockout bonus
+            } else if (predictedDamage >= this.target.maxHealth * GAME_CONFIG.AI_HIGH_DAMAGE_THRESHOLD) {
+                score += GAME_CONFIG.AI_HIGH_DAMAGE_BONUS; // High damage bonus
             }
             
             // Empowerment strategy: 
@@ -1366,10 +1366,10 @@ class EnemyAI {
             // If empowered and ability is high-power, give bonus for using empowerment
             if (!this.vasen.battleFlags.isEmpowered && abilityGrantsEmpowerment(abilityName)) {
                 // Give bonus to low-tier attacks if we're not empowered (setup for next turn)
-                score += 15;
-            } else if (this.vasen.battleFlags.isEmpowered && !abilityGrantsEmpowerment(abilityName) && ability.power >= 65) {
+                score += GAME_CONFIG.AI_EMPOWERMENT_SETUP_BONUS;
+            } else if (this.vasen.battleFlags.isEmpowered && !abilityGrantsEmpowerment(abilityName) && ability.power >= GAME_CONFIG.AI_HIGH_POWER_THRESHOLD) {
                 // Give significant bonus to high-power attacks if we're empowered
-                score += 35;
+                score += GAME_CONFIG.AI_EMPOWERED_HIGH_POWER_BONUS;
             }
             
             // Element bonus
@@ -1377,13 +1377,13 @@ class EnemyAI {
             const matchup = getMatchupType(abilityElement, this.target.species.element);
             
             if (matchup === 'POTENT') {
-                score += 20;
+                score += GAME_CONFIG.AI_ELEMENT_POTENT_BONUS;
             } else if (matchup === 'WEAK') {
                 // Check for weak hit runes
                 if (this.vasen.hasRune('NAUDIZ') || this.vasen.hasRune('INGUZ')) {
-                    score -= 5;
+                    score += GAME_CONFIG.AI_ELEMENT_WEAK_WITH_RUNE_PENALTY;
                 } else {
-                    score -= 30;
+                    score += GAME_CONFIG.AI_ELEMENT_WEAK_WITHOUT_RUNE_PENALTY;
                 }
             }
             
@@ -1397,38 +1397,38 @@ class EnemyAI {
             
             if (usageCount < 2) {
                 if (ability.effect && ability.effect.type === 'buff') {
-                    score += 40;
+                    score += GAME_CONFIG.AI_BUFF_BONUS;
                 } else if (ability.effect && ability.effect.type === 'debuff') {
-                    score += 30;
+                    score += GAME_CONFIG.AI_DEBUFF_BONUS;
                 }
             }
         }
         
         // Megin penalty
         const meginCost = this.vasen.getAbilityMeginCost(abilityName);
-        if (meginCost > this.vasen.currentMegin * 0.5) {
-            score -= 15;
+        if (meginCost > this.vasen.currentMegin * GAME_CONFIG.AI_MEGIN_PENALTY_THRESHOLD) {
+            score += GAME_CONFIG.AI_MEGIN_PENALTY;
         }
         
         // Risk penalty
         const threatLevel = this.assessThreat();
-        if (threatLevel > 0.6) {
-            score -= 20;
+        if (threatLevel > GAME_CONFIG.AI_RISK_PENALTY_THRESHOLD) {
+            score += GAME_CONFIG.AI_RISK_PENALTY;
         }
         
         // Variance
-        const variance = this.isGuardian ? 5 : 20;
+        const variance = this.isGuardian ? GAME_CONFIG.AI_GUARDIAN_VARIANCE : GAME_CONFIG.AI_WILD_VARIANCE;
         score += (Math.random() * variance * 2) - variance;
         
         return score;
     }
     
     scoreSwap(target) {
-        let score = 5;
+        let score = GAME_CONFIG.AI_SWAP_BASE_SCORE;
         
         // Low health bonus
-        if (this.vasen.currentHealth < this.vasen.maxHealth * 0.3) {
-            score += 30;
+        if (this.vasen.currentHealth < this.vasen.maxHealth * GAME_CONFIG.AI_SWAP_LOW_HEALTH_THRESHOLD) {
+            score += GAME_CONFIG.AI_SWAP_LOW_HEALTH_BONUS;
         }
         
         // Type advantage
@@ -1436,11 +1436,11 @@ class EnemyAI {
         const newMatchup = getMatchupType(this.target.species.element, target.species.element);
         
         if (currentMatchup === 'POTENT' && newMatchup !== 'POTENT') {
-            score += 20;
+            score += GAME_CONFIG.AI_SWAP_ELEMENT_ADVANTAGE_BONUS;
         }
         
         // Variance
-        score += (Math.random() * 10) - 5;
+        score += (Math.random() * GAME_CONFIG.AI_SWAP_VARIANCE) - (GAME_CONFIG.AI_SWAP_VARIANCE / 2);
         
         return score;
     }
@@ -1504,7 +1504,7 @@ class EnemyAI {
         const matchup = getMatchupType(this.target.species.element, this.vasen.species.element);
         
         let threat = 1 - healthRatio;
-        if (matchup === 'POTENT') threat += 0.2;
+        if (matchup === 'POTENT') threat += GAME_CONFIG.AI_THREAT_ELEMENT_BONUS;
         
         return Math.min(1, threat);
     }

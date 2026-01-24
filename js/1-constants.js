@@ -3,44 +3,179 @@
 // =============================================================================
 
 const GAME_CONFIG = {
+    // =============================================================================
+    // GENERAL GAME SETTINGS
+    // =============================================================================
     MAX_TEAM_SIZE: 3,
     MAX_INVENTORY_SIZE: 99,
     MAX_ITEM_STACK: 99,
     MAX_BATTLE_LOG: 99,
+    SAVE_KEY: 'vasenvaktaren_save',
+    
+    // =============================================================================
+    // LEVEL & PROGRESSION
+    // =============================================================================
     MAX_LEVEL: 30,
     ENEMY_MAX_LEVEL: 999,
-    SAVE_KEY: 'vasenvaktaren_save',
     STARTER_LEVEL: 7,
-    BASE_MEGIN: 60,
-    MEGIN_PER_LEVEL: 2,
-    MEGIN_REGEN_RATE: 0.12,
-    SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,
     BASE_LEVEL_UP_EXP: 55,
     LEVEL_UP_ACCELERATION: 5,
-    BASE_EXP_YIELD: 45,
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
-    POWER_CONSTANT: 250,
-    DEFENSE_CONSTANT: 200,
-    POST_BATTLE_HEAL_PERCENT: 0.05,
-    SACRED_WELL_HEAL_PERCENT: 0.80,
-    CORRECT_ITEM_HEAL_PERCENT: 0.80,
-    WRONG_ITEM_HEAL_PERCENT: 0.50,
-    MAX_OFFERS_PER_COMBAT: 3,
+    
+    // =============================================================================
+    // EXPERIENCE DISTRIBUTION
+    // =============================================================================
+    // Base experience yield per enemy level (modified by rarity)
+    BASE_EXP_YIELD: 45,
+    
+    // Experience percentages awarded based on participation level
+    EXP_KILLING_BLOW: 1.0,              // 100% - Dealt the final blow that knocked out the enemy
+    EXP_PARTICIPATED_ON_FIELD: 0.7,     // 70% - Spent at least one turn actively on the battlefield
+    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // 50% - In the party but never entered the battlefield
+    
+    // =============================================================================
+    // MEGIN (ENERGY SYSTEM)
+    // =============================================================================
+    BASE_MEGIN: 60,
+    MEGIN_PER_LEVEL: 2,
+    MEGIN_REGEN_RATE: 0.12,             // 12% of max Megin restored per turn
+    SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,  // 15% discount when using same-element abilities
+    
+    // =============================================================================
+    // ATTRIBUTE STAGES (BUFFS/DEBUFFS)
+    // =============================================================================
     MAX_ATTRIBUTE_STAGE: 5,
     MIN_ATTRIBUTE_STAGE: -5,
-    ATTRIBUTE_STAGE_MODIFIER: 0.1,
+    ATTRIBUTE_STAGE_MODIFIER: 0.1,      // Each stage = 10% increase/decrease
+    
+    // =============================================================================
+    // DAMAGE CALCULATION
+    // =============================================================================
+    POWER_CONSTANT: 250,
+    DEFENSE_CONSTANT: 200,
+    DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance (±10%)
+    
+    // Mixed-type attacks split damage calculation 50/50 between Strength and Wisdom
+    MIXED_ATTACK_STRENGTH_PORTION: 0.5,
+    MIXED_ATTACK_WISDOM_PORTION: 0.5,
+    
+    // Empowerment system for low-tier attacks
+    EMPOWERMENT_DAMAGE_BOOST: 0.08,     // +8% damage on next attack
+    
+    // =============================================================================
+    // HEALING
+    // =============================================================================
+    POST_BATTLE_HEAL_PERCENT: 0.05,     // 5% health restored after winning battle
+    SACRED_WELL_HEAL_PERCENT: 0.80,     // 80% health restored at Sacred Well
+    CORRECT_ITEM_HEAL_PERCENT: 0.80,    // 80% health restored when giving correct taming item
+    WRONG_ITEM_HEAL_PERCENT: 0.50,      // 50% health restored when giving wrong item
+    
+    // =============================================================================
+    // TAMING SYSTEM
+    // =============================================================================
+    MAX_OFFERS_PER_COMBAT: 3,           // Maximum items that can be offered per battle
+    
+    // =============================================================================
+    // EXPLORATION & PITY SYSTEM
+    // =============================================================================
     // Pity thresholds for exploration anti-grief system
-    PITY_BATTLE_THRESHOLD: 4,
-    PITY_ITEM_THRESHOLD: 5,
-    PITY_RUNE_THRESHOLD: 20,
-    PITY_SACRED_WELL_THRESHOLD: 4,
+    PITY_BATTLE_THRESHOLD: 4,           // Force battle after 4 non-battle encounters
+    PITY_ITEM_THRESHOLD: 5,             // Force item after 5 non-item encounters
+    PITY_RUNE_THRESHOLD: 20,            // Force rune after 20 non-rune encounters
+    PITY_SACRED_WELL_THRESHOLD: 4,      // Force Sacred Well after 4 battles
+    
+    // =============================================================================
+    // BATTLE UI
+    // =============================================================================
     // Input delay after each battle action to prevent spamming through turns (in milliseconds)
     BATTLE_INPUT_DELAY: 800,
-    // Endless Tower configuration
+    
+    // =============================================================================
+    // ENDLESS TOWER
+    // =============================================================================
     ENDLESS_TOWER_START_LEVEL: 30,
     ENDLESS_TOWER_MAX_FLOOR: 999,
-    // Empowerment system for low-tier attacks
-    EMPOWERMENT_DAMAGE_BOOST: 0.08
+    
+    // =============================================================================
+    // RUNE EFFECTS
+    // =============================================================================
+    // Elemental damage boost runes (Kaunan/Fire, Pertho/Earth, Tyr/Wind, Bjarka/Nature, Laguz/Water)
+    RUNE_ELEMENT_DAMAGE_BOOST: 0.12,    // +12% damage when using matching element
+    
+    // Odal: Low-cost ability damage boost
+    RUNE_ODAL_DAMAGE_BOOST: 0.10,       // +10% damage for abilities costing ≤30 Megin
+    RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
+    
+    // Dagaz: First round damage boost
+    RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +20% damage on first round in battle
+    
+    // Fehu: Potent hit damage reduction
+    RUNE_FEHU_DAMAGE_REDUCTION: 0.90,   // Reduce potent hits by 10% (multiply by 0.90)
+    
+    // Element-specific buff runes (Eihwaz/Earth, Sol/Fire, Ehwaz/Wind, Isaz/Water)
+    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // 30% chance to trigger attribute buff on hit
+    
+    // Nature healing runes (Algiz, Jera)
+    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // 30% chance for Algiz to heal on Nature ability hit
+    RUNE_ALGIZ_HEAL_PERCENT: 0.08,       // Heal 8% of max health when triggered
+    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // 30% chance for Jera to heal on low-cost hit
+    RUNE_JERA_HEAL_PERCENT: 0.08,        // Heal 8% of max health when triggered
+    
+    // Inguz: Megin drain on weak hits
+    RUNE_INGUZ_MEGIN_DRAIN: 18,          // Drain 18 Megin from enemy on weak hit
+    
+    // Mannaz: Heal on utility ability use
+    RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal 8% of max health when using utility ability
+    
+    // =============================================================================
+    // ENEMY AI CONFIGURATION
+    // =============================================================================
+    
+    // --- Ability Scoring Weights ---
+    // Base scores for different ability types
+    AI_UTILITY_FIRST_USE_SCORE: 30,      // First use of utility ability
+    AI_UTILITY_SECOND_USE_SCORE: 10,     // Second use of utility ability (diminishing value)
+    AI_UTILITY_THIRD_USE_PENALTY: -80,   // Third+ use penalty (avoid spam)
+    AI_NON_UTILITY_BASE_SCORE: 20,       // Base score for damaging abilities
+    
+    // Damage-based bonuses
+    AI_KNOCKOUT_BONUS: 100,              // Bonus if predicted damage will KO the target
+    AI_HIGH_DAMAGE_BONUS: 50,            // Bonus if damage is significant
+    AI_HIGH_DAMAGE_THRESHOLD: 0.5,       // Threshold: 50% of target's max health
+    
+    // Empowerment strategy bonuses
+    AI_EMPOWERMENT_SETUP_BONUS: 15,      // Bonus for using low-tier attack to gain empowerment
+    AI_EMPOWERED_HIGH_POWER_BONUS: 35,   // Bonus for using high-power attack while empowered
+    AI_HIGH_POWER_THRESHOLD: 65,         // Power threshold to be considered "high-power"
+    
+    // Element matchup bonuses/penalties
+    AI_ELEMENT_POTENT_BONUS: 20,         // Bonus for potent element matchup
+    AI_ELEMENT_WEAK_WITH_RUNE_PENALTY: -5,    // Small penalty for weak hit if has Naudiz/Inguz
+    AI_ELEMENT_WEAK_WITHOUT_RUNE_PENALTY: -30, // Large penalty for weak hit without runes
+    
+    // Utility ability bonuses
+    AI_BUFF_BONUS: 40,                   // Bonus for buff utility abilities
+    AI_DEBUFF_BONUS: 30,                 // Bonus for debuff utility abilities
+    
+    // Resource management penalties
+    AI_MEGIN_PENALTY_THRESHOLD: 0.5,     // Penalize if ability costs >50% of current Megin
+    AI_MEGIN_PENALTY: -15,               // Penalty applied when above threshold
+    
+    // Risk assessment penalties
+    AI_RISK_PENALTY_THRESHOLD: 0.6,      // Apply penalty when threat level >0.6
+    AI_RISK_PENALTY: -20,                // Penalty for risky situations
+    AI_THREAT_ELEMENT_BONUS: 0.2,        // Threat increase if facing potent matchup
+    
+    // Random variance for decision variety
+    AI_GUARDIAN_VARIANCE: 5,             // Low variance for guardian battles (more predictable)
+    AI_WILD_VARIANCE: 20,                // High variance for wild battles (more random)
+    
+    // --- Swap Scoring ---
+    AI_SWAP_BASE_SCORE: 5,               // Base score for swapping
+    AI_SWAP_LOW_HEALTH_THRESHOLD: 0.3,   // Swap bonus when health <30%
+    AI_SWAP_LOW_HEALTH_BONUS: 30,        // Bonus for swapping when low on health
+    AI_SWAP_ELEMENT_ADVANTAGE_BONUS: 20, // Bonus for swapping to better matchup
+    AI_SWAP_VARIANCE: 10                 // Random variance for swap decisions
 };
 
 // Family Passive Configuration
@@ -207,39 +342,57 @@ const FAMILY_DESCRIPTIONS = {
 const FAMILY_PASSIVES = {
     [FAMILIES.ALV]: {
         name: 'Innate Megin',
-        description: 'Increases max Megin by 14%.'
+        get description() {
+            return `Increases max Megin by ${Math.round(FAMILY_PASSIVE_CONFIG.ALV_MEGIN_BOOST * 100)}%.`;
+        }
     },
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
-        description: 'When entering the battlefield, raises one random attribute by 1 stage (once per battle).'
+        get description() {
+            return `When entering the battlefield, raises one random attribute by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`;
+        }
     },
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
-        description: 'When current health falls to 50% or lower, gain +1 Defense stage and +1 Durability stage (once per battle).'
+        get description() {
+            return `When current health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durability stage (once per battle).`;
+        }
     },
     [FAMILIES.JATTE]: {
         name: 'Colossal Power',
-        description: 'Basic Strike always has 35 power instead of its default power.'
+        get description() {
+            return `Basic Strike always has ${FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER} power instead of its default power.`;
+        }
     },
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
-        description: 'After spending 2 full turns on the battlefield, gain +1 Strength stage and +1 Wisdom stage (once per battle).'
+        get description() {
+            return `After spending ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} full turns on the battlefield, gain +${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} Strength stage and +${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} Wisdom stage (once per battle).`;
+        }
     },
     [FAMILIES.RA]: {
         name: 'Malicious Retaliation',
-        description: 'When hit by an enemy attack, lowers two random enemy attributes by 1 stage each (once per battle).'
+        get description() {
+            return `When hit by an enemy attack, lowers ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT} random enemy attributes by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} stage each (once per battle).`;
+        }
     },
     [FAMILIES.TROLL]: {
         name: 'Troll Theft',
-        description: 'When using an ability, steals one positive attribute stage from the enemy (once per battle).'
+        get description() {
+            return `When using an ability, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
+        }
     },
     [FAMILIES.VATTE]: {
         name: 'Tag Team',
-        description: 'When swapping out, the incoming ally gains +30% damage for the current turn.'
+        get description() {
+            return `When swapping out, the incoming ally gains +${Math.round(FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST * 100)}% damage for the current turn.`;
+        }
     },
     [FAMILIES.VALNAD]: {
         name: 'Deathless',
-        description: 'Upon knockout, revives with 10% of max health (once per battle).'
+        get description() {
+            return `Upon knockout, revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
+        }
     }
 };
 
