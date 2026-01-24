@@ -17,6 +17,7 @@ class UIController {
     init() {
         this.cacheElements();
         this.setupEventListeners();
+        this.restoreInventoryState();
     }
 
     // Cache DOM elements
@@ -2478,11 +2479,35 @@ if (firstButton) firstButton.focus();
             collapsible.classList.remove('collapsed');
             toggleBtn.classList.remove('collapsed');
             toggleText.textContent = 'Hide Inventory';
+            localStorage.setItem('inventoryCollapsed', 'false');
         } else {
             // Collapse
             collapsible.classList.add('collapsed');
             toggleBtn.classList.add('collapsed');
             toggleText.textContent = 'Show Inventory';
+            localStorage.setItem('inventoryCollapsed', 'true');
+        }
+    }
+
+    // Restore inventory collapsed state from localStorage
+    restoreInventoryState() {
+        const toggleBtn = document.getElementById('inventory-toggle-btn');
+        const collapsible = document.getElementById('inventory-collapsible');
+        const toggleText = toggleBtn ? toggleBtn.querySelector('.toggle-text') : null;
+        
+        // Only restore state if elements exist (mobile only)
+        if (!toggleBtn || !collapsible || !toggleText) return;
+        
+        const isCollapsed = localStorage.getItem('inventoryCollapsed') === 'true';
+        
+        if (isCollapsed) {
+            collapsible.classList.add('collapsed');
+            toggleBtn.classList.add('collapsed');
+            toggleText.textContent = 'Show Inventory';
+        } else {
+            collapsible.classList.remove('collapsed');
+            toggleBtn.classList.remove('collapsed');
+            toggleText.textContent = 'Hide Inventory';
         }
     }
 

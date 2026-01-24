@@ -2349,7 +2349,6 @@ button {
     border-color: var(--accent-gold);
     color: var(--text-primary);
     box-shadow: 0 0 12px rgba(201, 167, 90, 0.25), var(--shadow-md);
-    transform: translateX(6px);
 }
 
 .zone-item .zone-name,
@@ -4592,10 +4591,8 @@ button:focus-visible,
     margin-right: 2px;
 }
 
-.combatant-attack-elements .matchup-details {
-    left: auto;
-    right: 0;
-}
+/* Remove the override - let attack element popups center under their badges on desktop */
+/* .combatant-attack-elements .matchup-details is now handled by default centering */
 
 /* Ensure matchup details stay static (not fixed) on mobile */
 @media (max-width: 768px) {
@@ -4608,6 +4605,24 @@ button:focus-visible,
         max-width: 90vw;
         z-index: 9999;
         margin-top: var(--spacing-xs);
+    }
+    
+    /* Special positioning for attack elements at bottom of combatant card */
+    .combatant-attack-elements .element-matchup-collapsible .matchup-details {
+        position: absolute;
+        bottom: 100%;
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        max-width: min(200px, calc(100vw - 32px));
+        margin-top: 0;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    /* Ensure it stays within combatant panel */
+    .combatant-panel .combatant-attack-elements .element-matchup-collapsible .matchup-details {
+        max-width: 200px;
     }
     
     .element-guide-collapsible .element-guide-details {
@@ -4624,10 +4639,21 @@ button:focus-visible,
     /* Family passive descriptions should wrap naturally on mobile */
     .family-matchup-collapsible .family-description-popup {
         position: absolute;
-        max-width: 90vw;
-        min-width: 250px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: calc(100vw - 32px);
+        min-width: 200px;
         padding: var(--spacing-md);
-        overflow: visible;
+        overflow-x: auto;
+        overflow-y: visible;
+        white-space: normal;
+    }
+    
+    /* Ensure popup stays within combatant panel on mobile */
+    .combatant-panel .family-matchup-collapsible .family-description-popup {
+        max-width: min(220px, calc(100vw - 32px));
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .family-matchup-collapsible .family-description-popup > * {
@@ -4638,6 +4664,7 @@ button:focus-visible,
     .family-matchup-collapsible .family-description-popup p {
         white-space: normal;
         word-wrap: break-word;
+        overflow-wrap: break-word;
         margin-bottom: var(--spacing-sm);
         line-height: 1.6;
     }
