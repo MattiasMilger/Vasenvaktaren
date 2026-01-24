@@ -18,7 +18,7 @@ Gameplay clarity and flow have also been improved, with better visual feedback, 
 - Smoother animations and more consistent modal behavior  
 - Accessibility improvements and general polish  
 - Technical cleanup of CSS variables, transitions, and UI logic  
-- Rebalancing progression
+- Rebalancing progression and attributes
 - More thematic and immersive move sets
 - Better alignment with family identity and gameplay roles
 

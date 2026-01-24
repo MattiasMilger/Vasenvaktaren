@@ -699,6 +699,17 @@ renderVasenDetails(vasen) {
             </button>
         </div>
     `;
+
+    // Auto-scroll to details panel on mobile
+    if (window.innerWidth <= 768) {
+        // Use setTimeout to ensure the content is rendered before scrolling
+        setTimeout(() => {
+            this.vasenDetailsPanel.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 100);
+    }
 }
 
     // Render rune slots for details panel

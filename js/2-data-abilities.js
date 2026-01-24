@@ -51,7 +51,7 @@ const ABILITIES = {
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: 35,
         effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
     },
 
@@ -96,7 +96,7 @@ const ABILITIES = {
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: 35,
         effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1 }
     },
 
@@ -141,7 +141,7 @@ const ABILITIES = {
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: 35,
         effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 }
     },
 
@@ -186,7 +186,7 @@ const ABILITIES = {
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 60,
+        meginCost: 50,
         effect: { type: 'debuff', target: 'enemy', stats: ['defense', 'durability'], stages: 2 }
     },
 
@@ -231,7 +231,7 @@ const ABILITIES = {
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: 35,
         effect: { type: 'debuff', target: 'enemy', stats: ['strength', 'wisdom'], stages: 1 }
     },
 
