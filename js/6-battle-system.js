@@ -1019,8 +1019,8 @@ class Battle {
                     effects.push({ stat, change: result.changed });
                     
                     // Gifu: share first buff
-                    if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
-                        user.battleFlags.gifuTriggered = true;
+                    if (!targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
+                        targetVasen.battleFlags.gifuTriggered = true;
                         this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
                         
                         const allies = isPlayer ? this.playerTeam : this.enemyTeam;
