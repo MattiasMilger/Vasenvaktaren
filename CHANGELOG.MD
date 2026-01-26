@@ -4,6 +4,32 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
+## beta 1.1 – Code Modularization (2026-01-26)
+
+**Technical update** - Project structure reorganized for better maintainability and development workflow.
+**Zone animation** - Added animation affect to the zone images
+
+### Changes
+- **CSS Modularization**: Split main.css (5,255 lines) into 15 focused modules organized by feature
+  - Variables, reset, utilities, layout, buttons, panels, väsen, party, zones, combat, modals, badges, animations, responsive
+  - Main.css now serves as import file only
+- **Battle System Split**: Separated battle-system.js into two files
+  - `6a-battle-core.js` - Battle class and core mechanics
+  - `6b-battle-ai.js` - Enemy AI decision-making
+- **Code Organization**: Reorganized JavaScript into logical folders
+  - `js/core/` - Game data and constants
+  - `js/systems/` - Battle and state management
+- **Documentation**: Added MIGRATION.md with detailed explanation of changes
+
+### Technical Details
+- No gameplay changes or breaking changes
+- All functionality preserved
+- Improved code findability and maintainability
+- Better separation of concerns
+- Easier collaboration and future development
+
+---
+
 ## beta 1.0 – Major Visual & Gameplay Update (2026‑01‑23)
 
 A broad upgrade to Väsenväktaren’s presentation and overall feel.  

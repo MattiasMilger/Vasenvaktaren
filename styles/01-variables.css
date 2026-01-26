@@ -1,0 +1,100 @@
+/* =============================================================================
+   01-variables.css - CSS Variables
+   ============================================================================= */
+
+:root {
+    /* Background Colors - Deeper, more atmospheric */
+    --bg-primary: #16161c;
+    --bg-secondary: #1e1e28;
+    --bg-tertiary: #252533;
+    --bg-card: #2a2a3a;
+    --bg-hover: #323244;
+
+    /* Text Colors - Better contrast */
+    --text-primary: #f4f4f8;
+    --text-secondary: #d0d0dc;
+    --text-muted: #9898aa;
+    --text-accent: #dcc896;
+
+    /* Accent Colors - More vibrant */
+    --accent-primary: #8fa67e;
+    --accent-secondary: #7a92ab;
+    --accent-danger: #c46c6c;
+    --accent-warning: #d4a933;
+    --accent-gold: #c9a75a;
+
+    /* Border Colors */
+    --border-color: #3f3f52;
+    --border-light: #505066;
+    --border-focus: #7a92ab;
+
+    /* Border Radius */
+    --border-radius: 8px;
+    --border-radius-sm: 4px;
+    --border-radius-lg: 12px;
+
+    /* Spacing - More consistent scale */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+
+    /* Typography - Enhanced scale */
+    --font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.375rem;
+    --font-size-2xl: 1.75rem;
+    --font-size-3xl: 2.25rem;
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Element Colors - More vibrant and distinctive */
+    --element-earth: #a67c3a;
+    --element-nature: #5fa13a;
+    --element-water: #3d8ed4;
+    --element-fire: #d95555;
+    --element-wind: #9b8fc4;
+
+    /* Rarity Colors - Enhanced */
+    --rarity-common: #9898aa;
+    --rarity-uncommon: #5fa13a;
+    --rarity-rare: #3d8ed4;
+    --rarity-mythical: #d47dff;
+
+    /* Health/Megin Colors - More vibrant */
+    --health-fill: #5fa13a;
+    --health-bg: #1e2f1e;
+    --megin-fill: #5d7fb8;
+    --megin-bg: #1e2633;
+
+    /* Shadows - For depth */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+    /* Glows - For accents */
+    --glow-primary: 0 0 12px rgba(143, 166, 126, 0.3);
+    --glow-danger: 0 0 12px rgba(196, 108, 108, 0.3);
+    --glow-element: 0 0 8px currentColor;
+
+    /* Combat Panel Colors */
+    --combat-player-bg: rgba(61, 142, 212, 0.08);
+    --combat-player-border: #5d7fb8;
+    --combat-enemy-bg: rgba(217, 85, 85, 0.08);
+    --combat-enemy-border: #c46c6c;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+}

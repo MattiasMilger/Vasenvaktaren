@@ -1,0 +1,242 @@
+/* =============================================================================
+   08-party.css - Extracted Section
+   ============================================================================= */
+
+/* =============================================================================
+   17. PARTY SECTION
+   ============================================================================= */
+.party-section {
+    padding: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.section-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--accent-gold);
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.party-slots {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.party-slot {
+    position: relative;
+    flex: 1;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* Lead slot (slot 0) special styling */
+.party-slot[data-slot="0"],
+#party-slot-0 {
+    border-color: var(--accent-gold);
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(201, 167, 90, 0.08) 100%);
+}
+
+.party-slot[data-slot="0"] .slot-label,
+#party-slot-0 .slot-label {
+    color: var(--accent-gold);
+    font-weight: var(--font-weight-semibold);
+}
+
+.party-slot[data-slot="0"]:hover,
+#party-slot-0:hover {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 12px rgba(201, 167, 90, 0.3);
+}
+
+.party-slot:hover {
+    background: var(--bg-hover);
+}
+
+.party-slot.filled {
+    border-style: solid;
+}
+
+.party-slot.selected {
+    border-color: var(--accent-primary);
+}
+
+.slot-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.slot-content {
+    text-align: center;
+}
+
+.slot-content.empty {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: var(--spacing-md) 0;
+}
+
+.slot-vasen-img {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+    margin-bottom: var(--spacing-xs);
+}
+
+.slot-vasen-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slot-vasen-level {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.slot-health-bar {
+    height: 4px;
+    background: var(--bg-primary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: var(--spacing-xs);
+}
+
+.slot-health-fill {
+    height: 100%;
+    background: var(--health-fill);
+}
+
+/* Party Vasen Display */
+.party-vasen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs);
+}
+
+.party-vasen-img {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+    display: block;
+}
+
+.party-vasen-info {
+    text-align: center;
+}
+
+.party-vasen-tags {
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.party-vasen-name {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.party-vasen-level {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.party-vasen-bars {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.party-vasen-bars .combat-bar-small {
+    width: 100%;
+}
+
+.party-vasen-attributes {
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    flex-wrap: wrap;
+}
+
+.party-vasen-stages {
+    font-size: var(--font-size-xs);
+}
+
+.mini-stage {
+    margin-right: 2px;
+}
+
+.mini-stage.positive {
+    color: var(--accent-primary);
+}
+
+.mini-stage.negative {
+    color: var(--accent-danger);
+}
+
+.party-vasen-runes {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+}
+
+.mini-rune {
+    font-size: var(--font-size-sm);
+}
+
+.party-slot-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+}
+
+.party-action-btn {
+    padding: 2px 6px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-xs);
+}
+
+.party-action-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.party-action-btn.remove-btn:hover {
+    color: var(--accent-danger);
+}
+
+.party-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg) var(--spacing-sm);

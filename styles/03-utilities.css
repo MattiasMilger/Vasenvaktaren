@@ -1,0 +1,68 @@
+/* =============================================================================
+   03-utilities.css - Utility Classes and Messages
+   ============================================================================= */
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* Message Container (Toasts) */
+.message-container {
+    position: fixed;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    pointer-events: none;
+}
+
+.message {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    animation: slideIn 0.3s ease;
+    pointer-events: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+.message.success {
+    border-color: var(--accent-primary);
+}
+
+.message.error {
+    border-color: var(--accent-danger);
+}
+
+.game-message {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    animation: slideIn 0.3s ease;
+}
+
+.game-message.error {
+    border-color: var(--accent-danger);
+    background: rgba(176, 106, 106, 0.18);
+    color: var(--accent-danger);
+}
+
+.game-message.success {
+    border-color: var(--accent-primary);
+    background: rgba(138, 154, 122, 0.18);
+    color: var(--accent-primary);
+}

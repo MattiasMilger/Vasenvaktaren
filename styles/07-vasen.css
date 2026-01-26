@@ -1,0 +1,662 @@
+/* =============================================================================
+   07-vasen.css - Extracted Section
+   ============================================================================= */
+
+/* =============================================================================
+   15. VASEN INVENTORY
+   ============================================================================= */
+/* Sort Controls */
+.vasen-sort-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.vasen-sort-controls label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.vasen-sort-select {
+    flex: 1;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.vasen-sort-select:hover {
+    border-color: var(--border-light);
+}
+
+.vasen-sort-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+/* Flat list section (for non-family sorting) */
+.vasen-list-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+/* Family Sections */
+.family-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.family-header {
+    font-size: var(--font-size-sm);
+    color: var(--text-accent);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Vasen Cards */
+.vasen-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-left: 3px solid var(--border-color);
+    border-right: 3px solid var(--border-color);
+    border-top: 3px solid var(--border-color);
+    border-bottom: 3px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.vasen-card:hover {
+    background: var(--bg-hover);
+}
+
+
+/* Rarity-colored borders for Väsen cards */
+.vasen-card[data-rarity="Common"],
+.vasen-card.rarity-common {
+    border-color: var(--rarity-common);
+}
+
+.vasen-card[data-rarity="Uncommon"],
+.vasen-card.rarity-uncommon {
+    border-color: var(--rarity-uncommon);
+}
+
+.vasen-card[data-rarity="Rare"],
+.vasen-card.rarity-rare {
+    border-color: var(--rarity-rare);
+}
+
+.vasen-card[data-rarity="Mythical"],
+.vasen-card.rarity-mythical {
+    border-color: var(--rarity-mythical);
+}
+
+.vasen-card[data-rarity="Common"]:hover,
+.vasen-card.rarity-common:hover {
+    border-color: var(--rarity-common);
+    box-shadow: 0 2px 8px rgba(152, 152, 170, 0.3);
+}
+
+.vasen-card[data-rarity="Uncommon"]:hover,
+.vasen-card.rarity-uncommon:hover {
+    border-color: var(--rarity-uncommon);
+    box-shadow: 0 2px 8px rgba(95, 161, 58, 0.3);
+}
+
+.vasen-card[data-rarity="Rare"]:hover,
+.vasen-card.rarity-rare:hover {
+    border-color: var(--rarity-rare);
+    box-shadow: 0 2px 8px rgba(61, 142, 212, 0.3);
+}
+
+.vasen-card[data-rarity="Mythical"]:hover,
+.vasen-card.rarity-mythical:hover {
+    border-color: var(--rarity-mythical);
+    box-shadow: 0 2px 8px rgba(212, 125, 255, 0.4);
+}
+
+.vasen-card.selected[data-rarity="Common"],
+.vasen-card.selected.rarity-common {
+    border-color: var(--rarity-common);
+    box-shadow: 0 0 12px rgba(152, 152, 170, 0.4);
+}
+
+.vasen-card.selected[data-rarity="Uncommon"],
+.vasen-card.selected.rarity-uncommon {
+    border-color: var(--rarity-uncommon);
+    box-shadow: 0 0 12px rgba(95, 161, 58, 0.4);
+}
+
+.vasen-card.selected[data-rarity="Rare"],
+.vasen-card.selected.rarity-rare {
+    border-color: var(--rarity-rare);
+    box-shadow: 0 0 12px rgba(61, 142, 212, 0.4);
+}
+
+.vasen-card.selected[data-rarity="Mythical"],
+.vasen-card.selected.rarity-mythical {
+    border-color: var(--rarity-mythical);
+    box-shadow: 0 0 16px rgba(212, 125, 255, 0.5);
+}
+
+.vasen-card.selected {
+    border-color: var(--accent-primary);
+    background: var(--bg-hover);
+}
+
+.vasen-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.vasen-thumb {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    display: block;
+}
+
+.vasen-card-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.vasen-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vasen-level {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.vasen-add-btn {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 50%;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.vasen-add-btn:hover {
+    filter: brightness(1.1);
+}
+
+/* Favorite Button */
+.vasen-favorite-btn {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.vasen-favorite-btn:hover {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+.vasen-favorite-btn.active {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+/* Details Panel Favorite Button */
+.details-favorite-btn {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.details-favorite-btn:hover {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+.details-favorite-btn.active {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+/* Details name row with favorite button */
+.details-name-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Swap menu favorite star */
+.swap-favorite-star {
+    color: var(--accent-warning);
+    font-size: var(--font-size-lg);
+    margin-right: var(--spacing-xs);
+}
+
+.vasen-card-details {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Vasen Card Bars - now using combat-bar-small */
+.vasen-card-health,
+.vasen-card-megin {
+    margin-top: 4px;
+    width: 100%;
+}
+
+.vasen-card-health .combat-bar-small,
+.vasen-card-megin .combat-bar-small {
+    width: 100%;
+}
+
+/* Vasen Card Attributes */
+.vasen-card-attributes {
+    display: flex;
+    justify-content: flex-start;
+    gap: var(--spacing-sm);
+    margin-top: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.mini-attr {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.mini-attr .attr-label {
+    color: var(--text-secondary);
+}
+
+/* =============================================================================
+   16. VASEN DETAILS PANEL
+   ============================================================================= */
+.vasen-details-panel {
+    position: relative;
+    background: var(--bg-tertiary);
+    border-top: 2px solid var(--border-color);
+    padding: var(--spacing-sm);
+    max-height: 50%;
+    overflow-y: auto;
+    overflow-x: visible; /* Allow popups to overflow horizontally */
+    min-height: 80px;
+}
+
+/* Center empty message only */
+.vasen-details-panel:has(.empty-message) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.details-close-btn {
+    position: absolute;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+.details-close-btn:hover {
+    opacity: 1;
+    color: var(--text-primary);
+}
+
+.details-header {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    overflow: visible; /* Allow popups to overflow */
+}
+
+.details-image {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    display: block;
+}
+
+.details-identity {
+    flex: 1;
+    min-width: 0;
+    overflow: visible; /* Allow popups to overflow */
+}
+
+.details-name {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.details-meta {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+    overflow: visible; /* Allow popups to overflow */
+}
+
+.details-runes,
+.details-description,
+.details-level,
+.details-resources,
+.details-attributes,
+.details-temperament,
+.details-abilities,
+.details-actions {
+    margin-bottom: var(--spacing-md);
+}
+
+.details-runes h4,
+.details-description h4,
+.details-attributes h4,
+.details-temperament h4,
+.details-taming-item h4,
+.details-abilities h4 {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.taming-item-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+/* Rune Slots */
+.rune-slots {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.rune-slot {
+    flex: 1;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.rune-slot:hover {
+    background: var(--bg-hover);
+}
+
+.rune-slot.filled {
+    border-style: solid;
+    border-color: var(--accent-primary);
+}
+
+.rune-slot.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rune-symbol {
+    font-size: var(--font-size-xl);
+    display: block;
+}
+
+.rune-symbol.large {
+    font-size: var(--font-size-2xl);
+}
+
+.rune-name {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+.rune-slot .rune-effect {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+    line-height: 1.3;
+}
+
+.rune-placeholder {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+/* Experience Bar */
+.exp-bar {
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: var(--spacing-xs) 0;
+}
+
+.exp-fill {
+    height: 100%;
+    background: var(--accent-warning);
+    transition: width 0.3s;
+}
+
+.exp-text {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.max-level-badge {
+    font-size: var(--font-size-xs);
+    color: var(--accent-warning);
+}
+
+/* Resource Bars (now using combat-bar styling) */
+.details-resources {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.details-resources .combat-bar {
+    margin-bottom: 0;
+}
+
+/* Attribute Grid */
+.attribute-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.attribute-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+}
+
+.attr-name {
+    color: var(--text-muted);
+}
+
+.attr-value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Temperament */
+.temperament-name {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    cursor: help;
+}
+
+.temperament-info {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.temperament-details {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+/* Abilities List */
+.abilities-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.ability-item {
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--border-radius-sm);
+    border: 2px solid var(--border-color);
+}
+
+.ability-item.locked {
+    opacity: 0.6;
+    border-left-color: var(--text-muted);
+}
+
+.ability-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.ability-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.ability-type-tag {
+    font-size: var(--font-size-xs);
+    color: #e8e8f0;
+    padding: 1px 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+}
+
+.ability-stats {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+}
+
+.ability-element {
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: #fff;
+}
+
+.ability-element.element-earth { background: var(--element-earth); }
+.ability-element.element-nature { background: var(--element-nature); }
+.ability-element.element-water { background: var(--element-water); }
+.ability-element.element-fire { background: var(--element-fire); }
+.ability-element.element-wind { background: var(--element-wind); }
+
+.ability-power {
+    color: #e8e8f0;
+    font-weight: 600;
+}
+
+.ability-cost {
+    color: #6a9aff;
+    font-weight: 600;
+}
+
+.ability-description {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.learn-level {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    color: var(--accent-warning);
+}
+
+/* Details Actions */
+.details-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.release-btn {
+    margin-left: auto;
+}

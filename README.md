@@ -93,24 +93,50 @@ Collection based achievements
 Vasenvaktaren/
 ├── index.html
 ├── README.md
+├── CHANGELOG.MD
+├── MIGRATION.md
+│
 ├── styles/
-│   └── main.css
+│   ├── main.css                    (import file)
+│   ├── 01-variables.css            (CSS variables)
+│   ├── 02-reset.css                (reset & base styles)
+│   ├── 03-utilities.css            (utility classes)
+│   ├── 04-layout.css               (screens & layout)
+│   ├── 05-buttons.css              (button styles)
+│   ├── 06-panels.css               (panels & tabs)
+│   ├── 07-vasen.css                (väsen UI)
+│   ├── 08-party.css                (party section)
+│   ├── 09-zones.css                (zone section)
+│   ├── 10-combat.css               (combat UI)
+│   ├── 11-modals.css               (modal styles)
+│   ├── 12-badges.css               (badges & effects)
+│   ├── 13-animations.css           (animations)
+│   └── 14-responsive.css           (responsive design)
+│
 ├── js/
-│   ├── 1-constants.js
-│   ├── 2-data-abilities.js
-│   ├── 3-data-vasen.js
-│   ├── 4-data-items.js
-│   ├── 5-vasen-instance.js
-│   ├── 6-battle-system.js
-│   ├── 7-game-state.js
-│   ├── 8-ui-controller.js
-│   └── 9-main.js
+│   ├── core/
+│   │   ├── 1-constants.js          (game constants)
+│   │   ├── 2-data-abilities.js     (ability definitions)
+│   │   ├── 3-data-vasen.js         (väsen species data)
+│   │   ├── 4-data-items.js         (item definitions)
+│   │   └── 5-vasen-instance.js     (VasenInstance class)
+│   │
+│   ├── systems/
+│   │   ├── 6a-battle-core.js       (Battle class)
+│   │   ├── 6b-battle-ai.js         (EnemyAI class)
+│   │   └── 7-game-state.js         (GameState class)
+│   │
+│   ├── 8-ui-controller.js          (UIController class)
+│   └── 9-main.js                   (main entry point)
+│
 └── assets/
     ├── vasen/
     │   └── [30 Väsen images]
     └── zones/
         └── [7 zone images]
 ```
+
+**Note**: The project has been modularized for better maintainability. CSS is split into 14 focused modules, and the battle system is split into core and AI. See [MIGRATION.md](MIGRATION.md) for details.
 
 ## Feature roadmap
 

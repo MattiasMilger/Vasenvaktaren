@@ -1,0 +1,254 @@
+/* =============================================================================
+   04-layout.css - Extracted Section
+   ============================================================================= */
+
+/* =============================================================================
+   7. SCREENS
+   ============================================================================= */
+.screen {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.screen:not(.active) {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+/* =============================================================================
+   8. MAIN MENU SCREEN
+   ============================================================================= */
+#main-menu-screen {
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.main-menu-content {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.game-title {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: var(--accent-gold);
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8),
+                 0 0 20px rgba(201, 167, 90, 0.3);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.02em;
+}
+
+.game-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.menu-buttons .btn {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-lg);
+}
+
+/* =============================================================================
+   9. STARTER SELECTION SCREEN
+   ============================================================================= */
+#starter-select-screen {
+    padding: var(--spacing-xl);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.starter-content {
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+}
+
+.starter-intro {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.starter-prompt {
+    font-size: var(--font-size-xl);
+    color: var(--text-accent);
+    margin-bottom: var(--spacing-lg);
+}
+
+.starter-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.starter-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.starter-card:hover {
+    background: var(--bg-hover);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-light);
+}
+
+.starter-card.selected {
+    border-color: var(--accent-primary);
+    box-shadow: var(--glow-primary), var(--shadow-lg);
+    background: rgba(143, 166, 126, 0.08);
+}
+
+.starter-image-container {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto var(--spacing-sm) auto;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.starter-image {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+    display: block;
+}
+
+.starter-name {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.starter-badges {
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-sm);
+}
+
+.starter-family {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.starter-element {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-sm);
+    color: #fff;
+}
+
+.starter-element.element-earth { background: var(--element-earth); }
+.starter-element.element-nature { background: var(--element-nature); }
+.starter-element.element-water { background: var(--element-water); }
+.starter-element.element-fire { background: var(--element-fire); }
+.starter-element.element-wind { background: var(--element-wind); }
+
+.starter-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* =============================================================================
+   10. GAME SCREEN LAYOUT
+   ============================================================================= */
+#game-screen {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* =============================================================================
+   11. HEADER
+   ============================================================================= */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    flex-shrink: 0;
+    gap: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.header-title {
+    font-size: var(--font-size-lg);
+    color: var(--accent-gold);
+    white-space: nowrap;
+    font-weight: var(--font-weight-semibold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.header-subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.header-center {
+    flex-shrink: 0;
+}
+
+.player-profile {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    transition: background 0.2s;
+}
+
+.player-profile:hover {
+    background: var(--bg-hover);
+}
+
+.header-right {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+}
