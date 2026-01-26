@@ -8,6 +8,7 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 **Technical update** - Project structure reorganized for better maintainability and development workflow.
 **Zone animation** - Added animation affect to the zone images
+**Idle Animation** - Added idle animations for väsen
 
 ### Changes
 - **CSS Modularization**: Split main.css (5,255 lines) into 15 focused modules organized by feature

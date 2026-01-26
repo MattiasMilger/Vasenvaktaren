@@ -1,20 +1,22 @@
 /* =============================================================================
-   13-animations.css - Extracted Section
+   13-animations.css - Animations and Visual Effects
    ============================================================================= */
 
 /* =============================================================================
-   HOLOGRAPHIC PORTRAIT EFFECTS - Rarity-based effects for väsen images
+   IDLE ANIMATION FOR VÄSEN PORTRAITS - Gentle floating + scale pulse
    ============================================================================= */
 
-/* Container wrappers for holo effects */
+/* Container wrappers for animations */
 .vasen-thumb-container,
 .party-vasen-img-container,
 .standard-vasen-img-container,
 .details-image-container,
 .heal-vasen-img-container,
-.rune-vasen-img-container {
+.rune-vasen-img-container,
+.combatant-image-container,
+.starter-image-container {
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to allow subtle movement */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,113 +58,66 @@
     display: block;
 }
 
-/* The combatant-image-container already exists in the CSS, just needs holo applied to it */
-
-/* ── COMMON HOLO ── Smooth gray gradient sweep */
-.vasen-thumb-container.holo-common::before,
-.party-vasen-img-container.holo-common::before,
-.standard-vasen-img-container.holo-common::before,
-.details-image-container.holo-common::before,
-.combatant-image-container.holo-common::before,
-.heal-vasen-img-container.holo-common::before,
-.rune-vasen-img-container.holo-common::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 25%,
-        rgba(144, 144, 160, 0.2) 50%,
-        transparent 75%,
-        transparent 100%
-    );
-    animation: holoSweep 5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
+/* Apply idle animation to all väsen images */
+.vasen-thumb,
+.party-vasen-img,
+.standard-vasen-img,
+.details-image,
+.combatant-image,
+.heal-vasen-img,
+.rune-vasen-img,
+.starter-image {
+    image-rendering: pixelated;
+    animation: vasenIdle 4s ease-in-out infinite;
+    transform-origin: center center;
 }
 
-/* ── UNCOMMON HOLO ── Smooth green gradient sweep */
-.vasen-thumb-container.holo-uncommon::before,
-.party-vasen-img-container.holo-uncommon::before,
-.standard-vasen-img-container.holo-uncommon::before,
-.details-image-container.holo-uncommon::before,
-.combatant-image-container.holo-uncommon::before,
-.heal-vasen-img-container.holo-uncommon::before,
-.rune-vasen-img-container.holo-uncommon::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 25%,
-        rgba(107, 142, 35, 0.25) 50%,
-        transparent 75%,
-        transparent 100%
-    );
-    animation: holoSweep 4.5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* ── RARE HOLO ── Smooth blue gradient sweep */
-.vasen-thumb-container.holo-rare::before,
-.party-vasen-img-container.holo-rare::before,
-.standard-vasen-img-container.holo-rare::before,
-.details-image-container.holo-rare::before,
-.combatant-image-container.holo-rare::before,
-.heal-vasen-img-container.holo-rare::before,
-.rune-vasen-img-container.holo-rare::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 20%,
-        rgba(70, 130, 180, 0.35) 50%,
-        transparent 80%,
-        transparent 100%
-    );
-    animation: holoSweep 4s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* ── MYTHICAL HOLO ── Smooth purple gradient sweep (NO second layer) */
-.vasen-thumb-container.holo-mythical::before,
-.party-vasen-img-container.holo-mythical::before,
-.standard-vasen-img-container.holo-mythical::before,
-.details-image-container.holo-mythical::before,
-.combatant-image-container.holo-mythical::before,
-.heal-vasen-img-container.holo-mythical::before,
-.rune-vasen-img-container.holo-mythical::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 15%,
-        rgba(212, 125, 255, 0.45) 50%,
-        transparent 85%,
-        transparent 100%
-    );
-    animation: holoSweep 3.5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* ── HOLO ANIMATIONS ── */
-
-@keyframes holoSweep {
-    0% { 
-        transform: translateX(-150%);
+/* Idle animation keyframes - gentle floating + scale pulse */
+@keyframes vasenIdle {
+    0%, 100% {
+        transform: translateY(0px) scale(1);
     }
-    100% { 
-        transform: translateX(150%);
+    50% {
+        transform: translateY(-3px) scale(1.02);
     }
+}
+
+/* Vary animation timing for different sizes to feel more organic */
+.vasen-thumb {
+    animation-duration: 3.5s;
+    animation-delay: 0s;
+}
+
+.party-vasen-img {
+    animation-duration: 4s;
+    animation-delay: 0.3s;
+}
+
+.standard-vasen-img {
+    animation-duration: 4.2s;
+    animation-delay: 0.5s;
+}
+
+.details-image {
+    animation-duration: 4.5s;
+    animation-delay: 0s;
+}
+
+.combatant-image {
+    animation-duration: 3.8s;
+    animation-delay: 0.2s;
+}
+
+.starter-image {
+    animation-duration: 4s;
+    animation-delay: 0.4s;
+}
+
+/* Pause animation on knocked out */
+.combatant-image.knocked-out {
+    animation: none;
+    filter: grayscale(1);
+    opacity: 0.5;
 }
 
 /* Override container in modal buttons to center the portrait */
@@ -172,7 +127,7 @@
 .add-vasen-btn .standard-vasen-img-container {
     width: 64px;
     height: 64px;
-    overflow: hidden;
+    overflow: visible;
     margin: 0 auto;
 }
 
@@ -190,7 +145,7 @@
 .swap-party-card .standard-vasen-img-container {
     width: 64px;
     height: 64px;
-    overflow: hidden;
+    overflow: visible;
     margin: 0 auto;
 }
 
@@ -203,66 +158,6 @@
 .swap-party-card .standard-vasen-info {
     text-align: center;
     width: 100%;
-}
-
-/* Holo effects for starter selection images */
-.starter-image-container.holo-common::before,
-.starter-image-container.holo-uncommon::before,
-.starter-image-container.holo-rare::before,
-.starter-image-container.holo-mythical::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.starter-image-container.holo-common::before {
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 25%,
-        rgba(144, 144, 160, 0.2) 50%,
-        transparent 75%,
-        transparent 100%
-    );
-    animation: holoSweep 5s ease-in-out infinite;
-}
-
-.starter-image-container.holo-uncommon::before {
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 25%,
-        rgba(107, 142, 35, 0.25) 50%,
-        transparent 75%,
-        transparent 100%
-    );
-    animation: holoSweep 4.5s ease-in-out infinite;
-}
-
-.starter-image-container.holo-rare::before {
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 20%,
-        rgba(70, 130, 180, 0.35) 50%,
-        transparent 80%,
-        transparent 100%
-    );
-    animation: holoSweep 4s ease-in-out infinite;
-}
-
-.starter-image-container.holo-mythical::before {
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 15%,
-        rgba(212, 125, 255, 0.45) 50%,
-        transparent 85%,
-        transparent 100%
-    );
-    animation: holoSweep 3.5s ease-in-out infinite;
 }
 
 /* =============================================================================
@@ -279,4 +174,3 @@
     position: relative;
     margin: 0 auto var(--spacing-md) auto;
 }
-
