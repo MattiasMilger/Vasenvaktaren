@@ -90,6 +90,9 @@ const GAME_CONFIG = {
     // Input delay after each battle action to prevent spamming through turns (in milliseconds)
     BATTLE_INPUT_DELAY: 800,
     
+    // Ability animation display duration (in milliseconds)
+    ABILITY_ANIMATION_DURATION: 500,
+    
     // =============================================================================
     // ENDLESS TOWER
     // =============================================================================

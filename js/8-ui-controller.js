@@ -1454,6 +1454,49 @@ renderCombatantPanel(side, vasen, battle) {
     const healthPercent = (vasen.currentHealth / vasen.maxHealth) * 100;
     const meginPercent = (vasen.currentMegin / vasen.maxMegin) * 100;
 
+    // Get party members (excluding active)
+    const team = side === 'player' ? battle.playerTeam : battle.enemyTeam;
+    const activeIndex = side === 'player' ? battle.playerActiveIndex : battle.enemyActiveIndex;
+    
+    // Get party member portraits (member 2 on left, member 3 on right)
+    const partyPortraits = {
+        left: null,
+        right: null
+    };
+    
+    // Find the two other team members
+    const otherMembers = team.map((member, index) => ({ member, index }))
+        .filter(({index}) => index !== activeIndex);
+    
+    if (otherMembers.length >= 1) {
+        partyPortraits.left = otherMembers[0].member;
+    }
+    if (otherMembers.length >= 2) {
+        partyPortraits.right = otherMembers[1].member;
+    }
+
+    // Helper function to create party portrait HTML
+    const createPartyPortraitHTML = (member, position) => {
+        if (!member) return '';
+        
+        const hpPercent = (member.currentHealth / member.maxHealth) * 100;
+        const meginPercent = (member.currentMegin / member.maxMegin) * 100;
+        
+        return `
+            <div class="party-portrait ${position} ${member.isKnockedOut() ? 'knocked-out' : ''}">
+                <img src="${member.species.image}" 
+                     alt="${member.species.name}" 
+                     class="party-portrait-image">
+                <div class="party-portrait-hp-bar">
+                    <div class="party-portrait-hp-fill" style="width: ${hpPercent}%"></div>
+                </div>
+                <div class="party-portrait-megin-bar">
+                    <div class="party-portrait-megin-fill" style="width: ${meginPercent}%"></div>
+                </div>
+            </div>
+        `;
+    };
+
     // Build runes HTML with "Rune:" label
     const runesHtml = vasen.runes.length > 0
         ? `<span class="runes-label">Rune:</span>
@@ -1492,10 +1535,16 @@ renderCombatantPanel(side, vasen, battle) {
             <span class="combatant-level">Lvl ${vasen.level}</span>
         </div>
 
-        <div class="combatant-image-container ${vasen.isKnockedOut() ? '' : 'holo-' + vasen.species.rarity.toLowerCase()}">
-            <img src="${vasen.species.image}" alt="${vasen.species.name}" 
-                 class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
-            ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
+        <div class="combatant-image-wrapper">
+            ${createPartyPortraitHTML(partyPortraits.left, 'left')}
+            
+            <div class="combatant-image-container ${vasen.isKnockedOut() ? '' : 'holo-' + vasen.species.rarity.toLowerCase()}">
+                <img src="${vasen.species.image}" alt="${vasen.species.name}" 
+                     class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
+                ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
+            </div>
+            
+            ${createPartyPortraitHTML(partyPortraits.right, 'right')}
         </div>
 
         <div class="combatant-bars">
@@ -1840,6 +1889,113 @@ renderActionButtons(battle) {
                 }
             }
         }, 400);
+    }
+    
+    // Show ability animation on target
+    showAbilityAnimation(abilityName, targetSide, isPlayerAttacking, attackerElement = null) {
+        const ability = ABILITIES[abilityName];
+        if (!ability) return;
+
+        // Determine which panel to show animation on
+        // For self-buffs and ally-buffs, show on attacker's side
+        // For attacks and debuffs, show on defender's side (targetSide)
+        let animationSide = targetSide;
+        
+        if (ability.type === ATTACK_TYPES.UTILITY && ability.effect) {
+            if (ability.effect.target === 'self' || ability.effect.target === 'ally') {
+                // Self-buff or ally-buff: show on attacker's side
+                animationSide = isPlayerAttacking ? 'player' : 'enemy';
+            }
+            // For debuffs (target: 'enemy'), animationSide stays as targetSide
+        }
+
+        const panel = document.getElementById(`${animationSide}-panel`);
+        if (!panel) return;
+
+        // Helper: Convert ability name to animation filename
+        const abilityNameToAnimationFile = (abilityName, attackerElement) => {
+            const baseName = abilityName
+                .toLowerCase()
+                .replace(/'/g, '')
+                .replace(/\s+/g, '');
+            
+            // For Basic Strike, append element to filename
+            if (abilityName === 'Basic Strike' && attackerElement) {
+                return baseName + attackerElement.toLowerCase() + 'anim.png';
+            }
+            
+            return baseName + 'anim.png';
+        };
+
+        // Get animation filename
+        const animationFile = abilityNameToAnimationFile(abilityName, attackerElement);
+        const animationPath = `assets/abilities/${animationFile}`;
+
+        // On mobile/small screens, center on the väsen portrait instead of the whole panel
+        // Check screen width to determine positioning strategy
+        const isMobile = window.innerWidth <= 992;
+        let targetRect;
+        
+        if (isMobile) {
+            // Target the image container specifically on mobile
+            const imageContainer = panel.querySelector('.combatant-image-container');
+            targetRect = imageContainer ? imageContainer.getBoundingClientRect() : panel.getBoundingClientRect();
+        } else {
+            // Target the whole panel on desktop
+            targetRect = panel.getBoundingClientRect();
+        }
+
+        // Create animation overlay element
+        const overlay = document.createElement('div');
+        overlay.className = 'ability-animation-overlay';
+        
+        // Position absolutely over the target using fixed positioning
+        // z-index: 500 is above combat UI but below modals (1000)
+        overlay.style.position = 'fixed';
+        overlay.style.top = targetRect.top + 'px';
+        overlay.style.left = targetRect.left + 'px';
+        overlay.style.width = targetRect.width + 'px';
+        overlay.style.height = targetRect.height + 'px';
+        overlay.style.zIndex = '500';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.pointerEvents = 'none';
+        
+        // Determine if animation should be flipped
+        let shouldFlip = false;
+        
+        if (ability.type === ATTACK_TYPES.UTILITY && ability.effect) {
+            // Buff abilities never flip (always face right)
+            if (ability.effect.target === 'self' || ability.effect.target === 'ally') {
+                shouldFlip = false;
+            } 
+            // Debuff abilities flip when enemy attacks player
+            else if (ability.effect.target === 'enemy') {
+                shouldFlip = !isPlayerAttacking;
+            }
+        } else {
+            // Attack abilities flip when enemy attacks player
+            shouldFlip = !isPlayerAttacking;
+        }
+
+        const img = document.createElement('img');
+        img.src = animationPath;
+        img.className = 'ability-animation-image';
+        
+        if (shouldFlip) {
+            img.classList.add('flipped');
+        }
+        
+        overlay.appendChild(img);
+        document.body.appendChild(overlay);
+
+        // Remove animation after duration
+        setTimeout(() => {
+            if (overlay && overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, GAME_CONFIG.ABILITY_ANIMATION_DURATION);
     }
     
     // Trigger attack animation

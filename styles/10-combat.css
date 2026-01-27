@@ -78,6 +78,7 @@
 }
 
 .combatant-panel {
+    position: relative; /* For ability animation overlay positioning */
     flex: 1;
     max-width: 240px;
     padding: var(--spacing-md);
@@ -1283,3 +1284,155 @@
     border-color: var(--border-color) !important;
     pointer-events: none;
 }
+/* =============================================================================
+   Party Portraits - Styling for non-active party member portraits
+   ============================================================================= */
+
+/* Wrapper that contains the portraits and main combatant image */
+.combatant-image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin: 0 auto var(--spacing-sm) auto;
+    position: relative;
+}
+
+/* Party portrait container */
+.party-portrait {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+    background: var(--bg-card);
+    transition: all 0.3s ease;
+}
+
+/* Left and right positioning hints (optional, could add transforms) */
+.party-portrait.left {
+    order: 1;
+}
+
+.party-portrait.right {
+    order: 3;
+}
+
+/* Ensure main combatant is in the middle */
+.combatant-image-container {
+    order: 2;
+}
+
+/* Party portrait image with idle animation */
+.party-portrait-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    animation: partyIdleFloat 3s ease-in-out infinite;
+}
+
+/* Idle floating animation */
+@keyframes partyIdleFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Knocked out state */
+.party-portrait.knocked-out {
+    opacity: 0.4;
+    border-color: var(--accent-danger);
+}
+
+.party-portrait.knocked-out .party-portrait-image {
+    filter: grayscale(1);
+    animation: none;
+}
+
+/* Health bar for portraits - always visible */
+.party-portrait-hp-bar {
+    position: absolute;
+    bottom: 6px;
+    left: 2px;
+    right: 2px;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.party-portrait-hp-fill {
+    height: 100%;
+    background: #6fb850;
+    transition: width 0.3s ease;
+}
+
+.party-portrait.knocked-out .party-portrait-hp-fill {
+    background: #a85a4a;
+}
+
+/* Megin bar for portraits - always visible */
+.party-portrait-megin-bar {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.party-portrait-megin-fill {
+    height: 100%;
+    background: #5a8aaa;
+    transition: width 0.3s ease;
+}
+
+/* Hover effect - just scale, no tooltip */
+.party-portrait:hover {
+    transform: scale(1.1);
+    border-color: var(--border-light);
+    z-index: 10;
+}
+
+/* =============================================================================
+   Details Image Hover Effect (Vasen Details Panel)
+   ============================================================================= */
+
+/* Main vasen portrait in details panel - hoverable like party portraits */
+.details-image {
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+}
+
+.details-image:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .party-portrait {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .combatant-image-wrapper {
+        gap: var(--spacing-xs);
+    }
+}
+
+@media (max-width: 600px) {
+    .party-portrait {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* End of 10-combat.css */

@@ -52,6 +52,7 @@ class Battle {
         this.onAttack = null;
         this.onKnockoutSwap = null;
         this.onEnd = null;
+        this.onAbilityAnimation = null;
         
         // Action state
         this.waitingForPlayerAction = true;
@@ -450,6 +451,22 @@ class Battle {
             this.isOver = true;
             this.winner = 'player';
             this.addLog('Victory!', 'victory');
+            
+            // Apply 5% health and megin heal for Endless Tower victories
+            if (this.isEndlessTower) {
+                this.addLog('The tower\'s mystical energy flows through your team!', 'heal');
+                this.playerTeam.forEach(vasen => {
+                    if (!vasen.isKnockedOut()) {
+                        const healthHeal = vasen.healPercent(0.05);
+                        const meginHeal = Math.floor(vasen.maxMegin * 0.05);
+                        vasen.currentMegin = Math.min(vasen.maxMegin, vasen.currentMegin + meginHeal);
+                        
+                        if (healthHeal > 0 || meginHeal > 0) {
+                            this.addLog(`${vasen.getName()} recovered ${healthHeal} health and ${meginHeal} megin!`, 'heal');
+                        }
+                    }
+                });
+            }
         }
         
         return this.isOver;
@@ -717,6 +734,12 @@ class Battle {
         // Log ability use
         this.addLog(`${attacker.getName()} uses ${ability.name}!`, 'action');
         
+        // Trigger ability animation with attacker element for Basic Strike variants
+        if (this.onAbilityAnimation) {
+            const targetSide = isPlayer ? 'enemy' : 'player';
+            this.onAbilityAnimation(abilityName, targetSide, isPlayer, attacker.species.element);
+        }
+        
         // Trigger animation based on ability type
         if (this.onAttack) {
             this.onAttack(isPlayer ? 'player' : 'enemy', ability.type);
@@ -836,12 +859,40 @@ class Battle {
             // Calculate reflected damage as Mixed-type attack
             // The defender (Thurs user) becomes the "attacker" for the reflection
             // The original attacker becomes the "target" for the reflection
-            const reflectDamage = this.calculateThursReflection(defender, attacker, result.damage);
+            const reflectResult = this.calculateThursReflection(defender, attacker, result.damage);
             
-            if (reflectDamage > 0) {
-                attacker.takeDamage(reflectDamage);
-                this.addLog(`${attacker.getName()} took ${reflectDamage} reflected damage!`, 'damage');
-                result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectDamage}` });
+            if (reflectResult.damage > 0) {
+                attacker.takeDamage(reflectResult.damage);
+                this.addLog(`${attacker.getName()} took ${reflectResult.damage} reflected damage!`, 'damage');
+                result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectResult.damage}` });
+                
+                // Log matchup for reflected damage
+                if (reflectResult.matchup === 'POTENT') {
+                    this.addLog('Potent reflection!', 'potent');
+                } else if (reflectResult.matchup === 'WEAK') {
+                    this.addLog('Weak reflection!', 'weak');
+                }
+                
+                // Apply Naudiz effect if Thurs user has it and reflection was WEAK
+                if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {
+                    this.addLog(`${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                    const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                    for (let i = 0; i < 2; i++) {
+                        const randomIndex = Math.floor(Math.random() * stats.length);
+                        const stat = stats[randomIndex];
+                        attacker.modifyAttributeStage(stat, -1);
+                        this.addLog(`${attacker.getName()}'s ${stat} was lowered 1 stage!`, 'debuff');
+                    }
+                    result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
+                }
+                
+                // Apply Inguz effect if Thurs user has it and reflection was WEAK
+                if (reflectResult.matchup === 'WEAK' && defender.hasRune('INGUZ')) {
+                    this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
+                    attacker.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
+                    this.addLog(`${attacker.getName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
+                    result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin on weak reflection' });
+                }
             }
         }
         
@@ -854,21 +905,29 @@ class Battle {
         const reflectPercent = RUNES.THURS.mechanic.value;
         const baseReflectDamage = originalDamage * reflectPercent;
         
+        // Element matchup: Use Thurs wielder's element vs reflect target's element
+        const matchupType = getMatchupType(thursUser.species.element, reflectTarget.species.element);
+        const elementMod = DAMAGE_MULTIPLIERS[matchupType];
+        
         // Apply as Mixed hit: 50% checked against Defense, 50% checked against Durability
         // Defense reduction
         const defenseReduction = 1 - (reflectTarget.getAttribute('defense') / 
             (reflectTarget.getAttribute('defense') + GAME_CONFIG.DEFENSE_CONSTANT));
-        const defensePortionDamage = (baseReflectDamage * 0.5) * defenseReduction;
+        const defensePortionDamage = (baseReflectDamage * 0.5) * defenseReduction * elementMod;
         
         // Durability reduction
         const durabilityReduction = 1 - (reflectTarget.getAttribute('durability') / 
             (reflectTarget.getAttribute('durability') + GAME_CONFIG.DEFENSE_CONSTANT));
-        const durabilityPortionDamage = (baseReflectDamage * 0.5) * durabilityReduction;
+        const durabilityPortionDamage = (baseReflectDamage * 0.5) * durabilityReduction * elementMod;
         
         // Total Mixed-type damage
         const totalDamage = defensePortionDamage + durabilityPortionDamage;
         
-        return Math.floor(Math.max(1, totalDamage));
+        return {
+            damage: Math.floor(Math.max(1, totalDamage)),
+            matchup: matchupType,
+            element: thursUser.species.element
+        };
     }
     
     // Calculate damage

@@ -174,3 +174,72 @@
     position: relative;
     margin: 0 auto var(--spacing-md) auto;
 }
+
+/* =============================================================================
+   ABILITY ANIMATIONS - Flash ability animations on combat panels
+   ============================================================================= */
+
+/* Ability animation overlay container */
+.ability-animation-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    animation: abilityAnimationFade 500ms ease-in-out;
+}
+
+/* Ability animation image */
+.ability-animation-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.7;
+}
+
+/* Flipped state for enemy attacks */
+.ability-animation-image.flipped {
+    transform: scaleX(-1);
+}
+
+/* Fade animation */
+@keyframes abilityAnimationFade {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Responsive sizing for mobile - make animations larger and more visible */
+@media (max-width: 992px) {
+    .ability-animation-image {
+        /* Scale up the animation on mobile since it's centered on a smaller portrait */
+        width: 200%;
+        height: 200%;
+        max-width: 200px;
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .ability-animation-image {
+        /* Even larger on very small screens */
+        width: 250%;
+        height: 250%;
+        max-width: 180px;
+        max-height: 180px;
+    }
+}

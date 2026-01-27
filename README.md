@@ -110,7 +110,7 @@ Vasenvaktaren/
 │   ├── 10-combat.css               (combat UI)
 │   ├── 11-modals.css               (modal styles)
 │   ├── 12-badges.css               (badges & effects)
-│   ├── 13-animations.css           (animations)
+│   ├── 13-animations.css           (animations & ability animations)
 │   └── 14-responsive.css           (responsive design)
 │
 ├── js/
@@ -132,8 +132,16 @@ Vasenvaktaren/
 └── assets/
     ├── vasen/
     │   └── [30 Väsen images]
-    └── zones/
-        └── [7 zone images]
+    ├── zones/
+    │   └── [7 zone images]
+    └── abilities/
+        ├── [24 unique ability animations]
+        └── [5 Basic Strike element variants]
+            ├── basicstrikeearthanim.png
+            ├── basicstrikenatureanim.png
+            ├── basicstrikewateranim.png
+            ├── basicstrikefireanim.png
+            └── basicstrikewindanim.png
 ```
 
 **Note**: The project has been modularized for better maintainability. CSS is split into 14 focused modules, and the battle system is split into core and AI. See [MIGRATION.md](MIGRATION.md) for details.

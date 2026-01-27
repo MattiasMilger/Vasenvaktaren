@@ -217,8 +217,8 @@ const RUNES = {
         name: 'Thurs',
         fullName: 'Thurs',
         flavor: 'The violent, chaotic might of the Giants, channeled as a sharp, unyielding thorn. Any harm inflicted upon the bearer is instantly met with a fierce, painful recoil.',
-        effect: 'This väsen returns 40% of damage taken as mixed damage',
-        mechanic: { type: 'damage_reflect', value: 0.40 }
+        effect: 'This väsen returns 35% of damage taken as mixed damage of its own element',
+        mechanic: { type: 'damage_reflect', value: 0.35 }
     },
     'ANSUZ': {
         id: 'ANSUZ',
