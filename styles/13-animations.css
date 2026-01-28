@@ -2,3 +2,98 @@
    13-animations.css - Combat Animations
    ============================================================================= */
 
+/* =============================================================================
+   IDLE ANIMATIONS - Subtle breathing effect for combatant sprites
+   ============================================================================= */
+
+/* Idle breathing animation - ONLY for combatant images in active combat */
+.combatant-image:not(.knocked-out) {
+    animation: combatantIdle 3s ease-in-out infinite;
+}
+
+@keyframes combatantIdle {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-2px) scale(1.01);
+    }
+}
+
+/* =============================================================================
+   MATCHUP FLASH ANIMATIONS - Flash entire panel based on hit effectiveness
+   ============================================================================= */
+
+/* Matchup flash classes with HIGHER specificity than .player-side/.enemy-side
+   to ensure animations override the static gradient backgrounds */
+.combatant-panel.combatant-panel.matchup-flash-potent {
+    animation: flashPotent 400ms ease-in-out;
+}
+
+.combatant-panel.combatant-panel.matchup-flash-neutral {
+    animation: flashNeutral 400ms ease-in-out;
+}
+
+.combatant-panel.combatant-panel.matchup-flash-weak {
+    animation: flashWeak 400ms ease-in-out;
+}
+
+/* Potent hit - Green pulse */
+@keyframes flashPotent {
+    0% {
+        background: linear-gradient(135deg, var(--bg-card) 0%, rgba(61, 142, 212, 0.05) 100%);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(61, 142, 212, 0.15);
+    }
+    30% {
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.4) 0%, rgba(76, 175, 80, 0.6) 100%);
+        box-shadow: var(--shadow-md), 0 0 30px rgba(76, 175, 80, 0.8);
+    }
+    70% {
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.4) 0%, rgba(76, 175, 80, 0.6) 100%);
+        box-shadow: var(--shadow-md), 0 0 30px rgba(76, 175, 80, 0.8);
+    }
+    100% {
+        background: linear-gradient(135deg, var(--bg-card) 0%, rgba(61, 142, 212, 0.05) 100%);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(61, 142, 212, 0.15);
+    }
+}
+
+/* Neutral hit - White pulse */
+@keyframes flashNeutral {
+    0% {
+        background: linear-gradient(135deg, var(--bg-card) 0%, rgba(61, 142, 212, 0.05) 100%);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(61, 142, 212, 0.15);
+    }
+    30% {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+        box-shadow: var(--shadow-md), 0 0 30px rgba(255, 255, 255, 0.8);
+    }
+    70% {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%);
+        box-shadow: var(--shadow-md), 0 0 30px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+        background: linear-gradient(135deg, var(--bg-card) 0%, rgba(61, 142, 212, 0.05) 100%);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(61, 142, 212, 0.15);
+    }
+}
+
+/* Weak hit - Red pulse */
+@keyframes flashWeak {
+    0% {
+        background: linear-gradient(135deg, var(--bg-card) 0%, rgba(61, 142, 212, 0.05) 100%);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(61, 142, 212, 0.15);
+    }
+    30% {
+        background: linear-gradient(135deg, rgba(244, 67, 54, 0.4) 0%, rgba(244, 67, 54, 0.6) 100%);
+        box-shadow: var(--shadow-md), 0 0 30px rgba(244, 67, 54, 0.8);
+    }
+    70% {
+        background: linear-gradient(135deg, rgba(244, 67, 54, 0.4) 0%, rgba(244, 67, 54, 0.6) 100%);
+        box-shadow: var(--shadow-md), 0 0 30px rgba(244, 67, 54, 0.8);
+    }
+    100% {
+        background: linear-gradient(135deg, var(--bg-card) 0%, rgba(61, 142, 212, 0.05) 100%);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(61, 142, 212, 0.15);
+    }
+}

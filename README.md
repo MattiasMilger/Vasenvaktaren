@@ -8,14 +8,9 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 
 ## How to Play
 
-1. https://mattiasmilger.github.io/Vasenvaktaren/ <-- Open in Browser
-   (alternatively run locally: Save the files and open `index.html` with your web browser)
+- https://mattiasmilger.github.io/Vasenvaktaren/ <-- Open in Browser
+- (alternatively run locally: Save the files and open `index.html` with your web browser)
 
-2. Click "New Game" to start
-3. Choose your starter Väsen from three options
-4. Explore zones to encounter wild Väsen, find items, discover runes, or encounter sacred wells
-5. Battle and tame Väsen to build your collection
-6. Defeat zone guardians to unlock new areas
 
 ## Game Features
 

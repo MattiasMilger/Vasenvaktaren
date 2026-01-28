@@ -102,6 +102,10 @@
     box-shadow: var(--shadow-md), 0 0 20px rgba(217, 85, 85, 0.15);
 }
 
+.combatant-panel.flash {
+    animation: combatFlash 0.3s ease;
+}
+
 .combatant-img {
     width: 64px;
     height: 64px;
@@ -132,6 +136,17 @@
     width: 64px;
     height: 64px;
     overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect for main combatant - no cursor change */
+.combatant-image-container:hover {
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.combatant-image-container:hover .combatant-image {
+    filter: brightness(1.1);
 }
 
 /* Animation classes for combat */
@@ -1390,7 +1405,7 @@
     transition: width 0.3s ease;
 }
 
-/* Hover effect - just scale, no tooltip */
+/* Hover effect - scale and brighten border, no cursor change */
 .party-portrait:hover {
     transform: scale(1.1);
     border-color: var(--border-light);
@@ -1401,10 +1416,9 @@
    Details Image Hover Effect (Vasen Details Panel)
    ============================================================================= */
 
-/* Main vasen portrait in details panel - hoverable like party portraits */
+/* Main vasen portrait in details panel - hoverable, no cursor change */
 .details-image {
     transition: transform 0.3s ease, filter 0.3s ease;
-    cursor: pointer;
 }
 
 .details-image:hover {
