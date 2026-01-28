@@ -4,6 +4,9 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
+## beta 1.2 – Move Changes (2026-01-28)
+- Bergatroll learns Smithing instead of Torch strike, Gruvrå learns Ethereal Melody isntead of Smithing
+
 ## beta 1.1 – Code Modularization (2026-01-26)
 
 **Technical update** - Project structure reorganized for better maintainability and development workflow.

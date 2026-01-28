@@ -138,7 +138,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
-        abilities: ['Ground Stomp', 'Boulder Toss', 'Burning Insult', 'Torch Strike'],
+        abilities: ['Ground Stomp', 'Boulder Toss', 'Smithing', 'Burning Insult'],
         tamingItem: 'Silver Necklace',
         image: 'assets/vasen/bergatroll.png'
     },
@@ -173,7 +173,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Lava Jet', 'Smithing', 'Landslide'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Ethereal Melody', 'Landslide'],
         tamingItem: 'Mine Lantern',
         image: 'assets/vasen/gruvra.png'
     },
