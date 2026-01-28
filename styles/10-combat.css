@@ -135,13 +135,8 @@
     margin: 0 auto var(--spacing-sm) auto;
     width: 64px;
     height: 64px;
-    overflow: hidden;
+    overflow: visible;
     transition: transform 0.3s ease;
-    
-    /* Added styles to match side portraits */
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    background: var(--bg-card);
 }
 
 /* Hover effect for main combatant - no cursor change */
@@ -1329,10 +1324,12 @@
 /* Left and right positioning hints (optional, could add transforms) */
 .party-portrait.left {
     order: 1;
+    border: none;
 }
 
 .party-portrait.right {
     order: 3;
+    border: none;
 }
 
 /* Ensure main combatant is in the middle */
@@ -1540,4 +1537,3 @@
 }
 
 /* End of 10-combat.css */
-
