@@ -2894,7 +2894,10 @@ showKnockoutSwapModal(battle, callback) {
                 this.showDialogue(
     'Item Found!',
     `<p>${result.dialogue}</p>`,
-    [{ text: 'Confirm', callback: null }],
+    [
+        { text: 'Confirm', callback: null, class: 'btn-primary' },
+        { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
+    ],
     false
 );
                 break;
@@ -2903,7 +2906,10 @@ showKnockoutSwapModal(battle, callback) {
                 this.showDialogue(
     'Sacred Well',
     `<p>${result.dialogue}</p>`,
-    [{ text: 'Confirm', callback: null }],
+    [
+        { text: 'Confirm', callback: null, class: 'btn-primary' },
+        { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
+    ],
     false
 );
 
