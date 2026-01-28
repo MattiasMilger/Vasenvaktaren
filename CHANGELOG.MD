@@ -4,9 +4,6 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
-## beta 1.2 – Animations (2026-01-27)
-- Added battle animations and displays active party in the combatant field
-
 ## beta 1.1 – Code Modularization (2026-01-26)
 
 **Technical update** - Project structure reorganized for better maintainability and development workflow.

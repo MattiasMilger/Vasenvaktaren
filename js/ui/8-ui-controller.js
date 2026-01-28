@@ -1891,34 +1891,111 @@ renderActionButtons(battle) {
         }, 400);
     }
     
-    // Show element flash when ability is used (UTILITY abilities have no flash)
-    showElementFlash(abilityElement, targetSide) {
-        // Skip flash for UTILITY abilities (no element passed)
-        if (!abilityElement) return;
+    // Show ability animation on target
+    showAbilityAnimation(abilityName, targetSide, isPlayerAttacking, attackerElement = null) {
+        const ability = ABILITIES[abilityName];
+        if (!ability) return;
 
-        const panel = document.getElementById(`${targetSide}-panel`);
+        // Determine which panel to show animation on
+        // For self-buffs and ally-buffs, show on attacker's side
+        // For attacks and debuffs, show on defender's side (targetSide)
+        let animationSide = targetSide;
+        
+        if (ability.type === ATTACK_TYPES.UTILITY && ability.effect) {
+            if (ability.effect.target === 'self' || ability.effect.target === 'ally') {
+                // Self-buff or ally-buff: show on attacker's side
+                animationSide = isPlayerAttacking ? 'player' : 'enemy';
+            }
+            // For debuffs (target: 'enemy'), animationSide stays as targetSide
+        }
+
+        const panel = document.getElementById(`${animationSide}-panel`);
         if (!panel) return;
 
-        // Get element color
-        const flashColor = ELEMENT_COLORS[abilityElement];
-        if (!flashColor) return;
+        // Helper: Convert ability name to animation filename
+        const abilityNameToAnimationFile = (abilityName, attackerElement) => {
+            const baseName = abilityName
+                .toLowerCase()
+                .replace(/'/g, '')
+                .replace(/\s+/g, '');
+            
+            // For Basic Strike, append element to filename
+            if (abilityName === 'Basic Strike' && attackerElement) {
+                return baseName + attackerElement.toLowerCase() + 'anim.png';
+            }
+            
+            return baseName + 'anim.png';
+        };
 
-        // Create flash overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'element-flash-overlay';
-        overlay.style.backgroundColor = flashColor;
+        // Get animation filename
+        const animationFile = abilityNameToAnimationFile(abilityName, attackerElement);
+        const animationPath = `assets/abilities/${animationFile}`;
+
+        // On mobile/small screens, center on the väsen portrait instead of the whole panel
+        // Check screen width to determine positioning strategy
+        const isMobile = window.innerWidth <= 992;
+        let targetRect;
         
-        panel.appendChild(overlay);
+        if (isMobile) {
+            // Target the image container specifically on mobile
+            const imageContainer = panel.querySelector('.combatant-image-container');
+            targetRect = imageContainer ? imageContainer.getBoundingClientRect() : panel.getBoundingClientRect();
+        } else {
+            // Target the whole panel on desktop
+            targetRect = panel.getBoundingClientRect();
+        }
 
-        // Trigger animation
-        setTimeout(() => overlay.classList.add('active'), 10);
+        // Create animation overlay element
+        const overlay = document.createElement('div');
+        overlay.className = 'ability-animation-overlay';
+        
+        // Position absolutely over the target using fixed positioning
+        // z-index: 500 is above combat UI but below modals (1000)
+        overlay.style.position = 'fixed';
+        overlay.style.top = targetRect.top + 'px';
+        overlay.style.left = targetRect.left + 'px';
+        overlay.style.width = targetRect.width + 'px';
+        overlay.style.height = targetRect.height + 'px';
+        overlay.style.zIndex = '500';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.pointerEvents = 'none';
+        
+        // Determine if animation should be flipped
+        let shouldFlip = false;
+        
+        if (ability.type === ATTACK_TYPES.UTILITY && ability.effect) {
+            // Buff abilities never flip (always face right)
+            if (ability.effect.target === 'self' || ability.effect.target === 'ally') {
+                shouldFlip = false;
+            } 
+            // Debuff abilities flip when enemy attacks player
+            else if (ability.effect.target === 'enemy') {
+                shouldFlip = !isPlayerAttacking;
+            }
+        } else {
+            // Attack abilities flip when enemy attacks player
+            shouldFlip = !isPlayerAttacking;
+        }
 
-        // Remove flash after duration
+        const img = document.createElement('img');
+        img.src = animationPath;
+        img.className = 'ability-animation-image';
+        
+        if (shouldFlip) {
+            img.classList.add('flipped');
+        }
+        
+        overlay.appendChild(img);
+        document.body.appendChild(overlay);
+
+        // Remove animation after duration
         setTimeout(() => {
             if (overlay && overlay.parentNode) {
                 overlay.parentNode.removeChild(overlay);
             }
-        }, 400);
+        }, GAME_CONFIG.ABILITY_ANIMATION_DURATION);
     }
     
     // Trigger attack animation

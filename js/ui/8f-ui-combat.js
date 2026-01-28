@@ -607,71 +607,27 @@ UIController.prototype.reapplyAnimations = function(side) {
         }
     };
 
-    // Helper: Convert ability name to animation filename
-    function abilityNameToAnimationFile(abilityName) {
-        // Remove special characters and convert to lowercase
-        // "Storm Claw" -> "stormclaw"
-        // "Skald's Mead" -> "skaldsmead"
-        return abilityName
-            .toLowerCase()
-            .replace(/'/g, '')
-            .replace(/\s+/g, '')
-            + 'anim.png';
-    }
-
-    // Show ability animation on target
-    UIController.prototype.showAbilityAnimation = function(abilityName, targetSide, isPlayerAttacking) {
+    // Show matchup flash on combatant panel
+    // matchupType: 'POTENT', 'NEUTRAL', or 'WEAK'
+    UIController.prototype.showAbilityAnimation = function(abilityName, targetSide, isPlayerAttacking, matchupType) {
         const ability = ABILITIES[abilityName];
         if (!ability) return;
+
+        // Only flash for damaging abilities
+        if (ability.type === ATTACK_TYPES.UTILITY) {
+            return;
+        }
 
         const panel = document.getElementById(`${targetSide}-panel`);
         if (!panel) return;
 
-        // Get animation filename
-        const animationFile = abilityNameToAnimationFile(abilityName);
-        const animationPath = `assets/abilities/${animationFile}`;
+        // Add matchup flash class to the panel itself
+        const flashClass = `matchup-flash-${matchupType.toLowerCase()}`;
+        panel.classList.add(flashClass);
 
-        // Create animation overlay element
-        const overlay = document.createElement('div');
-        overlay.className = 'ability-animation-overlay';
-        
-        // Determine if animation should be flipped
-        // For self-buff abilities (target: 'self' or 'ally'), never flip
-        // For attack/debuff abilities:
-        //   - Player attacking enemy: normal (right-facing)
-        //   - Enemy attacking player: flipped (left-facing)
-        let shouldFlip = false;
-        
-        if (ability.type === ATTACK_TYPES.UTILITY && ability.effect) {
-            // Buff abilities that target self or ally - never flip
-            if (ability.effect.target === 'self' || ability.effect.target === 'ally') {
-                shouldFlip = false;
-            } 
-            // Debuff abilities that target enemy - flip when enemy attacks player
-            else if (ability.effect.target === 'enemy') {
-                shouldFlip = !isPlayerAttacking;
-            }
-        } else {
-            // Attack abilities - flip when enemy attacks player
-            shouldFlip = !isPlayerAttacking;
-        }
-
-        const img = document.createElement('img');
-        img.src = animationPath;
-        img.className = 'ability-animation-image';
-        if (shouldFlip) {
-            img.classList.add('flipped');
-        }
-
-        overlay.appendChild(img);
-        panel.appendChild(overlay);
-
-        // Remove animation after duration
+        // Remove flash class after animation (400ms)
         setTimeout(() => {
-            if (overlay && overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-            }
-        }, GAME_CONFIG.ABILITY_ANIMATION_DURATION);
+            panel.classList.remove(flashClass);
+        }, 400);
     };
-
 

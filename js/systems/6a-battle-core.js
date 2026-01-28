@@ -734,12 +734,6 @@ class Battle {
         // Log ability use
         this.addLog(`${attacker.getName()} uses ${ability.name}!`, 'action');
         
-        // Trigger ability animation with attacker element for Basic Strike variants
-        if (this.onAbilityAnimation) {
-            const targetSide = isPlayer ? 'enemy' : 'player';
-            this.onAbilityAnimation(abilityName, targetSide, isPlayer, attacker.species.element);
-        }
-        
         // Trigger animation based on ability type
         if (this.onAttack) {
             this.onAttack(isPlayer ? 'player' : 'enemy', ability.type);
@@ -815,6 +809,12 @@ class Battle {
             this.addLog('Potent hit!', 'potent');
         } else if (damageResult.matchup === 'WEAK') {
             this.addLog('Weak hit!', 'weak');
+        }
+        
+        // Trigger matchup flash animation (POTENT/NEUTRAL/WEAK)
+        if (this.onAbilityAnimation) {
+            const targetSide = isPlayer ? 'enemy' : 'player';
+            this.onAbilityAnimation(abilityName, targetSide, isPlayer, damageResult.matchup);
         }
         
         // Trigger Rå passive when defender takes damage

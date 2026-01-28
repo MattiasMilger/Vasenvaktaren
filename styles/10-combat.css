@@ -102,10 +102,6 @@
     box-shadow: var(--shadow-md), 0 0 20px rgba(217, 85, 85, 0.15);
 }
 
-.combatant-panel.flash {
-    animation: combatFlash 0.3s ease;
-}
-
 .combatant-img {
     width: 64px;
     height: 64px;
