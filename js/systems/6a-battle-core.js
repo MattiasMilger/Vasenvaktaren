@@ -1,15 +1,12 @@
 // =============================================================================
-// 6a-battle-core.js - Battle Core Mechanics
-// =============================================================================
-
-// =============================================================================
-// 6-battle-system.js - Battle Mechanics and Combat Logic
+// 6a-battle-core.js - Battle Mechanics and Combat Logic (FIXED GIFU)
 // =============================================================================
 
 const BATTLE_TYPES = {
     WILD: 'wild',
     GUARDIAN: 'guardian',
-    ENDLESS_TOWER: 'endless_tower',
+    ENDLESS_WILD: 'endless_wild',
+    ENDLESS_GUARDIAN: 'endless_guardian'
 };
 
 class Battle {
@@ -30,29 +27,20 @@ class Battle {
         this.winner = null;
         
         // Taming state
-        this.offersGiven = 0;
+        this.giftsGiven = 0;
         this.correctItemGiven = false;
         this.canTame = battleType === BATTLE_TYPES.WILD;
         this.isWildEncounter = battleType === BATTLE_TYPES.WILD;
         
-        // Endless Tower state
-        this.isEndlessTower = battleType === BATTLE_TYPES.ENDLESS_TOWER;
-        this.currentFloor = null; // Set externally when starting tower
-        
         // Experience tracking
         this.expTracker = new Map(); // vasen id -> { participated: boolean, turnsOnField: number, dealtKillingBlow: boolean }
-        
-        // Enemy utility ability usage tracking (fix for infinite utility spam)
-        this.enemyUtilityUsage = new Map(); // vasen id -> Map(abilityName -> usageCount)
         
         // Callbacks for UI updates
         this.onLog = null;
         this.onUpdate = null;
         this.onHit = null;
-        this.onAttack = null;
         this.onKnockoutSwap = null;
         this.onEnd = null;
-        this.onAbilityAnimation = null;
         
         // Action state
         this.waitingForPlayerAction = true;
@@ -61,177 +49,6 @@ class Battle {
         this.setPlayerActive(0);
         this.setEnemyActive(0);
     }
-    
-    // =============================================================================
-    // FAMILY PASSIVE SYSTEM
-    // =============================================================================
-    
-    // Apply family passive based on event
-    applyFamilyPassive(event, context) {
-        const { vasen, isPlayer } = context;
-        const family = vasen.species.family;
-        
-        switch (event) {
-            case 'onEnterBattlefield':
-                this.handleAndePassive(vasen, isPlayer);
-                break;
-            case 'onTakeDamage':
-                this.handleRaPassive(vasen, context.attacker, isPlayer);
-                this.handleDrakePassive(vasen, isPlayer);
-                break;
-            case 'onUseAbility':
-                this.handleTrollPassive(vasen, context.target, isPlayer);
-                break;
-            case 'onSwapOut':
-                this.handleVattePassive(vasen, context.incomingVasen, isPlayer);
-                break;
-            case 'onKnockout':
-                return this.handleValnadPassive(vasen, isPlayer);
-            case 'onTurnStart':
-                this.handleOdjurPassive(vasen, isPlayer);
-                break;
-        }
-        return false; // Default: no special handling
-    }
-    
-    // Ande: Ethereal Surge - raises one random attribute when entering battlefield
-    handleAndePassive(vasen, isPlayer) {
-        if (vasen.species.family !== FAMILIES.ANDE) return;
-        if (vasen.battleFlags.andePassiveTriggered) return;
-        
-        vasen.battleFlags.andePassiveTriggered = true;
-        
-        const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-        const randomAttr = attributes[Math.floor(Math.random() * attributes.length)];
-        
-        vasen.modifyAttributeStage(randomAttr, FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES);
-        
-        this.addLog(`[Family Passive] ${FAMILIES.ANDE} surges with ethereal energy!`, 'passive');
-        this.addLog(`${vasen.getName()}'s ${randomAttr} was raised ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage!`, 'buff');
-        
-        // Gifu: share the Ande buff with allies
-        if (!vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
-            vasen.battleFlags.gifuTriggered = true;
-            this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-            
-            const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-            allies.forEach(ally => {
-                if (ally !== vasen && !ally.isKnockedOut()) {
-                    ally.modifyAttributeStage(randomAttr, FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES);
-                    this.addLog(`${ally.getName()}'s ${randomAttr} was also raised!`, 'buff');
-                }
-            });
-        }
-    }
-    
-    // Drake: Draconic Resilience - gain Defense and Durability when health falls to 50% or lower
-    handleDrakePassive(vasen, isPlayer) {
-        if (vasen.species.family !== FAMILIES.DRAKE) return;
-        if (vasen.battleFlags.drakePassiveTriggered) return;
-        
-        const healthPercent = vasen.currentHealth / vasen.maxHealth;
-        if (healthPercent > FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD) return;
-        
-        vasen.battleFlags.drakePassiveTriggered = true;
-        
-        vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
-        vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
-        
-        this.addLog(`[Family Passive] ${FAMILIES.DRAKE} resilience activates!`, 'passive');
-        this.addLog(`${vasen.getName()}'s Defense and Durability were raised!`, 'buff');
-    }
-    
-    // Odjur: Bestial Rage - gain Strength and Wisdom after spending 2 full turns on battlefield
-    handleOdjurPassive(vasen, isPlayer) {
-        if (vasen.species.family !== FAMILIES.ODJUR) return;
-        if (vasen.battleFlags.odjurPassiveTriggered) return;
-        if (vasen.battleFlags.turnsOnField < FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) return;
-        
-        vasen.battleFlags.odjurPassiveTriggered = true;
-        
-        vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
-        vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
-        
-        this.addLog(`[Family Passive] ${FAMILIES.ODJUR} enters a bestial rage!`, 'passive');
-        this.addLog(`${vasen.getName()}'s Strength and Wisdom were raised!`, 'buff');
-    }
-    
-    // Rå: Malicious Retaliation - lowers two random enemy attributes when hit
-    handleRaPassive(vasen, attacker, isPlayer) {
-        if (vasen.species.family !== FAMILIES.RA) return;
-        if (vasen.battleFlags.raPassiveTriggered) return;
-        if (!attacker) return;
-        
-        vasen.battleFlags.raPassiveTriggered = true;
-        
-        const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-        const selectedAttributes = [];
-        
-        // Select two random attributes
-        for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
-            const availableAttributes = attributes.filter(attr => !selectedAttributes.includes(attr));
-            if (availableAttributes.length === 0) break;
-            const randomAttr = availableAttributes[Math.floor(Math.random() * availableAttributes.length)];
-            selectedAttributes.push(randomAttr);
-            attacker.modifyAttributeStage(randomAttr, -FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES);
-        }
-        
-        this.addLog(`[Family Passive] ${FAMILIES.RA} retaliates maliciously!`, 'passive');
-        this.addLog(`${attacker.getName()}'s ${selectedAttributes.join(' and ')} were lowered!`, 'debuff');
-    }
-    
-    // Troll: Troll Theft - steals one positive attribute stage when using an ability
-    handleTrollPassive(vasen, target, isPlayer) {
-        if (vasen.species.family !== FAMILIES.TROLL) return;
-        if (vasen.battleFlags.trollPassiveTriggered) return;
-        if (!target) return;
-        
-        // Find a positive stage to steal
-        const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-        const positiveAttributes = attributes.filter(attr => target.attributeStages[attr] > 0);
-        
-        if (positiveAttributes.length === 0) return; // No positive stages to steal
-        
-        vasen.battleFlags.trollPassiveTriggered = true;
-        
-        const stolenAttr = positiveAttributes[Math.floor(Math.random() * positiveAttributes.length)];
-        target.modifyAttributeStage(stolenAttr, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
-        vasen.modifyAttributeStage(stolenAttr, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
-        
-        this.addLog(`[Family Passive] ${FAMILIES.TROLL} steals power!`, 'passive');
-        this.addLog(`${vasen.getName()} stole ${stolenAttr} from ${target.getName()}!`, 'buff');
-    }
-    
-    // Vätte: Tag Team - incoming ally gains damage boost when swapping out
-    handleVattePassive(vasen, incomingVasen, isPlayer) {
-        if (vasen.species.family !== FAMILIES.VATTE) return;
-        if (!incomingVasen) return;
-        
-        incomingVasen.battleFlags.vattePassiveDamageBoost = FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST;
-        
-        this.addLog(`[Family Passive] ${FAMILIES.VATTE} empowers its ally!`, 'passive');
-        this.addLog(`${incomingVasen.getName()} gains a ${Math.floor(FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST * 100)}% damage boost!`, 'buff');
-    }
-    
-    // Vålnad: Deathless - revives with 10% of max health upon knockout
-    handleValnadPassive(vasen, isPlayer) {
-        if (vasen.species.family !== FAMILIES.VALNAD) return false;
-        if (vasen.battleFlags.valnadPassiveTriggered) return false;
-        
-        vasen.battleFlags.valnadPassiveTriggered = true;
-        
-        const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
-        vasen.currentHealth = reviveHealth;
-        
-        this.addLog(`[Family Passive] ${FAMILIES.VALNAD} refuses to fall!`, 'passive');
-        this.addLog(`${vasen.getName()} revives with ${reviveHealth} health!`, 'heal');
-        
-        return true; // Indicate that knockout was prevented
-    }
-    
-    // =============================================================================
-    // END FAMILY PASSIVE SYSTEM
-    // =============================================================================
     
     // Execute player action (dispatcher method)
     executePlayerAction(action) {
@@ -307,16 +124,16 @@ class Battle {
             vasen.battleFlags.turnsOnField = 0;
         }
         
-        // Trigger Ande passive when entering battlefield (via swap OR at battle start)
-        if (isSwap || !this.playerActive.battleFlags.andePassiveTriggered) {
-            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: true });
-        }
-        
         // Initialize exp tracking
         if (!this.expTracker.has(vasen.id)) {
             this.expTracker.set(vasen.id, { participated: true, turnsOnField: 0, dealtKillingBlow: false });
         } else {
             this.expTracker.get(vasen.id).participated = true;
+        }
+        
+        // Trigger Ande passive when entering battlefield (via swap OR at battle start)
+        if (isSwap || !this.playerActive.battleFlags.andePassiveTriggered) {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: true });
         }
         
         return true;
@@ -451,29 +268,13 @@ class Battle {
             this.isOver = true;
             this.winner = 'player';
             this.addLog('Victory!', 'victory');
-            
-            // Apply 5% health and megin heal for Endless Tower victories
-            if (this.isEndlessTower) {
-                this.addLog('The tower\'s mystical energy flows through your team!', 'heal');
-                this.playerTeam.forEach(vasen => {
-                    if (!vasen.isKnockedOut()) {
-                        const healthHeal = vasen.healPercent(0.05);
-                        const meginHeal = Math.floor(vasen.maxMegin * 0.05);
-                        vasen.currentMegin = Math.min(vasen.maxMegin, vasen.currentMegin + meginHeal);
-                        
-                        if (healthHeal > 0 || meginHeal > 0) {
-                            this.addLog(`${vasen.getName()} recovered ${healthHeal} health and ${meginHeal} megin!`, 'heal');
-                        }
-                    }
-                });
-            }
         }
         
         return this.isOver;
     }
     
     // Player action: use ability
-    playerUseAbility(abilityName) {
+    playerUseAbility(abilityName, selectedAllyTarget = null) {
         if (this.isOver) return null;
         if (this.playerActive.battleFlags.hasSwapSickness) {
             this.addLog(`${this.playerActive.getName()} is preparing and cannot act this turn.`, 'status');
@@ -507,73 +308,14 @@ class Battle {
         const results = { player: null, enemy: null };
         
         if (playerFirst) {
-            results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true);
+            results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, selectedAllyTarget);
             if (!this.enemyActive.isKnockedOut()) {
                 results.enemy = this.executeEnemyAction(enemyAction);
             }
         } else {
             results.enemy = this.executeEnemyAction(enemyAction);
             if (!this.playerActive.isKnockedOut()) {
-                results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true);
-            }
-        }
-        
-        this.handlePostTurn(results);
-        this.endTurn();
-        
-        return results;
-    }
-    
-    // Player action: use ability on specific ally (for ally-targeting buffs)
-    playerUseAbilityOnAlly(abilityName, allyIndex) {
-        if (this.isOver) return null;
-        if (this.playerActive.battleFlags.hasSwapSickness) {
-            this.addLog(`${this.playerActive.getName()} is preparing and cannot act this turn.`, 'status');
-            return this.enemyTurn();
-        }
-        
-        const ability = ABILITIES[abilityName];
-        if (!ability) return null;
-        
-        const meginCost = this.playerActive.getAbilityMeginCost(abilityName);
-        if (this.playerActive.currentMegin < meginCost) {
-            this.addLog('Not enough Megin.', 'error');
-            return null;
-        }
-        
-        // Get the ally target
-        const allyTarget = this.playerTeam[allyIndex];
-        if (!allyTarget || allyTarget.isKnockedOut()) {
-            this.addLog('Invalid target.', 'error');
-            return null;
-        }
-        
-        this.startTurn();
-        
-        // Determine turn order
-        const playerIsUtility = ability.type === ATTACK_TYPES.UTILITY;
-        const enemyAction = this.getEnemyAction();
-        const enemyAbility = ABILITIES[enemyAction.ability];
-        const enemyIsUtility = enemyAbility && enemyAbility.type === ATTACK_TYPES.UTILITY;
-        
-        // Priority: Player attacks first unless enemy uses utility and player doesn't
-        let playerFirst = true;
-        if (!playerIsUtility && enemyIsUtility) {
-            playerFirst = false;
-            this.addLog('The utility move goes first!', 'priority');
-        }
-        
-        const results = { player: null, enemy: null };
-        
-        if (playerFirst) {
-            results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
-            if (!this.enemyActive.isKnockedOut()) {
-                results.enemy = this.executeEnemyAction(enemyAction);
-            }
-        } else {
-            results.enemy = this.executeEnemyAction(enemyAction);
-            if (!this.playerActive.isKnockedOut()) {
-                results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
+                results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, selectedAllyTarget);
             }
         }
         
@@ -596,12 +338,6 @@ class Battle {
         
         // Swap has highest priority
         this.addLog(`${target.getName()} enters the fray!`, 'swap');
-        
-        // Trigger utility animation for swap
-        if (this.onAttack) {
-            this.onAttack('player', ATTACK_TYPES.UTILITY);
-        }
-        
         this.setPlayerActive(index, true);
         
         // Enemy still acts
@@ -635,79 +371,61 @@ class Battle {
     
     // Player action: offer item
     offerItem(itemName) {
-    if (!this.canTame) {
-        this.addLog('This Väsen can not be tamed!', 'error');
+        if (!this.canTame) {
+            this.addLog('This Väsen can not be tamed!', 'error');
+            if (this.onUpdate) this.onUpdate();
+            return { success: false, correct: false };
+        }
+        
+        if (this.giftsGiven >= GAME_CONFIG.MAX_GIFTS_PER_COMBAT) {
+            return { success: false, correct: false };
+        }
+        
+        if (this.correctItemGiven) {
+            return { success: false, correct: false };
+        }
+        
+        this.giftsGiven++;
+        this.addLog(`${itemName} was gifted to ${this.enemyActive.getName()}.`, 'gift');
+        
+        const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
+        
+        if (isCorrect) {
+            this.correctItemGiven = true;
+            this.addLog('Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.', 'dialogue');
+        } else {
+            this.addLog('What am I supposed to do with this?', 'dialogue');
+        }
+        
+        // Update UI (gift is a free action, don't end turn)
         if (this.onUpdate) this.onUpdate();
-        return { success: false, correct: false };
+        
+        return { success: true, correct: isCorrect };
     }
-
-    // Increment first
-    this.offersGiven++;
-
-    // If this was the final allowed offer, show the message and STOP
-    if (this.offersGiven === GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
-        this.addLog('Enough, no more items!', 'dialogue');
-        if (this.onUpdate) this.onUpdate();
-        return { success: false, correct: false };
-    }
-
-    // If somehow exceeded (should never happen), block silently
-    if (this.offersGiven > GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
-        if (this.onUpdate) this.onUpdate();
-        return { success: false, correct: false };
-    }
-
-    // If correct item already given, no more offers allowed
-    if (this.correctItemGiven) {
-        if (this.onUpdate) this.onUpdate();
-        return { success: false, correct: false };
-    }
-
-    // Normal offer logic
-    this.addLog(`${itemName} was offered to ${this.enemyActive.getName()}.`, 'offer');
-
-    const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
-
-    if (isCorrect) {
-        this.correctItemGiven = true;
-        this.addLog(
-            'Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.',
-            'dialogue'
-        );
-    } else {
-        this.addLog('What am I supposed to do with this?', 'dialogue');
-    }
-
-    if (this.onUpdate) this.onUpdate();
-
-    return { success: true, correct: isCorrect };
-}
-
-
     
     // Player action: ask about item
-askAboutItem() {
-    if (this.isOver) return null;
-    this.startTurn();
-
-    // 1. Get the enemy action
-    const enemyAction = this.getEnemyAction();
-    const results = { player: { action: 'ask' }, enemy: null };
+    askAboutItem() {
+        if (this.isOver) return null;
+        
+        this.startTurn();
+        
+        const tamingItem = this.enemyActive.species.tamingItem;
+        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you like the most?`, 'dialogue');
+        
+        // Enemy acts (player passes)
+        const enemyAction = this.getEnemyAction();
+        const results = { player: { action: 'ask' }, enemy: null };
+        results.enemy = this.executeEnemyAction(enemyAction);
+        
+        // Add the item response AFTER combat events
+        this.addLog(`If you must know, ${tamingItem} is what I desire most.`, 'dialogue');
+        
+        this.handlePostTurn(results);
+        this.endTurn();
+        
+        return results;
+    }
     
-    // 2. Execute the enemy action FIRST 
-    // This puts the "Enemy deals X damage" messages into the log first
-    results.enemy = this.executeEnemyAction(enemyAction);
-
-    // 3. NOW add your dialogue logs
-    // These will now appear at the bottom of the log for this turn
-    const tamingItem = this.enemyActive.species.tamingItem;
-    this.addLog(`Tell me ${this.enemyActive.getName()}, what do you desire most?`, 'dialogue');
-    this.addLog(`If you must know, ${tamingItem} is what I desire most.`, 'dialogue');
-
-    this.handlePostTurn(results);
-    this.endTurn();
-    return results;
-}
     // Player action: surrender
     surrender() {
         this.isOver = true;
@@ -736,11 +454,6 @@ askAboutItem() {
         // Log ability use
         this.addLog(`${attacker.getName()} uses ${ability.name}!`, 'action');
         
-        // Trigger animation based on ability type
-        if (this.onAttack) {
-            this.onAttack(isPlayer ? 'player' : 'enemy', ability.type);
-        }
-        
         if (meginCost > 0) {
             this.addLog(`${attacker.getName()} used ${meginCost} Megin!`, 'megin');
         }
@@ -760,7 +473,7 @@ askAboutItem() {
             
             // Mannaz: heal on utility
             if (attacker.hasRune('MANNAZ')) {
-                const healAmount = attacker.healPercent(0.08);
+                const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     result.runeEffects.push({ rune: 'MANNAZ', effect: `healed ${healAmount}` });
                     this.addLog(`${RUNES.MANNAZ.symbol} ${RUNES.MANNAZ.name} was activated!`, 'rune');
@@ -771,9 +484,6 @@ askAboutItem() {
             return result;
         }
         
-        // Trigger Troll passive when using an ability
-        this.applyFamilyPassive('onUseAbility', { vasen: attacker, target: defender, isPlayer });
-        
         // Calculate and apply damage
         const damageResult = this.calculateDamage(attacker, defender, abilityName);
         result.damage = damageResult.damage;
@@ -782,24 +492,7 @@ askAboutItem() {
         
         // Apply damage
         const actualDamage = defender.takeDamage(result.damage);
-        
-        // Log empowerment if it was active
-        if (attacker.battleFlags.isEmpowered) {
-            this.addLog(`${attacker.getName()}'s empowered attack strikes!`, 'buff');
-        }
-        
         this.addLog(`${attacker.getName()} deals ${actualDamage} damage to ${defender.getName()}!`, 'damage');
-        
-        // Consume empowerment after using it
-        if (attacker.battleFlags.isEmpowered) {
-            attacker.battleFlags.isEmpowered = false;
-        }
-        
-        // Grant empowerment if ability has that property
-        if (abilityGrantsEmpowerment(abilityName)) {
-            attacker.battleFlags.isEmpowered = true;
-            this.addLog(`${attacker.getName()}'s next attack is empowered!`, 'buff');
-        }
         
         // Flash the defender (hit effect)
         if (this.onHit) {
@@ -813,44 +506,18 @@ askAboutItem() {
             this.addLog('Weak hit!', 'weak');
         }
         
-        // Trigger matchup flash animation (POTENT/NEUTRAL/WEAK)
-        if (this.onAbilityAnimation) {
-            const targetSide = isPlayer ? 'enemy' : 'player';
-            this.onAbilityAnimation(abilityName, targetSide, isPlayer, damageResult.matchup);
-        }
-        
-        // Trigger Rå passive when defender takes damage
-        if (actualDamage > 0) {
-            this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
-        }
-        
         // Handle rune effects for hits
         this.applyHitRuneEffects(attacker, defender, damageResult, result, isPlayer);
         
         // Check knockout
         if (defender.isKnockedOut()) {
-            // Hagal: debuff on knockout (triggers BEFORE revival)
-            if (defender.hasRune('HAGAL')) {
-                this.addLog(`${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
-                ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
-                    attacker.modifyAttributeStage(stat, -1);
-                });
-                this.addLog(`${attacker.getName()}'s attributes were lowered!`, 'debuff');
-            }
-            
-            // Try Vålnad passive revival
-            const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
-            
-            if (!revived) {
-                // Vålnad didn't trigger or already used - process knockout normally
-                if (isPlayer) {
-                    this.addLog(`${defender.getName()} collapses!`, 'knockout');
-                    // Mark killing blow
-                    const tracker = this.expTracker.get(attacker.id);
-                    if (tracker) tracker.dealtKillingBlow = true;
-                } else {
-                    this.addLog(`${defender.getName()} has fainted!`, 'knockout');
-                }
+            if (isPlayer) {
+                this.addLog(`${defender.getName()} collapses!`, 'knockout');
+                // Mark killing blow
+                const tracker = this.expTracker.get(attacker.id);
+                if (tracker) tracker.dealtKillingBlow = true;
+            } else {
+                this.addLog(`${defender.getName()} has fainted!`, 'knockout');
             }
         }
         
@@ -998,32 +665,33 @@ askAboutItem() {
         }
         
         // Vätte family passive: Tag Team damage boost
-        if (attacker.battleFlags.vattePassiveDamageBoost > 0) {
-            runeMod += attacker.battleFlags.vattePassiveDamageBoost;
-            // Reset the boost after use (only applies to current turn)
-            attacker.battleFlags.vattePassiveDamageBoost = 0;
-        }
-        
-        // Empowerment system: boost damage if empowered
-        if (attacker.battleFlags.isEmpowered) {
-            runeMod += GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST;
+        if (attacker.species.family === FAMILIES.VATTE) {
+            const allyTeam = this.playerTeam.includes(attacker) ? this.playerTeam : this.enemyTeam;
+            const vatteAllies = allyTeam.filter(v => 
+                v !== attacker && 
+                !v.isKnockedOut() && 
+                v.species.family === FAMILIES.VATTE
+            );
+            if (vatteAllies.length > 0) {
+                runeMod += GAME_CONFIG.FAMILY_VATTE_DAMAGE_BOOST;
+            }
         }
         
         // Calculate damage based on attack type
         let totalDamage = 0;
-        const power = getAbilityPower(abilityName, attacker.species.family);
+        const power = ability.power;
         
         if (ability.type === ATTACK_TYPES.MIXED) {
             // 50% Strength, 50% Wisdom
             const strengthDamage = this.calculateSingleTypeDamage(
                 power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
                 damageRange, elementMod, runeMod
-            ) * GAME_CONFIG.MIXED_ATTACK_STRENGTH_PORTION;
+            ) * 0.5;
             
             const wisdomDamage = this.calculateSingleTypeDamage(
                 power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
                 damageRange, elementMod, runeMod
-            ) * GAME_CONFIG.MIXED_ATTACK_WISDOM_PORTION;
+            ) * 0.5;
             
             totalDamage = strengthDamage + wisdomDamage;
         } else if (useStrength) {
@@ -1074,6 +742,9 @@ askAboutItem() {
             }
             const stats = effect.stats || [effect.stat];
             
+            // Track which stats were actually buffed for Gifu
+            const buffedStats = [];
+            
             stats.forEach(stat => {
                 const result = targetVasen.modifyAttributeStage(stat, effect.stages);
                 if (result.capped) {
@@ -1082,24 +753,29 @@ askAboutItem() {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
                     this.addLog(`${targetVasen.getName()}'s ${stat} was raised ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
-                    
-                    // Gifu: share first buff
-                    if (!targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
-                        targetVasen.battleFlags.gifuTriggered = true;
-                        this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                        
-                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-                        allies.forEach(ally => {
-                            if (ally !== targetVasen && !ally.isKnockedOut()) {
-                                ally.modifyAttributeStage(stat, effect.stages);
-                                this.addLog(`${ally.getName()}'s ${stat} was also raised!`, 'buff');
-                            }
-                        });
-                    }
+                    buffedStats.push({ stat, stages: result.changed });
                 }
             });
+            
+            // Gifu: share ALL buffed stats to allies (moved outside individual stat loop)
+            if (buffedStats.length > 0 && !targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
+                targetVasen.battleFlags.gifuTriggered = true;
+                this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                
+                const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                allies.forEach(ally => {
+                    if (ally !== targetVasen && !ally.isKnockedOut()) {
+                        // Apply ALL buffed stats to each ally
+                        buffedStats.forEach(buffedStat => {
+                            ally.modifyAttributeStage(buffedStat.stat, buffedStat.stages);
+                            this.addLog(`${ally.getName()}'s ${buffedStat.stat} was also raised!`, 'buff');
+                        });
+                    }
+                });
+            }
         } else if (effect.type === 'debuff') {
-            const opponent = isPlayer ? target : this.playerActive; const targetVasen = effect.target === 'enemy' ? opponent : user;
+            const opponent = isPlayer ? target : this.playerActive;
+            const targetVasen = effect.target === 'enemy' ? opponent : user;
             const stats = effect.stats || [effect.stat];
             
             // Wynja: block first debuff
@@ -1218,47 +894,16 @@ askAboutItem() {
             const index = this.enemyTeam.indexOf(action.target);
             if (index !== -1) {
                 this.addLog(`The Guardian calls forth ${action.target.getName()}!`, 'swap');
-                
-                // Trigger utility animation for swap
-                if (this.onAttack) {
-                    this.onAttack('enemy', ATTACK_TYPES.UTILITY);
-                }
-                
-                this.setEnemyActive(index);
+                this.setEnemyActive(index, true);
                 return { action: 'swap', target: action.target };
             }
         }
         
         if (action.type === 'ability') {
-            // Track utility ability usage for enemy AI
-            const ability = ABILITIES[action.ability];
-            if (ability && ability.type === ATTACK_TYPES.UTILITY) {
-                this.trackEnemyUtilityUsage(this.enemyActive, action.ability);
-            }
-            
             return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false);
         }
         
         return null;
-    }
-    
-    // Track enemy utility ability usage
-    trackEnemyUtilityUsage(vasen, abilityName) {
-        if (!this.enemyUtilityUsage.has(vasen.id)) {
-            this.enemyUtilityUsage.set(vasen.id, new Map());
-        }
-        
-        const vasenUsage = this.enemyUtilityUsage.get(vasen.id);
-        const currentCount = vasenUsage.get(abilityName) || 0;
-        vasenUsage.set(abilityName, currentCount + 1);
-    }
-    
-    // Get enemy utility ability usage count
-    getEnemyUtilityUsageCount(vasen, abilityName) {
-        if (!this.enemyUtilityUsage.has(vasen.id)) return 0;
-        
-        const vasenUsage = this.enemyUtilityUsage.get(vasen.id);
-        return vasenUsage.get(abilityName) || 0;
     }
     
     // Handle post-turn effects and knockouts
@@ -1287,7 +932,7 @@ askAboutItem() {
                 // Auto swap to next enemy
                 const nextIndex = this.enemyTeam.findIndex(v => !v.isKnockedOut());
                 if (nextIndex !== -1) {
-                    this.setEnemyActive(nextIndex);
+                    this.setEnemyActive(nextIndex, true);
                     this.addLog(`The enemy sends out ${this.enemyActive.getName()}!`, 'swap');
                 }
             }
@@ -1317,11 +962,11 @@ askAboutItem() {
             let expPercent = 0;
             
             if (tracker.dealtKillingBlow) {
-                expPercent = GAME_CONFIG.EXP_KILLING_BLOW; // 100%
+                expPercent = 1.0; // 100%
             } else if (tracker.turnsOnField > 0) {
-                expPercent = GAME_CONFIG.EXP_PARTICIPATED_ON_FIELD; // 70% for participated
+                expPercent = 0.6; // 60% for participated
             } else if (tracker.participated) {
-                expPercent = GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED; // 50% for in party but not on field
+                expPercent = 0.3; // 30% for in party but not on field
             }
             
             const expGained = Math.floor(totalEnemyExp * expPercent);
@@ -1346,6 +991,243 @@ askAboutItem() {
                this.correctItemGiven && 
                this.winner === 'player';
     }
+    
+    // Apply family passive abilities
+    applyFamilyPassive(trigger, context) {
+        const { vasen, isPlayer } = context;
+        
+        if (trigger === 'onEnterBattlefield' && vasen.species.family === FAMILIES.ANDE) {
+            // Ande passive: Gain +1 stage to a random attribute when entering
+            if (!vasen.battleFlags.andePassiveTriggered) {
+                vasen.battleFlags.andePassiveTriggered = true;
+                const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                vasen.modifyAttributeStage(randomStat, 1);
+                this.addLog(`${vasen.getName()}'s Ande spirit empowers it!`, 'passive');
+                this.addLog(`${vasen.getName()}'s ${randomStat} was raised 1 stage!`, 'buff');
+            }
+        }
+        
+        if (trigger === 'onTurnStart' && vasen.species.family === FAMILIES.ODJUR) {
+            // Odjur passive: Megin drain on turn 4+ when Health is below 30%
+            if (vasen.battleFlags.turnsOnField >= 3) {
+                const healthPercent = vasen.currentHealth / vasen.maxHealth;
+                if (healthPercent < 0.30) {
+                    const opponent = isPlayer ? this.enemyActive : this.playerActive;
+                    if (opponent && !opponent.isKnockedOut()) {
+                        opponent.spendMegin(GAME_CONFIG.FAMILY_ODJUR_MEGIN_DRAIN);
+                        this.addLog(`${vasen.getName()}'s bestial fury drains ${opponent.getName()}!`, 'passive');
+                        this.addLog(`${opponent.getName()} lost ${GAME_CONFIG.FAMILY_ODJUR_MEGIN_DRAIN} Megin!`, 'megin');
+                    }
+                }
+            }
+        }
+        
+        if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.VATTE) {
+            // Vätte passive: Heal incoming ally
+            const { incomingVasen } = context;
+            if (incomingVasen && !incomingVasen.isKnockedOut()) {
+                const healAmount = incomingVasen.healPercent(GAME_CONFIG.FAMILY_VATTE_SWAP_HEAL);
+                if (healAmount > 0) {
+                    this.addLog(`${vasen.getName()} passes its blessing to ${incomingVasen.getName()}!`, 'passive');
+                    this.addLog(`${incomingVasen.getName()} gained ${healAmount} health!`, 'heal');
+                }
+            }
+        }
+    }
 }
 
 // Enemy AI Class
+class EnemyAI {
+    constructor(battle, isGuardian) {
+        this.battle = battle;
+        this.isGuardian = isGuardian;
+        this.vasen = battle.enemyActive;
+        this.target = battle.playerActive;
+    }
+    
+    chooseAction() {
+        const actions = this.scoreAllActions();
+        
+        // Sort by score descending
+        actions.sort((a, b) => b.score - a.score);
+        
+        // Return best action
+        return actions[0] || { type: 'ability', ability: 'Basic Strike' };
+    }
+    
+    scoreAllActions() {
+        const actions = [];
+        
+        // Score abilities
+        const abilities = this.vasen.getAvailableAbilities();
+        abilities.forEach(abilityName => {
+            if (this.vasen.canUseAbility(abilityName)) {
+                const score = this.scoreAbility(abilityName);
+                actions.push({ type: 'ability', ability: abilityName, score });
+            }
+        });
+        
+        // Score swap (guardians only)
+        if (this.isGuardian) {
+            const swapTargets = this.battle.enemyTeam.filter(v => 
+                !v.isKnockedOut() && v !== this.vasen
+            );
+            swapTargets.forEach(target => {
+                const score = this.scoreSwap(target);
+                actions.push({ type: 'swap', target, score });
+            });
+        }
+        
+        return actions;
+    }
+    
+    scoreAbility(abilityName) {
+        const ability = ABILITIES[abilityName];
+        let score = 0;
+        
+        // Base score
+        if (ability.type === ATTACK_TYPES.UTILITY) {
+            score += 30;
+        } else {
+            score += 20;
+        }
+        
+        // Damage bonus
+        if (ability.type !== ATTACK_TYPES.UTILITY) {
+            const predictedDamage = this.predictDamage(abilityName);
+            
+            if (predictedDamage >= this.target.currentHealth) {
+                score += 100; // Knockout bonus
+            } else if (predictedDamage >= this.target.maxHealth * 0.5) {
+                score += 50; // High damage bonus
+            }
+            
+            // Element bonus
+            const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
+            const matchup = getMatchupType(abilityElement, this.target.species.element);
+            
+            if (matchup === 'POTENT') {
+                score += 20;
+            } else if (matchup === 'WEAK') {
+                // Check for weak hit runes
+                if (this.vasen.hasRune('NAUDIZ') || this.vasen.hasRune('INGUZ')) {
+                    score -= 5;
+                } else {
+                    score -= 30;
+                }
+            }
+            
+            // Rune synergy bonus
+            if (this.isGuardian) {
+                score += this.scoreRuneSynergy(abilityName);
+            }
+        } else {
+            // Utility scoring
+            if (ability.effect && ability.effect.type === 'buff') {
+                score += 40;
+            } else if (ability.effect && ability.effect.type === 'debuff') {
+                score += 30;
+            }
+        }
+        
+        // Megin penalty
+        const meginCost = this.vasen.getAbilityMeginCost(abilityName);
+        if (meginCost > this.vasen.currentMegin * 0.5) {
+            score -= 15;
+        }
+        
+        // Risk penalty
+        const threatLevel = this.assessThreat();
+        if (threatLevel > 0.6) {
+            score -= 20;
+        }
+        
+        // Variance
+        const variance = this.isGuardian ? 5 : 20;
+        score += (Math.random() * variance * 2) - variance;
+        
+        return score;
+    }
+    
+    scoreSwap(target) {
+        let score = 25;
+        
+        // Low health bonus
+        if (this.vasen.currentHealth < this.vasen.maxHealth * 0.3) {
+            score += 30;
+        }
+        
+        // Type advantage
+        const currentMatchup = getMatchupType(this.target.species.element, this.vasen.species.element);
+        const newMatchup = getMatchupType(this.target.species.element, target.species.element);
+        
+        if (currentMatchup === 'POTENT' && newMatchup !== 'POTENT') {
+            score += 20;
+        }
+        
+        // Variance
+        score += (Math.random() * 10) - 5;
+        
+        return score;
+    }
+    
+    predictDamage(abilityName) {
+        const ability = ABILITIES[abilityName];
+        if (ability.type === ATTACK_TYPES.UTILITY) return 0;
+        
+        // Simplified damage prediction
+        const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
+        const matchup = getMatchupType(abilityElement, this.target.species.element);
+        const elementMod = DAMAGE_MULTIPLIERS[matchup];
+        
+        const power = ability.power;
+        const attackStat = ability.type === ATTACK_TYPES.WISDOM ? 
+            this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
+        const defenseStat = ability.type === ATTACK_TYPES.WISDOM ?
+            this.target.getAttribute('durability') : this.target.getAttribute('defense');
+        
+        const powerFactor = power / GAME_CONFIG.POWER_CONSTANT;
+        const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));
+        
+        return Math.floor(powerFactor * attackStat * elementMod * defenseReduction);
+    }
+    
+    scoreRuneSynergy(abilityName) {
+        let bonus = 0;
+        const ability = ABILITIES[abilityName];
+        const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
+        
+        // Element damage runes
+        const elementRunes = {
+            [ELEMENTS.FIRE]: 'KAUNAN',
+            [ELEMENTS.EARTH]: 'PERTHO',
+            [ELEMENTS.WIND]: 'TYR',
+            [ELEMENTS.NATURE]: 'BJARKA',
+            [ELEMENTS.WATER]: 'LAGUZ'
+        };
+        
+        if (this.vasen.hasRune(elementRunes[abilityElement])) {
+            bonus += 10;
+        }
+        
+        // Low cost runes
+        if (ability.meginCost <= 30) {
+            if (this.vasen.hasRune('ODAL')) bonus += 10;
+            if (this.vasen.hasRune('JERA')) bonus += 5;
+        }
+        
+        return bonus;
+    }
+    
+    assessThreat() {
+        // Estimate threat level from 0 to 1
+        const healthRatio = this.vasen.currentHealth / this.vasen.maxHealth;
+        const matchup = getMatchupType(this.target.species.element, this.vasen.species.element);
+        
+        let threat = 1 - healthRatio;
+        if (matchup === 'POTENT') threat += 0.2;
+        
+        return Math.min(1, threat);
+    }
+}
