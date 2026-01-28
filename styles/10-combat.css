@@ -1445,4 +1445,47 @@
     }
 }
 
+/* =============================================================================
+   MOBILE OVERRIDES - Portrait Stacking (1 Top, 2 Bottom Row)
+   ============================================================================= */
+
+@media (max-width: 600px) {
+    .combatant-image-wrapper {
+        display: grid;
+        /* Creates two equal columns */
+        grid-template-columns: 1fr 1fr; 
+        /* Defines the layout map */
+        grid-template-areas: 
+            "main main"
+            "left right";
+        gap: var(--spacing-sm);
+        justify-items: center;
+        align-items: center;
+    }
+
+    /* Assign elements to the grid areas */
+    .combatant-image-container { 
+        grid-area: main; 
+        width: 80px; /* Slightly larger for emphasis as the "boss" of the group */
+        height: 80px;
+    }
+
+    .party-portrait.left { 
+        grid-area: left; 
+        justify-self: end; /* Push toward the center */
+    }
+
+    .party-portrait.right { 
+        grid-area: right; 
+        justify-self: start; /* Push toward the center */
+    }
+
+    /* Adjust portrait sizes slightly for mobile if needed */
+    .party-portrait {
+        width: 44px;
+        height: 44px;
+    }
+}
+
 /* End of 10-combat.css */
+
