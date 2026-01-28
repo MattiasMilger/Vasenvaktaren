@@ -686,26 +686,28 @@ class Battle {
 
     
     // Player action: ask about item
-    askAboutItem() {
-        if (this.isOver) return null;
-        
-        this.startTurn();
-        
-        const tamingItem = this.enemyActive.species.tamingItem;
-        this.addLog(`Tell me ${this.enemyActive.getName()}, what do you desire most?`, 'dialogue');
-        this.addLog(`If you must know, ${tamingItem} is what I desire most.`, 'dialogue');
-        
-        // Enemy acts (player passes)
-        const enemyAction = this.getEnemyAction();
-        const results = { player: { action: 'ask' }, enemy: null };
-        results.enemy = this.executeEnemyAction(enemyAction);
-        
-        this.handlePostTurn(results);
-        this.endTurn();
-        
-        return results;
-    }
+askAboutItem() {
+    if (this.isOver) return null;
+    this.startTurn();
+
+    // 1. Get the enemy action
+    const enemyAction = this.getEnemyAction();
+    const results = { player: { action: 'ask' }, enemy: null };
     
+    // 2. Execute the enemy action FIRST 
+    // This puts the "Enemy deals X damage" messages into the log first
+    results.enemy = this.executeEnemyAction(enemyAction);
+
+    // 3. NOW add your dialogue logs
+    // These will now appear at the bottom of the log for this turn
+    const tamingItem = this.enemyActive.species.tamingItem;
+    this.addLog(`Tell me ${this.enemyActive.getName()}, what do you desire most?`, 'dialogue');
+    this.addLog(`If you must know, ${tamingItem} is what I desire most.`, 'dialogue');
+
+    this.handlePostTurn(results);
+    this.endTurn();
+    return results;
+}
     // Player action: surrender
     surrender() {
         this.isOver = true;

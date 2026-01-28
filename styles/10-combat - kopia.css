@@ -137,11 +137,6 @@
     height: 64px;
     overflow: hidden;
     transition: transform 0.3s ease;
-    
-    /* Added styles to match side portraits */
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    background: var(--bg-card);
 }
 
 /* Hover effect for main combatant - no cursor change */

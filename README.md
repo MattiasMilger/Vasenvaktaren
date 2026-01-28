@@ -8,7 +8,7 @@ A turn-based creature collection game inspired by Swedish mythology and folklore
 
 ## How to Play
 
-- https://mattiasmilger.github.io/Vasenvaktaren/ <-- Open in Browser (alternatively run locally: Save  files and open `index.html`)
+- https://mattiasmilger.github.io/Vasenvaktaren/ <-- Open in Browser (alternatively Save files and open `index.html`)
 
 ## Game Features
 
