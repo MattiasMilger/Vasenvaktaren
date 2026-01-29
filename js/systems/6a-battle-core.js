@@ -1039,9 +1039,24 @@ class Battle {
                 vasen.battleFlags.andePassiveTriggered = true;
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                vasen.modifyAttributeStage(randomStat, 1);
+                const result = vasen.modifyAttributeStage(randomStat, 1);
+                
                 this.addLog(`${vasen.getName()}'s Ande spirit empowers it!`, 'passive');
                 this.addLog(`${vasen.getName()}'s ${randomStat} was raised 1 stage!`, 'buff');
+                
+                // Gifu: share the buff with allies if equipped
+                if (result.changed !== 0 && !vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
+                    vasen.battleFlags.gifuTriggered = true;
+                    this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                    
+                    const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                    allies.forEach(ally => {
+                        if (ally !== vasen && !ally.isKnockedOut()) {
+                            ally.modifyAttributeStage(randomStat, 1);
+                            this.addLog(`${ally.getName()}'s ${randomStat} was also raised!`, 'buff');
+                        }
+                    });
+                }
             }
         }
         
