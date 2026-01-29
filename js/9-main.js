@@ -518,20 +518,12 @@ class Game {
         // Check if ability requires ally targeting
         if (abilityRequiresAllyTarget(abilityName)) {
             ui.showAllySelectionModal(this.currentBattle, abilityName, (allyIndex) => {
-                // Disable input immediately
-                this.currentBattle.waitingForPlayerAction = false;
-                ui.renderCombat(this.currentBattle);
-                
-                // Execute the ability
-                this.currentBattle.playerUseAbilityOnAlly(abilityName, allyIndex);
-                
-                // Re-enable input after delay
-                setTimeout(() => {
-                    if (this.currentBattle && !this.currentBattle.isOver) {
-                        this.currentBattle.waitingForPlayerAction = true;
-                        ui.renderCombat(this.currentBattle);
-                    }
-                }, GAME_CONFIG.BATTLE_INPUT_DELAY);
+                // Execute the ability on the selected ally
+                this.currentBattle.executePlayerAction({ 
+                    type: 'ability', 
+                    abilityName: abilityName,
+                    targetAllyIndex: allyIndex 
+                });
             });
             return;
         }

@@ -2,6 +2,13 @@
 // 6a-battle-core.js - Battle Mechanics and Combat Logic (FIXED GIFU)
 // =============================================================================
 
+// Helper: Check if ability requires ally targeting
+function abilityRequiresAllyTarget(abilityName) {
+    const ability = ABILITIES[abilityName];
+    if (!ability || !ability.effect) return false;
+    return ability.effect.target === 'ally';
+}
+
 const BATTLE_TYPES = {
     WILD: 'wild',
     GUARDIAN: 'guardian',
@@ -35,6 +42,9 @@ class Battle {
         // Experience tracking
         this.expTracker = new Map(); // vasen id -> { participated: boolean, turnsOnField: number, dealtKillingBlow: boolean }
         
+        // Enemy utility usage tracking (for AI)
+        this.enemyUtilityUsage = new Map(); // "vasenId-abilityName" -> count
+        
         // Callbacks for UI updates
         this.onLog = null;
         this.onUpdate = null;
@@ -61,7 +71,12 @@ class Battle {
         
         switch (action.type) {
             case 'ability':
-                result = this.playerUseAbility(action.abilityName);
+                // Get ally target if specified
+                let allyTarget = null;
+                if (action.targetAllyIndex !== undefined) {
+                    allyTarget = this.playerTeam[action.targetAllyIndex];
+                }
+                result = this.playerUseAbility(action.abilityName, allyTarget);
                 break;
             case 'swap':
                 result = this.playerSwap(action.targetIndex);
@@ -558,8 +573,9 @@ class Battle {
                 // Apply Inguz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('INGUZ')) {
                     this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                    attacker.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
-                    this.addLog(`${attacker.getName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
+                    const meginDrain = RUNES.INGUZ.mechanic.value; // Get value from rune definition
+                    attacker.spendMegin(meginDrain);
+                    this.addLog(`${attacker.getName()} lost ${meginDrain} Megin!`, 'megin');
                     result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin on weak reflection' });
                 }
             }
@@ -664,17 +680,11 @@ class Battle {
             runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
         }
         
-        // Vätte family passive: Tag Team damage boost
-        if (attacker.species.family === FAMILIES.VATTE) {
-            const allyTeam = this.playerTeam.includes(attacker) ? this.playerTeam : this.enemyTeam;
-            const vatteAllies = allyTeam.filter(v => 
-                v !== attacker && 
-                !v.isKnockedOut() && 
-                v.species.family === FAMILIES.VATTE
-            );
-            if (vatteAllies.length > 0) {
-                runeMod += GAME_CONFIG.FAMILY_VATTE_DAMAGE_BOOST;
-            }
+        // Vätte family passive: Tag Team damage boost (set when swapping in)
+        if (attacker.battleFlags.vatteDamageBoost) {
+            runeMod += FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST;
+            // Clear the flag after using it (lasts for current turn only)
+            attacker.battleFlags.vatteDamageBoost = false;
         }
         
         // Calculate damage based on attack type
@@ -873,8 +883,9 @@ class Battle {
             // Inguz: megin drain on weak hit
             if (attacker.hasRune('INGUZ')) {
                 this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                defender.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
-                this.addLog(`${defender.getName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
+                const meginDrain = RUNES.INGUZ.mechanic.value; // Get value from rune definition
+                defender.spendMegin(meginDrain);
+                this.addLog(`${defender.getName()} lost ${meginDrain} Megin!`, 'megin');
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin' });
             }
         }
@@ -900,7 +911,15 @@ class Battle {
         }
         
         if (action.type === 'ability') {
-            return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false);
+            const result = this.executeAbility(this.enemyActive, this.playerActive, action.ability, false);
+            
+            // Track utility usage for AI
+            const ability = ABILITIES[action.ability];
+            if (ability && ability.type === ATTACK_TYPES.UTILITY) {
+                this.trackEnemyUtilityUsage(this.enemyActive, action.ability);
+            }
+            
+            return result;
         }
         
         return null;
@@ -1009,225 +1028,40 @@ class Battle {
         }
         
         if (trigger === 'onTurnStart' && vasen.species.family === FAMILIES.ODJUR) {
-            // Odjur passive: Megin drain on turn 4+ when Health is below 30%
-            if (vasen.battleFlags.turnsOnField >= 3) {
-                const healthPercent = vasen.currentHealth / vasen.maxHealth;
-                if (healthPercent < 0.30) {
-                    const opponent = isPlayer ? this.enemyActive : this.playerActive;
-                    if (opponent && !opponent.isKnockedOut()) {
-                        opponent.spendMegin(GAME_CONFIG.FAMILY_ODJUR_MEGIN_DRAIN);
-                        this.addLog(`${vasen.getName()}'s bestial fury drains ${opponent.getName()}!`, 'passive');
-                        this.addLog(`${opponent.getName()} lost ${GAME_CONFIG.FAMILY_ODJUR_MEGIN_DRAIN} Megin!`, 'megin');
-                    }
+            // Odjur passive: Bestial Rage - gain Strength and Wisdom stages after 2 turns on field
+            if (vasen.battleFlags.turnsOnField >= FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) {
+                if (!vasen.battleFlags.odjurTriggered) {
+                    vasen.battleFlags.odjurTriggered = true;
+                    vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
+                    vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
+                    this.addLog(`${vasen.getName()}'s bestial rage awakens!`, 'passive');
+                    this.addLog(`${vasen.getName()}'s Strength and Wisdom were raised!`, 'buff');
                 }
             }
         }
         
         if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.VATTE) {
-            // Vätte passive: Heal incoming ally
+            // Vätte passive: Tag Team - incoming ally gains 30% damage boost for current turn
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
-                const healAmount = incomingVasen.healPercent(GAME_CONFIG.FAMILY_VATTE_SWAP_HEAL);
-                if (healAmount > 0) {
-                    this.addLog(`${vasen.getName()} passes its blessing to ${incomingVasen.getName()}!`, 'passive');
-                    this.addLog(`${incomingVasen.getName()} gained ${healAmount} health!`, 'heal');
-                }
+                // Set a temporary flag on the incoming väsen for the damage boost
+                incomingVasen.battleFlags.vatteDamageBoost = true;
+                this.addLog(`${vasen.getName()} tags in ${incomingVasen.getName()}!`, 'passive');
+                this.addLog(`${incomingVasen.getName()} gains a damage boost!`, 'buff');
             }
         }
     }
-}
-
-// Enemy AI Class
-class EnemyAI {
-    constructor(battle, isGuardian) {
-        this.battle = battle;
-        this.isGuardian = isGuardian;
-        this.vasen = battle.enemyActive;
-        this.target = battle.playerActive;
+    
+    // Get how many times an enemy has used a specific utility ability
+    getEnemyUtilityUsageCount(vasen, abilityName) {
+        const key = `${vasen.id}-${abilityName}`;
+        return this.enemyUtilityUsage.get(key) || 0;
     }
     
-    chooseAction() {
-        const actions = this.scoreAllActions();
-        
-        // Sort by score descending
-        actions.sort((a, b) => b.score - a.score);
-        
-        // Return best action
-        return actions[0] || { type: 'ability', ability: 'Basic Strike' };
-    }
-    
-    scoreAllActions() {
-        const actions = [];
-        
-        // Score abilities
-        const abilities = this.vasen.getAvailableAbilities();
-        abilities.forEach(abilityName => {
-            if (this.vasen.canUseAbility(abilityName)) {
-                const score = this.scoreAbility(abilityName);
-                actions.push({ type: 'ability', ability: abilityName, score });
-            }
-        });
-        
-        // Score swap (guardians only)
-        if (this.isGuardian) {
-            const swapTargets = this.battle.enemyTeam.filter(v => 
-                !v.isKnockedOut() && v !== this.vasen
-            );
-            swapTargets.forEach(target => {
-                const score = this.scoreSwap(target);
-                actions.push({ type: 'swap', target, score });
-            });
-        }
-        
-        return actions;
-    }
-    
-    scoreAbility(abilityName) {
-        const ability = ABILITIES[abilityName];
-        let score = 0;
-        
-        // Base score
-        if (ability.type === ATTACK_TYPES.UTILITY) {
-            score += 30;
-        } else {
-            score += 20;
-        }
-        
-        // Damage bonus
-        if (ability.type !== ATTACK_TYPES.UTILITY) {
-            const predictedDamage = this.predictDamage(abilityName);
-            
-            if (predictedDamage >= this.target.currentHealth) {
-                score += 100; // Knockout bonus
-            } else if (predictedDamage >= this.target.maxHealth * 0.5) {
-                score += 50; // High damage bonus
-            }
-            
-            // Element bonus
-            const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
-            const matchup = getMatchupType(abilityElement, this.target.species.element);
-            
-            if (matchup === 'POTENT') {
-                score += 20;
-            } else if (matchup === 'WEAK') {
-                // Check for weak hit runes
-                if (this.vasen.hasRune('NAUDIZ') || this.vasen.hasRune('INGUZ')) {
-                    score -= 5;
-                } else {
-                    score -= 30;
-                }
-            }
-            
-            // Rune synergy bonus
-            if (this.isGuardian) {
-                score += this.scoreRuneSynergy(abilityName);
-            }
-        } else {
-            // Utility scoring
-            if (ability.effect && ability.effect.type === 'buff') {
-                score += 40;
-            } else if (ability.effect && ability.effect.type === 'debuff') {
-                score += 30;
-            }
-        }
-        
-        // Megin penalty
-        const meginCost = this.vasen.getAbilityMeginCost(abilityName);
-        if (meginCost > this.vasen.currentMegin * 0.5) {
-            score -= 15;
-        }
-        
-        // Risk penalty
-        const threatLevel = this.assessThreat();
-        if (threatLevel > 0.6) {
-            score -= 20;
-        }
-        
-        // Variance
-        const variance = this.isGuardian ? 5 : 20;
-        score += (Math.random() * variance * 2) - variance;
-        
-        return score;
-    }
-    
-    scoreSwap(target) {
-        let score = 25;
-        
-        // Low health bonus
-        if (this.vasen.currentHealth < this.vasen.maxHealth * 0.3) {
-            score += 30;
-        }
-        
-        // Type advantage
-        const currentMatchup = getMatchupType(this.target.species.element, this.vasen.species.element);
-        const newMatchup = getMatchupType(this.target.species.element, target.species.element);
-        
-        if (currentMatchup === 'POTENT' && newMatchup !== 'POTENT') {
-            score += 20;
-        }
-        
-        // Variance
-        score += (Math.random() * 10) - 5;
-        
-        return score;
-    }
-    
-    predictDamage(abilityName) {
-        const ability = ABILITIES[abilityName];
-        if (ability.type === ATTACK_TYPES.UTILITY) return 0;
-        
-        // Simplified damage prediction
-        const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
-        const matchup = getMatchupType(abilityElement, this.target.species.element);
-        const elementMod = DAMAGE_MULTIPLIERS[matchup];
-        
-        const power = ability.power;
-        const attackStat = ability.type === ATTACK_TYPES.WISDOM ? 
-            this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
-        const defenseStat = ability.type === ATTACK_TYPES.WISDOM ?
-            this.target.getAttribute('durability') : this.target.getAttribute('defense');
-        
-        const powerFactor = power / GAME_CONFIG.POWER_CONSTANT;
-        const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));
-        
-        return Math.floor(powerFactor * attackStat * elementMod * defenseReduction);
-    }
-    
-    scoreRuneSynergy(abilityName) {
-        let bonus = 0;
-        const ability = ABILITIES[abilityName];
-        const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
-        
-        // Element damage runes
-        const elementRunes = {
-            [ELEMENTS.FIRE]: 'KAUNAN',
-            [ELEMENTS.EARTH]: 'PERTHO',
-            [ELEMENTS.WIND]: 'TYR',
-            [ELEMENTS.NATURE]: 'BJARKA',
-            [ELEMENTS.WATER]: 'LAGUZ'
-        };
-        
-        if (this.vasen.hasRune(elementRunes[abilityElement])) {
-            bonus += 10;
-        }
-        
-        // Low cost runes
-        if (ability.meginCost <= 30) {
-            if (this.vasen.hasRune('ODAL')) bonus += 10;
-            if (this.vasen.hasRune('JERA')) bonus += 5;
-        }
-        
-        return bonus;
-    }
-    
-    assessThreat() {
-        // Estimate threat level from 0 to 1
-        const healthRatio = this.vasen.currentHealth / this.vasen.maxHealth;
-        const matchup = getMatchupType(this.target.species.element, this.vasen.species.element);
-        
-        let threat = 1 - healthRatio;
-        if (matchup === 'POTENT') threat += 0.2;
-        
-        return Math.min(1, threat);
+    // Track enemy utility ability usage
+    trackEnemyUtilityUsage(vasen, abilityName) {
+        const key = `${vasen.id}-${abilityName}`;
+        const currentCount = this.enemyUtilityUsage.get(key) || 0;
+        this.enemyUtilityUsage.set(key, currentCount + 1);
     }
 }

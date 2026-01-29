@@ -147,11 +147,11 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         <div class="combatant-bars">
             <div class="combat-bar health-bar">
                 <div class="combat-bar-fill health-fill" style="width: ${healthPercent}%"></div>
-                <span class="combat-bar-text">HP: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
+                <span class="combat-bar-text">Health: ${vasen.currentHealth} / ${vasen.maxHealth}</span>
             </div>
             <div class="combat-bar megin-bar">
                 <div class="combat-bar-fill megin-fill" style="width: ${meginPercent}%"></div>
-                <span class="combat-bar-text">MP: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
+                <span class="combat-bar-text">Megin: ${vasen.currentMegin} / ${vasen.maxMegin}</span>
             </div>
         </div>
 
