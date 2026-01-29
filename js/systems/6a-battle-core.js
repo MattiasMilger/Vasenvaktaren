@@ -509,6 +509,13 @@ class Battle {
         const actualDamage = defender.takeDamage(result.damage);
         this.addLog(`${attacker.getName()} deals ${actualDamage} damage to ${defender.getName()}!`, 'damage');
         
+        // Trigger family passives after taking damage
+        // Drake: Check health threshold
+        this.applyFamilyPassive('onHealthThreshold', { vasen: defender, isPlayer: !isPlayer });
+        
+        // Rå: Malicious Retaliation when hit
+        this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
+        
         // Flash the defender (hit effect)
         if (this.onHit) {
             this.onHit(isPlayer ? 'enemy' : 'player');
@@ -526,13 +533,19 @@ class Battle {
         
         // Check knockout
         if (defender.isKnockedOut()) {
-            if (isPlayer) {
-                this.addLog(`${defender.getName()} collapses!`, 'knockout');
-                // Mark killing blow
-                const tracker = this.expTracker.get(attacker.id);
-                if (tracker) tracker.dealtKillingBlow = true;
-            } else {
-                this.addLog(`${defender.getName()} has fainted!`, 'knockout');
+            // Vålnad family passive: Deathless - attempt to revive
+            const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
+            
+            if (!revived) {
+                // If not revived, log the knockout
+                if (isPlayer) {
+                    this.addLog(`${defender.getName()} collapses!`, 'knockout');
+                    // Mark killing blow
+                    const tracker = this.expTracker.get(attacker.id);
+                    if (tracker) tracker.dealtKillingBlow = true;
+                } else {
+                    this.addLog(`${defender.getName()} has fainted!`, 'knockout');
+                }
             }
         }
         
@@ -579,6 +592,11 @@ class Battle {
                     result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin on weak reflection' });
                 }
             }
+        }
+        
+        // Troll family passive: Steal attribute stage when using ability
+        if (ability.type !== ATTACK_TYPES.UTILITY && !defender.isKnockedOut()) {
+            this.applyFamilyPassive('onUseAbility', { vasen: attacker, defender: defender, isPlayer });
         }
         
         return result;
@@ -1048,6 +1066,70 @@ class Battle {
                 incomingVasen.battleFlags.vatteDamageBoost = true;
                 this.addLog(`${vasen.getName()} tags in ${incomingVasen.getName()}!`, 'passive');
                 this.addLog(`${incomingVasen.getName()} gains a damage boost!`, 'buff');
+            }
+        }
+        
+        if (trigger === 'onHealthThreshold' && vasen.species.family === FAMILIES.DRAKE) {
+            // Drake passive: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
+            const healthPercent = vasen.currentHealth / vasen.maxHealth;
+            if (healthPercent <= FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD && !vasen.battleFlags.drakePassiveTriggered) {
+                vasen.battleFlags.drakePassiveTriggered = true;
+                vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
+                vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
+                this.addLog(`${vasen.getName()}'s draconic scales harden!`, 'passive');
+                this.addLog(`${vasen.getName()}'s Defense and Durability were raised!`, 'buff');
+            }
+        }
+        
+        if (trigger === 'onTakeDamage' && vasen.species.family === FAMILIES.RA) {
+            // Rå passive: Malicious Retaliation - lower two random enemy attributes by 1 stage when hit
+            const { attacker } = context;
+            if (attacker && !attacker.isKnockedOut()) {
+                const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                const debuffedStats = [];
+                for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
+                    if (stats.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * stats.length);
+                        const stat = stats[randomIndex];
+                        attacker.modifyAttributeStage(stat, -FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES);
+                        debuffedStats.push(stat);
+                        stats.splice(randomIndex, 1);
+                    }
+                }
+                this.addLog(`${vasen.getName()}'s malicious aura strikes back!`, 'passive');
+                debuffedStats.forEach(stat => {
+                    this.addLog(`${attacker.getName()}'s ${stat} was lowered!`, 'debuff');
+                });
+            }
+        }
+        
+        if (trigger === 'onUseAbility' && vasen.species.family === FAMILIES.TROLL) {
+            // Troll passive: Troll Theft - steal one positive attribute stage from enemy
+            const { defender } = context;
+            if (defender && !defender.isKnockedOut()) {
+                const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                const stealableStats = stats.filter(stat => defender.attributeStages[stat] > 0);
+                
+                if (stealableStats.length > 0) {
+                    const randomStat = stealableStats[Math.floor(Math.random() * stealableStats.length)];
+                    defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
+                    vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
+                    this.addLog(`${vasen.getName()} steals ${defender.getName()}'s ${randomStat} boost!`, 'passive');
+                    this.addLog(`${defender.getName()}'s ${randomStat} was lowered!`, 'debuff');
+                    this.addLog(`${vasen.getName()}'s ${randomStat} was raised!`, 'buff');
+                }
+            }
+        }
+        
+        if (trigger === 'onKnockout' && vasen.species.family === FAMILIES.VALNAD) {
+            // Vålnad passive: Deathless - revive with 10% health upon knockout (once per battle)
+            if (!vasen.battleFlags.valnadPassiveTriggered) {
+                vasen.battleFlags.valnadPassiveTriggered = true;
+                const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
+                vasen.currentHealth = reviveHealth;
+                this.addLog(`${vasen.getName()} refuses to fall!`, 'passive');
+                this.addLog(`${vasen.getName()} revived with ${reviveHealth} HP!`, 'heal');
+                return true; // Signal that the knockout was prevented
             }
         }
     }
