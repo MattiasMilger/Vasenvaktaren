@@ -1,5 +1,5 @@
 // =============================================================================
-// 6a-battle-core.js - Battle Mechanics and Combat Logic (FIXED GIFU)
+// 6a-battle-core.js - Battle Mechanics and Combat Logic (FIXED)
 // =============================================================================
 
 // Helper: Check if ability requires ally targeting
@@ -206,15 +206,11 @@ class Battle {
         if (this.playerActive && !this.playerActive.isKnockedOut()) {
             const tracker = this.expTracker.get(this.playerActive.id);
             if (tracker) tracker.turnsOnField++;
-            
-            // Trigger Odjur passive if conditions met
-            this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
         }
         
-        if (this.enemyActive && !this.enemyActive.isKnockedOut()) {
-            // Trigger Odjur passive for enemy
-            this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
-        }
+        // Trigger Odjur passive on turn start
+        this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
+        this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
     }
     
     // End turn (regenerate megin, clear flags)
@@ -231,16 +227,20 @@ class Battle {
             }
         });
         
-        // Clear swap sickness
+        // Clear swap sickness and temporary flags
         if (this.playerActive) {
             this.playerActive.battleFlags.hasSwapSickness = false;
             this.playerActive.battleFlags.isFirstRound = false;
             this.playerActive.battleFlags.turnsOnField++;
+            // Clear Vätte damage boost flag
+            this.playerActive.battleFlags.vatteDamageBoost = false;
         }
         if (this.enemyActive) {
             this.enemyActive.battleFlags.hasSwapSickness = false;
             this.enemyActive.battleFlags.isFirstRound = false;
             this.enemyActive.battleFlags.turnsOnField++;
+            // Clear Vätte damage boost flag
+            this.enemyActive.battleFlags.vatteDamageBoost = false;
         }
         
         // Check for battle end
@@ -289,7 +289,7 @@ class Battle {
     }
     
     // Player action: use ability
-    playerUseAbility(abilityName, selectedAllyTarget = null) {
+    playerUseAbility(abilityName, allyTarget = null) {
         if (this.isOver) return null;
         if (this.playerActive.battleFlags.hasSwapSickness) {
             this.addLog(`${this.playerActive.getName()} is preparing and cannot act this turn.`, 'status');
@@ -313,7 +313,7 @@ class Battle {
         const enemyAbility = ABILITIES[enemyAction.ability];
         const enemyIsUtility = enemyAbility && enemyAbility.type === ATTACK_TYPES.UTILITY;
         
-        // Priority: Player attacks first unless enemy uses utility and player doesn't
+        // Priority: Utility > Swap > Attack
         let playerFirst = true;
         if (!playerIsUtility && enemyIsUtility) {
             playerFirst = false;
@@ -323,14 +323,14 @@ class Battle {
         const results = { player: null, enemy: null };
         
         if (playerFirst) {
-            results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, selectedAllyTarget);
+            results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
             if (!this.enemyActive.isKnockedOut()) {
                 results.enemy = this.executeEnemyAction(enemyAction);
             }
         } else {
             results.enemy = this.executeEnemyAction(enemyAction);
             if (!this.playerActive.isKnockedOut()) {
-                results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, selectedAllyTarget);
+                results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
             }
         }
         
@@ -392,7 +392,7 @@ class Battle {
             return { success: false, correct: false };
         }
         
-        if (this.giftsGiven >= GAME_CONFIG.MAX_GIFTS_PER_COMBAT) {
+        if (this.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT) {
             return { success: false, correct: false };
         }
         
@@ -513,8 +513,10 @@ class Battle {
         // Drake: Check health threshold
         this.applyFamilyPassive('onHealthThreshold', { vasen: defender, isPlayer: !isPlayer });
         
-        // Rå: Malicious Retaliation when hit
-        this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
+        // Rå: Malicious Retaliation when hit (FIXED: only once per combat)
+        if (!defender.battleFlags.raPassiveTriggered) {
+            this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
+        }
         
         // Flash the defender (hit effect)
         if (this.onHit) {
@@ -533,6 +535,15 @@ class Battle {
         
         // Check knockout
         if (defender.isKnockedOut()) {
+            // Hagal rune: Debuff opponent on knockout (triggers BEFORE revive check)
+            if (defender.hasRune('HAGAL')) {
+                this.addLog(`${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
+                ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
+                    attacker.modifyAttributeStage(stat, -1);
+                });
+                this.addLog(`${attacker.getName()}'s attributes were lowered!`, 'debuff');
+            }
+            
             // Vålnad family passive: Deathless - attempt to revive
             const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
             
@@ -594,43 +605,14 @@ class Battle {
             }
         }
         
-        // Troll family passive: Steal attribute stage when using ability
+        // Troll family passive: Steal attribute stage when using ability (FIXED: only once per combat)
         if (ability.type !== ATTACK_TYPES.UTILITY && !defender.isKnockedOut()) {
-            this.applyFamilyPassive('onUseAbility', { vasen: attacker, defender: defender, isPlayer });
+            if (!attacker.battleFlags.trollPassiveTriggered) {
+                this.applyFamilyPassive('onUseAbility', { vasen: attacker, defender: defender, isPlayer });
+            }
         }
         
         return result;
-    }
-    
-    // Calculate Thurs reflection damage as a Mixed-type hit
-    calculateThursReflection(thursUser, reflectTarget, originalDamage) {
-        // Base reflected damage is defined in the rune's mechanic value
-        const reflectPercent = RUNES.THURS.mechanic.value;
-        const baseReflectDamage = originalDamage * reflectPercent;
-        
-        // Element matchup: Use Thurs wielder's element vs reflect target's element
-        const matchupType = getMatchupType(thursUser.species.element, reflectTarget.species.element);
-        const elementMod = DAMAGE_MULTIPLIERS[matchupType];
-        
-        // Apply as Mixed hit: 50% checked against Defense, 50% checked against Durability
-        // Defense reduction
-        const defenseReduction = 1 - (reflectTarget.getAttribute('defense') / 
-            (reflectTarget.getAttribute('defense') + GAME_CONFIG.DEFENSE_CONSTANT));
-        const defensePortionDamage = (baseReflectDamage * 0.5) * defenseReduction * elementMod;
-        
-        // Durability reduction
-        const durabilityReduction = 1 - (reflectTarget.getAttribute('durability') / 
-            (reflectTarget.getAttribute('durability') + GAME_CONFIG.DEFENSE_CONSTANT));
-        const durabilityPortionDamage = (baseReflectDamage * 0.5) * durabilityReduction * elementMod;
-        
-        // Total Mixed-type damage
-        const totalDamage = defensePortionDamage + durabilityPortionDamage;
-        
-        return {
-            damage: Math.floor(Math.max(1, totalDamage)),
-            matchup: matchupType,
-            element: thursUser.species.element
-        };
     }
     
     // Calculate damage
@@ -698,40 +680,41 @@ class Battle {
             runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
         }
         
-        // Vätte family passive: Tag Team damage boost (set when swapping in)
+        // Vätte passive: Tag Team damage boost
         if (attacker.battleFlags.vatteDamageBoost) {
             runeMod += FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST;
-            // Clear the flag after using it (lasts for current turn only)
-            attacker.battleFlags.vatteDamageBoost = false;
         }
         
         // Calculate damage based on attack type
         let totalDamage = 0;
-        const power = ability.power;
+        
+        // Jätte passive: Basic Strike has higher power
+        let power = ability.power;
+        if (abilityName === 'Basic Strike' && attacker.species.family === FAMILIES.JATTE) {
+            power = FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER;
+        }
         
         if (ability.type === ATTACK_TYPES.MIXED) {
             // 50% Strength, 50% Wisdom
             const strengthDamage = this.calculateSingleTypeDamage(
                 power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
                 damageRange, elementMod, runeMod
-            ) * 0.5;
+            ) * GAME_CONFIG.MIXED_ATTACK_STRENGTH_PORTION;
             
             const wisdomDamage = this.calculateSingleTypeDamage(
                 power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
                 damageRange, elementMod, runeMod
-            ) * 0.5;
+            ) * GAME_CONFIG.MIXED_ATTACK_WISDOM_PORTION;
             
             totalDamage = strengthDamage + wisdomDamage;
         } else if (useStrength) {
-            const defenseStat = attacker.hasRune('RAIDO') ? 'defense' : 'defense';
             totalDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('strength'), defender.getAttribute(defenseStat),
+                power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
                 damageRange, elementMod, runeMod
             );
         } else if (useWisdom) {
-            const defenseStat = attacker.hasRune('ANSUZ') ? 'durability' : 'durability';
             totalDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('wisdom'), defender.getAttribute(defenseStat),
+                power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
                 damageRange, elementMod, runeMod
             );
         }
@@ -741,6 +724,33 @@ class Battle {
             matchup: matchup,
             attackType: ability.type,
             element: abilityElement
+        };
+    }
+    
+    // Calculate Thurs reflection damage as Mixed attack
+    calculateThursReflection(defender, attacker, originalDamage) {
+        // Use the defender's element for the reflection
+        const reflectElement = defender.species.element;
+        
+        // Element matchup for the reflection
+        const matchup = getMatchupType(reflectElement, attacker.species.element);
+        const elementMod = DAMAGE_MULTIPLIERS[matchup];
+        
+        // Base reflected damage is 20% of original
+        const baseReflectDamage = originalDamage * 0.20;
+        
+        // Mixed attack: 50% based on Strength, 50% based on Wisdom
+        const strengthFactor = defender.getAttribute('strength') / 100;
+        const wisdomFactor = defender.getAttribute('wisdom') / 100;
+        const statMod = (strengthFactor + wisdomFactor) * 0.5;
+        
+        // Calculate final reflected damage
+        const totalReflectDamage = baseReflectDamage * elementMod * statMod;
+        
+        return {
+            damage: Math.floor(Math.max(1, totalReflectDamage)),
+            matchup: matchup,
+            element: reflectElement
         };
     }
     
@@ -759,19 +769,16 @@ class Battle {
         if (!effect) return effects;
         
         if (effect.type === 'buff') {
-            let targetVasen;
-            if (effect.target === 'ally') {
-                // Use selected ally if provided, otherwise default to user (self)
-                targetVasen = selectedAllyTarget || user;
+            // Determine the target of the buff
+            let targetVasen = user;
+            
+            if (effect.target === 'ally' && selectedAllyTarget) {
+                targetVasen = selectedAllyTarget;
             } else if (effect.target === 'self') {
                 targetVasen = user;
-            } else {
-                targetVasen = target;
             }
-            const stats = effect.stats || [effect.stat];
             
-            // Track which stats were actually buffed for Gifu
-            const buffedStats = [];
+            const stats = effect.stats || [effect.stat];
             
             stats.forEach(stat => {
                 const result = targetVasen.modifyAttributeStage(stat, effect.stages);
@@ -781,29 +788,24 @@ class Battle {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
                     this.addLog(`${targetVasen.getName()}'s ${stat} was raised ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
-                    buffedStats.push({ stat, stages: result.changed });
-                }
-            });
-            
-            // Gifu: share ALL buffed stats to allies (moved outside individual stat loop)
-            if (buffedStats.length > 0 && !targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
-                targetVasen.battleFlags.gifuTriggered = true;
-                this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                
-                const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-                allies.forEach(ally => {
-                    if (ally !== targetVasen && !ally.isKnockedOut()) {
-                        // Apply ALL buffed stats to each ally
-                        buffedStats.forEach(buffedStat => {
-                            ally.modifyAttributeStage(buffedStat.stat, buffedStat.stages);
-                            this.addLog(`${ally.getName()}'s ${buffedStat.stat} was also raised!`, 'buff');
+                    
+                    // Gifu: share first buff
+                    if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
+                        user.battleFlags.gifuTriggered = true;
+                        this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        
+                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                        allies.forEach(ally => {
+                            if (ally !== user && !ally.isKnockedOut()) {
+                                ally.modifyAttributeStage(stat, effect.stages);
+                                this.addLog(`${ally.getName()}'s ${stat} was also raised!`, 'buff');
+                            }
                         });
                     }
-                });
-            }
+                }
+            });
         } else if (effect.type === 'debuff') {
-            const opponent = isPlayer ? target : this.playerActive;
-            const targetVasen = effect.target === 'enemy' ? opponent : user;
+            const targetVasen = effect.target === 'enemy' ? (isPlayer ? target : user) : user;
             const stats = effect.stats || [effect.stat];
             
             // Wynja: block first debuff
@@ -839,7 +841,7 @@ class Battle {
         const ability = ABILITIES[result.ability];
         const abilityElement = damageResult.element;
         
-        // Element ability buffs (Eihwaz, Sol, Ehwaz)
+        // Element ability buffs (Eihwaz, Sol, Ehwaz, Isaz)
         const elementAbilityBuffs = {
             [ELEMENTS.EARTH]: { rune: 'EIHWAZ', stats: ['defense', 'durability'] },
             [ELEMENTS.FIRE]: { rune: 'SOL', stats: ['strength', 'wisdom'] },
@@ -901,9 +903,8 @@ class Battle {
             // Inguz: megin drain on weak hit
             if (attacker.hasRune('INGUZ')) {
                 this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                const meginDrain = RUNES.INGUZ.mechanic.value; // Get value from rune definition
-                defender.spendMegin(meginDrain);
-                this.addLog(`${defender.getName()} lost ${meginDrain} Megin!`, 'megin');
+                defender.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
+                this.addLog(`${defender.getName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin' });
             }
         }
@@ -929,15 +930,13 @@ class Battle {
         }
         
         if (action.type === 'ability') {
-            const result = this.executeAbility(this.enemyActive, this.playerActive, action.ability, false);
-            
             // Track utility usage for AI
             const ability = ABILITIES[action.ability];
             if (ability && ability.type === ATTACK_TYPES.UTILITY) {
                 this.trackEnemyUtilityUsage(this.enemyActive, action.ability);
             }
             
-            return result;
+            return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false, null);
         }
         
         return null;
@@ -1097,9 +1096,12 @@ class Battle {
         }
         
         if (trigger === 'onTakeDamage' && vasen.species.family === FAMILIES.RA) {
-            // Rå passive: Malicious Retaliation - lower two random enemy attributes by 1 stage when hit
+            // Rå passive: Malicious Retaliation - lower two random enemy attributes by 1 stage when hit (FIXED: once per combat)
             const { attacker } = context;
             if (attacker && !attacker.isKnockedOut()) {
+                // Mark flag so it only triggers once
+                vasen.battleFlags.raPassiveTriggered = true;
+                
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const debuffedStats = [];
                 for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
@@ -1119,9 +1121,12 @@ class Battle {
         }
         
         if (trigger === 'onUseAbility' && vasen.species.family === FAMILIES.TROLL) {
-            // Troll passive: Troll Theft - steal one positive attribute stage from enemy
+            // Troll passive: Troll Theft - steal one positive attribute stage from enemy (FIXED: once per combat)
             const { defender } = context;
             if (defender && !defender.isKnockedOut()) {
+                // Mark flag so it only triggers once
+                vasen.battleFlags.trollPassiveTriggered = true;
+                
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const stealableStats = stats.filter(stat => defender.attributeStages[stat] > 0);
                 

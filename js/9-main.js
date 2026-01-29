@@ -216,7 +216,7 @@ class Game {
         ui.showDialogue(
             'Endless Tower',
             `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength.</p>
-             <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor.</p>
+             <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor. Clearing a floor heals your active party by 5% Megin and Health.</p>
              <p><strong>Warning:</strong> Väsen cannot be tamed in this mode. Victory or defeat will end your run.</p>
              ${gameState.endlessTowerRecord.highestFloor > 0 
                 ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>` 
@@ -319,19 +319,14 @@ class Game {
             const playerTeam = gameState.party.filter(p => p !== null);
             const reachedFloor = floor - 1; // They were on this floor but didn't complete it
             
-            // Apply full heal if they completed at least floor 1 (the first floor)
-            if (reachedFloor >= 1) {
-                gameState.party.forEach(v => {
-                    if (v) {
-                        v.restoreFully();
-                    }
-                });
-                ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-                ui.showMessage('Your party was healed to full!', 'success');
-            } else {
-                // Apply normal post-battle healing
-                gameState.applyPostBattleHealing();
-            }
+            // Always apply full heal after tower run ends (whether they reached floor 1 or not)
+            gameState.party.forEach(v => {
+                if (v) {
+                    v.restoreFully();
+                }
+            });
+            ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
+            ui.showMessage('Your party was healed to full!', 'success');
             
             // Update record - reached floor before surrendering
             const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
@@ -403,9 +398,18 @@ class Game {
             // Add log message for floor completion
             ui.addCombatLog(`Floor ${floor} complete! Advancing to Floor ${nextFloor}...`, 'victory');
             
+            // Apply 5% heal for both HP and Megin (endless tower specific)
+            gameState.party.forEach(v => {
+                if (v) {
+                    const healthHeal = Math.floor(v.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
+                    const meginHeal = Math.floor(v.maxMegin * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
+                    v.currentHealth = Math.max(v.currentHealth, v.currentHealth + healthHeal);
+                    v.currentMegin = Math.min(v.maxMegin, v.currentMegin + meginHeal);
+                }
+            });
+            
             // Small delay before next floor for readability
             setTimeout(() => {
-                // No healing in Endless Tower - pure endurance challenge
                 this.startEndlessTowerBattle();
             }, 1500);
         } else {
@@ -416,19 +420,14 @@ class Game {
             const playerTeam = gameState.party.filter(p => p !== null);
             const reachedFloor = floor - 1;
             
-            // Apply full heal if they completed at least floor 1 (the first floor)
-            if (reachedFloor >= 1) {
-                gameState.party.forEach(v => {
-                    if (v) {
-                        v.restoreFully();
-                    }
-                });
-                ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-                ui.showMessage('Your party was healed to full!', 'success');
-            } else {
-                // Apply normal post-battle healing
-                gameState.applyPostBattleHealing();
-            }
+            // Always apply full heal after tower run ends (whether they reached floor 1 or not)
+            gameState.party.forEach(v => {
+                if (v) {
+                    v.restoreFully();
+                }
+            });
+            ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
+            ui.showMessage('Your party was healed to full!', 'success');
             
             const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
             
