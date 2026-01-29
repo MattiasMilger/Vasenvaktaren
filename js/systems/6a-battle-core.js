@@ -49,6 +49,7 @@ class Battle {
         this.onLog = null;
         this.onUpdate = null;
         this.onHit = null;
+        this.onAttack = null;
         this.onKnockoutSwap = null;
         this.onEnd = null;
         
@@ -468,6 +469,11 @@ class Battle {
         
         // Log ability use
         this.addLog(`${attacker.getName()} uses ${ability.name}!`, 'action');
+        
+        // Trigger attack animation based on ability type
+        if (this.onAttack) {
+            this.onAttack(isPlayer ? 'player' : 'enemy', ability.type);
+        }
         
         if (meginCost > 0) {
             this.addLog(`${attacker.getName()} used ${meginCost} Megin!`, 'megin');

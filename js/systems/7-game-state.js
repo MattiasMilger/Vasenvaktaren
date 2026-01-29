@@ -226,10 +226,10 @@ class GameState {
     }
     
     // Equip rune to a specific väsen (by vasen ID)
-equipRune(runeId, vasenId) {
+equipRune(runeId, vasenId, slotIndex = null) {
     if (this.currentBattle || this.inCombat) {
-    return { success: false, message: 'You cannot change runes during combat.' };
-}
+        return { success: false, message: 'You cannot change runes during combat.' };
+    }
     if (!this.collectedRunes.has(runeId)) {
         return { success: false, message: 'You do not own this rune.' };
     }
@@ -248,13 +248,7 @@ equipRune(runeId, vasenId) {
         return { success: false, message: 'This Väsen already has this rune equipped.' };
     }
 
-    // If rune slots are full, replace the first rune
-    if (vasen.runes.length >= maxRunes) {
-        const removedRune = vasen.runes[0];
-        vasen.unequipRune(removedRune);
-    }
-
-    // If another väsen has this rune, unequip it
+    // If another väsen has this rune, unequip it first
     for (const otherVasen of this.vasenCollection) {
         if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
             otherVasen.unequipRune(runeId);
@@ -262,8 +256,32 @@ equipRune(runeId, vasenId) {
         }
     }
 
-    // Equip the new rune
-    vasen.equipRune(runeId);
+    // Handle equipping based on current rune count
+    if (vasen.runes.length < maxRunes) {
+        // Empty slot - just add the rune
+        vasen.runes.push(runeId);
+        // Recalculate megin if Uruz
+        if (runeId === 'URUZ') {
+            vasen.maxMegin = vasen.calculateMaxMegin();
+            vasen.currentMegin = vasen.maxMegin;
+        }
+    } else {
+        // Slots are full - replace at specific index
+        const indexToReplace = (slotIndex !== null && slotIndex >= 0 && slotIndex < vasen.runes.length) 
+            ? slotIndex 
+            : vasen.runes.length - 1;
+        
+        const removedRune = vasen.runes[indexToReplace];
+        
+        // Directly replace at the index
+        vasen.runes[indexToReplace] = runeId;
+        
+        // Recalculate megin if Uruz was added or removed
+        if (runeId === 'URUZ' || removedRune === 'URUZ') {
+            vasen.maxMegin = vasen.calculateMaxMegin();
+            vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+        }
+    }
 
     this.saveGame();
     return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };

@@ -723,7 +723,7 @@ renderVasenDetails(vasen) {
             if (runeId && RUNES[runeId]) {
                 const rune = RUNES[runeId];
                 html += `
-                    <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}')">
+                    <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
                         <span class="rune-symbol">${rune.symbol}</span>
                         <span class="rune-name">${rune.name}</span>
                         <span class="rune-effect">${rune.effect}</span>
@@ -731,7 +731,7 @@ renderVasenDetails(vasen) {
                 `;
             } else {
                 html += `
-                    <div class="rune-slot empty" onclick="ui.showRuneEquipModal('${vasen.id}')">
+                    <div class="rune-slot empty" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
                         <span class="rune-placeholder">+ Equip Rune</span>
                     </div>
                 `;
@@ -2203,13 +2203,17 @@ if (firstButton) firstButton.focus();
     }
 
     // Show rune equip modal
-    showRuneEquipModal(vasenId) {
+    showRuneEquipModal(vasenId, slotIndex = null) {
         const modal = document.getElementById('rune-equip-modal');
         const runeList = document.getElementById('rune-equip-list');
         runeList.innerHTML = '';
 
         const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
         if (!vasen) return;
+
+        // Store which slot is being replaced
+        modal.dataset.vasenId = vasenId;
+        modal.dataset.slotIndex = slotIndex !== null ? slotIndex : '';
 
         const allRunes = RUNE_LIST.filter(runeId => gameState.collectedRunes.has(runeId));
         
@@ -2243,7 +2247,7 @@ if (firstButton) firstButton.focus();
                 if (!isOnThisVasen) {
                     runeBtn.onclick = () => {
                         modal.classList.remove('active');
-                        this.equipRune(vasenId, runeId);
+                        this.equipRune(vasenId, runeId, slotIndex);
                     };
                 }
                 runeList.appendChild(runeBtn);
@@ -2255,7 +2259,7 @@ if (firstButton) firstButton.focus();
     }
 
     // Equip rune
-    equipRune(vasenId, runeId) {
+    equipRune(vasenId, runeId, slotIndex = null) {
         // Find the väsen in collection
         const vasen = gameState.vasenCollection.find(v => v.id === vasenId);
         if (!vasen) {
@@ -2263,7 +2267,7 @@ if (firstButton) firstButton.focus();
             return;
         }
         
-        const result = gameState.equipRune(runeId, vasenId);
+        const result = gameState.equipRune(runeId, vasenId, slotIndex);
         this.showMessage(result.message, result.success ? 'info' : 'error');
         this.refreshCurrentTab();
         this.renderParty(); // Update party display to show new rune
