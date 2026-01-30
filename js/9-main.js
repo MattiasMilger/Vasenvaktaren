@@ -116,10 +116,26 @@ class Game {
                 // Add starting rune to collected
                 gameState.collectedRunes.add('URUZ');
 
-                // Give a random starting taming item from zone 1
-                const zone1Items = ['Mossy Bark', 'Shed Antlers', 'Elderflower Sprig', 'Morning Dew', 'Shedded Scale', 'Festive Midsommarkrans'];
-                const startingItem = zone1Items[Math.floor(Math.random() * zone1Items.length)];
-                gameState.addItem(startingItem, 2);
+                // Give two different starting taming items from zone 1
+const zone1Items = [
+  'Mossy Bark',
+  'Shed Antlers',
+  'Elderflower Sprig',
+  'Morning Dew',
+  'Shedded Scale',
+  'Festive Midsommarkrans'
+];
+
+// Copy + shuffle
+const shuffled = [...zone1Items].sort(() => Math.random() - 0.5);
+
+// Take the first two unique items
+const [item1, item2] = shuffled;
+
+// Add one of each
+gameState.addItem(item1, 1);
+gameState.addItem(item2, 1);
+
 
                 // Start the game for real
                 gameState.gameStarted = true;
