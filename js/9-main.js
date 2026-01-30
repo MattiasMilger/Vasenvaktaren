@@ -91,7 +91,7 @@ class Game {
         <p class="rune-hint">${RUNES.URUZ.effect}</p>
         <p>Your chosen companion stands ready at your side, 
            equipped with the rune's power.</p>
-        <p>You will also find an item to help you tame new Väsen.</p>
+        <p>You will also find items to help you tame new Väsen.</p>
     `,
     [
         {
@@ -119,7 +119,7 @@ class Game {
                 // Give a random starting taming item from zone 1
                 const zone1Items = ['Mossy Bark', 'Shed Antlers', 'Elderflower Sprig', 'Morning Dew', 'Shedded Scale', 'Festive Midsommarkrans'];
                 const startingItem = zone1Items[Math.floor(Math.random() * zone1Items.length)];
-                gameState.addItem(startingItem, 1);
+                gameState.addItem(startingItem, 2);
 
                 // Start the game for real
                 gameState.gameStarted = true;
@@ -216,7 +216,7 @@ class Game {
         ui.showDialogue(
             'Endless Tower',
             `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength.</p>
-             <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor. Clearing a floor heals your active party by 5% Megin and Health.</p>
+             <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor. Clearing a floor replenishes your active party somewhat.</p>
              <p><strong>Warning:</strong> Väsen cannot be tamed in this mode. Victory or defeat will end your run.</p>
              ${gameState.endlessTowerRecord.highestFloor > 0 
                 ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>` 
