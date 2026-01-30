@@ -1860,21 +1860,30 @@ renderActionButtons(battle) {
     }
 
     // Flash combatant (when hit)
-    flashCombatant(side) {
+    flashCombatant(side, matchup = 'NEUTRAL') {
         const panel = document.getElementById(`${side}-panel`);
         if (!panel) return;
+        
+        // Determine the hit class based on matchup
+        let hitClass = 'hit-neutral';
+        if (matchup === 'POTENT') {
+            hitClass = 'hit-potent';
+        } else if (matchup === 'WEAK') {
+            hitClass = 'hit-weak';
+        }
         
         // Clear any existing animations (hit has highest priority)
         this.clearAllAnimations(panel);
         
-        // Store animation state with priority
+        // Store animation state with priority AND the specific hit class
         panel.dataset.hitAnimation = 'true';
         panel.dataset.hitAnimationTime = Date.now();
+        panel.dataset.hitAnimationClass = hitClass; // Store which hit class to use
         panel.dataset.animationPriority = '1'; // Highest priority
         
         const imageContainer = panel.querySelector('.combatant-image-container');
         if (imageContainer) {
-            imageContainer.classList.add('hit');
+            imageContainer.classList.add(hitClass);
         }
         
         setTimeout(() => {
@@ -1882,41 +1891,12 @@ renderActionButtons(battle) {
             if (panel) {
                 delete panel.dataset.hitAnimation;
                 delete panel.dataset.hitAnimationTime;
+                delete panel.dataset.hitAnimationClass;
                 delete panel.dataset.animationPriority;
                 const imageContainer = panel.querySelector('.combatant-image-container');
                 if (imageContainer) {
-                    imageContainer.classList.remove('hit');
+                    imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak');
                 }
-            }
-        }, 400);
-    }
-    
-    // Show element flash when ability is used (UTILITY abilities have no flash)
-    showElementFlash(abilityElement, targetSide) {
-        // Skip flash for UTILITY abilities (no element passed)
-        if (!abilityElement) return;
-
-        const panel = document.getElementById(`${targetSide}-panel`);
-        if (!panel) return;
-
-        // Get element color
-        const flashColor = ELEMENT_COLORS[abilityElement];
-        if (!flashColor) return;
-
-        // Create flash overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'element-flash-overlay';
-        overlay.style.backgroundColor = flashColor;
-        
-        panel.appendChild(overlay);
-
-        // Trigger animation
-        setTimeout(() => overlay.classList.add('active'), 10);
-
-        // Remove flash after duration
-        setTimeout(() => {
-            if (overlay && overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
             }
         }, 400);
     }
@@ -1988,13 +1968,14 @@ renderActionButtons(battle) {
         
         const imageContainer = panel.querySelector('.combatant-image-container');
         if (imageContainer) {
-            // Remove all possible animation classes
-            imageContainer.classList.remove('hit', 'attacking-player', 'attacking-enemy', 'using-utility');
+            // Remove all possible animation classes including new hit variants
+            imageContainer.classList.remove('hit', 'hit-potent', 'hit-neutral', 'hit-weak', 'attacking-player', 'attacking-enemy', 'using-utility');
         }
         
         // Clear all animation data attributes
         delete panel.dataset.hitAnimation;
         delete panel.dataset.hitAnimationTime;
+        delete panel.dataset.hitAnimationClass;
         delete panel.dataset.attackAnimation;
         delete panel.dataset.attackAnimationTime;
         delete panel.dataset.attackAnimationClass;
@@ -2014,7 +1995,9 @@ renderActionButtons(battle) {
             if (elapsed < 400) {
                 const imageContainer = panel.querySelector('.combatant-image-container');
                 if (imageContainer) {
-                    imageContainer.classList.add('hit');
+                    // Use the stored hit class (hit-potent, hit-neutral, or hit-weak)
+                    const hitClass = panel.dataset.hitAnimationClass || 'hit';
+                    imageContainer.classList.add(hitClass);
                 }
                 return; // Don't check other animations if hit is active
             }

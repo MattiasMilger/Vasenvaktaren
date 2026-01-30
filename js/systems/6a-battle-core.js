@@ -526,7 +526,7 @@ class Battle {
         
         // Flash the defender (hit effect)
         if (this.onHit) {
-            this.onHit(isPlayer ? 'enemy' : 'player');
+            this.onHit(isPlayer ? 'enemy' : 'player', damageResult.matchup);
         }
         
         // Log matchup
