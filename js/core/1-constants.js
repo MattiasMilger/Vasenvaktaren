@@ -65,6 +65,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // HEALING
     // =============================================================================
+    POST_BATTLE_HEAL_PERCENT: 0.05,     // health restored after winning battle
     ENDLESS_TOWER_HEAL_PERCENT: 0.05,     // health restored after winning battle in Endless Tower
     SACRED_WELL_HEAL_PERCENT: 0.80,     // 80% health restored at Sacred Well
     CORRECT_ITEM_HEAL_PERCENT: 0.80,    // 80% health restored when giving correct taming item
