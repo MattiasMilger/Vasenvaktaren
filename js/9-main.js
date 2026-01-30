@@ -319,7 +319,7 @@ class Game {
             const playerTeam = gameState.party.filter(p => p !== null);
             const reachedFloor = floor - 1; // They were on this floor but didn't complete it
             
-            // Always apply full heal after tower run ends (whether they reached floor 1 or not)
+            // Always apply full heal after tower run ends
             gameState.party.forEach(v => {
                 if (v) {
                     v.restoreFully();
@@ -398,15 +398,21 @@ class Game {
             // Add log message for floor completion
             ui.addCombatLog(`Floor ${floor} complete! Advancing to Floor ${nextFloor}...`, 'victory');
             
-            // Apply 5% heal for both HP and Megin (endless tower specific)
-            gameState.party.forEach(v => {
-                if (v) {
-                    const healthHeal = Math.floor(v.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
-                    const meginHeal = Math.floor(v.maxMegin * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
-                    v.currentHealth = Math.max(v.currentHealth, v.currentHealth + healthHeal);
-                    v.currentMegin = Math.min(v.maxMegin, v.currentMegin + meginHeal);
-                }
-            });
+            // Apply post-victory heal for both HP and Megin (endless tower specific)
+gameState.party.forEach(v => {
+    if (!v) return;
+
+    // Skip knocked-out väsen
+    if (v.currentHealth <= 0) return;
+
+    const healthHeal = Math.floor(v.maxHealth * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
+    const meginHeal = Math.floor(v.maxMegin * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
+
+    // Correct clamping
+    v.currentHealth = Math.min(v.maxHealth, v.currentHealth + healthHeal);
+    v.currentMegin = Math.min(v.maxMegin, v.currentMegin + meginHeal);
+});
+
             
             // Small delay before next floor for readability
             setTimeout(() => {
