@@ -6,6 +6,7 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ## beta 1.3 – Hit Flash (2026-01-30)
 Introduced colors based on hit effectiveness
+Increased starting items to 2
 
 ## beta 1.2 – Move Changes (2026-01-28)
 - Bergatroll learns Smithing instead of Torch strike, Gruvrå learns Ethereal Melody isntead of Smithing
