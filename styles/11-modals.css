@@ -1196,4 +1196,89 @@ button:focus-visible,
     color: var(--text-secondary);
 }
 
-/* =============================================================================
+/* =============================================================================   OFFER MODAL CONFIRMATION
+   ============================================================================= */
+
+/* Offer confirmation container */
+.offer-confirmation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+}
+
+/* Item title */
+.offer-item-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    text-align: center;
+}
+
+/* Item description */
+.offer-item-description {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    text-align: left;
+    padding: var(--spacing-sm);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+/* Button container */
+.offer-confirmation-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.offer-confirmation-buttons .btn {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* Mobile responsiveness for offer confirmation */
+@media (max-width: 768px) {
+    .offer-confirmation {
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) 0;
+    }
+
+    .offer-item-title {
+        font-size: var(--font-size-md);
+    }
+
+    .offer-item-description {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-xs);
+    }
+
+    .offer-confirmation-buttons {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .offer-confirmation-buttons .btn {
+        width: 100%;
+    }
+}
+
+/* Small mobile for offer confirmation */
+@media (max-width: 480px) {
+    .offer-confirmation {
+        gap: var(--spacing-xs);
+    }
+
+    .offer-item-title {
+        font-size: var(--font-size-base);
+    }
+
+    .offer-item-description {
+        font-size: var(--font-size-xs);
+        line-height: 1.5;
+    }
+}

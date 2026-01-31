@@ -2121,6 +2121,7 @@ if (firstButton) firstButton.focus();
     showOfferModal(battle) {
         const modal = document.getElementById('offer-modal');
         const itemList = document.getElementById('offer-item-list');
+        const closeBtn = document.getElementById('close-offer-modal');
         itemList.innerHTML = '';
 
         const items = Object.entries(gameState.itemInventory);
@@ -2138,15 +2139,45 @@ if (firstButton) firstButton.focus();
                     <span class="offer-item-count">x${count}</span>
                 `;
                 itemBtn.onclick = () => {
-                    modal.classList.remove('active');
-                    game.handleOfferItem(itemId);
+                    this.showOfferConfirmation(battle, itemId);
                 };
                 itemList.appendChild(itemBtn);
             });
         }
 
-        document.getElementById('close-offer-modal').onclick = () => modal.classList.remove('active');
+        // Show the close button when displaying item list
+        closeBtn.style.display = 'block';
+        closeBtn.onclick = () => modal.classList.remove('active');
         modal.classList.add('active');
+    }
+
+    // Show offer confirmation
+    showOfferConfirmation(battle, itemId) {
+        const modal = document.getElementById('offer-modal');
+        const itemList = document.getElementById('offer-item-list');
+        const closeBtn = document.getElementById('close-offer-modal');
+        const item = TAMING_ITEMS[itemId];
+
+        // Hide the original close button since we have our own buttons
+        closeBtn.style.display = 'none';
+
+        itemList.innerHTML = `
+            <div class="offer-confirmation">
+                <h4 class="offer-item-title">${item.name}</h4>
+                <p class="offer-item-description">${item.description}</p>
+                <div class="offer-confirmation-buttons">
+                    <button class="btn btn-secondary" onclick="ui.showOfferModal(game.battle)">Cancel</button>
+                    <button class="btn btn-primary" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Confirm offer item
+    confirmOfferItem(itemId) {
+        const modal = document.getElementById('offer-modal');
+        modal.classList.remove('active');
+        game.handleOfferItem(itemId);
     }
 
     // Show ally select modal (for target selection)
