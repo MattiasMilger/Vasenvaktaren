@@ -1866,7 +1866,12 @@ flashCombatant(side, matchup = 'NEUTRAL') {
     
     // Determine the hit class based on matchup
     let hitClass = 'hit-neutral';
-    if (matchup === 'POTENT') {
+    let animationDuration = 400;
+    
+    if (matchup === 'KNOCKOUT') {
+        hitClass = 'hit-knockout';
+        animationDuration = 180; // Very fast for knockout
+    } else if (matchup === 'POTENT') {
         hitClass = 'hit-potent';
     } else if (matchup === 'WEAK') {
         hitClass = 'hit-weak';
@@ -1902,13 +1907,13 @@ flashCombatant(side, matchup = 'NEUTRAL') {
             
             const imageContainer = panel.querySelector('.combatant-image-container');
             if (imageContainer) {
-                imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak');
+                imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak', 'hit-knockout');
             }
 
             // Always remove shake after duration
             panel.classList.remove('hit-shake');
         }
-    }, 400);
+    }, animationDuration);
 }
 
     

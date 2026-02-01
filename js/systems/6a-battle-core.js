@@ -523,23 +523,32 @@ class Battle {
             this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
         }
         
-        // Flash the defender (hit effect)
+        // Check if this hit will cause a knockout BEFORE flashing
+        const willKnockout = defender.isKnockedOut();
+        
+        // Flash the defender (hit effect) - use KNOCKOUT flash if knocked out
         if (this.onHit) {
-            this.onHit(isPlayer ? 'enemy' : 'player', damageResult.matchup);
+            if (willKnockout) {
+                this.onHit(isPlayer ? 'enemy' : 'player', 'KNOCKOUT');
+            } else {
+                this.onHit(isPlayer ? 'enemy' : 'player', damageResult.matchup);
+            }
         }
         
-        // Log matchup
-        if (damageResult.matchup === 'POTENT') {
-            this.addLog('Potent hit!', 'potent');
-        } else if (damageResult.matchup === 'WEAK') {
-            this.addLog('Weak hit!', 'weak');
+        // Log matchup (only if not knocked out)
+        if (!willKnockout) {
+            if (damageResult.matchup === 'POTENT') {
+                this.addLog('Potent hit!', 'potent');
+            } else if (damageResult.matchup === 'WEAK') {
+                this.addLog('Weak hit!', 'weak');
+            }
         }
         
         // Handle rune effects for hits
         this.applyHitRuneEffects(attacker, defender, damageResult, result, isPlayer);
         
         // Check knockout
-        if (defender.isKnockedOut()) {
+        if (willKnockout) {
             // Hagal rune: Debuff opponent on knockout (triggers BEFORE revive check)
             if (defender.hasRune('HAGAL')) {
                 this.addLog(`${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
