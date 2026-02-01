@@ -2944,7 +2944,10 @@ showKnockoutSwapModal(battle, callback) {
                 this.showDialogue(
     'Rune Discovered!',
     `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p><p class="rune-effect">${RUNES[result.runeId].effect}</p>`,  
-    [{ text: 'Confirm', callback: null }],
+    [
+        { text: 'Confirm', callback: null, class: 'btn-primary' },
+        { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
+    ],
     false
 );
 
