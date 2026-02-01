@@ -426,7 +426,6 @@ class Battle {
         this.startTurn();
         
         const tamingItem = this.enemyActive.species.tamingItem;
-        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you like the most?`, 'dialogue');
         
         // Enemy acts (player passes)
         const enemyAction = this.getEnemyAction();
@@ -434,8 +433,8 @@ class Battle {
         results.enemy = this.executeEnemyAction(enemyAction);
         
         // Add the item response AFTER combat events
-        this.addLog(`If you must know, ${tamingItem} is what I desire most.`, 'dialogue');
-        
+        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you like the most?`, 'dialogue');
+        this.addLog(`If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
         this.handlePostTurn(results);
         this.endTurn();
         

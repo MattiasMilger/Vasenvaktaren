@@ -1837,8 +1837,8 @@ renderActionButtons(battle) {
     // Add combat log message
     addCombatLog(message, type = 'normal') {
         const logEntry = document.createElement('div');
-        logEntry.className = `combat-log-entry ${type}`;
-        logEntry.textContent = message;
+        logEntry.className = `combat-log-entry combat-log-${type}`;
+        logEntry.innerHTML = message;
 
         this.combatLog.appendChild(logEntry);
         this.combatLogMessages.push({ message, type });
@@ -1860,46 +1860,57 @@ renderActionButtons(battle) {
     }
 
     // Flash combatant (when hit)
-    flashCombatant(side, matchup = 'NEUTRAL') {
-        const panel = document.getElementById(`${side}-panel`);
-        if (!panel) return;
-        
-        // Determine the hit class based on matchup
-        let hitClass = 'hit-neutral';
-        if (matchup === 'POTENT') {
-            hitClass = 'hit-potent';
-        } else if (matchup === 'WEAK') {
-            hitClass = 'hit-weak';
-        }
-        
-        // Clear any existing animations (hit has highest priority)
-        this.clearAllAnimations(panel);
-        
-        // Store animation state with priority AND the specific hit class
-        panel.dataset.hitAnimation = 'true';
-        panel.dataset.hitAnimationTime = Date.now();
-        panel.dataset.hitAnimationClass = hitClass; // Store which hit class to use
-        panel.dataset.animationPriority = '1'; // Highest priority
-        
-        const imageContainer = panel.querySelector('.combatant-image-container');
-        if (imageContainer) {
-            imageContainer.classList.add(hitClass);
-        }
-        
-        setTimeout(() => {
-            const panel = document.getElementById(`${side}-panel`);
-            if (panel) {
-                delete panel.dataset.hitAnimation;
-                delete panel.dataset.hitAnimationTime;
-                delete panel.dataset.hitAnimationClass;
-                delete panel.dataset.animationPriority;
-                const imageContainer = panel.querySelector('.combatant-image-container');
-                if (imageContainer) {
-                    imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak');
-                }
-            }
-        }, 400);
+flashCombatant(side, matchup = 'NEUTRAL') {
+    const panel = document.getElementById(`${side}-panel`);
+    if (!panel) return;
+    
+    // Determine the hit class based on matchup
+    let hitClass = 'hit-neutral';
+    if (matchup === 'POTENT') {
+        hitClass = 'hit-potent';
+    } else if (matchup === 'WEAK') {
+        hitClass = 'hit-weak';
     }
+    
+    // Clear any existing animations (hit has highest priority)
+    this.clearAllAnimations(panel);
+    
+    panel.dataset.hitAnimation = 'true';
+    panel.dataset.hitAnimationTime = Date.now();
+    panel.dataset.hitAnimationClass = hitClass;
+    panel.dataset.animationPriority = '1';
+    
+    const imageContainer = panel.querySelector('.combatant-image-container');
+    if (imageContainer) {
+        imageContainer.classList.add(hitClass);
+    }
+    
+    // ⭐ Only shake on POTENT hits
+    if (matchup === 'POTENT') {
+        panel.classList.remove('hit-shake');
+        void panel.offsetWidth; // restart animation
+        panel.classList.add('hit-shake');
+    }
+
+    setTimeout(() => {
+        const panel = document.getElementById(`${side}-panel`);
+        if (panel) {
+            delete panel.dataset.hitAnimation;
+            delete panel.dataset.hitAnimationTime;
+            delete panel.dataset.hitAnimationClass;
+            delete panel.dataset.animationPriority;
+            
+            const imageContainer = panel.querySelector('.combatant-image-container');
+            if (imageContainer) {
+                imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak');
+            }
+
+            // Always remove shake after duration
+            panel.classList.remove('hit-shake');
+        }
+    }, 400);
+}
+
     
     // Trigger attack animation
     triggerAttackAnimation(side, abilityType) {
@@ -1963,65 +1974,56 @@ renderActionButtons(battle) {
     }
     
     // Clear all animations from a panel
-    clearAllAnimations(panel) {
-        if (!panel) return;
-        
-        const imageContainer = panel.querySelector('.combatant-image-container');
-        if (imageContainer) {
-            // Remove all possible animation classes including new hit variants
-            imageContainer.classList.remove('hit', 'hit-potent', 'hit-neutral', 'hit-weak', 'attacking-player', 'attacking-enemy', 'using-utility');
-        }
-        
-        // Clear all animation data attributes
-        delete panel.dataset.hitAnimation;
-        delete panel.dataset.hitAnimationTime;
-        delete panel.dataset.hitAnimationClass;
-        delete panel.dataset.attackAnimation;
-        delete panel.dataset.attackAnimationTime;
-        delete panel.dataset.attackAnimationClass;
-        delete panel.dataset.animationPriority;
+clearAllAnimations(panel) {
+    if (!panel) return;
+    
+    const imageContainer = panel.querySelector('.combatant-image-container');
+    if (imageContainer) {
+        imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak');
     }
+
+    // Remove shake from panel
+    panel.classList.remove('hit-shake');
+
+    delete panel.dataset.hitAnimation;
+    delete panel.dataset.hitAnimationTime;
+    delete panel.dataset.hitAnimationClass;
+    delete panel.dataset.attackAnimation;
+    delete panel.dataset.attackAnimationTime;
+    delete panel.dataset.attackAnimationClass;
+    delete panel.dataset.animationPriority;
+}
+
     
     // Reapply active animations after panel re-render
-    reapplyAnimations(side) {
-        const panel = document.getElementById(`${side}-panel`);
-        if (!panel) return;
-        
-        const now = Date.now();
-        
-        // Check for hit animation first (highest priority)
-        if (panel.dataset.hitAnimation === 'true') {
-            const elapsed = now - parseInt(panel.dataset.hitAnimationTime || 0);
-            if (elapsed < 400) {
-                const imageContainer = panel.querySelector('.combatant-image-container');
-                if (imageContainer) {
-                    // Use the stored hit class (hit-potent, hit-neutral, or hit-weak)
-                    const hitClass = panel.dataset.hitAnimationClass || 'hit';
-                    imageContainer.classList.add(hitClass);
-                }
-                return; // Don't check other animations if hit is active
-            }
+reapplyAnimations(side) {
+    const panel = document.getElementById(`${side}-panel`);
+    if (!panel) return;
+    
+    const now = Date.now();
+    const imageContainer = panel.querySelector('.combatant-image-container');
+    if (!imageContainer) return;
+
+    // Hit animation
+    if (panel.dataset.hitAnimation === 'true') {
+        const elapsed = now - parseInt(panel.dataset.hitAnimationTime || 0);
+        if (elapsed < 400) {
+            const hitClass = panel.dataset.hitAnimationClass || 'hit-neutral';
+            imageContainer.classList.add(hitClass);
         }
-        
-        // Check for attack/utility animation (lower priority)
-        if (panel.dataset.attackAnimation === 'true') {
-            const elapsed = now - parseInt(panel.dataset.attackAnimationTime || 0);
-            const animationClass = panel.dataset.attackAnimationClass;
-            
-            // Determine max duration based on animation type
-            let maxDuration = 500; // default for attack animations
-            if (animationClass === 'using-utility') {
-                maxDuration = 600;
-            }
-            
-            if (elapsed < maxDuration && animationClass) {
-                const imageContainer = panel.querySelector('.combatant-image-container');
-                if (imageContainer) {
-                    imageContainer.classList.add(animationClass);
-                }
+    }
+
+    // Attack animation
+    if (panel.dataset.attackAnimation === 'true') {
+        const elapsed = now - parseInt(panel.dataset.attackAnimationTime || 0);
+        if (elapsed < 400) {
+            const attackClass = panel.dataset.attackAnimationClass;
+            if (attackClass) {
+                imageContainer.classList.add(attackClass);
             }
         }
     }
+}
 
     // Show dialogue modal
 showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true, extraClass = null) {

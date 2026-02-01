@@ -381,47 +381,48 @@
     background: var(--bg-secondary);
     border-radius: var(--border-radius);
     margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-sm);
-}
 
+    font-size: calc(var(--font-size-sm) + 1px);
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text-strong, #e6e6f0);
+
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.35);
+}
 
 /* Enhanced combat log entries */
 .combat-log-entry {
     padding: 4px var(--spacing-xs);
-    border-bottom: 1px solid rgba(63, 63, 82, 0.5);
     margin-bottom: 2px;
+
+    font-weight: 600;
+    font-size: calc(var(--font-size-sm) + 0.5px);
     line-height: 1.4;
+    color: var(--text-strong, #ededf8);
+
+    text-shadow:
+        0 0 1px rgba(0, 0, 0, 0.35),
+        0 1px 0 rgba(0, 0, 0, 0.2);
+
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 3px;
 }
 
+.combat-log-potent {
+    color: #a2ba92;
+    font-weight: 700;
+}
 
+.combat-log-weak {
+    color: #d68080;
+    font-weight: 700;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Taming Item*/
+.taming-item {
+    color: #a2ba92;
+    font-weight: 700;
+}
 
 /* Ability Buttons */
 .ability-buttons {
