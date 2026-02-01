@@ -402,7 +402,7 @@ class Battle {
         }
         
         this.giftsGiven++;
-        this.addLog(`${itemName} was gifted to ${this.enemyActive.getName()}.`, 'gift');
+        this.addLog(`<span class="taming-item">${itemName}</span> was gifted to ${this.enemyActive.getName()}.`, 'gift');
         
         const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
         

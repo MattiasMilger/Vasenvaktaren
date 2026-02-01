@@ -1374,6 +1374,7 @@
     background: rgba(0, 0, 0, 0.4);
     border-radius: 2px;
     overflow: hidden;
+    animation: partyIdleFloat 3s ease-in-out infinite;
 }
 
 .party-portrait-hp-fill {
@@ -1386,6 +1387,10 @@
     background: #a85a4a;
 }
 
+.party-portrait.knocked-out .party-portrait-hp-bar {
+    animation: none;
+}
+
 /* Megin bar for portraits - always visible */
 .party-portrait-megin-bar {
     position: absolute;
@@ -1396,12 +1401,17 @@
     background: rgba(0, 0, 0, 0.4);
     border-radius: 2px;
     overflow: hidden;
+    animation: partyIdleFloat 3s ease-in-out infinite;
 }
 
 .party-portrait-megin-fill {
     height: 100%;
     background: #5a8aaa;
     transition: width 0.3s ease;
+}
+
+.party-portrait.knocked-out .party-portrait-megin-bar {
+    animation: none;
 }
 
 /* Hover effect - scale and brighten border, no cursor change */

@@ -432,25 +432,54 @@
     flex: 1;
     padding: var(--spacing-sm);
     background: var(--bg-card);
-    border: 1px dashed var(--border-color);
+    border: 2px dashed var(--accent-primary);
     border-radius: var(--border-radius-sm);
     text-align: center;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 0 8px rgba(143, 166, 126, 0.3);
+    animation: runeSlotPulse 2s ease-in-out infinite;
 }
 
 .rune-slot:hover {
     background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 12px rgba(143, 166, 126, 0.5);
+    transform: translateY(-1px);
 }
 
 .rune-slot.filled {
     border-style: solid;
     border-color: var(--accent-primary);
+    box-shadow: none;
+    animation: none;
+}
+
+.rune-slot.filled:hover {
+    transform: none;
 }
 
 .rune-slot.locked {
     opacity: 0.5;
     cursor: not-allowed;
+    border-color: var(--border-color);
+    box-shadow: none;
+    animation: none;
+}
+
+.rune-slot.locked:hover {
+    background: var(--bg-card);
+    transform: none;
+}
+
+/* Subtle pulse animation for empty rune slots */
+@keyframes runeSlotPulse {
+    0%, 100% {
+        box-shadow: 0 0 8px rgba(143, 166, 126, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 12px rgba(143, 166, 126, 0.5);
+    }
 }
 
 .rune-symbol {
@@ -477,7 +506,8 @@
 
 .rune-placeholder {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: var(--accent-primary);
+    font-weight: 600;
 }
 
 /* Experience Bar */
