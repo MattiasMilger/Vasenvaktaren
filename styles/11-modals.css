@@ -202,7 +202,7 @@
         min-height: 0 !important;
         max-height: 45vh !important;
         overflow-y: auto !important;
-        overflow-x: visible !important;
+        overflow-x: auto !important;
     }
 
     .combat-versus {
@@ -894,7 +894,7 @@ button:focus-visible,
         max-width: 90vw;
         z-index: 9999;
         margin-top: var(--spacing-xs);
-        overflow-x: auto;
+        overflow-x: visible;
         overflow-y: visible;
     }
     
@@ -903,13 +903,13 @@ button:focus-visible,
         position: absolute;
         bottom: 100%;
         top: auto;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 0;
+        transform: none;
         right: auto;
         max-width: min(200px, calc(100vw - 32px));
         margin-top: 0;
         margin-bottom: var(--spacing-xs);
-        overflow-x: auto;
+        overflow-x: visible;
         overflow-y: visible;
     }
     
@@ -918,11 +918,16 @@ button:focus-visible,
         flex-wrap: nowrap;
     }
     
+    /* Ensure element matchups in combatant panel have constrained width */
+    .combatant-panel .element-matchup-collapsible .matchup-details {
+        max-width: none;
+        overflow: visible;
+    }
+    
     /* Ensure it stays within combatant panel */
     .combatant-panel .combatant-attack-elements .element-matchup-collapsible .matchup-details {
-        max-width: 200px;
-        overflow-x: auto;
-        overflow-y: visible;
+        max-width: none;
+        overflow: visible;
     }
     
     /* KEY FIX: Give family popup content a min-width so it extends beyond container */
@@ -930,21 +935,19 @@ button:focus-visible,
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        max-width: calc(100vw - 32px);
+        max-width: none;
         min-width: 200px;
         padding: var(--spacing-md);
-        overflow-x: auto;
-        overflow-y: visible;
+        overflow: visible;
         white-space: normal;
     }
     
     /* Ensure popup stays within combatant panel on mobile */
     .combatant-panel .family-matchup-collapsible .family-description-popup {
-        max-width: min(220px, calc(100vw - 32px));
-        left: 50%;
-        transform: translateX(-50%);
-        overflow-x: auto;
-        overflow-y: visible;
+        max-width: none;
+        left: 0;
+        transform: none;
+        overflow: visible;
     }
     
     /* KEY FIX: Inner content has min-width to force horizontal scroll */
@@ -973,6 +976,7 @@ button:focus-visible,
         margin-top: var(--spacing-xs);
         overflow-x: auto;
         overflow-y: visible;
+        touch-action: pan-x;
     }
 }
 
@@ -1015,7 +1019,7 @@ button:focus-visible,
     flex: 1 1 0;
     min-width: 0;
     max-width: 100%;
-    overflow: visible;
+    overflow: auto;
 }
 
 .combat-ui {
@@ -1075,7 +1079,7 @@ button:focus-visible,
     min-height: 0;
     max-height: 45vh;
     overflow-y: auto;
-    overflow-x: visible;
+    overflow-x: auto;
 }
 
 /* Combat area gets its own space */ .combat-area { flex: 0 0 auto; min-height: 200px; }

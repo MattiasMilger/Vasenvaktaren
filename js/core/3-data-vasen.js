@@ -79,7 +79,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
-        abilities: ['Drown', 'Tidal Wave', 'Ethereal Melody', 'Wailing Cry'],
+        abilities: ['Drown', 'Tidal Wave', 'Skald\'s Mead', 'Wailing Cry'],
         tamingItem: 'Damp Seaweed',
         image: 'assets/vasen/strandvaskare.png'
     },

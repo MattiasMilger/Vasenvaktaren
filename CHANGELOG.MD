@@ -4,16 +4,20 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
+## beta 1.4 - UI (2026-02-02)
+- UI fixes
+- Strandvaskare - replaced ethereal melody with skald's mead
+
 ## beta 1.3 – Hit Flash (2026-01-30)
-Introduced colors based on hit effectiveness
-Increased starting items to 2
+- Introduced colors based on hit effectiveness
+- Increased starting items to 2
 
 ## beta 1.2 – Move Changes (2026-01-28)
 - Bergatroll learns Smithing instead of Torch strike, Gruvrå learns Ethereal Melody isntead of Smithing
 
 ## beta 1.1 – Code Modularization (2026-01-26)
 
-**Technical update** - Project structure reorganized for better maintainability and development workflow.
+**Technical update** - Project structure reorganized for better maintainability and development workflow
 **Zone animation** - Added animation affect to the zone images
 **Idle Animation** - Added idle animations for väsen
 
@@ -41,9 +45,9 @@ Increased starting items to 2
 ## beta 1.0 – Major Visual & Gameplay Update (2026‑01‑23)
 
 A broad upgrade to Väsenväktaren’s presentation and overall feel.  
-This update introduces a fully redesigned interface, improved readability, smoother transitions, and more polished interactions across combat, zones, inventory, and modals.
+This update introduces a fully redesigned interface, improved readability, smoother transitions, and more polished interactions across combat, zones, inventory, and modals
 
-Gameplay clarity and flow have also been improved, with better visual feedback, cleaner animations, and more consistent UI behavior on both desktop and mobile.
+Gameplay clarity and flow have also been improved, with better visual feedback, cleaner animations, and more consistent UI behavior on both desktop and mobile
 
 ### Highlights
 - Complete visual overhaul with a unified Dark Nordic Fantasy theme  
