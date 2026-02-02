@@ -6,6 +6,7 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ## beta 1.4 - UI (2026-02-02)
 - UI fixes
+- Key information highlighted with green text
 - Strandvaskare - replaced ethereal melody with skald's mead
 
 ## beta 1.3 – Hit Flash (2026-01-30)

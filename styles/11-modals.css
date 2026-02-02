@@ -1235,6 +1235,56 @@ button:focus-visible,
     padding: var(--spacing-md) 0;
 }
 
+/* Offer Item Button (in offer modal) */
+.offer-item-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: left;
+    margin-bottom: var(--spacing-xs);
+}
+
+.offer-item-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+.offer-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.offer-item-name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.offer-item-count {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-sm);
+}
+
+.offer-item-description {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
 /* Item title */
 .offer-item-title {
     font-size: var(--font-size-lg);
@@ -1244,8 +1294,8 @@ button:focus-visible,
     text-align: center;
 }
 
-/* Item description */
-.offer-item-description {
+/* Item description (in confirmation dialogue) */
+.offer-confirmation .offer-item-description {
     font-size: var(--font-size-base);
     color: var(--text-secondary);
     line-height: 1.6;

@@ -2169,7 +2169,7 @@ if (firstButton) firstButton.focus();
         itemList.innerHTML = `
             <div class="offer-confirmation">
                 <h4 class="offer-item-title">${item.name}</h4>
-                <p class="offer-item-description">${item.description}</p>
+                <p class="offer-item-description">${this.highlightItemKeywords(item.description)}</p>
                 <div class="offer-confirmation-buttons">
                     <button class="btn btn-secondary" onclick="ui.showOfferModal(game.battle)">Cancel</button>
                     <button class="btn btn-primary" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
@@ -2314,6 +2314,65 @@ if (firstButton) firstButton.focus();
     }
 
     // Show item options
+    // Helper function to highlight väsen hints in item descriptions
+    highlightItemKeywords(description) {
+        if (!description) return '';
+        
+        // Keywords/phrases that hint at specific väsen
+        const keywords = [
+            'guardian of the land',
+            'bearded guardian',
+            'house spirit',
+            'shrieking raven',
+            'infant spirit',
+            'fire-aligned spirit',
+            'drowned sailor',
+            'white horse',
+            'nocturnal grazer',
+            'great wolf',
+            'creator of the world\'s winds',
+            'mountain-dwelling giant',
+            'forest Troll',
+            'changeling child',
+            'spirit who guards the deep veins of ore',
+            'spirit of the forest',
+            'water spirit',
+            'tiny, dancing beings of the mist',
+            'subterranean smiths',
+            'light-aligned beings of creation',
+            'spirit of the Elder Tree',
+            'valiant warrior from Valhalla',
+            'winged maiden',
+            'ancient giants',
+            'fiery elemental being',
+            'primordial giants of ice and mist',
+            'massive, wingless serpent',
+            'avaricious drakes',
+            'World Serpent',
+            'world tree itself',
+            'world tree',
+            'legendary boar Särimner',
+            'Särimner',
+            'Valhalla',
+            'winged maiden who chooses the worthy slain',
+            'worthy slain',
+            'creatures driven by greed'
+        ];
+        
+        let highlighted = description;
+        
+        // Sort by length (longest first) to avoid partial matches
+        keywords.sort((a, b) => b.length - a.length);
+        
+        keywords.forEach(keyword => {
+            // Case-insensitive replacement
+            const regex = new RegExp(`(${keyword})`, 'gi');
+            highlighted = highlighted.replace(regex, '<span class="item-keyword-highlight">$1</span>');
+        });
+        
+        return highlighted;
+    }
+
     showItemOptions(itemId) {
         const item = TAMING_ITEMS[itemId];
         if (!item) return;
@@ -2350,7 +2409,7 @@ if (firstButton) firstButton.focus();
 
         this.showDialogue(
             item.name,
-            `<p>${item.description}</p>`,
+            `<p>${this.highlightItemKeywords(item.description)}</p>`,
             buttons
         );
     }
@@ -2916,7 +2975,7 @@ showKnockoutSwapModal(battle, callback) {
             case 'item':
                 this.showDialogue(
     'Item Found!',
-    `<p>${result.dialogue}</p>`,
+    `<p>${this.highlightItemKeywords(result.dialogue)}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
         { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }

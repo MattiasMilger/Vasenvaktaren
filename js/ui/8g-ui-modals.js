@@ -113,8 +113,11 @@ UIController.prototype.showOfferModal = function(battle) {
                 const itemBtn = document.createElement('button');
                 itemBtn.className = 'offer-item-btn';
                 itemBtn.innerHTML = `
-                    <span class="offer-item-name">${item.name}</span>
-                    <span class="offer-item-count">x${count}</span>
+                    <div class="offer-item-header">
+                        <span class="offer-item-name">${item.name}</span>
+                        <span class="offer-item-count">x${count}</span>
+                    </div>
+                    <p class="offer-item-description">${this.highlightItemKeywords(item.description)}</p>
                 `;
                 itemBtn.onclick = () => {
                     modal.classList.remove('active');

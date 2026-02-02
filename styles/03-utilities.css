@@ -66,3 +66,16 @@
     background: rgba(138, 154, 122, 0.18);
     color: var(--accent-primary);
 }
+
+/* Highlighting Styles */
+/* Item keyword highlighting - hints at which väsen the item is for */
+.item-keyword-highlight {
+    color: #a2ba92;
+    font-weight: 500;
+}
+
+/* Ability description highlighting - important effects and mechanics */
+.ability-highlight {
+    color: #a2ba92;
+    font-weight: 500;
+}
