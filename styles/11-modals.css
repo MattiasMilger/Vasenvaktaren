@@ -3,45 +3,6 @@
    ============================================================================= */
 
 /* =============================================================================
-   MODAL BACKDROP
-   ============================================================================= */
-/* Dark overlay backdrop for modals */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-/* Show modal when active */
-.modal.active {
-    display: flex;
-}
-
-/* Dark backdrop using ::before pseudo-element */
-.modal::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.75);
-    z-index: -1;
-}
-
-/* Modal content sits above the backdrop */
-.modal-content {
-    position: relative;
-    z-index: 1;
-}
-
-/* =============================================================================
    24. RUNE INVENTORY
    ============================================================================= */
 .rune-card {
@@ -241,7 +202,7 @@
         min-height: 0 !important;
         max-height: 45vh !important;
         overflow-y: auto !important;
-        overflow-x: hidden !important;
+        overflow-x: visible !important;
     }
 
     .combat-versus {
@@ -917,6 +878,13 @@ button:focus-visible,
 
 /* Ensure matchup details stay static (not fixed) on mobile */
 @media (max-width: 768px) {
+    /* KEY FIX: Prevent matchup rows from wrapping so they can scroll horizontally */
+    .element-matchup-collapsible .matchup-details .matchup-row,
+    .element-guide-collapsible .element-guide-details .matchup-row,
+    .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
+        flex-wrap: nowrap;
+    }
+    
     .element-matchup-collapsible .matchup-details {
         position: absolute;
         top: 100%;
@@ -926,6 +894,8 @@ button:focus-visible,
         max-width: 90vw;
         z-index: 9999;
         margin-top: var(--spacing-xs);
+        overflow-x: auto;
+        overflow-y: visible;
     }
     
     /* Special positioning for attack elements at bottom of combatant card */
@@ -939,25 +909,23 @@ button:focus-visible,
         max-width: min(200px, calc(100vw - 32px));
         margin-top: 0;
         margin-bottom: var(--spacing-xs);
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+    
+    /* Prevent wrapping in attack elements */
+    .combatant-attack-elements .element-matchup-collapsible .matchup-details .matchup-row {
+        flex-wrap: nowrap;
     }
     
     /* Ensure it stays within combatant panel */
     .combatant-panel .combatant-attack-elements .element-matchup-collapsible .matchup-details {
         max-width: 200px;
+        overflow-x: auto;
+        overflow-y: visible;
     }
     
-    .element-guide-collapsible .element-guide-details {
-        position: absolute;
-        top: 100%;
-        left: 0 !important;
-        right: auto !important;
-        transform: none;
-        max-width: 90vw;
-        z-index: 9999;
-        margin-top: var(--spacing-xs);
-    }
-    
-    /* Family passive descriptions should wrap naturally on mobile */
+    /* KEY FIX: Give family popup content a min-width so it extends beyond container */
     .family-matchup-collapsible .family-description-popup {
         position: absolute;
         left: 50%;
@@ -975,19 +943,36 @@ button:focus-visible,
         max-width: min(220px, calc(100vw - 32px));
         left: 50%;
         transform: translateX(-50%);
+        overflow-x: auto;
+        overflow-y: visible;
     }
     
+    /* KEY FIX: Inner content has min-width to force horizontal scroll */
     .family-matchup-collapsible .family-description-popup > * {
-        width: auto;
-        min-width: 0;
+        min-width: 300px;
+    }
+    
+    .combatant-panel .family-matchup-collapsible .family-description-popup > * {
+        min-width: 280px;
     }
     
     .family-matchup-collapsible .family-description-popup p {
         white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
         margin-bottom: var(--spacing-sm);
         line-height: 1.6;
+    }
+    
+    .element-guide-collapsible .element-guide-details {
+        position: absolute;
+        top: 100%;
+        left: 0 !important;
+        right: auto !important;
+        transform: none;
+        max-width: 90vw;
+        z-index: 9999;
+        margin-top: var(--spacing-xs);
+        overflow-x: auto;
+        overflow-y: visible;
     }
 }
 
@@ -1030,7 +1015,7 @@ button:focus-visible,
     flex: 1 1 0;
     min-width: 0;
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .combat-ui {
@@ -1090,7 +1075,7 @@ button:focus-visible,
     min-height: 0;
     max-height: 45vh;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: visible;
 }
 
 /* Combat area gets its own space */ .combat-area { flex: 0 0 auto; min-height: 200px; }
