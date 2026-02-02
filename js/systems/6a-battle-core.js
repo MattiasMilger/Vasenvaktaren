@@ -968,6 +968,14 @@ class Battle {
                 this.checkBattleEnd();
                 return;
             }
+            
+            // Check if enemy team is also wiped out (battle ends)
+            const enemyAliveTeam = this.enemyTeam.filter(v => !v.isKnockedOut());
+            if (enemyAliveTeam.length === 0) {
+                this.checkBattleEnd();
+                return;
+            }
+            
             // Need to swap - call UI to show swap modal
             if (this.onKnockoutSwap) {
                 this.onKnockoutSwap((index) => {
