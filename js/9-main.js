@@ -341,7 +341,7 @@ gameState.addItem(item2, 1);
                 }
             });
             ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-            ui.showMessage('Your party was healed to full!', 'success');
+            ui.showMessage('Your party was healed to full!');
             
             // Update record - reached floor before surrendering
             const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
@@ -384,7 +384,7 @@ gameState.addItem(item2, 1);
                     }
                 });
                 ui.addCombatLog('Your party has been fully restored after conquering the tower!', 'heal');
-                ui.showMessage('Your party was healed to full!', 'success');
+                ui.showMessage('Your party was healed to full!');
                 
                 // Update record
                 const playerTeam = gameState.party.filter(p => p !== null);
@@ -448,7 +448,7 @@ gameState.party.forEach(v => {
                 }
             });
             ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-            ui.showMessage('Your party was healed to full!', 'success');
+            ui.showMessage('Your party was healed to full!');
             
             const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
             
@@ -844,7 +844,7 @@ handleAskItem() {
                 }
             });
             ui.addCombatLog('Your party has been fully restored by the guardian\'s blessing!', 'heal');
-            ui.showMessage('Your party was healed to full!', 'success');
+            ui.showMessage('Your party was healed to full!');
         } else {
             gameState.party.forEach(v => {
                 if (v) {
@@ -915,7 +915,7 @@ handleAskItem() {
         const healPercent = isCorrectItem ? 0.8 : 0.5;
         const healed = vasen.healPercent(healPercent);
 
-        ui.showMessage(`${vasen.getName()} health restored ${Math.round(healPercent * 100)}%. (+${healed} HP)`);
+        ui.showMessage(`${vasen.getName()} health restored <span style="color: #a2ba92; font-weight: 700;">${Math.round(healPercent * 100)}%</span>. (+<span style="color: #a2ba92; font-weight: 700;">${healed}</span> HP)`);
         this.refreshUI();
         gameState.saveGame();
     }

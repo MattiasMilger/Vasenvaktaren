@@ -497,7 +497,7 @@ class Battle {
                 if (healAmount > 0) {
                     result.runeEffects.push({ rune: 'MANNAZ', effect: `healed ${healAmount}` });
                     this.addLog(`${RUNES.MANNAZ.symbol} ${RUNES.MANNAZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getName()} gained ${healAmount} health!`, 'heal');
+                    this.addLog(`${attacker.getName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                 }
             }
             
@@ -526,13 +526,16 @@ class Battle {
         // Check if this hit will cause a knockout BEFORE flashing
         const willKnockout = defender.isKnockedOut();
         
-        // Flash the defender (hit effect) - use KNOCKOUT flash if knocked out
+        // Flash the defender (hit effect) with a 200ms delay to overlap with attack animation
+        // This creates a better visual flow where the flash happens as the attacker reaches forward
         if (this.onHit) {
-            if (willKnockout) {
-                this.onHit(isPlayer ? 'enemy' : 'player', 'KNOCKOUT');
-            } else {
-                this.onHit(isPlayer ? 'enemy' : 'player', damageResult.matchup);
-            }
+            setTimeout(() => {
+                if (willKnockout) {
+                    this.onHit(isPlayer ? 'enemy' : 'player', 'KNOCKOUT');
+                } else {
+                    this.onHit(isPlayer ? 'enemy' : 'player', damageResult.matchup);
+                }
+            }, 200);
         }
         
         // Log matchup (only if not knocked out)
@@ -881,7 +884,7 @@ class Battle {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     this.addLog(`${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getName()} gained ${healAmount} health!`, 'heal');
+                    this.addLog(`${attacker.getName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
                 }
             }
@@ -893,7 +896,7 @@ class Battle {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                 if (healAmount > 0) {
                     this.addLog(`${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getName()} gained ${healAmount} health!`, 'heal');
+                    this.addLog(`${attacker.getName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
                 }
             }
@@ -1162,7 +1165,7 @@ class Battle {
                 const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
                 vasen.currentHealth = reviveHealth;
                 this.addLog(`${vasen.getName()} refuses to fall!`, 'passive');
-                this.addLog(`${vasen.getName()} revived with ${reviveHealth} HP!`, 'heal');
+                this.addLog(`${vasen.getName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
                 return true; // Signal that the knockout was prevented
             }
         }

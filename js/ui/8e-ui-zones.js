@@ -59,7 +59,7 @@ UIController.prototype.showMessage = function(text, type = 'info') {
         const messageContainer = document.getElementById('message-container');
         const message = document.createElement('div');
         message.className = `game-message ${type}`;
-        message.textContent = text;
+        message.innerHTML = text;
         messageContainer.appendChild(message);
 
         setTimeout(() => {

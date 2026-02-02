@@ -1877,8 +1877,7 @@ flashCombatant(side, matchup = 'NEUTRAL') {
         hitClass = 'hit-weak';
     }
     
-    // Clear any existing animations (hit has highest priority)
-    this.clearAllAnimations(panel);
+    // Don't clear attack animations - allow hit flash to play simultaneously with attack movement
     
     panel.dataset.hitAnimation = 'true';
     panel.dataset.hitAnimationTime = Date.now();
@@ -1931,8 +1930,7 @@ flashCombatant(side, matchup = 'NEUTRAL') {
             return; // Don't play this animation
         }
         
-        // Clear any lower priority animations
-        this.clearAllAnimations(panel);
+        // Don't clear animations - allow attack to play alongside hit flash
         
         // Determine animation type based on ability type
         let animationClass = '';

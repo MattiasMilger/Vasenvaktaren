@@ -149,18 +149,7 @@
     filter: brightness(1.1);
 }
 
-/* Animation classes for combat */
-.combatant-image-container.attacking-player .combatant-image {
-    animation: combatAttack 0.5s ease-out;
-}
-
-.combatant-image-container.attacking-enemy .combatant-image {
-    animation: combatAttackEnemy 0.5s ease-out;
-}
-
-.combatant-image-container.using-utility .combatant-image {
-    animation: combatUtility 0.6s ease-in-out;
-}
+/* Animation classes for combat - moved to 13-animations.css */
 
 .combatant-name {
     font-size: var(--font-size-sm);

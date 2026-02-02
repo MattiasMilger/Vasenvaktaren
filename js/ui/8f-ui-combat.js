@@ -461,8 +461,7 @@ UIController.prototype.flashCombatant = function(side) {
         const panel = document.getElementById(`${side}-panel`);
         if (!panel) return;
         
-        // Clear any existing animations (hit has highest priority)
-        this.clearAllAnimations(panel);
+        // Don't clear attack animations - allow hit flash to play simultaneously with attack movement
         
         // Store animation state with priority
         panel.dataset.hitAnimation = 'true';
@@ -502,8 +501,7 @@ UIController.prototype.triggerAttackAnimation = function(side, abilityType) {
             return; // Don't play this animation
         };
         
-        // Clear any lower priority animations
-        this.clearAllAnimations(panel);
+        // Don't clear animations - allow attack to play alongside hit flash
         
         // Determine animation type based on ability type
         let animationClass = '';
