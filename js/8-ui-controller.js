@@ -1875,6 +1875,8 @@ flashCombatant(side, matchup = 'NEUTRAL') {
         hitClass = 'hit-potent';
     } else if (matchup === 'WEAK') {
         hitClass = 'hit-weak';
+    } else if (matchup === 'DEBUFF') {
+        hitClass = 'hit-debuff';
     }
     
     // Don't clear attack animations - allow hit flash to play simultaneously with attack movement
@@ -1906,7 +1908,7 @@ flashCombatant(side, matchup = 'NEUTRAL') {
             
             const imageContainer = panel.querySelector('.combatant-image-container');
             if (imageContainer) {
-                imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak', 'hit-knockout');
+                imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak', 'hit-knockout', 'hit-debuff');
             }
 
             // Always remove shake after duration
@@ -1982,7 +1984,7 @@ clearAllAnimations(panel) {
     
     const imageContainer = panel.querySelector('.combatant-image-container');
     if (imageContainer) {
-        imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak');
+        imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak', 'hit-knockout', 'hit-debuff');
     }
 
     // Remove shake from panel

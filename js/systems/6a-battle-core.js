@@ -501,6 +501,13 @@ class Battle {
                 }
             }
             
+            // Trigger debuff flash animation if this is a debuff ability
+            if (ability.effect && ability.effect.type === 'debuff' && this.onHit) {
+                setTimeout(() => {
+                    this.onHit(isPlayer ? 'enemy' : 'player', 'DEBUFF');
+                }, 200);
+            }
+            
             return result;
         }
         
