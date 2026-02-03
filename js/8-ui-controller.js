@@ -2676,6 +2676,9 @@ if (firstButton) firstButton.focus();
 
     // Render dynamic Game Guide content (Element Matchups and Temperaments)
     renderGameGuideContent() {
+        // Populate dynamic values from GAME_CONFIG
+        this.populateGameGuideValues();
+
         // Render Element Matchups
         const elementMatchupsContainer = document.getElementById('dynamic-element-matchups');
         if (elementMatchupsContainer) {
@@ -2693,6 +2696,51 @@ if (firstButton) firstButton.focus();
         if (temperamentsContainer) {
             temperamentsContainer.innerHTML = this.generateTemperamentsHTML();
         }
+    }
+
+    // Populate game guide values from GAME_CONFIG
+    populateGameGuideValues() {
+        // Helper function to set text content safely
+        const setText = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        };
+
+        // Taming
+        setText('guide-max-offers', GAME_CONFIG.MAX_OFFERS_PER_COMBAT);
+
+        // Megin System
+        setText('guide-megin-regen', `${Math.round(GAME_CONFIG.MEGIN_REGEN_RATE * 100)}%`);
+        setText('guide-element-discount', `${Math.round(GAME_CONFIG.SAME_ELEMENT_MEGIN_DISCOUNT * 100)}%`);
+        setText('guide-base-megin', GAME_CONFIG.BASE_MEGIN);
+        setText('guide-megin-per-level', GAME_CONFIG.MEGIN_PER_LEVEL);
+
+        // Healing
+        setText('guide-post-battle-heal', `${Math.round(GAME_CONFIG.POST_BATTLE_HEAL_PERCENT * 100)}%`);
+        setText('guide-sacred-well-heal', `${Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100)}%`);
+        setText('guide-correct-item-heal', `${Math.round(GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT * 100)}%`);
+        setText('guide-wrong-item-heal', `${Math.round(GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT * 100)}%`);
+
+        // Experience & Leveling
+        setText('guide-max-level', GAME_CONFIG.MAX_LEVEL);
+        setText('guide-exp-killing', `${Math.round(GAME_CONFIG.EXP_KILLING_BLOW * 100)}%`);
+        setText('guide-exp-participated', `${Math.round(GAME_CONFIG.EXP_PARTICIPATED_ON_FIELD * 100)}%`);
+        setText('guide-exp-party', `${Math.round(GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED * 100)}%`);
+
+        // Runes (max level for 2 runes)
+        setText('guide-max-level-runes', GAME_CONFIG.MAX_LEVEL);
+
+        // Power & Damage
+        setText('guide-damage-variance', `${Math.round(GAME_CONFIG.DAMAGE_RANGE_VARIANCE * 100)}%`);
+
+        // Attribute Stages
+        setText('guide-stage-modifier', `${Math.round(GAME_CONFIG.ATTRIBUTE_STAGE_MODIFIER * 100)}%`);
+        setText('guide-min-stage', GAME_CONFIG.MIN_ATTRIBUTE_STAGE);
+        setText('guide-max-stage', `+${GAME_CONFIG.MAX_ATTRIBUTE_STAGE}`);
+
+        // Endless Tower
+        setText('guide-endless-start', GAME_CONFIG.ENDLESS_TOWER_START_LEVEL);
+        setText('guide-endless-heal', `${Math.round(GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT * 100)}%`);
     }
 
     // Generate Element Matchups HTML from ELEMENT_MATCHUPS constant

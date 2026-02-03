@@ -337,17 +337,18 @@
             <h3 class="modal-title">Game Guide</h3> <br>
             <div class="tips-content">
                 <h4>Taming</h4>
-                <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or asking the Väsen during combat.</p>
+                <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or asking the Väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
 
                 <!-- Attributes Section -->
                 <h4>Attributes</h4>
-                <p>Strength (STR) - increases damage with Strength attacks.<br>
-                    Wisdom (WIS) - increases damage with Wisdom attacks.<br>
-                    Defense (DEF) - Reduces damage from Strength attacks.<br>
-                    Durability (DUR) - Reduces damage taken taken from Wisdom attacks.</p>
+                <p><strong>Strength (STR)</strong> - increases damage with Strength attacks.<br>
+                    <strong>Wisdom (WIS)</strong> - increases damage with Wisdom attacks.<br>
+                    <strong>Defense (DEF)</strong> - Reduces damage from Strength attacks.<br>
+                    <strong>Durability (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
+                
                 <h4>Resources</h4>
-                    <p>Health (HP) - At 0 the väsen is knocked out.<br>
-                    Megin (MP) - Used to perform abilities. Abilities aligned with the väsen's own element cost less Megin, and megin is restored each round.</p>
+                <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between battles.<br>
+                <strong>Megin (MP)</strong> - Used to perform abilities. Megin fully restores after each combat.</p>
 
                 <!-- Dynamic Element Matchups Section -->
                 <div id="dynamic-element-matchups"></div>
@@ -359,16 +360,40 @@
                 <div id="dynamic-temperaments"></div>
 
                 <h4>Runes</h4>
-                <p>Equip runes to your Väsen for powerful effects. At lvl 30, they gain the ability to equip two runes.</p>
+                <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the ability to equip two runes.</p>
+
+                <h4>Megin System</h4>
+                <p><strong>Regeneration:</strong> <span id="guide-megin-regen"></span> of max Megin restored per turn<br>
+                <strong>Same-Element Discount:</strong> Abilities aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin<br>
+                <strong>Calculation:</strong> Base Megin (<span id="guide-base-megin"></span>) + (Level - 1) × <span id="guide-megin-per-level"></span></p>
+
+                <h4>Healing</h4>
+                <p><strong>Post-Battle:</strong> Active party heals <span id="guide-post-battle-heal"></span> of max HP (even from 0 HP)<br>
+                <strong>Sacred Well:</strong> All Väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> of max HP<br>
+                <strong>Items (Correct):</strong> Giving a Väsen its desired item heals <span id="guide-correct-item-heal"></span> of max HP<br>
+                <strong>Items (Wrong):</strong> Giving a Väsen any other item heals <span id="guide-wrong-item-heal"></span> of max HP<br>
+                <em>Note: All healing is based on max health, not current health.</em></p>
+
+                <h4>Experience & Leveling</h4>
+                <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
+                <strong>Distribution:</strong><br>
+                - Killing Blow: <span id="guide-exp-killing"></span> of base experience<br>
+                - Participated in Battle: <span id="guide-exp-participated"></span> of base experience<br>
+                - In Party (not fielded): <span id="guide-exp-party"></span> of base experience<br>
+                - Knocked Out: 0% (no experience)<br>
+                <em>Experience is only awarded after combat ends.</em></p>
 
                 <h4>Power</h4>
-                <p>Power represents the basic damage multiplier which is scaled by the associated damage attribute (Strength/Wisdom)</p>
+                <p>Power is a value shown on each ability that represents the basic damage multiplier, which is scaled by the associated damage attribute (Strength/Wisdom). Damage has a variance of ±<span id="guide-damage-variance"></span>.</p>
 
                 <h4>Attribute Stages</h4>
-                <p>Some abilities and runes raise or lower attribute stages. They Increase or decrease the affected attribute by 10% per stage, stages go from -5 to +5.</p>
+                <p>Some abilities and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>. Attribute stages reset after battle (except in Endless Tower where they persist between floors).</p>
 
                 <h4>Move Priority</h4>
-                <p>Swapping > Utility Moves > Attack moves. Player has priority.</p>
+                <p>Swapping > Utility Moves > Attack moves. Player has priority and acts first.</p>
+
+                <h4>Endless Tower</h4>
+                <p>Challenge the Endless Tower in Ginnungagap starting at level <span id="guide-endless-start"></span>. Attribute stages persist between floors. Post-floor healing: <span id="guide-endless-heal"></span> of max HP.</p>
             </div>
             <button id="close-combat-tips" class="btn btn-primary">Close</button>
         </div>
