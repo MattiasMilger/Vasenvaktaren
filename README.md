@@ -145,7 +145,7 @@ Vasenvaktaren/
 - [x] Introduce endgame system (100%)
 - [ ] Final Polish (50%)
 
-## Future Ideas (Feel free to recommend)
+## Future Ideas
 - Rune combinations
 - Post lvl 30 progression
 
