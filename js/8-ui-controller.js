@@ -1347,7 +1347,7 @@ renderZones() {
         const messageContainer = document.getElementById('message-container');
         const message = document.createElement('div');
         message.className = `game-message ${type}`;
-        message.textContent = text;
+        message.innerHTML = text;
         messageContainer.appendChild(message);
 
         setTimeout(() => {
@@ -1891,7 +1891,7 @@ flashCombatant(side, matchup = 'NEUTRAL') {
         imageContainer.classList.add(hitClass);
     }
     
-    // ⭐ Only shake on POTENT hits
+    // Only shake on POTENT hits
     if (matchup === 'POTENT') {
         panel.classList.remove('hit-shake');
         void panel.offsetWidth; // restart animation
