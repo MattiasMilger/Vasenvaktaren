@@ -136,7 +136,7 @@ Vasenvaktaren/
     │   └── [30 Väsen images]
     └── zones/
         └── [7 zone images]
-
+```
 ## Feature roadmap
 
 - [x] Finish Main Functionality (100%)
