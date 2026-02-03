@@ -1817,9 +1817,27 @@ renderActionButtons(battle) {
     // Update other action buttons
     document.getElementById('btn-swap').disabled =
         !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
-    document.getElementById('btn-offer').disabled =
+    
+    const offerBtn = document.getElementById('btn-offer');
+    offerBtn.disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
         battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
+    
+    // NEW: First combat tutorial - blink Offer Item button if player has matching item
+    if (!gameState.firstCombatTutorialShown && battle.isWildEncounter && !offerBtn.disabled) {
+        // Check if player has the correct taming item for this enemy
+        const enemySpecies = battle.enemyActive.speciesName;
+        const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
+        
+        if (correctItem && gameState.itemInventory[correctItem] && gameState.itemInventory[correctItem] > 0) {
+            offerBtn.classList.add('tutorial-blink');
+        } else {
+            offerBtn.classList.remove('tutorial-blink');
+        }
+    } else {
+        offerBtn.classList.remove('tutorial-blink');
+    }
+    
     document.getElementById('btn-ask').disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
         activeVasen.battleFlags.hasSwapSickness;
@@ -2135,12 +2153,23 @@ if (firstButton) firstButton.focus();
         if (items.length === 0) {
             itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {
+            // NEW: Check which item is correct for tutorial highlighting
+            const enemySpecies = battle.enemyActive.speciesName;
+            const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
+            const shouldShowTutorial = !gameState.firstCombatTutorialShown && battle.isWildEncounter;
+            
             items.forEach(([itemId, count]) => {
                 const item = TAMING_ITEMS[itemId];
                 if (!item) return;
 
                 const itemBtn = document.createElement('button');
                 itemBtn.className = 'offer-item-btn';
+                
+                // NEW: Add tutorial class if this is the correct item
+                if (shouldShowTutorial && itemId === correctItem) {
+                    itemBtn.classList.add('tutorial-blink');
+                }
+                
                 itemBtn.innerHTML = `
                     <span class="offer-item-name">${item.name}</span>
                     <span class="offer-item-count">x${count}</span>

@@ -101,7 +101,7 @@ class Game {
                 // NOW initialize new game and create everything
                 gameState.resetGame();
 
-                // Create starter Vasen at level 5
+                // Create starter Vasen at starter level
                 const starter = new VasenInstance(selectedStarterName, GAME_CONFIG.STARTER_LEVEL);
 
                 // Give starting rune (Uruz)
@@ -566,6 +566,12 @@ gameState.party.forEach(v => {
             return;
         }
 
+        // NEW: Mark tutorial as shown when player offers an item
+        if (!gameState.firstCombatTutorialShown && this.currentBattle.isWildEncounter) {
+            gameState.firstCombatTutorialShown = true;
+            gameState.saveGame();
+        }
+
         this.currentBattle.executePlayerAction({ type: 'offer', itemId });
     }
 
@@ -881,6 +887,11 @@ handleAskItem() {
 
     // End battle and return to exploration
     endBattle() {
+        // NEW: Mark tutorial as shown when first combat ends
+        if (!gameState.firstCombatTutorialShown && this.currentBattle && this.currentBattle.isWildEncounter) {
+            gameState.firstCombatTutorialShown = true;
+        }
+        
         gameState.inCombat = false;
 
         // Apply post-battle healing (includes megin restore)

@@ -4,6 +4,9 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
+## beta 1.5 - New Player Experience (2026-02-03)
+- Guidance for taming your first väsen via UI
+
 ## beta 1.4 - UI (2026-02-02)
 - UI fixes
 - Key information highlighted with green text

@@ -412,11 +412,54 @@ UIController.prototype.renderActionButtons = function(battle) {
     });
 
     // Update other action buttons
+    console.log('=== renderActionButtons called ===');
+    console.log('Battle object:', battle);
+    console.log('gameState.firstCombatTutorialShown:', gameState.firstCombatTutorialShown);
+    
     document.getElementById('btn-swap').disabled =
         !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
-    document.getElementById('btn-offer').disabled =
+    
+    const offerBtn = document.getElementById('btn-offer');
+    offerBtn.disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
         battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
+    
+    console.log('Offer button disabled?', offerBtn.disabled);
+    console.log('Is wild encounter?', battle.isWildEncounter);
+    
+    // NEW: First combat tutorial - blink Offer Item button if player has matching item
+    if (!gameState.firstCombatTutorialShown && battle.isWildEncounter && !offerBtn.disabled) {
+        console.log('ENTERING TUTORIAL BLOCK');
+        // Check if player has the correct taming item for this enemy
+        const enemySpecies = battle.enemyActive.speciesName;
+        const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
+        
+        // Debug logging
+        console.log('Tutorial check:', {
+            firstCombatTutorialShown: gameState.firstCombatTutorialShown,
+            isWildEncounter: battle.isWildEncounter,
+            offerBtnDisabled: offerBtn.disabled,
+            enemySpecies: enemySpecies,
+            correctItem: correctItem,
+            inventory: gameState.itemInventory,
+            hasItem: gameState.itemInventory[correctItem]
+        });
+        
+        if (correctItem && gameState.itemInventory[correctItem] && gameState.itemInventory[correctItem] > 0) {
+            console.log('ADDING tutorial-blink class!');
+            offerBtn.classList.add('tutorial-blink');
+        } else {
+            offerBtn.classList.remove('tutorial-blink');
+        }
+    } else {
+        console.log('NOT entering tutorial block. Reasons:', {
+            firstCombatTutorialShown: gameState.firstCombatTutorialShown,
+            isWildEncounter: battle.isWildEncounter,
+            offerBtnDisabled: offerBtn.disabled
+        });
+        offerBtn.classList.remove('tutorial-blink');
+    }
+    
     document.getElementById('btn-ask').disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
         activeVasen.battleFlags.hasSwapSickness;

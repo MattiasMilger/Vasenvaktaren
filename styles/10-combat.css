@@ -1532,4 +1532,29 @@
     }
 }
 
+/* =============================================================================
+   TUTORIAL BLINK ANIMATION - First Combat Help
+   ============================================================================= */
+@keyframes tutorial-blink {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+        border-color: var(--border-color);
+    }
+    50% {
+        box-shadow: 0 0 15px 3px rgba(76, 175, 80, 0.8),
+                    0 0 25px 5px rgba(76, 175, 80, 0.4);
+        border-color: #4CAF50;
+    }
+}
+
+.tutorial-blink {
+    animation: tutorial-blink 1.5s ease-in-out infinite;
+    position: relative;
+}
+
+/* Ensure tutorial blink works on both buttons and modal items */
+button.tutorial-blink {
+    border-color: #4CAF50 !important;
+}
+
 /* End of 10-combat.css */

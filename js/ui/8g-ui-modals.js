@@ -106,12 +106,23 @@ UIController.prototype.showOfferModal = function(battle) {
         if (items.length === 0) {
             itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {
+            // NEW: Check which item is correct for tutorial highlighting
+            const enemySpecies = battle.enemyActive.speciesName;
+            const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
+            const shouldShowTutorial = !gameState.firstCombatTutorialShown && battle.isWildEncounter;
+            
             items.forEach(([itemId, count]) => {
                 const item = TAMING_ITEMS[itemId];
                 if (!item) return;
 
                 const itemBtn = document.createElement('button');
                 itemBtn.className = 'offer-item-btn';
+                
+                // NEW: Add tutorial class if this is the correct item
+                if (shouldShowTutorial && itemId === correctItem) {
+                    itemBtn.classList.add('tutorial-blink');
+                }
+                
                 itemBtn.innerHTML = `
                     <div class="offer-item-header">
                         <span class="offer-item-name">${item.name}</span>
