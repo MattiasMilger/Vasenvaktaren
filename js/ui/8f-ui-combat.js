@@ -672,3 +672,22 @@ UIController.prototype.reapplyAnimations = function(side) {
         }, 400);
     };
 
+/* Custom fix for mobile ability button stacking */
+@media (max-width: 600px) {
+    .ability-buttons {
+        /* Override the auto-fit behavior to force two columns */
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--spacing-xs);
+    }
+
+    .ability-btn {
+        padding: var(--spacing-sm);
+        /* Ensure content doesn't force the button to be too wide */
+        min-width: 0; 
+    }
+
+    .ability-btn-name {
+        /* Slightly smaller text to ensure names fit in the 2-column grid */
+        font-size: var(--font-size-xs);
+    }
+}

@@ -1557,4 +1557,30 @@ button.tutorial-blink {
     border-color: #4CAF50 !important;
 }
 
+/* =============================================================================
+   MOBILE OVERRIDES - Ability Button Grid
+   ============================================================================= */
+
+@media (max-width: 600px) {
+    .ability-buttons {
+        /* Forces exactly two columns regardless of button width */
+        grid-template-columns: repeat(2, 1fr); 
+        gap: var(--spacing-xs); /* Tighter gap for small screens */
+    }
+
+    .ability-btn {
+        /* Reduce padding slightly to fit content in smaller boxes */
+        padding: var(--spacing-sm); 
+        min-width: 0; /* Prevents buttons from overflowing the 1fr column */
+    }
+
+    .ability-btn-desc {
+        /* Optional: Hide description on very small screens to keep height consistent */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
 /* End of 10-combat.css */
