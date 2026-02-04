@@ -320,7 +320,6 @@ if (this.isOver && this.onEnd) {
         let playerFirst = true;
         if (!playerIsUtility && enemyIsUtility) {
             playerFirst = false;
-            this.addLog('The utility move goes first!', 'priority');
         }
         
         const results = { player: null, enemy: null };

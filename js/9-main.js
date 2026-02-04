@@ -116,7 +116,7 @@ class Game {
                 // Add starting rune to collected
                 gameState.collectedRunes.add('URUZ');
 
-                // Give two different starting taming items from zone 1
+                // Give starting taming items from zone 1
 const zone1Items = [
   'Mossy Bark',
   'Shed Antlers',
@@ -129,12 +129,13 @@ const zone1Items = [
 // Copy + shuffle
 const shuffled = [...zone1Items].sort(() => Math.random() - 0.5);
 
-// Take the first two unique items
-const [item1, item2] = shuffled;
+// Take the first N unique items based on config
+const startingItems = shuffled.slice(0, GAME_CONFIG.STARTING_ITEMS_AMOUNT);
 
 // Add one of each
-gameState.addItem(item1, 1);
-gameState.addItem(item2, 1);
+startingItems.forEach(item => {
+  gameState.addItem(item, 1);
+});
 
 
                 // Start the game for real
@@ -887,10 +888,6 @@ handleAskItem() {
 
     // End battle and return to exploration
     endBattle() {
-        // NEW: Mark tutorial as shown when first combat ends
-        if (!gameState.firstCombatTutorialShown && this.currentBattle && this.currentBattle.isWildEncounter) {
-            gameState.firstCombatTutorialShown = true;
-        }
         
         gameState.inCombat = false;
 
