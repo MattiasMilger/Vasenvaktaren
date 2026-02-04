@@ -90,6 +90,8 @@ const GAME_CONFIG = {
     // =============================================================================
     // Input delay after each battle action to prevent spamming through turns (in milliseconds)
     BATTLE_INPUT_DELAY: 800,
+    // Delay before showing battle end modal to allow death animations to complete (in milliseconds)
+    BATTLE_END_ANIMATION_DELAY: 500,
     
     // =============================================================================
     // ENDLESS TOWER

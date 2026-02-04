@@ -252,10 +252,12 @@ class Battle {
             this.onUpdate();
         }
         
-        // Handle battle end
-        if (this.isOver && this.onEnd) {
-            this.onEnd(this.getBattleResult());
-        }
+        // Handle battle end with delay to allow death animations to complete
+if (this.isOver && this.onEnd) {
+    setTimeout(() => {
+        this.onEnd(this.getBattleResult());
+    }, GAME_CONFIG.BATTLE_END_ANIMATION_DELAY);
+}
     }
     
     // Get battle result
