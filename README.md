@@ -120,13 +120,13 @@ Vasenvaktaren/
 │   │   └── 7-game-state.js         (GameState class)
 │   │
 │   ├── ui/
-│   │   ├── 8a-ui-core.js
-│   │   ├── 8b-ui-screens.js
-│   │   ├── 8c-ui-vasen.js
-│   │   ├── 8d-ui-party.js
-│   │   ├── 8e-ui-zones.js
-│   │   ├── 8f-ui-combat.js
-│   │   └── 8g-ui-modals.js
+│   │   ├── 8a-ui-core.js           (UIController class, element caching, and global events)
+│   │   ├── 8b-ui-screens.js        (screen switching and tab navigation logic)
+│   │   ├── 8c-ui-vasen.js          (Väsen inventory sorting and Rune management)
+│   │   ├── 8d-ui-party.js          (party slot rendering and item inventory display)
+│   │   ├── 8e-ui-zones.js          (zone selection, descriptions, and game messages)
+│   │   ├── 8f-ui-combat.js         (combat panels, action buttons, and battle animations)
+│   │   └── 8g-ui-modals.js         (dialogues, item use, and guide collapsibles)
 │   │
 │   ├── 8-ui-controller.js          (UIController class)
 │   └── 9-main.js                   (main entry point)
