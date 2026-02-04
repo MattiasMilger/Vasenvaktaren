@@ -719,28 +719,38 @@ handleAskItem() {
         });
 
         // Handle taming
-        if (result.tamed && result.tamedVasen) {
-            const newVasen = result.tamedVasen;
-            
-            // Clear runes from tamed väsen - they join runeless
-            newVasen.runes = [];
-            
-            // Heal to full before adding to collection
-            newVasen.currentHealth = newVasen.maxHealth;
-            
-            // Recalculate megin since runes were cleared (in case it had Uruz)
-            newVasen.maxMegin = newVasen.calculateMaxMegin();
-            newVasen.currentMegin = newVasen.maxMegin;
+if (result.tamed && result.tamedVasen) {
+    const newVasen = result.tamedVasen;
+    
+    // Clear runes from tamed väsen - they join runeless
+    newVasen.runes = [];
+    
+    // Heal to full before adding to collection
+    newVasen.currentHealth = newVasen.maxHealth;
+    
+    // Recalculate megin since runes were cleared (in case it had Uruz)
+    newVasen.maxMegin = newVasen.calculateMaxMegin();
+    newVasen.currentMegin = newVasen.maxMegin;
 
-            // Reset attribute changes
-            newVasen.resetBattleState();
-            
-            gameState.vasenCollection.push(newVasen);
-            ui.addCombatLog(`${newVasen.getDisplayName()} has joined your party!`, 'tame');
+    // Reset attribute changes
+    newVasen.resetBattleState();
+    
+    // Add to total collection
+    gameState.vasenCollection.push(newVasen);
 
-            // Check for achievements
-            gameState.checkAchievements();
-        }
+    // --- NEW LOGIC: Add to party if a slot is free ---
+    const freeSlotIndex = gameState.party.findIndex(slot => slot === null);
+    if (freeSlotIndex !== -1) {
+        gameState.party[freeSlotIndex] = newVasen;
+        ui.addCombatLog(`${newVasen.getDisplayName()} joined your party in slot ${freeSlotIndex + 1}!`, 'tame');
+    } else {
+        ui.addCombatLog(`${newVasen.getDisplayName()} has been sent to your collection!`, 'tame');
+    }
+    // ------------------------------------------------
+
+    // Check for achievements
+    gameState.checkAchievements();
+}
 
         // Apply post-battle heal
         gameState.party.forEach(v => {
