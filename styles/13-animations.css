@@ -25,6 +25,20 @@
 }
 
 /* =============================================================================
+   ZONE IMAGE WAVE EFFECT - SVG filter-based ripple for zone description images
+   ============================================================================= */
+
+.zone-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    filter: url(#zone-wave-filter);
+    /* Ensure the image remains static in layout */
+    position: relative;
+    margin: 0 auto var(--spacing-md) auto;
+
+/* =============================================================================
    COMBAT ATTACK ANIMATIONS - Snappy 0.5s duration
    ============================================================================= */
 
