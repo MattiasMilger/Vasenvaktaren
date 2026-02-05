@@ -830,8 +830,8 @@ if (this.isOver && this.onEnd) {
                 }
             });
         } else if (effect.type === 'debuff') {
-            const targetVasen = effect.target === 'enemy' ? (isPlayer ? target : user) : user;
-            const stats = effect.stats || [effect.stat];
+    const targetVasen = isPlayer ? target : this.playerActive;
+    const stats = effect.stats || [effect.stat];
             
             // Wynja: block first debuff
             if (!targetVasen.battleFlags.wynjaTriggered && targetVasen.hasRune('WYNJA')) {
