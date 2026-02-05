@@ -188,8 +188,6 @@
 
 .dialogue-buttons .btn {
     width: 100%;
-    color: var(--text-muted);
-    font-style: italic;
 }
 
 .party-hint {

@@ -717,6 +717,7 @@ equipRune(runeId, vasenId, slotIndex = null) {
             this.achievements = data.achievements || {
                 champion: false,
                 rune_master: false,
+                hoarder: false,
             };
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
@@ -734,9 +735,6 @@ equipRune(runeId, vasenId, slotIndex = null) {
             this.itemCounter = data.itemCounter || 0;
             this.runeCounter = data.runeCounter || 0;
             this.sacredWellCounter = data.sacredWellCounter || 0;
-            
-            // Note: Runes are now stored directly on each väsen instance,
-            // so no need to reassign from party slots
             
             return true;
         } catch (e) {

@@ -37,6 +37,7 @@
     /* Ensure the image remains static in layout */
     position: relative;
     margin: 0 auto var(--spacing-md) auto;
+}
 
 /* =============================================================================
    COMBAT ATTACK ANIMATIONS - Snappy 0.5s duration

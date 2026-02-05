@@ -97,4 +97,14 @@
     --transition-fast: 0.15s ease;
     --transition-base: 0.2s ease;
     --transition-slow: 0.3s ease;
+
+    /* Gold Borders */
+    --accent-gold: #c9a75a;
+    --accent-gold-overlay: rgba(201, 167, 90, 0.15);
+    --accent-gold-border: #c9a75a;
+    --accent-gold-glow: rgba(201, 167, 90, 0.4);
+    --accent-gold-shadow: rgba(201, 167, 90, 0.2);
+    --accent-gold-shimmer-light: rgba(255, 215, 0, 0.15);
+    --accent-gold-shimmer-strong: rgba(255, 215, 0, 0.4);
+    --accent-gold-glow-strong: rgba(201, 167, 90, 0.6);
 }
