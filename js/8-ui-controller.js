@@ -1910,7 +1910,7 @@ flashCombatant(side, matchup = 'NEUTRAL') {
     }
     
     // Only shake on POTENT hits
-    if (matchup === 'POTENT') {
+    if (matchup === 'POTENT' || matchup === 'KNOCKOUT') {
         panel.classList.remove('hit-shake');
         void panel.offsetWidth; // restart animation
         panel.classList.add('hit-shake');
