@@ -2366,7 +2366,7 @@ if (firstButton) firstButton.focus();
             'forest Troll',
             'changeling child',
             'warden who guards the deep veins of ore',
-            'lady of the forest',
+            'warden of the forest',
             'water warden',
             'tiny, dancing beings of the mist',
             'subterranean smiths',
