@@ -434,7 +434,7 @@ if (this.isOver && this.onEnd) {
         results.enemy = this.executeEnemyAction(enemyAction);
         
         // Add the item response AFTER combat events
-        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you like the most?`, 'dialogue');
+        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you desire the most?`, 'dialogue');
         this.addLog(`If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
         this.handlePostTurn(results);
         this.endTurn();
