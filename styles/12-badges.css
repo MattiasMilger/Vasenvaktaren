@@ -146,7 +146,7 @@
 /* ── FAMILY ── subtle textured noble feel, fits the theme ───────────────────── */
 .family-badge {
     background: var(--bg-card);
-    color: var(--color-white);                           /* same as element badges */
+    color: var(--color-white);
     border: 2px solid var(--badge-border);
     box-shadow: 
         inset 0 1px 2px var(--white-overlay-light),
@@ -188,7 +188,7 @@
     color: var(--color-white);
 }
 
-/* ── ACHIEVEMENT SHIMMER ── premium glow for earned achievements */
+/* ── ACHIEVEMENT (UPDATED: shimmer removed) ── */
 .achievement.earned {
     position: relative;
     overflow: hidden;
@@ -203,25 +203,9 @@
         inset 0 0 8px rgba(255,215,0,0.1);
 }
 
-.achievement.earned::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -100%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        var(--accent-gold-shimmer-light) 25%,
-        var(--accent-gold-shimmer-strong) 50%,
-        var(--accent-gold-shimmer-light) 75%,
-        transparent 100%
-    );
-    animation: achievementShimmer 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    pointer-events: none;
-}
+/* shimmer layer removed */
 
+/* keep pulsing glow */
 .achievement.earned::after {
     content: '';
     position: absolute;
@@ -232,6 +216,11 @@
         0 0 16px var(--accent-gold-shadow);
     animation: achievementPulse 3s ease-in-out infinite alternate;
     pointer-events: none;
+}
+
+.achievement.locked {
+    opacity: 0.5;
+    border: 2px solid var(--border-color);
 }
 
 /* === Endless Tower Styles === */
@@ -329,7 +318,7 @@
     color: var(--text-secondary);
 }
 
-
+/* === ENDLESS TOWER ACHIEVED (UPDATED: shimmer removed) === */
 .endless-tower-record.achieved {
     position: relative;
     overflow: hidden;
@@ -344,25 +333,9 @@
         inset 0 0 8px rgba(255,215,0,0.1);
 }
 
-.endless-tower-record.achieved::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -100%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        var(--accent-gold-shimmer-light) 25%,
-        var(--accent-gold-shimmer-strong) 50%,
-        var(--accent-gold-shimmer-light) 75%,
-        transparent 100%
-    );
-    animation: towerShimmer 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    pointer-events: none;
-}
+/* shimmer removed */
 
+/* keep pulsing glow */
 .endless-tower-record.achieved::after {
     content: '';
     position: absolute;
@@ -373,12 +346,6 @@
         0 0 16px var(--accent-gold-shadow);
     animation: towerPulse 3s ease-in-out infinite alternate;
     pointer-events: none;
-}
-
-/* Locked achievements stay simple */
-.achievement.locked {
-    opacity: 0.5;
-    border: 2px solid var(--border-color);
 }
 
 /* Combat Animations - MOVED TO 13-animations.css */
@@ -419,11 +386,7 @@
 }
 
 /* === ACHIEVEMENT ANIMATIONS === */
-@keyframes achievementShimmer {
-    0%   { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) rotate(45deg); }
-}
-
+/* shimmer removed */
 @keyframes achievementPulse {
     0% {
         box-shadow: 
@@ -438,11 +401,7 @@
 }
 
 /* === ENDLESS TOWER ANIMATIONS === */
-@keyframes towerShimmer {
-    0%   { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) rotate(45deg); }
-}
-
+/* shimmer removed */
 @keyframes towerPulse {
     0% {
         box-shadow: 
@@ -455,7 +414,6 @@
             0 0 24px var(--accent-gold-shimmer-strong);
     }
 }
-
 
 /* Subtle entrance animations for cards */
 .vasen-card {
@@ -572,4 +530,3 @@
         background: rgba(255, 100, 100, 0.15);
     }
 }
-
