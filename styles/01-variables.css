@@ -70,6 +70,24 @@
     --rarity-rare: #3d8ed4;
     --rarity-mythical: #d47dff;
 
+    /* Rarity Shimmer Colors - For badge animations */
+    --rarity-common-shimmer-light: rgba(152, 152, 170, 0.15);
+    --rarity-common-shimmer: rgba(152, 152, 170, 0.3);
+    --rarity-uncommon-shimmer-light: rgba(95, 161, 58, 0.2);
+    --rarity-uncommon-shimmer: rgba(95, 161, 58, 0.4);
+    --rarity-rare-shimmer: rgba(61, 142, 212, 0.5);
+    --color-purple-mythical-overlay: rgba(212, 125, 255, 0.1);
+    --color-purple-mythical-shimmer-light: rgba(212, 125, 255, 0.3);
+    --color-purple-mythical-shimmer: rgba(212, 125, 255, 0.6);
+    --color-purple-mythical-glow: rgba(212, 125, 255, 0.4);
+    --color-purple-mythical-shadow: rgba(212, 125, 255, 0.2);
+    --color-purple-mythical-glow-strong: rgba(212, 125, 255, 0.6);
+    --color-white: #ffffff;
+    --badge-border: #3f3f52;
+    --white-overlay-light: rgba(255, 255, 255, 0.1);
+    --black-overlay: rgba(0, 0, 0, 0.2);
+    --black-overlay-strong: rgba(0, 0, 0, 0.4);
+
     /* Health/Megin Colors - More vibrant */
     --health-fill: #5fa13a;
     --health-bg: #1e2f1e;

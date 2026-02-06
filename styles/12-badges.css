@@ -31,14 +31,14 @@
 .rarity-badge {
     background: var(--bg-tertiary);
     border: 2px solid;
+    position: relative;
+    overflow: hidden;
 }
 
 /* ── COMMON ── ultra-subtle slow horizontal pass */
 .rarity-common {
     border-color: var(--rarity-common);
     color: var(--rarity-common);
-    position: relative;
-    overflow: hidden;
 }
 
 .rarity-common::before {
@@ -52,7 +52,7 @@
         var(--rarity-common-shimmer) 52%,
         transparent 100%
     );
-    animation: commonShimmer 14s linear infinite;
+    animation: badgeCommonShimmer 14s linear infinite;
     pointer-events: none;
 }
 
@@ -60,8 +60,6 @@
 .rarity-uncommon {
     border-color: var(--rarity-uncommon);
     color: var(--rarity-uncommon);
-    position: relative;
-    overflow: hidden;
 }
 
 .rarity-uncommon::before {
@@ -75,7 +73,7 @@
         var(--rarity-uncommon-shimmer) 55%,
         transparent 100%
     );
-    animation: uncommonShimmer 7s cubic-bezier(0.45,0,0.55,1) infinite;
+    animation: badgeUncommonShimmer 7s cubic-bezier(0.45,0,0.55,1) infinite;
     pointer-events: none;
 }
 
@@ -83,8 +81,6 @@
 .rarity-rare {
     border-color: var(--rarity-rare);
     color: var(--rarity-rare);
-    position: relative;
-    overflow: hidden;
 }
 
 .rarity-rare::before {
@@ -100,7 +96,7 @@
         var(--rarity-rare-shimmer) 50%,
         transparent 60%
     );
-    animation: rareMicroShine 5.2s ease-in-out infinite;
+    animation: badgeRareMicroShine 5.2s ease-in-out infinite;
     opacity: 0.65;
     pointer-events: none;
 }
@@ -109,8 +105,6 @@
 .rarity-mythical {
     border-color: var(--rarity-mythical);
     color: var(--rarity-mythical);
-    position: relative;
-    overflow: hidden;
     background: linear-gradient(135deg, 
         var(--bg-tertiary) 0%, 
         var(--color-purple-mythical-overlay) 50%, 
@@ -133,7 +127,7 @@
         var(--color-purple-mythical-shimmer-light) 70%,
         transparent 100%
     );
-    animation: mythicalShine 2.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: badgeMythicalShine 2.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     pointer-events: none;
 }
 
@@ -145,7 +139,7 @@
     box-shadow: 
         inset 0 0 8px var(--color-purple-mythical-glow),
         0 0 14px var(--color-purple-mythical-shadow);
-    animation: mythicalGlow 1.6s ease-in-out infinite alternate;
+    animation: badgeMythicalGlow 1.6s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
@@ -365,7 +359,7 @@
         var(--accent-gold-shimmer-light) 75%,
         transparent 100%
     );
-    animation: achievementShimmer 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: towerShimmer 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     pointer-events: none;
 }
 
@@ -377,11 +371,54 @@
     box-shadow: 
         inset 0 0 6px var(--accent-gold-glow),
         0 0 16px var(--accent-gold-shadow);
-    animation: achievementPulse 3s ease-in-out infinite alternate;
+    animation: towerPulse 3s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
-/* Animations */
+/* Locked achievements stay simple */
+.achievement.locked {
+    opacity: 0.5;
+    border: 2px solid var(--border-color);
+}
+
+/* Combat Animations - MOVED TO 13-animations.css */
+
+/* === BADGE RARITY ANIMATIONS === */
+@keyframes badgeCommonShimmer {
+    0%   { transform: translateX(-140%); }
+    100% { transform: translateX(140%);  }
+}
+
+@keyframes badgeUncommonShimmer {
+    0%   { transform: translateX(-120%); }
+    100% { transform: translateX(120%);  }
+}
+
+@keyframes badgeRareMicroShine {
+    0%   { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
+    50%  { transform: translateX(35%)  translateY(35%)  rotate(20deg); }
+    100% { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
+}
+
+@keyframes badgeMythicalShine {
+    0%   { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%)  rotate(45deg); }
+}
+
+@keyframes badgeMythicalGlow {
+    0% {
+        box-shadow: 
+            inset 0 0 8px  var(--color-purple-mythical-glow),
+            0 0 14px var(--color-purple-mythical-shadow);
+    }
+    100% {
+        box-shadow: 
+            inset 0 0 14px var(--color-purple-mythical-glow-strong),
+            0 0 22px rgba(153, 50, 204, 0.35);
+    }
+}
+
+/* === ACHIEVEMENT ANIMATIONS === */
 @keyframes achievementShimmer {
     0%   { transform: translateX(-100%) rotate(45deg); }
     100% { transform: translateX(100%) rotate(45deg); }
@@ -400,49 +437,24 @@
     }
 }
 
-/* Locked achievements stay simple */
-.achievement.locked {
-    opacity: 0.5;
-    border: 2px solid var(--border-color);
-}
-
-/* ── ANIMATIONS ────────────────────────────────────────────────────────────── */
-
-@keyframes commonShimmer {
-    0%   { transform: translateX(-140%); }
-    100% { transform: translateX(140%);  }
-}
-
-@keyframes uncommonShimmer {
-    0%   { transform: translateX(-120%); }
-    100% { transform: translateX(120%);  }
-}
-
-@keyframes rareMicroShine {
-    0%   { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
-    50%  { transform: translateX(35%)  translateY(35%)  rotate(20deg); }
-    100% { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
-}
-
-@keyframes mythicalShine {
+/* === ENDLESS TOWER ANIMATIONS === */
+@keyframes towerShimmer {
     0%   { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%)  rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
 }
 
-@keyframes mythicalGlow {
+@keyframes towerPulse {
     0% {
         box-shadow: 
-            inset 0 0 8px  var(--color-purple-mythical-glow),
-            0 0 14px var(--color-purple-mythical-shadow);
+            inset 0 0 6px var(--accent-gold-glow),
+            0 0 16px var(--accent-gold-shadow);
     }
     100% {
         box-shadow: 
-            inset 0 0 14px var(--color-purple-mythical-glow-strong),
-            0 0 22px rgba(153, 50, 204, 0.35);
+            inset 0 0 12px var(--accent-gold-glow-strong),
+            0 0 24px var(--accent-gold-shimmer-strong);
     }
 }
-
-/* Combat Animations - MOVED TO 13-animations.css */
 
 
 /* Subtle entrance animations for cards */
