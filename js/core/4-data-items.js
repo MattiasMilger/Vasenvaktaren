@@ -93,19 +93,19 @@ const TAMING_ITEMS = {
     },
     'Mine Lantern': {
         name: 'Mine Lantern',
-        description: 'A sturdy Mine Lantern. The light might please the beautiful spirit who guards the deep veins of ore. ',
-        foundText: 'You found a sturdy Mine Lantern. The light might please the beautiful spirit who guards the deep veins of ore.',
+        description: 'A sturdy Mine Lantern. The light might please the beautiful warden who guards the deep veins of ore. ',
+        foundText: 'You found a sturdy Mine Lantern. The light might please the beautiful warden who guards the deep veins of ore.',
         tamingTarget: 'Gruvra'
     },
     'Shed Antlers': {
         name: 'Shed Antlers',
-        description: 'A set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, spirit of the forest. ',
-        foundText: 'You found a set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, spirit of the forest.',
+        description: 'A set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, warden of the forest. ',
+        foundText: 'You found a set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, warden of the forest.',
         tamingTarget: 'Skogsra'
     },
     'Waterlogged Violin': {
         name: 'Waterlogged Violin',
-        description: 'A Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water spirit. ',
+        description: 'A Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water warden. ',
         foundText: 'You found a Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water spirit.',
         tamingTarget: 'Nacken'
     },

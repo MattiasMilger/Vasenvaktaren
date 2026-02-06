@@ -169,7 +169,7 @@ const VASEN_SPECIES = {
     'Gruvra': {
         name: 'Gruvrå',
         internalName: 'Gruvra',
-        description: 'The beautiful, veiled female spirit of the mine. She jealously guards the rich veins of ore and will cause immediate cave-ins if her domain is defiled.',
+        description: 'The beautiful, veiled female warden of the mine. She jealously guards the rich veins of ore and will cause immediate cave-ins if her domain is defiled.',
         family: FAMILIES.RA,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
@@ -180,7 +180,7 @@ const VASEN_SPECIES = {
     'Skogsra': {
         name: 'Skogsrå',
         internalName: 'Skogsra',
-        description: 'A stunningly beautiful forest spirit, whose presence irresistibly draws men deep into the woods to their demise. Her back is often hollow like an old tree trunk.',
+        description: 'A stunningly beautiful forest warden, whose presence irresistibly draws men deep into the woods to their demise. Her back is often hollow like an old tree trunk.',
         family: FAMILIES.RA,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -191,7 +191,7 @@ const VASEN_SPECIES = {
     'Nacken': {
         name: 'Näcken',
         internalName: 'Nacken',
-        description: 'A male water spirit who plays enchanting, sorrowful tunes on his fiddle. His music lures victims into watery graves, and only knowing his songs grants safety.',
+        description: 'A male water warden who plays enchanting, sorrowful tunes on his fiddle. His music lures victims into watery graves, and only knowing his songs grants safety.',
         family: FAMILIES.RA,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,

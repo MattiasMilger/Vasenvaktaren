@@ -546,13 +546,11 @@ if (this.isOver && this.onEnd) {
             }, 200);
         }
         
-        // Log matchup (only if not knocked out)
-        if (!willKnockout) {
-            if (damageResult.matchup === 'POTENT') {
-                this.addLog('Potent hit!', 'potent');
-            } else if (damageResult.matchup === 'WEAK') {
-                this.addLog('Weak hit!', 'weak');
-            }
+        // Log matchup (always show effectiveness)
+        if (damageResult.matchup === 'POTENT') {
+            this.addLog('Potent hit!', 'potent');
+        } else if (damageResult.matchup === 'WEAK') {
+            this.addLog('Weak hit!', 'weak');
         }
         
         // Handle rune effects for hits
