@@ -2883,7 +2883,7 @@ if (firstButton) firstButton.focus();
                 if (species && temperament) {
                     const runesHtml = member.runes.map(runeId => {
                         const rune = RUNES[runeId];
-                        return rune ? `${rune.symbol}` : '';
+                        return rune ? `${rune.symbol} ${rune.name}` : '';
                     }).join(' ');
                     
                     teamHtml += `
