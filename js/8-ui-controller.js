@@ -52,6 +52,9 @@ class UIController {
         this.zoneList = document.getElementById('zone-list');
         this.exploreBtn = document.getElementById('explore-btn');
         this.challengeBtn = document.getElementById('challenge-btn');
+        
+        // Tutorial state for explore button
+        this.exploreTutorialActive = false;
 
         // Combat area
         this.combatArea = document.getElementById('combat-area');
@@ -756,10 +759,18 @@ renderVasenDetails(vasen) {
         // Helper function to highlight key phrases in ability descriptions
         const highlightDescription = (desc) => {
             if (!desc) return '';
-            
+
             // Patterns to highlight (case insensitive)
             const patterns = [
-                // Stage changes
+                // Next attack phrases with damage/effect modifiers
+                /Next attack[^.]+?(?:\d+%\s+(?:more|less)\s+(?:damage|health|healing)|empowered)/gi,
+                // Passive voice stage changes (e.g., "ally's Strength is raised by 1 stage")
+                /(?:ally's?|enemy's?|opponent's?|their|your|the)\s+\w+\s+is\s+(?:raised|lowered|increased|decreased)\s+by\s+\d+\s+stages?/gi,
+                // Present participle stage changes (e.g., "raising their Wisdom by 1 stage")
+                /(?:raising|lowering|increasing|decreasing)\s+(?:their|its|your|enemy's?|opponent's?|ally's?|all|the)\s+\w+\s+by\s+\d+\s+stages?/gi,
+                // Attribute names followed directly by "by X stage" (e.g., "Defense and Durability by 1 stage")
+                /(?:strength|wisdom|defense|durability|health|attack|speed)(?:\s+and\s+\w+)*\s+by\s+\d+\s+stages?/gi,
+                // Stage changes (active voice)
                 /(\d+\s+stages?)/gi,
                 /(raises?|lowers?|increases?|decreases?)\s+[^.]+?(\d+\s+stages?)/gi,
                 // Damage/healing percentages
@@ -771,14 +782,14 @@ renderVasenDetails(vasen) {
                 // Status effects
                 /(blocks?|prevents?|removes?|drains?|restores?)[^.]+?(?:megin|health|attributes?|stages?)/gi,
             ];
-            
+
             let highlighted = desc;
             patterns.forEach(pattern => {
                 highlighted = highlighted.replace(pattern, (match) => {
                     return `<span class="ability-highlight">${match}</span>`;
                 });
             });
-            
+
             return highlighted;
         };
 
@@ -1326,6 +1337,17 @@ renderZones() {
             this.exploreBtn.innerHTML = `Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
             this.exploreBtn.disabled = !hasParty || gameState.inCombat;
 
+            // NEW: Explore tutorial - blink Explore button until first combat
+            if (!gameState.firstExploreTutorialShown && hasParty && !gameState.inCombat) {
+                if (!this.exploreTutorialActive) {
+                    this.exploreBtn.classList.add('tutorial-blink');
+                    this.exploreTutorialActive = true;
+                }
+            } else {
+                this.exploreBtn.classList.remove('tutorial-blink');
+                this.exploreTutorialActive = false;
+            }
+
             // Show/hide challenge button
             if (zone.guardian) {
                 this.challengeBtn.style.display = 'block';
@@ -1771,10 +1793,18 @@ renderActionButtons(battle) {
         // Helper function to highlight key phrases in ability descriptions
         const highlightDescription = (desc) => {
             if (!desc) return '';
-            
+
             // Patterns to highlight (case insensitive)
             const patterns = [
-                // Stage changes
+                // Next attack phrases with damage/effect modifiers
+                /Next attack[^.]+?(?:\d+%\s+(?:more|less)\s+(?:damage|health|healing)|empowered)/gi,
+                // Passive voice stage changes (e.g., "ally's Strength is raised by 1 stage")
+                /(?:ally's?|enemy's?|opponent's?|their|your|the)\s+\w+\s+is\s+(?:raised|lowered|increased|decreased)\s+by\s+\d+\s+stages?/gi,
+                // Present participle stage changes (e.g., "raising their Wisdom by 1 stage")
+                /(?:raising|lowering|increasing|decreasing)\s+(?:their|its|your|enemy's?|opponent's?|ally's?|all|the)\s+\w+\s+by\s+\d+\s+stages?/gi,
+                // Attribute names followed directly by "by X stage" (e.g., "Defense and Durability by 1 stage")
+                /(?:strength|wisdom|defense|durability|health|attack|speed)(?:\s+and\s+\w+)*\s+by\s+\d+\s+stages?/gi,
+                // Stage changes (active voice)
                 /(\d+\s+stages?)/gi,
                 /(raises?|lowers?|increases?|decreases?)\s+[^.]+?(\d+\s+stages?)/gi,
                 // Damage/healing percentages
@@ -1786,14 +1816,14 @@ renderActionButtons(battle) {
                 // Status effects
                 /(blocks?|prevents?|removes?|drains?|restores?)[^.]+?(?:megin|health|attributes?|stages?)/gi,
             ];
-            
+
             let highlighted = desc;
             patterns.forEach(pattern => {
                 highlighted = highlighted.replace(pattern, (match) => {
                     return `<span class="ability-highlight">${match}</span>`;
                 });
             });
-            
+
             return highlighted;
         };
 
@@ -1895,19 +1925,19 @@ renderActionButtons(battle) {
         result = result.replace(/(\d+)\s+(damage)/gi, '<span class="combat-damage">$1 $2</span>');
         
         // 4. Color positive stat changes (green)
-        // Matches: "raised X stage", "raised X stages", "increased X stage", etc.
-        result = result.replace(/(raised|increased|boosted)\s+(\d+)\s+(stage|stages)/gi, 
-            '<span class="combat-buff">$1 $2 $3</span>');
+        // Matches: "raised by X stage", "raised by X stages", "increased X stage", etc.
+        result = result.replace(/(raised|increased|boosted)(\s+by)?\s+(\d+)\s+(stages?)/gi,
+            '<span class="combat-buff">$1$2 $3 $4</span>');
         // Also matches: "was raised", "was increased", "was boosted"
-        result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi, 
+        result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi,
             '<span class="combat-buff">$1 $2</span>');
-        
+
         // 5. Color negative stat changes (red)
-        // Matches: "lowered X stage", "lowered X stages", "decreased X stage", etc.
-        result = result.replace(/(lowered|decreased|reduced)\s+(\d+)\s+(stage|stages)/gi, 
-            '<span class="combat-debuff">$1 $2 $3</span>');
+        // Matches: "lowered by X stage", "lowered by X stages", "decreased X stage", etc.
+        result = result.replace(/(lowered|decreased|reduced)(\s+by)?\s+(\d+)\s+(stages?)/gi,
+            '<span class="combat-debuff">$1$2 $3 $4</span>');
         // Also matches: "was lowered", "was decreased", "was reduced"
-        result = result.replace(/\b(was)\s+(lowered|decreased|reduced)/gi, 
+        result = result.replace(/\b(was)\s+(lowered|decreased|reduced)/gi,
             '<span class="combat-debuff">$1 $2</span>');
             
         //Color "attributes were lowered" (red)

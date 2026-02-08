@@ -1601,11 +1601,11 @@ button.tutorial-blink {
     text-shadow: 0 0 4px rgba(196, 108, 108, 0.3);
 }
 
-/* Positive stat changes - Green color */
+/* Positive stat changes - Green color (matches potent hit) */
 .combat-buff {
-    color: var(--accent-primary);
+    color: #a2ba92;
     font-weight: 600;
-    text-shadow: 0 0 4px rgba(143, 166, 126, 0.3);
+    text-shadow: 0 0 4px rgba(162, 186, 146, 0.3);
 }
 
 /* Negative stat changes - Red color */

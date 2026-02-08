@@ -486,6 +486,14 @@ gameState.party.forEach(v => {
 
     // Start battle with wild Vasen
     startBattle(enemyVasen) {
+        // NEW: Stop showing explore tutorial when first combat starts
+        if (!gameState.firstExploreTutorialShown) {
+            gameState.firstExploreTutorialShown = true;
+            gameState.saveGame();
+            // Immediately update the explore button to remove tutorial class
+            ui.updateExploreButton();
+        }
+
         gameState.inCombat = true;
 
         // Get player team (non-null party members)
@@ -510,6 +518,14 @@ gameState.party.forEach(v => {
 
     // Start guardian battle
     startGuardianBattle(guardian) {
+        // NEW: Stop showing explore tutorial when first combat starts
+        if (!gameState.firstExploreTutorialShown) {
+            gameState.firstExploreTutorialShown = true;
+            gameState.saveGame();
+            // Immediately update the explore button to remove tutorial class
+            ui.updateExploreButton();
+        }
+
         gameState.inCombat = true;
 
         // Get player team
