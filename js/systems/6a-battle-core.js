@@ -1166,8 +1166,8 @@ if (this.isOver && this.onEnd) {
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     this.addLog(`${vasen.getName()} steals ${defender.getName()}'s ${randomStat} boost!`, 'passive');
-                    this.addLog(`${defender.getName()}'s ${randomStat} was lowered!`, 'debuff');
-                    this.addLog(`${vasen.getName()}'s ${randomStat} was raised!`, 'buff');
+                    this.addLog(`${defender.getName()}'s ${randomStat} was lowered 1 stage!`, 'debuff');
+                    this.addLog(`${vasen.getName()}'s ${randomStat} was raised 1 stage!`, 'buff');
                 }
             }
         }

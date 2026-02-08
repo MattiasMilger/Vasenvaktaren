@@ -1852,14 +1852,17 @@ renderActionButtons(battle) {
 }
 
 
-    // Add combat log message
+    // Add combat log message with automatic color coding
     addCombatLog(message, type = 'normal') {
         const logEntry = document.createElement('div');
         logEntry.className = `combat-log-entry combat-log-${type}`;
-        logEntry.innerHTML = message;
+        
+        // Apply color coding to the message
+        const coloredMessage = this.colorCodeCombatMessage(message);
+        logEntry.innerHTML = coloredMessage;
 
         this.combatLog.appendChild(logEntry);
-        this.combatLogMessages.push({ message, type });
+        this.combatLogMessages.push({ message: coloredMessage, type });
 
         // Cap at max messages
         while (this.combatLogMessages.length > GAME_CONFIG.MAX_BATTLE_LOG) {
@@ -1869,6 +1872,49 @@ renderActionButtons(battle) {
 
         // Scroll to bottom
         this.combatLog.scrollTop = this.combatLog.scrollHeight;
+    }
+
+    // Color code combat message text based on content
+    colorCodeCombatMessage(message) {
+        let result = message;
+        
+        // 1. Color megin references (blue)
+        // Matches: "used X megin", "X megin", "megin"
+        result = result.replace(/(\d+)\s+(megin)/gi, '<span class="combat-megin">$1 $2</span>');
+        result = result.replace(/\b(megin)\b(?![^<]*>)/gi, '<span class="combat-megin">$1</span>');
+        
+        // 2. Color reflected damage (red) - MUST come before general damage
+        // Matches: "X reflected damage"
+        result = result.replace(/(\d+)\s+(reflected)\s+(damage)/gi, 
+            '<span class="combat-damage">$1 $2 $3</span>');
+        
+        // 3. Color damage numbers and the word "damage" (red)
+        // Matches: "deals X damage", "X damage", "takes X damage"
+        result = result.replace(/(deals|takes)\s+(\d+)\s+(damage)/gi, 
+            '$1 <span class="combat-damage">$2 $3</span>');
+        result = result.replace(/(\d+)\s+(damage)/gi, '<span class="combat-damage">$1 $2</span>');
+        
+        // 4. Color positive stat changes (green)
+        // Matches: "raised X stage", "raised X stages", "increased X stage", etc.
+        result = result.replace(/(raised|increased|boosted)\s+(\d+)\s+(stage|stages)/gi, 
+            '<span class="combat-buff">$1 $2 $3</span>');
+        // Also matches: "was raised", "was increased", "was boosted"
+        result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi, 
+            '<span class="combat-buff">$1 $2</span>');
+        
+        // 5. Color negative stat changes (red)
+        // Matches: "lowered X stage", "lowered X stages", "decreased X stage", etc.
+        result = result.replace(/(lowered|decreased|reduced)\s+(\d+)\s+(stage|stages)/gi, 
+            '<span class="combat-debuff">$1 $2 $3</span>');
+        // Also matches: "was lowered", "was decreased", "was reduced"
+        result = result.replace(/\b(was)\s+(lowered|decreased|reduced)/gi, 
+            '<span class="combat-debuff">$1 $2</span>');
+            
+        //Color "attributes were lowered" (red)
+result = result.replace(/\b(attributes)\s+(were)\s+(lowered)\b/gi,
+    '<span class="combat-debuff">$1 $2 $3</span>');
+
+        return result;
     }
 
     // Clear combat log

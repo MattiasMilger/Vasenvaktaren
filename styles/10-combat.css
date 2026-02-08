@@ -1583,4 +1583,36 @@ button.tutorial-blink {
     }
 }
 
+/* =============================================================================
+   Combat Log Color Coding
+   ============================================================================= */
+
+/* Megin text - Blue color matching the megin bar */
+.combat-megin {
+    color: var(--megin-fill);
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(93, 127, 184, 0.3);
+}
+
+/* Damage text - Red color for damage dealt */
+.combat-damage {
+    color: var(--accent-danger);
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(196, 108, 108, 0.3);
+}
+
+/* Positive stat changes - Green color */
+.combat-buff {
+    color: var(--accent-primary);
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(143, 166, 126, 0.3);
+}
+
+/* Negative stat changes - Red color */
+.combat-debuff {
+    color: var(--accent-danger);
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(196, 108, 108, 0.3);
+}
+
 /* End of 10-combat.css */
