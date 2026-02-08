@@ -22,6 +22,9 @@ class UIController {
 
     // Cache DOM elements
     cacheElements() {
+        // Modal overlay
+        this.modalOverlay = document.getElementById('modal-overlay');
+
         // Screens
         this.screens = {
             mainMenu: document.getElementById('main-menu-screen'),
@@ -128,9 +131,23 @@ class UIController {
                     const isDismissible = modal.dataset.dismissible !== 'false';
                     if (isDismissible) {
                         modal.classList.remove('active');
+                        this.checkAndHideOverlay();
                     }
                 }
             });
+        });
+
+        // Close modals and overlay on overlay click (only if dismissible)
+        this.modalOverlay.addEventListener('click', () => {
+            // Check if any active modal is dismissible
+            const activeModals = document.querySelectorAll('.modal.active');
+            activeModals.forEach(modal => {
+                const isDismissible = modal.dataset.dismissible !== 'false';
+                if (isDismissible) {
+                    modal.classList.remove('active');
+                }
+            });
+            this.checkAndHideOverlay();
         });
 
         // Inventory toggle for mobile
@@ -153,6 +170,28 @@ class UIController {
                 });
             }
         });
+    }
+
+    // Show modal overlay (called when any modal opens)
+    showModalOverlay() {
+        if (this.modalOverlay) {
+            this.modalOverlay.classList.add('active');
+        }
+    }
+
+    // Check if any modals are active and hide overlay if none are
+    checkAndHideOverlay() {
+        const activeModals = document.querySelectorAll('.modal.active');
+        if (activeModals.length === 0 && this.modalOverlay) {
+            this.modalOverlay.classList.remove('active');
+        }
+    }
+
+    // Force hide overlay (for special cases)
+    hideModalOverlay() {
+        if (this.modalOverlay) {
+            this.modalOverlay.classList.remove('active');
+        }
     }
 }
 

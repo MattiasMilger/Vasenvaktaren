@@ -665,7 +665,8 @@
     }
 }
 
-.modal {
+/* Persistent modal overlay - stays visible across modal transitions */
+.modal-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -674,12 +675,26 @@
     bottom: 0;
     background: rgba(0, 0, 0, 0.88);
     backdrop-filter: blur(2px);
+    z-index: 999;
+    animation: modalFadeIn 0.2s ease;
+}
+
+.modal-overlay.active {
+    display: block;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 1000;
     justify-content: center;
     align-items: center;
     padding: var(--spacing-md);
     overflow-y: auto;
-    animation: modalFadeIn 0.2s ease;
 }
 
 .modal.active {

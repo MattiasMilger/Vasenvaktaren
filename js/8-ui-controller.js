@@ -22,6 +22,9 @@ class UIController {
 
     // Cache DOM elements
     cacheElements() {
+        // Modal overlay
+        this.modalOverlay = document.getElementById('modal-overlay');
+
         // Screens
         this.screens = {
             mainMenu: document.getElementById('main-menu-screen'),
@@ -131,10 +134,26 @@ document.querySelectorAll('.modal').forEach(modal => {
             const isDismissible = modal.dataset.dismissible !== 'false';
             if (isDismissible) {
                 modal.classList.remove('active');
+                this.checkAndHideOverlay();
             }
         }
     });
 });
+
+// Close modals and overlay on overlay click (only if dismissible)
+if (this.modalOverlay) {
+    this.modalOverlay.addEventListener('click', () => {
+        // Check if any active modal is dismissible
+        const activeModals = document.querySelectorAll('.modal.active');
+        activeModals.forEach(modal => {
+            const isDismissible = modal.dataset.dismissible !== 'false';
+            if (isDismissible) {
+                modal.classList.remove('active');
+            }
+        });
+        this.checkAndHideOverlay();
+    });
+}
 
 // Inventory toggle for mobile
 const inventoryToggleBtn = document.getElementById('inventory-toggle-btn');
@@ -1152,6 +1171,7 @@ handlePartySlotClick(slotIndex) {
 
         btn.onclick = () => {
             modal.classList.remove('active');
+            ui.checkAndHideOverlay();
 
             if (isInParty) {
                 // Swap positions
@@ -1166,9 +1186,12 @@ handlePartySlotClick(slotIndex) {
         list.appendChild(btn);
     });
 
-    document.getElementById('close-add-vasen-modal').onclick = () =>
+    document.getElementById('close-add-vasen-modal').onclick = () => {
         modal.classList.remove('active');
+        ui.checkAndHideOverlay();
+    };
 
+    ui.showModalOverlay();
     modal.classList.add('active');
 }
 
@@ -1455,6 +1478,7 @@ renderZones() {
 
         btn.onclick = () => {
             modal.classList.remove('active');
+            ui.checkAndHideOverlay();
             this.addToParty(vasen.id, slotIndex);
         };
 
@@ -1463,8 +1487,10 @@ renderZones() {
 
     document.getElementById('close-add-vasen-modal').onclick = () => {
         modal.classList.remove('active');
+        ui.checkAndHideOverlay();
         document.activeElement.blur();
     };
+    ui.showModalOverlay();
     modal.classList.add('active');
 }
 
@@ -1744,6 +1770,7 @@ renderSwapOptions(battle) {
 
         btn.onclick = () => {
             modal.classList.remove('active');
+            ui.checkAndHideOverlay();
             // Prevent focus issues
             if (document.activeElement) {
                 document.activeElement.blur();
@@ -1760,6 +1787,7 @@ renderSwapOptions(battle) {
     document.getElementById('close-swap-modal').onclick =
         () => {
             modal.classList.remove('active');
+            ui.checkAndHideOverlay();
             if (document.activeElement) {
                 document.activeElement.blur();
             }
@@ -1767,6 +1795,7 @@ renderSwapOptions(battle) {
             setTimeout(() => document.body.blur(), 0);
         };
 
+    ui.showModalOverlay();
     modal.classList.add('active');
 }
 
@@ -2151,6 +2180,7 @@ showDialogue(title, message, buttons = [{ text: 'Confirm', callback: null }], di
             modal.classList.remove('active');
             if (extraClass) modal.classList.remove(extraClass);
             gameState.uiLocked = false;
+            ui.checkAndHideOverlay();
 
             const exploreBtn = document.getElementById('explore-btn');
             if (exploreBtn) exploreBtn.focus();
@@ -2175,6 +2205,7 @@ if (extraClass) {
     modal.classList.add(extraClass);
 }
 
+ui.showModalOverlay();
 modal.classList.add('active');
 
 const firstButton = btnContainer.querySelector('button:not([disabled])');
@@ -2259,7 +2290,11 @@ if (firstButton) firstButton.focus();
 
         // Show the close button when displaying item list
         closeBtn.style.display = 'block';
-        closeBtn.onclick = () => modal.classList.remove('active');
+        closeBtn.onclick = () => {
+            modal.classList.remove('active');
+            ui.checkAndHideOverlay();
+        };
+        ui.showModalOverlay();
         modal.classList.add('active');
     }
 
@@ -2289,6 +2324,7 @@ if (firstButton) firstButton.focus();
     confirmOfferItem(itemId) {
         const modal = document.getElementById('offer-modal');
         modal.classList.remove('active');
+        ui.checkAndHideOverlay();
         game.handleOfferItem(itemId);
     }
 
@@ -2311,6 +2347,7 @@ if (firstButton) firstButton.focus();
             btn.innerHTML = this.createStandardVasenCardHTML(vasen, true); // true = show combat info
             btn.onclick = () => {
                 modal.classList.remove('active');
+                ui.checkAndHideOverlay();
                 callback(index);
             };
             list.appendChild(btn);
@@ -2318,8 +2355,10 @@ if (firstButton) firstButton.focus();
 
         document.getElementById('close-ally-select-modal').onclick = () => {
             modal.classList.remove('active');
+            ui.checkAndHideOverlay();
             document.activeElement.blur();
         };
+        ui.showModalOverlay();
         modal.classList.add('active');
     }
 
@@ -2373,6 +2412,7 @@ if (firstButton) firstButton.focus();
                 if (!isOnThisVasen) {
                     runeBtn.onclick = () => {
                         modal.classList.remove('active');
+                        ui.checkAndHideOverlay();
                         this.equipRune(vasenId, runeId, slotIndex);
                     };
                 }
@@ -2380,7 +2420,11 @@ if (firstButton) firstButton.focus();
             });
         }
 
-        document.getElementById('close-rune-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-rune-modal').onclick = () => {
+            modal.classList.remove('active');
+            ui.checkAndHideOverlay();
+        };
+        ui.showModalOverlay();
         modal.classList.add('active');
     }
 
@@ -2561,13 +2605,18 @@ if (firstButton) firstButton.focus();
                 `;
                 vasenBtn.onclick = () => {
                     modal.classList.remove('active');
+                    ui.checkAndHideOverlay();
                     game.healVasenWithItem(vasen.id, itemId);
                 };
                 vasenList.appendChild(vasenBtn);
             });
         }
 
-        document.getElementById('close-heal-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-heal-modal').onclick = () => {
+            modal.classList.remove('active');
+            ui.checkAndHideOverlay();
+        };
+        ui.showModalOverlay();
         modal.classList.add('active');
     }
 
@@ -2638,6 +2687,7 @@ if (firstButton) firstButton.focus();
                 if (!hasThisRune) {
                     vasenBtn.onclick = () => {
                         modal.classList.remove('active');
+                        ui.checkAndHideOverlay();
                         this.equipRuneToVasen(vasen.id, runeId);
                     };
                 }
@@ -2645,7 +2695,11 @@ if (firstButton) firstButton.focus();
             });
         }
 
-        document.getElementById('close-rune-to-vasen-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-rune-to-vasen-modal').onclick = () => {
+            modal.classList.remove('active');
+            ui.checkAndHideOverlay();
+        };
+        ui.showModalOverlay();
         modal.classList.add('active');
     }
 
@@ -3080,6 +3134,7 @@ showKnockoutSwapModal(battle, callback) {
     if (availableVasen.length === 0) {
         modal.classList.remove('active');
         GameState.uiLocked = false;
+        ui.checkAndHideOverlay();
         callback(null);
         return;
     }
@@ -3089,6 +3144,7 @@ showKnockoutSwapModal(battle, callback) {
         const actualIndex = battle.playerTeam.indexOf(availableVasen[0]);
         modal.classList.remove('active');
         GameState.uiLocked = false;
+        ui.checkAndHideOverlay();
         callback(actualIndex);
         return;
     }
@@ -3105,12 +3161,14 @@ showKnockoutSwapModal(battle, callback) {
         vasenBtn.onclick = () => {
             modal.classList.remove('active');
             GameState.uiLocked = false;
+            ui.checkAndHideOverlay();
             callback(actualIndex);
         };
 
         vasenList.appendChild(vasenBtn);
     });
 
+    ui.showModalOverlay();
     modal.classList.add('active');
 }
 
@@ -3248,6 +3306,43 @@ showKnockoutSwapModal(battle, callback) {
             }
         } else {
             this.renderVasenDetails(null);
+        }
+    }
+
+    // Show modal overlay (called when any modal opens)
+    showModalOverlay() {
+        // Clear any pending hide timeout to prevent flash
+        if (this.overlayHideTimeout) {
+            clearTimeout(this.overlayHideTimeout);
+            this.overlayHideTimeout = null;
+        }
+
+        if (this.modalOverlay) {
+            this.modalOverlay.classList.add('active');
+        }
+    }
+
+    // Check if any modals are active and hide overlay if none are
+    checkAndHideOverlay() {
+        // Clear any existing timeout
+        if (this.overlayHideTimeout) {
+            clearTimeout(this.overlayHideTimeout);
+        }
+
+        // Add a small delay before hiding to prevent flash when transitioning between modals
+        this.overlayHideTimeout = setTimeout(() => {
+            const activeModals = document.querySelectorAll('.modal.active');
+            if (activeModals.length === 0 && this.modalOverlay) {
+                this.modalOverlay.classList.remove('active');
+            }
+            this.overlayHideTimeout = null;
+        }, 50); // 50ms delay - enough to prevent flash but not noticeable to user
+    }
+
+    // Force hide overlay (for special cases)
+    hideModalOverlay() {
+        if (this.modalOverlay) {
+            this.modalOverlay.classList.remove('active');
         }
     }
 }

@@ -4,6 +4,10 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
+## beta 1.6 - New Player Experience 2 (2026-02-08)
+- Guidance for exploring
+- Key elements highlighted with colors in combat log
+
 ## beta 1.5 - New Player Experience (2026-02-03)
 - Guidance for taming your first väsen via UI
 

@@ -29,6 +29,7 @@ UIController.prototype.showDialogue = function(title, message, buttons = [{ text
             modal.classList.remove('active');
             if (extraClass) modal.classList.remove(extraClass);
             gameState.uiLocked = false;
+            this.checkAndHideOverlay();
 
             const exploreBtn = document.getElementById('explore-btn');
             if (exploreBtn) exploreBtn.focus();
@@ -53,6 +54,7 @@ if (extraClass) {
     modal.classList.add(extraClass);
 };
 
+this.showModalOverlay();
 modal.classList.add('active');
 
 const firstButton = btnContainer.querySelector('button:not([disabled])');
@@ -132,13 +134,18 @@ UIController.prototype.showOfferModal = function(battle) {
                 `;
                 itemBtn.onclick = () => {
                     modal.classList.remove('active');
+                    this.checkAndHideOverlay();
                     game.handleOfferItem(itemId);
                 };
                 itemList.appendChild(itemBtn);
             });
         };
 
-        document.getElementById('close-offer-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-offer-modal').onclick = () => {
+            modal.classList.remove('active');
+            this.checkAndHideOverlay();
+        };
+        this.showModalOverlay();
         modal.classList.add('active');
     };
 
@@ -161,6 +168,7 @@ UIController.prototype.showAllySelectionModal = function(battle, abilityName, ca
             btn.innerHTML = this.createStandardVasenCardHTML(vasen, true); // true = show combat info
             btn.onclick = () => {
                 modal.classList.remove('active');
+                this.checkAndHideOverlay();
                 callback(index);
             };
             list.appendChild(btn);
@@ -168,8 +176,10 @@ UIController.prototype.showAllySelectionModal = function(battle, abilityName, ca
 
         document.getElementById('close-ally-select-modal').onclick = () => {
             modal.classList.remove('active');
+            this.checkAndHideOverlay();
             document.activeElement.blur();
         };
+        this.showModalOverlay();
         modal.classList.add('active');
     };
 
@@ -219,6 +229,7 @@ UIController.prototype.showRuneEquipModal = function(vasenId) {
                 if (!isOnThisVasen) {
                     runeBtn.onclick = () => {
                         modal.classList.remove('active');
+                        this.checkAndHideOverlay();
                         this.equipRune(vasenId, runeId);
                     };
                 };
@@ -227,36 +238,46 @@ UIController.prototype.showRuneEquipModal = function(vasenId) {
             });
         };
 
-        document.getElementById('close-rune-equip-modal').onclick = () => modal.classList.remove('active');
+        document.getElementById('close-rune-equip-modal').onclick = () => {
+            modal.classList.remove('active');
+            this.checkAndHideOverlay();
+        };
+        this.showModalOverlay();
         modal.classList.add('active');
     };
 
 // Settings modal
 UIController.prototype.showSettings = function() {
+    this.showModalOverlay();
     this.settingsModal.classList.add('active');
 };
 
 UIController.prototype.hideSettings = function() {
     this.settingsModal.classList.remove('active');
+    this.checkAndHideOverlay();
 };
 
 // Combat tips modal
 UIController.prototype.showCombatTips = function() {
+    this.showModalOverlay();
     this.combatTipsModal.classList.add('active');
 };
 
 UIController.prototype.hideCombatTips = function() {
     this.combatTipsModal.classList.remove('active');
+    this.checkAndHideOverlay();
 };
 
 // Profile modal
 UIController.prototype.showProfile = function() {
     this.updateProfileAchievements();
+    this.showModalOverlay();
     this.profileModal.classList.add('active');
 };
 
 UIController.prototype.hideProfile = function() {
     this.profileModal.classList.remove('active');
+    this.checkAndHideOverlay();
 };
 
 UIController.prototype.updateProfileAchievements = function() {
@@ -410,9 +431,11 @@ UIController.prototype.showSwapIntoPartyDialogue = function(vasenId) {
     cancelBtn.onclick = () => {
         modal.classList.remove('active', 'swap-into-party-dialogue');
         gameState.uiLocked = false;
+        this.checkAndHideOverlay();
     };
     btnContainer.appendChild(cancelBtn);
-    
+
+    this.showModalOverlay();
     modal.classList.add('active', 'swap-into-party-dialogue');
     gameState.uiLocked = true;
     modal.dataset.dismissible = 'true';
@@ -423,6 +446,7 @@ UIController.prototype.performPartySwap = function(incomingVasenId, outgoingVase
     const modal = document.getElementById('dialogue-modal');
     modal.classList.remove('active', 'swap-into-party-dialogue');
     gameState.uiLocked = false;
+    this.checkAndHideOverlay();
     
     const incomingVasen = gameState.vasenCollection.find(v => v.id === incomingVasenId);
     const outgoingVasen = gameState.vasenCollection.find(v => v.id === outgoingVasenId);
@@ -533,6 +557,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
     if (availableVasen.length === 0) {
         modal.classList.remove('active');
         GameState.uiLocked = false;
+        this.checkAndHideOverlay();
         callback(null);
         return;
     };
@@ -542,6 +567,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
         const actualIndex = battle.playerTeam.indexOf(availableVasen[0]);
         modal.classList.remove('active');
         GameState.uiLocked = false;
+        this.checkAndHideOverlay();
         callback(actualIndex);
         return;
     };
@@ -558,11 +584,13 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
         vasenBtn.onclick = () => {
             modal.classList.remove('active');
             GameState.uiLocked = false;
+            this.checkAndHideOverlay();
             callback(actualIndex);
         };
 
         vasenList.appendChild(vasenBtn);
     });
 
+    this.showModalOverlay();
     modal.classList.add('active');
 };
