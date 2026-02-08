@@ -13,6 +13,14 @@ class Game {
 
         // Check for existing save
         if (gameState.loadGame()) {
+            // NEW: Reset tutorial on page load only if player has tamed at least one Vasen
+            // This allows the first tutorial to persist until first tame, but prevents reload exploit after
+            if (!gameState.firstCombatTutorialShown && gameState.vasenCollection.length > 1) {
+                // Length > 1 because starter counts as 1
+                gameState.firstCombatTutorialShown = true;
+                gameState.saveGame();
+            }
+            
             // Has save data - go to game screen
             this.showGameScreen();
         } else {
@@ -590,6 +598,11 @@ handleAskItem() {
                 text: 'Confirm',
                 class: 'btn-primary',
                 callback: () => {
+                    // NEW: Trigger tutorial by resetting the flag when asking about item
+                    if (this.currentBattle.isWildEncounter) {
+                        gameState.firstCombatTutorialShown = false;
+                        gameState.saveGame();
+                    }
                     // Execute the action if confirmed
                     this.currentBattle.executePlayerAction({ type: 'ask' });
                 }
@@ -900,6 +913,14 @@ if (result.tamed && result.tamedVasen) {
     endBattle() {
         
         gameState.inCombat = false;
+
+        // NEW: Stop showing tutorial when battle ends, but only if player has tamed at least one Vasen
+        // This allows the first tutorial to persist across battles until first successful tame
+        if (!gameState.firstCombatTutorialShown && gameState.vasenCollection.length > 1) {
+            // Length > 1 because starter counts as 1
+            gameState.firstCombatTutorialShown = true;
+            gameState.saveGame();
+        }
 
         // Apply post-battle healing (includes megin restore)
         gameState.applyPostBattleHealing();
