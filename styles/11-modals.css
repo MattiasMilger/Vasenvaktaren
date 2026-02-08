@@ -1044,8 +1044,9 @@ button:focus-visible,
 }
 
 .toggle-icon {
-    font-size: var(--font-size-xs);
-    transition: transform 0.2s;
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    font-family: monospace;
 }
 
 .description-content {
@@ -1065,8 +1066,9 @@ button:focus-visible,
 }
 
 .toggle-icon {
-    font-size: var(--font-size-xs);
-    transition: transform 0.2s;
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    font-family: monospace;
 }
 
 /* === Global combatant panel behavior: always scrollable === */

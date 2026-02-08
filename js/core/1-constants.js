@@ -37,7 +37,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
     // =============================================================================
-    BASE_MEGIN: 60,
+    BASE_MEGIN: 65,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,             // 12% of max Megin restored per turn
     SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,  // 15% discount when using same-element abilities

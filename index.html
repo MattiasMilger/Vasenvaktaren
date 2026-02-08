@@ -99,7 +99,7 @@
                 <!-- Mobile Inventory Toggle Button -->
                 <button id="inventory-toggle-btn" class="inventory-toggle-btn">
                     <span class="toggle-text">Hide Inventory</span>
-                    <span class="toggle-icon">▼</span>
+                    <span class="toggle-icon">«</span>
                 </button>
                 
                 <!-- Collapsible Inventory Container -->
@@ -164,7 +164,18 @@
                             <div id="enemy-panel" class="combatant-panel enemy-side"></div>
                         </div>
                     </div>
-                    <div id="combat-log" class="combat-log"></div>
+
+                    <!-- Mobile Battle Log Toggle Button -->
+                    <button id="battle-log-toggle-btn" class="battle-log-toggle-btn collapsed">
+                        <span class="toggle-text">Show Battle Log</span>
+                        <span class="toggle-icon">»</span>
+                    </button>
+
+                    <!-- Collapsible Battle Log Container -->
+                    <div id="battle-log-collapsible" class="battle-log-collapsible collapsed">
+                        <div id="combat-log" class="combat-log"></div>
+                    </div>
+
                     <div id="ability-buttons" class="ability-buttons"></div>
                     <div class="action-buttons">
                         <button id="btn-swap" class="btn btn-action">Swap</button>
@@ -368,7 +379,6 @@
                 <h4>Megin System</h4>
                 <p><strong>Regeneration:</strong> <span id="guide-megin-regen"></span> of max Megin restored per turn<br>
                 <strong>Same-Element Discount:</strong> Abilities aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin<br>
-                <strong>Calculation:</strong> Base Megin (<span id="guide-base-megin"></span>) + (Level - 1) × <span id="guide-megin-per-level"></span></p>
 
                 <h4>Healing</h4>
                 <p><strong>Post-Battle:</strong> Active party heals <span id="guide-post-battle-heal"></span> of max HP (even from 0 HP)<br>

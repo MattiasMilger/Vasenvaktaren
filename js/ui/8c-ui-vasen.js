@@ -422,7 +422,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
 
         <div class="details-description">
             <h4 class="description-toggle" onclick="ui.toggleDescription()">
-                <span class="toggle-icon">${this.descriptionCollapsed ? '▶' : '▼'}</span>
+                <span class="toggle-icon">${this.descriptionCollapsed ? '»' : '«'}</span>
                 Description
             </h4>
             <div class="description-content ${this.descriptionCollapsed ? 'collapsed' : ''}">

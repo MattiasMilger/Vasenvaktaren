@@ -593,17 +593,39 @@
 }
 
 .rune-collapsible-header {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 4px var(--spacing-sm);
     background: var(--bg-card);
     color: var(--text-primary);
     font-size: var(--font-size-sm);
     cursor: pointer;
     user-select: none;
     transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .rune-collapsible-header:hover {
     background: var(--bg-hover);
+}
+
+.rune-collapsible-header .toggle-icon {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 0;
+    display: inline-block;
+    min-width: 20px;
+}
+
+/* Show icon content via ::after */
+.rune-collapsible:not(.open) .rune-collapsible-header .toggle-icon::after {
+    content: '»';
+    font-size: var(--font-size-base);
+}
+
+.rune-collapsible.open .rune-collapsible-header .toggle-icon::after {
+    content: '«';
+    font-size: var(--font-size-base);
 }
 
 .rune-collapsible-body {
@@ -612,13 +634,13 @@
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     line-height: 1.4;
-
-    font-weight: var(--font-weight-normal);}
+    font-weight: var(--font-weight-normal);
+}
 
 .rune-collapsible.open .rune-collapsible-body {
     display: block;
-
-    font-weight: var(--font-weight-normal);}
+    font-weight: var(--font-weight-normal);
+}
 
 /* =============================================================================
    22. FOOTER

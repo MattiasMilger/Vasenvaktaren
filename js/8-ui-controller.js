@@ -18,6 +18,7 @@ class UIController {
         this.cacheElements();
         this.setupEventListeners();
         this.restoreInventoryState();
+        this.restoreBattleLogState();
     }
 
     // Cache DOM elements
@@ -159,6 +160,12 @@ if (this.modalOverlay) {
 const inventoryToggleBtn = document.getElementById('inventory-toggle-btn');
 if (inventoryToggleBtn) {
     inventoryToggleBtn.addEventListener('click', () => this.toggleInventory());
+}
+
+// Battle log toggle for mobile
+const battleLogToggleBtn = document.getElementById('battle-log-toggle-btn');
+if (battleLogToggleBtn) {
+    battleLogToggleBtn.addEventListener('click', () => this.toggleBattleLog());
 }
 
 // Close element and family collapsibles when clicking anywhere outside them
@@ -631,7 +638,7 @@ renderVasenDetails(vasen) {
 
         <div class="details-description">
             <h4 class="description-toggle" onclick="ui.toggleDescription()">
-                <span class="toggle-icon">${this.descriptionCollapsed ? '▶' : '▼'}</span>
+                <span class="toggle-icon">${this.descriptionCollapsed ? '»' : '«'}</span>
                 Description
             </h4>
             <div class="description-content ${this.descriptionCollapsed ? 'collapsed' : ''}">
@@ -1555,6 +1562,7 @@ renderCombatantPanel(side, vasen, battle) {
                 return `
                     <div class="rune-collapsible open">
                         <div class="rune-collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+                            <span class="toggle-icon">«</span>
                             ${rune.symbol} ${rune.name}
                         </div>
                         <div class="rune-collapsible-body">
@@ -1657,7 +1665,7 @@ renderCombatantPanel(side, vasen, battle) {
         <div class="combatant-description">
             <div class="rune-collapsible">
                 <div class="rune-collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-                    <span class="toggle-icon">▶</span>
+                    <span class="toggle-icon">[+]</span>
                     Description
                 </div>
                 <div class="rune-collapsible-body">
@@ -2795,18 +2803,21 @@ if (firstButton) firstButton.focus();
         const toggleBtn = document.getElementById('inventory-toggle-btn');
         const collapsible = document.getElementById('inventory-collapsible');
         const toggleText = toggleBtn.querySelector('.toggle-text');
-        
+        const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+
         if (collapsible.classList.contains('collapsed')) {
             // Expand
             collapsible.classList.remove('collapsed');
             toggleBtn.classList.remove('collapsed');
             toggleText.textContent = 'Hide Inventory';
+            toggleIcon.textContent = '«';
             localStorage.setItem('inventoryCollapsed', 'false');
         } else {
             // Collapse
             collapsible.classList.add('collapsed');
             toggleBtn.classList.add('collapsed');
             toggleText.textContent = 'Show Inventory';
+            toggleIcon.textContent = '»';
             localStorage.setItem('inventoryCollapsed', 'true');
         }
     }
@@ -2816,20 +2827,74 @@ if (firstButton) firstButton.focus();
         const toggleBtn = document.getElementById('inventory-toggle-btn');
         const collapsible = document.getElementById('inventory-collapsible');
         const toggleText = toggleBtn ? toggleBtn.querySelector('.toggle-text') : null;
-        
+        const toggleIcon = toggleBtn ? toggleBtn.querySelector('.toggle-icon') : null;
+
         // Only restore state if elements exist (mobile only)
-        if (!toggleBtn || !collapsible || !toggleText) return;
-        
+        if (!toggleBtn || !collapsible || !toggleText || !toggleIcon) return;
+
         const isCollapsed = localStorage.getItem('inventoryCollapsed') === 'true';
-        
+
         if (isCollapsed) {
             collapsible.classList.add('collapsed');
             toggleBtn.classList.add('collapsed');
             toggleText.textContent = 'Show Inventory';
+            toggleIcon.textContent = '»';
         } else {
             collapsible.classList.remove('collapsed');
             toggleBtn.classList.remove('collapsed');
             toggleText.textContent = 'Hide Inventory';
+            toggleIcon.textContent = '«';
+        }
+    }
+
+    // Toggle battle log visibility (mobile only)
+    toggleBattleLog() {
+        const toggleBtn = document.getElementById('battle-log-toggle-btn');
+        const collapsible = document.getElementById('battle-log-collapsible');
+        const toggleText = toggleBtn.querySelector('.toggle-text');
+        const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+
+        if (collapsible.classList.contains('collapsed')) {
+            // Expand
+            collapsible.classList.remove('collapsed');
+            toggleBtn.classList.remove('collapsed');
+            toggleText.textContent = 'Hide Battle Log';
+            toggleIcon.textContent = '«';
+            localStorage.setItem('battleLogCollapsed', 'false');
+        } else {
+            // Collapse
+            collapsible.classList.add('collapsed');
+            toggleBtn.classList.add('collapsed');
+            toggleText.textContent = 'Show Battle Log';
+            toggleIcon.textContent = '»';
+            localStorage.setItem('battleLogCollapsed', 'true');
+        }
+    }
+
+    // Restore battle log collapsed state from localStorage
+    restoreBattleLogState() {
+        const toggleBtn = document.getElementById('battle-log-toggle-btn');
+        const collapsible = document.getElementById('battle-log-collapsible');
+        const toggleText = toggleBtn ? toggleBtn.querySelector('.toggle-text') : null;
+        const toggleIcon = toggleBtn ? toggleBtn.querySelector('.toggle-icon') : null;
+
+        // Only restore state if elements exist (mobile only)
+        if (!toggleBtn || !collapsible || !toggleText || !toggleIcon) return;
+
+        // Check if user has saved state, otherwise default to collapsed on mobile
+        const savedState = localStorage.getItem('battleLogCollapsed');
+        const isCollapsed = savedState !== null ? savedState === 'true' : true; // Default to collapsed (true)
+
+        if (isCollapsed) {
+            collapsible.classList.add('collapsed');
+            toggleBtn.classList.add('collapsed');
+            toggleText.textContent = 'Show Battle Log';
+            toggleIcon.textContent = '»';
+        } else {
+            collapsible.classList.remove('collapsed');
+            toggleBtn.classList.remove('collapsed');
+            toggleText.textContent = 'Hide Battle Log';
+            toggleIcon.textContent = '«';
         }
     }
 

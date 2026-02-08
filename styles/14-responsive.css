@@ -28,12 +28,12 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
         background: var(--bg-secondary);
         border: 2px solid var(--border-color);
         border-radius: var(--border-radius);
         color: var(--text-primary);
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-sm);
         font-weight: 600;
         cursor: pointer;
         margin-bottom: var(--spacing-sm);
@@ -49,8 +49,9 @@
     }
 
     .toggle-icon {
-        font-size: var(--font-size-lg);
-        transition: transform 0.3s ease;
+        font-size: var(--font-size-base);
+        font-weight: 700;
+        font-family: monospace;
         display: inline-block;
     }
 
@@ -63,10 +64,59 @@
     .inventory-collapsible.collapsed {
         max-height: 0;
     }
+}
 
-    /* Rotate icon when collapsed */
-    .inventory-toggle-btn.collapsed .toggle-icon {
-        transform: rotate(-90deg);
+/* =============================================================================
+   COLLAPSIBLE BATTLE LOG (Mobile Only)
+   ============================================================================= */
+
+/* Hide toggle button on desktop */
+.battle-log-toggle-btn {
+    display: none;
+}
+
+/* Desktop: battle-log-collapsible always visible */
+@media (min-width: 769px) {
+    .battle-log-collapsible {
+        display: block;
+    }
+}
+
+/* Mobile-only collapsible battle log styles */
+@media (max-width: 768px) {
+    .battle-log-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius);
+        color: var(--text-primary);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: var(--spacing-sm);
+        transition: background 0.2s ease;
+    }
+
+    .battle-log-toggle-btn:hover {
+        background: var(--bg-hover);
+    }
+
+    .battle-log-toggle-btn:active {
+        background: var(--bg-tertiary);
+    }
+
+    .battle-log-collapsible {
+        max-height: 500px; /* Large enough for battle log content */
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .battle-log-collapsible.collapsed {
+        max-height: 0;
     }
 }
 

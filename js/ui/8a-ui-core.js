@@ -18,6 +18,7 @@ class UIController {
         this.cacheElements();
         this.setupEventListeners();
         this.restoreInventoryState();
+        this.restoreBattleLogState();
     }
 
     // Cache DOM elements
@@ -154,6 +155,12 @@ class UIController {
         const inventoryToggleBtn = document.getElementById('inventory-toggle-btn');
         if (inventoryToggleBtn) {
             inventoryToggleBtn.addEventListener('click', () => this.toggleInventory());
+        }
+
+        // Battle log toggle for mobile
+        const battleLogToggleBtn = document.getElementById('battle-log-toggle-btn');
+        if (battleLogToggleBtn) {
+            battleLogToggleBtn.addEventListener('click', () => this.toggleBattleLog());
         }
 
         // Close element and family collapsibles when clicking anywhere outside them
