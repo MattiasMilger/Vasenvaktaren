@@ -612,7 +612,7 @@ if (this.isOver && this.onEnd) {
                         const randomIndex = Math.floor(Math.random() * stats.length);
                         const stat = stats[randomIndex];
                         attacker.modifyAttributeStage(stat, -1);
-                        this.addLog(`${attacker.getName()}'s ${stat} was lowered 1 stage!`, 'debuff');
+                        this.addLog(`${attacker.getName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
                     }
                     result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
                 }
@@ -809,7 +809,7 @@ if (this.isOver && this.onEnd) {
                     this.addLog(`${targetVasen.getName()}'s ${stat} cannot be raised any higher.`, 'status');
                 } else if (result.changed !== 0) {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
-                    this.addLog(`${targetVasen.getName()}'s ${stat} was raised ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
+                    this.addLog(`${targetVasen.getName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
                     
                     // Gifu: share first buff
@@ -840,7 +840,7 @@ if (this.isOver && this.onEnd) {
                 // Raise random attribute
                 const randomStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                 targetVasen.modifyAttributeStage(randomStat, 1);
-                this.addLog(`${targetVasen.getName()}'s ${randomStat} was raised 1 stage!`, 'buff');
+                this.addLog(`${targetVasen.getName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 return effects;
             }
             
@@ -850,7 +850,7 @@ if (this.isOver && this.onEnd) {
                     this.addLog(`${targetVasen.getName()}'s ${stat} cannot be lowered any further.`, 'status');
                 } else if (result.changed !== 0) {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
-                    this.addLog(`${targetVasen.getName()}'s ${stat} was lowered ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
+                    this.addLog(`${targetVasen.getName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
                     effects.push({ stat, change: result.changed });
                 }
             });
@@ -878,7 +878,7 @@ if (this.isOver && this.onEnd) {
                 this.addLog(`${RUNES[buffData.rune].symbol} ${RUNES[buffData.rune].name} was activated!`, 'rune');
                 buffData.stats.forEach(stat => {
                     attacker.modifyAttributeStage(stat, 1);
-                    this.addLog(`${attacker.getName()}'s ${stat} was raised 1 stage!`, 'buff');
+                    this.addLog(`${attacker.getName()}'s ${stat} was raised by 1 stage!`, 'buff');
                 });
                 result.runeEffects.push({ rune: buffData.rune, effect: 'buffed' });
             }
@@ -918,7 +918,7 @@ if (this.isOver && this.onEnd) {
                     const randomIndex = Math.floor(Math.random() * stats.length);
                     const stat = stats[randomIndex];
                     defender.modifyAttributeStage(stat, -1);
-                    this.addLog(`${defender.getName()}'s ${stat} was lowered 1 stage!`, 'debuff');
+                    this.addLog(`${defender.getName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
                 }
                 result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed' });
             }
@@ -1072,7 +1072,7 @@ if (this.isOver && this.onEnd) {
                 const result = vasen.modifyAttributeStage(randomStat, 1);
                 
                 this.addLog(`${vasen.getName()}'s Ande spirit empowers it!`, 'passive');
-                this.addLog(`${vasen.getName()}'s ${randomStat} was raised 1 stage!`, 'buff');
+                this.addLog(`${vasen.getName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 
                 // Gifu: share the buff with allies if equipped
                 if (result.changed !== 0 && !vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
@@ -1166,8 +1166,8 @@ if (this.isOver && this.onEnd) {
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     this.addLog(`${vasen.getName()} steals ${defender.getName()}'s ${randomStat} boost!`, 'passive');
-                    this.addLog(`${defender.getName()}'s ${randomStat} was lowered 1 stage!`, 'debuff');
-                    this.addLog(`${vasen.getName()}'s ${randomStat} was raised 1 stage!`, 'buff');
+                    this.addLog(`${defender.getName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
+                    this.addLog(`${vasen.getName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 }
             }
         }

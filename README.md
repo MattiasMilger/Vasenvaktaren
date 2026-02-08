@@ -141,9 +141,9 @@ Vasenvaktaren/
 
 - [x] Finish Main Functionality (100%)
 - [ ] Make mobile friendly (90%)
-- [ ] Game Balance (50%)
+- [ ] Game Balance (70%)
 - [x] Introduce endgame system (100%)
-- [ ] Final Polish (50%)
+- [ ] Final Polish (70%)
 
 ## Future Ideas
 - Rune combinations
