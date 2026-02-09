@@ -105,6 +105,13 @@ UIController.prototype.showOfferModal = function(battle) {
         itemList.innerHTML = '';
 
         const items = Object.entries(gameState.itemInventory);
+        // Sort items alphabetically by name
+        items.sort(([aId], [bId]) => {
+            const aName = TAMING_ITEMS[aId]?.name || aId;
+            const bName = TAMING_ITEMS[bId]?.name || bId;
+            return aName.localeCompare(bName);
+        });
+
         if (items.length === 0) {
             itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {

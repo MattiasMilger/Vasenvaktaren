@@ -27,42 +27,51 @@ UIController.prototype.getSortedVasenCollection = function() {
             return bFav - aFav; // Favorites first
         };
 
+        // Alphabetical tiebreaker used across all sort modes
+        const alphabetical = (a, b) => a.getDisplayName().localeCompare(b.getDisplayName());
+
         switch (this.vasenSortBy) {
             case 'level':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.level - a.level;
+                    const diff = b.level - a.level;
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'health':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.maxHealth - a.maxHealth;
+                    const diff = b.maxHealth - a.maxHealth;
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'defense':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('defense') - a.calculateAttribute('defense');
+                    const diff = b.calculateAttribute('defense') - a.calculateAttribute('defense');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'durability':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('durability') - a.calculateAttribute('durability');
+                    const diff = b.calculateAttribute('durability') - a.calculateAttribute('durability');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'strength':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('strength') - a.calculateAttribute('strength');
+                    const diff = b.calculateAttribute('strength') - a.calculateAttribute('strength');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'wisdom':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom');
+                    const diff = b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'rarity':
                 return collection.sort((a, b) => {
@@ -70,8 +79,9 @@ UIController.prototype.getSortedVasenCollection = function() {
                     if (favDiff !== 0) return favDiff;
                     const rarityDiff = rarityOrder[b.species.rarity] - rarityOrder[a.species.rarity];
                     if (rarityDiff !== 0) return rarityDiff;
-                    // Secondary sort by level if same rarity
-                    return b.level - a.level;
+                    // Secondary sort by level, then alphabetical
+                    const levelDiff = b.level - a.level;
+                    return levelDiff !== 0 ? levelDiff : alphabetical(a, b);
                 });
             case 'family':
             default:

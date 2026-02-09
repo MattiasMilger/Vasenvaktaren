@@ -53,15 +53,17 @@ UIController.prototype.showAddVasenMenu = function(slotIndex) {
     const list = document.getElementById('add-vasen-list');
     list.innerHTML = '';
 
-    // Sort: favorites first, then by family, then name
+    // Sort: favorites first, then highest level, then alphabetical
     const sorted = [...gameState.vasenCollection].sort((a, b) => {
         // Favorites first
         const aFav = gameState.isFavorite(a.id) ? 1 : 0;
         const bFav = gameState.isFavorite(b.id) ? 1 : 0;
         if (aFav !== bFav) return bFav - aFav;
-        
-        if (a.species.family !== b.species.family)
-            return a.species.family.localeCompare(b.species.family);
+
+        // Highest level first
+        if (a.level !== b.level) return b.level - a.level;
+
+        // Alphabetical tiebreaker
         return a.getDisplayName().localeCompare(b.getDisplayName());
     });
 

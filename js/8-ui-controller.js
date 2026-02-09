@@ -244,42 +244,51 @@ document.addEventListener('click', (e) => {
             return bFav - aFav; // Favorites first
         };
 
+        // Alphabetical tiebreaker used across all sort modes
+        const alphabetical = (a, b) => a.getDisplayName().localeCompare(b.getDisplayName());
+
         switch (this.vasenSortBy) {
             case 'level':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.level - a.level;
+                    const diff = b.level - a.level;
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'health':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.maxHealth - a.maxHealth;
+                    const diff = b.maxHealth - a.maxHealth;
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'defense':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('defense') - a.calculateAttribute('defense');
+                    const diff = b.calculateAttribute('defense') - a.calculateAttribute('defense');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'durability':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('durability') - a.calculateAttribute('durability');
+                    const diff = b.calculateAttribute('durability') - a.calculateAttribute('durability');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'strength':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('strength') - a.calculateAttribute('strength');
+                    const diff = b.calculateAttribute('strength') - a.calculateAttribute('strength');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'wisdom':
                 return collection.sort((a, b) => {
                     const favDiff = compareFavorites(a, b);
                     if (favDiff !== 0) return favDiff;
-                    return b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom');
+                    const diff = b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom');
+                    return diff !== 0 ? diff : alphabetical(a, b);
                 });
             case 'rarity':
                 return collection.sort((a, b) => {
@@ -287,8 +296,9 @@ document.addEventListener('click', (e) => {
                     if (favDiff !== 0) return favDiff;
                     const rarityDiff = rarityOrder[b.species.rarity] - rarityOrder[a.species.rarity];
                     if (rarityDiff !== 0) return rarityDiff;
-                    // Secondary sort by level if same rarity
-                    return b.level - a.level;
+                    // Secondary sort by level, then alphabetical
+                    const levelDiff = b.level - a.level;
+                    return levelDiff !== 0 ? levelDiff : alphabetical(a, b);
                 });
             case 'family':
             default:
@@ -871,6 +881,13 @@ renderVasenDetails(vasen) {
             return;
         }
 
+        // Sort items alphabetically by name
+        itemEntries.sort(([aId], [bId]) => {
+            const aName = TAMING_ITEMS[aId]?.name || aId;
+            const bName = TAMING_ITEMS[bId]?.name || bId;
+            return aName.localeCompare(bName);
+        });
+
         itemEntries.forEach(([itemId, count]) => {
             const item = TAMING_ITEMS[itemId];
             if (!item || count <= 0) return;
@@ -1118,14 +1135,16 @@ handlePartySlotClick(slotIndex) {
     list.innerHTML = '';
 
     // Show ALL väsen in collection, just like Add to Party
+    // Sort: favorites first, then highest level, then alphabetical
     const sorted = [...gameState.vasenCollection].sort((a, b) => {
         const aFav = gameState.isFavorite(a.id) ? 1 : 0;
         const bFav = gameState.isFavorite(b.id) ? 1 : 0;
         if (aFav !== bFav) return bFav - aFav;
 
-        if (a.species.family !== b.species.family)
-            return a.species.family.localeCompare(b.species.family);
+        // Highest level first
+        if (a.level !== b.level) return b.level - a.level;
 
+        // Alphabetical tiebreaker
         return a.getDisplayName().localeCompare(b.getDisplayName());
     });
 
@@ -1423,15 +1442,17 @@ renderZones() {
     const list = document.getElementById('add-vasen-list');
     list.innerHTML = '';
 
-    // Sort: favorites first, then by family, then name
+    // Sort: favorites first, then highest level, then alphabetical
     const sorted = [...gameState.vasenCollection].sort((a, b) => {
         // Favorites first
         const aFav = gameState.isFavorite(a.id) ? 1 : 0;
         const bFav = gameState.isFavorite(b.id) ? 1 : 0;
         if (aFav !== bFav) return bFav - aFav;
-        
-        if (a.species.family !== b.species.family)
-            return a.species.family.localeCompare(b.species.family);
+
+        // Highest level first
+        if (a.level !== b.level) return b.level - a.level;
+
+        // Alphabetical tiebreaker
         return a.getDisplayName().localeCompare(b.getDisplayName());
     });
 
@@ -2196,6 +2217,13 @@ if (firstButton) firstButton.focus();
         itemList.innerHTML = '';
 
         const items = Object.entries(gameState.itemInventory);
+        // Sort items alphabetically by name
+        items.sort(([aId], [bId]) => {
+            const aName = TAMING_ITEMS[aId]?.name || aId;
+            const bName = TAMING_ITEMS[bId]?.name || bId;
+            return aName.localeCompare(bName);
+        });
+
         if (items.length === 0) {
             itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {
@@ -2203,7 +2231,7 @@ if (firstButton) firstButton.focus();
             const enemySpecies = battle.enemyActive.speciesName;
             const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
             const shouldShowTutorial = !gameState.firstCombatTutorialShown && battle.isWildEncounter;
-            
+
             items.forEach(([itemId, count]) => {
                 const item = TAMING_ITEMS[itemId];
                 if (!item) return;

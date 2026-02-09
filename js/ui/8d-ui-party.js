@@ -13,6 +13,13 @@ UIController.prototype.renderItemInventory = function() {
             return;
         };
 
+        // Sort items alphabetically by name
+        itemEntries.sort(([aId], [bId]) => {
+            const aName = TAMING_ITEMS[aId]?.name || aId;
+            const bName = TAMING_ITEMS[bId]?.name || bId;
+            return aName.localeCompare(bName);
+        });
+
         itemEntries.forEach(([itemId, count]) => {
             const item = TAMING_ITEMS[itemId];
             if (!item || count <= 0) return;
@@ -260,14 +267,16 @@ UIController.prototype.showReplaceMenu = function(fromSlot) {
     list.innerHTML = '';
 
     // Show ALL väsen in collection, just like Add to Party
+    // Sort: favorites first, then highest level, then alphabetical
     const sorted = [...gameState.vasenCollection].sort((a, b) => {
         const aFav = gameState.isFavorite(a.id) ? 1 : 0;
         const bFav = gameState.isFavorite(b.id) ? 1 : 0;
         if (aFav !== bFav) return bFav - aFav;
 
-        if (a.species.family !== b.species.family)
-            return a.species.family.localeCompare(b.species.family);
+        // Highest level first
+        if (a.level !== b.level) return b.level - a.level;
 
+        // Alphabetical tiebreaker
         return a.getDisplayName().localeCompare(b.getDisplayName());
     });
 
