@@ -9,7 +9,7 @@ const ITEM_TYPES = {
 const TAMING_ITEMS = {
     'Sturdy Spade': {
         name: 'Sturdy Spade',
-        description: 'A sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land. It can either be offered to wild väsen or your own väsen to heal them. Be careful, only some väsen like this.',
+        description: 'A sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land.',
         foundText: 'You found a sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land.',
         tamingTarget: 'Landvatte'
     },
@@ -171,8 +171,8 @@ const TAMING_ITEMS = {
     },
     'Gold Coin': {
         name: 'Gold Coin',
-        description: 'A flawless coin of pure gold, often found in the colossal hoards of avaricious drakes. It speaks volumes of wealth and is a tempting offering to creatures driven by greed. ',
-        foundText: 'You found a flawless coin of pure gold, often found in the colossal hoards of avaricious drakes. It speaks volumes of wealth and is a tempting offering to creatures driven by greed.',
+        description: 'A flawless coin of pure gold, often found in the colossal hoards of avaricious drakes.',
+        foundText: 'You found a flawless coin of pure gold, often found in the colossal hoards of avaricious drakes.',
         tamingTarget: 'Fafner'
     },
     'Fishing Hook': {

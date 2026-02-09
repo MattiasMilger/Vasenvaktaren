@@ -917,12 +917,17 @@
     background: var(--bg-card);
     border-color: var(--border-color);
     color: var(--text-primary);
+    overflow: visible;
+    white-space: normal;
+    text-align: left;
 }
 
 .move-vasen-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled),
 .swap-into-party-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
     background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow-md);
+    transform: none;
 }
 
 /* Settings Modal */
@@ -1119,6 +1124,7 @@
 
 .offer-item-btn:hover {
     background: var(--bg-hover);
+    border-color: var(--border-light);
 }
 
 .offer-item-name {
@@ -1195,7 +1201,7 @@
 
 .rune-to-vasen-btn:hover:not(:disabled) {
     background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
 
 .rune-to-vasen-btn:disabled {
@@ -1263,7 +1269,7 @@
 .rune-equip-btn:hover,
 .rune-select-btn:hover {
     background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
 
 .rune-equip-btn:disabled,
@@ -1321,7 +1327,7 @@
 
 #add-vasen-list button:hover:not(:disabled) {
     background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
 
 #add-vasen-list button:disabled {
@@ -1347,7 +1353,7 @@
 
 #rune-to-vasen-list button:hover:not(:disabled) {
     background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
 
 #rune-to-vasen-list button:disabled {

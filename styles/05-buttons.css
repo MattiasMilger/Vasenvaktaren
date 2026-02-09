@@ -78,7 +78,7 @@
 
 .btn-action:hover:not(:disabled) {
     background: var(--bg-hover);
-    border-color: var(--accent-secondary);
+    border-color: var(--border-light);
 }
 
 .btn-small {

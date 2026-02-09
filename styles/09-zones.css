@@ -113,7 +113,7 @@
 .knockout-swap-btn:hover,
 .add-vasen-btn:hover {
     background: var(--bg-hover);
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
 
 .ally-select-btn:disabled,
@@ -132,7 +132,7 @@
     position: absolute;
     top: var(--spacing-xs);
     right: var(--spacing-xs);
-    color: var(--accent-primary);
+    color: var(--accent-warning);
     font-size: var(--font-size-lg);
 }
 
@@ -163,10 +163,6 @@
     gap: var(--spacing-md);
     width: 100%;
     padding: var(--spacing-sm);
-    background: var(--bg-tertiary);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
-    margin-bottom: var(--spacing-xs);
 }
 
 .swap-party-slot-label {

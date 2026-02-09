@@ -2252,7 +2252,7 @@ if (firstButton) firstButton.focus();
                 <h4 class="offer-item-title">${item.name}</h4>
                 <p class="offer-item-description">${this.highlightItemKeywords(item.description)}</p>
                 <div class="offer-confirmation-buttons">
-                    <button class="btn btn-secondary" onclick="ui.showOfferModal(game.battle)">Cancel</button>
+                    <button class="btn btn-secondary" onclick="ui.showOfferModal(game.currentBattle)">Cancel</button>
                     <button class="btn btn-primary" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
                 </div>
             </div>
@@ -2445,8 +2445,7 @@ if (firstButton) firstButton.focus();
             'Särimner',
             'Valhalla',
             'winged maiden who chooses the worthy slain',
-            'worthy slain',
-            'creatures driven by greed'
+            'worthy slain'
         ];
         
         let highlighted = description;
@@ -2538,9 +2537,6 @@ if (firstButton) firstButton.focus();
                 vasenBtn.className = 'heal-vasen-btn';
                 vasenBtn.innerHTML = `
                     ${this.createStandardVasenCardHTML(vasen, false)}
-                    <div class="heal-amount-overlay">
-                        <span class="heal-amount">+${Math.floor(vasen.maxHealth * healPercent)} Health</span>
-                    </div>
                 `;
                 vasenBtn.onclick = () => {
                     modal.classList.remove('active');

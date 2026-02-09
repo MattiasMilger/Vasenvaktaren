@@ -92,5 +92,5 @@ button {
 .knockout-swap-btn:hover,
 .add-vasen-btn:hover {
     background: var(--bg-hover) !important;
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
