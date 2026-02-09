@@ -100,17 +100,21 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
     const healthPercent = (vasen.currentHealth / vasen.maxHealth) * 100;
     const meginPercent = (vasen.currentMegin / vasen.maxMegin) * 100;
 
-    // Build runes HTML with "Rune:" label
+    // Build runes HTML with global toggle for descriptions
+    const runeOpen = this.runeDescriptionsVisible ? 'open' : '';
+    const runeToggleIcon = this.runeDescriptionsVisible ? '«' : '»';
     const runesHtml = vasen.runes.length > 0
-        ? `<span class="runes-label">Rune:</span>
+        ? `<span class="runes-label runes-toggle" onclick="toggleRuneDescriptions()">
+               <span class="toggle-icon">${runeToggleIcon}</span> Rune:
+           </span>
            ${vasen.runes.map(r => {
                 const rune = RUNES[r];
                 if (!rune) return '';
 
                 return `
-                    <div class="rune-collapsible open">
-                        <div class="rune-collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-                            <span class="toggle-icon">«</span>
+                    <div class="rune-collapsible ${runeOpen}">
+                        <div class="rune-collapsible-header" onclick="toggleRuneDescriptions()">
+                            <span class="toggle-icon"></span>
                             ${rune.symbol} ${rune.name}
                         </div>
                         <div class="rune-collapsible-body">
@@ -712,12 +716,11 @@ UIController.prototype.reapplyAnimations = function(side) {
         const toggleText = toggleBtn ? toggleBtn.querySelector('.toggle-text') : null;
         const toggleIcon = toggleBtn ? toggleBtn.querySelector('.toggle-icon') : null;
 
-        // Only restore state if elements exist (mobile only)
         if (!toggleBtn || !collapsible || !toggleText || !toggleIcon) return;
 
-        // Check if user has saved state, otherwise default to collapsed on mobile
+        // Check if user has saved state, otherwise default to expanded
         const savedState = localStorage.getItem('battleLogCollapsed');
-        const isCollapsed = savedState !== null ? savedState === 'true' : true; // Default to collapsed (true)
+        const isCollapsed = savedState !== null ? savedState === 'true' : false;
 
         if (isCollapsed) {
             collapsible.classList.add('collapsed');

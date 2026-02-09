@@ -10,6 +10,7 @@ class UIController {
         this.selectedPartySlot = null;
         this.combatLogMessages = [];
         this.descriptionCollapsed = false; // Global state for väsen description fold
+        this.runeDescriptionsVisible = true; // Global toggle for rune descriptions in combat
         this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
@@ -257,6 +258,17 @@ function toggleFamilyDescription(element, event) {
     if (isOpening) {
         parent.classList.add('open');
     }
+}
+
+// Toggle rune descriptions globally for both combatant panels
+function toggleRuneDescriptions() {
+    ui.runeDescriptionsVisible = !ui.runeDescriptionsVisible;
+    document.querySelectorAll('.rune-collapsible').forEach(el => {
+        // Skip non-rune collapsibles (e.g. description collapsible)
+        if (el.closest('.combatant-runes')) {
+            el.classList.toggle('open', ui.runeDescriptionsVisible);
+        }
+    });
 }
 
 // Create global instance

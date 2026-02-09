@@ -263,6 +263,25 @@
     color: var(--text-secondary);
 }
 
+.runes-toggle {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.runes-toggle:hover {
+    color: var(--text-primary);
+}
+
+.runes-toggle .toggle-icon {
+    font-family: monospace;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 14px;
+}
+
 /* Combatant Stages */
 .combatant-stages {
     margin-top: var(--spacing-xs);
@@ -362,9 +381,8 @@
 
 /* Combat Log */
 .combat-log {
-    flex: 1 1 120px;
-    min-height: 80px;
-    max-height: 130px;
+    flex: 0 0 auto;
+    height: 145px;
     overflow-y: auto;
     padding: var(--spacing-sm);
     background: var(--bg-secondary);
@@ -377,6 +395,32 @@
     color: var(--text-strong, #e6e6f0);
 
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+/* Battle Log Toggle - ensure visible on all screen sizes */
+.battle-log-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: var(--spacing-sm);
+    transition: background 0.2s ease;
+}
+
+.battle-log-toggle-btn:hover {
+    background: var(--bg-hover);
+}
+
+.battle-log-toggle-btn:active {
+    background: var(--bg-tertiary);
 }
 
 /* Enhanced combat log entries */
@@ -417,25 +461,25 @@
 .ability-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    gap: 6px;
+    margin-bottom: 12px;
 }
 
 .ability-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 6px 12px;
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
     color: var(--text-primary);
     cursor: pointer;
     text-align: left;
-    transition: background var(--transition-base), 
-                border-color var(--transition-base), 
-                transform var(--transition-base), 
+    transition: background var(--transition-base),
+                border-color var(--transition-base),
+                transform var(--transition-base),
                 box-shadow var(--transition-base);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     box-shadow: var(--shadow-sm);
 }
 
@@ -537,8 +581,8 @@
     display: block;
     font-size: var(--font-size-xs);
     color: var(--text-muted);
-    margin-top: var(--spacing-xs);
-    line-height: 1.3;
+    margin-top: 2px;
+    line-height: 1.2;
 }
 
 .ability-btn-cost {
@@ -1650,6 +1694,25 @@ button.tutorial-blink {
     color: var(--accent-danger);
     font-weight: 600;
     text-shadow: 0 0 4px rgba(196, 108, 108, 0.3);
+}
+
+/* Responsive combat log height */
+@media (max-width: 1200px) {
+    .combat-log {
+        height: 130px;
+    }
+}
+
+@media (max-width: 992px) {
+    .combat-log {
+        height: 115px;
+    }
+}
+
+@media (max-width: 768px) {
+    .combat-log {
+        height: 100px;
+    }
 }
 
 /* End of 10-combat.css */
