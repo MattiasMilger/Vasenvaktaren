@@ -560,40 +560,11 @@ UIController.prototype.renderRuneSlots = function(vasen) {
         return html;
     };
 
-    // Render abilities list
+    // Render abilities list (väsen details: flavor + mechanics)
 UIController.prototype.renderAbilitiesList = function(vasen) {
         const allAbilities = vasen.getAllAbilityNames();
         const availableAbilities = vasen.getAvailableAbilities();
         let html = '';
-
-        // Helper function to highlight key phrases in ability descriptions
-        const highlightDescription = (desc) => {
-            if (!desc) return '';
-            
-            // Patterns to highlight (case insensitive)
-            const patterns = [
-                // Stage changes
-                /(\d+\s+stages?)/gi,
-                /(raises?|lowers?|increases?|decreases?)\s+[^.]+?(\d+\s+stages?)/gi,
-                // Damage/healing percentages
-                /(\d+%\s+(?:more|less|of)\s+(?:damage|health|healing))/gi,
-                // Attribute changes
-                /((?:raises?|lowers?|increases?|decreases?)\s+(?:their|its|your|enemy|opponent|allies?|all)\s+[^.]+?attributes?[^.]*)/gi,
-                // Specific attribute mentions with modifications
-                /((?:raises?|lowers?|increases?|decreases?)\s+(?:their|its|your|enemy|opponent)\s+(?:strength|wisdom|defense|durability|health)[^.]*)/gi,
-                // Status effects
-                /(blocks?|prevents?|removes?|drains?|restores?)[^.]+?(?:megin|health|attributes?|stages?)/gi,
-            ];
-            
-            let highlighted = desc;
-            patterns.forEach(pattern => {
-                highlighted = highlighted.replace(pattern, (match) => {
-                    return `<span class="ability-highlight">${match}</span>`;
-                });
-            });
-            
-            return highlighted;
-        };
 
         allAbilities.forEach((abilityName, index) => {
             const ability = ABILITIES[abilityName];
@@ -602,7 +573,7 @@ UIController.prototype.renderAbilitiesList = function(vasen) {
             const learnLevel = ABILITY_LEARN_LEVELS[index];
             const isLearned = availableAbilities.includes(abilityName);
             const meginCost = vasen.getAbilityMeginCost(abilityName);
-            
+
             // Handle Basic Strike's null element - use Väsen's element
             const abilityElement = ability.element || vasen.species.element;
 
@@ -620,7 +591,7 @@ UIController.prototype.renderAbilitiesList = function(vasen) {
                         ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
                         <span class="ability-cost">Megin: ${meginCost}</span>
                     </div>
-                    <p class="ability-description">${highlightDescription(ability.description)}</p>
+                    <p class="ability-description">${ability.flavorDescription} ${ability.mechanicsDescription}</p>
                     ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}
                 </div>
             `;

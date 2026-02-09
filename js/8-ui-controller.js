@@ -777,48 +777,11 @@ renderVasenDetails(vasen) {
         return html;
     }
 
-    // Render abilities list
+    // Render abilities list (väsen details: flavor + mechanics)
     renderAbilitiesList(vasen) {
         const allAbilities = vasen.getAllAbilityNames();
         const availableAbilities = vasen.getAvailableAbilities();
         let html = '';
-
-        // Helper function to highlight key phrases in ability descriptions
-        const highlightDescription = (desc) => {
-            if (!desc) return '';
-
-            // Patterns to highlight (case insensitive)
-            const patterns = [
-                // Next attack phrases with damage/effect modifiers
-                /Next attack[^.]+?(?:\d+%\s+(?:more|less)\s+(?:damage|health|healing)|empowered)/gi,
-                // Passive voice stage changes (e.g., "ally's Strength is raised by 1 stage")
-                /(?:ally's?|enemy's?|opponent's?|their|your|the)\s+\w+\s+is\s+(?:raised|lowered|increased|decreased)\s+by\s+\d+\s+stages?/gi,
-                // Present participle stage changes (e.g., "raising their Wisdom by 1 stage")
-                /(?:raising|lowering|increasing|decreasing)\s+(?:their|its|your|enemy's?|opponent's?|ally's?|all|the)\s+\w+\s+by\s+\d+\s+stages?/gi,
-                // Attribute names followed directly by "by X stage" (e.g., "Defense and Durability by 1 stage")
-                /(?:strength|wisdom|defense|durability|health|attack|speed)(?:\s+and\s+\w+)*\s+by\s+\d+\s+stages?/gi,
-                // Stage changes (active voice)
-                /(\d+\s+stages?)/gi,
-                /(raises?|lowers?|increases?|decreases?)\s+[^.]+?(\d+\s+stages?)/gi,
-                // Damage/healing percentages
-                /(\d+%\s+(?:more|less|of)\s+(?:damage|health|healing))/gi,
-                // Attribute changes
-                /((?:raises?|lowers?|increases?|decreases?)\s+(?:their|its|your|enemy|opponent|allies?|all)\s+[^.]+?attributes?[^.]*)/gi,
-                // Specific attribute mentions with modifications
-                /((?:raises?|lowers?|increases?|decreases?)\s+(?:their|its|your|enemy|opponent)\s+(?:strength|wisdom|defense|durability|health)[^.]*)/gi,
-                // Status effects
-                /(blocks?|prevents?|removes?|drains?|restores?)[^.]+?(?:megin|health|attributes?|stages?)/gi,
-            ];
-
-            let highlighted = desc;
-            patterns.forEach(pattern => {
-                highlighted = highlighted.replace(pattern, (match) => {
-                    return `<span class="ability-highlight">${match}</span>`;
-                });
-            });
-
-            return highlighted;
-        };
 
         allAbilities.forEach((abilityName, index) => {
             const ability = ABILITIES[abilityName];
@@ -827,7 +790,7 @@ renderVasenDetails(vasen) {
             const learnLevel = ABILITY_LEARN_LEVELS[index];
             const isLearned = availableAbilities.includes(abilityName);
             const meginCost = vasen.getAbilityMeginCost(abilityName);
-            
+
             // Handle Basic Strike's null element - use Väsen's element
             const abilityElement = ability.element || vasen.species.element;
 
@@ -845,7 +808,7 @@ renderVasenDetails(vasen) {
                         ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
                         <span class="ability-cost">Megin: ${meginCost}</span>
                     </div>
-                    <p class="ability-description">${highlightDescription(ability.description)}</p>
+                    <p class="ability-description">${ability.flavorDescription} ${ability.mechanicsDescription}</p>
                     ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}
                 </div>
             `;
@@ -1832,43 +1795,6 @@ renderActionButtons(battle) {
         
         const abilityElement = ability.element || activeVasen.species.element;
 
-        // Helper function to highlight key phrases in ability descriptions
-        const highlightDescription = (desc) => {
-            if (!desc) return '';
-
-            // Patterns to highlight (case insensitive)
-            const patterns = [
-                // Next attack phrases with damage/effect modifiers
-                /Next attack[^.]+?(?:\d+%\s+(?:more|less)\s+(?:damage|health|healing)|empowered)/gi,
-                // Passive voice stage changes (e.g., "ally's Strength is raised by 1 stage")
-                /(?:ally's?|enemy's?|opponent's?|their|your|the)\s+\w+\s+is\s+(?:raised|lowered|increased|decreased)\s+by\s+\d+\s+stages?/gi,
-                // Present participle stage changes (e.g., "raising their Wisdom by 1 stage")
-                /(?:raising|lowering|increasing|decreasing)\s+(?:their|its|your|enemy's?|opponent's?|ally's?|all|the)\s+\w+\s+by\s+\d+\s+stages?/gi,
-                // Attribute names followed directly by "by X stage" (e.g., "Defense and Durability by 1 stage")
-                /(?:strength|wisdom|defense|durability|health|attack|speed)(?:\s+and\s+\w+)*\s+by\s+\d+\s+stages?/gi,
-                // Stage changes (active voice)
-                /(\d+\s+stages?)/gi,
-                /(raises?|lowers?|increases?|decreases?)\s+[^.]+?(\d+\s+stages?)/gi,
-                // Damage/healing percentages
-                /(\d+%\s+(?:more|less|of)\s+(?:damage|health|healing))/gi,
-                // Attribute changes
-                /((?:raises?|lowers?|increases?|decreases?)\s+(?:their|its|your|enemy|opponent|allies?|all)\s+[^.]+?attributes?[^.]*)/gi,
-                // Specific attribute mentions with modifications
-                /((?:raises?|lowers?|increases?|decreases?)\s+(?:their|its|your|enemy|opponent)\s+(?:strength|wisdom|defense|durability|health)[^.]*)/gi,
-                // Status effects
-                /(blocks?|prevents?|removes?|drains?|restores?)[^.]+?(?:megin|health|attributes?|stages?)/gi,
-            ];
-
-            let highlighted = desc;
-            patterns.forEach(pattern => {
-                highlighted = highlighted.replace(pattern, (match) => {
-                    return `<span class="ability-highlight">${match}</span>`;
-                });
-            });
-
-            return highlighted;
-        };
-
         const btn = document.createElement('button');
         btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
         btn.disabled = !canUse || !battle.waitingForPlayerAction;
@@ -1880,7 +1806,7 @@ renderActionButtons(battle) {
                 ${ability.power ? `<span class="ability-btn-power">Power: ${getAbilityPower(abilityName, activeVasen.species.family)}</span>` : ''}
                 <span class="ability-btn-cost">Megin: ${meginCost}</span>
             </span>
-            <span class="ability-btn-desc">${highlightDescription(ability.description)}</span>
+            <span class="ability-btn-desc">${ability.mechanicsDescription}</span>
         `;
         btn.onclick = () => game.handleAbilityUse(abilityName);
         actionsContainer.appendChild(btn);

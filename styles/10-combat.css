@@ -466,7 +466,7 @@
 }
 
 .ability-btn {
-    padding: 6px 12px;
+    padding: 4px 10px;
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -479,7 +479,7 @@
                 box-shadow var(--transition-base);
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     box-shadow: var(--shadow-sm);
 }
 
@@ -580,8 +580,8 @@
 .ability-btn-desc {
     display: block;
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin-top: 2px;
+    color: #e8e8f0;
+    margin-top: 1px;
     line-height: 1.2;
 }
 
@@ -612,10 +612,6 @@
     margin-left: var(--spacing-xs);
 }
 
-.ability-highlight {
-    color: #e8e8f0;
-    font-weight: 600;
-}
 
 /* Action Buttons (Combat) */
 .action-buttons {
