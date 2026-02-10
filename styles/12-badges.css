@@ -214,7 +214,7 @@
     box-shadow: 
         inset 0 0 6px var(--accent-gold-glow),
         0 0 16px var(--accent-gold-shadow);
-    animation: achievementPulse 3s ease-in-out infinite alternate;
+    animation: goldPulse 3s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
@@ -344,7 +344,7 @@
     box-shadow: 
         inset 0 0 6px var(--accent-gold-glow),
         0 0 16px var(--accent-gold-shadow);
-    animation: towerPulse 3s ease-in-out infinite alternate;
+    animation: goldPulse 3s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
@@ -385,31 +385,15 @@
     }
 }
 
-/* === ACHIEVEMENT ANIMATIONS === */
-/* shimmer removed */
-@keyframes achievementPulse {
+/* === GOLD PULSE ANIMATION (shared by achievements and endless tower) === */
+@keyframes goldPulse {
     0% {
-        box-shadow: 
+        box-shadow:
             inset 0 0 6px var(--accent-gold-glow),
             0 0 16px var(--accent-gold-shadow);
     }
     100% {
-        box-shadow: 
-            inset 0 0 12px var(--accent-gold-glow-strong),
-            0 0 24px var(--accent-gold-shimmer-strong);
-    }
-}
-
-/* === ENDLESS TOWER ANIMATIONS === */
-/* shimmer removed */
-@keyframes towerPulse {
-    0% {
-        box-shadow: 
-            inset 0 0 6px var(--accent-gold-glow),
-            0 0 16px var(--accent-gold-shadow);
-    }
-    100% {
-        box-shadow: 
+        box-shadow:
             inset 0 0 12px var(--accent-gold-glow-strong),
             0 0 24px var(--accent-gold-shimmer-strong);
     }

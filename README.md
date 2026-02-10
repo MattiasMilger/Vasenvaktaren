@@ -120,16 +120,23 @@ Vasenvaktaren/
 │   │   └── 7-game-state.js         (GameState class)
 │   │
 │   ├── ui/
-│   │   ├── 8a-ui-core.js           (UIController class, element caching, and global events)
-│   │   ├── 8b-ui-screens.js        (screen switching and tab navigation logic)
-│   │   ├── 8c-ui-vasen.js          (Väsen inventory sorting and Rune management)
-│   │   ├── 8d-ui-party.js          (party slot rendering and item inventory display)
-│   │   ├── 8e-ui-zones.js          (zone selection, descriptions, and game messages)
-│   │   ├── 8f-ui-combat.js         (combat panels, action buttons, and battle animations)
-│   │   └── 8g-ui-modals.js         (dialogues, item use, and guide collapsibles)
+│   │   ├── 8a-ui-core.js           (UIController class, initialization, and overlay management)
+│   │   ├── 8b-ui-screens.js        (screen switching and tab navigation)
+│   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, and matchup display)
+│   │   ├── 8d-ui-items.js          (item and rune inventory management)
+│   │   ├── 8e-ui-party.js          (party slot management and väsen release)
+│   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
+│   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and battle animations)
+│   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
+│   │   └── 8i-ui-settings.js       (settings, profile, and game guide)
 │   │
-│   ├── 8-ui-controller.js          (UIController class)
-│   └── 9-main.js                   (main entry point)
+│   └── game/
+│       ├── 9a-game-core.js         (Game class, menu flow, and core lifecycle)
+│       ├── 9b-game-exploration.js   (wild encounters and battle handling)
+│       ├── 9c-game-guardian.js      (guardian battles)
+│       ├── 9d-game-endless.js       (endless tower mode)
+│       ├── 9e-game-actions.js       (combat action handlers)
+│       └── 9f-game-init.js         (bootstrap and event bindings)
 │
 └── assets/
     ├── vasen/
@@ -141,9 +148,9 @@ Vasenvaktaren/
 
 - [x] Finish Main Functionality (100%)
 - [ ] Make mobile friendly (90%)
-- [ ] Game Balance (70%)
+- [ ] Game Balance (75%)
 - [x] Introduce endgame system (100%)
-- [ ] Final Polish (70%)
+- [ ] Final Polish (85%)
 
 ## Future Ideas
 - Rune combinations

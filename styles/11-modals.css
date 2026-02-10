@@ -1067,12 +1067,6 @@ button:focus-visible,
     margin: 0;
 }
 
-.toggle-icon {
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    font-family: monospace;
-}
-
 /* === Global combatant panel behavior: always scrollable === */
 .combat-arena {
     min-height: 0;
@@ -1111,6 +1105,7 @@ button:focus-visible,
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
+    color: var(--text-primary);
     cursor: pointer;
     transition: all var(--transition-base);
     text-align: left;

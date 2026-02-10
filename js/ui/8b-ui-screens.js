@@ -1,8 +1,8 @@
 // =============================================================================
-// 8b-ui-screens.js - UI Controller Extension
+// 8b-ui-screens.js - Screen Switching and Tab Navigation
 // =============================================================================
 
-
+// Screen management
 UIController.prototype.showScreen = function(screenId) {
         Object.values(this.screens).forEach(screen => screen.classList.remove('active'));
         this.screens[screenId].classList.add('active');
@@ -35,3 +35,26 @@ UIController.prototype.refreshCurrentTab = function() {
         }
     };
 
+    // Refresh all UI
+UIController.prototype.refreshAll = function() {
+        this.renderParty();
+        this.renderZones();
+        this.updateZoneDescription();
+        this.refreshCurrentTab();
+        this.updatePlayerName();
+
+        if (this.selectedVasen) {
+            const updatedVasen = gameState.vasenCollection.find(v => v.id === this.selectedVasen.id);
+            if (updatedVasen) {
+                // Ensure selectedVasen always points to the live object
+                this.selectedVasen = updatedVasen;
+                this.renderVasenDetails(updatedVasen);
+            } else {
+                 // The selected väsen might have been removed (e.g., reset)
+                 this.selectedVasen = null;
+                 this.renderVasenDetails(null);
+            }
+        } else {
+            this.renderVasenDetails(null);
+        }
+    };

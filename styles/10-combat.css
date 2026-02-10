@@ -793,8 +793,8 @@
 }
 
 .modal-title {
-    font-size: var(--font-size-xl);
-    color: var(--accent-gold);
+    font-size: var(--font-size-lg);
+    color: var(--text-accent);
     font-weight: var(--font-weight-semibold);
     margin: 0;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
@@ -804,8 +804,8 @@
     width: 32px;
     height: 32px;
     padding: 0;
-    background: transparent;
-    border: 2px solid var(--border-color);
+    background: none;
+    border: none;
     border-radius: var(--border-radius);
     color: var(--text-muted);
     font-size: var(--font-size-xl);
@@ -826,27 +826,6 @@
 
 .modal-close:active {
     transform: scale(0.95);
-}
-
-
-.modal-title {
-    font-size: var(--font-size-lg);
-    color: var(--text-accent);
-    margin: 0;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: var(--font-size-xl);
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-}
-
-.modal-close:hover {
-    color: var(--text-primary);
 }
 
 .modal-body {
@@ -879,10 +858,9 @@
 
 .dialogue-message {
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-lg);
     line-height: 1.6;
+    margin: var(--spacing-md) 0;
 }
-
 
 .dialogue-buttons {
     display: flex;
@@ -890,18 +868,6 @@
     gap: var(--spacing-sm);
     margin-top: var(--spacing-lg);
 }
-
-.dialogue-buttons .btn {
-    width: 100%;
-    justify-content: center;
-}
-
-.dialogue-message {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin: var(--spacing-md) 0;
-}
-
 
 .dialogue-buttons .btn {
     width: 100%;
@@ -1032,15 +998,6 @@
     transition: background 0.2s, border-color 0.2s;
 }
 
-.achievement.earned {
-    border-color: var(--accent-primary);
-    background: var(--bg-tertiary);
-}
-
-.achievement.locked {
-    opacity: 0.5;
-}
-
 .achievement-name {
     display: block;
     font-weight: 600;
@@ -1106,34 +1063,6 @@
     gap: var(--spacing-sm);
     max-height: 300px;
     overflow-y: auto;
-}
-
-.offer-item-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.offer-item-btn:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-light);
-}
-
-.offer-item-name {
-    font-size: var(--font-size-sm);
-}
-
-.offer-item-count {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
 }
 
 /* Heal Modal */
@@ -1368,16 +1297,6 @@
    Party Portraits - Styling for non-active party member portraits
    ============================================================================= */
 
-/* Wrapper that contains the portraits and main combatant image */
-.combatant-image-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    margin: 0 auto var(--spacing-sm) auto;
-    position: relative;
-}
-
 /* Party portrait container */
 .party-portrait {
     position: relative;
@@ -1388,22 +1307,6 @@
     border: 2px solid var(--border-color);
     background: var(--bg-card);
     transition: all 0.3s ease;
-}
-
-/* Left and right positioning hints (optional, could add transforms) */
-.party-portrait.left {
-    order: 1;
-    border: none;
-}
-
-.party-portrait.right {
-    order: 3;
-    border: none;
-}
-
-/* Ensure main combatant is in the middle */
-.combatant-image-container {
-    order: 2;
 }
 
 /* Party portrait image with idle animation */
@@ -1530,48 +1433,47 @@
    FIX: Centering Main Portrait with Variable Party Size (Desktop)
    ============================================================================= */
 
+/* Wrapper that contains the portraits and main combatant image */
 .combatant-image-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: var(--spacing-sm);
+    margin: 0 auto var(--spacing-sm) auto;
     position: relative;
     width: 100%;
-    /* Create a minimum width so the container doesn't collapse 
-       when portraits are missing */
-    min-height: 80px; 
+    min-height: 80px;
 }
 
-/* 1. Force the Main Container to the center and give it a fixed width */
-.combatant-image-container {
-    order: 2;
-    margin: 0 var(--spacing-md) !important;
-    flex-shrink: 0;
-}
-
-/* 2. Give the portraits 'flex: 1' or fixed alignment to balance the sides */
-.party-portrait.left {
-    order: 1;
-    margin-left: auto; /* Pushes toward the center from the left */
-}
-
-.party-portrait.right {
-    order: 3;
-    margin-right: auto; /* Pushes toward the center from the right */
-}
-
-/* 3. If a side is missing, we need an invisible spacer to keep the center balanced */
+/* Invisible spacers to keep center balanced when a side is missing */
 .combatant-image-wrapper::before,
 .combatant-image-wrapper::after {
     content: "";
     flex: 1;
 }
 
-/* Adjust the existing orders to play nice with the spacers */
 .combatant-image-wrapper::before { order: 0; }
-.party-portrait.left { order: 1; }
-.combatant-image-container { order: 2; }
-.party-portrait.right { order: 3; }
 .combatant-image-wrapper::after { order: 4; }
+
+/* Force the main container to the center */
+.combatant-image-container {
+    order: 2;
+    margin: 0 var(--spacing-md) !important;
+    flex-shrink: 0;
+}
+
+/* Portrait positioning */
+.party-portrait.left {
+    order: 1;
+    border: none;
+    margin-left: auto;
+}
+
+.party-portrait.right {
+    order: 3;
+    border: none;
+    margin-right: auto;
+}
 
 /* =============================================================================
    MOBILE OVERRIDES - Portrait Stacking (1 Top, 2 Bottom Row)

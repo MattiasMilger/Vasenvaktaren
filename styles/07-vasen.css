@@ -68,11 +68,7 @@
 /* Vasen Cards */
 .vasen-card {
     background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-left: 3px solid var(--border-color);
-    border-right: 3px solid var(--border-color);
-    border-top: 3px solid var(--border-color);
-    border-bottom: 3px solid var(--border-color);
+    border: 3px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
@@ -226,33 +222,8 @@
     filter: brightness(1.1);
 }
 
-/* Favorite Button */
-.vasen-favorite-btn {
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    background: transparent;
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: var(--font-size-lg);
-    line-height: 1;
-    flex-shrink: 0;
-    transition: all 0.2s;
-}
-
-.vasen-favorite-btn:hover {
-    color: var(--accent-warning);
-    border-color: var(--accent-warning);
-}
-
-.vasen-favorite-btn.active {
-    color: var(--accent-warning);
-    border-color: var(--accent-warning);
-}
-
-/* Details Panel Favorite Button */
+/* Favorite Button (shared between inventory and details panel) */
+.vasen-favorite-btn,
 .details-favorite-btn {
     width: 28px;
     height: 28px;
@@ -264,15 +235,17 @@
     cursor: pointer;
     font-size: var(--font-size-lg);
     line-height: 1;
-    transition: all 0.2s;
     flex-shrink: 0;
+    transition: all 0.2s;
 }
 
+.vasen-favorite-btn:hover,
 .details-favorite-btn:hover {
     color: var(--accent-warning);
     border-color: var(--accent-warning);
 }
 
+.vasen-favorite-btn.active,
 .details-favorite-btn.active {
     color: var(--accent-warning);
     border-color: var(--accent-warning);

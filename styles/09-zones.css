@@ -303,11 +303,6 @@
     font-weight: var(--font-weight-semibold);
 }
 
-/* Original cleared status override */
-.zone-status.cleared {
-    color: var(--accent-primary);
-}
-
 .zone-status.locked {
     color: var(--text-muted);
     font-style: italic;

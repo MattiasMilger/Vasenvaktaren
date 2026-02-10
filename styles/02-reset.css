@@ -79,18 +79,3 @@ button {
     padding: 0;
 }
 
-/* Modal button overrides */
-.ally-select-btn,
-.swap-modal-btn,
-.knockout-swap-btn,
-.add-vasen-btn {
-    background: var(--bg-tertiary) !important;
-}
-
-.ally-select-btn:hover,
-.swap-modal-btn:hover,
-.knockout-swap-btn:hover,
-.add-vasen-btn:hover {
-    background: var(--bg-hover) !important;
-    border-color: var(--border-light);
-}
