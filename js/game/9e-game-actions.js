@@ -116,3 +116,146 @@ Game.prototype.showOfferModal = function() {
     if (!this.currentBattle.isWildEncounter) return;
     ui.showOfferModal(this.currentBattle);
 };
+
+// Handle auto battle
+Game.prototype.handleAutoBattle = function() {
+    if (!this.currentBattle) return;
+
+    ui.showDialogue(
+        'Auto Battle',
+        '<p>Let the AI fight for you? The battle will play out automatically using the same AI as the enemy.</p>',
+        [
+            {
+                text: 'Start Auto Battle',
+                class: 'btn-primary',
+                callback: () => {
+                    this.startAutoBattle();
+                }
+            },
+            {
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: null
+            }
+        ]
+    );
+};
+
+// Start auto battle loop
+Game.prototype.startAutoBattle = function() {
+    const battle = this.currentBattle;
+    if (!battle || battle.isOver) return;
+
+    battle.isAutoBattle = true;
+    battle.playerAutoUtilityUsage = new Map();
+
+    // Override knockout swap to auto-select during auto battle
+    const originalOnKnockoutSwap = battle.onKnockoutSwap;
+    battle.onKnockoutSwap = (callback) => {
+        if (!battle.isAutoBattle) {
+            originalOnKnockoutSwap(callback);
+            return;
+        }
+        // Auto-select best swap target using AI logic
+        const aliveTeam = battle.playerTeam
+            .map((v, i) => ({ vasen: v, index: i }))
+            .filter(({ vasen, index }) => !vasen.isKnockedOut() && index !== battle.playerActiveIndex);
+
+        if (aliveTeam.length > 0) {
+            // Pick the team member with best element matchup against enemy
+            let bestIndex = aliveTeam[0].index;
+            let bestScore = -Infinity;
+
+            aliveTeam.forEach(({ vasen, index }) => {
+                let score = vasen.currentHealth / vasen.maxHealth * 50;
+                const matchup = getMatchupType(vasen.species.element, battle.enemyActive.species.element);
+                if (matchup === 'POTENT') score += 30;
+                else if (matchup === 'WEAK') score -= 20;
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestIndex = index;
+                }
+            });
+
+            callback(bestIndex);
+        }
+    };
+
+    // Update UI to show auto battle is active
+    if (battle.onUpdate) battle.onUpdate();
+
+    this.autoBattleTick();
+};
+
+// Single auto battle tick
+Game.prototype.autoBattleTick = function() {
+    const battle = this.currentBattle;
+    if (!battle || battle.isOver || !battle.isAutoBattle) return;
+
+    // Wait for player action to be enabled
+    if (!battle.waitingForPlayerAction) {
+        setTimeout(() => this.autoBattleTick(), 200);
+        return;
+    }
+
+    // Use AI to choose player's action
+    const action = this.getAutoBattleAction();
+    if (!action) return;
+
+    // Track utility usage for the player auto AI
+    if (action.type === 'ability') {
+        const ability = ABILITIES[action.abilityName];
+        if (ability && ability.type === ATTACK_TYPES.UTILITY && battle.playerAutoUtilityUsage) {
+            const key = `auto-${battle.playerActive.id}-${action.abilityName}`;
+            const count = battle.playerAutoUtilityUsage.get(key) || 0;
+            battle.playerAutoUtilityUsage.set(key, count + 1);
+        }
+    }
+
+    battle.executePlayerAction(action);
+
+    // Schedule next tick after the battle input delay
+    setTimeout(() => {
+        if (battle.isOver || !battle.isAutoBattle) return;
+        this.autoBattleTick();
+    }, GAME_CONFIG.BATTLE_INPUT_DELAY + 200);
+};
+
+// Get AI-chosen action for the player
+Game.prototype.getAutoBattleAction = function() {
+    const battle = this.currentBattle;
+    if (!battle) return null;
+
+    // Create a mirrored battle view so the AI thinks it's playing from the player's side
+    const mirroredBattle = {
+        enemyActive: battle.playerActive,
+        playerActive: battle.enemyActive,
+        enemyTeam: battle.playerTeam,
+        playerTeam: battle.enemyTeam,
+        enemyActiveIndex: battle.playerActiveIndex,
+        playerActiveIndex: battle.enemyActiveIndex,
+        isWildEncounter: battle.isWildEncounter,
+        getEnemyUtilityUsageCount: (vasen, abilityName) => {
+            // Track player-side utility usage with a separate key prefix
+            const key = `auto-${vasen.id}-${abilityName}`;
+            return battle.playerAutoUtilityUsage ? (battle.playerAutoUtilityUsage.get(key) || 0) : 0;
+        }
+    };
+
+    // Use guardian-level AI (smarter) for the player
+    const ai = new EnemyAI(mirroredBattle, true);
+    const aiAction = ai.chooseAction();
+
+    // Map AI action back to a player action
+    if (aiAction.type === 'ability') {
+        return { type: 'ability', abilityName: aiAction.ability };
+    } else if (aiAction.type === 'swap') {
+        const targetIndex = battle.playerTeam.indexOf(aiAction.target);
+        if (targetIndex !== -1) {
+            return { type: 'swap', targetIndex: targetIndex };
+        }
+    }
+
+    // Fallback to basic strike
+    return { type: 'ability', abilityName: 'Basic Strike' };
+};

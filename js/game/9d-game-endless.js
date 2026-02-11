@@ -98,6 +98,11 @@ Game.prototype.startEndlessTowerBattle = function() {
         this.currentBattle.correctItemGiven = false;
 
         ui.renderCombat(this.currentBattle);
+
+        // Resume auto battle if it was active
+        if (this.currentBattle.isAutoBattle) {
+            this.autoBattleTick();
+        }
     }
 
     ui.addCombatLog(`Floor ${floor}: A wild ${enemyVasen.getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');

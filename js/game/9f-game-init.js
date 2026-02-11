@@ -54,4 +54,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-ask').addEventListener('click', () => game.handleAskItem());
     document.getElementById('btn-pass').addEventListener('click', () => game.handlePass());
     document.getElementById('btn-surrender').addEventListener('click', () => game.handleSurrender());
+    document.getElementById('btn-auto-battle').addEventListener('click', () => game.handleAutoBattle());
 });

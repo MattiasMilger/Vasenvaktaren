@@ -365,7 +365,7 @@ UIController.prototype.renderActionButtons = function(battle) {
 
         const btn = document.createElement('button');
         btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
-        btn.disabled = !canUse || !battle.waitingForPlayerAction;
+        btn.disabled = !canUse || !battle.waitingForPlayerAction || battle.isAutoBattle;
         btn.innerHTML = `
             <span class="ability-btn-name">${ability.name}</span>
             <span class="ability-btn-type">${ability.type}</span>
@@ -382,12 +382,12 @@ UIController.prototype.renderActionButtons = function(battle) {
 
     // Update other action buttons
     document.getElementById('btn-swap').disabled =
-        !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness;
+        !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle;
 
     const offerBtn = document.getElementById('btn-offer');
     offerBtn.disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
-        battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven;
+        battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven || battle.isAutoBattle;
 
     // NEW: First combat tutorial - blink Offer Item button if player has matching item
     if (!gameState.firstCombatTutorialShown && battle.isWildEncounter && !offerBtn.disabled) {
@@ -406,13 +406,25 @@ UIController.prototype.renderActionButtons = function(battle) {
 
     document.getElementById('btn-ask').disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
-        activeVasen.battleFlags.hasSwapSickness;
-    document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction;
-    document.getElementById('btn-surrender').disabled = false;
+        activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle;
+    document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction || battle.isAutoBattle;
+    document.getElementById('btn-surrender').disabled = battle.isAutoBattle;
+
+    // Auto Battle button
+    const autoBattleBtn = document.getElementById('btn-auto-battle');
+    if (battle.isAutoBattle) {
+        autoBattleBtn.textContent = 'Auto Battling...';
+        autoBattleBtn.disabled = true;
+        autoBattleBtn.classList.add('auto-battle-active');
+    } else {
+        autoBattleBtn.textContent = 'Auto Battle';
+        autoBattleBtn.disabled = false;
+        autoBattleBtn.classList.remove('auto-battle-active');
+    }
 
     // Swap button opens the modal
     document.getElementById('btn-swap').onclick = () => {
-        if (!battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness) return;
+        if (!battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle) return;
         this.renderSwapOptions(battle);
     };
 };

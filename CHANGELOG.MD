@@ -4,6 +4,10 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 
 ---
 
+## beta 1.7 - Auto Battle (2026-02-11)
+
+- Added a button for auto battle
+
 ## beta 1.6 - New Player Experience 2 (2026-02-08)
 - Guidance for exploring
 - Key elements highlighted with colors in combat log

@@ -1620,4 +1620,38 @@ button.tutorial-blink {
     }
 }
 
+/* =============================================================================
+   AUTO BATTLE BUTTON
+   ============================================================================= */
+.auto-battle-row {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-sm);
+}
+
+.btn-auto-battle {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+}
+
+.btn-auto-battle:hover:not(:disabled) {
+    background: rgba(var(--text-accent-rgb, 100, 160, 220), 0.15);
+    border-color: var(--text-accent);
+}
+
+.btn-auto-battle.auto-battle-active {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: auto-battle-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes auto-battle-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(100, 160, 220, 0);
+    }
+    50% {
+        box-shadow: 0 0 10px 2px rgba(100, 160, 220, 0.4);
+    }
+}
+
 /* End of 10-combat.css */
