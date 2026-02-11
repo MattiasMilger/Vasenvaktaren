@@ -155,6 +155,8 @@
     font-size: var(--font-size-sm);
     color: var(--text-primary);
     margin-bottom: var(--spacing-xs);
+    padding-left: 18px;
+    padding-right: 18px;
 }
 
 .combatant-level {
@@ -411,6 +413,7 @@
     font-size: var(--font-size-sm);
     font-weight: 600;
     cursor: pointer;
+    margin-top: var(--spacing-sm);
     margin-bottom: var(--spacing-sm);
     transition: background 0.2s ease;
 }
@@ -421,6 +424,47 @@
 
 .battle-log-toggle-btn:active {
     background: var(--bg-tertiary);
+}
+
+/* Combat Card Minimize Toggle (corner icon) */
+.combat-card-toggle {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    font-family: monospace;
+    cursor: pointer;
+    z-index: 1;
+    transition: background 0.2s ease;
+    line-height: 1;
+}
+
+.combat-card-toggle:hover {
+    background: var(--bg-hover);
+}
+
+.combat-card-toggle:active {
+    background: var(--bg-tertiary);
+}
+
+/* Minimized combatant panels - hide everything after HP/MP bars */
+.combatant-panel.minimized .combatant-info,
+.combatant-panel.minimized .combatant-attributes,
+.combatant-panel.minimized .combatant-description,
+.combatant-panel.minimized .combatant-runes,
+.combatant-panel.minimized .combatant-stages,
+.combatant-panel.minimized .combatant-attack-elements {
+    display: none;
 }
 
 /* Enhanced combat log entries */
@@ -619,6 +663,11 @@
     flex-wrap: wrap;
     gap: var(--spacing-sm);
     justify-content: center;
+}
+
+.action-buttons .btn {
+    flex: 1 1 0;
+    white-space: nowrap;
 }
 
 /* =============================================================================
@@ -1623,12 +1672,6 @@ button.tutorial-blink {
 /* =============================================================================
    AUTO BATTLE BUTTON
    ============================================================================= */
-.auto-battle-row {
-    display: flex;
-    justify-content: center;
-    margin-top: var(--spacing-sm);
-}
-
 .btn-auto-battle {
     border-color: var(--text-accent);
     color: var(--text-accent);

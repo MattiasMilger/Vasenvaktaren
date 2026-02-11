@@ -431,10 +431,10 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         </div>
 
         <div class="details-description">
-            <h4 class="description-toggle" onclick="ui.toggleDescription()">
+            <button class="description-toggle-btn" onclick="ui.toggleDescription()">
+                <span class="toggle-text">Description</span>
                 <span class="toggle-icon">${this.descriptionCollapsed ? '»' : '«'}</span>
-                Description
-            </h4>
+            </button>
             <div class="description-content ${this.descriptionCollapsed ? 'collapsed' : ''}">
                 <p>${vasen.species.description}</p>
             </div>

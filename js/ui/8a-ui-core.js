@@ -14,6 +14,8 @@ class UIController {
         this.runeDescriptionsVisible = savedRunes !== null ? savedRunes === 'true' : false;
         const savedDesc = localStorage.getItem('combatDescriptionVisible');
         this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : false;
+        const savedCards = localStorage.getItem('combatCardsMinimized');
+        this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
         this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
@@ -23,6 +25,7 @@ class UIController {
         this.setupEventListeners();
         this.restoreInventoryState();
         this.restoreBattleLogState();
+        this.restoreCombatCardsState();
     }
 
     // Cache DOM elements

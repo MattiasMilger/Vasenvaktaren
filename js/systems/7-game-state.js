@@ -802,6 +802,7 @@ equipRune(runeId, vasenId, slotIndex = null) {
         localStorage.removeItem(SAVE_KEY);
         localStorage.removeItem('combatRunesVisible');
         localStorage.removeItem('combatDescriptionVisible');
+        localStorage.removeItem('combatCardsMinimized');
         
         this.playerName = '';
         this.playerLevel = 1;

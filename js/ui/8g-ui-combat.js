@@ -129,6 +129,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
 
     // Build combatant panel
     panel.innerHTML = `
+        <span class="combat-card-toggle" onclick="ui.toggleCombatCards()">${this.combatCardsMinimized ? '»' : '«'}</span>
         <div class="combatant-header">
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
             <span class="combatant-level">Lvl ${vasen.level}</span>
@@ -217,6 +218,9 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
             ${attackElementsHtml}
         </div>
     `;
+
+    // Apply minimized state if active
+    panel.classList.toggle('minimized', this.combatCardsMinimized);
 
     // Reapply any active animations after re-render
     this.reapplyAnimations(side);
@@ -708,4 +712,21 @@ UIController.prototype.restoreBattleLogState = function() {
             toggleText.textContent = 'Hide Battle Log';
             toggleIcon.textContent = '«';
         }
+};
+
+UIController.prototype.toggleCombatCards = function() {
+        this.combatCardsMinimized = !this.combatCardsMinimized;
+        localStorage.setItem('combatCardsMinimized', this.combatCardsMinimized ? 'true' : 'false');
+
+        const icon = this.combatCardsMinimized ? '»' : '«';
+
+        document.querySelectorAll('.combatant-panel').forEach(panel => {
+            panel.classList.toggle('minimized', this.combatCardsMinimized);
+            const toggle = panel.querySelector('.combat-card-toggle');
+            if (toggle) toggle.textContent = icon;
+        });
+};
+
+UIController.prototype.restoreCombatCardsState = function() {
+        // State is applied during renderCombatantPanel, nothing to restore on init
 };
