@@ -128,10 +128,13 @@ if (firstButton) firstButton.focus();
         // Hide the original close button since we have our own buttons
         closeBtn.style.display = 'none';
 
+        let offerDesc = this.highlightItemKeywords(item.description);
+        const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        offerDesc = offerDesc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
+
         itemList.innerHTML = `
             <div class="offer-confirmation">
-                <h4 class="offer-item-title">${item.name}</h4>
-                <p class="offer-item-description">${this.highlightItemKeywords(item.description)}</p>
+                <p class="offer-item-description">${offerDesc}</p>
                 <div class="offer-confirmation-buttons">
                     <button class="btn btn-secondary" onclick="ui.showOfferModal(game.currentBattle)">Cancel</button>
                     <button class="btn btn-primary" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
@@ -250,16 +253,23 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
 );
                 break;
 
-            case 'item':
+            case 'item': {
+                let itemDialogue = this.highlightItemKeywords(result.dialogue);
+                const itemName = TAMING_ITEMS[result.itemId]?.name;
+                if (itemName) {
+                    const escaped = itemName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    itemDialogue = itemDialogue.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
+                }
                 this.showDialogue(
     'Item Found!',
-    `<p>${this.highlightItemKeywords(result.dialogue)}</p>`,
+    `<p>${itemDialogue}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
         { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
     ],
     false
 );
+            }
                 break;
 
             case 'well':

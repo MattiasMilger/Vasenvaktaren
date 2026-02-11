@@ -92,32 +92,26 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'white horse',
         'nocturnal grazer',
         'great wolf',
-        'creator of the world\'s winds',
+        'world\'s winds',
         'mountain-dwelling giant',
         'forest Troll',
         'changeling child',
-        'warden who guards the deep veins of ore',
+        'mine warden',
         'warden of the forest',
         'water warden',
-        'tiny, dancing beings of the mist',
+        'beings of the mist',
         'subterranean smiths',
-        'light-aligned beings of creation',
-        'spirit of the Elder Tree',
-        'valiant warrior from Valhalla',
+        'beings of creation',
+        'Elder Tree',
+        'valiant warrior',
         'winged maiden',
         'ancient giants',
-        'fiery elemental being',
-        'primordial giants of ice and mist',
-        'massive, wingless serpent',
+        'fiery elemental',
+        'giants of ice',
+        'wingless serpent',
         'avaricious drakes',
         'World Serpent',
-        'world tree itself',
-        'world tree',
-        'legendary boar Särimner',
-        'Särimner',
-        'Valhalla',
-        'winged maiden who chooses the worthy slain',
-        'worthy slain'
+        'world tree'
     ];
 
     let highlighted = description;
@@ -168,9 +162,13 @@ UIController.prototype.showItemOptions = function(itemId) {
         callback: null
     });
 
+    let desc = this.highlightItemKeywords(item.description);
+    const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    desc = desc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
+
     this.showDialogue(
-        item.name,
-        `<p>${this.highlightItemKeywords(item.description)}</p>`,
+        'Item',
+        `<p>${desc}</p>`,
         buttons
     );
 };

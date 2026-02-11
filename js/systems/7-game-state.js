@@ -518,9 +518,9 @@ equipRune(runeId, vasenId, slotIndex = null) {
                 // Add to inventory
                 this.addItem(randomItem, 1);
                 
-                // Get item dialogue
+                // Get item dialogue (derive from description)
                 const itemData = TAMING_ITEMS[randomItem];
-                const dialogue = itemData?.foundText || `You found a ${randomItem}!`;
+                const dialogue = itemData ? 'You found ' + itemData.description[0].toLowerCase() + itemData.description.slice(1) : `You found a ${randomItem}!`;
                 
                 result = { type: 'item', itemId: randomItem, dialogue };
                 break;

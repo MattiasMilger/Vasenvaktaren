@@ -9,182 +9,152 @@ const ITEM_TYPES = {
 const TAMING_ITEMS = {
     'Sturdy Spade': {
         name: 'Sturdy Spade',
-        description: 'A sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land.',
-        foundText: 'You found a sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land.',
+        description: 'A Sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land.',
         tamingTarget: 'Landvatte'
     },
     'Garden Rake': {
         name: 'Garden Rake',
-        description: 'A weathered Garden Rake. It seems useful for tending to a farm, perhaps attracting a careful, bearded guardian. ',
-        foundText: 'You found a weathered Garden Rake. It seems useful for tending to a farm, perhaps attracting a careful, bearded guardian.',
+        description: 'A weathered Garden Rake. It seems useful for tending to a farm, perhaps attracting a careful, bearded guardian.',
         tamingTarget: 'Gardstomte'
     },
     'Warm Tomtegrot': {
         name: 'Warm Tomtegröt',
-        description: 'A bowl of fresh Tomtegröt. The sweet smell might attract a watchful house spirit who loves this offering. ',
-        foundText: 'You found a bowl of fresh Tomtegröt. The sweet smell might attract a watchful house spirit who loves this offering.',
+        description: 'A bowl of Warm Tomtegröt. The sweet smell might attract a watchful house spirit who loves this offering.',
         tamingTarget: 'Hustomte'
     },
     'Black Feather': {
         name: 'Black Feather',
-        description: 'A large Black Feather. It carries an eerie silence, likely shed by a spectral, shrieking raven. ',
-        foundText: 'You found a large Black Feather. It carries an eerie silence, likely shed by a spectral, shrieking raven. You should give it to a Väsen that could use it.',
+        description: 'A large Black Feather. It carries an eerie silence, likely shed by a spectral, shrieking raven. You should give it to a Väsen that could use it.',
         tamingTarget: 'Nattramn'
     },
     'Burial Flowers': {
         name: 'Burial Flowers',
-        description: 'A small bouquet of Burial Flowers. Their scent is mournful, calling out to a lost, wailing infant spirit. ',
-        foundText: 'You found a small bouquet of Burial Flowers. Their scent is mournful, calling out to a lost, wailing infant spirit.',
+        description: 'A small bouquet of Burial Flowers. Their scent is mournful, calling out to a lost, wailing infant spirit.',
         tamingTarget: 'Myling'
     },
     'Ghastly Lantern': {
         name: 'Ghastly Lantern',
-        description: 'A sputtering Ghastly Lantern. Its light is faint and misleading, a lure for a wandering, fire-aligned spirit. ',
-        foundText: 'You found a sputtering Ghastly Lantern. Its light is faint and misleading, a lure for a wandering, fire-aligned spirit.',
+        description: 'A sputtering Ghastly Lantern. Its light is faint and misleading, a lure for a wandering, fire-aligned spirit.',
         tamingTarget: 'Irrbloss'
     },
     'Damp Seaweed': {
         name: 'Damp Seaweed',
-        description: 'A clump of Damp Seaweed. It smells strongly of the sea, a sign of a drowned sailor\'s haunting cry. ',
-        foundText: 'You found a clump of Damp Seaweed. It smells strongly of the sea, a sign of a drowned sailor\'s haunting cry.',
+        description: 'A clump of Damp Seaweed. It smells strongly of the sea, a sign of a drowned sailor\'s haunting cry.',
         tamingTarget: 'Strandvaskare'
     },
     'Drenched Saddle': {
         name: 'Drenched Saddle',
-        description: 'A glistening Drenched Saddle. Be cautious; a deceptive white horse might be nearby, looking for a rider. ',
-        foundText: 'You found a glistening Drenched Saddle. Be cautious; a deceptive white horse might be nearby, looking for a rider.',
+        description: 'A glistening Drenched Saddle. Be cautious; a deceptive white horse might be nearby, looking for a rider.',
         tamingTarget: 'Backahast'
     },
     'Delicate Truffle': {
         name: 'Delicate Truffle',
-        description: 'A rare, pale fungus with a rich aroma. It\'s a highly prized delicacy that makes a nocturnal grazer drop its guard and follow its nose. ',
-        foundText: 'You found a rare, pale fungus with a rich aroma. It\'s a highly prized delicacy that makes a nocturnal grazer drop its guard and follow its nose.',
+        description: 'A Delicate Truffle. Its rich aroma is a highly prized delicacy that makes a nocturnal grazer drop its guard and follow its nose.',
         tamingTarget: 'Gloson'
     },
     'Broken Chain': {
         name: 'Broken Chain',
-        description: 'A piece of a mighty Broken Chain. The metal pulses with immense, restrained power - a sign of the great wolf. ',
-        foundText: 'You found a piece of a mighty Broken Chain. The metal pulses with immense, restrained power - a sign of the great wolf.',
+        description: 'A piece of a mighty Broken Chain. The metal pulses with immense, restrained power - a sign of the great wolf.',
         tamingTarget: 'Fenrir'
     },
     'Eagle Quill': {
         name: 'Eagle Quill',
-        description: 'A massive Eagle Quill. It feels impossibly light; a feather from the creator of the world\'s winds. ',
-        foundText: 'You found a massive Eagle Quill. It feels impossibly light; a feather from the creator of the world\'s winds.',
+        description: 'A massive Eagle Quill. It feels impossibly light; a feather from the creator of the world\'s winds.',
         tamingTarget: 'Rasvelg'
     },
     'Silver Necklace': {
         name: 'Silver Necklace',
-        description: 'A dazzling silver necklace. Perhaps a greedy mountain-dwelling giant dropped it while passing through. ',
-        foundText: 'You found a dazzling Silver Necklace. Perhaps a greedy mountain-dwelling giant dropped it while passing through.',
+        description: 'A dazzling Silver Necklace. Perhaps a greedy mountain-dwelling giant dropped it while passing through.',
         tamingTarget: 'Bergatroll'
     },
     'Mossy Bark': {
         name: 'Mossy Bark',
-        description: 'A thick piece of Mossy Bark. It\'s the perfect camouflage for a cunning forest Troll. ',
-        foundText: 'You found a thick piece of Mossy Bark. It\'s the perfect camouflage for a cunning forest Troll.',
+        description: 'A thick piece of Mossy Bark. It\'s the perfect camouflage for a cunning forest Troll.',
         tamingTarget: 'Skogstroll'
     },
     'Trollmilk Bottle': {
         name: 'Trollmilk Bottle',
-        description: 'A strange, small Trollmilk Bottle. It seems to have been left by a sickly, irritable changeling child. ',
-        foundText: 'You found a strange, small Trollmilk Bottle. It seems to have been left by a sickly, irritable changeling child.',
+        description: 'A strange, small Trollmilk Bottle. It seems to have been left by a sickly, irritable changeling child.',
         tamingTarget: 'Bortbyting'
     },
     'Mine Lantern': {
         name: 'Mine Lantern',
-        description: 'A sturdy Mine Lantern. The light might please the beautiful warden who guards the deep veins of ore. ',
-        foundText: 'You found a sturdy Mine Lantern. The light might please the beautiful warden who guards the deep veins of ore.',
+        description: 'A sturdy Mine Lantern. The light might please the beautiful mine warden.',
         tamingTarget: 'Gruvra'
     },
     'Shed Antlers': {
         name: 'Shed Antlers',
-        description: 'A set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, warden of the forest. ',
-        foundText: 'You found a set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, warden of the forest.',
+        description: 'A set of Shed Antlers. They whisper of the deep woods and the alluring, yet dangerous, warden of the forest.',
         tamingTarget: 'Skogsra'
     },
     'Waterlogged Violin': {
         name: 'Waterlogged Violin',
-        description: 'A Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water warden. ',
-        foundText: 'You found a Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water spirit.',
+        description: 'A Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water warden.',
         tamingTarget: 'Nacken'
     },
     'Morning Dew': {
         name: 'Morning Dew',
-        description: 'A jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, dancing beings of the mist. ',
-        foundText: 'You found a jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, dancing beings of the mist.',
+        description: 'A jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, dancing beings of the mist.',
         tamingTarget: 'Alva'
     },
     'Anvil Shard': {
         name: 'Anvil Shard',
-        description: 'A fragment of an Anvil Shard. It rings with a sound of skilled craftsmanship, belonging to the subterranean smiths. ',
-        foundText: 'You found a fragment of an Anvil Shard. It rings with a sound of skilled craftsmanship, belonging to the subterranean smiths.',
+        description: 'A fragment of an Anvil Shard. It rings with a sound of skilled craftsmanship, belonging to the subterranean smiths.',
         tamingTarget: 'Svartalv'
     },
     'Festive Midsommarkrans': {
         name: 'Festive Midsommarkrans',
-        description: 'A festive woven flower wreath. Its radiance attracts the beautiful, light-aligned beings of creation. ',
-        foundText: 'You found a festive woven flower Wreath. Its radiance attracts the beautiful, light-aligned beings of creation.',
+        description: 'A Festive Midsommarkrans. Its radiance attracts the beautiful, light-aligned beings of creation.',
         tamingTarget: 'Ljusalv'
     },
     'Elderflower Sprig': {
         name: 'Elderflower Sprig',
-        description: 'A fragrant Elderflower Sprig. Its scent is protective and ancient, a necessary offering for the fierce, watchful spirit of the Elder Tree. ',
-        foundText: 'You found a fragrant Elderflower Sprig. Its scent is protective, a necessary offering for the fierce, watchful spirit of the Elder Tree.',
+        description: 'A fragrant Elderflower Sprig. Its scent is protective, a necessary offering for the fierce, watchful spirit of the Elder Tree.',
         tamingTarget: 'Hyllemor'
     },
     'Valhalla Pork': {
         name: 'Valhalla Pork',
-        description: 'A savory portion from the legendary boar Särimner, served nightly in Valhalla. Though he is slain each evening, Särimner rises anew by dawn, and his ever‑renewing flesh is said to restore body and spirit alike.',
-        foundText: 'You found a tempting piece of Valhalla Pork. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla.',
+        description: 'A tempting piece of Valhalla Pork. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla.',
         tamingTarget: 'Einharje'
     },
     'Shield Fragment': {
         name: 'Shield Fragment',
-        description: 'A polished Shield Fragment. It has the mark of a powerful, winged maiden who chooses the worthy slain. ',
-        foundText: 'You found a polished Shield Fragment. It has the mark of a powerful, winged maiden who chooses the worthy slain.',
+        description: 'A polished Shield Fragment. It has the mark of a powerful, winged maiden who chooses the worthy slain.',
         tamingTarget: 'Valkyria'
     },
     'Giant Rock': {
         name: 'Giant Rock',
-        description: 'A surprisingly smooth Giant Rock. A piece of the raw, immense power of the ancient giants. ',
-        foundText: 'You found a surprisingly smooth Giant Rock. A piece of the raw, immense power of the ancient giants.',
+        description: 'A surprisingly smooth Giant Rock. A piece of the raw, immense power of the ancient giants.',
         tamingTarget: 'Jotun'
     },
     'Glowing Coal': {
         name: 'Glowing Coal',
-        description: 'A searing Glowing Coal. It burns with the endless fire of Muspelheim, attracting a fiery elemental being. ',
-        foundText: 'You found a searing Glowing Coal. It burns with the endless fire of Muspelheim, attracting a fiery elemental being.',
+        description: 'A searing Glowing Coal. It burns with the endless fire of Muspelheim, attracting a fiery elemental being.',
         tamingTarget: 'Eldturs'
     },
     'Ice Crystal': {
         name: 'Ice Crystal',
-        description: 'A razor-sharp Ice Crystal. It is bone-chillingly cold, a remnant of the primordial giants of ice and mist. ',
-        foundText: 'You found a razor-sharp Ice Crystal. It is bone-chillingly cold, a remnant of the primordial giants of ice and mist.',
+        description: 'A razor-sharp Ice Crystal. It is bone-chillingly cold, a remnant of the primordial giants of ice and mist.',
         tamingTarget: 'Rimturs'
     },
     'Shedded Scale': {
         name: 'Shedded Scale',
-        description: 'A large, slick Shedded Scale. It belonged to a massive, wingless serpent of the forgotten forests. ',
-        foundText: 'You found a large, slick Shedded Scale. It belonged to a massive, wingless serpent of the forgotten forests.',
+        description: 'A large, slick Shedded Scale. It belonged to a massive, wingless serpent of the forgotten forests.',
         tamingTarget: 'Lindorm'
     },
     'Gold Coin': {
         name: 'Gold Coin',
-        description: 'A flawless coin of pure gold, often found in the colossal hoards of avaricious drakes.',
-        foundText: 'You found a flawless coin of pure gold, often found in the colossal hoards of avaricious drakes.',
+        description: 'A flawless Gold Coin, often found in the colossal hoards of avaricious drakes.',
         tamingTarget: 'Fafner'
     },
     'Fishing Hook': {
         name: 'Fishing Hook',
-        description: 'A colossal Fishing Hook. Only the one who tried to catch the World Serpent could have used this. ',
-        foundText: 'You found a colossal Fishing Hook. Only the one who tried to catch the World Serpent could have used this.',
+        description: 'A colossal Fishing Hook. Only the one who tried to catch the World Serpent could have used this.',
         tamingTarget: 'Jormungandr'
     },
     'Yggdrasil Root': {
         name: 'Yggdrasil Root',
-        description: 'A fragment of Yggdrasil Root. It is gnawed and ancient, a piece of the world tree itself. ',
-        foundText: 'You found a fragment of Yggdrasil Root. It is gnawed and ancient, a piece of the world tree itself.',
+        description: 'A fragment of Yggdrasil Root. It is gnawed and ancient, a piece of the world tree itself.',
         tamingTarget: 'Nidhogg'
     }
 };

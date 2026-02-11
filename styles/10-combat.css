@@ -1055,6 +1055,7 @@
 /* Offer Modal */
 .modal-offer {
     max-width: 400px;
+    text-align: center;
 }
 
 .offer-item-list {
@@ -1575,28 +1576,28 @@ button.tutorial-blink {
 /* Megin text - Blue color matching the megin bar */
 .combat-megin {
     color: var(--megin-fill);
-    font-weight: 600;
+    font-weight: 700;
     text-shadow: 0 0 4px rgba(93, 127, 184, 0.3);
 }
 
 /* Damage text - Red color for damage dealt */
 .combat-damage {
     color: var(--accent-danger);
-    font-weight: 600;
+    font-weight: 700;
     text-shadow: 0 0 4px rgba(196, 108, 108, 0.3);
 }
 
 /* Positive stat changes - Green color (matches potent hit) */
 .combat-buff {
     color: #a2ba92;
-    font-weight: 600;
+    font-weight: 700;
     text-shadow: 0 0 4px rgba(162, 186, 146, 0.3);
 }
 
 /* Negative stat changes - Red color */
 .combat-debuff {
     color: var(--accent-danger);
-    font-weight: 600;
+    font-weight: 700;
     text-shadow: 0 0 4px rgba(196, 108, 108, 0.3);
 }
 
