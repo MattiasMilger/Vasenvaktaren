@@ -600,6 +600,12 @@
     border: 2px solid var(--border-color);
 }
 
+.ability-item.element-earth { border-left: 4px solid var(--element-earth); }
+.ability-item.element-nature { border-left: 4px solid var(--element-nature); }
+.ability-item.element-water { border-left: 4px solid var(--element-water); }
+.ability-item.element-fire { border-left: 4px solid var(--element-fire); }
+.ability-item.element-wind { border-left: 4px solid var(--element-wind); }
+
 .ability-item.locked {
     opacity: 0.6;
     border-left-color: var(--text-muted);

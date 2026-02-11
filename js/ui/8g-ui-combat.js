@@ -192,6 +192,18 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
             <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
         </div>
 
+        <div class="combatant-description">
+            <div class="rune-collapsible ${this.combatDescriptionVisible ? 'open' : ''}">
+                <div class="rune-collapsible-header" onclick="toggleCombatDescriptions()">
+                    <span class="toggle-icon"></span>
+                    Description
+                </div>
+                <div class="rune-collapsible-body">
+                    ${vasen.species.description}
+                </div>
+            </div>
+        </div>
+
         <div class="combatant-runes">
             ${runesHtml}
         </div>
@@ -203,18 +215,6 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         <div class="combatant-attack-elements">
             <span class="elements-label">Attack Elements:</span>
             ${attackElementsHtml}
-        </div>
-
-        <div class="combatant-description">
-            <div class="rune-collapsible">
-                <div class="rune-collapsible-header" onclick="this.parentElement.classList.toggle('open')">
-                    <span class="toggle-icon">[+]</span>
-                    Description
-                </div>
-                <div class="rune-collapsible-body">
-                    ${vasen.species.description}
-                </div>
-            </div>
         </div>
     `;
 

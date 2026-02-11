@@ -588,7 +588,7 @@ UIController.prototype.renderAbilitiesList = function(vasen) {
         const abilityElement = ability.element || vasen.species.element;
 
         html += `
-            <div class="ability-item ${isLearned ? 'learned' : 'locked'}">
+            <div class="ability-item element-${abilityElement.toLowerCase()} ${isLearned ? 'learned' : 'locked'}">
                 <div class="ability-header">
                     <span class="ability-name">${ability.name}</span>
                     <span class="ability-type-tag">${ability.type}</span>

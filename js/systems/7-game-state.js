@@ -800,6 +800,8 @@ equipRune(runeId, vasenId, slotIndex = null) {
     // Reset game
     resetGame() {
         localStorage.removeItem(SAVE_KEY);
+        localStorage.removeItem('combatRunesVisible');
+        localStorage.removeItem('combatDescriptionVisible');
         
         this.playerName = '';
         this.playerLevel = 1;
