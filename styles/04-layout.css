@@ -233,18 +233,7 @@
 }
 
 .player-profile {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background: var(--bg-tertiary);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    transition: background 0.2s;
-}
-
-.player-profile:hover {
-    background: var(--bg-hover);
 }
 
 .header-right {

@@ -74,7 +74,7 @@
 
 /* Collapsible container */
 .battle-log-collapsible {
-    max-height: 500px;
+    max-height: 2000px;
     overflow: hidden;
     transition: max-height 0.3s ease;
 }

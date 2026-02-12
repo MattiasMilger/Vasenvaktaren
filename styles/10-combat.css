@@ -481,7 +481,7 @@
         0 0 1px rgba(0, 0, 0, 0.35),
         0 1px 0 rgba(0, 0, 0, 0.2);
 
-    background: rgba(255, 255, 255, 0.02);
+    background: transparent;
     border-radius: 3px;
 }
 
@@ -1006,15 +1006,61 @@
     margin-bottom: var(--spacing-xs);
 }
 
-.profile-name-input {
+.profile-name-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-name-section label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.profile-name-input-wrapper {
+    position: relative;
+}
+
+.profile-name-input-wrapper input {
     width: 100%;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
     color: var(--text-primary);
+    font-family: var(--font-family);
     font-size: var(--font-size-base);
-    margin-bottom: var(--spacing-sm);
+    font-weight: var(--font-weight-normal);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    box-sizing: border-box;
+}
+
+.profile-name-input-wrapper input::placeholder {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-normal);
+}
+
+.profile-name-input-wrapper input:focus {
+    outline: none;
+    border-color: var(--border-light);
+    box-shadow: 0 0 0 2px rgba(80, 80, 102, 0.25);
+}
+
+.profile-name-saved {
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--font-size-xs);
+    color: var(--accent-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.profile-name-saved.visible {
+    opacity: 1;
 }
 
 .achievement-list {
@@ -1572,13 +1618,13 @@
    ============================================================================= */
 @keyframes tutorial-blink {
     0%, 100% {
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+        box-shadow: 0 0 0 0 transparent;
         border-color: var(--border-color);
     }
     50% {
-        box-shadow: 0 0 15px 3px rgba(76, 175, 80, 0.8),
-                    0 0 25px 5px rgba(76, 175, 80, 0.4);
-        border-color: #4CAF50;
+        box-shadow: 0 0 15px 3px color-mix(in srgb, var(--tutorial-color) 85%, transparent),
+                    0 0 25px 5px color-mix(in srgb, var(--tutorial-color) 40%, transparent);
+        border-color: var(--tutorial-color);
     }
 }
 
@@ -1589,7 +1635,7 @@
 
 /* Ensure tutorial blink works on both buttons and modal items */
 button.tutorial-blink {
-    border-color: #4CAF50 !important;
+    border-color: var(--tutorial-color) !important;
 }
 
 /* =============================================================================
@@ -1665,7 +1711,7 @@ button.tutorial-blink {
 
 @media (max-width: 768px) {
     .combat-log {
-        height: 100px;
+        height: 170px;
     }
 }
 

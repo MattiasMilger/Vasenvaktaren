@@ -132,12 +132,17 @@ if (firstButton) firstButton.focus();
         const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         offerDesc = offerDesc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
 
+        // Highlight Confirm button during first combat tutorial
+        const confirmClass = !gameState.firstCombatTutorialShown && battle.isWildEncounter
+            ? 'btn btn-primary tutorial-blink'
+            : 'btn btn-primary';
+
         itemList.innerHTML = `
             <div class="offer-confirmation">
                 <p class="offer-item-description">${offerDesc}</p>
                 <div class="offer-confirmation-buttons">
                     <button class="btn btn-secondary" onclick="ui.showOfferModal(game.currentBattle)">Cancel</button>
-                    <button class="btn btn-primary" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
+                    <button class="${confirmClass}" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
                 </div>
             </div>
         `;
@@ -243,12 +248,15 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
 
     // Show encounter result
     UIController.prototype.showEncounterResult = function(result) {
+        const tutorialActive = !gameState.firstExploreTutorialShown;
+        const nextClass = tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary';
+
         switch (result.type) {
             case 'vasen':
                 this.showDialogue(
     'Wild Encounter!',
     `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
-    [{ text: 'Battle!', callback: () => game.startBattle(result.vasen) }],
+    [{ text: 'Battle!', callback: () => game.startBattle(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
     false // <-- non-dismissible
 );
                 break;
@@ -265,7 +273,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
     `<p>${itemDialogue}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
+        { text: 'Next', callback: () => game.explore(), class: nextClass }
     ],
     false
 );
@@ -278,7 +286,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
     `<p>${result.dialogue}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
+        { text: 'Next', callback: () => game.explore(), class: nextClass }
     ],
     false
 );
@@ -291,7 +299,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
     `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p><p class="rune-effect">${RUNES[result.runeId].effect}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: 'Next', callback: () => game.explore(), class: 'btn-primary' }
+        { text: 'Next', callback: () => game.explore(), class: nextClass }
     ],
     false
 );

@@ -2,6 +2,19 @@
 // 8g-ui-combat.js - Combat Rendering, Action Buttons, and Battle Animations
 // =============================================================================
 
+UIController.prototype._sizeCombatLog = function() {
+        if (!this.combatLog || this.combatLog.offsetParent === null) return;
+        // Only auto-size on desktop (>768px width)
+        if (window.innerWidth <= 768) {
+                this.combatLog.style.height = '';
+                return;
+        }
+        const rect = this.combatLog.getBoundingClientRect();
+        const remaining = window.innerHeight - rect.top - 16; // 16px bottom padding
+        const minH = 145;
+        this.combatLog.style.height = Math.max(minH, remaining) + 'px';
+};
+
 UIController.prototype.showCombatUI = function() {
         this.zoneDescription.style.display = 'none';
         this.combatArea.style.display = 'flex';
@@ -9,6 +22,14 @@ UIController.prototype.showCombatUI = function() {
         this.combatUI.classList.add('active');
         this.combatLogMessages = [];
         this.combatLog.innerHTML = '';
+
+        // Auto-size combat log to fill remaining viewport on desktop
+        if (!this._boundSizeCombatLog) {
+                this._boundSizeCombatLog = this._sizeCombatLog.bind(this);
+        }
+        window.addEventListener('resize', this._boundSizeCombatLog);
+        // Initial sizing after layout settles
+        requestAnimationFrame(() => this._sizeCombatLog());
 };
 
 UIController.prototype.hideCombatUI = function() {
@@ -16,6 +37,12 @@ UIController.prototype.hideCombatUI = function() {
         this.combatUI.style.display = 'none';
         this.combatUI.classList.remove('active');
         this.zoneDescription.style.display = 'block';
+
+        // Remove resize listener and reset height
+        if (this._boundSizeCombatLog) {
+                window.removeEventListener('resize', this._boundSizeCombatLog);
+        }
+        this.combatLog.style.height = '';
 };
 
 UIController.prototype.renderCombat = function(battle) {
@@ -679,6 +706,8 @@ UIController.prototype.toggleBattleLog = function() {
             toggleText.textContent = 'Hide Battle Log';
             toggleIcon.textContent = '«';
             localStorage.setItem('battleLogCollapsed', 'false');
+            // Re-size after expand transition
+            setTimeout(() => this._sizeCombatLog(), 350);
         } else {
             // Collapse
             collapsible.classList.add('collapsed');

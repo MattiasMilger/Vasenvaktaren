@@ -422,6 +422,16 @@ UIController.prototype.confirmReleaseVasen = function(vasenId) {
         return;
     }
 
+    if (gameState.isFavorite(vasenId)) {
+        this.showMessage("You cannot release a favorited Väsen. Remove it from favorites first.", "error");
+        return;
+    }
+
+    if (gameState.vasenCollection.length <= 1) {
+        this.showMessage("You cannot release your only Väsen!", "error");
+        return;
+    }
+
     this.showDialogue(
         `Release ${vasen.getName()}?`,
         `<p>Are you sure you want to release <strong>${vasen.getDisplayName()}</strong>?<br>

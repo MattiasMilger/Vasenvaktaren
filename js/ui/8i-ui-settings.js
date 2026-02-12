@@ -80,6 +80,17 @@
     };
 
     UIController.prototype.hideProfile = function() {
+        // Auto-save name on close
+        const nameInput = document.getElementById('profile-name-input');
+        if (nameInput) {
+            const newName = nameInput.value.trim();
+            if (newName !== gameState.playerName) {
+                gameState.playerName = newName;
+                const displayName = newName || 'Väktare';
+                this.playerNameDisplay.textContent = 'Player Profile: ' + displayName;
+                gameState.saveGame();
+            }
+        }
         this.profileModal.classList.remove('active');
     };
 
@@ -105,15 +116,15 @@ achievementsHtml += '</div></div>';
         content.innerHTML = `
             <div class="profile-name-section">
                 <label for="profile-name-input">Player Name:</label>
-                <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20">
-                <button id="save-name-btn" class="btn btn-small">Save</button>
+                <div class="profile-name-input-wrapper">
+                    <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off">
+                    <span id="profile-name-saved" class="profile-name-saved">Saved</span>
+                </div>
             </div>
 <div class="profile-stats">
-    <br>
     <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
     <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</p>
     <p>Väsen Types Tamed: ${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</p>
-    <br>
 </div>
 
             ${achievementsHtml}
@@ -121,14 +132,31 @@ achievementsHtml += '</div></div>';
             ${this.renderEndlessTowerRecord()}
         `;
 
-        // Add save name listener
-        document.getElementById('save-name-btn').addEventListener('click', () => {
-            const newName = document.getElementById('profile-name-input').value.trim();
+        // Auto-save name helper
+        const nameInput = document.getElementById('profile-name-input');
+        const savedIndicator = document.getElementById('profile-name-saved');
+        let savedTimeout = null;
+
+        const saveName = () => {
+            const newName = nameInput.value.trim();
+            if (newName === gameState.playerName) return;
             gameState.playerName = newName;
             const displayName = newName || 'Väktare';
-            this.playerNameDisplay.textContent = `Player Profile: ${displayName}`;
+            this.playerNameDisplay.textContent = 'Player Profile: ' + displayName;
             gameState.saveGame();
-            this.showMessage('Name saved!');
+
+            // Flash "Saved" indicator
+            savedIndicator.classList.add('visible');
+            clearTimeout(savedTimeout);
+            savedTimeout = setTimeout(() => savedIndicator.classList.remove('visible'), 1500);
+        };
+
+        nameInput.addEventListener('blur', saveName);
+        nameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                nameInput.blur();
+            }
         });
     };
 

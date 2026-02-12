@@ -105,6 +105,9 @@
     --glow-danger: 0 0 12px rgba(196, 108, 108, 0.3);
     --glow-element: 0 0 8px currentColor;
 
+    /* Tutorial Highlight */
+    --tutorial-color: #46dc5a;
+
     /* Combat Panel Colors */
     --combat-player-bg: rgba(61, 142, 212, 0.08);
     --combat-player-border: #5d7fb8;

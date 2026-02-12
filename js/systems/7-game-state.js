@@ -63,6 +63,7 @@ class GameState {
         this.itemCounter = 0;        // Increments on non-item, resets on item
         this.runeCounter = 0;        // Increments on non-rune, resets on rune
         this.sacredWellCounter = 0;  // Increments on battles only, resets on Sacred Well
+        this.lastEncounterType = null; // Tracks last encounter to prevent consecutive Sacred Wells
     }
     
     // count väsen types tamed
@@ -469,6 +470,14 @@ equipRune(runeId, vasenId, slotIndex = null) {
             }
         }
         
+        // Prevent consecutive Sacred Wells — re-roll as a battle encounter
+        if (encounterType === 'well' && this.lastEncounterType === 'well') {
+            encounterType = 'vasen';
+        }
+
+        // Track last encounter type
+        this.lastEncounterType = encounterType;
+
         // Update pity counters based on encounter type
         switch (encounterType) {
             case 'vasen':
@@ -683,7 +692,8 @@ equipRune(runeId, vasenId, slotIndex = null) {
             battleCounter: this.battleCounter,
             itemCounter: this.itemCounter,
             runeCounter: this.runeCounter,
-            sacredWellCounter: this.sacredWellCounter
+            sacredWellCounter: this.sacredWellCounter,
+            lastEncounterType: this.lastEncounterType
         };
     }
     
@@ -738,6 +748,7 @@ equipRune(runeId, vasenId, slotIndex = null) {
             this.itemCounter = data.itemCounter || 0;
             this.runeCounter = data.runeCounter || 0;
             this.sacredWellCounter = data.sacredWellCounter || 0;
+            this.lastEncounterType = data.lastEncounterType || null;
             
             return true;
         } catch (e) {

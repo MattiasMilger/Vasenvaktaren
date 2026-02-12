@@ -584,9 +584,10 @@ button:focus-visible,
     outline-offset: 2px;
 }
 
+/* Tab buttons use .active class for visual state - no extra focus outline needed */
+.tab-btn:focus,
 .tab-btn:focus-visible {
-    outline: 2px solid var(--accent-gold);
-    outline-offset: -2px;
+    outline: none;
 }
 
 .vasen-card:focus-visible,
