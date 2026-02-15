@@ -92,11 +92,11 @@
 }
 
 .github-link {
-    color: var(--accent-primary);
+    color: var(--text-accent);
     text-decoration: none;
     transition: color var(--transition-base);
 }
 
 .github-link:hover {
-    color: #a2ba92;
+    color: #e8d8a8;
 }

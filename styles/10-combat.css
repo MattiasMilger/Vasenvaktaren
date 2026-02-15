@@ -1014,8 +1014,10 @@
 }
 
 .profile-name-section label {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
     color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
 }
 
 .profile-name-input-wrapper {
@@ -1061,6 +1063,43 @@
 
 .profile-name-saved.visible {
     opacity: 1;
+}
+
+/* Profile section headings */
+.profile-collection-section,
+.achievements-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-collection-section h4,
+.achievements-section h4 {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.collection-stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.collection-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collection-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.collection-value {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
 }
 
 .achievement-list {

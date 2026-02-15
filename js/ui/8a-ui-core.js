@@ -13,7 +13,7 @@ class UIController {
         const savedRunes = localStorage.getItem('combatRunesVisible');
         this.runeDescriptionsVisible = savedRunes !== null ? savedRunes === 'true' : false;
         const savedDesc = localStorage.getItem('combatDescriptionVisible');
-        this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : false;
+        this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : true;
         const savedCards = localStorage.getItem('combatCardsMinimized');
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
         this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
@@ -214,7 +214,7 @@ document.addEventListener('click', (e) => {
 
         // Add a small delay before hiding to prevent flash when transitioning between modals
         this.overlayHideTimeout = setTimeout(() => {
-            const activeModals = document.querySelectorAll('.modal.active');
+            const activeModals = document.querySelectorAll('.modal.active:not(#settings-modal):not(#profile-modal):not(#combat-tips-modal)');
             if (activeModals.length === 0 && this.modalOverlay) {
                 this.modalOverlay.classList.remove('active');
             }

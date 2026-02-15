@@ -48,7 +48,15 @@ UIController.prototype.getPreviousZone = function(zoneId) {
     // Select zone
 UIController.prototype.selectZone = function(zoneId) {
         gameState.currentZone = zoneId;
-        this.renderZones();
+
+        // Update selection class without full re-render to avoid flash
+        const zoneButtons = this.zoneList.querySelectorAll('.zone-item');
+        ZONE_ORDER.forEach((id, index) => {
+            if (zoneButtons[index]) {
+                zoneButtons[index].classList.toggle('selected', id === zoneId);
+            }
+        });
+
         this.updateZoneDescription();
         this.updateExploreButton();
         gameState.saveGame();

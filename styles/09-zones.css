@@ -339,3 +339,13 @@
     background: var(--bg-tertiary);
     border-color: var(--border-color);
 }
+
+#challenge-btn {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+}
+
+#challenge-btn:hover:not(:disabled) {
+    background: rgba(220, 200, 150, 0.15);
+    border-color: var(--text-accent);
+}

@@ -121,11 +121,26 @@ achievementsHtml += '</div></div>';
                     <span id="profile-name-saved" class="profile-name-saved">Saved</span>
                 </div>
             </div>
-<div class="profile-stats">
-    <p>Runes Collected: ${gameState.collectedRunes.size} / ${RUNE_LIST.length}</p>
-    <p>Zones Cleared: ${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</p>
-    <p>Väsen Types Tamed: ${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</p>
-</div>
+
+            <div class="profile-collection-section">
+                <h4>Collection:</h4>
+                <div class="achievement">
+                    <div class="collection-stats">
+                        <div class="collection-stat">
+                            <span class="collection-label">Runes Collected</span>
+                            <span class="collection-value">${gameState.collectedRunes.size} / ${RUNE_LIST.length}</span>
+                        </div>
+                        <div class="collection-stat">
+                            <span class="collection-label">Zones Cleared</span>
+                            <span class="collection-value">${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</span>
+                        </div>
+                        <div class="collection-stat">
+                            <span class="collection-label">Väsen Types Tamed</span>
+                            <span class="collection-value">${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             ${achievementsHtml}
 

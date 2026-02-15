@@ -27,7 +27,7 @@ const GAME_CONFIG = {
     // EXPERIENCE DISTRIBUTION
     // =============================================================================
     // Base experience yield per enemy level (modified by rarity)
-    BASE_EXP_YIELD: 45,
+    BASE_EXP_YIELD: 50,
     
     // Experience percentages awarded based on participation level
     EXP_KILLING_BLOW: 1.0,              // 100% - Dealt the final blow that knocked out the enemy
