@@ -7,6 +7,7 @@ All notable changes to **Väsenväktaren** will be documented in this file.
 ## beta 1.8 - performance (2026-02-15)
 
 - UI and performance improvements
+- Ability to cancel auto battle
 
 ## beta 1.7 - Auto Battle (2026-02-11)
 

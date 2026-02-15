@@ -121,6 +121,13 @@ Game.prototype.showOfferModal = function() {
 Game.prototype.handleAutoBattle = function() {
     if (!this.currentBattle) return;
 
+    // If already auto battling, cancel it
+    if (this.currentBattle.isAutoBattle) {
+        this.currentBattle.isAutoBattle = false;
+        if (this.currentBattle.onUpdate) this.currentBattle.onUpdate();
+        return;
+    }
+
     ui.showDialogue(
         'Auto Battle',
         '<p>Let the AI fight for you? The battle will play out automatically using the same AI as the enemy.</p>',

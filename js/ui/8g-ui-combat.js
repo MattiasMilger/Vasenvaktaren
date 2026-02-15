@@ -444,8 +444,8 @@ UIController.prototype.renderActionButtons = function(battle) {
     // Auto Battle button
     const autoBattleBtn = document.getElementById('btn-auto-battle');
     if (battle.isAutoBattle) {
-        autoBattleBtn.textContent = 'Auto Battling...';
-        autoBattleBtn.disabled = true;
+        autoBattleBtn.textContent = 'Cancel Auto Battle';
+        autoBattleBtn.disabled = false;
         autoBattleBtn.classList.add('auto-battle-active');
     } else {
         autoBattleBtn.textContent = 'Auto Battle';
