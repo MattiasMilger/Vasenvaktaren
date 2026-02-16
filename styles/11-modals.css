@@ -434,8 +434,8 @@
     .panel-content {
         overflow-y: auto;
         overflow-x: hidden;
-        min-height: 200px;
-        max-height: 800px;
+        min-height: 150px;
+        max-height: 45vh;
     }
 
     .vasen-details-panel {

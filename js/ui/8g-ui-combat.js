@@ -224,7 +224,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
             <div class="rune-collapsible ${this.combatDescriptionVisible ? 'open' : ''}">
                 <div class="rune-collapsible-header" onclick="toggleCombatDescriptions()">
                     <span class="toggle-icon"></span>
-                    Description
+                    <span class="label-full">Description</span>
+                    <span class="label-short">Desc</span>
                 </div>
                 <div class="rune-collapsible-body">
                     ${vasen.species.description}

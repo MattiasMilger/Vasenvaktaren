@@ -23,7 +23,6 @@ class UIController {
     init() {
         this.cacheElements();
         this.setupEventListeners();
-        this.restoreInventoryState();
         this.restoreBattleLogState();
         this.restoreCombatCardsState();
     }
@@ -161,12 +160,6 @@ if (this.modalOverlay) {
         });
         this.checkAndHideOverlay();
     });
-}
-
-// Inventory toggle for mobile
-const inventoryToggleBtn = document.getElementById('inventory-toggle-btn');
-if (inventoryToggleBtn) {
-    inventoryToggleBtn.addEventListener('click', () => this.toggleInventory());
 }
 
 // Battle log toggle for mobile

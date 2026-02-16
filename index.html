@@ -96,29 +96,19 @@
         <main class="game-main">
             <!-- Left Panel - Inventory -->
             <aside class="panel panel-left">
-                <!-- Mobile Inventory Toggle Button -->
-                <button id="inventory-toggle-btn" class="inventory-toggle-btn">
-                    <span class="toggle-text">Hide Inventory</span>
-                    <span class="toggle-icon">«</span>
-                </button>
-                
-                <!-- Collapsible Inventory Container -->
-                <div id="inventory-collapsible" class="inventory-collapsible">
-                    <div class="panel-tabs">
-                        <button id="tab-vasen" class="tab-btn active" data-tab="vasen">Väsen</button>
-                        <button id="tab-runes" class="tab-btn" data-tab="runes">Runes</button>
-                        <button id="tab-items" class="tab-btn" data-tab="items">Items</button>
-                    </div>
-                    <div class="panel-content">
-                        <!-- Väsen Tab -->
-                        <div id="inventory-vasen" class="tab-content active"></div>
-                        <!-- Runes Tab -->
-                        <div id="inventory-runes" class="tab-content"></div>
-                        <!-- Items Tab -->
-                        <div id="inventory-items" class="tab-content"></div>
-                    </div>
+                <div class="panel-tabs">
+                    <button id="tab-vasen" class="tab-btn active" data-tab="vasen">Väsen</button>
+                    <button id="tab-runes" class="tab-btn" data-tab="runes">Runes</button>
+                    <button id="tab-items" class="tab-btn" data-tab="items">Items</button>
                 </div>
-                <!-- Vasen Details Panel (outside collapsible so it stays visible when inventory is hidden) -->
+                <div class="panel-content">
+                    <!-- Väsen Tab -->
+                    <div id="inventory-vasen" class="tab-content active"></div>
+                    <!-- Runes Tab -->
+                    <div id="inventory-runes" class="tab-content"></div>
+                    <!-- Items Tab -->
+                    <div id="inventory-items" class="tab-content"></div>
+                </div>
                 <div id="vasen-details-panel" class="vasen-details-panel"></div>
             </aside>
 
