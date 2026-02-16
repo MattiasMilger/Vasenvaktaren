@@ -45,7 +45,8 @@
 
 .rune-card-equipped {
     font-size: var(--font-size-xs);
-    color: var(--accent-primary);
+    color: var(--text-primary);
+    font-weight: bold;
 }
 
 /* =============================================================================
