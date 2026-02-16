@@ -148,7 +148,7 @@ Vasenvaktaren/
 
 - [x] Finish Main Functionality (100%)
 - [ ] Make mobile friendly (90%)
-- [ ] Game Balance (75%)
+- [ ] Game Balance (80%)
 - [x] Introduce endgame system (100%)
 - [ ] Final Polish (85%)
 
