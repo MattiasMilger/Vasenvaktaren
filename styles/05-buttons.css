@@ -48,8 +48,8 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: #a2ba92;
-    border-color: #a2ba92;
+    background: var(--color-positive-soft);
+    border-color: var(--color-positive-soft);
     box-shadow: var(--glow-primary);
 }
 
@@ -66,8 +66,8 @@
 }
 
 .btn-danger:hover:not(:disabled) {
-    background: #d68080;
-    border-color: #d68080;
+    background: var(--color-negative-soft);
+    border-color: var(--color-negative-soft);
     box-shadow: var(--glow-danger);
 }
 
@@ -98,5 +98,5 @@
 }
 
 .github-link:hover {
-    color: #e8d8a8;
+    color: var(--text-accent-hover);
 }

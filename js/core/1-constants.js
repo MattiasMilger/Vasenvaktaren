@@ -231,11 +231,11 @@ const ELEMENTS = {
 const ELEMENT_LIST = Object.values(ELEMENTS);
 
 const ELEMENT_COLORS = {
-    [ELEMENTS.EARTH]: '#8B6914',
-    [ELEMENTS.NATURE]: '#2E7D32',
-    [ELEMENTS.WATER]: '#1565C0',
-    [ELEMENTS.FIRE]: '#C62828',
-    [ELEMENTS.WIND]: '#7E57C2'
+    [ELEMENTS.EARTH]: '#a67c3a',
+    [ELEMENTS.NATURE]: '#3d9e52',
+    [ELEMENTS.WATER]: '#3d8ed4',
+    [ELEMENTS.FIRE]: '#e0622a',
+    [ELEMENTS.WIND]: '#9b8fc4'
 };
 
 const DAMAGE_MULTIPLIERS = {

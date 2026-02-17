@@ -105,49 +105,49 @@
 .vasen-card[data-rarity="Common"]:hover,
 .vasen-card.rarity-common:hover {
     border-color: var(--rarity-common);
-    box-shadow: 0 2px 8px rgba(152, 152, 170, 0.3);
+    box-shadow: var(--rarity-common-glow-shadow);
 }
 
 .vasen-card[data-rarity="Uncommon"]:hover,
 .vasen-card.rarity-uncommon:hover {
     border-color: var(--rarity-uncommon);
-    box-shadow: 0 2px 8px rgba(95, 161, 58, 0.3);
+    box-shadow: var(--rarity-uncommon-glow-shadow);
 }
 
 .vasen-card[data-rarity="Rare"]:hover,
 .vasen-card.rarity-rare:hover {
     border-color: var(--rarity-rare);
-    box-shadow: 0 2px 8px rgba(61, 142, 212, 0.3);
+    box-shadow: var(--rarity-rare-glow-shadow);
 }
 
 .vasen-card[data-rarity="Mythical"]:hover,
 .vasen-card.rarity-mythical:hover {
     border-color: var(--rarity-mythical);
-    box-shadow: 0 2px 8px rgba(212, 125, 255, 0.4);
+    box-shadow: var(--rarity-mythical-glow-shadow);
 }
 
 .vasen-card.selected[data-rarity="Common"],
 .vasen-card.selected.rarity-common {
     border-color: var(--rarity-common);
-    box-shadow: 0 0 12px rgba(152, 152, 170, 0.4);
+    box-shadow: var(--rarity-common-selected-shadow);
 }
 
 .vasen-card.selected[data-rarity="Uncommon"],
 .vasen-card.selected.rarity-uncommon {
     border-color: var(--rarity-uncommon);
-    box-shadow: 0 0 12px rgba(95, 161, 58, 0.4);
+    box-shadow: var(--rarity-uncommon-selected-shadow);
 }
 
 .vasen-card.selected[data-rarity="Rare"],
 .vasen-card.selected.rarity-rare {
     border-color: var(--rarity-rare);
-    box-shadow: 0 0 12px rgba(61, 142, 212, 0.4);
+    box-shadow: var(--rarity-rare-selected-shadow);
 }
 
 .vasen-card.selected[data-rarity="Mythical"],
 .vasen-card.selected.rarity-mythical {
     border-color: var(--rarity-mythical);
-    box-shadow: 0 0 16px rgba(212, 125, 255, 0.5);
+    box-shadow: var(--rarity-mythical-selected-shadow);
 }
 
 .vasen-card.selected {
@@ -649,7 +649,7 @@
 
 .ability-type-tag {
     font-size: var(--font-size-xs);
-    color: #e8e8f0;
+    color: var(--text-secondary);
     padding: 1px 4px;
     background: var(--bg-tertiary);
     border-radius: 2px;
@@ -665,7 +665,7 @@
 .ability-element {
     padding: 1px 4px;
     border-radius: 2px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .ability-element.element-earth { background: var(--element-earth); }
@@ -675,12 +675,12 @@
 .ability-element.element-wind { background: var(--element-wind); }
 
 .ability-power {
-    color: #e8e8f0;
+    color: var(--text-secondary);
     font-weight: 600;
 }
 
 .ability-cost {
-    color: #6a9aff;
+    color: var(--megin-highlight);
     font-weight: 600;
 }
 
