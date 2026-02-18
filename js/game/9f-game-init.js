@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
                 el.classList.remove('open');
             });
+            clearCombatCardPopupStyles();
         }
     });
 

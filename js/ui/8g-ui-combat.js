@@ -156,6 +156,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
 
     // Build combatant panel
     panel.innerHTML = `
+        <div class="combatant-scroll-inner">
         <span class="combat-card-toggle" onclick="ui.toggleCombatCards()">${this.combatCardsMinimized ? '»' : '«'}</span>
         <div class="combatant-header">
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
@@ -244,6 +245,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         <div class="combatant-attack-elements">
             <span class="elements-label">Attack Elements:</span>
             ${attackElementsHtml}
+        </div>
         </div>
     `;
 

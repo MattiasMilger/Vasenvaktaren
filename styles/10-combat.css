@@ -81,13 +81,16 @@
     position: relative; /* For ability animation overlay positioning */
     flex: 1;
     max-width: 240px;
-    padding: var(--spacing-md);
     background: var(--bg-card);
     border-radius: var(--border-radius-lg);
     text-align: center;
-    overflow: visible;
+    overflow: hidden; /* Clip scrolling content to border-radius */
     box-shadow: var(--shadow-md);
     border: 2px solid var(--border-color);
+}
+
+.combatant-scroll-inner {
+    padding: var(--spacing-md);
 }
 
 .combatant-panel.player-side {

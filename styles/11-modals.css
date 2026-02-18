@@ -200,12 +200,14 @@
     .combatant-panel {
         max-width: 100%;
         width: 100%;
+    }
 
-        /* NEW: make combatant cards scrollable */
-        min-height: 0 !important;
-        max-height: 45vh !important;
-        overflow-y: auto !important;
-        overflow-x: auto !important;
+    .combatant-panel .combatant-scroll-inner {
+        /* make combatant cards scrollable */
+        min-height: 0;
+        max-height: 45vh;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .combat-versus {
@@ -892,8 +894,8 @@ button:focus-visible,
     .element-matchup-collapsible .matchup-details {
         position: absolute;
         top: 100%;
-        left: 0 !important;
-        right: auto !important;
+        left: 0;
+        right: auto;
         transform: none;
         max-width: 90vw;
         z-index: 9999;
@@ -922,18 +924,11 @@ button:focus-visible,
         flex-wrap: nowrap;
     }
     
-    /* Ensure element matchups in combatant panel have constrained width */
-    .combatant-panel .element-matchup-collapsible .matchup-details {
-        max-width: none;
-        overflow: visible;
+    /* Combatant panel popups use position:fixed via JS — rows wrap to fit width */
+    .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
+        flex-wrap: wrap;
     }
-    
-    /* Ensure it stays within combatant panel */
-    .combatant-panel .combatant-attack-elements .element-matchup-collapsible .matchup-details {
-        max-width: none;
-        overflow: visible;
-    }
-    
+
     /* KEY FIX: Give family popup content a min-width so it extends beyond container */
     .family-matchup-collapsible .family-description-popup {
         position: absolute;
@@ -945,22 +940,21 @@ button:focus-visible,
         overflow: visible;
         white-space: normal;
     }
-    
-    /* Ensure popup stays within combatant panel on mobile */
+
+    /* Combatant panel family popup: position handled by JS, content wraps */
     .combatant-panel .family-matchup-collapsible .family-description-popup {
-        max-width: none;
         left: 0;
         transform: none;
-        overflow: visible;
     }
-    
-    /* KEY FIX: Inner content has min-width to force horizontal scroll */
+
+    /* KEY FIX: Inner content has min-width to force horizontal scroll (non-card contexts) */
     .family-matchup-collapsible .family-description-popup > * {
         min-width: 300px;
     }
-    
+
+    /* No forced min-width inside combatant card — content wraps instead */
     .combatant-panel .family-matchup-collapsible .family-description-popup > * {
-        min-width: 280px;
+        min-width: 0;
     }
     
     .family-matchup-collapsible .family-description-popup p {
@@ -1023,7 +1017,6 @@ button:focus-visible,
     flex: 1 1 0;
     min-width: 0;
     max-width: 100%;
-    overflow: auto;
 }
 
 .combat-ui {
@@ -1075,11 +1068,16 @@ button:focus-visible,
     overflow: visible;
 }
 
-.combat-arena .combatant-panel {
+.combat-arena .combatant-panel .combatant-scroll-inner {
     min-height: 0;
     max-height: 45vh;
     overflow-y: auto;
-    overflow-x: auto;
+    overflow-x: hidden;
+}
+
+/* Scrollbar on the inner scroll wrapper — panel's overflow:hidden clips it to rounded corners */
+.combatant-panel .combatant-scroll-inner::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 /* Combat area gets its own space */ .combat-area { flex: 0 0 auto; min-height: 200px; }

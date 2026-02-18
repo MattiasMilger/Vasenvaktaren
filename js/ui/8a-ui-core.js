@@ -180,6 +180,7 @@ document.addEventListener('click', (e) => {
         document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open, .family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
             el.classList.remove('open');
         });
+        clearCombatCardPopupStyles();
     }
 });
 
@@ -228,6 +229,55 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// Clear fixed-position inline styles from all combatant card popups
+function clearCombatCardPopupStyles() {
+    document.querySelectorAll('.combatant-panel .matchup-details, .combatant-panel .family-description-popup').forEach(popup => {
+        popup.style.cssText = '';
+    });
+}
+
+// Position a popup using fixed viewport coords so it escapes overflow:hidden on the panel.
+// Horizontally centered on the panel; opens in whichever vertical direction has more room.
+function positionPopupForCombatCard(popup, trigger) {
+    const panel = trigger.closest('.combatant-panel');
+    if (!panel) return;
+
+    const panelRect  = panel.getBoundingClientRect();
+    const triggerRect = trigger.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - triggerRect.bottom;
+    const spaceAbove = triggerRect.top;
+
+    // Center on the panel so the popup is never left-edge clamped on small screens
+    const popupWidth = Math.min(260, window.innerWidth - 16);
+    let left = panelRect.left + panelRect.width / 2 - popupWidth / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - popupWidth - 8));
+
+    // Always open toward whichever side has more space; cap height to that space
+    const showBelow = spaceBelow >= spaceAbove;
+    const availableSpace = showBelow ? spaceBelow : spaceAbove;
+    const maxHeight = Math.max(Math.min(availableSpace - 4, 260), 80);
+
+    popup.style.position = 'fixed';
+    popup.style.left     = left + 'px';
+    popup.style.width    = popupWidth + 'px';
+    popup.style.maxWidth = 'none';       // override CSS max-width rules
+    popup.style.transform = 'none';      // override CSS translateX(-50%) on family popup
+    popup.style.maxHeight = maxHeight + 'px';
+    popup.style.overflowY = 'auto';
+    popup.style.overflowX = 'hidden';
+    popup.style.overscrollBehavior = 'contain';
+    popup.style.zIndex = '99999';
+
+    // Use 'auto' not '' so CSS bottom/top values can't leak back in
+    if (showBelow) {
+        popup.style.top    = (triggerRect.bottom + 4) + 'px';
+        popup.style.bottom = 'auto';
+    } else {
+        popup.style.top    = 'auto';
+        popup.style.bottom = (window.innerHeight - triggerRect.top + 4) + 'px';
+    }
+}
+
 // Helper function to toggle element matchup collapsibles (closes others when one opens)
 function toggleElementMatchup(element, event) {
     // Stop propagation to prevent global click handler from closing immediately
@@ -248,9 +298,16 @@ function toggleElementMatchup(element, event) {
         el.classList.remove('open');
     });
 
+    clearCombatCardPopupStyles();
+
     // If we're opening this one, add the open class
     if (isOpening) {
         parent.classList.add('open');
+        // In a combatant card the popup is clipped by overflow:hidden — use fixed positioning instead
+        if (parent.closest('.combatant-panel')) {
+            const popup = parent.querySelector('.matchup-details');
+            if (popup) positionPopupForCombatCard(popup, element);
+        }
     }
 }
 
@@ -274,9 +331,16 @@ function toggleFamilyDescription(element, event) {
         el.classList.remove('open');
     });
 
+    clearCombatCardPopupStyles();
+
     // If we're opening this one, add the open class
     if (isOpening) {
         parent.classList.add('open');
+        // In a combatant card the popup is clipped by overflow:hidden — use fixed positioning instead
+        if (parent.closest('.combatant-panel')) {
+            const popup = parent.querySelector('.family-description-popup');
+            if (popup) positionPopupForCombatCard(popup, element);
+        }
     }
 }
 
