@@ -88,9 +88,8 @@ Collection based achievements
 
 ```
 Vasenvaktaren/
-├── index.html
-├── README.md
-├── CHANGELOG.MD
+├── index.html                      (game initialization)
+├── README.md                       (project information)
 │
 ├── styles/
 │   ├── main.css                    (import file)
