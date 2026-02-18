@@ -91,7 +91,6 @@ Vasenvaktaren/
 ├── index.html
 ├── README.md
 ├── CHANGELOG.MD
-├── MIGRATION.md
 │
 ├── styles/
 │   ├── main.css                    (import file)
@@ -152,9 +151,9 @@ Vasenvaktaren/
 
 - [x] Finish Main Functionality (100%)
 - [ ] Make mobile friendly (90%)
-- [ ] Game Balance (80%)
+- [ ] Game Balance (90%)
 - [x] Introduce endgame system (100%)
-- [ ] Final Polish (85%)
+- [ ] Final Polish (90%)
 
 ## Future Ideas
 - Rune combinations
