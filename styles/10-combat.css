@@ -494,7 +494,7 @@
 }
 
 .combat-log-weak {
-    color: var(--color-negative-soft);
+    color: var(--accent-danger);
     font-weight: 700;
 }
 

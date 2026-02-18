@@ -281,7 +281,7 @@ if (this.isOver && this.onEnd) {
         if (!playerAlive) {
             this.isOver = true;
             this.winner = 'enemy';
-            this.addLog(`${this.playerActive.getName()} has fainted! You lost and ran away!`, 'defeat');
+            this.addLog(`${this.playerActive.getDisplayName()} has fainted! You lost and ran away!`, 'defeat');
         } else if (!enemyAlive) {
             this.isOver = true;
             this.winner = 'player';
@@ -295,7 +295,7 @@ if (this.isOver && this.onEnd) {
     playerUseAbility(abilityName, allyTarget = null) {
         if (this.isOver) return null;
         if (this.playerActive.battleFlags.hasSwapSickness) {
-            this.addLog(`${this.playerActive.getName()} is preparing and cannot act this turn.`, 'status');
+            this.addLog(`${this.playerActive.getDisplayName()} is preparing and cannot act this turn.`, 'status');
             return this.enemyTurn();
         }
         
@@ -354,7 +354,7 @@ if (this.isOver && this.onEnd) {
         this.startTurn();
         
         // Swap has highest priority
-        this.addLog(`${target.getName()} enters the fray!`, 'swap');
+        this.addLog(`${target.getDisplayName()} enters the fray!`, 'swap');
         this.setPlayerActive(index, true);
         
         // Enemy still acts
@@ -374,7 +374,7 @@ if (this.isOver && this.onEnd) {
         if (this.isOver) return null;
         
         this.startTurn();
-        this.addLog(`${this.playerActive.getName()} waits.`, 'pass');
+        this.addLog(`${this.playerActive.getDisplayName()} waits.`, 'pass');
         
         const enemyAction = this.getEnemyAction();
         const results = { player: { action: 'pass' }, enemy: null };
@@ -403,7 +403,7 @@ if (this.isOver && this.onEnd) {
         }
         
         this.giftsGiven++;
-        this.addLog(`<span class="taming-item">${itemName}</span> was gifted to ${this.enemyActive.getName()}.`, 'gift');
+        this.addLog(`<span class="taming-item">${itemName}</span> was gifted to ${this.enemyActive.getDisplayName()}.`, 'gift');
         
         const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
         
@@ -434,7 +434,7 @@ if (this.isOver && this.onEnd) {
         results.enemy = this.executeEnemyAction(enemyAction);
         
         // Add the item response AFTER combat events
-        this.addLog(`Tell me ${this.enemyActive.getName()}, what is it that you desire the most?`, 'dialogue');
+        this.addLog(`Tell me ${this.enemyActive.getDisplayName()}, what is it that you desire the most?`, 'dialogue');
         this.addLog(`If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
         this.handlePostTurn(results);
         this.endTurn();
@@ -468,7 +468,7 @@ if (this.isOver && this.onEnd) {
         attacker.spendMegin(meginCost);
         
         // Log ability use
-        this.addLog(`${attacker.getName()} uses ${ability.name}!`, 'action');
+        this.addLog(`${attacker.getDisplayName()} uses ${ability.name}!`, 'action');
         
         // Trigger attack animation based on ability type
         if (this.onAttack) {
@@ -476,7 +476,7 @@ if (this.isOver && this.onEnd) {
         }
         
         if (meginCost > 0) {
-            this.addLog(`${attacker.getName()} used ${meginCost} Megin!`, 'megin');
+            this.addLog(`${attacker.getDisplayName()} used ${meginCost} Megin!`, 'megin');
         }
         
         const result = {
@@ -497,8 +497,8 @@ if (this.isOver && this.onEnd) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     result.runeEffects.push({ rune: 'MANNAZ', effect: `healed ${healAmount}` });
-                    this.addLog(`${RUNES.MANNAZ.symbol} ${RUNES.MANNAZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                    this.addLog(`${RUNES.MANNAZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.MANNAZ.name} was activated!`, 'rune');
+                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                 }
             }
             
@@ -520,7 +520,7 @@ if (this.isOver && this.onEnd) {
         
         // Apply damage
         const actualDamage = defender.takeDamage(result.damage);
-        this.addLog(`${attacker.getName()} deals ${actualDamage} damage to ${defender.getName()}!`, 'damage');
+        this.addLog(`${attacker.getDisplayName()} deals ${actualDamage} damage to ${defender.getDisplayName()}!`, 'damage');
         
         // Trigger family passives after taking damage
         // Drake: Check health threshold
@@ -560,11 +560,11 @@ if (this.isOver && this.onEnd) {
         if (willKnockout) {
             // Hagal rune: Debuff opponent on knockout (triggers BEFORE revive check)
             if (defender.hasRune('HAGAL')) {
-                this.addLog(`${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
+                this.addLog(`${RUNES.HAGAL.symbol} ${defender.getDisplayName()}'s ${RUNES.HAGAL.name} was activated!`, 'rune');
                 ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
                     attacker.modifyAttributeStage(stat, -1);
                 });
-                this.addLog(`${attacker.getName()}'s attributes were lowered!`, 'debuff');
+                this.addLog(`${attacker.getDisplayName()}'s attributes were lowered!`, 'debuff');
             }
             
             // Vålnad family passive: Deathless - attempt to revive
@@ -573,19 +573,19 @@ if (this.isOver && this.onEnd) {
             if (!revived) {
                 // If not revived, log the knockout
                 if (isPlayer) {
-                    this.addLog(`${defender.getName()} collapses!`, 'knockout');
+                    this.addLog(`${defender.getDisplayName()} collapses!`, 'knockout');
                     // Mark killing blow
                     const tracker = this.expTracker.get(attacker.id);
                     if (tracker) tracker.dealtKillingBlow = true;
                 } else {
-                    this.addLog(`${defender.getName()} has fainted!`, 'knockout');
+                    this.addLog(`${defender.getDisplayName()} has fainted!`, 'knockout');
                 }
             }
         }
         
         // Thurs: damage reflect as Mixed hit (only if not knocked out)
         if (!attacker.isKnockedOut() && defender.hasRune('THURS') && result.damage > 0) {
-            this.addLog(`${RUNES.THURS.symbol} ${RUNES.THURS.name} was activated!`, 'rune');
+            this.addLog(`${RUNES.THURS.symbol} ${defender.getDisplayName()}'s ${RUNES.THURS.name} was activated!`, 'rune');
             
             // Calculate reflected damage as Mixed-type attack
             // The defender (Thurs user) becomes the "attacker" for the reflection
@@ -594,35 +594,35 @@ if (this.isOver && this.onEnd) {
             
             if (reflectResult.damage > 0) {
                 attacker.takeDamage(reflectResult.damage);
-                this.addLog(`${attacker.getName()} took ${reflectResult.damage} reflected damage!`, 'damage');
+                this.addLog(`${attacker.getDisplayName()} took ${reflectResult.damage} damage!`, 'damage');
                 result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectResult.damage}` });
-                
+
                 // Log matchup for reflected damage
                 if (reflectResult.matchup === 'POTENT') {
-                    this.addLog('Potent reflection!', 'potent');
+                    this.addLog('Potent hit!', 'potent');
                 } else if (reflectResult.matchup === 'WEAK') {
-                    this.addLog('Weak reflection!', 'weak');
+                    this.addLog('Weak hit!', 'weak');
                 }
                 
                 // Apply Naudiz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {
-                    this.addLog(`${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                    this.addLog(`${RUNES.NAUDIZ.symbol} ${defender.getDisplayName()}'s ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                     const stats = ['strength', 'wisdom', 'defense', 'durability'];
                     for (let i = 0; i < 2; i++) {
                         const randomIndex = Math.floor(Math.random() * stats.length);
                         const stat = stats[randomIndex];
                         attacker.modifyAttributeStage(stat, -1);
-                        this.addLog(`${attacker.getName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
+                        this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
                     }
                     result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
                 }
                 
                 // Apply Inguz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('INGUZ')) {
-                    this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
+                    this.addLog(`${RUNES.INGUZ.symbol} ${defender.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
                     const meginDrain = RUNES.INGUZ.mechanic.value; // Get value from rune definition
                     attacker.spendMegin(meginDrain);
-                    this.addLog(`${attacker.getName()} lost ${meginDrain} Megin!`, 'megin');
+                    this.addLog(`${attacker.getDisplayName()} lost ${meginDrain} Megin!`, 'megin');
                     result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin on weak reflection' });
                 }
             }
@@ -806,22 +806,22 @@ if (this.isOver && this.onEnd) {
             stats.forEach(stat => {
                 const result = targetVasen.modifyAttributeStage(stat, effect.stages);
                 if (result.capped) {
-                    this.addLog(`${targetVasen.getName()}'s ${stat} cannot be raised any higher.`, 'status');
+                    this.addLog(`${targetVasen.getDisplayName()}'s ${stat} cannot be raised any higher.`, 'status');
                 } else if (result.changed !== 0) {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
-                    this.addLog(`${targetVasen.getName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
+                    this.addLog(`${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
                     
                     // Gifu: share first buff
                     if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
                         user.battleFlags.gifuTriggered = true;
-                        this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        this.addLog(`${RUNES.GIFU.symbol} ${user.getDisplayName()}'s ${RUNES.GIFU.name} was activated!`, 'rune');
                         
                         const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                         allies.forEach(ally => {
                             if (ally !== user && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(stat, effect.stages);
-                                this.addLog(`${ally.getName()}'s ${stat} was also raised!`, 'buff');
+                                this.addLog(`${ally.getDisplayName()}'s ${stat} was also raised!`, 'buff');
                             }
                         });
                     }
@@ -834,23 +834,23 @@ if (this.isOver && this.onEnd) {
             // Wynja: block first debuff
             if (!targetVasen.battleFlags.wynjaTriggered && targetVasen.hasRune('WYNJA')) {
                 targetVasen.battleFlags.wynjaTriggered = true;
-                this.addLog(`${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                this.addLog(`${targetVasen.getName()} blocked the debuff!`, 'block');
+                this.addLog(`${RUNES.WYNJA.symbol} ${targetVasen.getDisplayName()}'s ${RUNES.WYNJA.name} was activated!`, 'rune');
+                this.addLog(`${targetVasen.getDisplayName()} blocked the debuff!`, 'block');
                 
                 // Raise random attribute
                 const randomStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                 targetVasen.modifyAttributeStage(randomStat, 1);
-                this.addLog(`${targetVasen.getName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                this.addLog(`${targetVasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 return effects;
             }
             
             stats.forEach(stat => {
                 const result = targetVasen.modifyAttributeStage(stat, -effect.stages);
                 if (result.capped) {
-                    this.addLog(`${targetVasen.getName()}'s ${stat} cannot be lowered any further.`, 'status');
+                    this.addLog(`${targetVasen.getDisplayName()}'s ${stat} cannot be lowered any further.`, 'status');
                 } else if (result.changed !== 0) {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
-                    this.addLog(`${targetVasen.getName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
+                    this.addLog(`${targetVasen.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
                     effects.push({ stat, change: result.changed });
                 }
             });
@@ -875,10 +875,10 @@ if (this.isOver && this.onEnd) {
         if (elementAbilityBuffs[abilityElement] && attacker.hasRune(elementAbilityBuffs[abilityElement].rune)) {
             if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
                 const buffData = elementAbilityBuffs[abilityElement];
-                this.addLog(`${RUNES[buffData.rune].symbol} ${RUNES[buffData.rune].name} was activated!`, 'rune');
+                this.addLog(`${RUNES[buffData.rune].symbol} ${attacker.getDisplayName()}'s ${RUNES[buffData.rune].name} was activated!`, 'rune');
                 buffData.stats.forEach(stat => {
                     attacker.modifyAttributeStage(stat, 1);
-                    this.addLog(`${attacker.getName()}'s ${stat} was raised by 1 stage!`, 'buff');
+                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by 1 stage!`, 'buff');
                 });
                 result.runeEffects.push({ rune: buffData.rune, effect: 'buffed' });
             }
@@ -889,8 +889,8 @@ if (this.isOver && this.onEnd) {
             if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
                 if (healAmount > 0) {
-                    this.addLog(`${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                    this.addLog(`${RUNES.ALGIZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.ALGIZ.name} was activated!`, 'rune');
+                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
                 }
             }
@@ -901,8 +901,8 @@ if (this.isOver && this.onEnd) {
             if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                 if (healAmount > 0) {
-                    this.addLog(`${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                    this.addLog(`${RUNES.JERA.symbol} ${attacker.getDisplayName()}'s ${RUNES.JERA.name} was activated!`, 'rune');
+                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
                 }
             }
@@ -912,22 +912,22 @@ if (this.isOver && this.onEnd) {
         if (damageResult.matchup === 'WEAK') {
             // Naudiz: debuff on weak hit
             if (attacker.hasRune('NAUDIZ')) {
-                this.addLog(`${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                this.addLog(`${RUNES.NAUDIZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 for (let i = 0; i < 2; i++) {
                     const randomIndex = Math.floor(Math.random() * stats.length);
                     const stat = stats[randomIndex];
                     defender.modifyAttributeStage(stat, -1);
-                    this.addLog(`${defender.getName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
+                    this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
                 }
                 result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed' });
             }
             
             // Inguz: megin drain on weak hit
             if (attacker.hasRune('INGUZ')) {
-                this.addLog(`${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
+                this.addLog(`${RUNES.INGUZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
                 defender.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
-                this.addLog(`${defender.getName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
+                this.addLog(`${defender.getDisplayName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin' });
             }
         }
@@ -946,7 +946,7 @@ if (this.isOver && this.onEnd) {
         if (action.type === 'swap') {
             const index = this.enemyTeam.indexOf(action.target);
             if (index !== -1) {
-                this.addLog(`The Guardian calls forth ${action.target.getName()}!`, 'swap');
+                this.addLog(`The Guardian calls forth ${action.target.getDisplayName()}!`, 'swap');
                 this.setEnemyActive(index, true);
                 return { action: 'swap', target: action.target };
             }
@@ -986,7 +986,7 @@ if (this.isOver && this.onEnd) {
             if (this.onKnockoutSwap) {
                 this.onKnockoutSwap((index) => {
                     this.setPlayerActive(index, false); // No swap sickness for forced swap
-                    this.addLog(`${this.playerActive.getName()} enters the fray!`, 'swap');
+                    this.addLog(`${this.playerActive.getDisplayName()} enters the fray!`, 'swap');
                     if (this.onUpdate) this.onUpdate();
                 });
             }
@@ -1000,7 +1000,7 @@ if (this.isOver && this.onEnd) {
                 const nextIndex = this.enemyTeam.findIndex(v => !v.isKnockedOut());
                 if (nextIndex !== -1) {
                     this.setEnemyActive(nextIndex, true);
-                    this.addLog(`The enemy sends out ${this.enemyActive.getName()}!`, 'swap');
+                    this.addLog(`The enemy sends out ${this.enemyActive.getDisplayName()}!`, 'swap');
                 }
             }
         }
@@ -1071,19 +1071,19 @@ if (this.isOver && this.onEnd) {
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
                 const result = vasen.modifyAttributeStage(randomStat, 1);
                 
-                this.addLog(`${vasen.getName()}'s Ande spirit empowers it!`, 'passive');
-                this.addLog(`${vasen.getName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                this.addLog(`${vasen.getDisplayName()}'s Ande spirit empowers it!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 
                 // Gifu: share the buff with allies if equipped
                 if (result.changed !== 0 && !vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
                     vasen.battleFlags.gifuTriggered = true;
-                    this.addLog(`${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                    this.addLog(`${RUNES.GIFU.symbol} ${vasen.getDisplayName()}'s ${RUNES.GIFU.name} was activated!`, 'rune');
                     
                     const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                     allies.forEach(ally => {
                         if (ally !== vasen && !ally.isKnockedOut()) {
                             ally.modifyAttributeStage(randomStat, 1);
-                            this.addLog(`${ally.getName()}'s ${randomStat} was also raised!`, 'buff');
+                            this.addLog(`${ally.getDisplayName()}'s ${randomStat} was also raised!`, 'buff');
                         }
                     });
                 }
@@ -1097,8 +1097,8 @@ if (this.isOver && this.onEnd) {
                     vasen.battleFlags.odjurTriggered = true;
                     vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
                     vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
-                    this.addLog(`${vasen.getName()}'s bestial rage awakens!`, 'passive');
-                    this.addLog(`${vasen.getName()}'s Strength and Wisdom were raised!`, 'buff');
+                    this.addLog(`${vasen.getDisplayName()}'s bestial rage awakens!`, 'passive');
+                    this.addLog(`${vasen.getDisplayName()}'s Strength and Wisdom were raised!`, 'buff');
                 }
             }
         }
@@ -1109,8 +1109,8 @@ if (this.isOver && this.onEnd) {
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
                 // Set a temporary flag on the incoming väsen for the damage boost
                 incomingVasen.battleFlags.vatteDamageBoost = true;
-                this.addLog(`${vasen.getName()} tags in ${incomingVasen.getName()}!`, 'passive');
-                this.addLog(`${incomingVasen.getName()} gains a damage boost!`, 'buff');
+                this.addLog(`${vasen.getDisplayName()} tags in ${incomingVasen.getDisplayName()}!`, 'passive');
+                this.addLog(`${incomingVasen.getDisplayName()} gains a damage boost!`, 'buff');
             }
         }
         
@@ -1121,8 +1121,8 @@ if (this.isOver && this.onEnd) {
                 vasen.battleFlags.drakePassiveTriggered = true;
                 vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
                 vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
-                this.addLog(`${vasen.getName()}'s draconic scales harden!`, 'passive');
-                this.addLog(`${vasen.getName()}'s Defense and Durability were raised!`, 'buff');
+                this.addLog(`${vasen.getDisplayName()}'s draconic scales harden!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()}'s Defense and Durability were raised!`, 'buff');
             }
         }
         
@@ -1144,9 +1144,9 @@ if (this.isOver && this.onEnd) {
                         stats.splice(randomIndex, 1);
                     }
                 }
-                this.addLog(`${vasen.getName()}'s malicious aura strikes back!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()}'s malicious aura strikes back!`, 'passive');
                 debuffedStats.forEach(stat => {
-                    this.addLog(`${attacker.getName()}'s ${stat} was lowered!`, 'debuff');
+                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered!`, 'debuff');
                 });
             }
         }
@@ -1165,9 +1165,9 @@ if (this.isOver && this.onEnd) {
                     const randomStat = stealableStats[Math.floor(Math.random() * stealableStats.length)];
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
-                    this.addLog(`${vasen.getName()} steals ${defender.getName()}'s ${randomStat} boost!`, 'passive');
-                    this.addLog(`${defender.getName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
-                    this.addLog(`${vasen.getName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                    this.addLog(`${vasen.getDisplayName()} steals ${defender.getDisplayName()}'s ${randomStat} boost!`, 'passive');
+                    this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
+                    this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 }
             }
         }
@@ -1178,8 +1178,8 @@ if (this.isOver && this.onEnd) {
                 vasen.battleFlags.valnadPassiveTriggered = true;
                 const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
                 vasen.currentHealth = reviveHealth;
-                this.addLog(`${vasen.getName()} refuses to fall!`, 'passive');
-                this.addLog(`${vasen.getName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
+                this.addLog(`${vasen.getDisplayName()} refuses to fall!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
                 return true; // Signal that the knockout was prevented
             }
         }
