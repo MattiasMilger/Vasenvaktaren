@@ -154,10 +154,6 @@ Vasenvaktaren/
 - [x] Introduce endgame system (100%)
 - [ ] Final Polish (90%)
 
-## Future Ideas
-- Rune combinations
-- Post lvl 30 progression
-
 ## Credits
 
 **Developer**: Mattias Milger  
