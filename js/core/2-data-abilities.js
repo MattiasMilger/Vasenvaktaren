@@ -15,7 +15,7 @@ const ABILITIES = {
         name: 'Ground Stomp',
         flavorDescription: 'Slams the ground with immense force, sending a stunning shockwave through the bedrock.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -36,7 +36,7 @@ const ABILITIES = {
         name: 'Sinkhole',
         flavorDescription: 'The earth softens and collapses, opening a treacherous pit beneath the enemy.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
@@ -69,7 +69,7 @@ const ABILITIES = {
         name: 'Vine Whip',
         flavorDescription: 'Swift, thorny vines lash out from the wilderness, tangling and striking the target.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
@@ -90,7 +90,7 @@ const ABILITIES = {
         name: 'Elven Light',
         flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the magic of the twilight mist.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
@@ -123,7 +123,7 @@ const ABILITIES = {
         name: 'Drown',
         flavorDescription: 'Violently drags the opponent down, mimicking the crushing pressure of deep water.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
@@ -144,7 +144,7 @@ const ABILITIES = {
         name: 'Hail Storm',
         flavorDescription: 'A sudden, freezing downpour of stinging ice and freezing wind.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
@@ -177,7 +177,7 @@ const ABILITIES = {
         name: 'Torch Strike',
         flavorDescription: 'A searing blow with a burning torch, delivering simple, raw heat.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
@@ -198,7 +198,7 @@ const ABILITIES = {
         name: 'Fire Breath',
         flavorDescription: 'Exhales a short, scorching gust of flame from the creature\'s core.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
@@ -231,7 +231,7 @@ const ABILITIES = {
         name: 'Storm Claw',
         flavorDescription: 'A quick, brutal strike delivered with claws riding the speed of a gale.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
@@ -252,7 +252,7 @@ const ABILITIES = {
         name: 'Wailing Cry',
         flavorDescription: 'Unleashes an agonizing, ghostly shriek that assails the opponent\'s senses.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack is empowered and deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,

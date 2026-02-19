@@ -30,47 +30,47 @@ const GAME_CONFIG = {
     BASE_EXP_YIELD: 50,
     
     // Experience percentages awarded based on participation level
-    EXP_KILLING_BLOW: 1.0,              // 100% - Dealt the final blow that knocked out the enemy
-    EXP_PARTICIPATED_ON_FIELD: 0.7,     // 70% - Spent at least one turn actively on the battlefield
-    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // 50% - In the party but never entered the battlefield
+    EXP_KILLING_BLOW: 1.0,              // Full exp share - dealt the final blow that knocked out the enemy
+    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the battlefield
+    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the battlefield
     
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
     // =============================================================================
     BASE_MEGIN: 65,
     MEGIN_PER_LEVEL: 2,
-    MEGIN_REGEN_RATE: 0.12,             // 12% of max Megin restored per turn
-    SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,  // 15% discount when using same-element abilities
+    MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
+    SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,  // Cost discount when using same-element abilities
     
     // =============================================================================
     // ATTRIBUTE STAGES (BUFFS/DEBUFFS)
     // =============================================================================
     MAX_ATTRIBUTE_STAGE: 5,
     MIN_ATTRIBUTE_STAGE: -5,
-    ATTRIBUTE_STAGE_MODIFIER: 0.1,      // Each stage = 10% increase/decrease
+    ATTRIBUTE_STAGE_MODIFIER: 0.1,      // Per-stage modifier added/subtracted per attribute stage
     
     // =============================================================================
     // DAMAGE CALCULATION
     // =============================================================================
     POWER_CONSTANT: 250,
     DEFENSE_CONSTANT: 200,
-    DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance (±10%)
+    DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     
     // Mixed-type attacks split damage calculation 50/50 between Strength and Wisdom
     MIXED_ATTACK_STRENGTH_PORTION: 0.5,
     MIXED_ATTACK_WISDOM_PORTION: 0.5,
     
     // Empowerment system for low-tier attacks
-    EMPOWERMENT_DAMAGE_BOOST: 0.08,     // +8% damage on next attack
+    EMPOWERMENT_DAMAGE_BOOST: 0.08,     // Damage boost on next attack after empowerment
     
     // =============================================================================
     // HEALING
     // =============================================================================
-    POST_BATTLE_HEAL_PERCENT: 0.05,     // health restored after winning battle
-    ENDLESS_TOWER_HEAL_PERCENT: 0.05,     // health restored after winning battle in Endless Tower
-    SACRED_WELL_HEAL_PERCENT: 0.80,     // 80% health restored at Sacred Well
-    CORRECT_ITEM_HEAL_PERCENT: 0.80,    // 80% health restored when giving correct taming item
-    WRONG_ITEM_HEAL_PERCENT: 0.50,      // 50% health restored when giving wrong item
+    POST_BATTLE_HEAL_PERCENT: 0.05,     // % health restored after winning battle
+    ENDLESS_TOWER_HEAL_PERCENT: 0.05,   // % health and Megin restored after winning a floor in Endless Tower
+    SACRED_WELL_HEAL_PERCENT: 0.80,     // % health restored at Sacred Well
+    CORRECT_ITEM_HEAL_PERCENT: 0.80,    // % health restored when giving correct taming item
+    WRONG_ITEM_HEAL_PERCENT: 0.50,      // % health restored when giving wrong item
     
     // =============================================================================
     // TAMING SYSTEM
@@ -104,32 +104,32 @@ const GAME_CONFIG = {
     // RUNE EFFECTS
     // =============================================================================
     // Elemental damage boost runes (Kaunan/Fire, Pertho/Earth, Tyr/Wind, Bjarka/Nature, Laguz/Water)
-    RUNE_ELEMENT_DAMAGE_BOOST: 0.12,    // +12% damage when using matching element
+    RUNE_ELEMENT_DAMAGE_BOOST: 0.12,    // +% damage when using matching element
     
     // Odal: Low-cost ability damage boost
-    RUNE_ODAL_DAMAGE_BOOST: 0.10,       // +10% damage for abilities costing ≤30 Megin
+    RUNE_ODAL_DAMAGE_BOOST: 0.10,       // +% damage for abilities costing ≤30 Megin
     RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
     
     // Dagaz: First round damage boost
-    RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +20% damage on first round in battle
+    RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +% damage on first round in battle
     
     // Fehu: Potent hit damage reduction
-    RUNE_FEHU_DAMAGE_REDUCTION: 0.90,   // Reduce potent hits by 10% (multiply by 0.90)
+    RUNE_FEHU_DAMAGE_REDUCTION: 0.90,   // Multiplier applied to reduce incoming potent hit damage
     
     // Element-specific buff runes (Eihwaz/Earth, Sol/Fire, Ehwaz/Wind, Isaz/Water)
-    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // 30% chance to trigger attribute buff on hit
+    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // +% chance to trigger attribute buff on hit
     
     // Nature healing runes (Algiz, Jera)
-    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // 30% chance for Algiz to heal on Nature ability hit
-    RUNE_ALGIZ_HEAL_PERCENT: 0.08,       // Heal 8% of max health when triggered
-    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // 30% chance for Jera to heal on low-cost hit
-    RUNE_JERA_HEAL_PERCENT: 0.08,        // Heal 8% of max health when triggered
+    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // % chance for Algiz to heal on Nature ability hit
+    RUNE_ALGIZ_HEAL_PERCENT: 0.08,       // Heal % of max health when triggered
+    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost hit
+    RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
     // Inguz: Megin drain on weak hits
-    RUNE_INGUZ_MEGIN_DRAIN: 18,          // Drain 18 Megin from enemy on weak hit
+    RUNE_INGUZ_MEGIN_DRAIN: 18,          // Drai Megin from enemy on weak hit
     
     // Mannaz: Heal on utility ability use
-    RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal 8% of max health when using utility ability
+    RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
     
     // =============================================================================
     // ENEMY AI CONFIGURATION
@@ -145,7 +145,7 @@ const GAME_CONFIG = {
     // Damage-based bonuses
     AI_KNOCKOUT_BONUS: 100,              // Bonus if predicted damage will KO the target
     AI_HIGH_DAMAGE_BONUS: 50,            // Bonus if damage is significant
-    AI_HIGH_DAMAGE_THRESHOLD: 0.5,       // Threshold: 50% of target's max health
+    AI_HIGH_DAMAGE_THRESHOLD: 0.5,       // Fraction of target's max health considered high damage
     
     // Empowerment strategy bonuses
     AI_EMPOWERMENT_SETUP_BONUS: 15,      // Bonus for using low-tier attack to gain empowerment
@@ -162,11 +162,11 @@ const GAME_CONFIG = {
     AI_DEBUFF_BONUS: 30,                 // Bonus for debuff utility abilities
     
     // Resource management penalties
-    AI_MEGIN_PENALTY_THRESHOLD: 0.5,     // Penalize if ability costs >50% of current Megin
+    AI_MEGIN_PENALTY_THRESHOLD: 0.5,     // Penalize if ability costs more than this fraction of current Megin
     AI_MEGIN_PENALTY: -15,               // Penalty applied when above threshold
     
     // Risk assessment penalties
-    AI_RISK_PENALTY_THRESHOLD: 0.6,      // Apply penalty when threat level >0.6
+    AI_RISK_PENALTY_THRESHOLD: 0.6,      // Threat level above which the risk penalty is applied
     AI_RISK_PENALTY: -20,                // Penalty for risky situations
     AI_THREAT_ELEMENT_BONUS: 0.2,        // Threat increase if facing potent matchup
     
@@ -176,7 +176,7 @@ const GAME_CONFIG = {
     
     // --- Swap Scoring ---
     AI_SWAP_BASE_SCORE: 5,               // Base score for swapping
-    AI_SWAP_LOW_HEALTH_THRESHOLD: 0.3,   // Swap bonus when health <30%
+    AI_SWAP_LOW_HEALTH_THRESHOLD: 0.3,   // Health fraction below which the low-health swap bonus is applied
     AI_SWAP_LOW_HEALTH_BONUS: 30,        // Bonus for swapping when low on health
     AI_SWAP_ELEMENT_ADVANTAGE_BONUS: 20, // Bonus for swapping to better matchup
     AI_SWAP_VARIANCE: 10                 // Random variance for swap decisions
@@ -184,36 +184,36 @@ const GAME_CONFIG = {
 
 // Family Passive Configuration
 const FAMILY_PASSIVE_CONFIG = {
-    // Alv: Innate Megin - increases max Megin by 14%
+    // Alv: Innate Megin - increases max Megin
     ALV_MEGIN_BOOST: 0.14,
     
-    // Ande: Ethereal Surge - raises one random attribute by 1 stage when entering battlefield
+    // Ande: Ethereal Surge - raises a random attribute by stages when entering battlefield
     ANDE_ATTRIBUTE_STAGES: 1,
     
-    // Drake: Draconic Resilience - gain Defense and Durability stages when health falls to 50% or lower
+    // Drake: Draconic Resilience - gain Defense and Durability stages when health falls below threshold
     DRAKE_HEALTH_THRESHOLD: 0.50,
     DRAKE_DEFENSE_STAGES: 1,
     DRAKE_DURABILITY_STAGES: 1,
     
-    // Jätte: Colossal Power - Basic Strike always has 35 power
+    // Jätte: Colossal Power - Basic Strike always has a fixed power
     JATTE_BASIC_STRIKE_POWER: 35,
     
-    // Odjur: Bestial Rage - gain Strength and Wisdom stages after spending 2 full turns on battlefield
+    // Odjur: Bestial Rage - gain Strength and Wisdom stages after spending several turns on battlefield
     ODJUR_TURNS_REQUIRED: 2,
     ODJUR_STRENGTH_STAGES: 1,
     ODJUR_WISDOM_STAGES: 1,
     
-    // Rå: Malicious Retaliation - lowers two random enemy attributes by 1 stage when hit
+    // Rå: Malicious Retaliation - lowers several random enemy attributes by stages when hit
     RA_DEBUFF_COUNT: 2,
     RA_DEBUFF_STAGES: 1,
     
-    // Troll: Troll Theft - steals one positive attribute stage when using an ability
+    // Troll: Troll Theft - steals positive attribute stages from the enemy when using an ability
     TROLL_STAGE_STEAL: 1,
     
-    // Vätte: Tag Team - incoming ally gains 30% damage bonus for current turn when swapping out
+    // Vätte: Tag Team - incoming ally gains a damage bonus for the current turn when swapping out
     VATTE_DAMAGE_BOOST: 0.30,
     
-    // Vålnad: Deathless - revives with 10% of max health upon knockout
+    // Vålnad: Deathless - revives with a fraction of max health upon knockout
     VALNAD_REVIVE_HEALTH_PERCENT: 0.10
 };
 

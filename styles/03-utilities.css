@@ -57,13 +57,11 @@
 
 .game-message.error {
     border-color: var(--accent-danger);
-    background: rgba(176, 106, 106, 0.18);
     color: var(--accent-danger);
 }
 
 .game-message.success {
     border-color: var(--accent-primary);
-    background: rgba(138, 154, 122, 0.18);
     color: var(--accent-primary);
 }
 

@@ -404,7 +404,7 @@ achievementsHtml += '</div></div>';
             html += `<p><strong>${temperament.name}</strong> +${temperament.modifier} ${capitalize(temperament.positive)}, -${temperament.modifier} ${capitalize(temperament.negative)}</p>`;
         });
 
-        html += `</div>`;
+        html += `<p class="temperament-note">Modifiers apply before other bonuses.</p></div>`;
 
         return html;
     };

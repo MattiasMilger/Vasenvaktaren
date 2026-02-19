@@ -914,6 +914,23 @@
     margin: var(--spacing-md) 0;
 }
 
+.dialogue-message .rune-flavor {
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+}
+
+.dialogue-message .rune-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: var(--spacing-sm) 0;
+}
+
+.dialogue-message .rune-effect {
+    color: var(--text-primary);
+    margin: 0;
+}
+
 .dialogue-buttons {
     display: flex;
     flex-direction: column;

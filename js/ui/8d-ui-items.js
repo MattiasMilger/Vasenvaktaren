@@ -228,7 +228,7 @@ UIController.prototype.showRuneOptions = function(runeId) {
     const rune = RUNES[runeId];
     const equippedTo = this.findRuneEquippedTo(runeId);
 
-    let message = `<br><p class="rune-flavor">${rune.flavor}</p><br><p class="rune-effect">${rune.effect}</p>`;
+    let message = `<p class="rune-flavor">${rune.flavor}</p><hr class="rune-divider"><p class="rune-effect">${rune.effect}</p>`;
     if (equippedTo) {
         message += `<p>Currently equipped to <strong>${equippedTo.getDisplayName()}</strong></p>`;
     }

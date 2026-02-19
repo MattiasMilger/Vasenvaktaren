@@ -41,7 +41,7 @@
 
 .vasen-sort-select:focus {
     outline: none;
-    border-color: var(--accent-primary);
+    border-color: var(--border-light);
 }
 
 /* Flat list section (for non-family sorting) */
