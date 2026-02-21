@@ -154,12 +154,12 @@ Vasenvaktaren/
 - [x] Introduce endgame system (100%)
 - [ ] Final Polish (90%)
 
-## License
-
-All rights reserved. This game and its assets are the property of Mattias Milger.
-
 ## Credits
 
 **Developer**: Mattias Milger  
 **Email**: mattias.r.milger@gmail.com  
-**GitHub**: [MattiasMilger](https://github.com/MattiasMilger)
+**GitHub**: [MattiasMilger](https://github.com/MattiasMilger/Vasenvaktaren)
+
+## License
+
+All rights reserved. This game and its assets are the property of Mattias Milger.

@@ -239,7 +239,7 @@ function clearCombatCardPopupStyles() {
 // Position a popup using fixed viewport coords so it escapes overflow:hidden on the panel.
 // Horizontally centered on the panel; opens in whichever vertical direction has more room.
 function positionPopupForCombatCard(popup, trigger) {
-    const panel = trigger.closest('.combatant-panel');
+    const panel = trigger.closest('.combatant-panel') || trigger.closest('.vasen-details-panel');
     if (!panel) return;
 
     const panelRect  = panel.getBoundingClientRect();
@@ -303,8 +303,8 @@ function toggleElementMatchup(element, event) {
     // If we're opening this one, add the open class
     if (isOpening) {
         parent.classList.add('open');
-        // In a combatant card the popup is clipped by overflow:hidden — use fixed positioning instead
-        if (parent.closest('.combatant-panel')) {
+        // In a combatant card or vasen details panel the popup is clipped by overflow — use fixed positioning instead
+        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
             const popup = parent.querySelector('.matchup-details');
             if (popup) positionPopupForCombatCard(popup, element);
         }
@@ -336,8 +336,8 @@ function toggleFamilyDescription(element, event) {
     // If we're opening this one, add the open class
     if (isOpening) {
         parent.classList.add('open');
-        // In a combatant card the popup is clipped by overflow:hidden — use fixed positioning instead
-        if (parent.closest('.combatant-panel')) {
+        // In a combatant card or vasen details panel the popup is clipped by overflow — use fixed positioning instead
+        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
             const popup = parent.querySelector('.family-description-popup');
             if (popup) positionPopupForCombatCard(popup, element);
         }
