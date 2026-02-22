@@ -200,7 +200,7 @@ UIController.prototype.showHealVasenModal = function(itemId) {
         healableVasen.forEach(vasen => {
             const item = TAMING_ITEMS[itemId];
             const isCorrectItem = vasen.species.tamingItem === itemId;
-            const healPercent = isCorrectItem ? 0.8 : 0.4;
+            const healPercent = isCorrectItem ? GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT : 0.4;
 
             const vasenBtn = document.createElement('button');
             vasenBtn.className = 'heal-vasen-btn';

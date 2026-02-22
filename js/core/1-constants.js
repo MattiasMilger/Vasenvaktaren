@@ -68,8 +68,8 @@ const GAME_CONFIG = {
     // =============================================================================
     POST_BATTLE_HEAL_PERCENT: 0.05,     // % health restored after winning battle
     ENDLESS_TOWER_HEAL_PERCENT: 0.05,   // % health and Megin restored after winning a floor in Endless Tower
-    SACRED_WELL_HEAL_PERCENT: 0.80,     // % health restored at Sacred Well
-    CORRECT_ITEM_HEAL_PERCENT: 0.80,    // % health restored when giving correct taming item
+    SACRED_WELL_HEAL_PERCENT: 0.75,     // % health restored at Sacred Well
+    CORRECT_ITEM_HEAL_PERCENT: 0.75,    // % health restored when giving correct taming item
     WRONG_ITEM_HEAL_PERCENT: 0.50,      // % health restored when giving wrong item
     
     // =============================================================================

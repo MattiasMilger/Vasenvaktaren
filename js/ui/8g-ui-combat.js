@@ -55,7 +55,7 @@ UIController.prototype.renderCombat = function(battle) {
         this.renderCombatantPanel('enemy', battle.enemyTeam[battle.enemyActiveIndex], battle);
 
         // Render Endless Tower floor display if applicable
-        const versusDiv = document.querySelector('.combat-versus');
+        const versusDiv = this.combatVersus;
         if (battle.isEndlessTower && battle.currentFloor) {
             versusDiv.innerHTML = `
                 <div class="endless-tower-floor">Floor ${battle.currentFloor}</div>

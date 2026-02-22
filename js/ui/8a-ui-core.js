@@ -71,6 +71,7 @@ class UIController {
         this.zoneDescription = document.getElementById('zone-description');
         this.combatUI = document.getElementById('combat-ui');
         this.combatLog = document.getElementById('combat-log');
+        this.combatVersus = document.querySelector('.combat-versus');
 
         // Settings modal
         this.settingsModal = document.getElementById('settings-modal');

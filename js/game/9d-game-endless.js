@@ -14,6 +14,7 @@ Game.prototype.challengeEndlessTower = function() {
         'Endless Tower',
         `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength.</p>
          <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor. Clearing a floor replenishes your active party somewhat.</p>
+         <p>Every third floor (3, 6, 9...) pits you against <strong>two foes</strong> at once.</p>
          <p><strong>Warning:</strong> Väsen cannot be tamed in this mode. Victory or defeat will end your run.</p>
          ${gameState.endlessTowerRecord.highestFloor > 0
             ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>`
@@ -45,13 +46,16 @@ Game.prototype.startEndlessTowerBattle = function() {
 
     const floor = this.endlessTowerCurrentFloor;
     const enemyLevel = GAME_CONFIG.ENDLESS_TOWER_START_LEVEL + (floor - 1);
+    const isDualFloor = floor % 3 === 0;
 
-    // Get random species from all available
+    // Build enemy team (2 foes on every 3rd floor, otherwise 1)
     const allSpecies = Object.keys(VASEN_SPECIES);
-    const randomSpecies = allSpecies[Math.floor(Math.random() * allSpecies.length)];
-
-    // Create enemy
-    const enemyVasen = createWildVasen(randomSpecies, enemyLevel);
+    const enemyTeam = [];
+    const enemyCount = isDualFloor ? 2 : 1;
+    for (let i = 0; i < enemyCount; i++) {
+        const randomSpecies = allSpecies[Math.floor(Math.random() * allSpecies.length)];
+        enemyTeam.push(createWildVasen(randomSpecies, enemyLevel));
+    }
 
     // Get player team
     const playerTeam = gameState.party.filter(p => p !== null);
@@ -59,9 +63,9 @@ Game.prototype.startEndlessTowerBattle = function() {
     if (floor === 1) {
         // First floor - reset battle state and create new battle
         playerTeam.forEach(v => v.resetBattleState());
-        enemyVasen.resetBattleState();
+        enemyTeam.forEach(v => v.resetBattleState());
 
-        this.currentBattle = new Battle(playerTeam, [enemyVasen], BATTLE_TYPES.ENDLESS_TOWER);
+        this.currentBattle = new Battle(playerTeam, enemyTeam, BATTLE_TYPES.ENDLESS_TOWER);
         this.currentBattle.currentFloor = floor;
         this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
         this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
@@ -82,11 +86,11 @@ Game.prototype.startEndlessTowerBattle = function() {
             }
         }, GAME_CONFIG.BATTLE_INPUT_DELAY);
     } else {
-        // Subsequent floors - preserve player state, only reset enemy
-        enemyVasen.resetBattleState();
+        // Subsequent floors - preserve player state, only reset enemy team
+        enemyTeam.forEach(v => v.resetBattleState());
 
-        // Update the battle with new enemy
-        this.currentBattle.enemyTeam = [enemyVasen];
+        // Update the battle with the new enemy team
+        this.currentBattle.enemyTeam = enemyTeam;
         this.currentBattle.setEnemyActive(0);
         this.currentBattle.currentFloor = floor;
         this.currentBattle.isOver = false;
@@ -105,7 +109,12 @@ Game.prototype.startEndlessTowerBattle = function() {
         }
     }
 
-    ui.addCombatLog(`Floor ${floor}: A wild ${enemyVasen.getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');
+    // Log encounter message
+    if (isDualFloor) {
+        ui.addCombatLog(`Floor ${floor}: Two foes appear! ${enemyTeam[0].getDisplayName()} and ${enemyTeam[1].getDisplayName()} (Lvl ${enemyLevel}) stand before you!`, 'encounter');
+    } else {
+        ui.addCombatLog(`Floor ${floor}: A wild ${enemyTeam[0].getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');
+    }
 };
 
 // Handle Endless Tower battle end

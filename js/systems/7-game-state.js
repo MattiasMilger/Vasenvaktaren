@@ -40,8 +40,8 @@ class GameState {
         // Game flags
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;
-        this.firstCombatTutorialShown = false; // NEW: Track if first combat tutorial was shown
-        this.firstExploreTutorialShown = false; // NEW: Track if first explore tutorial was shown
+        this.firstCombatTutorialShown = false;
+        this.firstExploreTutorialShown = false;
         
         // Endless Tower tracking
         this.endlessTowerRecord = {
@@ -68,10 +68,10 @@ class GameState {
     
     // count väsen types tamed
     getUniqueSpeciesTamed() {
-    const set = new Set();
-    this.vasenCollection.forEach(v => set.add(v.speciesName));
-    return set.size;
-}
+        const set = new Set();
+        this.vasenCollection.forEach(v => set.add(v.speciesName));
+        return set.size;
+    }
     
     // Toggle favorite status for a väsen
     toggleFavorite(vasenId) {
@@ -229,73 +229,73 @@ class GameState {
     }
     
     // Equip rune to a specific väsen (by vasen ID)
-equipRune(runeId, vasenId, slotIndex = null) {
-    if (this.currentBattle || this.inCombat) {
-        return { success: false, message: 'You cannot change runes during combat.' };
-    }
-    if (!this.collectedRunes.has(runeId)) {
-        return { success: false, message: 'You do not own this rune.' };
-    }
-
-    // Find the väsen in collection
-    const vasen = this.vasenCollection.find(v => v.id === vasenId);
-    if (!vasen) {
-        return { success: false, message: 'Väsen not found.' };
-    }
-
-    // Determine rune slot limit
-    const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
-
-    // Already has this rune?
-    if (vasen.runes.includes(runeId)) {
-        return { success: false, message: 'This Väsen already has this rune equipped.' };
-    }
-
-    // If another väsen has this rune, unequip it first
-    for (const otherVasen of this.vasenCollection) {
-        if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
-            otherVasen.unequipRune(runeId);
-            break;
+    equipRune(runeId, vasenId, slotIndex = null) {
+        if (this.currentBattle || this.inCombat) {
+            return { success: false, message: 'You cannot change runes during combat.' };
         }
-    }
-
-    // Handle equipping based on current rune count
-    if (vasen.runes.length < maxRunes) {
-        // Empty slot - just add the rune
-        vasen.runes.push(runeId);
-        // Recalculate megin if Uruz
-        if (runeId === 'URUZ') {
-            vasen.maxMegin = vasen.calculateMaxMegin();
-            vasen.currentMegin = vasen.maxMegin;
+        if (!this.collectedRunes.has(runeId)) {
+            return { success: false, message: 'You do not own this rune.' };
         }
-    } else {
-        // Slots are full - replace at specific index
-        const indexToReplace = (slotIndex !== null && slotIndex >= 0 && slotIndex < vasen.runes.length) 
-            ? slotIndex 
-            : vasen.runes.length - 1;
-        
-        const removedRune = vasen.runes[indexToReplace];
-        
-        // Directly replace at the index
-        vasen.runes[indexToReplace] = runeId;
-        
-        // Recalculate megin if Uruz was added or removed
-        if (runeId === 'URUZ' || removedRune === 'URUZ') {
-            vasen.maxMegin = vasen.calculateMaxMegin();
-            vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
-        }
-    }
 
-    this.saveGame();
-    return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
-}
+        // Find the väsen in collection
+        const vasen = this.vasenCollection.find(v => v.id === vasenId);
+        if (!vasen) {
+            return { success: false, message: 'Väsen not found.' };
+        }
+
+        // Determine rune slot limit
+        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+
+        // Already has this rune?
+        if (vasen.runes.includes(runeId)) {
+            return { success: false, message: 'This Väsen already has this rune equipped.' };
+        }
+
+        // If another väsen has this rune, unequip it first
+        for (const otherVasen of this.vasenCollection) {
+            if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
+                otherVasen.unequipRune(runeId);
+                break;
+            }
+        }
+
+        // Handle equipping based on current rune count
+        if (vasen.runes.length < maxRunes) {
+            // Empty slot - just add the rune
+            vasen.runes.push(runeId);
+            // Recalculate megin if Uruz
+            if (runeId === 'URUZ') {
+                vasen.maxMegin = vasen.calculateMaxMegin();
+                vasen.currentMegin = vasen.maxMegin;
+            }
+        } else {
+            // Slots are full - replace at specific index
+            const indexToReplace = (slotIndex !== null && slotIndex >= 0 && slotIndex < vasen.runes.length)
+                ? slotIndex
+                : vasen.runes.length - 1;
+
+            const removedRune = vasen.runes[indexToReplace];
+
+            // Directly replace at the index
+            vasen.runes[indexToReplace] = runeId;
+
+            // Recalculate megin if Uruz was added or removed
+            if (runeId === 'URUZ' || removedRune === 'URUZ') {
+                vasen.maxMegin = vasen.calculateMaxMegin();
+                vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+            }
+        }
+
+        this.saveGame();
+        return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
+    }
 
     
     // Unequip rune from a specific väsen
     unequipRune(vasenId, runeId) {
         if (this.currentBattle || this.inCombat) {
-    return { success: false, message: 'You cannot change runes during combat.' };
-}
+            return { success: false, message: 'You cannot change runes during combat.' };
+        }
         // Find the väsen in collection
         const vasen = this.vasenCollection.find(v => v.id === vasenId);
         if (!vasen) {
@@ -579,7 +579,7 @@ equipRune(runeId, vasenId, slotIndex = null) {
         return this.party.filter(v => v !== null && v.currentHealth > 0);
     }
     
-    // Apply post-battle healing (5% to all party members)
+    // Apply post-battle healing
     applyPostBattleHealing() {
         this.party.forEach(vasen => {
             if (vasen) {
@@ -591,7 +591,7 @@ equipRune(runeId, vasenId, slotIndex = null) {
         this.saveGame();
     }
     
-    // Apply Sacred Well healing (80% to all Vasen)
+    // Apply Sacred Well healing
     applySacredWellHealing() {
         let anyHealed = false;
         
@@ -650,23 +650,23 @@ equipRune(runeId, vasenId, slotIndex = null) {
     
     // Check and update achievements
     checkAchievements() {
-    // Champion - Defeat all zone guardians
-    const allGuardians = Object.keys(ZONES).filter(z => ZONES[z].guardian);
-    if (allGuardians.every(z => this.defeatedGuardians.has(z))) {
-        this.achievements.champion = true;
-    }
-    
-    // Rune Master - Collect all runes
-    if (this.hasAllRunes()) {
-        this.achievements.rune_master = true;
-    }
+        // Champion - Defeat all zone guardians
+        const allGuardians = Object.keys(ZONES).filter(z => ZONES[z].guardian);
+        if (allGuardians.every(z => this.defeatedGuardians.has(z))) {
+            this.achievements.champion = true;
+        }
 
-    // Hoarder - Tame every Väsen type
-    const totalSpecies = Object.keys(VASEN_SPECIES).length;
-    if (this.getUniqueSpeciesTamed() === totalSpecies) {
-        this.achievements.hoarder = true;
+        // Rune Master - Collect all runes
+        if (this.hasAllRunes()) {
+            this.achievements.rune_master = true;
+        }
+
+        // Hoarder - Tame every Väsen type
+        const totalSpecies = Object.keys(VASEN_SPECIES).length;
+        if (this.getUniqueSpeciesTamed() === totalSpecies) {
+            this.achievements.hoarder = true;
+        }
     }
-}
     
     // Serialize game state for saving
     serialize() {
@@ -684,8 +684,8 @@ equipRune(runeId, vasenId, slotIndex = null) {
             achievements: this.achievements,
             gameStarted: this.gameStarted,
             runeMenuFirstOpen: this.runeMenuFirstOpen,
-            firstCombatTutorialShown: this.firstCombatTutorialShown, // NEW
-            firstExploreTutorialShown: this.firstExploreTutorialShown, // NEW
+            firstCombatTutorialShown: this.firstCombatTutorialShown,
+            firstExploreTutorialShown: this.firstExploreTutorialShown,
             settings: this.settings,
             endlessTowerRecord: this.endlessTowerRecord,
             // Pity counters for exploration anti-grief system
@@ -733,8 +733,8 @@ equipRune(runeId, vasenId, slotIndex = null) {
             };
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
-            this.firstCombatTutorialShown = data.firstCombatTutorialShown || false; // NEW
-            this.firstExploreTutorialShown = data.firstExploreTutorialShown || false; // NEW
+            this.firstCombatTutorialShown = data.firstCombatTutorialShown || false;
+            this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
             
             // Restore Endless Tower record
             this.endlessTowerRecord = data.endlessTowerRecord || {
@@ -830,8 +830,8 @@ equipRune(runeId, vasenId, slotIndex = null) {
         };
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;
-        this.firstCombatTutorialShown = false; // NEW
-        this.firstExploreTutorialShown = false; // NEW
+        this.firstCombatTutorialShown = false;
+        this.firstExploreTutorialShown = false;
         this.currentBattle = null;
         this.currentEncounter = null;
         this.inCombat = false;
