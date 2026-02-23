@@ -53,7 +53,10 @@ Game.prototype.startEndlessTowerBattle = function() {
     const enemyTeam = [];
     const enemyCount = isDualFloor ? 2 : 1;
     for (let i = 0; i < enemyCount; i++) {
-        const randomSpecies = allSpecies[Math.floor(Math.random() * allSpecies.length)];
+        const usedSpecies = enemyTeam.map(e => e.speciesName);
+        const availableSpecies = allSpecies.filter(s => !usedSpecies.includes(s));
+        const pool = availableSpecies.length > 0 ? availableSpecies : allSpecies;
+        const randomSpecies = pool[Math.floor(Math.random() * pool.length)];
         enemyTeam.push(createWildVasen(randomSpecies, enemyLevel));
     }
 
