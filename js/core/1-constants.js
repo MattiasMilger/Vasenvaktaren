@@ -18,8 +18,8 @@ const GAME_CONFIG = {
     MAX_LEVEL: 30,
     ENEMY_MAX_LEVEL: 999,
     STARTER_LEVEL: 8,
-    BASE_LEVEL_UP_EXP: 55,
-    LEVEL_UP_ACCELERATION: 5,
+    BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
+    LEVEL_UP_ACCELERATION: 5,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
     STARTING_ITEMS_AMOUNT: 3,
     
@@ -52,8 +52,8 @@ const GAME_CONFIG = {
     // =============================================================================
     // DAMAGE CALCULATION
     // =============================================================================
-    POWER_CONSTANT: 250,
-    DEFENSE_CONSTANT: 200,
+    POWER_CONSTANT: 250,            // Divisor that converts an ability's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. An ability with power 250 produces a 1× multiplier against the attacker's stat.
+    DEFENSE_CONSTANT: 200,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
     DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     
     // Mixed-type attacks split damage calculation 50/50 between Strength and Wisdom
