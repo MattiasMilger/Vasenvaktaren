@@ -8,7 +8,15 @@
 .screen {
     display: none;
     width: 100%;
+    /* Viewport-height stack (most → least compatible):
+       100vh                    — legacy; equals viewport WITH chrome hidden on iOS → clips content
+       -webkit-fill-available   — old WebKit: fills the true visible area
+       100svh                   — "small" viewport height; stable with chrome visible (Chrome 108+, FF 101+, Safari 15.4+)
+       calc(var(--vh,1vh)*100)  — JS-measured value from 0-viewport.js; widest fallback coverage */
     min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100svh;
+    min-height: calc(var(--vh, 1vh) * 100);
 }
 
 .screen.active {
@@ -189,7 +197,13 @@
    10. GAME SCREEN LAYOUT
    ============================================================================= */
 #game-screen {
+    /* Same progressive stack as .screen above.
+       svh / dvh are preferred over vh because they exclude the browser chrome,
+       preventing content from being hidden behind the address bar. */
     height: 100vh;
+    height: -webkit-fill-available;
+    height: 100svh;
+    height: calc(var(--vh, 1vh) * 100);
     overflow: hidden;
 }
 

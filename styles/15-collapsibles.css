@@ -1,0 +1,357 @@
+/* =============================================================================
+   15-collapsibles.css  —  Element & Family Matchup Collapsible Popups
+
+   Moved here from 11-modals.css (section 31) where it was misplaced.
+   These styles apply globally wherever clickable element/family badges
+   appear: the inventory details panel, combatant panels, game guide.
+   ============================================================================= */
+
+/* =============================================================================
+   31. ELEMENT MATCHUP COLLAPSIBLES
+   ============================================================================= */
+
+/* Clickable element badge styling */
+.clickable-element {
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.clickable-element:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+/* Element matchup collapsible container */
+.element-matchup-collapsible {
+    position: relative;
+    display: inline-block;
+}
+
+/* Inline collapsible for combat attack elements */
+.element-matchup-collapsible.inline-collapsible {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Matchup details dropdown */
+.element-matchup-collapsible .matchup-details {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    min-width: 180px;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: 2px;
+    pointer-events: auto;
+}
+
+.element-matchup-collapsible.open .matchup-details {
+    display: block;
+}
+
+/* Matchup row styling */
+.matchup-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+}
+
+.matchup-row:last-child {
+    margin-bottom: 0;
+}
+
+.matchup-label {
+    color: var(--text-muted);
+    min-width: 80px;
+}
+
+/* Matchup type colors */
+.matchup-row.potent .matchup-label {
+    color: var(--accent-primary);
+}
+
+.matchup-row.vulnerable .matchup-label {
+    color: var(--accent-danger);
+}
+
+.matchup-row.weak .matchup-label {
+    color: var(--accent-danger);
+}
+
+.matchup-row.resists .matchup-label {
+    color: var(--accent-primary);
+}
+
+.matchup-row.neutral .matchup-label {
+    color: var(--text-muted);
+}
+
+/* Game Guide element collapsibles */
+.element-guide-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.element-guide-collapsible {
+    position: relative;
+}
+
+.element-guide-collapsible .element-guide-details {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    min-width: 220px;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: var(--spacing-xs);
+}
+
+.element-guide-collapsible.open .element-guide-details {
+    display: block;
+}
+
+.guide-matchup-section {
+    margin-bottom: var(--spacing-sm);
+}
+
+.guide-matchup-section:last-child {
+    margin-bottom: 0;
+}
+
+.guide-matchup-section strong {
+    display: block;
+    color: var(--text-accent);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
+.matchup-instruction {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* =============================================================================
+   FAMILY DESCRIPTION COLLAPSIBLES
+   ============================================================================= */
+
+/* Family Guide List */
+.family-guide-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.family-guide-collapsible {
+    position: relative;
+}
+
+.family-guide-collapsible .family-description-popup {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    min-width: 250px;
+    max-width: 350px;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.family-guide-collapsible.open .family-description-popup {
+    display: block;
+}
+
+.family-guide-item {
+    display: inline-block;
+}
+
+/* Family description collapsible popup (for details panel and combatant cards) */
+.family-matchup-collapsible {
+    position: relative;
+    display: inline-block;
+}
+
+/* Wrapper for fixed positioning - the popup will calculate its position via JS or we use a portal pattern */
+.family-matchup-collapsible .family-description-popup {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    min-width: 250px;
+    max-width: 350px;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: 2px;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.4;
+    pointer-events: auto;
+}
+
+.family-matchup-collapsible.open .family-description-popup {
+    display: block;
+}
+
+.family-matchup-collapsible.inline-collapsible .family-description-popup {
+    left: 0;
+    transform: none;
+}
+
+/* Adjustments for combatant info element badge */
+.combatant-info .element-matchup-collapsible {
+    display: inline-block;
+}
+
+.combatant-info .matchup-details {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Adjustments for details meta element badge */
+.details-meta .element-matchup-collapsible {
+    display: inline-block;
+}
+
+/* Ensure family descriptions in details panel don't clip on desktop */
+.details-meta .family-matchup-collapsible .family-description-popup {
+    left: auto;
+    right: 0;
+    transform: none;
+    max-width: min(350px, calc(100vw - 32px));
+}
+
+/* Adjustments for ability stats element badge */
+.ability-stats .element-matchup-collapsible {
+    display: inline-block;
+}
+
+/* Adjustments for combat attack elements */
+.combatant-attack-elements .element-matchup-collapsible {
+    margin-right: 2px;
+}
+
+/* Ensure matchup details stay static (not fixed) on mobile */
+@media (max-width: 768px) {
+    /* KEY FIX: Prevent matchup rows from wrapping so they can scroll horizontally */
+    .element-matchup-collapsible .matchup-details .matchup-row,
+    .element-guide-collapsible .element-guide-details .matchup-row,
+    .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
+        flex-wrap: nowrap;
+    }
+
+    .element-matchup-collapsible .matchup-details {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: auto;
+        transform: none;
+        max-width: 90vw;
+        z-index: 9999;
+        margin-top: var(--spacing-xs);
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+
+    /* Special positioning for attack elements at bottom of combatant card */
+    .combatant-attack-elements .element-matchup-collapsible .matchup-details {
+        position: absolute;
+        bottom: 100%;
+        top: auto;
+        left: 0;
+        transform: none;
+        right: auto;
+        max-width: min(200px, calc(100vw - 32px));
+        margin-top: 0;
+        margin-bottom: var(--spacing-xs);
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+
+    /* Prevent wrapping in attack elements */
+    .combatant-attack-elements .element-matchup-collapsible .matchup-details .matchup-row {
+        flex-wrap: nowrap;
+    }
+
+    /* Combatant panel popups use position:fixed via JS — rows wrap to fit width */
+    .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
+        flex-wrap: wrap;
+    }
+
+    /* KEY FIX: Give family popup content a min-width so it extends beyond container */
+    .family-matchup-collapsible .family-description-popup {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: none;
+        min-width: 200px;
+        padding: var(--spacing-md);
+        overflow: visible;
+        white-space: normal;
+    }
+
+    /* Combatant panel family popup: position handled by JS, content wraps */
+    .combatant-panel .family-matchup-collapsible .family-description-popup {
+        left: 0;
+        transform: none;
+    }
+
+    /* KEY FIX: Inner content has min-width to force horizontal scroll (non-card contexts) */
+    .family-matchup-collapsible .family-description-popup > * {
+        min-width: 300px;
+    }
+
+    /* No forced min-width inside combatant card — content wraps instead */
+    .combatant-panel .family-matchup-collapsible .family-description-popup > * {
+        min-width: 0;
+    }
+
+    .family-matchup-collapsible .family-description-popup p {
+        white-space: normal;
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.6;
+    }
+
+    .element-guide-collapsible .element-guide-details {
+        position: absolute;
+        top: 100%;
+        left: 0 !important;
+        right: auto !important;
+        transform: none;
+        max-width: 90vw;
+        z-index: 9999;
+        margin-top: var(--spacing-xs);
+        overflow-x: auto;
+        overflow-y: visible;
+        touch-action: pan-x;
+    }
+}

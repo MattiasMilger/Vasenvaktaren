@@ -25,6 +25,9 @@ class UIController {
         this.setupEventListeners();
         this.restoreBattleLogState();
         this.restoreCombatCardsState();
+
+        // Performance: microtask flag prevents multiple same-tick refreshAll() calls
+        this._refreshPending = false;
     }
 
     // Cache DOM elements
@@ -368,3 +371,48 @@ function toggleCombatDescriptions() {
 
 // Create global instance
 const ui = new UIController();
+
+// ---------------------------------------------------------------------------
+// scheduleRefresh  — batches same-tick refreshAll() calls into one
+//
+// Problem: many game actions (equip rune, swap party, use item …) each end
+// with `game.refreshUI()` → `ui.refreshAll()`.  When several actions fire
+// in the same microtask batch (e.g., auto-battle applying effects + healing
+// + XP at once), the entire DOM is rebuilt three or four times in rapid
+// succession even though only the final state is visible.
+//
+// Fix: `scheduleRefresh()` queues a single `refreshAll()` on the microtask
+// queue (via Promise.resolve()).  Subsequent calls before that microtask runs
+// are no-ops.  Result: exactly one DOM rebuild per logical "tick", regardless
+// of how many places call scheduleRefresh in the same synchronous block.
+// ---------------------------------------------------------------------------
+UIController.prototype.scheduleRefresh = function () {
+    if (this._refreshPending) return;
+    this._refreshPending = true;
+    Promise.resolve().then(() => {
+        this._refreshPending = false;
+        this.refreshAll();
+    });
+};
+
+// ---------------------------------------------------------------------------
+// SVG zone-wave animation management
+//
+// The <feTurbulence><animate> in index.html runs at ~60 fps continuously,
+// even during combat when the zone image is hidden behind the combat UI.
+// pauseZoneAnimation() / resumeZoneAnimation() stop the SVG timeline when
+// the animation produces no visible output, cutting idle GPU work.
+// ---------------------------------------------------------------------------
+UIController.prototype.pauseZoneAnimation = function () {
+    const svg = document.querySelector('svg[aria-hidden="true"]');
+    if (svg && svg.pauseAnimations) {
+        try { svg.pauseAnimations(); } catch (_) {}
+    }
+};
+
+UIController.prototype.resumeZoneAnimation = function () {
+    const svg = document.querySelector('svg[aria-hidden="true"]');
+    if (svg && svg.unpauseAnimations) {
+        try { svg.unpauseAnimations(); } catch (_) {}
+    }
+};

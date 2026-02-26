@@ -699,8 +699,13 @@ class GameState {
     
     // Deserialize game state from save data
     deserialize(data) {
-        if (!data || data.version !== SAVE_VERSION) {
-            console.warn('Save version mismatch or invalid data');
+        if (!data || typeof data.version !== 'number') {
+            console.warn('Invalid or missing save data');
+            return false;
+        }
+        data = migrateData(data);
+        if (!data) {
+            console.warn('Save could not be migrated (newer version than current game?)');
             return false;
         }
         
@@ -760,6 +765,12 @@ class GameState {
     // Save game to localStorage
     saveGame() {
         try {
+            // Keep a one-step backup of the previous save in case the new save
+            // is corrupted or the player wants to undo a destructive action.
+            const existing = localStorage.getItem(SAVE_KEY);
+            if (existing) {
+                localStorage.setItem(BACKUP_SAVE_KEY, existing);
+            }
             const saveData = JSON.stringify(this.serialize());
             localStorage.setItem(SAVE_KEY, saveData);
             return true;
@@ -811,6 +822,7 @@ class GameState {
     // Reset game
     resetGame() {
         localStorage.removeItem(SAVE_KEY);
+        localStorage.removeItem(BACKUP_SAVE_KEY);
         localStorage.removeItem('combatRunesVisible');
         localStorage.removeItem('combatDescriptionVisible');
         localStorage.removeItem('combatCardsMinimized');
@@ -853,3 +865,32 @@ class GameState {
 
 // Global game state instance
 const gameState = new GameState();
+
+// ---------------------------------------------------------------------------
+// migrateData — upgrades raw save data to SAVE_VERSION.
+//
+// Called by deserialize() before processing any loaded save. Older saves are
+// upgraded step-by-step so players never lose progress after a game update.
+// Saves from a future version (data.version > SAVE_VERSION) return null;
+// the caller treats that as an unloadable save and reports a warning.
+//
+// How to add a migration: append a block checking `d.version === N`, apply
+// the structural change, then set `d.version = N + 1` before the next block.
+// ---------------------------------------------------------------------------
+function migrateData(data) {
+    if (!data || typeof data.version !== 'number') return null;
+    if (data.version > SAVE_VERSION) {
+        console.warn(`Save is from a newer game version (${data.version}). Cannot load.`);
+        return null;
+    }
+    // Shallow clone so we don't mutate the caller's object.
+    let d = Object.assign({}, data);
+
+    // Example template — uncomment and fill in when the format changes:
+    // if (d.version === 1) {
+    //     d.newField = d.newField !== undefined ? d.newField : defaultValue;
+    //     d.version = 2;
+    // }
+
+    return d;
+}

@@ -11,19 +11,37 @@
 }
 
 html {
+    /* Keep 16px as the deliberate design baseline.
+       All spacing variables use px; rem-based fonts scale from this. */
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* Required for the height:100% chain on desktop panels.
+       Without this, children with height:100% fall back to auto. */
+    height: 100%;
 }
 
 body {
     width: 100%;
+    /* min-height ensures body covers the viewport even when content is short.
+       The height:100% on html + min-height:100% here creates the correct chain
+       without preventing the body from growing taller than the viewport. */
+    min-height: 100%;
     background: var(--bg-primary);
     color: var(--text-primary);
     font-family: var(--font-family);
     line-height: 1.5;
     outline: none;
     font-weight: var(--font-weight-normal);
+
+    /* iOS notch / home-indicator safe areas (no-op on non-notched devices).
+       Only adds padding where the hardware requires it.
+       Requires viewport-fit=cover on the <meta> viewport tag. */
+    padding-top:    env(safe-area-inset-top,    0px);
+    padding-right:  env(safe-area-inset-right,  0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left:   env(safe-area-inset-left,   0px);
 }
 
 body:focus {

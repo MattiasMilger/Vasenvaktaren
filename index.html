@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Väsenväktaren</title>
     <link rel="stylesheet" href="styles/main.css">
     <style>
@@ -405,7 +405,10 @@
     </div>
 
     <!-- Scripts loaded in dependency order -->
-    
+
+    <!-- Viewport / DPR utility — must load first so --vh is set before paint -->
+    <script src="js/core/0-viewport.js"></script>
+
     <!-- Core Data & Logic -->
     <script src="js/core/1-constants.js"></script>
     <script src="js/core/2-data-abilities.js"></script>

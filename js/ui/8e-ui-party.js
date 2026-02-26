@@ -405,7 +405,7 @@ UIController.prototype.releaseVasen = function(vasenId) {
     }
 
     gameState.saveGame();
-    this.refreshAll();
+    this.scheduleRefresh();
     this.showMessage(`${vasen.getName()} was released.`);
 };
 
