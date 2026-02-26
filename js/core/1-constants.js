@@ -621,7 +621,6 @@ function getExpYield(enemyLevel, rarity) {
 
 // Convenience constants for frequently used values
 const SAVE_KEY = GAME_CONFIG.SAVE_KEY;
-const BACKUP_SAVE_KEY = GAME_CONFIG.SAVE_KEY + '_backup';
 const SAVE_VERSION = 1;
 const MAX_PARTY_SIZE = GAME_CONFIG.MAX_TEAM_SIZE;
 const MAX_VASEN_COLLECTION = GAME_CONFIG.MAX_INVENTORY_SIZE;

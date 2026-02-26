@@ -173,11 +173,9 @@ startingItems.forEach(item => {
         this.refreshUI();
     }
 
-    // Refresh all UI elements.
-    // Delegates to scheduleRefresh() so multiple same-tick calls are batched
-    // into a single refreshAll(), avoiding redundant DOM rebuilds.
+    // Refresh all UI elements
     refreshUI() {
-        ui.scheduleRefresh();
+        ui.refreshAll();
     }
 
     // End battle and return to exploration

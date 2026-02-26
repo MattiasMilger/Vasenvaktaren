@@ -74,8 +74,6 @@ Collection based achievements
 ## Save System
 
 - Game automatically saves to localStorage
-- A one-step backup of the previous save is kept under `vasenvaktaren_save_backup` and is overwritten on each save — useful for recovering from accidental resets
-- Save format is versioned; older saves are migrated forward automatically via `migrateData()` in `7-game-state.js`
 - Export your save from Settings to back up progress
 - Import saves to restore progress
 - Reset game to start fresh
@@ -90,37 +88,29 @@ Collection based achievements
 
 ```
 Vasenvaktaren/
-├── index.html                      (markup, screen templates, modal definitions)
+├── index.html                      (game initialization)
 ├── README.md                       (project information)
 │
 ├── styles/
-│   ├── main.css                    (import file — loads all stylesheets in order)
-│   ├── 01-variables.css            (CSS custom properties: colours, spacing, typography)
-│   ├── 02-reset.css                (reset, base html/body height chain, safe-area insets)
-│   ├── 03-utilities.css            (utility classes, toast messages)
-│   ├── 04-layout.css               (screen definitions, game-screen, header, starter screen)
-│   ├── 05-buttons.css              (button variants)
-│   ├── 06-panels.css               (three-panel layout, tabs, panel-content)
-│   ├── 07-vasen.css                (väsen inventory, family sections, details panel)
-│   ├── 08-party.css                (party slots)
-│   ├── 09-zones.css                (zone list, zone items, standardised väsen cards)
-│   ├── 10-combat.css               (combat arena, combatant panels, ability buttons)
-│   ├── 11-modals.css               (rune/item/attribute-stage cards, combat UI base,
-│   │                                offer-modal confirmation)
-│   ├── 12-badges.css               (element, rarity, and family badges)
-│   ├── 13-animations.css           (keyframe animations, ability effects)
-│   ├── 14-responsive.css           (battle-log collapsible, touch-action helpers,
-│   │                                ALL responsive breakpoints 320 px – 1440 px+,
-│   │                                accessibility — hover/focus/reduced-motion)
-│   └── 15-collapsibles.css         (element & family matchup collapsible popups —
-│                                    clickable badges, matchup-details, family-description-popup)
+│   ├── main.css                    (import file)
+│   ├── 01-variables.css            (CSS variables)
+│   ├── 02-reset.css                (reset & base styles)
+│   ├── 03-utilities.css            (utility classes)
+│   ├── 04-layout.css               (screens & layout)
+│   ├── 05-buttons.css              (button styles)
+│   ├── 06-panels.css               (panels & tabs)
+│   ├── 07-vasen.css                (väsen UI)
+│   ├── 08-party.css                (party section)
+│   ├── 09-zones.css                (zone section)
+│   ├── 10-combat.css               (combat UI)
+│   ├── 11-modals.css               (modal styles)
+│   ├── 12-badges.css               (badges & effects)
+│   ├── 13-animations.css           (animations & ability animations)
+│   └── 14-responsive.css           (responsive design)
 │
 ├── js/
 │   ├── core/
-│   │   ├── 0-viewport.js           (viewport & DPR utility — loads first)
-│   │   │                            sets --vh CSS variable, watches DPR changes,
-│   │   │                            closes stale popups on resize/orientation change
-│   │   ├── 1-constants.js          (game constants & configuration)
+│   │   ├── 1-constants.js          (game constants)
 │   │   ├── 2-data-abilities.js     (ability definitions)
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
@@ -129,57 +119,33 @@ Vasenvaktaren/
 │   ├── systems/
 │   │   ├── 6a-battle-core.js       (Battle class)
 │   │   ├── 6b-battle-ai.js         (EnemyAI class)
-│   │   └── 7-game-state.js         (GameState class, save/load)
+│   │   └── 7-game-state.js         (GameState class)
 │   │
 │   ├── ui/
-│   │   ├── 8a-ui-core.js           (UIController class, overlay management,
-│   │   │                            positionPopupForCombatCard helper)
-│   │   ├── 8b-ui-screens.js        (screen switching, tab navigation)
-│   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, matchup display)
-│   │   ├── 8d-ui-items.js          (item and rune inventory)
-│   │   ├── 8e-ui-party.js          (party slot management, väsen release)
-│   │   ├── 8f-ui-zones.js          (zone selection, descriptions, exploration UI)
-│   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, battle animations)
-│   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, encounter results)
-│   │   └── 8i-ui-settings.js       (settings, profile, game guide)
+│   │   ├── 8a-ui-core.js           (UIController class, initialization, and overlay management)
+│   │   ├── 8b-ui-screens.js        (screen switching and tab navigation)
+│   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, and matchup display)
+│   │   ├── 8d-ui-items.js          (item and rune inventory management)
+│   │   ├── 8e-ui-party.js          (party slot management and väsen release)
+│   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
+│   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and battle animations)
+│   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
+│   │   └── 8i-ui-settings.js       (settings, profile, and game guide)
 │   │
 │   └── game/
-│       ├── 9a-game-core.js         (Game class, menu flow, core lifecycle)
-│       ├── 9b-game-exploration.js  (wild encounters, battle handling)
-│       ├── 9c-game-guardian.js     (guardian battles)
-│       ├── 9d-game-endless.js      (endless tower mode)
-│       ├── 9e-game-actions.js      (combat action handlers)
-│       └── 9f-game-init.js         (bootstrap, global event bindings)
+│       ├── 9a-game-core.js         (Game class, menu flow, and core lifecycle)
+│       ├── 9b-game-exploration.js   (wild encounters and battle handling)
+│       ├── 9c-game-guardian.js      (guardian battles)
+│       ├── 9d-game-endless.js       (endless tower mode)
+│       ├── 9e-game-actions.js       (combat action handlers)
+│       └── 9f-game-init.js         (bootstrap and event bindings)
 │
 └── assets/
     ├── vasen/
-    │   └── [30 Väsen images — PNG pixel art]
+    │   └── [30 Väsen images]
     └── zones/
-        └── [7 zone images — PNG]
+        └── [7 zone images]
 ```
-
-### Script load order
-
-Scripts are loaded in numbered order. The prefix determines dependencies:
-
-| Prefix | Layer | Depends on |
-|--------|-------|------------|
-| `0-` | Viewport utility | nothing (runs immediately) |
-| `1–5` | Core data & logic | nothing |
-| `6–7` | Game systems | core |
-| `8a–8i` | UI controllers | core + systems |
-| `9a–9f` | Game controllers | all of the above |
-
-### Responsive breakpoints (all in `11-modals.css`)
-
-| Range | Layout |
-|-------|--------|
-| 1440 px+ | Three columns: 320 px / 1fr / 1fr |
-| 1025–1439 px | Three columns: 280 px / minmax(300,400) / 1fr |
-| 769–1024 px | Two columns: 280 px / 1fr (right panel wraps below) |
-| ≤ 768 px | Single column, full scroll |
-| `max-height: 800px` | Compact combat log, reduced details panel |
-| `max-height: 850px` | Combat arena switches to column layout |
 ## Feature roadmap
 
 - [x] Finish Main Functionality (100%)

@@ -23,9 +23,6 @@ UIController.prototype.showCombatUI = function() {
         this.combatLogMessages = [];
         this.combatLog.innerHTML = '';
 
-        // Zone image is now hidden — no point animating the SVG wave filter
-        this.pauseZoneAnimation();
-
         // Auto-size combat log to fill remaining viewport on desktop
         if (!this._boundSizeCombatLog) {
                 this._boundSizeCombatLog = this._sizeCombatLog.bind(this);
@@ -40,9 +37,6 @@ UIController.prototype.hideCombatUI = function() {
         this.combatUI.style.display = 'none';
         this.combatUI.classList.remove('active');
         this.zoneDescription.style.display = 'block';
-
-        // Zone image is visible again — resume the SVG wave filter animation
-        this.resumeZoneAnimation();
 
         // Remove resize listener and reset height
         if (this._boundSizeCombatLog) {
