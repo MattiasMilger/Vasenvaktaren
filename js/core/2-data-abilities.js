@@ -29,7 +29,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Sinkhole': {
@@ -50,7 +50,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Smithing': {
@@ -83,7 +83,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Elven Light': {
@@ -104,7 +104,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Thick Coat': {
@@ -137,7 +137,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Hail Storm': {
@@ -158,7 +158,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Skald\'s Mead': {
@@ -191,7 +191,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Fire Breath': {
@@ -212,7 +212,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Burning Insult': {
@@ -245,7 +245,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Wailing Cry': {
@@ -266,7 +266,7 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
-        power: 65,
+        power: 68,
         meginCost: 50
     },
     'Ethereal Melody': {
