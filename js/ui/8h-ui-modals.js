@@ -57,8 +57,6 @@ if (extraClass) {
 ui.showModalOverlay();
 modal.classList.add('active');
 
-const firstButton = btnContainer.querySelector('button:not([disabled])');
-if (firstButton) firstButton.focus();
 
 };
 

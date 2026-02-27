@@ -108,6 +108,39 @@
     width: 100%;
 }
 
+/* Center all flex rows inside modal vasen cards */
+.ally-select-btn .standard-vasen-header,
+.swap-modal-btn .standard-vasen-header,
+.knockout-swap-btn .standard-vasen-header,
+.add-vasen-btn .standard-vasen-header,
+.swap-party-card .standard-vasen-header {
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.ally-select-btn .standard-vasen-badges,
+.swap-modal-btn .standard-vasen-badges,
+.knockout-swap-btn .standard-vasen-badges,
+.add-vasen-btn .standard-vasen-badges,
+.swap-party-card .standard-vasen-badges,
+.ally-select-btn .standard-vasen-attributes,
+.swap-modal-btn .standard-vasen-attributes,
+.knockout-swap-btn .standard-vasen-attributes,
+.add-vasen-btn .standard-vasen-attributes,
+.swap-party-card .standard-vasen-attributes,
+.ally-select-btn .standard-vasen-stages,
+.swap-modal-btn .standard-vasen-stages,
+.knockout-swap-btn .standard-vasen-stages,
+.add-vasen-btn .standard-vasen-stages,
+.swap-party-card .standard-vasen-stages,
+.ally-select-btn .standard-vasen-runes,
+.swap-modal-btn .standard-vasen-runes,
+.knockout-swap-btn .standard-vasen-runes,
+.add-vasen-btn .standard-vasen-runes,
+.swap-party-card .standard-vasen-runes {
+    justify-content: center;
+}
+
 .ally-select-btn:hover,
 .swap-modal-btn:hover,
 .knockout-swap-btn:hover,

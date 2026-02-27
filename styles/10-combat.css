@@ -844,6 +844,14 @@
     border-bottom: 2px solid var(--border-color);
 }
 
+#add-vasen-modal .modal-header,
+#swap-modal .modal-header,
+#ally-select-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: var(--spacing-sm);
+}
+
 .modal-title {
     font-size: var(--font-size-lg);
     color: var(--text-accent);
@@ -1198,6 +1206,7 @@
 /* Swap Modal */
 .modal-swap {
     max-width: 400px;
+    text-align: center;
 }
 
 .swap-vasen-list {
