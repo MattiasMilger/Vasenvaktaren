@@ -187,6 +187,30 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
     // Check achievements
     gameState.checkAchievements();
 
+    // Unlock lore entries on first guardian clear
+    if (wasFirstClear) {
+        // Guardian's own lore entry
+        const guardianLoreKey = LORE_ENTRY_KEYS.find(k =>
+            LORE_ENTRIES[k].unlockType === 'guardian' &&
+            LORE_ENTRIES[k].unlockKey === gameState.currentZone
+        );
+        if (guardianLoreKey && gameState.unlockLoreEntry(guardianLoreKey)) {
+            ui.showLoreUnlockMessage(guardianLoreKey);
+        }
+
+        // Next zone's lore entry
+        if (currentIndex < ZONE_ORDER.length - 1) {
+            const nextZoneId = ZONE_ORDER[currentIndex + 1];
+            const zoneLoreKey = LORE_ENTRY_KEYS.find(k =>
+                LORE_ENTRIES[k].unlockType === 'zone' &&
+                LORE_ENTRIES[k].unlockKey === nextZoneId
+            );
+            if (zoneLoreKey && gameState.unlockLoreEntry(zoneLoreKey)) {
+                ui.showLoreUnlockMessage(zoneLoreKey);
+            }
+        }
+    }
+
     // Show result
     let message = `<p>${guardian.dialogue.win}</p>`;
     let callback = () => this.endBattle(); // Default callback to just return to game screen

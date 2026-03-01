@@ -25,7 +25,10 @@ class GameState {
         
         // Set of favorite väsen IDs (shown first in inventory)
         this.favoriteVasen = new Set();
-        
+
+        // Set of unlocked lore entry keys
+        this.unlockedLoreEntries = new Set();
+
         // Zone progression
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
@@ -35,6 +38,7 @@ class GameState {
             champion: false,
             rune_master: false,
             hoarder: false,
+            lore_master: false,
         };
         
         // Game flags
@@ -388,6 +392,115 @@ class GameState {
     hasAllRunes() {
         return this.collectedRunes.size >= Object.keys(RUNES).length;
     }
+
+    // Unlock a single lore entry by key; returns true if newly unlocked
+    unlockLoreEntry(key) {
+        if (!LORE_ENTRIES[key]) return false;
+        if (this.unlockedLoreEntries.has(key)) return false;
+        this.unlockedLoreEntries.add(key);
+        this.checkAchievements();
+        this.saveGame();
+        return true;
+    }
+
+    // Unlock all standard lore entries and the starting zone entry
+    unlockStandardLoreEntries() {
+        LORE_STANDARD_KEYS.forEach(k => this.unlockLoreEntry(k));
+        // Trollskogen is always the starting zone — unlock its lore entry
+        this.unlockLoreEntry('location_trollskogen');
+    }
+
+    // Scan existing game state and retroactively unlock all earned lore entries.
+    // Uses batch pattern — adds directly to the Set, single save at the end.
+    retroactivelyUnlockLoreEntries() {
+        // Remove stale keys from deleted or renamed lore entries so the count stays accurate
+        this.unlockedLoreEntries.forEach(k => {
+            if (!LORE_ENTRIES[k]) this.unlockedLoreEntries.delete(k);
+        });
+
+        const unlock = (key) => {
+            if (LORE_ENTRIES[key]) this.unlockedLoreEntries.add(key);
+        };
+
+        // Standard entries (auto-unlocked at game start) + starting zone
+        LORE_STANDARD_KEYS.forEach(k => unlock(k));
+        unlock('location_trollskogen');
+
+        // Unlock entries earned by väsen already in collection
+        this.vasenCollection.forEach(vasen => {
+            const species = vasen.species;
+            if (!species) return;
+
+            // Species entries (multiple entries can share the same unlock key, e.g. god entries)
+            LORE_ENTRY_KEYS.filter(k =>
+                LORE_ENTRIES[k].unlockType === 'vasen' && LORE_ENTRIES[k].unlockKey === vasen.speciesName
+            ).forEach(k => unlock(k));
+
+            // Family entries
+            LORE_ENTRY_KEYS.filter(k =>
+                LORE_ENTRIES[k].unlockType === 'family' && LORE_ENTRIES[k].unlockKey === species.family
+            ).forEach(k => unlock(k));
+
+            // Element entries
+            LORE_ENTRY_KEYS.filter(k =>
+                LORE_ENTRIES[k].unlockType === 'element' && LORE_ENTRIES[k].unlockKey === species.element
+            ).forEach(k => unlock(k));
+
+            // Ability entries
+            if (species.abilities) {
+                species.abilities.forEach(abilityName => {
+                    LORE_ENTRY_KEYS.filter(k =>
+                        LORE_ENTRIES[k].unlockType === 'ability' && LORE_ENTRIES[k].unlockKey === abilityName
+                    ).forEach(k => unlock(k));
+                });
+            }
+
+            // Taming item entries
+            if (species.tamingItem) {
+                LORE_ENTRY_KEYS.filter(k =>
+                    LORE_ENTRIES[k].unlockType === 'item' && LORE_ENTRIES[k].unlockKey === species.tamingItem
+                ).forEach(k => unlock(k));
+            }
+
+            // Valhalla entries (taming Einharje or Valkyria)
+            if (vasen.speciesName === 'Einharje' || vasen.speciesName === 'Valkyria') {
+                LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => unlock(k));
+            }
+        });
+
+        // Valhalla entries from inventory (finding Valhalla Pork)
+        if (this.itemInventory['Valhalla Pork'] > 0) {
+            LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => unlock(k));
+        }
+
+        // Zone entries for all zones the player has unlocked
+        LORE_ENTRY_KEYS.forEach(k => {
+            if (LORE_ENTRIES[k].unlockType === 'zone') {
+                if (this.isZoneUnlocked(LORE_ENTRIES[k].unlockKey)) unlock(k);
+            }
+        });
+
+        // Guardian entries for each defeated guardian
+        LORE_ENTRY_KEYS.forEach(k => {
+            if (LORE_ENTRIES[k].unlockType === 'guardian') {
+                if (this.defeatedGuardians.has(LORE_ENTRIES[k].unlockKey)) unlock(k);
+            }
+        });
+
+        // Offering entries - unlocked once the player has made their first offer
+        if (this.firstCombatTutorialShown) {
+            LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'offering').forEach(k => unlock(k));
+        }
+
+        // Single save at the end
+        this.checkAchievements();
+        this.saveGame();
+    }
+
+    // Check if all lore entries are unlocked
+    hasAllLoreEntries() {
+        return this.unlockedLoreEntries.size >= LORE_TOTAL;
+    }
     
     // Defeat guardian and unlock next zone
     defeatGuardian(zoneId) {
@@ -650,6 +763,8 @@ class GameState {
     
     // Check and update achievements
     checkAchievements() {
+        const before = { ...this.achievements };
+
         // Champion - Defeat all zone guardians
         const allGuardians = Object.keys(ZONES).filter(z => ZONES[z].guardian);
         if (allGuardians.every(z => this.defeatedGuardians.has(z))) {
@@ -666,6 +781,26 @@ class GameState {
         if (this.getUniqueSpeciesTamed() === totalSpecies) {
             this.achievements.hoarder = true;
         }
+
+        // Lore Master - Collect all lore entries
+        if (this.hasAllLoreEntries()) {
+            this.achievements.lore_master = true;
+        }
+
+        // Notify for newly unlocked achievements
+        const achievementNames = {
+            champion:    'Achievement unlocked: Champion',
+            rune_master: 'Achievement unlocked: Rune Master',
+            hoarder:     'Achievement unlocked: Hoarder',
+            lore_master: 'Achievement unlocked: Lore Master'
+        };
+        if (typeof ui !== 'undefined') {
+            Object.keys(achievementNames).forEach(key => {
+                if (!before[key] && this.achievements[key]) {
+                    ui.showMessage(achievementNames[key], 'success');
+                }
+            });
+        }
     }
     
     // Serialize game state for saving
@@ -679,6 +814,7 @@ class GameState {
             itemInventory: this.itemInventory,
             collectedRunes: Array.from(this.collectedRunes),
             favoriteVasen: Array.from(this.favoriteVasen),
+            unlockedLoreEntries: Array.from(this.unlockedLoreEntries),
             currentZone: this.currentZone,
             defeatedGuardians: Array.from(this.defeatedGuardians),
             achievements: this.achievements,
@@ -724,6 +860,7 @@ class GameState {
             this.itemInventory = data.itemInventory || {};
             this.collectedRunes = new Set(data.collectedRunes || []);
             this.favoriteVasen = new Set(data.favoriteVasen || []);
+            this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
             this.currentZone = data.currentZone || 'TROLLSKOGEN';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
             this.achievements = data.achievements || {
@@ -822,11 +959,14 @@ class GameState {
         this.itemInventory = {};
         this.collectedRunes = new Set();
         this.favoriteVasen = new Set();
+        this.unlockedLoreEntries = new Set();
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
         this.achievements = {
             champion: false,
             rune_master: false,
+            hoarder: false,
+            lore_master: false,
         };
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;

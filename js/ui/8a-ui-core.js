@@ -77,6 +77,9 @@ class UIController {
         this.settingsModal = document.getElementById('settings-modal');
         this.combatTipsModal = document.getElementById('combat-tips-modal');
 
+        // Lore modal
+        this.loreModal = document.getElementById('lore-modal');
+
         // Player info
         this.playerNameDisplay = document.getElementById('player-name-display');
         this.profileModal = document.getElementById('profile-modal');
@@ -125,6 +128,10 @@ confirmImportBtn.addEventListener('click', () => {
 });
 
 document.getElementById('reset-game-btn').addEventListener('click', () => this.confirmReset());
+
+// Lore book
+document.getElementById('lore-btn').addEventListener('click', () => this.showLore());
+document.getElementById('close-lore').addEventListener('click', () => this.hideLore());
 
 // Combat tips
 document.getElementById('combat-tips-btn').addEventListener('click', () => this.showCombatTips());
@@ -209,7 +216,7 @@ document.addEventListener('click', (e) => {
 
         // Add a small delay before hiding to prevent flash when transitioning between modals
         this.overlayHideTimeout = setTimeout(() => {
-            const activeModals = document.querySelectorAll('.modal.active:not(#settings-modal):not(#profile-modal):not(#combat-tips-modal)');
+            const activeModals = document.querySelectorAll('.modal.active:not(#settings-modal):not(#profile-modal):not(#combat-tips-modal):not(#lore-modal)');
             if (activeModals.length === 0 && this.modalOverlay) {
                 this.modalOverlay.classList.remove('active');
             }

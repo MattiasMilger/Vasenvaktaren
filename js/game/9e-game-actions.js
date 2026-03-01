@@ -39,9 +39,15 @@ Game.prototype.handleOfferItem = function(itemId) {
         return;
     }
 
-    // NEW: Mark tutorial as shown when player offers an item
+    // Mark tutorial as shown when player offers an item; also unlock offering-type lore entries
     if (!gameState.firstCombatTutorialShown && this.currentBattle.isWildEncounter) {
         gameState.firstCombatTutorialShown = true;
+        LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'offering').forEach(k => {
+            if (!gameState.unlockedLoreEntries.has(k)) {
+                gameState.unlockedLoreEntries.add(k);
+                ui.showLoreUnlockMessage(k);
+            }
+        });
         gameState.saveGame();
     }
 

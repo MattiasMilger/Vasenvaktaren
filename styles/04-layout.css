@@ -241,3 +241,26 @@
     gap: var(--spacing-sm);
     flex-shrink: 0;
 }
+
+@media (max-width: 600px) {
+    .game-header {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header-center {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .header-right {
+        flex-shrink: 0;
+    }
+}

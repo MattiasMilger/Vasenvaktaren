@@ -21,6 +21,9 @@ class Game {
                 gameState.saveGame();
             }
 
+            // Retroactively unlock all lore entries earned by existing progress
+            gameState.retroactivelyUnlockLoreEntries();
+
             // Has save data - go to game screen
             this.showGameScreen();
         } else {
@@ -149,6 +152,25 @@ startingItems.forEach(item => {
                 // Start the game for real
                 gameState.gameStarted = true;
                 gameState.saveGame();
+
+                // Unlock standard lore entries and starter-specific entries
+                gameState.unlockStandardLoreEntries();
+                const starterSpecies = VASEN_SPECIES[selectedStarterName];
+                if (starterSpecies) {
+                    // Starter väsen species entry
+                    const speciesKey = LORE_ENTRY_KEYS.find(k =>
+                        LORE_ENTRIES[k].unlockType === 'vasen' &&
+                        LORE_ENTRIES[k].unlockKey === selectedStarterName
+                    );
+                    if (speciesKey) gameState.unlockLoreEntry(speciesKey);
+
+                    // Starter family entry (always Vätte)
+                    const familyKey = LORE_ENTRY_KEYS.find(k =>
+                        LORE_ENTRIES[k].unlockType === 'family' &&
+                        LORE_ENTRIES[k].unlockKey === starterSpecies.family
+                    );
+                    if (familyKey) gameState.unlockLoreEntry(familyKey);
+                }
 
                 game.showGameScreen();
             }

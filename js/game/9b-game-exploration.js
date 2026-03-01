@@ -13,6 +13,20 @@ Game.prototype.explore = function() {
     const result = gameState.explore();
     ui.showEncounterResult(result);
 
+    // Unlock lore entries based on exploration encounter
+    if (result.type === 'well') {
+        if (gameState.unlockLoreEntry('location_sacred_well')) {
+            ui.showLoreUnlockMessage('location_sacred_well');
+        }
+    } else if (result.type === 'item' && result.itemId === 'Valhalla Pork') {
+        // Finding Valhalla Pork unlocks Valhalla-related lore entries
+        LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => {
+            if (gameState.unlockLoreEntry(k)) {
+                ui.showLoreUnlockMessage(k);
+            }
+        });
+    }
+
     if (result.type !== 'vasen') {
         this.refreshUI();
     }
@@ -48,6 +62,72 @@ Game.prototype.startBattle = function(enemyVasen) {
     ui.showCombatUI();
     ui.renderCombat(this.currentBattle);
     ui.addCombatLog(`A wild ${enemyVasen.getDisplayName()} appears!`, 'encounter');
+};
+
+// Unlock all lore entries triggered by taming a specific väsen
+Game.prototype.unlockTamingLoreEntries = function(newVasen) {
+    const species = newVasen.species;
+    if (!species) return;
+
+    // Species entry
+    const speciesKey = LORE_ENTRY_KEYS.find(k =>
+        LORE_ENTRIES[k].unlockType === 'vasen' &&
+        LORE_ENTRIES[k].unlockKey === newVasen.speciesName
+    );
+    if (speciesKey && gameState.unlockLoreEntry(speciesKey)) {
+        ui.showLoreUnlockMessage(speciesKey);
+    }
+
+    // Family entry
+    const familyKey = LORE_ENTRY_KEYS.find(k =>
+        LORE_ENTRIES[k].unlockType === 'family' &&
+        LORE_ENTRIES[k].unlockKey === species.family
+    );
+    if (familyKey && gameState.unlockLoreEntry(familyKey)) {
+        ui.showLoreUnlockMessage(familyKey);
+    }
+
+    // Element concept entry
+    const elementKey = LORE_ENTRY_KEYS.find(k =>
+        LORE_ENTRIES[k].unlockType === 'element' &&
+        LORE_ENTRIES[k].unlockKey === species.element
+    );
+    if (elementKey && gameState.unlockLoreEntry(elementKey)) {
+        ui.showLoreUnlockMessage(elementKey);
+    }
+
+    // Ability entries (lore-worthy abilities only)
+    if (species.abilities) {
+        species.abilities.forEach(abilityName => {
+            const abilityKey = LORE_ENTRY_KEYS.find(k =>
+                LORE_ENTRIES[k].unlockType === 'ability' &&
+                LORE_ENTRIES[k].unlockKey === abilityName
+            );
+            if (abilityKey && gameState.unlockLoreEntry(abilityKey)) {
+                ui.showLoreUnlockMessage(abilityKey);
+            }
+        });
+    }
+
+    // Taming item entry (unlocked when correctly used to tame)
+    if (species.tamingItem) {
+        const itemKey = LORE_ENTRY_KEYS.find(k =>
+            LORE_ENTRIES[k].unlockType === 'item' &&
+            LORE_ENTRIES[k].unlockKey === species.tamingItem
+        );
+        if (itemKey && gameState.unlockLoreEntry(itemKey)) {
+            ui.showLoreUnlockMessage(itemKey);
+        }
+    }
+
+    // Valhalla entries (taming Einharje or Valkyria)
+    if (newVasen.speciesName === 'Einharje' || newVasen.speciesName === 'Valkyria') {
+        LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => {
+            if (gameState.unlockLoreEntry(k)) {
+                ui.showLoreUnlockMessage(k);
+            }
+        });
+    }
 };
 
 // Handle battle end
@@ -160,6 +240,9 @@ if (result.tamed && result.tamedVasen) {
 
     // Check for achievements
     gameState.checkAchievements();
+
+    // Unlock lore entries earned by taming this väsen
+    this.unlockTamingLoreEntries(newVasen);
 }
 
     // Apply post-battle heal

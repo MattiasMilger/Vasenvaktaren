@@ -131,6 +131,10 @@ achievementsHtml += '</div></div>';
                             <span class="collection-value">${gameState.collectedRunes.size} / ${RUNE_LIST.length}</span>
                         </div>
                         <div class="collection-stat">
+                            <span class="collection-label">Lore Entries Collected</span>
+                            <span class="collection-value">${gameState.unlockedLoreEntries.size} / ${LORE_TOTAL}</span>
+                        </div>
+                        <div class="collection-stat">
                             <span class="collection-label">Zones Cleared</span>
                             <span class="collection-value">${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</span>
                         </div>

@@ -67,9 +67,21 @@ Water,
 Fire,
 Wind
 
+### Lore Book
+- Collect lore entries by taming Väsen, defeating guardians, and finding items
+- Entries organised into categories: Väsen, Families, Items, Locations, Abilities, Gods, Names, Concepts
+- Each entry has English and Swedish descriptions — toggle with the language button
+- Expand or collapse individual entries or entire categories
+- Search highlights matching text in currently visible entries
+- Category labels switch to Swedish when Swedish mode is active
+
 ## Achievements
 
-Collection based achievements
+Collection based achievements — a green notification appears when you unlock one:
+- **Champion**: Defeat all zone guardians
+- **Rune Master**: Collect all runes
+- **Hoarder**: Tame every Väsen type
+- **Lore Master**: Collect all lore entries
 
 ## Save System
 
@@ -106,7 +118,8 @@ Vasenvaktaren/
 │   ├── 11-modals.css               (modal styles)
 │   ├── 12-badges.css               (badges & effects)
 │   ├── 13-animations.css           (animations & ability animations)
-│   └── 14-responsive.css           (responsive design)
+│   ├── 14-responsive.css           (responsive design)
+│   └── 15-lore.css                 (lore book styles)
 │
 ├── js/
 │   ├── core/
@@ -114,7 +127,8 @@ Vasenvaktaren/
 │   │   ├── 2-data-abilities.js     (ability definitions)
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
-│   │   └── 5-vasen-instance.js     (VasenInstance class)
+│   │   ├── 5-vasen-instance.js     (VasenInstance class)
+│   │   └── 10-data-lore.js         (lore entries, categories, and unlock keys)
 │   │
 │   ├── systems/
 │   │   ├── 6a-battle-core.js       (Battle class)
@@ -130,7 +144,8 @@ Vasenvaktaren/
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
 │   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and battle animations)
 │   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
-│   │   └── 8i-ui-settings.js       (settings, profile, and game guide)
+│   │   ├── 8i-ui-settings.js       (settings, profile, and game guide)
+│   │   └── 8j-ui-lore.js           (lore book rendering, search, and language toggle)
 │   │
 │   └── game/
 │       ├── 9a-game-core.js         (Game class, menu flow, and core lifecycle)

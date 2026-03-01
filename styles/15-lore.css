@@ -1,0 +1,341 @@
+/* =============================================================================
+   15-lore.css - Lore Book Styles
+   ============================================================================= */
+
+/* =============================================================================
+   LORE MODAL SIZING
+   ============================================================================= */
+
+/* Lore modal is wider and taller than a standard modal to accommodate long text */
+.modal-lore {
+    max-width: 680px;
+    width: 95vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-lore .modal-title {
+    flex-shrink: 0;
+}
+
+/* Scrollable content area */
+#lore-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: var(--spacing-xs);
+}
+
+/* =============================================================================
+   LORE COUNTER
+   ============================================================================= */
+
+.lore-header-controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Top row: counter on the left, buttons on the right */
+.lore-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+}
+
+.lore-header-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    flex-shrink: 0;
+}
+
+.lore-counter {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.lore-global-lang-btn,
+.lore-collapse-btn {
+    flex-shrink: 0;
+}
+
+/* Search input */
+.lore-search-input {
+    width: 100%;
+    padding: 4px var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.lore-search-input:focus {
+    border-color: var(--border-light);
+}
+
+/* Search highlight */
+mark.lore-highlight {
+    background: rgba(255, 220, 80, 0.35);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* =============================================================================
+   LORE CATEGORIES
+   ============================================================================= */
+
+.lore-category {
+    margin-bottom: var(--spacing-lg);
+}
+
+.lore-category-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-accent);
+    margin: 0 0 var(--spacing-sm) 0;
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/* Chevron inside category title */
+.lore-cat-chevron {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: inline-block;
+    line-height: 1;
+}
+
+.lore-cat-chevron::before {
+    content: '»';
+}
+
+/* Collapsed state: swap chevron and hide entry list */
+.lore-category.lore-category-collapsed .lore-cat-chevron::before {
+    content: '«';
+}
+
+.lore-category.lore-category-collapsed .lore-entry-list {
+    display: none;
+}
+
+/* =============================================================================
+   LORE ENTRY LIST
+   ============================================================================= */
+
+.lore-entry-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+/* =============================================================================
+   LOCKED ENTRY — name only, greyed out
+   ============================================================================= */
+
+.lore-entry-locked {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    opacity: 0.45;
+    user-select: none;
+    cursor: default;
+}
+
+.lore-entry-name-locked {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* =============================================================================
+   UNLOCKED ENTRY — full card
+   ============================================================================= */
+
+.lore-entry-unlocked {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm) var(--spacing-md);
+    transition: border-color var(--transition-base);
+}
+
+.lore-entry-unlocked:hover {
+    border-color: var(--border-light);
+}
+
+/* Header row: chevron + name + language toggle button */
+.lore-entry-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Chevron — « when collapsed, » when expanded */
+.lore-entry-chevron {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: inline-block;
+    line-height: 1;
+}
+
+.lore-entry-chevron::before {
+    content: '«';
+}
+
+.lore-entry-unlocked.lore-entry-expanded .lore-entry-chevron::before {
+    content: '»';
+}
+
+.lore-entry-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-accent);
+    flex: 1;
+}
+
+/* Language toggle button — small, unobtrusive */
+.lore-lang-btn {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    padding: 2px var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    white-space: nowrap;
+    /* Hidden when collapsed */
+    display: none;
+}
+
+.lore-entry-unlocked.lore-entry-expanded .lore-lang-btn {
+    display: inline-block;
+}
+
+.lore-lang-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-secondary);
+}
+
+/* Description text — hidden when collapsed */
+.lore-entry-body {
+    display: none;
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
+.lore-entry-unlocked.lore-entry-expanded .lore-entry-body {
+    display: block;
+}
+
+.lore-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Meta row: source | heritage — hidden when collapsed */
+.lore-entry-meta {
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    padding-top: var(--spacing-xs);
+    border-top: 1px solid var(--border-color);
+    margin-top: var(--spacing-xs);
+}
+
+.lore-entry-unlocked.lore-entry-expanded .lore-entry-meta {
+    display: flex;
+}
+
+.lore-meta-label {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+}
+
+.lore-meta-value {
+    color: var(--text-secondary);
+}
+
+.lore-meta-sep {
+    color: var(--border-light);
+}
+
+/* =============================================================================
+   CLOSE BUTTON ROW
+   ============================================================================= */
+
+.modal-lore .btn-secondary {
+    margin-top: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+/* =============================================================================
+   RESPONSIVE — MOBILE
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    .modal-lore {
+        max-height: 90vh;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .lore-entry-header {
+        flex-wrap: wrap;
+    }
+
+    .lore-entry-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .lore-meta-sep {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .lore-entry-unlocked {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .lore-desc {
+        font-size: var(--font-size-xs);
+    }
+}

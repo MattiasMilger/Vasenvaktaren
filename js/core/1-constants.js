@@ -493,7 +493,7 @@ const ZONES = {
         levelRange: [10, 14],
         spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner'],
         guardian: {
-            name: 'Gerd',
+            name: 'Brynhild',
             team: [
                 { species: 'Svartalv', level: 15, temperament: 'ALERT', runes: ['FEHU'] },
                 { species: 'Myling', level: 15, temperament: 'THOUGHTFUL', runes: ['ODAL'] },
@@ -510,7 +510,7 @@ const ZONES = {
     GLIMRANDE_KALLAN: {
         id: 'glimrande_kallan',
         name: 'Glimrande Källan',
-        description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves.',
+        description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
         image: 'assets/zones/glimrandekallan.png',
         levelRange: [15, 19],
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr'],
@@ -554,7 +554,7 @@ const ZONES = {
     VARLDENS_ANDE: {
         id: 'varldens_ande',
         name: 'Världens Ände',
-        description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos.',
+        description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos — Ragnarök, the prophesied end of the gods.',
         image: 'assets/zones/varldensande.png',
         levelRange: [25, 29],
         spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg'],
@@ -591,6 +591,7 @@ const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },
     RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
     HOARDER: { id: 'hoarder', name: 'Hoarder', description: 'Tame every Väsen type' },
+    LORE_MASTER: { id: 'lore_master', name: 'Lore Master', description: 'Collect all Lore Entries' },
 };
 
 // Helper functions for constants

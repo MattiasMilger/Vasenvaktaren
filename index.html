@@ -87,6 +87,7 @@
                 </button>
             </div>
             <div class="header-right">
+                <button id="lore-btn" class="btn btn-small">Lore Book</button>
                 <button id="combat-tips-btn" class="btn btn-small">Game Guide</button>
                 <button id="settings-btn" class="btn btn-small">Settings</button>
             </div>
@@ -280,6 +281,15 @@
     </div>
 </div>
 
+<!-- Lore Modal -->
+<div id="lore-modal" class="modal">
+    <div class="modal-content modal-lore">
+        <h3 class="modal-title">Lore Book</h3>
+        <div id="lore-content"></div>
+        <button id="close-lore" class="btn btn-secondary">Close</button>
+    </div>
+</div>
+
 <!-- Settings Modal -->
 <div id="settings-modal" class="modal">
     <div class="modal-content modal-settings">
@@ -411,6 +421,7 @@
     <script src="js/core/2-data-abilities.js"></script>
     <script src="js/core/3-data-vasen.js"></script>
     <script src="js/core/4-data-items.js"></script>
+    <script src="js/core/10-data-lore.js"></script>
     <script src="js/core/5-vasen-instance.js"></script>
     
     <!-- Game Systems -->
@@ -428,6 +439,7 @@
     <script src="js/ui/8g-ui-combat.js"></script>
     <script src="js/ui/8h-ui-modals.js"></script>
     <script src="js/ui/8i-ui-settings.js"></script>
+    <script src="js/ui/8j-ui-lore.js"></script>
 
     <!-- Game Controller (modular) -->
     <script src="js/game/9a-game-core.js"></script>
