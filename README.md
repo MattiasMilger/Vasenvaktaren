@@ -71,9 +71,6 @@ Wind
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
 - Entries organised into categories: Väsen, Families, Items, Locations, Abilities, Gods, Names, Concepts
 - Each entry has English and Swedish descriptions — toggle with the language button
-- Expand or collapse individual entries or entire categories
-- Search highlights matching text in currently visible entries
-- Category labels switch to Swedish when Swedish mode is active
 
 ## Achievements
 
