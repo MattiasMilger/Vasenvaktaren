@@ -239,7 +239,12 @@ UIController.prototype._applyLoreSearch = function(container, query) {
 // Build the HTML for one unlocked lore entry card
 UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
     const desc     = (isSwedish ? entry.swedishDesc : entry.englishDesc) || '';
-    const name     = (isSwedish && entry.swedishName) ? entry.swedishName : entry.name;
+    let name;
+    if (isSwedish && entry.swedishName) {
+        name = entry.swedishName.replace(/\s*\([^)]*\)\s*$/, '').trim();
+    } else {
+        name = entry.name;
+    }
     const source   = entry.source || '-';
     const heritage = entry.heritage || '-';
 
