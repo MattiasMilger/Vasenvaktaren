@@ -338,7 +338,7 @@ const LORE_ENTRIES = {
         key: 'vasen_svartalv',
         name: 'Svartalv',
         category: 'vasen',
-        englishDesc: 'The svartalver (dark elves), also known as Dwarves (Swedish: Dvärgar), are the master craftsmen of Norse mythology, living underground in Nidavelir / Svartalfheim. They are distinguished by their extraordinary skill in smithing and forging magical artifacts. According to the Prose Edda, the svartalver forged some of the most important objects in Norse myth: Gleipnir (the magical ribbon binding Fenrir), Gungnir (Odin\'s spear), Mjölnir (Thor\'s hammer), and Draupnir (Odin\'s self-replicating gold ring).'
+        englishDesc: 'The svartalver (dark elves), also known as Dwarves (Swedish: Dvärgar), are the master craftsmen of Norse mythology, living underground in Nidavelir / Svartalfheim. They are distinguished by their extraordinary skill in smithing and forging magical artifacts. According to the Prose Edda, the svartalver forged some of the most important objects in Norse myth: Gleipnir (the magical ribbon binding Fenrir), Gungnir (Odin\'s spear), Mjölnir (Thor\'s hammer), and Draupnir (Odin\'s self-replicating gold ring).',
         swedishDesc: 'Svartalverna är nordisk mytologis mästarhantverkare, även kända som Dvärgar, och bor under jord i Nidavelir / Svartalfheim. De utmärks av sin extraordinära skicklighet i smidning och skapande av magiska föremål. Enligt Prosa-Eddan smidde svartalverna några av de viktigaste föremålen i nordisk myt: Gleipnir (det magiska bandet som binder Fenrir), Gungnir (Odins spjut), Mjölnir (Tors hammare) och Draupnir (Odins självreproducerande guldring). De identifieras ibland med dvärgarna i nordisk mytologi.',
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',

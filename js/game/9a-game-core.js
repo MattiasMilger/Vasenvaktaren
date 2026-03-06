@@ -180,7 +180,7 @@ startingItems.forEach(item => {
             class: 'btn-secondary',
             callback: () => {
                 // Close popup and return to starter selection
-                ui.hideDialogue();
+                ui.hideModalOverlay();
             }
         }
     ],
