@@ -250,20 +250,25 @@ UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
 
     // Extra meta: Family for väsen entries (via VASEN_SPECIES), Väsen name for item entries,
     // and direct family field for god entries and other entries that declare it explicitly.
+    const labelSource   = isSwedish ? 'Källa:'   : 'Source:';
+    const labelHeritage = isSwedish ? 'Arv:'     : 'Heritage:';
+    const labelFamily   = isSwedish ? 'Familj:'  : 'Family:';
+    const labelVasen    = isSwedish ? 'Väsen:'   : 'Väsen:';
+
     let extraMeta = '';
-    if (entry.unlockType === 'vasen' && entry.unlockKey) {
+    if (entry.unlockType === 'vasen' && entry.unlockKey && !entry.family) {
         const species = VASEN_SPECIES[entry.unlockKey];
         if (species && species.family) {
-            extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">Family:</span><span class="lore-meta-value">${species.family}</span>`;
+            extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${species.family}</span>`;
         }
     } else if (entry.unlockType === 'item' && entry.unlockKey) {
         const vasenEntry = Object.values(VASEN_SPECIES).find(s => s.tamingItem === entry.unlockKey);
         if (vasenEntry) {
-            extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">Väsen:</span><span class="lore-meta-value">${vasenEntry.name}</span>`;
+            extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelVasen}</span><span class="lore-meta-value">${vasenEntry.name}</span>`;
         }
     }
     if (entry.family) {
-        extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">Family:</span><span class="lore-meta-value">${entry.family}</span>`;
+        extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${entry.family}</span>`;
     }
 
     return `
@@ -276,10 +281,10 @@ UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
                 <p class="lore-desc">${desc}</p>
             </div>
             <div class="lore-entry-meta">
-                <span class="lore-meta-label">Source:</span>
+                <span class="lore-meta-label">${labelSource}</span>
                 <span class="lore-meta-value">${source}</span>
                 <span class="lore-meta-sep">|</span>
-                <span class="lore-meta-label">Heritage:</span>
+                <span class="lore-meta-label">${labelHeritage}</span>
                 <span class="lore-meta-value">${heritage}</span>${extraMeta}
             </div>
         </div>

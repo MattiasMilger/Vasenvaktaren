@@ -449,7 +449,7 @@ const ZONES = {
         levelRange: [1, 4],
         spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv'],
         guardian: {
-            name: 'Hjördis',
+            name: 'Åsa',
             team: [
                 { species: 'Alva', level: 5, temperament: 'HEALTHY', runes: ['NAUDIZ'] },
                 { species: 'Skogsra', level: 5, temperament: 'ENDURING', runes: ['URUZ'] },
@@ -471,7 +471,7 @@ const ZONES = {
         levelRange: [5, 9],
         spawns: ['Gardstomte', 'Hustomte', 'Nattramn', 'Bortbyting', 'Gloson'],
         guardian: {
-            name: 'Åsa',
+            name: 'Ragnar',
             team: [
                 { species: 'Gardstomte', level: 10, temperament: 'SAVAGE', runes: ['HAGAL'] },
                 { species: 'Nattramn', level: 10, temperament: 'RESILIENT', runes: ['EHWAZ'] },
@@ -493,7 +493,7 @@ const ZONES = {
         levelRange: [10, 14],
         spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner'],
         guardian: {
-            name: 'Brynhild',
+            name: 'Hjördis',
             team: [
                 { species: 'Svartalv', level: 15, temperament: 'ALERT', runes: ['FEHU'] },
                 { species: 'Myling', level: 15, temperament: 'THOUGHTFUL', runes: ['ODAL'] },
@@ -515,7 +515,7 @@ const ZONES = {
         levelRange: [15, 19],
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr'],
         guardian: {
-            name: 'Ragnar',
+            name: 'Sigurd',
             team: [
                 { species: 'Backahast', level: 20, temperament: 'BRUTAL', runes: ['GIFU'] },
                 { species: 'Irrbloss', level: 20, temperament: 'VIGILANT', runes: ['INGUZ'] },
@@ -537,7 +537,7 @@ const ZONES = {
         levelRange: [20, 24],
         spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs'],
         guardian: {
-            name: 'Sigurd',
+            name: 'Brynhild',
             team: [
                 { species: 'Bergatroll', level: 25, temperament: 'RESILIENT', runes: ['THURS'] },
                 { species: 'Eldturs', level: 25, temperament: 'FEROCIOUS', runes: ['KAUNAN'] },

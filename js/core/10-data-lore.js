@@ -718,7 +718,7 @@ const LORE_ENTRIES = {
         source: 'Völsunga saga / Norse Mythology',
         heritage: 'Norse',
         unlockType: 'guardian',
-        unlockKey: 'TROLLSKOGEN'
+        unlockKey: 'DJUPA_GRUVAN'
     },
     'guardian_asa': {
         key: 'guardian_asa',
@@ -729,7 +729,7 @@ const LORE_ENTRIES = {
         source: 'Old Norse Tradition',
         heritage: 'Norse',
         unlockType: 'guardian',
-        unlockKey: 'FOLKETS_BY'
+        unlockKey: 'TROLLSKOGEN'
     },
     'guardian_brynhild': {
         key: 'guardian_brynhild',
@@ -740,7 +740,7 @@ const LORE_ENTRIES = {
         source: 'Völsunga saga / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
-        unlockKey: 'DJUPA_GRUVAN'
+        unlockKey: 'URBERGEN'
     },
     'guardian_ragnar': {
         key: 'guardian_ragnar',
@@ -751,7 +751,7 @@ const LORE_ENTRIES = {
         source: 'Old Norse Sagas',
         heritage: 'Scandinavian',
         unlockType: 'guardian',
-        unlockKey: 'GLIMRANDE_KALLAN'
+        unlockKey: 'FOLKETS_BY'
     },
     'guardian_sigurd': {
         key: 'guardian_sigurd',
@@ -762,7 +762,7 @@ const LORE_ENTRIES = {
         source: 'Völsunga saga / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
-        unlockKey: 'URBERGEN'
+        unlockKey: 'GLIMRANDE_KALLAN'
     },
     'guardian_gylfe': {
         key: 'guardian_gylfe',
@@ -811,8 +811,8 @@ const LORE_ENTRIES = {
         swedishName: 'Oden',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His ravens Huginn and Muninn fly across the world each day, gathering knowledge. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday ("Wōden\'s day" in Old English).',
-        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans korpar Hugin och Munin flyger ut i världen varje dag och samlar kunskap. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ligger till grund för onsdag.',
+        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") — he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday — Old English "Wōden\'s day" (Swedish: onsdag).',
+        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") — han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag — fornengelskt "Wōden\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'valhalla'
@@ -823,8 +823,8 @@ const LORE_ENTRIES = {
         swedishName: 'Tor',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk.',
-        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölnir och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor.',
+        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday — Old English "Þūnor\'s day" (Swedish: torsdag).',
+        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölnir och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag — fornengelskt "Þūnor\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -852,6 +852,19 @@ const LORE_ENTRIES = {
         englishDesc: 'Freyr is one of the most important Vanir gods, lord of sunshine, rain, fertility, and prosperity. He is the son of the sea god Njord and twin brother to the goddess Freyja. Consumed by love for the giantess Gerd, he gave away his enchanted sword - which could fight on its own - in exchange for help winning her hand. Without his sword, he is fated to fall to Surt at Ragnarök. He is a god of peaceful abundance, closely associated with the Swedish Yngling dynasty, which claimed divine descent from him.',
         swedishDesc: 'Frej är en av de viktigaste vanagudarna, herre över solsken, regn, fruktbarhet och välstånd. Han är son till havsguden Njord och tvillingbror till gudinnan Freja. Bränd av kärlek till jättinnan Gerd gav han bort sitt förtrollade svärd - som kunde strida på egen hand - i utbyte mot hjälp att vinna hennes hand. Utan sitt svärd är han ödesbestämd att falla för Surt vid Ragnarök. Han är en gudom för fredlig rikedom, nära förknippad med den svenska Ynglingadynastin, som påstod gudomlig härstamning från honom.',
         source: 'Prose Edda (Skírnismál)',
+        heritage: 'Norse',
+        unlockType: 'guardian',
+        unlockKey: 'DJUPA_GRUVAN'
+    },
+    'god_freja': {
+        key: 'god_freja',
+        name: 'Freyja',
+        swedishName: 'Freja',
+        category: 'gods',
+        family: 'Vaner',
+        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen — a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday — Old English "Frigedæg" (Swedish: fredag).',
+        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen — ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag — fornengelskt "Frigedæg".',
+        source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
         unlockKey: 'DJUPA_GRUVAN'
@@ -963,6 +976,17 @@ const LORE_ENTRIES = {
         unlockKey: 'Ljusalv'
     },
 
+    'concept_edda': {
+        key: 'concept_edda',
+        name: 'The Eddas',
+        swedishName: 'Eddan',
+        category: 'concepts',
+        englishDesc: 'The Eddas are the two primary collections of Norse mythology and poetry, compiled in Iceland in the 13th century. The Prose Edda (also called Snorri\'s Edda), written by Icelandic historian Snorri Sturluson around 1220 CE, is a handbook of Norse mythology and skaldic poetry. The Poetic Edda (the Elder Edda) is a collection of anonymous Old Norse poems including the Völuspá ("The Prophecy of the Seeress") and the Hávamál ("The Sayings of the High One") — a poem in the voice of Odin himself, containing wisdom, ethics, and practical philosophy that spans from social etiquette to cosmic truth. The Hávamál includes Odin\'s account of hanging on Yggdrasil to learn the runes. Together, the Eddas are the most important surviving sources for Norse mythology.',
+        swedishDesc: 'Eddorna är de två primära samlingarna av nordisk mytologi och poesi, sammanställda på Island under 1200-talet. Prosa-Eddan (även kallad Snorres Edda), skriven av den isländske historikern Snorri Sturluson runt år 1220, är en handbok i nordisk mytologi och skaldediktning. Den poetiska Eddan (Den äldre Eddan) är en samling anonyma fornnordiska dikter inklusive Völuspå ("Völvans spådom") och Hávamál ("Den Höges sång") — ett diktverk i Odens röst som innehåller visdom, etik och praktisk filosofi som sträcker sig från social etikett till kosmisk sanning. Hávamål inkluderar Odens berättelse om att hänga på Yggdrasil för att lära sig runorna. Tillsammans är Eddorna de viktigaste bevarade källorna för nordisk mytologi.',
+        source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
+        heritage: 'Norse / Icelandic',
+        unlockType: 'valhalla'
+    },
     'concept_ragnarok': {
         key: 'concept_ragnarok',
         name: 'Ragnarök',
