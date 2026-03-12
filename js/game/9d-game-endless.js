@@ -139,7 +139,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
             }
         });
         ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-        ui.showMessage('Your party was healed to full!');
+        ui.showMessage('Your party was healed to full!', 'success');
 
         // Update record - reached floor before surrendering
         const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
@@ -182,7 +182,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
                 }
             });
             ui.addCombatLog('Your party has been fully restored after conquering the tower!', 'heal');
-            ui.showMessage('Your party was healed to full!');
+            ui.showMessage('Your party was healed to full!', 'success');
 
             // Update record
             const playerTeam = gameState.party.filter(p => p !== null);
@@ -246,7 +246,7 @@ gameState.party.forEach(v => {
             }
         });
         ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-        ui.showMessage('Your party was healed to full!');
+        ui.showMessage('Your party was healed to full!', 'success');
 
         const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
 
