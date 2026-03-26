@@ -96,18 +96,16 @@ Game.prototype.unlockTamingLoreEntries = function(newVasen) {
         ui.showLoreUnlockMessage(elementKey);
     }
 
-    // Ability entries (lore-worthy abilities only)
-    if (species.abilities) {
-        species.abilities.forEach(abilityName => {
-            const abilityKey = LORE_ENTRY_KEYS.find(k =>
-                LORE_ENTRIES[k].unlockType === 'ability' &&
-                LORE_ENTRIES[k].unlockKey === abilityName
-            );
-            if (abilityKey && gameState.unlockLoreEntry(abilityKey)) {
-                ui.showLoreUnlockMessage(abilityKey);
-            }
-        });
-    }
+    // Ability entries — only abilities the väsen has actually learned at its current level
+    newVasen.getAvailableAbilities().forEach(abilityName => {
+        const abilityKey = LORE_ENTRY_KEYS.find(k =>
+            LORE_ENTRIES[k].unlockType === 'ability' &&
+            LORE_ENTRIES[k].unlockKey === abilityName
+        );
+        if (abilityKey && gameState.unlockLoreEntry(abilityKey)) {
+            ui.showLoreUnlockMessage(abilityKey);
+        }
+    });
 
     // Taming item entry (unlocked when correctly used to tame)
     if (species.tamingItem) {
@@ -204,6 +202,17 @@ Game.prototype.handleBattleEnd = function(result) {
             ui.addCombatLog(`${vasen.getName()} gained ${displayExpAmount} experience!`, 'exp');
             if (levelResult.leveledUp) {
                 ui.addCombatLog(`${vasen.getName()} reached level ${levelResult.newLevel}!`, 'levelup');
+
+                // Check if leveling up unlocked a new ability with a lore entry
+                vasen.getAvailableAbilities().forEach(abilityName => {
+                    const abilityKey = LORE_ENTRY_KEYS.find(k =>
+                        LORE_ENTRIES[k].unlockType === 'ability' &&
+                        LORE_ENTRIES[k].unlockKey === abilityName
+                    );
+                    if (abilityKey && gameState.unlockLoreEntry(abilityKey)) {
+                        ui.showLoreUnlockMessage(abilityKey);
+                    }
+                });
             }
         }
     });

@@ -245,7 +245,7 @@ UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
     } else {
         name = entry.name;
     }
-    const source   = entry.source || '-';
+    const source   = (isSwedish && entry.sourceSv) ? entry.sourceSv : (entry.source || '-');
     const heritage = entry.heritage || '-';
 
     // Extra meta: Family for väsen entries (via VASEN_SPECIES), Väsen name for item entries,

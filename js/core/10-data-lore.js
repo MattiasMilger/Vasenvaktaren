@@ -30,6 +30,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Swedish word "väsen" (plural: "väsen" or "väsenden") is a broad, collective term for all manner of supernatural beings found in Scandinavian folk belief. It encompasses everything from helpful house spirits to malevolent forest predators. Unlike the English word "monster," väsen carries no inherent moral judgment - a being is simply a väsen by its very nature. The word itself derives from Old Swedish and is related to the verb "vara" (to be), meaning roughly "a being" or "an entity."',
         swedishDesc: 'Det svenska ordet "väsen" är ett brett, samlande begrepp för alla slags övernaturliga varelser i skandinavisk folktro. Det omfattar allt från hjälpsamma husandar till illvilliga skogsvarelser. Till skillnad från det engelska ordet "monster" bär väsen ingen inneboende moralisk dom - ett väsen är helt enkelt ett väsen till sin natur. Ordet härstammar från fornskenska och är besläktat med verbet "vara", ungefär synonymt med "ett levande väsen" eller "en entitet."',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'standard'
     },
@@ -42,6 +43,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Vätten (singular: vätte) are small, elusive guardian spirits tied to specific places or functions. They inhabit homes, farms, mines, and stretches of wilderness, quietly maintaining order in their domain. Though rarely seen, their presence is felt through the health of animals, the quality of crops, and the peace of the household. They demand respect and can become deeply vindictive if treated with contempt or neglect.',
         swedishDesc: 'Vätten (singular: vätte) är små, svårfångade skyddsandar knutna till platser eller uppgifter. De bebor hem, gårdar, gruvor och naturmarker och upprätthåller ordning inom sitt område. Även om de sällan syns, märks deras närvaro i djurens hälsa, skördars kvalitet och hemmets lugn. De kräver respekt och kan bli djupt hämndfulla om de behandlas med förakt eller negligeras.',
         source: 'Swedish and Scandinavian Folklore',
+        sourceSv: 'Svensk och skandinavisk folktro',
         heritage: 'Scandinavian',
         unlockType: 'family',
         unlockKey: 'Vätte'
@@ -53,6 +55,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Vålnader (singular: vålnad) are the restless, tormented spirits of the dead - those who died in violence, grief, or dishonor and could not find peace. They linger in the world of the living, often tied to the place of their death or to the injustice that caused it. Many seek revenge, while others simply spread misery as an extension of their own suffering. Proper burial rites and prayers were considered essential in Swedish folk belief to prevent the creation of a vålnad.',
         swedishDesc: 'Vålnader (singular: vålnad) är de dödas rastlösa, plågade andar - de som dött i våld, sorg eller vanära och inte kunnat finna frid. De dröjer kvar i de levandes värld, ofta bundna till platsen för sin död eller till den orättvisa som orsakade den. Många söker hämnd, medan andra sprider elände som en förlängning av sitt eget lidande. Ordentliga begravningsriter och böner ansågs nödvändiga i svensk folktro för att förhindra uppkomsten av en vålnad.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'family',
         unlockKey: 'Vålnad'
@@ -64,6 +67,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Odjur (singular: odjur) are the great supernatural beasts of Norse and Swedish myth - neither entirely animal nor spirit, but something far more primordial. They are often the monstrous offspring of gods, giants, or chaos itself, embodying the raw, untameable forces of nature. Many odjur are foretold to play decisive roles at Ragnarök, the twilight of the gods. The word itself simply means "beast" or "monster" in Swedish, reflecting how these creatures defy ordinary classification.',
         swedishDesc: 'Odjur (singular: odjur) är de stora övernaturliga djuren från nordisk och svensk mytologi - varken helt djur eller ande, utan något vida mer uråldrigt. De är ofta de monstruösa avkommorna till gudar, jättar eller kaos självt och förkroppsligar naturens råa, otyglade krafter. Många odjur är förutsagda att spela avgörande roller vid Ragnarök, gudars skymning. Ordet betyder helt enkelt "best" eller "monster" på svenska, vilket speglar hur dessa varelser trotsar vanlig klassificering.',
         source: 'Norse Mythology / Swedish Folklore',
+        sourceSv: 'Nordisk mytologi / Svensk folktro',
         heritage: 'Norse',
         unlockType: 'family',
         unlockKey: 'Odjur'
@@ -73,8 +77,9 @@ const LORE_ENTRIES = {
         name: 'Troll',
         category: 'vasen',
         englishDesc: 'Trolls are among the most iconic beings in Scandinavian folklore, found across Sweden, Norway, and Denmark in countless local variations. They are ancient, often enormous beings of great physical strength but limited wisdom, dwelling in mountains and deep forests. The most famous trait of the troll is its weakness to sunlight: a troll caught by the dawn will be frozen forever in stone, which is used to explain the peculiar shapes of many natural rock formations throughout Scandinavia. Church bells were said to drive trolls into a frenzy.',
-        swedishDesc: 'Troll är bland de mest ikoniska varelserna i skandinavisk folklore och förekommer i Sverige, Norge och Danmark i otaliga lokala varianter. De är urgamla, ofta enorma varelser med stor fysisk styrka men begränsad visdom och bor i berg och djupa skogar. Trollets mest kända egenskap är dess svaghet mot solljus: ett troll som fångas av gryningen fryser för alltid till sten, vilket används för att förklara de märkliga formerna på många naturliga klippformationer i Skandinavien. Kyrkklockorna sades driva troll till vansinne.',
+        swedishDesc: 'Troll är bland de mest ikoniska varelserna i skandinavisk folktro och förekommer i Sverige, Norge och Danmark i otaliga lokala varianter. De är urgamla, ofta enorma varelser med stor fysisk styrka men begränsad visdom och bor i berg och djupa skogar. Trollets mest kända egenskap är dess svaghet mot solljus: ett troll som fångas av gryningen fryser för alltid till sten, vilket används för att förklara de märkliga formerna på många naturliga klippformationer i Skandinavien. Kyrkklockorna sades driva troll till vansinne.',
         source: 'Scandinavian Folklore',
+        sourceSv: 'Skandinavisk folktro',
         heritage: 'Scandinavian',
         unlockType: 'family',
         unlockKey: 'Troll'
@@ -86,6 +91,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Rå are the seductive, nature-bound spirits who serve as wardens of specific natural domains - the forest, the water, the mine, the marsh. They typically appear as strikingly beautiful women who can enchant hunters, fishermen, and miners with irresistible allure. Their true nature is always betrayed by a physical flaw: a hollow back, a cow\'s tail, or backwards feet. Those who fall under a rå\'s power often waste away or vanish entirely. The word "rå" is cognate with Old Norse "rá," meaning a ruler or warden.',
         swedishDesc: 'Rå är de förföriska, naturknutna andarna som fungerar som väktare av specifika naturliga domäner - skogen, vattnet, gruvan, mossen. De framträder vanligtvis som slående vackra kvinnor som kan förhäxa jägare, fiskare och gruvarbetare med oemotståndlig lockelse. Deras sanna natur avslöjas alltid av ett fysiskt fel: en ihålig rygg, en kosvans eller bakvända fötter. De som faller under en råas makt tynar ofta bort eller försvinner helt. Ordet "rå" är besläktat med fornnordiskans "rá", som betyder en härskare eller väktare.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'family',
         unlockKey: 'Rå'
@@ -108,6 +114,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Andar (singular: ande) are spirits of a mystical or semi-divine nature, distinguished from the simpler house spirits and nature wardens by their connection to greater cosmic powers. They serve gods, guard sacred places, or fulfil divine roles in the ordering of the world. The Swedish word "ande" means "spirit" or "breath," reflecting the ancient belief that these beings exist on the boundary between the physical and the divine.',
         swedishDesc: 'Andar (singular: ande) är andar av mystisk eller halvgudomlig natur, utmärkta från de enklare husandarna och naturväktarna genom sin koppling till större kosmiska krafter. De tjänar gudar, vaktar heliga platser eller uppfyller gudomliga roller i världens ordnande. Det svenska ordet "ande" betyder "ande" eller "andetag", vilket speglar den urgamla tron att dessa varelser existerar på gränsen mellan det fysiska och det gudomliga.',
         source: 'Norse Mythology / Swedish Folklore',
+        sourceSv: 'Nordisk mytologi / Svensk folktro',
         heritage: 'Norse',
         unlockType: 'family',
         unlockKey: 'Ande'
@@ -130,6 +137,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Drakar (singular: drake) are the great serpentine dragons of Norse mythology and Northern European legend. In Norse tradition, dragons like Nidhögg and Fafner are deeply tied to cosmic forces: one gnaws at the roots of Yggdrasil while the other guards cursed gold. Unlike the winged European dragon, many Nordic dragons are described as great serpents or lindworms. The word "drake" shares its root with the Latin "draco" and the Greek "drakōn," meaning "serpent" or "one who gazes sharply."',
         swedishDesc: 'Drakar (singular: drake) är de stora ormliknande drakarna i nordisk mytologi och nordeuropeisk legend. I nordisk tradition är drakar som Nidhögg och Fafner djupt knutna till kosmiska krafter: en gnager på Yggdrasils rötter medan en annan vaktar förbannat guld. Till skillnad från den bevingade europeiska draken beskrivs många nordiska drakar som stora ormar eller lindormar. Ordet "drake" delar sin rot med latinets "draco" och grekiskans "drakōn", som betyder "orm" eller "den som stirrar skarpt."',
         source: 'Norse Mythology / European Folklore',
+        sourceSv: 'Nordisk mytologi / Europeisk folktro',
         heritage: 'European',
         unlockType: 'family',
         unlockKey: 'Drake'
@@ -143,6 +151,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Landvätte (land spirit) is the protector of a specific stretch of wilderness, hill, or natural landmark. In Old Norse sources, including the Heimskringla, King Odin commanded that all Viking ships approaching the Norwegian coast lower their dragon prows so as not to frighten the landvættr - the land spirits who protect the country. Swedish folk belief inherited this tradition, holding that disturbing a landvätte\'s territory would bring misfortune.',
         swedishDesc: 'Landvättet är skyddaren av ett specifikt naturområde, en kulle eller ett naturlandmärke. I fornnordiska källor, inklusive Heimskringla, befallde kung Oden att alla vikingaskepp som närmade sig den norska kusten skulle sänka sina drakstävar för att inte skrämma landvättrarna - landets andar som skyddar landet. Svensk folktro ärvde denna tradition och höll att störa ett landvätts territorium skulle föra olycka med sig.',
         source: 'Heimskringla (Snorri Sturluson) / Swedish Folklore',
+        sourceSv: 'Heimskringla (Snorri Sturluson) / Svensk folktro',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Landvatte'
@@ -154,6 +163,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Gårdstomte (farm spirit) is the guardian of the farmstead - the barns, the livestock, the outbuildings, and the fields. It is depicted as a small, bearded, elderly man who works invisibly by night to keep the farm in order. The Gårdstomte demands an annual gift of a bowl of porridge (gröt) with a lump of butter on top; neglecting this offering invites disaster, as the tomte may torment the animals, spoil the milk, or move to another farm entirely.',
         swedishDesc: 'Gårdstomten är väktaren av gården - ladugårdarna, boskapen, uthusarna och åkrarna. Det skildras som en liten, skäggig, äldre man som arbetar osynligt om natten för att hålla gården i ordning. Gårdstomten kräver en årlig gåva av en skål gröt med en klick smör på toppen; att försumma detta erbjudande inbjuder till katastrof, då tomten kan plåga djuren, förstöra mjölken eller flytta till en annan gård helt och hållet.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Gardstomte'
@@ -165,6 +175,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Hustomte (house spirit) is the beloved domestic guardian found in nearly every Swedish farmhouse tradition. It lives near the hearth or beneath the floorboards, silently watching over the family and their home. The Hustomte is especially associated with the Christmas season, when it traditionally received its most important offering: a bowl of warm sweet porridge (tomtegröt). The modern image of the Swedish Christmas gnome (Jultomte) descends directly from this ancient folk tradition.',
         swedishDesc: 'Hustomten är den älskade inhemska väktare som finns i nästan varje svensk gårdshustradition. Det bor nära spisen eller under golvbrädorna och vakar tyst över familjen och deras hem. Hustomten är speciellt förknippad med julsäsongen, när den traditionellt fick sitt viktigaste erbjudande: en skål varm söt gröt (tomtegröt). Den moderna bilden av den svenska julnissen (Jultomten) härstammar direkt från denna urgamla folktradition.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Hustomte'
@@ -174,8 +185,9 @@ const LORE_ENTRIES = {
         name: 'Nattramn',
         category: 'vasen',
         englishDesc: 'The Nattramn (night raven) is a spectral bird of ill omen in Swedish folklore, believed to be the restless spirit of a builder who was walled alive into a foundation to strengthen it - a practice said to have occurred during the construction of churches and castles. Its shrieking cry heard at night was a death omen. In some traditions the nattramn has no flesh, only a skeleton of hollow bones, and if you could count all its feathers before dawn you would be protected from its curse.',
-        swedishDesc: 'Nattramnen är en spöklika fågel av olycksanat i svensk folklore, tros vara anden av en byggare som murades levande in i ett fundament för att stärka det - en praktik som sägs ha förekommit under byggandet av kyrkor och slott. Dess skrikande läte hörd på natten var ett dödsomen. I vissa traditioner saknar nattramnen kött, bara ett skelett av ihåliga ben, och om man kunde räkna alla dess fjädrar före gryningen skulle man skyddas från dess förbannelse.',
+        swedishDesc: 'Nattramnen är en spöklika fågel av olycksanat i svensk folktro, tros vara anden av en byggare som murades levande in i ett fundament för att stärka det - en praktik som sägs ha förekommit under byggandet av kyrkor och slott. Dess skrikande läte hörd på natten var ett dödsomen. I vissa traditioner saknar nattramnen kött, bara ett skelett av ihåliga ben, och om man kunde räkna alla dess fjädrar före gryningen skulle man skyddas från dess förbannelse.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Nattramn'
@@ -185,8 +197,9 @@ const LORE_ENTRIES = {
         name: 'Myling',
         category: 'vasen',
         englishDesc: 'The Myling (also "myrling" or "utbörding") is one of the most chilling figures in Swedish folklore: the spirit of an infant who was murdered or abandoned by its mother before receiving a name and a Christian burial. Condemned to wander the wilderness, it would leap onto the backs of lone travelers and demand to be carried to the nearest churchyard for proper burial. With each step toward the church, it grew heavier, often crushing its unwilling carrier. These spirits were the embodiment of infanticide\'s cultural shame.',
-        swedishDesc: 'Mylingen (även "myrling" eller "utbörding") är en av de mest skrämmande figurerna i svensk folklore: anden av ett spädbarn som mördades eller övergavs av sin mor innan det fick ett namn och en kristen begravning. Dömt att vandra i vildmarken, hoppade det upp på ryggen av ensamma resenärer och krävde att bli buren till närmaste kyrkogård för en ordentlig begravning. Med varje steg mot kyrkan blev det tyngre, och krossade ofta sin ofrivillige bärare. Dessa andar var förkroppsligandet av barnamordens kulturella skam.',
+        swedishDesc: 'Mylingen (även "myrling" eller "utbörding") är en av de mest skrämmande figurerna i svensk folktro: anden av ett spädbarn som mördades eller övergavs av sin mor innan det fick ett namn och en kristen begravning. Dömt att vandra i vildmarken, hoppade det upp på ryggen av ensamma resenärer och krävde att bli buren till närmaste kyrkogård för en ordentlig begravning. Med varje steg mot kyrkan blev det tyngre, och krossade ofta sin ofrivillige bärare. Dessa andar var förkroppsligandet av barnamordens kulturella skam.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Myling'
@@ -198,6 +211,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Irrbloss (also "lyktgubbe" or "lyktemän") is the Swedish name for the will-o\'-wisp, the eerie hovering light seen over bogs and marshes. Folk belief held these lights to be the souls of sinful or dishonest men - surveyors who had falsified boundaries, cheats, and murderers - condemned to wander eternally between the living world and the realm of the dead. Those who followed the light would be led astray into bogs, quicksand, or over cliffs.',
         swedishDesc: 'Irrblossen (även "lyktgubbe" eller "lyktemän") är det svenska namnet på irrbloss, det kusliga svävande ljuset som ses över mossar och träsk. Folktron höll dessa ljus för att vara syndiga eller oärliga mäns själar - lantmätare som förfalskat gränser, bedragare och mördare - dömda att vandra evigt mellan de levandes värld och de dödas rike. De som följde ljuset skulle ledas vilse ut i mossar, kvicksand eller över stup.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Irrbloss'
@@ -207,8 +221,9 @@ const LORE_ENTRIES = {
         name: 'Strandvaskare',
         category: 'vasen',
         englishDesc: 'The Strandvaskare (shore washer) is a coastal apparition in Swedish folklore, the tormented ghost of a drowned sailor eternally condemned to haunt the shoreline where it perished. It wails and lures ships toward the reef with deceptive lights and sounds. This figure shares similarities with the "Bean Nighe" (the washer at the ford) found in Celtic tradition and with the banshee - all representing a spectral harbinger encountered near water who portends death.',
-        swedishDesc: 'Strandvaskaren är en kustlig uppenbarelse i svensk folklore, det plågade spöket av en drunknad sjöman, evigt dömt att spöka vid kuststräckan där det omkom. Det tjuter och lockar skepp mot revet med vilseledande ljus och ljud. Denna figur har likheter med "Bean Nighe" (tvätterskan vid vadet) i keltisk tradition och med banshee - alla representerande ett spöklikt varseldjur vid vatten som varslar om död.',
+        swedishDesc: 'Strandvaskaren är en kustlig uppenbarelse i svensk folktro, det plågade spöket av en drunknad sjöman, evigt dömt att spöka vid kuststräckan där det omkom. Det tjuter och lockar skepp mot revet med vilseledande ljus och ljud. Denna figur har likheter med "Bean Nighe" (tvätterskan vid vadet) i keltisk tradition och med banshee - alla representerande ett spöklikt varseldjur vid vatten som varslar om död.',
         source: 'Swedish Folklore / Comparative Folklore',
+        sourceSv: 'Svensk folktro / Komparativ folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Strandvaskare'
@@ -218,8 +233,9 @@ const LORE_ENTRIES = {
         name: 'Bäckahäst',
         category: 'vasen',
         englishDesc: 'The Bäckahäst (brook horse) is a supernatural water horse from Swedish folklore that lurks near rivers and streams in the guise of a beautiful, shimmering white stallion. Anyone who mounts it finds they cannot dismount - the horse then plunges into the water and drowns its rider. This creature is closely related to the Scottish kelpie and the Norwegian nykur. A common protective charm was to name the horse with the words "brook horse" aloud, breaking the spell.',
-        swedishDesc: 'Bäckahästen är en övernaturlig vattenhäst från svensk folklore som lurar vid floder och bäckar i skepnad av en vacker, glänsande vit hingst. Den som sitter upp på den finner att de inte kan stiga av - hästen störtar sedan in i vattnet och drunknar sin ryttare. Denna varelse är nära besläktad med den skotska kelpien och den norska nykuren. En vanlig skyddsamulett var att namnge hästen med orden "bäckahäst" högt, vilket bröt förbannelsen.',
+        swedishDesc: 'Bäckahästen är en övernaturlig vattenhäst från svensk folktro som lurar vid floder och bäckar i skepnad av en vacker, glänsande vit hingst. Den som sitter upp på den finner att de inte kan stiga av - hästen störtar sedan in i vattnet och drunknar sin ryttare. Denna varelse är nära besläktad med den skotska kelpien och den norska nykuren. En vanlig skyddsamulett var att namnge hästen med orden "bäckahäst" högt, vilket bröt förbannelsen.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Backahast'
@@ -229,8 +245,9 @@ const LORE_ENTRIES = {
         name: 'Gloson',
         category: 'vasen',
         englishDesc: 'The Gloson (glowing sow) is a spectral pig from Swedish folklore, described as a monstrous sow with eyes of burning fire that runs silently through the night at supernatural speed. Encountering a gloson was considered an omen of death or disaster. It is found primarily in Swedish provincial traditions, particularly in Skåne and other southern regions. The creature is sometimes associated with the souls of women who had committed secret crimes in life.',
-        swedishDesc: 'Glosonen (glödande sugga) är en spöklik gris från svensk folklore, beskriven som en monströs sugga med brinnande elögon som springer ljudlöst genom natten med övernaturlig hastighet. Att möta en gloson ansågs vara ett omen om död eller katastrof. Den återfinns främst i svenska provinstraditioner, särskilt i Skåne och andra sydliga regioner. Varelsen förknippas ibland med själarna av kvinnor som begått hemliga brott i livet.',
+        swedishDesc: 'Glosonen (glödande sugga) är en spöklik gris från svensk folktro, beskriven som en monströs sugga med brinnande elögon som springer ljudlöst genom natten med övernaturlig hastighet. Att möta en gloson ansågs vara ett omen om död eller katastrof. Den återfinns främst i svenska provinstraditioner, särskilt i Skåne och andra sydliga regioner. Varelsen förknippas ibland med själarna av kvinnor som begått hemliga brott i livet.',
         source: 'Swedish Folklore (Skånsk tradition)',
+        sourceSv: 'Svensk folktro (Skånsk tradition)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Gloson'
@@ -262,8 +279,9 @@ const LORE_ENTRIES = {
         name: 'Bergatroll',
         category: 'vasen',
         englishDesc: 'The Bergatroll (mountain troll) is the classic giant troll of Scandinavian folklore: enormous, slow-witted, ferociously strong, and fond of gold and silver jewelry. Mountain trolls live inside hills and mountains, emerging at night to roam the land. Sunlight turns them instantly to stone - explaining why ancient boulders with unusual shapes are sometimes called "troll rocks" across Norway and Sweden. Some local traditions describe bergatroll as the corrupted spirits of ancient giants.',
-        swedishDesc: 'Bergatrollet är det klassiska jättetrollet i skandinavisk folklore: enormt, tröghjärnat, fruktansvärt starkt och förtjust i guld- och silversmycken. Bergatroll bor inuti kullar och berg och ger sig ut nattetid för att ströva över landet. Solljus förvandlar dem omedelbart till sten - vilket förklarar varför urgamla klippblock med ovanliga former ibland kallas "trollstenar" i Norge och Sverige. Vissa lokala traditioner beskriver bergatroll som de fördärvade andarna av urgamla jättar.',
+        swedishDesc: 'Bergatrollet är det klassiska jättetrollet i skandinavisk folktro: enormt, tröghjärnat, fruktansvärt starkt och förtjust i guld- och silversmycken. Bergatroll bor inuti kullar och berg och ger sig ut nattetid för att ströva över landet. Solljus förvandlar dem omedelbart till sten - vilket förklarar varför urgamla klippblock med ovanliga former ibland kallas "trollstenar" i Norge och Sverige. Vissa lokala traditioner beskriver bergatroll som de fördärvade andarna av urgamla jättar.',
         source: 'Scandinavian Folklore',
+        sourceSv: 'Skandinavisk folktro',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Bergatroll'
@@ -275,6 +293,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Skogstroll (forest troll) is smaller and more cunning than its mountain cousin, blending into the forest with camouflage of moss, bark, and soil. Swedish folk belief held forest trolls responsible for misleading travelers, stealing livestock, and abducting children to be raised underground. They are deeply connected to the ancient wilderness and regard human settlements as an intrusion. Their howls and strange noises heard at night were interpreted as troll communication echoing through the old forests.',
         swedishDesc: 'Skogstrollet är mindre och listigare än sin bergkusin och smälter in i skogen med kamouflage av mossa, bark och jord. Svensk folktro höll skogstroll ansvariga för att vilseleda resenärer, stjäla boskap och kidnappa barn för att uppfostras under jord. De är djupt kopplade till den urgamla vildmarken och betraktar mänskliga bosättningar som en inkräktning. Deras tjut och konstiga ljud som hörs på natten tolkades som trollkommunikation som ekar genom de gamla skogarna.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Skogstroll'
@@ -286,6 +305,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Bortbyting (changeling) is the troll or fairy child secretly swapped into a human cradle while the real infant is stolen away. The changeling is recognizable by its sickly appearance, excessive demands for food, and sinister, knowing eyes despite its infant appearance. Folk remedies to recover a stolen child were often elaborate and sometimes cruel, based on the belief that causing sufficient discomfort to the changeling would force the hidden folk to return the real child.',
         swedishDesc: 'Bortbytingen är trollets eller älvans barn som i hemlighet bytts in i en mänsklig vagga medan det riktiga spädbarnet stulits. Bortbytingen känns igen på sitt sjukliga utseende, överdrivna krav på mat och onda, vetande ögon trots sitt spädbarnsutseende. Folkliga botemedel för att återfå ett stulet barn var ofta utarbetade och ibland grymma, baserade på tron att orsaka tillräckligt obehag för bortbytingen skulle tvinga de dolda folken att återlämna det riktiga barnet.',
         source: 'Scandinavian Folklore',
+        sourceSv: 'Skandinavisk folktro',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Bortbyting'
@@ -297,6 +317,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Gruvrå (mine spirit) is the female warden of the mine - a beautiful, pale woman who may appear as a benevolent guide or a deadly seductress depending on the miner\'s behavior. Sweden\'s long mining history, particularly in the Bergslagen region, gave rise to a rich tradition of mine spirits. Miners would leave offerings and observe strict protocols: never whistle underground, never speak of the rå directly, and always treat the mine\'s resources with respect. The German Berggeist is closely related.',
         swedishDesc: 'Gruvrån är gruvans väktaranda - en vacker, blek kvinna som kan framstå som en välvillig guide eller en dödlig förförerska beroende på gruvarbetarens beteende. Sveriges långa gruvhistoria, särskilt i Bergslagenregionen, gav upphov till en rik tradition av gruvandarna. Gruvarbetare lämnade erbjudanden och iakttog strikta protokoll: vissla aldrig under jord, tala aldrig om rån direkt, och behandla alltid gruvans resurser med respekt. Den tyske Berggeisten är nära besläktad.',
         source: 'Swedish Folklore (Bergslagen)',
+        sourceSv: 'Svensk folktro (Bergslagen)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Gruvra'
@@ -306,8 +327,9 @@ const LORE_ENTRIES = {
         name: 'Skogsrå',
         category: 'vasen',
         englishDesc: 'The Skogsrå (forest warden) is one of the most prominent figures in Swedish folklore - a hauntingly beautiful woman who guards the forest and can enchant any hunter or woodsman who ventures into her domain. Her most distinctive feature is her hollow back, often described as looking like a rotten tree trunk, and sometimes a cow\'s tail. Hunters who pleased the skogsrå might find exceptional luck; those who angered her would become hopelessly lost. She is sometimes called "huldra" in Norwegian tradition.',
-        swedishDesc: 'Skogsrån är en av de mest framträdande figurerna i svensk folklore - en spöklikt vacker kvinna som vaktar skogen och kan förhäxa vilken jägare eller skogsarbetare som helst som ger sig in i hennes domän. Hennes mest utmärkande drag är hennes ihåliga rygg, ofta beskriven som liknande en rutten trädstam, och ibland en kosvans. Jägare som behagade skogsrån kunde hitta exceptionell tur; de som förgrymmade henne skulle bli hopplöst vilse. Hon kallas ibland "huldra" i norsk tradition.',
+        swedishDesc: 'Skogsrån är en av de mest framträdande figurerna i svensk folktro - en spöklikt vacker kvinna som vaktar skogen och kan förhäxa vilken jägare eller skogsarbetare som helst som ger sig in i hennes domän. Hennes mest utmärkande drag är hennes ihåliga rygg, ofta beskriven som liknande en rutten trädstam, och ibland en kosvans. Jägare som behagade skogsrån kunde hitta exceptionell tur; de som förgrymmade henne skulle bli hopplöst vilse. Hon kallas ibland "huldra" i norsk tradition.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Skogsra'
@@ -319,6 +341,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Näcken is a male water spirit who sits by rivers, streams, and lake shores playing an entrancing violin or fiddle. His music is said to be supernaturally beautiful - so beautiful that listeners cannot stop dancing until they die. He can be propitiated with offerings of schnapps, meat, or tobacco, after which he may teach the listener to play with equal mastery. In some accounts he appears as a handsome young man; in others as a horse or a log drifting in the water.',
         swedishDesc: 'Näcken är en manlig vattenande som sitter vid floder, bäckar och sjöstränder och spelar en förtjusande fiol eller violin. Hans musik sägs vara övernaturligt vacker - så vacker att lyssnare inte kan sluta dansa tills de dör. Han kan blidkas med erbjudanden om sprit, kött eller tobak, varefter han kan lära lyssnaren att spela med lika stor skicklighet. I vissa berättelser framstår han som en stilig ung man; i andra som en häst eller en stock som flyter i vattnet.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Nacken'
@@ -330,6 +353,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The älvor (singular: älva) are small, ethereal beings strongly associated with dew, mist, and the half-light of dusk and dawn. Unlike the majestic Norse alvar, the Swedish folkloristic älva is more akin to a fairy - tiny, dancing in meadows, and capricious. Contact with älvor was believed to cause "älvablåst" (elf-blast), a sudden illness explained as being breathed upon by an elf. Circular impressions in the morning dew were called "älvringar" (elf rings), believed to mark where älvor had danced.',
         swedishDesc: 'Älvorna (singular: älva) är små, eteriska varelser starkt förknippade med dagg, dimma och halvljuset vid skymning och gryning. Till skillnad från de majestätiska nordiska alvarna liknar den folkloristiska svenska älvan mer en fe - liten, dansande på ängar och nyckfull. Kontakt med älvor troddes orsaka "älvablåst", en plötslig sjukdom förklarad som att bli andad på av en älva. Cirkulära intryck i morgondaggen kallades "älvringar", trodda markera var älvor hade dansat.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Alva'
@@ -363,6 +387,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Hyldemor (the Elder Mother) is the spirit inhabiting the elder tree (Sambucus nigra), found across Scandinavian and British Isles folk tradition. Before cutting any elder wood, one must ask the Elder Mother\'s permission aloud and wait for her consent. Failure to do so brings extreme misfortune: illness, broken furniture made from the wood, and even death. The elder tree was considered sacred across much of Northern Europe, and its white flowers and dark berries were used in protective charms and medicine.',
         swedishDesc: 'Hyllemor (äldermoder) är anden som bor i fläderträdet (Sambucus nigra), funnen i skandinavisk och brittisk folktradition. Innan man hugger något fläderträ måste man högt be om Hyllemors tillstånd och vänta på hennes samtycke. Underlåtenhet att göra detta ger extrem olycka: sjukdom, trasiga möbler gjorda av träet, och till och med döden. Fläderträdet betraktades som heligt i stora delar av Nordeuropa, och dess vita blommor och mörka bär användes i skyddsbesvärjelser och medicin.',
         source: 'Scandinavian and British Folklore',
+        sourceSv: 'Skandinavisk och brittisk folktro',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Hyllemor'
@@ -427,8 +452,9 @@ const LORE_ENTRIES = {
         name: 'Lindorm',
         category: 'vasen',
         englishDesc: 'The Lindorm (from Old Norse "linnormr") is a great wingless serpentine dragon of Scandinavian folklore, distinguished from the fire-breathing European dragon by its serpentine form. Lindorms appear throughout Swedish folk ballads and fairy tales, often as cursed princes or as terrifying beasts slain by heroes. One of the most famous Swedish folk tales, "Prins Lindorm," tells of a prince cursed to live as a serpent who can only be freed through love and sacrifice. Lindorms were associated with the deep forests.',
-        swedishDesc: 'Lindormen (från fornnordiskans "linnormr") är en stor, vinglos ormlik drake i skandinavisk folklore, skild från den eldsprutande europeiska draken genom sin ormlika form. Lindormar förekommer i svenska folkballader och sagor, ofta som förhäxade prinsar eller som skräckinjagande odjur dödade av hjältar. En av de mest kända svenska folksagorna, "Prins Lindorm", berättar om en prins förhäxad att leva som en orm som bara kan befrias genom kärlek och uppoffring. Lindormar förknippades med de djupa skogarna.',
+        swedishDesc: 'Lindormen (från fornnordiskans "linnormr") är en stor, vinglos ormlik drake i skandinavisk folktro, skild från den eldsprutande europeiska draken genom sin ormlika form. Lindormar förekommer i svenska folkballader och sagor, ofta som förhäxade prinsar eller som skräckinjagande odjur dödade av hjältar. En av de mest kända svenska folksagorna, "Prins Lindorm", berättar om en prins förhäxad att leva som en orm som bara kan befrias genom kärlek och uppoffring. Lindormar förknippades med de djupa skogarna.',
         source: 'Swedish Folklore / Folk Ballads',
+        sourceSv: 'Svensk folktro / Folkvisor',
         heritage: 'Northern European',
         unlockType: 'vasen',
         unlockKey: 'Lindorm'
@@ -537,6 +563,7 @@ const LORE_ENTRIES = {
         englishDesc: 'In Swedish folk belief, an infant who died without baptism - especially one murdered or abandoned - could not pass on to rest and instead became a Myling. The only way to free such a spirit was to give it a proper Christian burial in consecrated ground, complete with the appropriate rites. Flowers placed on a grave were seen as both an offering to the deceased and as a marker for the living - confirming that the dead had been properly honored and laid to rest.',
         swedishDesc: 'I svensk folktro kunde ett spädbarn som dog utan dop - särskilt ett som mördats eller övergivits - inte gå vidare till vila och blev istället ett myling. Det enda sättet att befria en sådan ande var att ge den en ordentlig kristen begravning på vigd mark, komplett med lämpliga riter. Blommor placerade på en grav sågs både som ett erbjudande till den döde och som ett märke för de levande - som bekräftar att de döda hedrats och lagts till ro på rätt sätt.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'item',
         unlockKey: 'Burial Flowers'
@@ -575,8 +602,9 @@ const LORE_ENTRIES = {
         name: 'Trollskogen',
         category: 'locations',
         englishDesc: 'Trollskogen ("Troll Forest") evokes the ancient Swedish tradition of the enchanted deep forest - a space outside civilized order where dangerous beings dwell and human rules cease to apply. Swedish folklore is filled with accounts of people entering old-growth forests and encountering trolls, rå, and other beings. The forest canopy blocking sunlight was particularly associated with danger, as sunlight was the primary protection against many supernatural threats. Several real locations in Sweden bear this name, most famously on the island of Öland.',
-        swedishDesc: 'Trollskogen åkallar den urgamla svenska traditionen av den förtrollade djupskogen - ett rum utanför civilisationens ordning där farliga varelser bor och mänskliga regler upphör att gälla. Svensk folklore är fylld med berättelser om människor som gick in i urskogen och stötte på troll, rå och andra varelser. Skogens baldakin som blockerade solljuset var särskilt förknippad med fara, eftersom solljuset var det primära skyddet mot många övernaturliga hot. Flera verkliga platser i Sverige bär detta namn, mest känt på ön Öland.',
+        swedishDesc: 'Trollskogen åkallar den urgamla svenska traditionen av den förtrollade djupskogen - ett rum utanför civilisationens ordning där farliga varelser bor och mänskliga regler upphör att gälla. Svensk folktro är fylld med berättelser om människor som gick in i urskogen och stötte på troll, rå och andra varelser. Skogens baldakin som blockerade solljuset var särskilt förknippad med fara, eftersom solljuset var det primära skyddet mot många övernaturliga hot. Flera verkliga platser i Sverige bär detta namn, mest känt på ön Öland.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'zone',
         unlockKey: 'TROLLSKOGEN'
@@ -662,8 +690,9 @@ const LORE_ENTRIES = {
         swedishName: 'Eterisk Melodi (Ethereal Melody)',
         category: 'abilities',
         englishDesc: 'Music as supernatural enchantment is a recurring motif in Scandinavian folklore, most powerfully represented by Näcken\'s fiddle playing. The näcken is said to play by the water\'s edge with such devastating beauty that listeners cannot control themselves - they must dance, and they will dance until they die unless someone can break the spell by calling the näcken by name. Näcken could also teach his art to humans, but only for a price. Similar traditions appear across Northern Europe, from the Irish fiddle spirits to the Scottish Faerie musicians.',
-        swedishDesc: 'Musik som övernaturlig förtrollning är ett återkommande motiv i skandinavisk folklore, kraftfullast representerat av näckens fiolspelande. Näcken sägs spela vid vattenkanten med sådan förödande skönhet att lyssnare inte kan kontrollera sig - de måste dansa, och de ska dansa tills de dör om inte någon kan bryta förbannelsen genom att kalla näcken vid namn. Näcken kunde också lära ut sin konst till människor, men bara till ett pris. Liknande traditioner förekommer i hela Nordeuropa, från de irländska fidelandarna till de skotska feutiska musikerna.',
+        swedishDesc: 'Musik som övernaturlig förtrollning är ett återkommande motiv i skandinavisk folktro, kraftfullast representerat av näckens fiolspelande. Näcken sägs spela vid vattenkanten med sådan förödande skönhet att lyssnare inte kan kontrollera sig - de måste dansa, och de ska dansa tills de dör om inte någon kan bryta förbannelsen genom att kalla näcken vid namn. Näcken kunde också lära ut sin konst till människor, men bara till ett pris. Liknande traditioner förekommer i hela Nordeuropa, från de irländska fidelandarna till de skotska feutiska musikerna.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'ability',
         unlockKey: 'Ethereal Melody'
@@ -676,6 +705,7 @@ const LORE_ENTRIES = {
         englishDesc: 'Across Scandinavia, local legends explain numerous large boulders and rock formations as evidence of giants and trolls hurling stones. One widespread tradition holds that trolls, infuriated by the sound of church bells - which drove them away from human settlements - would hurl enormous boulders at churches in retaliation. Many Swedish churches claim to have old boulders in their environs that were thrown by nearby trolls. Geologically, these are typically glacial erratics - rocks transported and deposited by glaciers thousands of years ago, which perfectly suited the legendary explanation.',
         swedishDesc: 'Över hela Skandinavien förklarar lokala legender många stora stenblock och klippformationer som bevis på att jättar och troll kastar stenar. En utbredd tradition hävdar att troll, uppretade av kyrkklockors ljud - som drev dem bort från mänskliga bosättningar - kastade enorma stenblock mot kyrkor i vedergällning. Många svenska kyrkor påstår sig ha gamla stenblock i sin omgivning som kastades av närliggande troll. Geologiskt sett är dessa vanligtvis glaciala erratiker - stenar transporterade och avsatta av glaciärer för tusentals år sedan, vilket passade perfekt för den legendariska förklaringen.',
         source: 'Scandinavian Folklore',
+        sourceSv: 'Skandinavisk folktro',
         heritage: 'Scandinavian',
         unlockType: 'ability',
         unlockKey: 'Boulder Toss'
@@ -686,8 +716,9 @@ const LORE_ENTRIES = {
         swedishName: 'Älvljus (Elven Light)',
         category: 'abilities',
         englishDesc: 'In Swedish folklore, elves and related beings were associated with mysterious lights seen in meadows, forests, and over marshes at twilight - the "älvornas dans" (the dance of the elves). A ring of flattened grass in a meadow, found in the morning, was called an "älvring" (elf ring) - the mark left by elves dancing through the night. The lights themselves, hovering and drifting, were interpreted as the elves\' own luminescence or as lanterns they carried. Seeing such lights was considered an omen that required caution and respect.',
-        swedishDesc: 'I svensk folklore förknippades alver och besläktade väsen med mystiska ljus sedda på ängar, i skogar och över mossar i skymningen - "älvornas dans". En ring av nedtryckt gräs på en äng, funnen på morgonen, kallades en "älvring" - märket kvar av alver som dansat under natten. Ljusen själva, svävande och drivande, tolkades som alvernas egna luminescens eller som lyktor de bar. Att se sådana ljus ansågs vara ett omen som krävde försiktighet och respekt.',
+        swedishDesc: 'I svensk folktro förknippades alver och besläktade väsen med mystiska ljus sedda på ängar, i skogar och över mossar i skymningen - "älvornas dans". En ring av nedtryckt gräs på en äng, funnen på morgonen, kallades en "älvring" - märket kvar av alver som dansat under natten. Ljusen själva, svävande och drivande, tolkades som alvernas egna luminescens eller som lyktor de bar. Att se sådana ljus ansågs vara ett omen som krävde försiktighet och respekt.',
         source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'ability',
         unlockKey: 'Elven Light'
@@ -700,6 +731,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The fire-breathing dragon is one of the most universal figures in European mythology, and in Norse tradition dragons like Fafner guard their hoards with deadly flame. The image may derive from the association between serpents and poison - a venomous serpent\'s bite as a form of burning from within. In Beowulf, the Anglo-Saxon epic closely related to Norse tradition, the dragon breathes fire to defend its treasure. The fire breath represents the destructive potential of hoarded power, turned outward against any who dare approach.',
         swedishDesc: 'Den eldsprutande draken är en av de mest universella figurerna i europeisk mytologi, och i nordisk tradition vaktar drakar som Fafner sina skattkammare med dödlig flamma. Bilden kan härstamma från associationen mellan ormar och gift - en giftig orms bett som en form av brinnande inifrån. I Beowulf, det anglosaxiska epos nära besläktat med nordisk tradition, andas draken eld för att försvara sin skatt. Eldandedräkten representerar den destruktiva potentialen hos samlad makt, riktad utåt mot alla som vågar närma sig.',
         source: 'Norse Mythology / European Folklore',
+        sourceSv: 'Nordisk mytologi / Europeisk folktro',
         heritage: 'European',
         unlockType: 'ability',
         unlockKey: 'Fire Breath'

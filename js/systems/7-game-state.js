@@ -446,14 +446,12 @@ class GameState {
                 LORE_ENTRIES[k].unlockType === 'element' && LORE_ENTRIES[k].unlockKey === species.element
             ).forEach(k => unlock(k));
 
-            // Ability entries
-            if (species.abilities) {
-                species.abilities.forEach(abilityName => {
-                    LORE_ENTRY_KEYS.filter(k =>
-                        LORE_ENTRIES[k].unlockType === 'ability' && LORE_ENTRIES[k].unlockKey === abilityName
-                    ).forEach(k => unlock(k));
-                });
-            }
+            // Ability entries — only abilities the väsen has actually learned at its current level
+            vasen.getAvailableAbilities().forEach(abilityName => {
+                LORE_ENTRY_KEYS.filter(k =>
+                    LORE_ENTRIES[k].unlockType === 'ability' && LORE_ENTRIES[k].unlockKey === abilityName
+                ).forEach(k => unlock(k));
+            });
 
             // Taming item entries
             if (species.tamingItem) {
