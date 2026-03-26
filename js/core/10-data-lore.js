@@ -668,6 +668,7 @@ const LORE_ENTRIES = {
         englishDesc: 'The Mead of Poetry (Skáldskaparmál, or the Mead of Skalds) is one of the most fascinating myths in Norse tradition. The gods and the Vanir made peace by creating Kvasir - a being so wise he could answer any question - from their combined saliva. Two dwarves killed Kvasir and mixed his blood with honey to create a mead that granted the gift of poetry and wisdom to anyone who drank it. Odin eventually stole the mead for the gods after transforming himself into a serpent and then an eagle to escape with it.',
         swedishDesc: 'Skaldsmjödet (Skáldskaparmál, eller skaldemjödet) är en av de mest fascinerande myterna i nordisk tradition. Gudarna och Vanirna skapade fred genom att skapa Kvasir - ett väsen så vis att det kunde svara på vilken fråga som helst - från deras kombinerade saliv. Två dvärgar dödade Kvasir och blandade hans blod med honung för att skapa ett mjöd som gav diktningens och visdomens gåva till alla som drack det. Oden stal till slut mjödet för gudarna efter att ha förvandlat sig till en orm och sedan en örn för att fly med det.',
         source: 'Prose Edda (Skáldskaparmál)',
+        sourceSv: 'Prosaiska Eddan (Skáldskaparmál/Skaldskapens språk)',
         heritage: 'Norse',
         unlockType: 'ability',
         unlockKey: "Skald's Mead"
