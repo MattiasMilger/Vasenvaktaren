@@ -107,6 +107,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Delicate Truffle',
         image: 'assets/vasen/gloson.png'
     },
+    'Bjara': {
+        name: 'Bjära',
+        internalName: 'Bjara',
+        description: 'A supernatural construct resembling a hare, fashioned from wood shavings, yarn, and hair, brought to life by a drop of a witch\'s blood. Its sole purpose is to steal the life-giving milk of the land, carrying it back to its creator in its distended belly.',
+        family: FAMILIES.ODJUR,
+        element: ELEMENTS.NATURE,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Ethereal Melody'],
+        tamingItem: 'Cursed Yarn',
+        image: 'assets/vasen/bjara.png'
+    },
     'Fenrir': {
         name: 'Fenrir',
         internalName: 'Fenrir',

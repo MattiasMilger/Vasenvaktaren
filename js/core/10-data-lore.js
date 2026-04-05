@@ -252,6 +252,18 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Gloson'
     },
+    'vasen_bjara': {
+        key: 'vasen_bjara',
+        name: 'Bjära',
+        category: 'vasen',
+        englishDesc: 'The Bjära (also "mjölkhare" or "trollhare") is a supernatural familiar from Swedish folk belief, constructed rather than born. A witch would fashion it from wood shavings, yarn, and hair, then animate it with three drops of her own blood and a pact with the devil. Taking the form of a hare or a ball of yarn, it would slink across the countryside, sucking milk directly from the udders of neighbours\' cows and carrying it home in its distended belly. When it returned, it would vomit the stolen milk into its mistress\' churn. Neighbours who spotted one recognized it immediately by its bloated stomach. Bjäror were said to be nearly impossible to kill by ordinary means, though iron and silver were believed to wound them. The creature is found predominantly in the folklore of southern Sweden, Skåne, Blekinge, and Småland, and represents the deep rural anxiety over crop failure, livestock illness, and the suspicion that a neighbour\'s prosperity came at your expense.',
+        swedishDesc: 'Bjäran (även "mjölkhare" eller "trollhare") är ett övernaturligt hjälpande väsen från svensk folktro, konstruerat snarare än fött. En häxa tillverkade den av träspån, garn och hår och gav den sedan liv med tre droppar av sitt eget blod och ett pakt med djävulen. I skepnad av en hare eller ett garnnystan smög den ut över landsbygden, sög mjölk direkt från grannars kossor och bar hem det i sin uppsvullna mage. När den kom tillbaka spydde den den stulna mjölken i sin skaperskas kärna. Grannar som fick syn på en kände igen den direkt på den uppblåsta magen. Bjäror sades vara näst intill omöjliga att döda med vanliga medel, men järn och silver troddes kunna såra dem. Varelsen återfinns främst i folklore från södra Sverige - Skåne, Blekinge och Småland - och representerar den djupa lantliga ångesten över missväxt, boskapssjukdomar och misstanken att en grannes välstånd kom på din bekostnad.',
+        source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
+        heritage: 'Swedish',
+        unlockType: 'vasen',
+        unlockKey: 'Bjara'
+    },
     'vasen_fenrir': {
         key: 'vasen_fenrir',
         name: 'Fenrir',

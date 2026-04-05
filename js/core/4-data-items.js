@@ -52,6 +52,11 @@ const TAMING_ITEMS = {
         description: 'A Delicate Truffle. Its rich aroma is a highly prized delicacy that makes a nocturnal grazer drop its guard and follow its nose.',
         tamingTarget: 'Gloson'
     },
+    'Cursed Yarn': {
+        name: 'Cursed Yarn',
+        description: 'A spool of blood-stained Cursed Yarn. This tangled mess of wool and wood might entice the twitching construct that stalks the farmsteads.',
+        tamingTarget: 'Bjara'
+    },
     'Broken Chain': {
         name: 'Broken Chain',
         description: 'A piece of a mighty Broken Chain. The metal pulses with immense, restrained power - a sign of the great wolf.',
