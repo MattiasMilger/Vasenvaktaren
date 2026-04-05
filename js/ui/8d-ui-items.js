@@ -91,6 +91,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'drowned sailor',
         'white horse',
         'nocturnal grazer',
+        'twitching construct',
         'great wolf',
         'world\'s winds',
         'mountain-dwelling giant',
