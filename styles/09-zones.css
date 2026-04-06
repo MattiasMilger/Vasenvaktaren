@@ -316,6 +316,19 @@
     flex-shrink: 0;
 }
 
+.zone-caught {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.zone-caught.zone-caught-complete {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
 .zone-status {
     font-size: var(--font-size-xs);
     flex: 1;

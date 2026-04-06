@@ -2,6 +2,24 @@
 // 8f-ui-zones.js - Zone Selection, Descriptions, and Exploration UI
 // =============================================================================
 
+    // Helper: count unique caught species and total catchable species for a zone
+UIController.prototype.getZoneCaughtStats = function(zoneId) {
+        const zone = ZONES[zoneId];
+        if (!zone) return { caught: 0, total: 0 };
+
+        const spawns = zone.spawns === 'ALL' ? VASEN_LIST : zone.spawns;
+        const spawnSet = new Set(spawns);
+
+        const total = spawnSet.size;
+        const caught = new Set(
+            gameState.vasenCollection
+                .map(v => v.speciesName)
+                .filter(name => spawnSet.has(name))
+        ).size;
+
+        return { caught, total };
+    };
+
     // Render zones
 UIController.prototype.renderZones = function() {
     this.zoneList.innerHTML = '';
@@ -18,10 +36,14 @@ UIController.prototype.renderZones = function() {
         zoneBtn.disabled = !isUnlocked;
 
         if (isUnlocked) {
+            const { caught, total } = this.getZoneCaughtStats(zoneId);
+            const allCaught = caught === total;
+
             zoneBtn.innerHTML = `
                 <span class="zone-name">${zone.name}</span>
                 <span class="zone-level">Lvl ${zone.levelRange[0]}-${zone.levelRange[1]}</span>
-                ${isCleared ? '<span class="zone-status cleared">Cleared</span>' : ''}
+                <span class="zone-caught ${allCaught ? 'zone-caught-complete' : ''}">${caught}/${total} väsen</span>
+                ${isCleared ? '<span class="zone-status cleared">Cleared</span>' : '<span class="zone-status"></span>'}
             `;
             zoneBtn.onclick = () => this.selectZone(zoneId);
         } else {
