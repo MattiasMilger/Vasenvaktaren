@@ -491,7 +491,7 @@ const ZONES = {
         description: 'An endless labyrinth of cold, black tunnels carved by greed. Only the muffled echo of a pickaxe and the hungry glow of rare ore disturb the crushing silence, guarded by unforgiving spirits who despise light and trespassers.',
         image: 'assets/zones/djupagruvan.png',
         levelRange: [10, 14],
-        spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner'],
+        spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner', 'Mara'],
         guardian: {
             name: 'Hjördis',
             team: [

@@ -210,6 +210,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Waterlogged Violin',
         image: 'assets/vasen/nacken.png'
     },
+    'Mara': {
+        name: 'Mara',
+        internalName: 'Mara',
+        description: 'A weightless, shifting phantom of the twilight, capable of thinning her essence to glide through keyholes and the smallest cracks in the timber. She settles upon the chest of sleeping victims.',
+        family: FAMILIES.RA,
+        element: ELEMENTS.WIND,
+        rarity: RARITIES.RARE,
+        abilities: ['Wailing Cry', 'Moon Beam', 'Ethereal Melody', 'Wind Gust'],
+        tamingItem: 'Heavy Pillow',
+        image: 'assets/vasen/mara.png'
+    },
 
     // Alv Family
     'Alva': {

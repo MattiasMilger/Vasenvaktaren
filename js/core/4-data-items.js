@@ -97,6 +97,11 @@ const TAMING_ITEMS = {
         description: 'A Waterlogged Violin. Its silent strings recall the melancholic, luring music of the water warden.',
         tamingTarget: 'Nacken'
     },
+    'Heavy Pillow': {
+        name: 'Heavy Pillow',
+        description: 'A simple, down-filled cushion that has become unnaturally dense, bearing the invisible imprint of a nocturnal visitor. To hold it is to feel the lingering paralysis of a night spent under the phantom\'s press.',
+        tamingTarget: 'Mara'
+    },
     'Morning Dew': {
         name: 'Morning Dew',
         description: 'A jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, dancing beings of the mist.',

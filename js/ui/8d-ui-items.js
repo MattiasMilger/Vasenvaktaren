@@ -92,6 +92,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'white horse',
         'nocturnal grazer',
         'twitching construct',
+        'nocturnal visitor',
         'great wolf',
         'world\'s winds',
         'mountain-dwelling giant',

@@ -258,8 +258,8 @@ const LORE_ENTRIES = {
         category: 'vasen',
         englishDesc: 'The Bjära (also "mjölkhare" or "trollhare") is a supernatural familiar from Swedish folk belief, constructed rather than born. A witch would fashion it from wood shavings, yarn, and hair, then animate it with three drops of her own blood and a pact with the devil. Taking the form of a hare or a ball of yarn, it would slink across the countryside, sucking milk directly from the udders of neighbours\' cows and carrying it home in its distended belly. When it returned, it would vomit the stolen milk into its mistress\' churn. Neighbours who spotted one recognized it immediately by its bloated stomach. Bjäror were said to be nearly impossible to kill by ordinary means, though iron and silver were believed to wound them. The creature is found predominantly in the folklore of southern Sweden, Skåne, Blekinge, and Småland, and represents the deep rural anxiety over crop failure, livestock illness, and the suspicion that a neighbour\'s prosperity came at your expense.',
         swedishDesc: 'Bjäran (även "mjölkhare" eller "trollhare") är ett övernaturligt hjälpande väsen från svensk folktro, konstruerat snarare än fött. En häxa tillverkade den av träspån, garn och hår och gav den sedan liv med tre droppar av sitt eget blod och ett pakt med djävulen. I skepnad av en hare eller ett garnnystan smög den ut över landsbygden, sög mjölk direkt från grannars kossor och bar hem det i sin uppsvullna mage. När den kom tillbaka spydde den den stulna mjölken i sin skaperskas kärna. Grannar som fick syn på en kände igen den direkt på den uppblåsta magen. Bjäror sades vara näst intill omöjliga att döda med vanliga medel, men järn och silver troddes kunna såra dem. Varelsen återfinns främst i folklore från södra Sverige - Skåne, Blekinge och Småland - och representerar den djupa lantliga ångesten över missväxt, boskapssjukdomar och misstanken att en grannes välstånd kom på din bekostnad.',
-        source: 'Swedish Folklore',
-        sourceSv: 'Svensk folktro',
+        source: 'Swedish Folklore (Skånsk, Blekinsk, Småländsk tradition)',
+        sourceSv: 'Svensk folktro (Skånsk, Blekinsk, Småländsk tradition)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Bjara'
@@ -357,6 +357,19 @@ const LORE_ENTRIES = {
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Nacken'
+    },
+    'vasen_mara': {
+        key: 'vasen_mara',
+        name: 'Mara',
+        swedishName: 'Mara',
+        category: 'vasen',
+        englishDesc: 'The Mara is an atmospheric entity, often described not as a ghost, but as a living person, usually a woman, whose soul leaves her body at night to torment others. Unlike the Skogsrå, who is bound to the forest, the Mara is a domestic predator. She is the personification of the "night-press," an experience where the victim wakes unable to move or breathe, feeling a crushing weight upon their chest. In Swedish tradition, she is famous for creating Marlockar (Mare-locks), intricate, impossible knots in the hair of humans and the manes of horses. A horse found sweating and exhausted in its stable at dawn was said to have been ridden by the Mara all night. To prevent her entry, peasants would place shoes with the toes pointing away from the bed, or hang a Marpipa (a knotty branch) above the door. If one managed to plug the keyhole while she was inside, she would be trapped in her physical form until the plug was removed.',
+        swedishDesc: 'Maran är ett atmosfäriskt väsen, ofta beskrivet inte som ett spöke utan som en levande person, vanligtvis en kvinna, vars själ lämnar kroppen om natten för att plåga andra. Till skillnad från skogsrån, som är bunden till skogen, är maran ett hushållsrovdjur. Hon är personifieringen av "mareritten", en upplevelse där offret vaknar oförmöget att röra sig eller andas och känner en krossande tyngd mot bröstet. I svensk tradition är hon känd för att skapa marlockar, intrikata, omöjliga knutar i människors hår och hästars manar. En häst som hittades svettdränkt och utmattad i sin stall i gryningen sades ha ridit av maran hela natten. För att hindra hennes inträde lade bönder skor med tårna pekande bort från sängen eller hängde en marpipa (en kvistig gren) ovanför dörren. Om man lyckades proppa igen nyckelhålet medan hon var inuti skulle hon vara fångad i sin fysiska form tills proppen togs bort.',
+        source: 'Historical accounts of sleep paralysis and peasant superstitions (17th–19th century)',
+        sourceSv: 'Historiska redogörelser om sömnparalys och bondtro (1600–1800-tal)',
+        heritage: 'Swedish',
+        unlockType: 'vasen',
+        unlockKey: 'Mara'
     },
     'vasen_alva': {
         key: 'vasen_alva',
