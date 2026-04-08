@@ -419,6 +419,9 @@
     margin-top: var(--spacing-sm);
     margin-bottom: var(--spacing-sm);
     transition: background 0.2s ease;
+    position: relative;
+    z-index: 1;
+    touch-action: manipulation;
 }
 
 .battle-log-toggle-btn:hover {
