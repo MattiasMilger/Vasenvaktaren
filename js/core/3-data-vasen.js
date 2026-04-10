@@ -114,7 +114,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Ethereal Melody'],
+        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Enchanting Song'],
         tamingItem: 'Cursed Yarn',
         image: 'assets/vasen/bjara.png'
     },
@@ -184,7 +184,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Lava Jet', 'Ethereal Melody', 'Landslide'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Enchanting Song', 'Landslide'],
         tamingItem: 'Mine Lantern',
         image: 'assets/vasen/gruvra.png'
     },
@@ -195,7 +195,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Moon Beam', 'Ethereal Melody', 'Thick Coat'],
+        abilities: ['Elven Light', 'Moon Beam', 'Enchanting Song', 'Thick Coat'],
         tamingItem: 'Shed Antlers',
         image: 'assets/vasen/skogsra.png'
     },
@@ -206,7 +206,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
-        abilities: ['Drown', 'Elven Light', 'Ethereal Melody', 'Tidal Wave'],
+        abilities: ['Drown', 'Elven Light', 'Enchanting Song', 'Tidal Wave'],
         tamingItem: 'Waterlogged Violin',
         image: 'assets/vasen/nacken.png'
     },
@@ -217,7 +217,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Wailing Cry', 'Moon Beam', 'Ethereal Melody', 'Wind Gust'],
+        abilities: ['Wailing Cry', 'Moon Beam', 'Enchanting Song', 'Wind Gust'],
         tamingItem: 'Heavy Pillow',
         image: 'assets/vasen/mara.png'
     },
@@ -230,7 +230,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Wind Gust', 'Ethereal Melody', 'Moon Beam'],
+        abilities: ['Elven Light', 'Wind Gust', 'Enchanting Song', 'Moon Beam'],
         tamingItem: 'Morning Dew',
         image: 'assets/vasen/alva.png'
     },
@@ -252,7 +252,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.RARE,
-        abilities: ['Elven Light', 'Hail Storm', 'Ethereal Melody', 'Moon Beam'],
+        abilities: ['Elven Light', 'Hail Storm', 'Enchanting Song', 'Moon Beam'],
         tamingItem: 'Festive Midsommarkrans',
         image: 'assets/vasen/ljusalv.png'
     },
@@ -265,7 +265,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Moon Beam', 'Burning Insult', 'Ethereal Melody'],
+        abilities: ['Vine Whip', 'Moon Beam', 'Burning Insult', 'Enchanting Song'],
         tamingItem: 'Elderflower Sprig',
         image: 'assets/vasen/hyllemor.png'
     },

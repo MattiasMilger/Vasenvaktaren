@@ -710,10 +710,10 @@ const LORE_ENTRIES = {
         unlockType: 'ability',
         unlockKey: 'Burning Insult'
     },
-    'ability_ethereal_melody': {
-        key: 'ability_ethereal_melody',
-        name: 'Ethereal Melody',
-        swedishName: 'Eterisk Melodi (Ethereal Melody)',
+    'ability_enchanting_song': {
+        key: 'ability_enchanting_song',
+        name: 'Enchanting Song',
+        swedishName: 'Förtrollande Visa (Enchanting Song)',
         category: 'abilities',
         englishDesc: 'Music as supernatural enchantment is a recurring motif in Scandinavian folklore, most powerfully represented by Näcken\'s fiddle playing. The näcken is said to play by the water\'s edge with such devastating beauty that listeners cannot control themselves - they must dance, and they will dance until they die unless someone can break the spell by calling the näcken by name. Näcken could also teach his art to humans, but only for a price. Similar traditions appear across Northern Europe, from the Irish fiddle spirits to the Scottish Faerie musicians.',
         swedishDesc: 'Musik som övernaturlig förtrollning är ett återkommande motiv i skandinavisk folktro, kraftfullast representerat av näckens fiolspelande. Näcken sägs spela vid vattenkanten med sådan förödande skönhet att lyssnare inte kan kontrollera sig - de måste dansa, och de ska dansa tills de dör om inte någon kan bryta förbannelsen genom att kalla näcken vid namn. Näcken kunde också lära ut sin konst till människor, men bara till ett pris. Liknande traditioner förekommer i hela Nordeuropa, från de irländska fidelandarna till de skotska feutiska musikerna.',
@@ -721,7 +721,7 @@ const LORE_ENTRIES = {
         sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'ability',
-        unlockKey: 'Ethereal Melody'
+        unlockKey: 'Enchanting Song'
     },
     'ability_boulder_toss': {
         key: 'ability_boulder_toss',

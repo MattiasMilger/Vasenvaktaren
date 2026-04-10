@@ -269,8 +269,8 @@ const ABILITIES = {
         power: 68,
         meginCost: 50
     },
-    'Ethereal Melody': {
-        name: 'Ethereal Melody',
+    'Enchanting Song': {
+        name: 'Enchanting Song',
         flavorDescription: 'Plays a haunting tune that distracts the enemy.',
         mechanicsDescription: 'Lowers enemy Strength and Wisdom by 1 stage.',
         element: ELEMENTS.WIND,
