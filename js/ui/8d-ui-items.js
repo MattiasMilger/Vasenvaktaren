@@ -91,8 +91,6 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'drowned sailor',
         'white horse',
         'nocturnal grazer',
-        'twitching construct',
-        'nocturnal visitor',
         'great wolf',
         'world\'s winds',
         'mountain-dwelling giant',
@@ -113,7 +111,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'wingless serpent',
         'avaricious drakes',
         'World Serpent',
-        'world tree'
+        'world tree',
+        'destiny-shaping being'
     ];
 
     let highlighted = description;

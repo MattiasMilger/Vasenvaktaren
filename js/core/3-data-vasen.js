@@ -291,6 +291,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Shield Fragment',
         image: 'assets/vasen/valkyria.png'
     },
+    'Norna': {
+        name: 'Norna',
+        internalName: 'Norna',
+        description: 'The ancient weaver of fate who tends the sacred waters of the Wellspring of Urd. Her touch shapes destiny itself, and even the roots of Yggdrasil bend to her will.',
+        family: FAMILIES.ANDE,
+        element: ELEMENTS.WATER,
+        rarity: RARITIES.MYTHICAL,
+        abilities: ['Hail Storm', 'Tidal Wave', 'Skald\'s Mead', 'Ethereal Melody'],
+        tamingItem: 'Fate Thread',
+        image: 'assets/vasen/norna.png'
+    },
 
     // Jätte Family
     'Jotun': {

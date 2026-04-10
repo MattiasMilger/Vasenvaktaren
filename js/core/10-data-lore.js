@@ -517,6 +517,17 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Nidhogg'
     },
+    'vasen_norna': {
+        key: 'vasen_norna',
+        name: 'Norna',
+        category: 'vasen',
+        englishDesc: 'The Nornir (singular: Norn) are the three great weavers of fate in Norse mythology: Urd ("What Has Been"), Verdandi ("What Is Becoming"), and Skuld ("What Shall Be"). They dwell at Urdarbrunnen - the Well of Urd - at the base of Yggdrasil, the World Tree, where they draw water from the sacred spring each day to pour over the tree\'s roots and keep it alive. From this same well they weave the threads of destiny for gods, giants, and mortals alike, carving the fates of each being into wooden runes at the moment of birth. No power in the nine realms - not even Odin himself - can undo what the Nornir have woven. They are described in the Prose Edda as three women of immense wisdom who came from the home of the giants, and their arrival among the gods is said to have marked the end of the golden age. A fourth category of nornir, lesser in stature, are said to attend the birth of every individual, shaping the course of their life. The Well of Urd is also the site where the gods hold their daily council, riding over Bifröst to gather beneath Yggdrasil\'s branches to pass judgment and settle the affairs of the world.',
+        swedishDesc: 'Nornorna (singular: Norn) är de tre stora ödesväverskor i nordisk mytologi: Urd ("Det Som Har Varit"), Verdande ("Det Som Håller På Att Bli") och Skuld ("Det Som Ska Bli"). De bor vid Urdarbrunnen - Urds brunn - vid foten av Yggdrasil, Världsträdet, där de varje dag hämtar vatten från den heliga källan för att ösa över trädets rötter och hålla det vid liv. Från samma brunn väver de ödesträdar för gudar, jättar och dödliga, och ristar varje varelses öde i trärunor vid födseln. Ingen makt i de nio världarna - inte ens Oden själv - kan ta upp det Nornorna har vävt. De beskrivs i Prosa-Eddan som tre kvinnor av enorm visdom som kom från jättarnas hem, och deras ankomst bland gudarna sägs ha markerat slutet på guldåldern. En fjärde kategori av nornor, av lägre rang, sägs närvara vid varje individs födelse och forma loppet av deras liv. Urdarbrunnen är också platsen där gudarna håller sina dagliga råd och rider över Bifrost för att samlas under Yggdrasils grenar för att döma och avgöra världens angelägenheter.',
+        source: 'Prose Edda (Gylfaginning) / Poetic Edda (Völuspá)',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Norna'
+    },
 
     // =========================================================================
     // CATEGORY: ITEMS
@@ -616,6 +627,18 @@ const LORE_ENTRIES = {
         heritage: 'Norse / Germanic',
         unlockType: 'item',
         unlockKey: 'Anvil Shard'
+    },
+    'item_fate_thread': {
+        key: 'item_fate_thread',
+        name: 'Fate Thread',
+        swedishName: 'Ödestrå (Fate Thread)',
+        category: 'items',
+        englishDesc: 'The Nornir weave the fate of all living beings at Urdarbrunnen, the sacred Well of Urd at the base of Yggdrasil. Their threads - spun from the waters of the well itself - are said to shimmer with a silver-blue light that is neither of this world nor the next. Each thread represents a life: its length, its color, and the manner of its weaving determine everything that will ever befall the being to whom it belongs. To hold a fragment of such a thread is to hold a sliver of destiny - something immeasurably precious and profoundly dangerous in equal measure.',
+        swedishDesc: 'Nornorna väver alla levande varelsers öde vid Urdarbrunnen, den heliga Urds brunn vid foten av Yggdrasil. Deras trådar - spunna från brunnens vatten - sägs skimra med ett silvrig-blått ljus som varken tillhör denna värld eller nästa. Varje tråd representerar ett liv: dess längd, dess färg och sättet den vävs på avgör allt som någonsin ska drabba den varelse den tillhör. Att hålla ett fragment av en sådan tråd är att hålla en skärva av ödet - något omätligt dyrbart och djupt farligt i lika mån.',
+        source: 'Prose Edda (Gylfaginning)',
+        heritage: 'Norse',
+        unlockType: 'item',
+        unlockKey: 'Fate Thread'
     },
 
     // =========================================================================

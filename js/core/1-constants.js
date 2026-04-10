@@ -513,7 +513,7 @@ const ZONES = {
         description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
         image: 'assets/zones/glimrandekallan.png',
         levelRange: [15, 19],
-        spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr'],
+        spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna'],
         guardian: {
             name: 'Sigurd',
             team: [

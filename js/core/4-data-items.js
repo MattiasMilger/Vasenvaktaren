@@ -166,6 +166,11 @@ const TAMING_ITEMS = {
         name: 'Yggdrasil Root',
         description: 'A fragment of Yggdrasil Root. It is gnawed and ancient, a piece of the world tree itself.',
         tamingTarget: 'Nidhogg'
+    },
+    'Fate Thread': {
+        name: 'Fate Thread',
+        description: 'A shimmering Fate Thread. Its silver-blue fibers ripple like moonlit water, humming softly with ancient power drawn from the well beneath Yggdrasil. A rare offering worthy of a destiny-shaping being.',
+        tamingTarget: 'Norna'
     }
 };
 
