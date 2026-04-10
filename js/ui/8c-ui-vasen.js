@@ -83,6 +83,8 @@ UIController.prototype.getSortedVasenCollection = function() {
                 const levelDiff = b.level - a.level;
                 return levelDiff !== 0 ? levelDiff : alphabetical(a, b);
             });
+        case 'element':
+            return null; // Return null to indicate element grouping should be used
         case 'family':
         default:
             return null; // Return null to indicate family grouping should be used
@@ -107,6 +109,7 @@ UIController.prototype.renderVasenInventory = function() {
         <select id="vasen-sort-select" class="vasen-sort-select">
             <option value="level" ${this.vasenSortBy === 'level' ? 'selected' : ''}>Level</option>
             <option value="rarity" ${this.vasenSortBy === 'rarity' ? 'selected' : ''}>Rarity</option>
+            <option value="element" ${this.vasenSortBy === 'element' ? 'selected' : ''}>Element</option>
             <option value="health" ${this.vasenSortBy === 'health' ? 'selected' : ''}>Health</option>
             <option value="defense" ${this.vasenSortBy === 'defense' ? 'selected' : ''}>Defense</option>
             <option value="durability" ${this.vasenSortBy === 'durability' ? 'selected' : ''}>Durability</option>
@@ -123,7 +126,10 @@ UIController.prototype.renderVasenInventory = function() {
 
     const sortedCollection = this.getSortedVasenCollection();
 
-    if (sortedCollection === null) {
+    if (sortedCollection === null && this.vasenSortBy === 'element') {
+        // Element grouping
+        this.renderVasenByElement(container);
+    } else if (sortedCollection === null) {
         // Family grouping (original behavior)
         this.renderVasenByFamily(container);
     } else {
@@ -180,7 +186,54 @@ UIController.prototype.renderVasenByFamily = function(container) {
     });
 };
 
-// Render väsen as flat sorted list
+// Render väsen grouped by element
+UIController.prototype.renderVasenByElement = function(container) {
+    // Group by element
+    const byElement = {};
+    gameState.vasenCollection.forEach(vasen => {
+        const element = vasen.species.element;
+        if (!byElement[element]) byElement[element] = [];
+        byElement[element].push(vasen);
+    });
+
+    // Use defined element order from constants
+    const elementOrder = Object.values(ELEMENTS);
+
+    elementOrder.forEach(element => {
+        if (!byElement[element] || byElement[element].length === 0) return;
+
+        const elementSection = document.createElement('div');
+        elementSection.className = 'family-section';
+        const elementHeader = document.createElement('h4');
+        elementHeader.className = 'family-header';
+        elementHeader.textContent = element;
+        elementSection.appendChild(elementHeader);
+
+        // Sort väsen within element: favorites first, then alphabetically by species, then by temperament
+        const sortedVasen = byElement[element].sort((a, b) => {
+            const aFav = gameState.isFavorite(a.id) ? 1 : 0;
+            const bFav = gameState.isFavorite(b.id) ? 1 : 0;
+            if (aFav !== bFav) return bFav - aFav;
+
+            if (a.speciesName !== b.speciesName) {
+                return a.speciesName.localeCompare(b.speciesName);
+            }
+            return a.temperamentKey.localeCompare(b.temperamentKey);
+        });
+
+        sortedVasen.forEach(vasen => {
+            const card = this.createVasenCard(vasen);
+            if (this.selectedVasen && this.selectedVasen.id === vasen.id) {
+                card.classList.add('selected');
+            }
+            elementSection.appendChild(card);
+        });
+
+        container.appendChild(elementSection);
+    });
+};
+
+
 UIController.prototype.renderVasenFlat = function(container, sortedCollection) {
     const vasenListSection = document.createElement('div');
     vasenListSection.className = 'vasen-list-section';
