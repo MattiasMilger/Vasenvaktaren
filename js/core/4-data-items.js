@@ -22,6 +22,11 @@ const TAMING_ITEMS = {
         description: 'A bowl of Warm Tomtegröt. The sweet smell might attract a watchful house spirit who loves this offering.',
         tamingTarget: 'Hustomte'
     },
+    'Water Bucket': {
+        name: 'Water Bucket',
+        description: 'A heavy wooden pail reinforced with iron. Its rhythmic splashing against mossy stones is a familiar call to the well-dweller, who may emerge from the dark for such a sturdy, clean vessel.',
+        tamingTarget: 'Brunnsgubbe'
+    },
     'Black Feather': {
         name: 'Black Feather',
         description: 'A large Black Feather. It carries an eerie silence, likely shed by a spectral, shrieking raven. You should give it to a Väsen that could use it.',

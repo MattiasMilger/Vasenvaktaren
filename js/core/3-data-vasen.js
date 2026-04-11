@@ -37,6 +37,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Warm Tomtegrot',
         image: 'assets/vasen/hustomte.png'
     },
+    'Brunnsgubbe': {
+        name: 'Brunnsgubbe',
+        internalName: 'Brunnsgubbe',
+        description: 'A damp, reclusive warden of the village well. He keeps the water pure and the spring flowing, but demands cleanliness. Defile his domain and he will sour the water or snatch the bucket clean off its rope.',
+        family: FAMILIES.VATTE,
+        element: ELEMENTS.WATER,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Drown', 'Torch Strike', 'Burning Insult', 'Wild Bite'],
+        tamingItem: 'Water Bucket',
+        image: 'assets/vasen/brunnsgubbe.png'
+    },
 
     // Vålnad Family
     'Nattramn': {
@@ -298,7 +309,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Hail Storm', 'Tidal Wave', 'Skald\'s Mead', 'Ethereal Melody'],
+        abilities: ['Hail Storm', 'Tidal Wave', 'Skald\'s Mead', 'Enchanting Song'],
         tamingItem: 'Fate Thread',
         image: 'assets/vasen/norna.png'
     },

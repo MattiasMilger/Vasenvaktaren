@@ -469,7 +469,7 @@ const ZONES = {
         description: 'A cluster of quiet, humble settlements where ancient house spirits live side-by-side with humans. Tread carefully, for the peace is fragile, and the benevolent guardians turn fiercely protective when their homes are threatened.',
         image: 'assets/zones/folketsby.png',
         levelRange: [5, 9],
-        spawns: ['Gardstomte', 'Hustomte', 'Nattramn', 'Bortbyting', 'Gloson', 'Bjara'],
+        spawns: ['Gardstomte', 'Hustomte', 'Brunnsgubbe', 'Nattramn', 'Bortbyting', 'Gloson', 'Bjara'],
         guardian: {
             name: 'Ragnar',
             team: [

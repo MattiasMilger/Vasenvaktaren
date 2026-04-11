@@ -112,7 +112,9 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'avaricious drakes',
         'World Serpent',
         'world tree',
-        'destiny-shaping being'
+        'destiny-shaping being',
+        'well-dweller',
+        'twitching construct'
     ];
 
     let highlighted = description;
