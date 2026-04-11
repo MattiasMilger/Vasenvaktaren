@@ -166,6 +166,7 @@ Vasenvaktaren/
 - [x] Introduce endgame system (100%)
 - [ ] Final Polish (90%)
 - [ ] Introduce all Väsen (34/45)
+- [ ] Wiki Page (0%)
 
 ## Credits
 
