@@ -399,8 +399,8 @@ const LORE_ENTRIES = {
         key: 'vasen_svartalv',
         name: 'Svartalv',
         category: 'vasen',
-        englishDesc: 'The svartalver (dark elves), also known as Dwarves (Swedish: Dvärgar), are the master craftsmen of Norse mythology, living underground in Nidavelir / Svartalfheim. They are distinguished by their extraordinary skill in smithing and forging magical artifacts. According to the Prose Edda, the svartalver forged some of the most important objects in Norse myth: Gleipnir (the magical ribbon binding Fenrir), Gungnir (Odin\'s spear), Mjölnir (Thor\'s hammer), and Draupnir (Odin\'s self-replicating gold ring).',
-        swedishDesc: 'Svartalverna är nordisk mytologis mästarhantverkare, även kända som Dvärgar, och bor under jord i Nidavelir / Svartalfheim. De utmärks av sin extraordinära skicklighet i smidning och skapande av magiska föremål. Enligt Prosa-Eddan smidde svartalverna några av de viktigaste föremålen i nordisk myt: Gleipner (det magiska bandet som binder Fenrir), Gungner (Odins spjut), Mjölner (Tors hammare) och Draupner (Odins självreproducerande guldring). De identifieras ibland med dvärgarna i nordisk mytologi.',
+        englishDesc: 'The svartalver (dark elves) are the master craftsmen of Norse mythology, living underground in Nidavelir / Svartalfheim. They are distinguished by their extraordinary skill in shaping cold stone and forging magical artifacts through mastery of the earth itself. According to the Prose Edda, the svartalver forged some of the most important objects in Norse myth: Gleipnir (the magical ribbon binding Fenrir), Gungnir (Odin\'s spear), Mjölnir (Thor\'s hammer), and Draupnir (Odin\'s self-replicating gold ring). Scholars often equate the svartalver with the Dvärgar of Norse myth, though in the deep places of the world the two are regarded as distinct folk -the svartalver working the cold rock, the Dvärgar commanding the living fire of the forge.',
+        swedishDesc: 'Svartalverna är nordisk mytologis mästarhantverkare och bor under jord i Nidavelir / Svartalfheim. De utmärks av sin extraordinära skicklighet i att forma kallt sten och skapa magiska föremål genom behärskandet av jorden själv. Enligt Prosa-Eddan smidde svartalverna några av de viktigaste föremålen i nordisk myt: Gleipner (det magiska bandet som binder Fenrir), Gungner (Odins spjut), Mjölner (Tors hammare) och Draupner (Odins självreproducerande guldring). Forskare likställer ofta svartalverna med Dvärgarna i nordisk myt, men i världens djupaste platser betraktas de två som skilda folk -svartalverna arbetar det kalla berget, medan Dvärgarna befaller smedans levande eld.',
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -416,6 +416,18 @@ const LORE_ENTRIES = {
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Ljusalv'
+    },
+    'vasen_dvarg': {
+        key: 'vasen_dvarg',
+        name: 'Dvärg',
+        category: 'vasen',
+        englishDesc: 'The Dvärgar (singular: Dvärg) are the fiery forge-masters of Norse myth, closely linked to the svartalver yet distinct in their nature. Where the svartalver shape cold stone and earth, the Dvärgar command the living heat of the deep forge - the raw, molten fire that courses through the veins of the mountain itself. They are master smiths of legendary pride, reclusive and territorial, and are said to emerge only for materials worthy of their craft. Some Norse sources equate the Dvärgar with dwarves entirely, though others suggest they are a separate order of underground folk united by their bond to fire and iron.',
+        swedishDesc: 'Dvärgarna (singular: Dvärg) är eldkraftens smedmästare i nordisk myt, nära besläktade med svartalverna men ändå distinkta till sin natur. Där svartalverna formar kallt sten och jord, befaller Dvärgarna den levande hettan i den djupa smältugnen - den råa, flytande elden som flödar genom bergets egna ådror. De är legendariskt stolta mästersmedar, tillbakadragna och territoriella, och sägs enbart träda fram för material värdigt deras hantverk. Vissa nordiska källor likställer Dvärgarna helt med dvärgar, medan andra antyder att de är en separat ordning av underjordiskt folk förenade av sitt band till eld och järn.',
+        source: 'Norse Mythology / Prose Edda',
+        sourceSv: 'Nordisk mytologi / Prosa-Eddan',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Dvarg'
     },
     'vasen_hyllemor': {
         key: 'vasen_hyllemor',
@@ -639,6 +651,19 @@ const LORE_ENTRIES = {
         heritage: 'Norse / Germanic',
         unlockType: 'item',
         unlockKey: 'Anvil Shard'
+    },
+    'item_molten_ore': {
+        key: 'item_molten_ore',
+        name: 'Molten Ore',
+        swedishName: 'Smält Malm (Molten Ore)',
+        category: 'items',
+        englishDesc: 'Deep within the roots of the oldest mountains, volcanic veins carry ore so saturated with primordial heat that it never fully solidifies. The Dvärgar are said to seek out these seams above all others, for only ore still alive with the fire of the deep earth can be worked into the legendary artifacts their craft demands. To hold a lump of molten ore without the Dvärg\'s innate resistance to flame is to invite serious injury -and yet to a cinder smith, it is simply the finest of raw materials.',
+        swedishDesc: 'Djupt inne i de äldsta bergens rötter bär vulkaniska ådror malm så mättad av urtida hetta att den aldrig helt stelnar. Dvärgarna sägs söka upp dessa ådror framför alla andra, ty bara malm som fortfarande lever med djupjordens eld kan formas till de legendariska artefakter deras hantverk kräver. Att hålla ett klump smält malm utan Dvärgens medfödda motståndskraft mot lågor är att inbjuda till allvarlig skada -och ändå är det för en cindersmed helt enkelt det finaste av råmaterial.',
+        source: 'Norse Mythology',
+        sourceSv: 'Nordisk mytologi',
+        heritage: 'Norse',
+        unlockType: 'item',
+        unlockKey: 'Molten Ore'
     },
     'item_fate_thread': {
         key: 'item_fate_thread',
@@ -904,8 +929,8 @@ const LORE_ENTRIES = {
         swedishName: 'Oden',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") — he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday — Old English "Wōden\'s day" (Swedish: onsdag).',
-        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") — han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag — fornengelskt "Wōden\'s day".',
+        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") -he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday -Old English "Wōden\'s day" (Swedish: onsdag).',
+        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") -han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag -fornengelskt "Wōden\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'valhalla'
@@ -916,8 +941,8 @@ const LORE_ENTRIES = {
         swedishName: 'Tor',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday — Old English "Þūnor\'s day" (Swedish: torsdag).',
-        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölner och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag — fornengelskt "Þūnor\'s day".',
+        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday -Old English "Þūnor\'s day" (Swedish: torsdag).',
+        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölner och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag -fornengelskt "Þūnor\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -955,8 +980,8 @@ const LORE_ENTRIES = {
         swedishName: 'Freja',
         category: 'gods',
         family: 'Vaner',
-        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen — a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday — Old English "Frigedæg" (Swedish: fredag).',
-        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen — ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag — fornengelskt "Frigedæg".',
+        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen -a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday -Old English "Frigedæg" (Swedish: fredag).',
+        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen -ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag -fornengelskt "Frigedæg".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
@@ -1031,7 +1056,7 @@ const LORE_ENTRIES = {
     },
 
     // =========================================================================
-    // MIDGÅRD — LOCATION
+    // MIDGÅRD -LOCATION
     // =========================================================================
 
     'location_midgard': {
@@ -1074,8 +1099,8 @@ const LORE_ENTRIES = {
         name: 'The Eddas',
         swedishName: 'Eddan',
         category: 'concepts',
-        englishDesc: 'The Eddas are the two primary collections of Norse mythology and poetry, compiled in Iceland in the 13th century. The Prose Edda (also called Snorri\'s Edda), written by Icelandic historian Snorri Sturluson around 1220 CE, is a handbook of Norse mythology and skaldic poetry. The Poetic Edda (the Elder Edda) is a collection of anonymous Old Norse poems including the Völuspá ("The Prophecy of the Seeress") and the Hávamál ("The Sayings of the High One") — a poem in the voice of Odin himself, containing wisdom, ethics, and practical philosophy that spans from social etiquette to cosmic truth. The Hávamál includes Odin\'s account of hanging on Yggdrasil to learn the runes. Together, the Eddas are the most important surviving sources for Norse mythology.',
-        swedishDesc: 'Eddorna är de två primära samlingarna av nordisk mytologi och poesi, sammanställda på Island under 1200-talet. Prosa-Eddan (även kallad Snorres Edda), skriven av den isländske historikern Snorri Sturluson runt år 1220, är en handbok i nordisk mytologi och skaldediktning. Den poetiska Eddan (Den äldre Eddan) är en samling anonyma fornnordiska dikter inklusive Völuspå ("Völvans spådom") och Hávamál ("Den Höges sång") — ett diktverk i Odens röst som innehåller visdom, etik och praktisk filosofi som sträcker sig från social etikett till kosmisk sanning. Hávamål inkluderar Odens berättelse om att hänga på Yggdrasil för att lära sig runorna. Tillsammans är Eddorna de viktigaste bevarade källorna för nordisk mytologi.',
+        englishDesc: 'The Eddas are the two primary collections of Norse mythology and poetry, compiled in Iceland in the 13th century. The Prose Edda (also called Snorri\'s Edda), written by Icelandic historian Snorri Sturluson around 1220 CE, is a handbook of Norse mythology and skaldic poetry. The Poetic Edda (the Elder Edda) is a collection of anonymous Old Norse poems including the Völuspá ("The Prophecy of the Seeress") and the Hávamál ("The Sayings of the High One") -a poem in the voice of Odin himself, containing wisdom, ethics, and practical philosophy that spans from social etiquette to cosmic truth. The Hávamál includes Odin\'s account of hanging on Yggdrasil to learn the runes. Together, the Eddas are the most important surviving sources for Norse mythology.',
+        swedishDesc: 'Eddorna är de två primära samlingarna av nordisk mytologi och poesi, sammanställda på Island under 1200-talet. Prosa-Eddan (även kallad Snorres Edda), skriven av den isländske historikern Snorri Sturluson runt år 1220, är en handbok i nordisk mytologi och skaldediktning. Den poetiska Eddan (Den äldre Eddan) är en samling anonyma fornnordiska dikter inklusive Völuspå ("Völvans spådom") och Hávamál ("Den Höges sång") -ett diktverk i Odens röst som innehåller visdom, etik och praktisk filosofi som sträcker sig från social etikett till kosmisk sanning. Hávamål inkluderar Odens berättelse om att hänga på Yggdrasil för att lära sig runorna. Tillsammans är Eddorna de viktigaste bevarade källorna för nordisk mytologi.',
         source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
         heritage: 'Norse / Icelandic',
         unlockType: 'valhalla'

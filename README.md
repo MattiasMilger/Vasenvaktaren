@@ -160,13 +160,12 @@ Vasenvaktaren/
 ```
 ## Feature roadmap
 
-- [x] Finish Main Functionality (100%)
-- [ ] Make mobile friendly (90%)
-- [ ] Game Balance (90%)
-- [x] Introduce endgame system (100%)
-- [ ] Final Polish (90%)
-- [ ] Introduce all Väsen (34/45)
-- [ ] Wiki Page (0%)
+- [x] Finish Main Functionality 
+- [x] Introduce endgame system
+- [ ] Balance Overhaul
+- [ ] Introduce all 45 Väsen (34/45)
+- [ ] Introduce New Abilities
+- [ ] Wiki Page
 
 ## Credits
 

@@ -267,6 +267,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Festive Midsommarkrans',
         image: 'assets/vasen/ljusalv.png'
     },
+    'Dvarg': {
+        name: 'Dvärg',
+        internalName: 'Dvarg',
+        description: 'A master of the forge, born from the primordial heat of the earth\'s deep veins. While their Svartalv kin shape the cold stone, the Dvärg commands the searing heart of the fire itself to transform raw ore into legendary artifacts.',
+        family: FAMILIES.ALV,
+        element: ELEMENTS.FIRE,
+        rarity: RARITIES.RARE,
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Skald\'s Mead'],
+        tamingItem: 'Molten Ore',
+        image: 'assets/vasen/dvarg.png'
+    },
 
     // Ande Family
     'Hyllemor': {
@@ -333,7 +344,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Boulder Toss', 'Smithing'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Boulder Toss'],
         tamingItem: 'Glowing Coal',
         image: 'assets/vasen/eldturs.png'
     },

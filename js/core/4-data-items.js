@@ -24,7 +24,7 @@ const TAMING_ITEMS = {
     },
     'Water Bucket': {
         name: 'Water Bucket',
-        description: 'A heavy wooden pail reinforced with iron. Its rhythmic splashing against mossy stones is a familiar call to the well-dweller, who may emerge from the dark for such a sturdy, clean vessel.',
+        description: 'A heavy wooden pail reinforced with iron. Its rhythmic splashing against mossy stones is a familiar call to the well dweller, who may emerge from the dark for such a sturdy, clean vessel.',
         tamingTarget: 'Brunnsgubbe'
     },
     'Black Feather': {
@@ -121,6 +121,11 @@ const TAMING_ITEMS = {
         name: 'Festive Midsommarkrans',
         description: 'A Festive Midsommarkrans. Its radiance attracts the beautiful, light-aligned beings of creation.',
         tamingTarget: 'Ljusalv'
+    },
+    'Molten Ore': {
+        name: 'Molten Ore',
+        description: 'A glowing, liquid stone that pulses with the white-hot intensity of the deep earth. A cinder smith cannot resist the pull of such raw, volatile heat, for it is the lifeblood of their craft and the only material worthy of their legendary hammers.',
+        tamingTarget: 'Dvarg'
     },
     'Elderflower Sprig': {
         name: 'Elderflower Sprig',
