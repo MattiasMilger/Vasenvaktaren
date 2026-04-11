@@ -17,7 +17,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ## Game Features
 
 ### Väsen
-- 30 unique creatures based on Swedish folklore
+- 45 unique creatures based on Swedish folklore
 - 10 families: Vätte, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake
 - 5 elements: Earth, Nature, Water, Fire, Wind
 - 4 rarities: Common, Uncommon, Rare, Mythical
@@ -165,6 +165,7 @@ Vasenvaktaren/
 - [ ] Game Balance (90%)
 - [x] Introduce endgame system (100%)
 - [ ] Final Polish (90%)
+- [ ] Introduce all Väsen (34/45)
 
 ## Credits
 
