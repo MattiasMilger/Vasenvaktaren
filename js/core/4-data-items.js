@@ -184,7 +184,7 @@ const TAMING_ITEMS = {
     },
     'Ancient Log': {
         name: 'Ancient Log',
-        description: 'A section of Ancient Log, so dense it could not be split with any axe. The bark is black as iron and still warm to the touch, as though the sap within never stopped moving. Something in the deep forest that moves like ancient timber giant would recognize this as a piece of its own kind.',
+        description: 'A section of Ancient Log whose bark is black as iron and warm to the touch. Something that moves like an ancient timber giant would recognize this as a piece of its own kind.',
         tamingTarget: 'Jarnvedsjatte'
     }
 };

@@ -363,7 +363,7 @@ const VASEN_SPECIES = {
     'Jarnvedsjatte': {
         name: 'Järnvedsjätte',
         internalName: 'Jarnvedsjatte',
-        description: 'Born from the mythic Iron-Wood where the sap runs like liquid metal and the bark is impenetrable. This giant is not a person, but a massive, walking manifestation of the forest\'s oldest timber. In folklore, these giants were said to be the reason why certain parts of the forest remained dark even at noon — their massive canopies blocked out the sun entirely. They move with the creaking sound of breaking wood and embody the sheer, crushing weight of ancient growth.',
+        description: 'A walking manifestation of the forest\'s oldest timber, born from the mythic Iron-Wood. Its bark is impenetrable, its sap runs like liquid metal, and its vast canopy blocks out the sun even at noon.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
