@@ -100,6 +100,15 @@ Game.prototype.startEndlessTowerBattle = function() {
         this.currentBattle.winner = null;
         this.currentBattle.waitingForPlayerAction = true;
 
+        // If the previously active player Väsen was knocked out in the last floor
+        // (simultaneous KO scenario), auto-swap to the first alive team member.
+        if (this.currentBattle.playerActive && this.currentBattle.playerActive.isKnockedOut()) {
+            const firstAliveIndex = this.currentBattle.playerTeam.findIndex(v => !v.isKnockedOut());
+            if (firstAliveIndex !== -1) {
+                this.currentBattle.setPlayerActive(firstAliveIndex, false);
+            }
+        }
+
         // Reset offers but keep taming disabled
         this.currentBattle.offersGiven = 0;
         this.currentBattle.correctItemGiven = false;
