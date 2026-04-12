@@ -99,6 +99,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'mine warden',
         'warden of the forest',
         'water warden',
+        'nocturnal visitor',
         'beings of the mist',
         'subterranean smiths',
         'beings of creation',
