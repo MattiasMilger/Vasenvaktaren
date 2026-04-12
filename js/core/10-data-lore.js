@@ -180,18 +180,6 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Hustomte'
     },
-    'vasen_brunnsgubbe': {
-        key: 'vasen_brunnsgubbe',
-        name: 'Brunnsgubbe',
-        category: 'vasen',
-        englishDesc: 'The Brunnsgubbe (well man) is the capricious spirit guardian of the village well or sacred spring in Swedish folk belief. Wells were vital to daily life and seen as liminal places where the boundaries between the human world and the spirit realm were thin. The well spirit ensured the water stayed clean and the spring kept flowing, demanding in return that the well be kept free of filth and treated with respect. Dropping foreign objects into the well, washing impure things in it, or failing to leave a small offering could provoke the Brunnsgubbe into souring the water or causing the spring to run dry. Similar well-dwelling spirits appear across Northern European folklore.',
-        swedishDesc: 'Brunnsgubben är den nyckfulle skyddsanden för bybrunnen eller den heliga källan i svensk folktro. Brunnar var avgörande för det dagliga livet och betraktades som liminala platser där gränserna mellan människovärlden och andevärlden var tunna. Brunnsanden såg till att vattnet förblev rent och källan fortsatte flöda, och krävde i gengäld att brunnen hölls fri från smuts och behandlades med respekt. Att kasta främmande föremål i brunnen, tvätta orena ting i den, eller att underlåta att lämna ett litet erbjudande kunde reta brunnsgubben till att förstöra vattnet eller få källan att sina. Liknande brunnsboende andar förekommer i hela nordeuropeisk folktro.',
-        source: 'Swedish Folklore',
-        sourceSv: 'Svensk folktro',
-        heritage: 'Swedish',
-        unlockType: 'vasen',
-        unlockKey: 'Brunnsgubbe'
-    },
     'vasen_nattramn': {
         key: 'vasen_nattramn',
         name: 'Nattramn',
@@ -263,18 +251,6 @@ const LORE_ENTRIES = {
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Gloson'
-    },
-    'vasen_bjara': {
-        key: 'vasen_bjara',
-        name: 'Bjära',
-        category: 'vasen',
-        englishDesc: 'The Bjära (also "mjölkhare" or "trollhare") is a supernatural familiar from Swedish folk belief, constructed rather than born. A witch would fashion it from wood shavings, yarn, and hair, then animate it with three drops of her own blood and a pact with the devil. Taking the form of a hare or a ball of yarn, it would slink across the countryside, sucking milk directly from the udders of neighbours\' cows and carrying it home in its distended belly. When it returned, it would vomit the stolen milk into its mistress\' churn. Neighbours who spotted one recognized it immediately by its bloated stomach. Bjäror were said to be nearly impossible to kill by ordinary means, though iron and silver were believed to wound them. The creature is found predominantly in the folklore of southern Sweden, Skåne, Blekinge, and Småland, and represents the deep rural anxiety over crop failure, livestock illness, and the suspicion that a neighbour\'s prosperity came at your expense.',
-        swedishDesc: 'Bjäran (även "mjölkhare" eller "trollhare") är ett övernaturligt hjälpande väsen från svensk folktro, konstruerat snarare än fött. En häxa tillverkade den av träspån, garn och hår och gav den sedan liv med tre droppar av sitt eget blod och ett pakt med djävulen. I skepnad av en hare eller ett garnnystan smög den ut över landsbygden, sög mjölk direkt från grannars kossor och bar hem det i sin uppsvullna mage. När den kom tillbaka spydde den den stulna mjölken i sin skaperskas kärna. Grannar som fick syn på en kände igen den direkt på den uppblåsta magen. Bjäror sades vara näst intill omöjliga att döda med vanliga medel, men järn och silver troddes kunna såra dem. Varelsen återfinns främst i folklore från södra Sverige - Skåne, Blekinge och Småland - och representerar den djupa lantliga ångesten över missväxt, boskapssjukdomar och misstanken att en grannes välstånd kom på din bekostnad.',
-        source: 'Swedish Folklore (Skånsk, Blekinsk, Småländsk tradition)',
-        sourceSv: 'Svensk folktro (Skånsk, Blekinsk, Småländsk tradition)',
-        heritage: 'Swedish',
-        unlockType: 'vasen',
-        unlockKey: 'Bjara'
     },
     'vasen_fenrir': {
         key: 'vasen_fenrir',
@@ -370,19 +346,6 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Nacken'
     },
-    'vasen_mara': {
-        key: 'vasen_mara',
-        name: 'Mara',
-        swedishName: 'Mara',
-        category: 'vasen',
-        englishDesc: 'The Mara is an atmospheric entity, often described not as a ghost, but as a living person, usually a woman, whose soul leaves her body at night to torment others. Unlike the Skogsrå, who is bound to the forest, the Mara is a domestic predator. She is the personification of the "night-press," an experience where the victim wakes unable to move or breathe, feeling a crushing weight upon their chest. In Swedish tradition, she is famous for creating Marlockar (Mare-locks), intricate, impossible knots in the hair of humans and the manes of horses. A horse found sweating and exhausted in its stable at dawn was said to have been ridden by the Mara all night. To prevent her entry, peasants would place shoes with the toes pointing away from the bed, or hang a Marpipa (a knotty branch) above the door. If one managed to plug the keyhole while she was inside, she would be trapped in her physical form until the plug was removed.',
-        swedishDesc: 'Maran är ett atmosfäriskt väsen, ofta beskrivet inte som ett spöke utan som en levande person, vanligtvis en kvinna, vars själ lämnar kroppen om natten för att plåga andra. Till skillnad från skogsrån, som är bunden till skogen, är maran ett hushållsrovdjur. Hon är personifieringen av "mareritten", en upplevelse där offret vaknar oförmöget att röra sig eller andas och känner en krossande tyngd mot bröstet. I svensk tradition är hon känd för att skapa marlockar, intrikata, omöjliga knutar i människors hår och hästars manar. En häst som hittades svettdränkt och utmattad i sin stall i gryningen sades ha ridit av maran hela natten. För att hindra hennes inträde lade bönder skor med tårna pekande bort från sängen eller hängde en marpipa (en kvistig gren) ovanför dörren. Om man lyckades proppa igen nyckelhålet medan hon var inuti skulle hon vara fångad i sin fysiska form tills proppen togs bort.',
-        source: 'Historical accounts of sleep paralysis and peasant superstitions (17th–19th century)',
-        sourceSv: 'Historiska redogörelser om sömnparalys och bondtro (1600–1800-tal)',
-        heritage: 'Swedish',
-        unlockType: 'vasen',
-        unlockKey: 'Mara'
-    },
     'vasen_alva': {
         key: 'vasen_alva',
         name: 'Älva',
@@ -399,8 +362,8 @@ const LORE_ENTRIES = {
         key: 'vasen_svartalv',
         name: 'Svartalv',
         category: 'vasen',
-        englishDesc: 'The svartalver (dark elves) are the master craftsmen of Norse mythology, living underground in Nidavelir / Svartalfheim. They are distinguished by their extraordinary skill in shaping cold stone and forging magical artifacts through mastery of the earth itself. According to the Prose Edda, the svartalver forged some of the most important objects in Norse myth: Gleipnir (the magical ribbon binding Fenrir), Gungnir (Odin\'s spear), Mjölnir (Thor\'s hammer), and Draupnir (Odin\'s self-replicating gold ring). Scholars often equate the svartalver with the Dvärgar of Norse myth, though in the deep places of the world the two are regarded as distinct folk -the svartalver working the cold rock, the Dvärgar commanding the living fire of the forge.',
-        swedishDesc: 'Svartalverna är nordisk mytologis mästarhantverkare och bor under jord i Nidavelir / Svartalfheim. De utmärks av sin extraordinära skicklighet i att forma kallt sten och skapa magiska föremål genom behärskandet av jorden själv. Enligt Prosa-Eddan smidde svartalverna några av de viktigaste föremålen i nordisk myt: Gleipner (det magiska bandet som binder Fenrir), Gungner (Odins spjut), Mjölner (Tors hammare) och Draupner (Odins självreproducerande guldring). Forskare likställer ofta svartalverna med Dvärgarna i nordisk myt, men i världens djupaste platser betraktas de två som skilda folk -svartalverna arbetar det kalla berget, medan Dvärgarna befaller smedans levande eld.',
+        englishDesc: 'The svartalver (dark elves), also known as Dwarves (Swedish: Dvärgar), are the master craftsmen of Norse mythology, living underground in Nidavelir / Svartalfheim. They are distinguished by their extraordinary skill in smithing and forging magical artifacts. According to the Prose Edda, the svartalver forged some of the most important objects in Norse myth: Gleipnir (the magical ribbon binding Fenrir), Gungnir (Odin\'s spear), Mjölnir (Thor\'s hammer), and Draupnir (Odin\'s self-replicating gold ring).',
+        swedishDesc: 'Svartalverna är nordisk mytologis mästarhantverkare, även kända som Dvärgar, och bor under jord i Nidavelir / Svartalfheim. De utmärks av sin extraordinära skicklighet i smidning och skapande av magiska föremål. Enligt Prosa-Eddan smidde svartalverna några av de viktigaste föremålen i nordisk myt: Gleipner (det magiska bandet som binder Fenrir), Gungner (Odins spjut), Mjölner (Tors hammare) och Draupner (Odins självreproducerande guldring). De identifieras ibland med dvärgarna i nordisk mytologi.',
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -416,18 +379,6 @@ const LORE_ENTRIES = {
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Ljusalv'
-    },
-    'vasen_dvarg': {
-        key: 'vasen_dvarg',
-        name: 'Dvärg',
-        category: 'vasen',
-        englishDesc: 'The Dvärgar (singular: Dvärg) are the fiery forge-masters of Norse myth, closely linked to the svartalver yet distinct in their nature. Where the svartalver shape cold stone and earth, the Dvärgar command the living heat of the deep forge - the raw, molten fire that courses through the veins of the mountain itself. They are master smiths of legendary pride, reclusive and territorial, and are said to emerge only for materials worthy of their craft. Some Norse sources equate the Dvärgar with dwarves entirely, though others suggest they are a separate order of underground folk united by their bond to fire and iron.',
-        swedishDesc: 'Dvärgarna (singular: Dvärg) är eldkraftens smedmästare i nordisk myt, nära besläktade med svartalverna men ändå distinkta till sin natur. Där svartalverna formar kallt sten och jord, befaller Dvärgarna den levande hettan i den djupa smältugnen - den råa, flytande elden som flödar genom bergets egna ådror. De är legendariskt stolta mästersmedar, tillbakadragna och territoriella, och sägs enbart träda fram för material värdigt deras hantverk. Vissa nordiska källor likställer Dvärgarna helt med dvärgar, medan andra antyder att de är en separat ordning av underjordiskt folk förenade av sitt band till eld och järn.',
-        source: 'Norse Mythology / Prose Edda',
-        sourceSv: 'Nordisk mytologi / Prosa-Eddan',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Dvarg'
     },
     'vasen_hyllemor': {
         key: 'vasen_hyllemor',
@@ -467,7 +418,7 @@ const LORE_ENTRIES = {
         key: 'vasen_jotun',
         name: 'Jotun',
         category: 'vasen',
-        englishDesc: 'The jötnar (singular: jötunn, Swedish: jättar) are the primordial giants of Norse cosmology - ancient, immense beings who represent the raw chaos that the Aesir gods constantly battle to contain. They inhabited Jotunheim beyond the great barrier of Midgard. Despite their role as antagonists, the line between gods and giants is surprisingly blurred: Odin, Thor, and Freyr all have jötunn ancestry, and many jötnar are depicted as wise counselors rather than mindless brutes. Their name may derive from a word meaning "devourer."',
+        englishDesc: 'The jötnar (singular: jötunn, Swedish: jättar) are the primordial giants of Norse cosmology - ancient, immense beings who represent the raw chaos that the Aesir gods constantly battle to contain. They inhabited Jotunheim beyond the great barrier of Midgard. Despite being home to the gods\' great enemies, the line between gods and giants is surprisingly blurred: Odin, Thor, and Freyr all have jötunn ancestry, and many jötnar are depicted as wise counselors rather than mindless brutes. Their name may derive from a word meaning "devourer."',
         swedishDesc: 'Jötnar (singular: jötunn, svenska: jättar) är nordisk kosmologis uråldrigt jättar - urgamla, enorma varelser som representerar det råa kaoset som asagudarna ständigt kämpar för att hålla i schack. De bebodde Jotunheim bortom den stora barriären av Midgård. Trots sin roll som antagonister är gränsen mellan gudar och jättar förvånansvärt suddig: Oden, Tor och Frej har alla jätteursprung, och många jötnar skildras som visa rådgivare snarare än tanklösa bruter. Deras namn kan härledas från ett ord som betyder "slukare."',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
@@ -495,18 +446,6 @@ const LORE_ENTRIES = {
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Rimturs'
-    },
-    'vasen_jarnvedsjatte': {
-        key: 'vasen_jarnvedsjatte',
-        name: 'Järnvedsjätte',
-        category: 'vasen',
-        englishDesc: 'The Järnvedsjätte takes its name from Járnviðr — the Iron-Wood — a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a great troll-woman raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a body and a will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these could rise and walk. The Järnvedsjätte is such a being — its sap runs like molten metal, its bark cannot be cut, and its canopy is so vast that it plunges the ground beneath into permanent shadow.',
-        swedishDesc: 'Järnvedsjätten tar sitt namn från Járnviðr — Järnskogen — en mörk skog öster om Midgård som omnämns i den poetiska Eddans Völuspå, där en stor trollkvinna uppfostrar en skara vargar. I svensk folktradition var den djupa skogen hem för enorma, urgamla närvaron som varken var troll eller jätte i vanlig mening, utan något äldre: skogen själv given en kropp och en vilja. Träd som växt i århundraden utan att fällas sades utveckla en egen ande, och de storslagnaste av dessa kunde resa sig och vandra. Järnvedsjätten är ett sådant väsen — dess sav rinner som smält metall, dess bark kan inte huggas, och dess tak är så vid att den sänker marken under i permanent skugga.',
-        source: 'Poetic Edda (Völuspá) / Swedish Folklore',
-        sourceSv: 'Poetiska Eddan (Völuspå) / Svensk folktro',
-        heritage: 'Norse / Swedish',
-        unlockType: 'vasen',
-        unlockKey: 'Jarnvedsjatte'
     },
     'vasen_lindorm': {
         key: 'vasen_lindorm',
@@ -552,17 +491,6 @@ const LORE_ENTRIES = {
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Nidhogg'
-    },
-    'vasen_norna': {
-        key: 'vasen_norna',
-        name: 'Norna',
-        category: 'vasen',
-        englishDesc: 'The Nornir (singular: Norn) are the three great weavers of fate in Norse mythology: Urd ("What Has Been"), Verdandi ("What Is Becoming"), and Skuld ("What Shall Be"). They dwell at Urdarbrunnen - the Well of Urd - at the base of Yggdrasil, the World Tree, where they draw water from the sacred spring each day to pour over the tree\'s roots and keep it alive. From this same well they weave the threads of destiny for gods, giants, and mortals alike, carving the fates of each being into wooden runes at the moment of birth. No power in the nine realms - not even Odin himself - can undo what the Nornir have woven. They are described in the Prose Edda as three women of immense wisdom who came from the home of the giants, and their arrival among the gods is said to have marked the end of the golden age. A fourth category of nornir, lesser in stature, are said to attend the birth of every individual, shaping the course of their life. The Well of Urd is also the site where the gods hold their daily council, riding over Bifröst to gather beneath Yggdrasil\'s branches to pass judgment and settle the affairs of the world.',
-        swedishDesc: 'Nornorna (singular: Norn) är de tre stora ödesväverskor i nordisk mytologi: Urd ("Det Som Har Varit"), Verdande ("Det Som Håller På Att Bli") och Skuld ("Det Som Ska Bli"). De bor vid Urdarbrunnen - Urds brunn - vid foten av Yggdrasil, Världsträdet, där de varje dag hämtar vatten från den heliga källan för att ösa över trädets rötter och hålla det vid liv. Från samma brunn väver de ödesträdar för gudar, jättar och dödliga, och ristar varje varelses öde i trärunor vid födseln. Ingen makt i de nio världarna - inte ens Oden själv - kan ta upp det Nornorna har vävt. De beskrivs i Prosa-Eddan som tre kvinnor av enorm visdom som kom från jättarnas hem, och deras ankomst bland gudarna sägs ha markerat slutet på guldåldern. En fjärde kategori av nornor, av lägre rang, sägs närvara vid varje individs födelse och forma loppet av deras liv. Urdarbrunnen är också platsen där gudarna håller sina dagliga råd och rider över Bifrost för att samlas under Yggdrasils grenar för att döma och avgöra världens angelägenheter.',
-        source: 'Prose Edda (Gylfaginning) / Poetic Edda (Völuspá)',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Norna'
     },
 
     // =========================================================================
@@ -664,31 +592,6 @@ const LORE_ENTRIES = {
         unlockType: 'item',
         unlockKey: 'Anvil Shard'
     },
-    'item_molten_ore': {
-        key: 'item_molten_ore',
-        name: 'Molten Ore',
-        swedishName: 'Smält Malm (Molten Ore)',
-        category: 'items',
-        englishDesc: 'Deep within the roots of the oldest mountains, volcanic veins carry ore so saturated with primordial heat that it never fully solidifies. The Dvärgar are said to seek out these seams above all others, for only ore still alive with the fire of the deep earth can be worked into the legendary artifacts their craft demands. To hold a lump of molten ore without the Dvärg\'s innate resistance to flame is to invite serious injury -and yet to a cinder smith, it is simply the finest of raw materials.',
-        swedishDesc: 'Djupt inne i de äldsta bergens rötter bär vulkaniska ådror malm så mättad av urtida hetta att den aldrig helt stelnar. Dvärgarna sägs söka upp dessa ådror framför alla andra, ty bara malm som fortfarande lever med djupjordens eld kan formas till de legendariska artefakter deras hantverk kräver. Att hålla ett klump smält malm utan Dvärgens medfödda motståndskraft mot lågor är att inbjuda till allvarlig skada -och ändå är det för en cindersmed helt enkelt det finaste av råmaterial.',
-        source: 'Norse Mythology',
-        sourceSv: 'Nordisk mytologi',
-        heritage: 'Norse',
-        unlockType: 'item',
-        unlockKey: 'Molten Ore'
-    },
-    'item_fate_thread': {
-        key: 'item_fate_thread',
-        name: 'Fate Thread',
-        swedishName: 'Ödestrå (Fate Thread)',
-        category: 'items',
-        englishDesc: 'The Nornir weave the fate of all living beings at Urdarbrunnen, the sacred Well of Urd at the base of Yggdrasil. Their threads - spun from the waters of the well itself - are said to shimmer with a silver-blue light that is neither of this world nor the next. Each thread represents a life: its length, its color, and the manner of its weaving determine everything that will ever befall the being to whom it belongs. To hold a fragment of such a thread is to hold a sliver of destiny - something immeasurably precious and profoundly dangerous in equal measure.',
-        swedishDesc: 'Nornorna väver alla levande varelsers öde vid Urdarbrunnen, den heliga Urds brunn vid foten av Yggdrasil. Deras trådar - spunna från brunnens vatten - sägs skimra med ett silvrig-blått ljus som varken tillhör denna värld eller nästa. Varje tråd representerar ett liv: dess längd, dess färg och sättet den vävs på avgör allt som någonsin ska drabba den varelse den tillhör. Att hålla ett fragment av en sådan tråd är att hålla en skärva av ödet - något omätligt dyrbart och djupt farligt i lika mån.',
-        source: 'Prose Edda (Gylfaginning)',
-        heritage: 'Norse',
-        unlockType: 'item',
-        unlockKey: 'Fate Thread'
-    },
 
     // =========================================================================
     // CATEGORY: LOCATIONS
@@ -699,7 +602,7 @@ const LORE_ENTRIES = {
         name: 'Trollskogen',
         category: 'locations',
         englishDesc: 'Trollskogen ("Troll Forest") evokes the ancient Swedish tradition of the enchanted deep forest - a space outside civilized order where dangerous beings dwell and human rules cease to apply. Swedish folklore is filled with accounts of people entering old-growth forests and encountering trolls, rå, and other beings. The forest canopy blocking sunlight was particularly associated with danger, as sunlight was the primary protection against many supernatural threats. Several real locations in Sweden bear this name, most famously on the island of Öland.',
-        swedishDesc: 'Trollskogen åkallar den urgamla svenska traditionen av den förtrollade djupskogen - ett rum utanför civilisationens ordning där farliga varelser bor och mänskliga regler upphör att gälla. Svensk folktro är fylld med berättelser om människor som gick in i urskogen och stötte på troll, rå och andra varelser. Skogens tak som blockerade solljuset var särskilt förknippad med fara, eftersom solljuset var det primära skyddet mot många övernaturliga hot. Flera verkliga platser i Sverige bär detta namn, mest känt på ön Öland.',
+        swedishDesc: 'Trollskogen åkallar den urgamla svenska traditionen av den förtrollade djupskogen - ett rum utanför civilisationens ordning där farliga varelser bor och mänskliga regler upphör att gälla. Svensk folktro är fylld med berättelser om människor som gick in i urskogen och stötte på troll, rå och andra varelser. Skogens baldakin som blockerade solljuset var särskilt förknippad med fara, eftersom solljuset var det primära skyddet mot många övernaturliga hot. Flera verkliga platser i Sverige bär detta namn, mest känt på ön Öland.',
         source: 'Swedish Folklore',
         sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
@@ -739,6 +642,52 @@ const LORE_ENTRIES = {
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'valhalla'
+    },
+    'location_midgard': {
+        key: 'location_midgard',
+        name: 'Midgard',
+        swedishName: 'Midgård',
+        category: 'locations',
+        englishDesc: 'Midgard ("the middle enclosure") is the realm of humans in Norse cosmology - one of the nine worlds connected by Yggdrasil. It lies at the center of the cosmic structure, encircled by the vast ocean in which Jörmungandr, the Midgard Serpent, endlessly coils. Midgard was fashioned from the body of the primordial giant Ymir: his flesh became the earth, and the gods built an encircling wall from his eyebrows to protect it from the giants of Jotunheim. Midgard is the world of human life, where gods and supernatural beings cross paths with mortal folk.',
+        swedishDesc: 'Midgård ("mellaninhägnaden") är människornas rike i nordisk kosmologi - en av de nio världarna förbundna av Yggdrasil. Det ligger i centrum av den kosmiska strukturen, omgivet av det stora havet i vilket Jörmungandr, Midgårdsslangen, oupphörligt ringlar sig. Midgård formades av urjätten Ymers kropp: hans kött blev till jord, och gudarna byggde en kringliggande mur av hans ögonbryn för att skydda det från Jotunheims jättar. Midgård är den mänskliga livets värld, där gudar och övernaturliga varelser korsar vägar med dödliga.',
+        source: 'Prose Edda / Poetic Edda',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Jormungandr'
+    },
+    'location_jotunheim': {
+        key: 'location_jotunheim',
+        name: 'Jotunheim',
+        category: 'locations',
+        englishDesc: 'Jotunheim ("the home of the giants") is the realm of the jötnar in Norse cosmology, lying beyond the vast ocean that encircles Midgard. It is a land of towering mountains, dense forests, and bitter cold, ruled by primordial forces of chaos that predate the gods themselves. Despite being home to the gods\' great enemies, Jotunheim features prominently in Norse myth as a place the Aesir must visit: Odin journeyed there in pursuit of wisdom, Thor crossed it to battle the giant Utgard-Loki, and Freyr rode there in pursuit of the giantess Gerd. Many giants are depicted not as mindless brutes but as beings of vast and ancient knowledge.',
+        swedishDesc: 'Jotunheim ("jättarnas hem") är jötnarnas rike i nordisk kosmologi, beläget bortom det väldiga havet som omringar Midgård. Det är ett land av jättelika berg, täta skogar och bitande köld, styrt av urtida kaoskrafter som föregår gudarna själva. Trots att det är hem för gudarnas stora fiender spelar Jotunheim en framträdande roll i nordisk myt som en plats asagudarna måste besöka: Oden reste dit i jakt på visdom, Tor korsade det för att strida mot jätten Utgård-Loke, och Frej red dit i pursuit av jättinnan Gerd. Många jättar skildras inte som tanklösa bruter utan som varelser med enorm och uråldrigt kunskap.',
+        source: 'Prose Edda / Poetic Edda',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Jotun'
+    },
+    'location_alfheim': {
+        key: 'location_alfheim',
+        name: 'Alfheim',
+        category: 'locations',
+        englishDesc: 'Alfheim ("elf home") is the realm of the Light Elves (Swedish: Ljusalver) in Norse cosmology - one of the nine worlds connected by Yggdrasil. In the Prose Edda, Snorri Sturluson describes it as a realm of breathtaking beauty, home to beings "more radiant than the sun." The realm was given as a tooth-gift to the god Freyr when he cut his first tooth, suggesting its intimate connection to fertility and abundance. Alfheim represents the luminous, benevolent face of elven existence in Norse cosmology, in stark contrast to the underground realm of the Dark Elves.',
+        swedishDesc: 'Alfheim ("alvernas hem") är Ljusalvernas rike i nordisk kosmologi - en av de nio världar som förbinds av Yggdrasil. I Prosa-Eddan beskriver Snorri Sturluson det som ett rike av enastående skönhet, hem för varelser "mer strålande än solen." Riket gavs som tandgåva till guden Frej när han fick sin första tand, vilket antyder dess intima koppling till fruktbarhet och överflöd. Alfheim representerar den lysande, välvilliga sidan av alvernas existens i nordisk kosmologi, i skarp kontrast till Svartalvernas underjordiska rike.',
+        source: 'Prose Edda (Snorri Sturluson)',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Ljusalv'
+    },
+    'location_jarnveden': {
+        key: 'location_jarnveden',
+        name: 'Järnveden',
+        swedishName: 'Järnveden (Järnskogen)',
+        category: 'locations',
+        englishDesc: 'Järnveden (Old Norse: Járnviðr, "Iron Wood" or "Iron Forest") is a dark and ancient forest east of Midgard described in the Poetic Edda\'s Völuspá. It is the dwelling place of a troll-woman - a giantess - who raises an entire brood of wolf-kin there, each one monstrous and hungry beyond reckoning. Among her offspring are the wolves Sköll and Hati, who chase the sun and moon across the sky each day, and one of her children is fated to devour the moon itself at Ragnarök. The Iron Wood represents the furthest, most savage edge of the known world - a place so wild and primordial that even the iron of its trees speaks to something harder and older than the world of gods and men.',
+        swedishDesc: 'Järnveden (fornnordiska: Járnviðr, "Järnskogen") är en mörk och urgammal skog öster om Midgård som beskrivs i den poetiska Eddans Völuspå. Det är hemvist för en trollkvinna - en jättinna - som föder upp ett helt kull av vargslaget där, var och en monstruös och hungrig bortom all beräkning. Bland hennes avkomma finns vargarna Sköll och Hate, som jagar solen och månen tvärs över himlen varje dag, och ett av hennes barn är förutbestämt att svälja månen vid Ragnarök. Järnveden representerar den yttersta, mest vilda kanten av den kända världen - en plats så vild och uråldrigt att till och med järnet i dess träd talar om något hårdare och äldre än gudarnas och männens värld.',
+        source: 'Poetic Edda (Völuspá)',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Järnvedsjätte'
     },
 
     // =========================================================================
@@ -785,7 +734,7 @@ const LORE_ENTRIES = {
     'ability_enchanting_song': {
         key: 'ability_enchanting_song',
         name: 'Enchanting Song',
-        swedishName: 'Förtrollande Visa (Enchanting Song)',
+        swedishName: 'Förtrollande Sång (Enchanting Song)',
         category: 'abilities',
         englishDesc: 'Music as supernatural enchantment is a recurring motif in Scandinavian folklore, most powerfully represented by Näcken\'s fiddle playing. The näcken is said to play by the water\'s edge with such devastating beauty that listeners cannot control themselves - they must dance, and they will dance until they die unless someone can break the spell by calling the näcken by name. Näcken could also teach his art to humans, but only for a price. Similar traditions appear across Northern Europe, from the Irish fiddle spirits to the Scottish Faerie musicians.',
         swedishDesc: 'Musik som övernaturlig förtrollning är ett återkommande motiv i skandinavisk folktro, kraftfullast representerat av näckens fiolspelande. Näcken sägs spela vid vattenkanten med sådan förödande skönhet att lyssnare inte kan kontrollera sig - de måste dansa, och de ska dansa tills de dör om inte någon kan bryta förbannelsen genom att kalla näcken vid namn. Näcken kunde också lära ut sin konst till människor, men bara till ett pris. Liknande traditioner förekommer i hela Nordeuropa, från de irländska fidelandarna till de skotska feutiska musikerna.',
@@ -941,8 +890,8 @@ const LORE_ENTRIES = {
         swedishName: 'Oden',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") -he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday -Old English "Wōden\'s day" (Swedish: onsdag).',
-        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") -han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag -fornengelskt "Wōden\'s day".',
+        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") — he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday — Old English "Wōden\'s day" (Swedish: onsdag).',
+        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") — han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag — fornengelskt "Wōden\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'valhalla'
@@ -953,8 +902,8 @@ const LORE_ENTRIES = {
         swedishName: 'Tor',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday -Old English "Þūnor\'s day" (Swedish: torsdag).',
-        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölner och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag -fornengelskt "Þūnor\'s day".',
+        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday — Old English "Þūnor\'s day" (Swedish: torsdag).',
+        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölner och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag — fornengelskt "Þūnor\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -992,8 +941,8 @@ const LORE_ENTRIES = {
         swedishName: 'Freja',
         category: 'gods',
         family: 'Vaner',
-        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen -a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday -Old English "Frigedæg" (Swedish: fredag).',
-        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen -ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag -fornengelskt "Frigedæg".',
+        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen — a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday — Old English "Frigedæg" (Swedish: fredag).',
+        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen — ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag — fornengelskt "Frigedæg".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
@@ -1068,43 +1017,8 @@ const LORE_ENTRIES = {
     },
 
     // =========================================================================
-    // MIDGÅRD -LOCATION
+    // MIDGÅRD — LOCATION
     // =========================================================================
-
-    'location_midgard': {
-        key: 'location_midgard',
-        name: 'Midgard',
-        swedishName: 'Midgård',
-        category: 'locations',
-        englishDesc: 'Midgard ("the middle enclosure") is the realm of humans in Norse cosmology - one of the nine worlds connected by Yggdrasil. It lies at the center of the cosmic structure, encircled by the vast ocean in which Jörmungandr, the Midgard Serpent, endlessly coils. Midgard was fashioned from the body of the primordial giant Ymir: his flesh became the earth, and the gods built an encircling wall from his eyebrows to protect it from the giants of Jotunheim. Midgard is the world of human life, where gods and supernatural beings cross paths with mortal folk.',
-        swedishDesc: 'Midgård ("mellaninhägnaden") är människornas rike i nordisk kosmologi - en av de nio världarna förbundna av Yggdrasil. Det ligger i centrum av den kosmiska strukturen, omgivet av det stora havet i vilket Jörmungandr, Midgårdsslangen, oupphörligt ringlar sig. Midgård formades av urjätten Ymers kropp: hans kött blev till jord, och gudarna byggde en kringliggande mur av hans ögonbryn för att skydda det från Jotunheims jättar. Midgård är den mänskliga livets värld, där gudar och övernaturliga varelser korsar vägar med dödliga.',
-        source: 'Prose Edda / Poetic Edda',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Jormungandr'
-    },
-    'location_jotunheim': {
-        key: 'location_jotunheim',
-        name: 'Jotunheim',
-        category: 'locations',
-        englishDesc: 'Jotunheim ("the home of the giants") is the realm of the jötnar in Norse cosmology, lying beyond the vast ocean that encircles Midgard. It is a land of towering mountains, dense forests, and bitter cold, ruled by primordial forces of chaos that predate the gods themselves. Despite being home to the gods\' great enemies, Jotunheim features prominently in Norse myth as a place the Aesir must visit: Odin journeyed there in pursuit of wisdom, Thor crossed it to battle the giant Utgard-Loki, and Freyr rode there in pursuit of the giantess Gerd. Many giants are depicted not as mindless brutes but as beings of vast and ancient knowledge.',
-        swedishDesc: 'Jotunheim ("jättarnas hem") är jötnarnas rike i nordisk kosmologi, beläget bortom det väldiga havet som omringar Midgård. Det är ett land av jättelika berg, täta skogar och bitande köld, styrt av urtida kaoskrafter som föregår gudarna själva. Trots att det är hem för gudarnas stora fiender spelar Jotunheim en framträdande roll i nordisk myt som en plats asagudarna måste besöka: Oden reste dit i jakt på visdom, Tor korsade det för att strida mot jätten Utgård-Loke, och Frej red dit i pursuit av jättinnan Gerd. Många jättar skildras inte som tanklösa bruter utan som varelser med enorm och uråldrigt kunskap.',
-        source: 'Prose Edda / Poetic Edda',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Jotun'
-    },
-    'location_alfheim': {
-        key: 'location_alfheim',
-        name: 'Alfheim',
-        category: 'locations',
-        englishDesc: 'Alfheim ("elf home") is the realm of the Light Elves (Swedish: Ljusalver) in Norse cosmology - one of the nine worlds connected by Yggdrasil. In the Prose Edda, Snorri Sturluson describes it as a realm of breathtaking beauty, home to beings "more radiant than the sun." The realm was given as a tooth-gift to the god Freyr when he cut his first tooth, suggesting its intimate connection to fertility and abundance. Alfheim represents the luminous, benevolent face of elven existence in Norse cosmology, in stark contrast to the underground realm of the Dark Elves.',
-        swedishDesc: 'Alfheim ("alvernas hem") är Ljusalvernas rike i nordisk kosmologi - en av de nio världar som förbinds av Yggdrasil. I Prosa-Eddan beskriver Snorri Sturluson det som ett rike av enastående skönhet, hem för varelser "mer strålande än solen." Riket gavs som tandgåva till guden Frej när han fick sin första tand, vilket antyder dess intima koppling till fruktbarhet och överflöd. Alfheim representerar den lysande, välvilliga sidan av alvernas existens i nordisk kosmologi, i skarp kontrast till Svartalvernas underjordiska rike.',
-        source: 'Prose Edda (Snorri Sturluson)',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Ljusalv'
-    },
 
     'concept_edda': {
         key: 'concept_edda',

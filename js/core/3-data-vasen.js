@@ -121,7 +121,7 @@ const VASEN_SPECIES = {
     'Bjara': {
         name: 'Bjära',
         internalName: 'Bjara',
-        description: 'A supernatural construct resembling a hare, fashioned from wood shavings, yarn, and hair, brought to life by a drop of a witch\'s blood. Its sole purpose is to steal the life-giving milk of the land, carrying it back to its creator in its distended belly.',
+        description: 'A supernatural construct resembling a hare, fashioned from wood shavings, yarn, and hair, and animated by a witch\'s blood. It exists solely to steal milk from the land and carry it back to its creator.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -270,7 +270,7 @@ const VASEN_SPECIES = {
     'Dvarg': {
         name: 'Dvärg',
         internalName: 'Dvarg',
-        description: 'A master of the forge, born from the primordial heat of the earth\'s deep veins. While their Svartalv kin shape the cold stone, the Dvärg commands the searing heart of the fire itself to transform raw ore into legendary artifacts.',
+        description: 'A master of the forge and close kin to the Svartalv, though where the Svartalv shapes cold stone, the Dvärg commands raw fire to hammer ore into legendary artifacts.',
         family: FAMILIES.ALV,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -363,7 +363,7 @@ const VASEN_SPECIES = {
     'Jarnvedsjatte': {
         name: 'Järnvedsjätte',
         internalName: 'Jarnvedsjatte',
-        description: 'A walking manifestation of the forest\'s oldest timber, born from the mythic Iron-Wood. Its bark is impenetrable, its sap runs like liquid metal, and its vast canopy blocks out the sun even at noon.',
+        description: 'A walking manifestation of the Iron-Wood\'s oldest timber. Its bark is impenetrable, its sap runs like liquid metal, and its canopy blots out the sun.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,

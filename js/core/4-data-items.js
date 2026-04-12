@@ -24,7 +24,7 @@ const TAMING_ITEMS = {
     },
     'Water Bucket': {
         name: 'Water Bucket',
-        description: 'A heavy wooden pail reinforced with iron. Its rhythmic splashing against mossy stones is a familiar call to the well dweller, who may emerge from the dark for such a sturdy, clean vessel.',
+        description: 'A heavy wooden pail reinforced with iron. Its familiar weight and clean build might coax the well dweller to emerge from the dark.',
         tamingTarget: 'Brunnsgubbe'
     },
     'Black Feather': {
@@ -104,7 +104,7 @@ const TAMING_ITEMS = {
     },
     'Heavy Pillow': {
         name: 'Heavy Pillow',
-        description: 'A simple, down-filled cushion that has become unnaturally dense, bearing the invisible imprint of a nocturnal visitor. To hold it is to feel the lingering paralysis of a night spent under the phantom\'s press.',
+        description: 'A down-filled cushion grown unnaturally dense from nocturnal visits. It bears the lingering paralysis of a night spent under the phantom\'s press.',
         tamingTarget: 'Mara'
     },
     'Morning Dew': {
@@ -124,7 +124,7 @@ const TAMING_ITEMS = {
     },
     'Molten Ore': {
         name: 'Molten Ore',
-        description: 'A glowing, liquid stone that pulses with the white-hot intensity of the deep earth. A cinder smith cannot resist the pull of such raw, volatile heat, for it is the lifeblood of their craft and the only material worthy of their legendary hammers.',
+        description: 'A glowing lump of liquid stone pulsing with deep-earth heat. A cinder smith cannot resist such raw, volatile ore — the lifeblood of their legendary hammers.',
         tamingTarget: 'Dvarg'
     },
     'Elderflower Sprig': {
@@ -179,12 +179,12 @@ const TAMING_ITEMS = {
     },
     'Fate Thread': {
         name: 'Fate Thread',
-        description: 'A shimmering Fate Thread. Its silver-blue fibers ripple like moonlit water, humming softly with ancient power drawn from the well beneath Yggdrasil. A rare offering worthy of a destiny-shaping being.',
+        description: 'A shimmering silver-blue Fate Thread humming with ancient power drawn from the well beneath Yggdrasil. A fitting offering for a destiny-shaping being.',
         tamingTarget: 'Norna'
     },
     'Ancient Log': {
         name: 'Ancient Log',
-        description: 'A section of Ancient Log whose bark is black as iron and warm to the touch. Something that moves like an ancient timber giant would recognize this as a piece of its own kind.',
+        description: 'A section of Ancient Log whose bark is black as iron and warm to the touch. A fitting tribute for a creature born of the Iron-Wood.',
         tamingTarget: 'Jarnvedsjatte'
     }
 };
