@@ -360,6 +360,18 @@ const VASEN_SPECIES = {
         image: 'assets/vasen/rimturs.png'
     },
 
+    'Jarnvedsjatte': {
+        name: 'Järnvedsjätte',
+        internalName: 'Jarnvedsjatte',
+        description: 'Born from the mythic Iron-Wood where the sap runs like liquid metal and the bark is impenetrable. This giant is not a person, but a massive, walking manifestation of the forest\'s oldest timber. In folklore, these giants were said to be the reason why certain parts of the forest remained dark even at noon — their massive canopies blocked out the sun entirely. They move with the creaking sound of breaking wood and embody the sheer, crushing weight of ancient growth.',
+        family: FAMILIES.JATTE,
+        element: ELEMENTS.NATURE,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Vine Whip', 'Ground Stomp', 'Thick Coat', 'Boulder Toss'],
+        tamingItem: 'Ancient Log',
+        image: 'assets/vasen/jarnvedsjatte.png'
+    },
+
     // Drake Family
     'Lindorm': {
         name: 'Lindorm',

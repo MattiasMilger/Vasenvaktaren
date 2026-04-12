@@ -181,6 +181,11 @@ const TAMING_ITEMS = {
         name: 'Fate Thread',
         description: 'A shimmering Fate Thread. Its silver-blue fibers ripple like moonlit water, humming softly with ancient power drawn from the well beneath Yggdrasil. A rare offering worthy of a destiny-shaping being.',
         tamingTarget: 'Norna'
+    },
+    'Ancient Log': {
+        name: 'Ancient Log',
+        description: 'A section of Ancient Log, so dense it could not be split with any axe. The bark is black as iron and still warm to the touch, as though the sap within never stopped moving. Something in the deep forest that moves like ancient timber giant would recognize this as a piece of its own kind.',
+        tamingTarget: 'Jarnvedsjatte'
     }
 };
 

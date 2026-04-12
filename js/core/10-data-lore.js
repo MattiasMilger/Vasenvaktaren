@@ -496,6 +496,18 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Rimturs'
     },
+    'vasen_jarnvedsjatte': {
+        key: 'vasen_jarnvedsjatte',
+        name: 'Järnvedsjätte',
+        category: 'vasen',
+        englishDesc: 'The Järnvedsjätte takes its name from Járnviðr — the Iron-Wood — a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a great troll-woman raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a body and a will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these could rise and walk. The Järnvedsjätte is such a being — its sap runs like molten metal, its bark cannot be cut, and its canopy is so vast that it plunges the ground beneath into permanent shadow.',
+        swedishDesc: 'Järnvedsjätten tar sitt namn från Járnviðr — Järnskogen — en mörk skog öster om Midgård som omnämns i den poetiska Eddans Völuspå, där en stor trollkvinna uppfostrar en skara vargar. I svensk folktradition var den djupa skogen hem för enorma, urgamla närvaron som varken var troll eller jätte i vanlig mening, utan något äldre: skogen själv given en kropp och en vilja. Träd som växt i århundraden utan att fällas sades utveckla en egen ande, och de storslagnaste av dessa kunde resa sig och vandra. Järnvedsjätten är ett sådant väsen — dess sav rinner som smält metall, dess bark kan inte huggas, och dess tak är så vid att den sänker marken under i permanent skugga.',
+        source: 'Poetic Edda (Völuspá) / Swedish Folklore',
+        sourceSv: 'Poetiska Eddan (Völuspå) / Svensk folktro',
+        heritage: 'Norse / Swedish',
+        unlockType: 'vasen',
+        unlockKey: 'Jarnvedsjatte'
+    },
     'vasen_lindorm': {
         key: 'vasen_lindorm',
         name: 'Lindorm',
@@ -687,7 +699,7 @@ const LORE_ENTRIES = {
         name: 'Trollskogen',
         category: 'locations',
         englishDesc: 'Trollskogen ("Troll Forest") evokes the ancient Swedish tradition of the enchanted deep forest - a space outside civilized order where dangerous beings dwell and human rules cease to apply. Swedish folklore is filled with accounts of people entering old-growth forests and encountering trolls, rå, and other beings. The forest canopy blocking sunlight was particularly associated with danger, as sunlight was the primary protection against many supernatural threats. Several real locations in Sweden bear this name, most famously on the island of Öland.',
-        swedishDesc: 'Trollskogen åkallar den urgamla svenska traditionen av den förtrollade djupskogen - ett rum utanför civilisationens ordning där farliga varelser bor och mänskliga regler upphör att gälla. Svensk folktro är fylld med berättelser om människor som gick in i urskogen och stötte på troll, rå och andra varelser. Skogens baldakin som blockerade solljuset var särskilt förknippad med fara, eftersom solljuset var det primära skyddet mot många övernaturliga hot. Flera verkliga platser i Sverige bär detta namn, mest känt på ön Öland.',
+        swedishDesc: 'Trollskogen åkallar den urgamla svenska traditionen av den förtrollade djupskogen - ett rum utanför civilisationens ordning där farliga varelser bor och mänskliga regler upphör att gälla. Svensk folktro är fylld med berättelser om människor som gick in i urskogen och stötte på troll, rå och andra varelser. Skogens tak som blockerade solljuset var särskilt förknippad med fara, eftersom solljuset var det primära skyddet mot många övernaturliga hot. Flera verkliga platser i Sverige bär detta namn, mest känt på ön Öland.',
         source: 'Swedish Folklore',
         sourceSv: 'Svensk folktro',
         heritage: 'Swedish',

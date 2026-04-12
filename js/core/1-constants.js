@@ -447,7 +447,7 @@ const ZONES = {
         description: 'An enchanted forest where the ancient canopy chokes out the sun. The air is thick with the scent of damp moss, and the unseen inhabitants constantly watch you from the gloom.',
         image: 'assets/zones/trollskogen.png',
         levelRange: [1, 4],
-        spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv'],
+        spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv', 'Jarnvedsjatte'],
         guardian: {
             name: 'Åsa',
             team: [
