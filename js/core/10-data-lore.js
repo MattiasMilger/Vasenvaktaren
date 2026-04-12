@@ -687,7 +687,18 @@ const LORE_ENTRIES = {
         source: 'Poetic Edda (Völuspá)',
         heritage: 'Norse',
         unlockType: 'vasen',
-        unlockKey: 'Järnvedsjätte'
+        unlockKey: 'Jarnvedsjatte'
+    },
+    'location_yggdrasil': {
+        key: 'location_yggdrasil',
+        name: 'Yggdrasil',
+        category: 'locations',
+        englishDesc: 'Yggdrasil ("Ygg\'s steed" - Ygg being one of Odin\'s names) is the immense ash tree at the center of Norse cosmology whose branches and roots connect all nine worlds. Three roots reach outward: one to Asgard, where a well of wisdom lies; one to Jotunheim, where Mimir\'s Well holds cosmic knowledge; and one to Niflheim, where Nidhögg perpetually gnaws. An eagle perches at its crown and a squirrel, Ratatoskr, runs up and down its trunk carrying insults between them. The Norns tend its roots at the Well of Urd, watering the tree with sacred water to keep it from rotting. Despite their ceaseless care, the tree is always decaying - gnawed below, scorched above, and rotted at its sides.',
+        swedishDesc: 'Yggdrasil ("Yggs sto" - Ygg är ett av Odens namn) är det enorma askträdet i centrum av nordisk kosmologi vars grenar och rötter förbinder alla nio världar. Tre rötter sträcker sig utåt: en till Asgård, där en visdomsbrunn finns; en till Jotunheim, där Mimers brunn håller kosmisk kunskap; och en till Niflheim, där Nidhögg oavbrutet gnager. En örn sitter vid dess krona och en ekorre, Ratatoskr, springer upp och ned längs stammen och bär förolämpningar mellan dem. Nornorna vårdar dess rötter vid Urds brunn och vattnar trädet med heligt vatten för att hålla det från att ruttna. Trots deras outtröttliga omsorg är trädet alltid i förfall - gnaget underifrån, bränt ovanifrån och ruttet på sina sidor.',
+        source: 'Prose Edda / Poetic Edda',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Nidhogg'
     },
 
     // =========================================================================
