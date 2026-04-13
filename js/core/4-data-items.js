@@ -124,8 +124,13 @@ const TAMING_ITEMS = {
     },
     'Molten Ore': {
         name: 'Molten Ore',
-        description: 'A glowing lump of liquid stone pulsing with deep-earth heat. A cinder smith cannot resist such raw, volatile ore — the lifeblood of their legendary hammers.',
+        description: 'A chunk of Molten Ore, still pulsing with deep-earth heat. A cinder smith cannot resist such raw, volatile ore.',
         tamingTarget: 'Dvarg'
+    },
+    'Cooling Grease': {
+        name: 'Cooling Grease',
+        description: 'A jar of Cooling Grease, used by smiths to quench blazing metal. A fitting offering for a sunstruck troll whose core never cools.',
+        tamingTarget: 'Gryningstroll'
     },
     'Elderflower Sprig': {
         name: 'Elderflower Sprig',

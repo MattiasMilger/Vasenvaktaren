@@ -310,6 +310,18 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Bortbyting'
     },
+    'vasen_gryningstroll': {
+        key: 'vasen_gryningstroll',
+        name: 'Gryningstroll',
+        category: 'vasen',
+        englishDesc: 'The Gryningstroll (dawn troll) is a uniquely Swedish variant of troll mythology, born from the ancient belief that trolls caught by sunlight are instantly turned to stone. In most tales, this is simply death. But in the older accounts from the mountain provinces, some trolls whose blood ran especially hot with volcanic rage did not die - the sunlight fused with the fire within them, transmuting flesh and fury into a living stone furnace. The resulting creature is neither troll nor stone, but something in between: a walking monument of cracked granite webbed with rivers of molten rock. Folk accounts describe the Gryningstroll as slower than its kin but far more destructive, prone to eruptions of heat that scorch everything nearby. Smiths who work near volcanic rock sometimes leave offerings at suspected Gryningstroll territories, hoping to earn the creature\'s grudging tolerance.',
+        swedishDesc: 'Gryningstrollet är en unikt svensk variant av trollmytologin, född ur den urgamla tron att troll som fångas av solljus omedelbart förvandlas till sten. I de flesta sagor är detta helt enkelt döden. Men i de äldre berättelserna från bergsprovinserna dog inte alla troll vars blod rann ovanligt hett av vulkanisk raseri - solljuset smälte samman med elden inom dem och förvandlade kött och vrede till en levande stenugnare. Det resulterande väsendet är varken troll eller sten, utan något mittemellan: ett vandrande monument av sprucken granit genomdragen av floder av smält sten. Folksagor beskriver Gryningstrollet som långsammare än sina fränder men vida mer förödande, benäget till utbrott av värme som scorchar allt i närheten. Smeder som arbetar nära vulkanisk sten lämnar ibland erbjudanden vid misstänkta Gryningstroll-territorier, i hopp om att förtjäna varesens motvilliga tolerans.',
+        source: 'Swedish Folklore (Mountain Province Tradition)',
+        sourceSv: 'Svensk folktro (Bergsprovinstradition)',
+        heritage: 'Swedish',
+        unlockType: 'vasen',
+        unlockKey: 'Gryningstroll'
+    },
     'vasen_gruvra': {
         key: 'vasen_gruvra',
         name: 'Gruvrå',
@@ -591,6 +603,19 @@ const LORE_ENTRIES = {
         heritage: 'Norse / Germanic',
         unlockType: 'item',
         unlockKey: 'Anvil Shard'
+    },
+    'item_cooling_grease': {
+        key: 'item_cooling_grease',
+        name: 'Cooling Grease',
+        swedishName: 'Kyllsmörja (Cooling Grease)',
+        category: 'items',
+        englishDesc: 'Quenching grease - the thick, cold compound used by smiths to rapidly cool white-hot metal and set its temper - is one of the oldest tools of the forge tradition. In Swedish folk belief, the smith\'s art was never purely mundane: it carried ritual dimensions, and the quenching of iron was understood as a moment of transformation between states, where the violent and the inert briefly occupied the same substance. Offering such a grease to a sunstruck troll whose inner fire can never fully cool represents a gesture of understanding - an acknowledgement of its unending torment and an offer of fleeting relief.',
+        swedishDesc: 'Kyllsmörja - den tjocka, kalla föreningen som smeder använde för att snabbt kyla glödgat metall och sätta dess härdning - är ett av de äldsta verktygen i smidestraditionens arv. I svensk folktro var smedens konst aldrig rent vardaglig: den bar rituella dimensioner, och härdningen av järn förstods som ett ögonblick av omvandling mellan tillstånd, där det våldsamma och det inerta kort bebodde samma substans. Att erbjuda en sådan smörja till ett solträffat troll vars inre eld aldrig kan slockna fullständigt representerar en gest av förståelse - ett erkännande av dess oändliga plåga och ett erbjudande om flyktigt lindring.',
+        source: 'Swedish Folk Tradition / Norse Smithing Lore',
+        sourceSv: 'Svensk folktradition / Nordisk smedeslära',
+        heritage: 'Swedish',
+        unlockType: 'item',
+        unlockKey: 'Cooling Grease'
     },
 
     // =========================================================================
@@ -901,8 +926,8 @@ const LORE_ENTRIES = {
         swedishName: 'Oden',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") — he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday — Old English "Wōden\'s day" (Swedish: onsdag).',
-        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") — han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag — fornengelskt "Wōden\'s day".',
+        englishDesc: 'Odin is the Allfather and chief of the Aesir gods, lord of wisdom, war, poetry, and death. He sacrificed one eye at Mimir\'s Well in exchange for cosmic wisdom, and hung himself on Yggdrasil for nine nights to learn the runes. From his throne Hlidskjalf in Asgard, he can observe all nine worlds. His two ravens, Huginn (Thought) and Muninn (Memory), fly across the world each day to gather knowledge and report back to him. His wolves Geri and Freki ("Greedy" and "Ravenous") feast on the food set before him at the table, for Odin himself requires no food. A god of many guises, Odin travels Midgard in disguise under names such as Grimnir ("the Masked One"), Gangleri ("the Wanderer"), and Bölverk ("the Evildoer") - he is said to bear over two hundred names. At Ragnarök, Odin will be swallowed whole by Fenrir. His name is the root of Wednesday - Old English "Wōden\'s day" (Swedish: onsdag).',
+        swedishDesc: 'Oden är Allefadern och ledaren av asagudarna, herre över visdom, krig, diktning och döden. Han offrade ett öga vid Mimers brunn i utbyte mot kosmisk visdom och hängde sig på Yggdrasil i nio nätter för att lära sig runorna. Från sin tron Lidskjalv i Asgård kan han se alla nio världar. Hans två korpar, Hugin (Tanken) och Munin (Minnet), flyger varje dag ut i världen för att samla kunskap och rapportera tillbaka. Hans vargar Gere och Freke ("Girig" och "Glupsk") festar på maten som ställs fram för honom, ty Oden själv behöver ingen föda. En gud av många skepnader reser Oden i Midgård i förklädnad under namn som Grimnir ("den maskerade"), Ganglere ("vandraren") och Bölverk ("illdådaren") - han sägs bära över tvåhundra namn. Vid Ragnarök ska Oden slukas av Fenrisulven. Hans namn ger upphov till onsdag - fornengelskt "Wōden\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'valhalla'
@@ -913,8 +938,8 @@ const LORE_ENTRIES = {
         swedishName: 'Tor',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday — Old English "Þūnor\'s day" (Swedish: torsdag).',
-        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölner och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag — fornengelskt "Þūnor\'s day".',
+        englishDesc: 'Thor is the Aesir god of thunder, storms, strength, and the protection of humanity. Armed with his hammer Mjölnir and the belt Megingjörð, he is the greatest warrior of the gods and chief defender against the giants who threaten Asgard and Midgard. He and Jörmungandr, the Midgard Serpent, are fated enemies: at Ragnarök, Thor will slay the serpent but die from its venom after walking nine steps. Despite his fierce reputation as a giant-slayer, Thor was beloved by common people as a guardian of farmers, travelers, and honest folk. His name is the root of Thursday - Old English "Þūnor\'s day" (Swedish: torsdag).',
+        swedishDesc: 'Tor är asaguden för åska, stormar, styrka och mänsklighetens skydd. Beväpnad med hammaren Mjölner och bältet Megingjardar är han gudarnas störste krigare och chefsförsvarare mot jättarna som hotar Asgård och Midgård. Han och Jörmungandr, Midgårdsslangen, är ödets fiender: vid Ragnarök ska Tor döda ormen men dö av dess gift efter att ha gått nio steg. Trots sitt rykte som jättedödare var Tor djupt älskad av vanligt folk som skyddare av bönder, resenärer och ärliga människor. Hans namn ger upphov till torsdag - fornengelskt "Þūnor\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -952,8 +977,8 @@ const LORE_ENTRIES = {
         swedishName: 'Freja',
         category: 'gods',
         family: 'Vaner',
-        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen — a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday — Old English "Frigedæg" (Swedish: fredag).',
-        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen — ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag — fornengelskt "Frigedæg".',
+        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen - a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday - Old English "Frigedæg" (Swedish: fredag).',
+        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen - ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag - fornengelskt "Frigedæg".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
@@ -1028,7 +1053,7 @@ const LORE_ENTRIES = {
     },
 
     // =========================================================================
-    // MIDGÅRD — LOCATION
+    // MIDGÅRD - LOCATION
     // =========================================================================
 
     'concept_edda': {

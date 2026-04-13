@@ -115,7 +115,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'world tree',
         'well dweller',
         'cinder smith',
-        'ancient timber giant'
+        'ancient timber giant',
+        'sunstruck troll'
     ];
 
     let highlighted = description;

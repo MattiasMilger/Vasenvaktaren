@@ -535,7 +535,7 @@ const ZONES = {
         description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants battle the very elements that forged them.',
         image: 'assets/zones/urbergen.png',
         levelRange: [20, 24],
-        spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Dvarg'],
+        spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Dvarg', 'Gryningstroll'],
         guardian: {
             name: 'Brynhild',
             team: [

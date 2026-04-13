@@ -186,6 +186,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Trollmilk Bottle',
         image: 'assets/vasen/bortbyting.png'
     },
+    'Gryningstroll': {
+        name: 'Gryningstroll',
+        internalName: 'Gryningstroll',
+        description: 'A hulking Troll caught by the first rays of dawn and turned to stone. Instead of dying, the intense fire in its blood fused with the rock, creating a living furnace of magmatic stone.',
+        family: FAMILIES.TROLL,
+        element: ELEMENTS.FIRE,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Ground Stomp', 'Lava Jet', 'Thick Coat', 'Boulder Toss'],
+        tamingItem: 'Cooling Grease',
+        image: 'assets/vasen/gryningstroll.png'
+    },
 
     // Rå Family
     'Gruvra': {
