@@ -47,6 +47,8 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - **Ask About Item**: Learn what item the Väsen wants
 - **Pass**: Skip your turn
 - **Surrender**: Exit combat (reduces party to 5% health)
+- **Auto Battle**: Let AI take control
+
 
 ### Party Management
 - Click Väsen in inventory to view details
@@ -163,7 +165,7 @@ Vasenvaktaren/
 - [x] Finish Main Functionality 
 - [x] Introduce endgame system
 - [ ] Balance Overhaul
-- [ ] Introduce all 45 Väsen (36/45)
+- [ ] Introduce all 45 Väsen (37/45)
 - [ ] Introduce New Abilities
 - [ ] Wiki Page
 
