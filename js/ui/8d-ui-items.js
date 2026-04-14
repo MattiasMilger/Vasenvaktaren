@@ -118,7 +118,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'ancient timber giant',
         'sunstruck troll',
         'wind-riding elven being',
-        'mist-dwelling beings'
+        'mist-dwelling beings',
+        'twitching construct'
     ];
 
     let highlighted = description;
