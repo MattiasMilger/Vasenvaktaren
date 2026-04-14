@@ -68,13 +68,24 @@ Game.prototype.handleAskItem = function() {
                 text: 'Confirm',
                 class: 'btn-primary',
                 callback: () => {
+                    // Capture current names for the dialogue
+                    const player = gameState.playerName || "Väktare";
+                    const enemy = this.currentBattle.enemyActive;
+                    const enemyName = enemy.getDisplayName();
+                    const itemName = enemy.species.tamingItem;
+
                     // NEW: Trigger tutorial by resetting the flag when asking about item
                     if (this.currentBattle.isWildEncounter) {
                         gameState.firstCombatTutorialShown = false;
                         gameState.saveGame();
                     }
-                    // Execute the action if confirmed
-                    this.currentBattle.executePlayerAction({ type: 'ask' });
+
+                    // Execute the action with pre-formatted names so the UI can bold them
+                    this.currentBattle.executePlayerAction({ 
+                        type: 'ask',
+                        playerLine: `${player}: Tell me ${enemyName}, what is it that you desire the most?`,
+                        enemyLine: `${enemyName}: If you must know, ${itemName} is what I desire most.`
+                    });
                 }
             },
             {

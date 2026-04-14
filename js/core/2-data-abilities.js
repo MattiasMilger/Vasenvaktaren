@@ -13,7 +13,7 @@ const ABILITIES = {
     // Earth Abilities
     'Ground Stomp': {
         name: 'Ground Stomp',
-        flavorDescription: 'Slams the ground with immense force, sending a stunning shockwave through the bedrock.',
+        flavorDescription: 'Slams the ground with force, sending a stunning shockwave through the bedrock.',
         get mechanicsDescription() {
             return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
@@ -88,7 +88,7 @@ const ABILITIES = {
     },
     'Elven Light': {
         name: 'Elven Light',
-        flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the magic of the twilight mist.',
+        flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the twilight mist.',
         get mechanicsDescription() {
             return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
@@ -121,7 +121,7 @@ const ABILITIES = {
     // Water Abilities
     'Drown': {
         name: 'Drown',
-        flavorDescription: 'Violently drags the opponent down, mimicking the crushing pressure of deep water.',
+        flavorDescription: 'Violently drags the opponent down, with the crushing pressure of water.',
         get mechanicsDescription() {
             return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },
@@ -175,7 +175,7 @@ const ABILITIES = {
     // Fire Abilities
     'Torch Strike': {
         name: 'Torch Strike',
-        flavorDescription: 'A searing blow with a burning torch, delivering simple, raw heat.',
+        flavorDescription: 'A searing blow with a burning torch, delivering raw heat.',
         get mechanicsDescription() {
             return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
         },

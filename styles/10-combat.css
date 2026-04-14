@@ -154,6 +154,14 @@
 
 /* Animation classes for combat - moved to 13-animations.css */
 
+.combatant-untamed {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--accent-danger);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 2px;
+}
+
 .combatant-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);

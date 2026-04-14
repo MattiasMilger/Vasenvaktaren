@@ -835,6 +835,19 @@ const LORE_ENTRIES = {
         unlockType: 'ability',
         unlockKey: 'Smithing'
     },
+    'ability_drown': {
+    key: 'ability_drown',
+    name: 'Drown',
+    swedishName: 'Dränka (Drown)',
+    category: 'abilities',
+    englishDesc: 'In Swedish folklore, the element of water is often a site of great peril. Many water-dwelling väsen, such as the shimmering Bäckahäst or the melodic Näcken, possess an aspect of drowning their victims. This is rarely described as simple predation. Instead, it is often a thematic calling to the depths where the victim is pulled into a space between the living world and the crushing silence of the water. This reflects the ancient fear of the unpredictable power found in lakes and streams.',
+    swedishDesc: 'I svensk folktro är vattenelementet ofta en plats för stor fara. Många vattenlevande väsen, som den glänsande Bäckahästen eller den melodiske Näcken, har en aspekt av att dränka sina offer. Detta beskrivs sällan som enkel jakt. Istället är det ofta ett tematiskt kall till djupet där offret dras in i ett utrymme mellan den levande världen och vattnets krossande tystnad. Detta speglar den urgamla rädslan för den oförutsägbara kraften i sjöar och vattendrag.',
+    source: 'Swedish Folklore / Oral Tradition',
+    sourceSv: 'Svensk folktro / Muntlig tradition',
+    heritage: 'Swedish',
+    unlockType: 'ability',
+    unlockKey: 'Drown'
+},
     'ability_skalds_mead': {
         key: 'ability_skalds_mead',
         name: "Skald's Mead",

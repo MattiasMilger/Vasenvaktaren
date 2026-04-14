@@ -406,15 +406,17 @@ if (this.isOver && this.onEnd) {
         this.addLog(`<span class="taming-item">${itemName}</span> was gifted to ${this.enemyActive.getDisplayName()}.`, 'gift');
         
         const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
+        const enemyName = this.enemyActive.getDisplayName(); // Get the name for the dialogue
         
         if (isCorrect) {
             this.correctItemGiven = true;
-            this.addLog('Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.', 'dialogue');
+            // Updated line below to include Name and Colon
+            this.addLog(`${enemyName}: Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.`, 'dialogue');
         } else {
-            this.addLog('What am I supposed to do with this?', 'dialogue');
+            // Updated line below to include Name and Colon
+            this.addLog(`${enemyName}: What am I supposed to do with this?`, 'dialogue');
         }
         
-        // Update UI (gift is a free action, don't end turn)
         if (this.onUpdate) this.onUpdate();
         
         return { success: true, correct: isCorrect };
@@ -426,16 +428,23 @@ if (this.isOver && this.onEnd) {
         
         this.startTurn();
         
+        // 1. Get correct names
+        const playerName = typeof gameState !== 'undefined' ? (gameState.playerName || "Väktare") : "Väktare";
+        const enemyName = this.enemyActive.getDisplayName();
         const tamingItem = this.enemyActive.species.tamingItem;
         
-        // Enemy acts (player passes)
+        // 2. Enemy acts (player passes)
         const enemyAction = this.getEnemyAction();
         const results = { player: { action: 'ask' }, enemy: null };
         results.enemy = this.executeEnemyAction(enemyAction);
         
-        // Add the item response AFTER combat events
-        this.addLog(`Tell me ${this.enemyActive.getDisplayName()}, what is it that you desire the most?`, 'dialogue');
-        this.addLog(`If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
+        // 3. Add the dialogue with Colons so the UI can bold the names
+        this.addLog(`${playerName}: Tell me ${enemyName}, what is it that you desire the most?`, 'dialogue');
+        
+        setTimeout(() => {
+            this.addLog(`${enemyName}: If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
+        }, 600);
+
         this.handlePostTurn(results);
         this.endTurn();
         
