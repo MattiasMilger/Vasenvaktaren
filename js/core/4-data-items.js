@@ -24,7 +24,7 @@ const TAMING_ITEMS = {
     },
     'Water Bucket': {
         name: 'Water Bucket',
-        description: 'A heavy wooden pail reinforced with iron. Its familiar weight and clean build might coax the well dweller to emerge from the dark.',
+        description: 'A heavy Water Bucket reinforced with iron. Its familiar weight and clean build might coax the well dweller to emerge from the dark.',
         tamingTarget: 'Brunnsgubbe'
     },
     'Black Feather': {
