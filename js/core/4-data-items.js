@@ -189,7 +189,7 @@ const TAMING_ITEMS = {
     },
     'Fate Thread': {
         name: 'Fate Thread',
-        description: 'A shimmering silver-blue Fate Thread humming with ancient power drawn from the well beneath Yggdrasil. A fitting offering for a destiny-shaping being.',
+        description: 'A shimmering silver-blue Fate Thread humming with ancient power drawn from the well beneath Yggdrasil. A fitting offering for a destiny shaper.',
         tamingTarget: 'Norna'
     },
     'Ancient Log': {

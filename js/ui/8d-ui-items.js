@@ -119,6 +119,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'sunstruck troll',
         'wind-riding elven being',
         'mist-dwelling beings',
+        'destiny shaper',
         'twitching construct'
     ];
 
