@@ -248,13 +248,24 @@ const VASEN_SPECIES = {
     'Alva': {
         name: 'Älva',
         internalName: 'Alva',
-        description: 'A tiny, ethereal being that dances in twilight mist and dew. Often associated with sickness, it can be benevolent if treated with high respect.',
+        description: 'A tiny, radiant being that rides high currents and twilight breezes. Known for a capricious nature, it manifests as flickering lights in the canopy that can bring either sudden luck or unexplained sickness.',
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
         abilities: ['Elven Light', 'Wind Gust', 'Enchanting Song', 'Moon Beam'],
-        tamingItem: 'Morning Dew',
+        tamingItem: 'Flicker Dust',
         image: 'assets/vasen/alva.png'
+    },
+    'Dimalva': {
+        name: 'Dimälva',
+        internalName: 'Dimalva',
+        description: 'A tiny being of pure mist that flutters over morning lakes. It weaves a thick supernatural shroud to mask the water\'s edge, luring the unwary toward the reeds.',
+        family: FAMILIES.ALV,
+        element: ELEMENTS.WATER,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Hail Storm', 'Elven Light', 'Enchanting Song', 'Tidal Wave'],
+        tamingItem: 'Morning Dew',
+        image: 'assets/vasen/dimalva.png'
     },
     'Svartalv': {
         name: 'Svartalv',
@@ -370,7 +381,6 @@ const VASEN_SPECIES = {
         tamingItem: 'Ice Crystal',
         image: 'assets/vasen/rimturs.png'
     },
-
     'Jarnvedsjatte': {
         name: 'Järnvedsjätte',
         internalName: 'Jarnvedsjatte',

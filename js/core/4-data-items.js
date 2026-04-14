@@ -107,10 +107,15 @@ const TAMING_ITEMS = {
         description: 'A down-filled cushion grown unnaturally dense from nocturnal visits. It bears the lingering paralysis of a night spent under the phantom\'s press.',
         tamingTarget: 'Mara'
     },
+    'Flicker Dust': {
+        name: 'Flicker Dust',
+        description: 'A pinch of shimmering Flicker Dust, gathered where flickering canopy lights have been seen at dusk. It might catch the attention of a capricious, wind-riding elven being.',
+        tamingTarget: 'Alva'
+    },
     'Morning Dew': {
         name: 'Morning Dew',
-        description: 'A jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, dancing beings of the mist.',
-        tamingTarget: 'Alva'
+        description: 'A jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, mist-dwelling beings that haunt the water\'s edge.',
+        tamingTarget: 'Dimalva'
     },
     'Anvil Shard': {
         name: 'Anvil Shard',

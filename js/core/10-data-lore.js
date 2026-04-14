@@ -1,20 +1,6 @@
 // =============================================================================
 // 10-data-lore.js - Lore Book Entry Definitions
 // =============================================================================
-// Each entry contains English and Swedish descriptions, a literature source,
-// a heritage region, a category, and an unlock condition.
-//
-// unlockType values:
-//   'standard'  - auto-unlocked when the game starts
-//   'vasen'     - unlocked when the named species is tamed (unlockKey = internalName)
-//   'family'    - unlocked when the first väsen of that family is tamed (unlockKey = family name)
-//   'element'   - unlocked when the first väsen of that element is tamed (unlockKey = element name)
-//   'zone'      - unlocked when the zone becomes accessible (unlockKey = zone key)
-//   'guardian'  - unlocked when the zone guardian is defeated (unlockKey = zone key)
-//   'ability'   - unlocked when a väsen with that ability is tamed (unlockKey = ability name)
-//   'item'      - unlocked when the correct taming item is used to tame its väsen (unlockKey = item name)
-//   'well'      - unlocked upon encountering a Sacred Well
-//   'valhalla'  - unlocked by taming Einharje or Valkyria, OR finding Valhalla Pork
 
 const LORE_ENTRIES = {
 
@@ -22,7 +8,6 @@ const LORE_ENTRIES = {
     // CATEGORY: VÄSEN
     // =========================================================================
 
-    // - -- The Term - --
     'vasen_term': {
         key: 'vasen_term',
         name: 'Väsen',
@@ -35,7 +20,6 @@ const LORE_ENTRIES = {
         unlockType: 'standard'
     },
 
-    // - -- Families - --
     'family_vatte': {
         key: 'family_vatte',
         name: 'Vätte',
@@ -123,8 +107,8 @@ const LORE_ENTRIES = {
         key: 'family_jatte',
         name: 'Jätte',
         category: 'vasen',
-        englishDesc: 'Jättar (singular: jätte) are the immense, primordial giants of Norse mythology known as Jötnar. They are among the oldest beings in existence, born before the gods, and represent the raw chaos and elemental forces that the Aesir gods struggle to keep in check. They dwell in Jotunheim, beyond the walls of Asgard and Midgard. Despite their antagonistic role, many gods have jötunn blood or take jötunn spouses, blurring the line between divine and primordial.',
-        swedishDesc: 'Jättar (singular: jätte) är de enorma, uråldringa jättarna i nordisk mytologi kända som Jötnar. De är bland de äldsta varelserna som existerar, födda före gudarna, och representerar det råa kaoset och de elementala krafterna som asagudarna kämpar för att hålla i schack. De bor i Jotunheim, bortom murarna av Asgård och Midgård. Trots deras antagonistiska roll har många gudar jätteblod eller tar jättegemåler, vilket suddar ut gränsen mellan gudomlig och uråldrigt.',
+        englishDesc: 'Jättar (singular: jätte) are the immense, primordial giants of Norse mythology known as Jötnar. They are among the oldest beings in existence, born before the gods, and represent the raw chaos and elemental forces that the Aesir gods struggle to keep in check. They dwell in Jotunheim, beyond the walls of Asgard and Midgard. Despite being home to the gods\' great enemies, many gods have jötunn blood or take jötunn spouses, blurring the line between divine and primordial.',
+        swedishDesc: 'Jättar (singular: jätte) är nordisk kosmologis uråldrigt jättar - urgamla, enorma varelser som representerar det råa kaoset och de elementala krafterna som asagudarna ständigt kämpar för att hålla i schack. De bebodde Jotunheim bortom den stora barriären av Midgård. Trots sin roll som antagonister är gränsen mellan gudar och jättar förvånansvärt suddig: Oden, Tor och Frej har alla jätteursprung, och många jötnar skildras som visa rådgivare snarare än tanklösa bruter. Deras namn kan härledas från ett ord som betyder "slukare."',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'family',
@@ -143,7 +127,6 @@ const LORE_ENTRIES = {
         unlockKey: 'Drake'
     },
 
-    // - -- Individual Väsen - --
     'vasen_landvatte': {
         key: 'vasen_landvatte',
         name: 'Landvätte',
@@ -399,13 +382,25 @@ const LORE_ENTRIES = {
         key: 'vasen_alva',
         name: 'Älva',
         category: 'vasen',
-        englishDesc: 'The älvor (singular: älva) are small, ethereal beings strongly associated with dew, mist, and the half-light of dusk and dawn. Unlike the majestic Norse alvar, the Swedish folkloristic älva is more akin to a fairy - tiny, dancing in meadows, and capricious. Contact with älvor was believed to cause "älvablåst" (elf-blast), a sudden illness explained as being breathed upon by an elf. Circular impressions in the morning dew were called "älvringar" (elf rings), believed to mark where älvor had danced.',
-        swedishDesc: 'Älvorna (singular: älva) är små, eteriska varelser starkt förknippade med dagg, dimma och halvljuset vid skymning och gryning. Till skillnad från de majestätiska nordiska alvarna liknar den folkloristiska svenska älvan mer en fe - liten, dansande på ängar och nyckfull. Kontakt med älvor troddes orsaka "älvablåst", en plötslig sjukdom förklarad som att bli andad på av en älva. Cirkulära intryck i morgondaggen kallades "älvringar", trodda markera var älvor hade dansat.',
+        englishDesc: 'The älvor (singular: älva) are small, ethereal beings strongly associated with wind, flickering lights, and the half-light of dusk and dawn. Unlike the majestic Norse alvar, the Swedish folkloristic älva is more akin to a fairy - tiny, capricious, and riding the high currents of the forest canopy. Contact with älvor was believed to cause "älvablåst" (elf-blast), a sudden illness explained as being breathed upon by an elf. Their appearance as flickering lights among the trees could bring either unexplained good fortune or sudden sickness to those who encountered them.',
+        swedishDesc: 'Älvorna (singular: älva) är små, eteriska varelser starkt förknippade med vind, flimrande ljus och halvljuset vid skymning och gryning. Till skillnad från de majestätiska nordiska alvarna liknar den folkloristiska svenska älvan mer en fe - liten, nyckfull och ridande på skogens höga luftströmmar. Kontakt med älvor troddes orsaka "älvablåst", en plötslig sjukdom förklarad som att bli andad på av en älva. Deras uppträdande som flimrande ljus bland träden kunde ge antingen oförklarlig lycka eller plötslig sjukdom åt dem som mötte dem.',
         source: 'Swedish Folklore',
         sourceSv: 'Svensk folktro',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Alva'
+    },
+    'vasen_dimalva': {
+        key: 'vasen_dimalva',
+        name: 'Dimälva',
+        category: 'vasen',
+        englishDesc: 'The dimälva (mist elf) is a lesser-known variant of the Swedish älva, distinguished by its affinity for water and morning fog rather than wind and canopy light. Where the ordinary älva rides high breezes, the dimälva clings to the surface of lakes and rivers, weaving a supernatural shroud of mist that blurs the boundary between water and land. Swedish lakeside communities spoke of mornings when the water\'s edge became impossible to discern, and those who waded in too confidently would find the ground giving way beneath them. The dimälva itself was described as nearly invisible - a faint shimmer within the fog, glimpsed only when the light struck it from just the right angle.',
+        swedishDesc: 'Dimälvan är en mindre känd variant av den svenska älvan, utmärkt av sin affinitet för vatten och morgondimma snarare än vind och kronljus. Där den vanliga älvan rider på höga luftströmmar håller sig dimälvan nära ytan av sjöar och floder och väver ett övernaturligt dis som suddar ut gränsen mellan vatten och land. Svenska sjösamhällen talade om morgnar då vattnets kant blev omöjlig att urskilja, och de som vadade in för säkert skulle finna marken ge vika under dem. Dimälvan själv beskrevs som nästan osynlig - ett svagt skimmer i dimman, skymtad bara när ljuset träffade den från precis rätt vinkel.',
+        source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
+        heritage: 'Swedish',
+        unlockType: 'vasen',
+        unlockKey: 'Dimalva'
     },
     'vasen_svartalv': {
         key: 'vasen_svartalv',
@@ -423,7 +418,7 @@ const LORE_ENTRIES = {
         name: 'Ljusalv',
         category: 'vasen',
         englishDesc: 'The ljusalver (light elves) dwell in Alfheim, described in the Prose Edda as the most beautiful of realms. Snorri Sturluson describes them as "more radiant than the sun in appearance," aligning them with light, fertility, goodness, and the Vanir gods. Their realm was given as a gift to the god Freyr. While the exact nature of the ljusalver remains somewhat mysterious in the sources, they represent the benevolent, life-affirming face of elven beings in Norse cosmology.',
-        swedishDesc: 'Ljusalverna bor i Alfheim, beskrivet i Prosa-Eddan som det vackraste av riken. Snorri Sturluson beskriver dem som "mer strålande än solen i utseende", vilket kopplar dem till ljus, fruktbarhet, godhet och Vanirgudar. Deras rike gavs som gåva till guden Frej. Medan ljusalvernas exakta natur förblir något mystisk i källorna, representerar de det välvilliga, livsbejakande ansiktet av älvavarelser i nordisk kosmologi.',
+        swedishDesc: 'Ljusalverna bor i Alfheim, beskrivet i Prosa-Eddan som det vackraste av riken. Snorri Sturluson beskriver dem som "mer strålande än solen i utseende", vilket kopplar dem till ljus, fruktbarhet, godhet och Vanirgudar. Deras rike gavs som gåva till guden Frej. Medan ljusalvernas exakta natur förblir något mystisk i källorna, representerar de det välvilliga, livsbejakande ansiktet av alvernas existens i nordisk kosmologi.',
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -559,13 +554,13 @@ const LORE_ENTRIES = {
         name: 'Nidhögg',
         category: 'vasen',
         englishDesc: 'Nidhögg ("malice striker" or "he who strikes with malice") is a great dragon or serpent who eternally gnaws at the roots of Yggdrasil, the cosmic World Tree that holds the nine realms together. Its ceaseless gnawing is an act of cosmic dissolution - a constant threat to the fabric of existence. At Ragnarök, Nidhögg will fly with corpses on its wings across the ruined landscape. It is described in the poem Völuspá as surviving the end of the world, suggesting it belongs to whatever comes after.',
-        swedishDesc: 'Nidhögg ("skadestrikaren" eller "han som slår med illvilja") är en stor drake eller orm som evigt gnager på Yggdrasils rötter, det kosmiska Världsträdet som håller samman de nio världarna. Dess ständiga gnagande är en handling av kosmisk upplösning - ett ständigt hot mot existensens väv. Vid Ragnarök ska Nidhögg flyga med lik på sina vingar över det sönderfallna landskapet. Det beskrivs i dikten Völuspá som att överleva världens undergång, vilket antyder att det tillhör vad som än kommer efter.',
+        swedishDesc: 'Nidhögg ("skadestrikaren" eller "han som slår med illvilja") är en stor drake eller orm som evigt gnager på Yggdrasils rötter, det kosmiska Världsträdet som håller samman de nio världarna. Dess ständiga gnagande är en handling av kosmisk upplösning - ett ständigt hot mot existensens väv. Vid Ragnarök ska Nidhögg flyga med lik på sina vingar över det sönderfallna landskapet. Det beskrivs i dikten Völuspå som att överleva världens undergång, vilket antyder att det tillhör vad som än kommer efter.',
         source: 'Poetic Edda (Völuspá)',
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Nidhogg'
     },
-        'vasen_norna': {
+    'vasen_norna': {
         key: 'vasen_norna',
         name: 'Norna',
         category: 'vasen',
@@ -688,6 +683,32 @@ const LORE_ENTRIES = {
         heritage: 'Swedish',
         unlockType: 'item',
         unlockKey: 'Cooling Grease'
+    },
+    'item_flicker_dust': {
+        key: 'item_flicker_dust',
+        name: 'Flicker Dust',
+        swedishName: 'Flimmerdam (Flicker Dust)',
+        category: 'items',
+        englishDesc: 'In Swedish folk belief, the dancing lights seen flickering among forest canopies at dusk were attributed to the älvor riding the evening breezes. Collected from the places where such lights had been seen - patches of bark, wind-smoothed stones, or the undersides of leaves - flicker dust was said to carry a residue of elven presence. It was considered both a protective charm and a lure, as the capricious wind-riding beings of the canopy were thought to be drawn back to the traces of their own passing.',
+        swedishDesc: 'I svensk folktro tillskrevs de dansande ljus som flimrar bland skogstak i skymningen älvorna som rider på kvällsbrisen. Samlad från platser där sådana ljus hade skådats - barkflisor, vindslipade stenar eller undersidan av löv - sades flimmerdamm bära ett spår av älvornas närvaro. Det betraktades som både ett skyddsmedel och ett lockbete, eftersom de nyckfulla, vindridande varelserna i kronljuset ansågs dras tillbaka till spåren av sitt eget förbipasserande.',
+        source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
+        heritage: 'Swedish',
+        unlockType: 'item',
+        unlockKey: 'Flicker Dust'
+    },
+    'item_morning_dew': {
+        key: 'item_morning_dew',
+        name: 'Morning Dew',
+        swedishName: 'Morgondagg (Morning Dew)',
+        category: 'items',
+        englishDesc: 'Morning dew held a special place in Swedish folk belief, gathered before sunrise and credited with healing properties and magical significance. Dew collected from lakesides and riverbanks at first light was considered especially potent, carrying the breath of the water itself. It was associated with the thin membrane between night and day when mist-dwelling spirits were said to be most active, weaving their shrouds across the water before the sun burned them away.',
+        swedishDesc: 'Morgondagg hade en särskild plats i svensk folktro och samlades före soluppgången med tillskrivna läkande egenskaper och magisk betydelse. Dagg samlad vid sjöstränder och flodbankar i det första ljuset ansågs vara särskilt potent och bärande vattnets eget andetag. Den förknippades med den tunna membranen mellan natt och dag när mistboendes andar sades vara som mest aktiva och väva sina slöjor över vattnet innan solen brände bort dem.',
+        source: 'Swedish Folk Tradition',
+        sourceSv: 'Svensk folktradition',
+        heritage: 'Swedish',
+        unlockType: 'item',
+        unlockKey: 'Morning Dew'
     },
 
     // =========================================================================
@@ -922,8 +943,8 @@ const LORE_ENTRIES = {
         key: 'guardian_brynhild',
         name: 'Brynhild',
         category: 'names',
-        englishDesc: 'Brynhild (Old Norse: Brynhildr) is a shieldmaiden of legendary renown from the Völsunga saga and the heroic lays of the Poetic Edda. Her name means "armored battle" (bryn = armor + hildr = battle), reflecting her fierce warrior nature. As punishment by Odin, she was placed in an enchanted sleep surrounded by an unbreakable ring of fire, from which only the fearless hero Sigurd could wake her. The two pledged their hearts to each other, but treachery and the curse of Fafner\'s gold tore them apart - one of the great tragedies of Norse legend. The name has been borne by queens and shieldmaidens throughout Scandinavian history.',
-        swedishDesc: 'Brynhild (fornnordiskans Brynhildr) är en sköldemö av legendarisk ryktbarhet från Völsunga saga och hjältedikterna i den poetiska Eddan. Hennes namn betyder "bepansrad strid" (bryn = rustning + hildr = strid), vilket speglar hennes våldsamma krigarnatur. Som straff av Oden försattes hon i en förtrollad sömn omgiven av en obrytbar eldring, ur vilken bara den oförskräckte hjälten Sigurd kunde väcka henne. De lovade sina hjärtan till varandra, men svek och förbannelsen av Fafners guld slet dem isär - en av de stora tragedierna i nordisk legend. Namnet har burits av drottningar och sköldemöar genom hela Skandinaviens historia.',
+        englishDesc: 'Brynhild (Old Norse: Brynhildr) is a shieldmaiden of legendary renown from the Völsunga saga and the heroic lays of the Poetic Edda. Her name means "armored battle" (bryn = armor + hildr = battle), reflecting her fierce warrior nature. As punishment by Odin, she was placed in an enchanted sleep surrounded by an unbreakable ring of fire, from which only the fearless hero Sigurd could wake her. The two pledged their hearts to each other, but treachery and the curse of Fafner\'s gold tore them apart - one of the great tragedies of Norse legend.',
+        swedishDesc: 'Brynhild (fornnordiskans Brynhildr) är en sköldemö av legendarisk ryktbarhet från Völsunga saga och hjältedikterna i den poetiska Eddan. Hennes namn betyder "bepansrad strid" (bryn = rustning + hildr = strid), vilket speglar hennes våldsamma krigarnatur. Som straff av Oden försattes hon i en förtrollad sömn omgiven av en obrytbar eldring, ur vilken bara den oförskräckte hjälten Sigurd kunde väcka henne. De lovade sina hjärtan till varandra, men svek och förbannelsen av Fafners guld slet dem isär - en av de stora tragedierna i nordisk legend.',
         source: 'Völsunga saga / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
@@ -988,6 +1009,7 @@ const LORE_ENTRIES = {
         heritage: 'Scandinavian / Germanic',
         unlockType: 'standard'
     },
+
     // =========================================================================
     // CATEGORY: GODS
     // =========================================================================
@@ -1036,12 +1058,12 @@ const LORE_ENTRIES = {
         swedishName: 'Frej',
         category: 'gods',
         family: 'Vaner',
-        englishDesc: 'Freyr is one of the most important Vanir gods, lord of sunshine, rain, fertility, and prosperity. He is the son of the sea god Njord and twin brother to the goddess Freyja. Consumed by love for the giantess Gerd, he gave away his enchanted sword - which could fight on its own - in exchange for help winning her hand. Without his sword, he is fated to fall to Surt at Ragnarök. He is a god of peaceful abundance, closely associated with the Swedish Yngling dynasty, which claimed divine descent from him.',
-        swedishDesc: 'Frej är en av de viktigaste vanagudarna, herre över solsken, regn, fruktbarhet och välstånd. Han är son till havsguden Njord och tvillingbror till gudinnan Freja. Bränd av kärlek till jättinnan Gerd gav han bort sitt förtrollade svärd - som kunde strida på egen hand - i utbyte mot hjälp att vinna hennes hand. Utan sitt svärd är han ödesbestämd att falla för Surt vid Ragnarök. Han är en gudom för fredlig rikedom, nära förknippad med den svenska Ynglingadynastin, som påstod gudomlig härstamning från honom.',
-        source: 'Prose Edda (Skírnismál)',
+        englishDesc: 'Freyr is one of the most important Vanir gods, lord of sunshine, rain, fertility, and prosperity. He is the son of the sea god Njord and twin brother to the goddess Freyja. Consumed by love for the giantess Gerd, he gave away his enchanted sword - which could fight on its own - in exchange for help winning her hand. Without his sword, he is fated to fall to Surtr at Ragnarök. He is a god of peaceful abundance, closely associated with the Swedish Yngling dynasty who claimed descent from him. The realm of Alfheim was given to him as a tooth-gift.',
+        swedishDesc: 'Frej är en av de viktigaste Vaner-gudarna, herre över solsken, regn, fruktbarhet och välstånd. Han är son till havsguden Njord och tvillingbror till gudinnan Freja. Gripen av kärlek till jättinnan Gerd gav han bort sitt förtrollade svärd - som kunde strida på egen hand - i utbyte mot hjälp att vinna hennes hand. Utan sitt svärd är han förutbestämd att falla för Surt vid Ragnarök. Han är en gud för fridfull rikedom, nära förknippad med den svenska Ynglingadynastin som hävdade härstamning från honom. Riket Alfheim gavs till honom som tandgåva.',
+        source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'DJUPA_GRUVAN'
+        unlockType: 'vasen',
+        unlockKey: 'Ljusalv'
     },
     'god_freja': {
         key: 'god_freja',
@@ -1049,12 +1071,12 @@ const LORE_ENTRIES = {
         swedishName: 'Freja',
         category: 'gods',
         family: 'Vaner',
-        englishDesc: 'Freyja is the most prominent goddess among the Vanir gods, associated with love, fertility, beauty, war, and death. She is the twin sister of Freyr and daughter of the sea god Njord. A fierce battle-goddess as well as a deity of love, she is said to choose half of all warriors slain in battle and bring them to her hall Fólkvangr, while the other half go to Odin\'s Valhalla. She possesses a cloak of falcon feathers (Valhamr) that allows her to fly between worlds, and the Brísingamen - a necklace of supreme beauty forged by dwarves. In her grief for her wandering husband Óðr, she wept tears of red gold. Her name is the root of Friday - Old English "Frigedæg" (Swedish: fredag).',
-        swedishDesc: 'Freja är den mest framträdande gudinnan bland vanagudarna och förknippas med kärlek, fruktbarhet, skönhet, krig och döden. Hon är tvillingssyster till Frej och dotter till havsguden Njord. Som en mäktig stridsgudom såväl som kärleksgudinna sägs hon välja hälften av alla krigare som faller i strid och föra dem till sin sal Folkvang, medan den andra halvan går till Odens Valhall. Hon äger en kappa av falkvingar (Valhamr) som låter henne flyga mellan världarna, och Brisingamen - ett halsband av enastående skönhet smitt av dvärgar. I sorg över sin vandrande make Öde grät hon tårar av rött guld. Hennes namn ger upphov till fredag - fornengelskt "Frigedæg".',
+        englishDesc: 'Freyja is the Vanir goddess of love, beauty, fertility, war, and magic. She is Freyr\'s twin sister and the daughter of Njord. She taught the Aesir the art of seiðr - a form of powerful shamanic magic. Each day she weeps golden tears for her missing husband Óðr, whose identity remains mysterious. She rides into battle in a chariot drawn by cats, and receives half of the battle-slain into her hall Fólkvangr, while Odin takes the other half to Valhalla. She owns the famous necklace Brísingamen, which she won from the dwarves. Her name is the root of Friday - Old English "Frīge\'s day" (Swedish: fredag).',
+        swedishDesc: 'Freja är Vaner-gudinnan för kärlek, skönhet, fruktbarhet, krig och magi. Hon är Frejs tvillingsyster och dotter till Njord. Hon lärde asagudarna seidens konst - en form av kraftfull schamansk magi. Varje dag gråter hon guldtårar efter sin försvunne make Odr, vars identitet förblir mystisk. Hon rider till strid i en vagn dragen av katter och tar emot hälften av de fallna i strid i sin sal Folkvang, medan Oden tar den andra hälften till Valhall. Hon äger det berömda halsbandet Brisingen, som hon vann från dvärgarna. Hennes namn ger upphov till fredag - fornengelskt "Frīge\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'DJUPA_GRUVAN'
+        unlockType: 'vasen',
+        unlockKey: 'Valkyria'
     },
     'god_tyr': {
         key: 'god_tyr',
@@ -1062,122 +1084,63 @@ const LORE_ENTRIES = {
         swedishName: 'Tyr',
         category: 'gods',
         family: 'Asar',
-        englishDesc: 'Tyr is the Aesir god of law, justice, and single combat. He is best known for sacrificing his right hand to bind Fenrir: the wolf agreed to be fettered with Gleipnir only if a god placed a hand in his mouth as a pledge of good faith. Knowing the gods intended to keep Fenrir bound, Tyr willingly offered his hand, which Fenrir bit off when he found himself unable to break free. Despite this sacrifice, Tyr is celebrated not as a victim but as the embodiment of courageous commitment to law and order. His name gives us Tuesday.',
-        swedishDesc: 'Tyr är asaguden för lag, rättvisa och envig. Han är mest känd för att ha offrat sin högra hand för att binda Fenrisulven: vargen gick med på att bindas med Gleipner bara om en gud lade sin hand i hans mun som ett löfte om god tro. I vetskapen om att gudarna avsåg att hålla Fenrir bunden offrade Tyr frivilligt sin hand, vilken Fenrisulven bet av när han fann sig oförmögen att frigöra sig. Trots detta offer firas Tyr inte som ett offer utan som förkroppsligandet av modigt engagemang för lag och ordning. Hans namn ger oss tisdag.',
-        source: 'Prose Edda',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Fenrir'
-    },
-    'god_surt': {
-        key: 'god_surt',
-        name: 'Surt',
-        swedishName: 'Surt',
-        category: 'gods',
-        family: 'Jättar',
-        englishDesc: 'Surt ("the black one") is the lord of Muspelheim, the primordial realm of fire, and ruler of the fire giants. In Norse cosmology, he stands at the southern boundary of the world wielding a flaming sword that blazes brighter than the sun. At Ragnarök, Surt will lead the fire giants across Bifröst - the rainbow bridge - causing it to shatter, and will kill the Vanir god Freyr, whose own sword he now wields. After the final battle, Surt will engulf the entire world in fire, both destroying it and, according to the Völuspá, purifying it for rebirth.',
-        swedishDesc: 'Surt ("den svarte") är härskaren av Muspelheim, det urtida eldriket, och ledaren av eldjättarna. I nordisk kosmologi står han vid världens södra gräns och svingar ett flammande svärd som lyser klarare än solen. Vid Ragnarök ska Surt leda eldjättarna över Bifrost - regnbågsbryggan - och orsaka att den krossas, och ska döda Vanar-guden Frej, vars eget svärd han nu svingar. Efter den sista striden ska Surt dränka hela världen i eld, både förstöra den och, enligt Völuspå, rena den inför pånyttfödelse.',
-        source: 'Prose Edda (Völuspá)',
-        heritage: 'Norse',
-        unlockType: 'vasen',
-        unlockKey: 'Eldturs'
-    },
-    'god_ymir': {
-        key: 'god_ymir',
-        name: 'Ymir',
-        swedishName: 'Ymer',
-        category: 'gods',
-        family: 'Jättar',
-        englishDesc: 'Ymir is the primordial giant - the first being - from whose body the gods Odin, Vili, and Vé created the world. Ymir arose in Ginnungagap, the primordial void, from the meeting of ice from Niflheim and fire from Muspelheim. He was nourished by the cow Audhumbla. When the gods killed Ymir, his blood became the seas and rivers, his flesh the earth, his bones the mountains, his skull the sky, his brains the clouds, and his hair the forests. All the giants are descended from him. He is not a god in the traditional sense, but a cosmic being whose sacrifice - willing or not - made the world possible.',
-        swedishDesc: 'Ymer är urjätten - det första väsendet - vars kropp gudarna Oden, Vile och Ve skapade världen av. Ymer uppstod i Ginnungagap, det urtida tomrummet, ur mötet mellan is från Niflheim och eld från Muspelheim. Han närades av kon Audhumbla. När gudarna dödade Ymer blev hans blod haven och floderna, hans kött jord, hans ben berg, hans skalle himlen, hans hjärna molnen och hans hår skogarna. Alla jättar härstammar från honom. Han är ingen gud i traditionell mening, utan ett kosmiskt väsen vars offer - frivilligt eller ej - gjorde världen möjlig.',
-        source: 'Prose Edda (Gylfaginning)',
-        heritage: 'Norse',
-        unlockType: 'zone',
-        unlockKey: 'GINNUNGAGAP'
-    },
-
-    // =========================================================================
-    // FAMILY ENTRIES: ASAR AND VANAR
-    // =========================================================================
-
-    'family_asar': {
-        key: 'family_asar',
-        name: 'Asar',
-        swedishName: 'Asar',
-        category: 'families',
-        englishDesc: 'The Aesir (Swedish: Asar) are the principal family of gods in Norse mythology, dwelling in Asgard and led by Odin the Allfather. They include the gods most central to Norse myth: Odin, Thor, Tyr, Baldr, and Frigg, as well as Loki by adoption. The Aesir waged a mythological war against the Vanir - another family of gods - which ended in a truce and an exchange of divine hostages: Freyr and Freyja came to dwell among the Aesir. At Ragnarök, most of the Aesir are fated to die in the final battle against the giants and the forces of chaos.',
-        swedishDesc: 'Asarna är den huvudsakliga familjen av gudar i nordisk mytologi, boendes i Asgård och ledade av Allefadern Oden. De inkluderar gudarna mest centrala i nordisk myt: Oden, Tor, Tyr, Balder och Frigg, samt Loke genom adoption. Asarna förde ett mytologiskt krig mot Vanerna - en annan gudafamilj - vilket slutade med vapenvila och ett utbyte av gudomliga gisslan: Frej och Freja kom att bo bland asarna. Vid Ragnarök är de flesta asarna ödesbestämda att dö i den sista striden mot jättarna och kaoskrafterna.',
-        source: 'Prose Edda / Poetic Edda',
-        heritage: 'Norse',
-        unlockType: 'valhalla'
-    },
-    'family_vanar': {
-        key: 'family_vanar',
-        name: 'Vaner',
-        swedishName: 'Vaner',
-        category: 'families',
-        englishDesc: 'The Vanir (Swedish: Vaner) are a family of Norse gods associated with fertility, wisdom, the sea, and abundance. They include Freyr (lord of rain and sunshine), Freyja (goddess of love and magic), and Njord (god of sea and winds). The Aesir and Vanir once waged a mythological war that ended in truce and an exchange of divine hostages. Unlike the martial Aesir, the Vanir are gods of peaceful plenty. Many agricultural and nature-based traditions in Scandinavia are rooted in Vanir worship.',
-        swedishDesc: 'Vanerna är en familj av nordiska gudar förknippade med fruktbarhet, visdom, havet och rikedom. De inkluderar Frej (herre över regn och solsken), Freja (gudinna för kärlek och magi) och Njord (gud för hav och vind). Asarna och Vanerna förde en gång ett mytologiskt krig som slutade med vapenvila och ett utbyte av gudomliga gisslan. Till skillnad från de krigiska Asarna är Vanerna gudar för fredlig rikedom. Många jordbruks- och naturbaserade traditioner i Skandinavien har sina rötter i Vanerdyrkan.',
+        englishDesc: 'Tyr is the ancient Norse god of justice, law, and righteous combat. He is the one-handed god: when the gods bound Fenrir with Gleipnir, Fenrir agreed only if a god placed a hand in his mouth as surety. Tyr volunteered, and when Fenrir discovered the trick and could not break free, he bit off Tyr\'s hand. Tyr accepted this sacrifice for the good of all. The runic character Tiwaz (ᛏ) bears his name and represents sacrifice, justice, and the self-giving required for order to prevail. His name is the root of Tuesday - Old English "Tīw\'s day" (Swedish: tisdag).',
+        swedishDesc: 'Tyr är den urgamla nordiske guden för rättvisa, lag och rättfärdig strid. Han är den enbente guden: när gudarna band Fenrisulven med Gleipner gick Fenrir med på det bara om en gud lade sin hand i hans mun som säkerhet. Tyr ställde upp, och när Fenrir upptäckte tricket och inte kunde frigöra sig bet han av Tyrs hand. Tyr accepterade detta offer för allas bästa. Runbokstaven Tiwaz (ᛏ) bär hans namn och representerar offer, rättvisa och det självgivande som krävs för att ordningen ska råda. Hans namn ger upphov till tisdag - fornengelskt "Tīw\'s day".',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'guardian',
-        unlockKey: 'DJUPA_GRUVAN'
-    },
-
-    // =========================================================================
-    // MIDGÅRD - LOCATION
-    // =========================================================================
-
-    'concept_edda': {
-        key: 'concept_edda',
-        name: 'The Eddas',
-        swedishName: 'Eddan',
-        category: 'concepts',
-        englishDesc: 'The Eddas are the two primary collections of Norse mythology and poetry, compiled in Iceland in the 13th century. The Prose Edda (also called Snorri\'s Edda), written by Icelandic historian Snorri Sturluson around 1220 CE, is a handbook of Norse mythology and skaldic poetry. The Poetic Edda (the Elder Edda) is a collection of anonymous Old Norse poems including the Völuspá ("The Prophecy of the Seeress") and the Hávamál ("The Sayings of the High One") -a poem in the voice of Odin himself, containing wisdom, ethics, and practical philosophy that spans from social etiquette to cosmic truth. The Hávamál includes Odin\'s account of hanging on Yggdrasil to learn the runes. Together, the Eddas are the most important surviving sources for Norse mythology.',
-        swedishDesc: 'Eddorna är de två primära samlingarna av nordisk mytologi och poesi, sammanställda på Island under 1200-talet. Prosa-Eddan (även kallad Snorres Edda), skriven av den isländske historikern Snorri Sturluson runt år 1220, är en handbok i nordisk mytologi och skaldediktning. Den poetiska Eddan (Den äldre Eddan) är en samling anonyma fornnordiska dikter inklusive Völuspå ("Völvans spådom") och Hávamál ("Den Höges sång") -ett diktverk i Odens röst som innehåller visdom, etik och praktisk filosofi som sträcker sig från social etikett till kosmisk sanning. Hávamål inkluderar Odens berättelse om att hänga på Yggdrasil för att lära sig runorna. Tillsammans är Eddorna de viktigaste bevarade källorna för nordisk mytologi.',
-        source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
-        heritage: 'Norse / Icelandic',
-        unlockType: 'valhalla'
-    },
-    'concept_ragnarok': {
-        key: 'concept_ragnarok',
-        name: 'Ragnarök',
-        category: 'concepts',
-        englishDesc: 'Ragnarök ("Fate of the Gods" or "Twilight of the Gods") is the prophesied apocalypse of Norse mythology: the cataclysmic series of events that will destroy the known world and kill most of the gods. The great wolf Fenrir will break free from his bonds and swallow Odin. Jörmungandr will rise from the sea, and Thor will slay it but die from its venom nine steps later. Surtr will set the world ablaze with fire from Muspelheim. And yet, Ragnarök is not purely an ending - from the wreckage, a new, green world will rise from the waters, and surviving gods and humans will begin again. The most detailed account is found in the Eddic poem Völuspá, "The Prophecy of the Seeress."',
-        swedishDesc: 'Ragnarök ("gudarnas öde" eller "gudarnas skymning") är den profeterade apokalypsen i nordisk mytologi: den katastrofala serien av händelser som ska förstöra den kända världen och döda de flesta gudarna. Den stora vargen Fenrir ska bryta sig fri från sina bojor och svälja Oden. Jörmungandr ska stiga upp ur havet, och Tor ska döda honom men dö av dess gift nio steg senare. Surt ska tända världen i lågor med eld från Muspelheim. Och ändå är Ragnarök inte enbart ett slut - ur resterna ska en ny, grön värld stiga upp ur vattnet, och överlevande gudar och människor ska börja om. Den mest detaljerade redogörelsen finns i det eddiska dikten Völuspá, "Völvans spådom."',
-        source: 'Poetic Edda (Völuspá)',
-        heritage: 'Norse',
-        unlockType: 'zone',
         unlockKey: 'VARLDENS_ANDE'
-    },
-    'concept_blot': {
-        key: 'concept_blot',
-        name: 'Blot',
-        category: 'concepts',
-        englishDesc: 'Blot (Old Norse: "sacrifice") is the central ritual of Norse paganism - a sacred offering made to gods or spirits in exchange for their goodwill, protection, and blessing. The ceremony involved sacrificing animals whose blood was sprinkled on altars, temple walls, and gathered worshippers. Feasting, mead-drinking, and communal prayer accompanied the sacrifice. Major blots were held at midwinter (Yule), mid-spring, and midsummer. In Swedish folk tradition the practice survived in the Dísablot (for the dísir), the Sigrblot (for victory in battle), and the Álfablot (for the elves). The word blot lives on in the Swedish verb blöta ("to soak") and in place names such as Blotsberg. Giving something of value to earn supernatural favor is the oldest form of the human-spirit relationship.',
-        swedishDesc: 'Blot (fornnordiska: "offer") är det centrala ritualet i nordisk hedendom - ett heligt offer till gudar eller andar i utbyte mot deras välvilja, skydd och välsignelse. Ceremonin innebar att djur offrades vars blod stänktes på altaren, tempelmurar och de församlade deltagarna. Festande, mjödsdrickande och gemensam bön åtföljde offret. Stora blot hölls vid midvinter (Jul), vårens mitt och midsommar. I svensk folktradition överlevde seden i Dísablotet (för diserna), Sigrblotet (för seger i strid) och Álfablotet (för alferna). Ordet blot lever kvar i det svenska verbet blöta och i ortnamn som Blotsberg. Att ge något av värde för att vinna övernaturligt välvilja är den äldsta formen av relationen mellan människa och andevärld.',
-        source: 'Norse Paganism / Swedish Folk Tradition',
-        heritage: 'Norse',
-        unlockType: 'offering'
-    },
+    }
 };
 
-// Ordered list of all lore entry keys
-const LORE_ENTRY_KEYS = Object.keys(LORE_ENTRIES);
+// =========================================================================
+// LORE META - counts and ordered key list
+// =========================================================================
 
-// Total number of lore entries
+const LORE_ENTRY_KEYS = Object.keys(LORE_ENTRIES);
 const LORE_TOTAL = LORE_ENTRY_KEYS.length;
 
-// Category display names and sort order
 const LORE_CATEGORIES = {
-    vasen:     { label: 'Väsen',     labelSv: 'Väsen',    order: 0 },
-    families:  { label: 'Families',  labelSv: 'Familjer', order: 1 },
-    items:     { label: 'Items',     labelSv: 'Föremål',  order: 2 },
-    locations: { label: 'Locations', labelSv: 'Områden',  order: 3 },
-    abilities: { label: 'Abilities', labelSv: 'Förmågor', order: 4 },
-    gods:      { label: 'Gods',      labelSv: 'Gudar',    order: 5 },
-    names:     { label: 'Names',     labelSv: 'Namn',     order: 6 },
-    concepts:  { label: 'Concepts',  labelSv: 'Begrepp',  order: 7 }
+    vasen: {
+        label: 'Väsen',
+        labelSv: 'Väsen',
+        order: 0
+    },
+    items: {
+        label: 'Items',
+        labelSv: 'Föremål',
+        order: 1
+    },
+    locations: {
+        label: 'Locations',
+        labelSv: 'Platser',
+        order: 2
+    },
+    abilities: {
+        label: 'Abilities',
+        labelSv: 'Förmågor',
+        order: 3
+    },
+    names: {
+        label: 'Names',
+        labelSv: 'Namn',
+        order: 4
+    },
+    concepts: {
+        label: 'Concepts',
+        labelSv: 'Begrepp',
+        order: 5
+    },
+    gods: {
+        label: 'Gods',
+        labelSv: 'Gudar',
+        order: 6
+    },
+    families: {
+        label: 'Families',
+        labelSv: 'Familjer',
+        order: 7
+    }
 };
 
 // Keys that are automatically unlocked when the game starts (standard + starter zone)

@@ -190,7 +190,7 @@ const FAMILY_PASSIVE_CONFIG = {
     // Ande: Ethereal Surge - raises a random attribute by stages when entering battlefield
     ANDE_ATTRIBUTE_STAGES: 1,
     
-    // Drake: Draconic Resilience - gain Defense and Durability stages when health falls below threshold
+    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
     DRAKE_DEFENSE_STAGES: 1,
     DRAKE_DURABILITY_STAGES: 1,
@@ -513,7 +513,7 @@ const ZONES = {
         description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
         image: 'assets/zones/glimrandekallan.png',
         levelRange: [15, 19],
-        spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna'],
+        spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna', 'Dimalva'],
         guardian: {
             name: 'Sigurd',
             team: [
