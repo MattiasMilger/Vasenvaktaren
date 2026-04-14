@@ -439,7 +439,7 @@ if (this.isOver && this.onEnd) {
         results.enemy = this.executeEnemyAction(enemyAction);
         
         // 3. Add the dialogue with Colons so the UI can bold the names
-        this.addLog(`${playerName}: Tell me ${enemyName}, what is it that you desire the most?`, 'dialogue');
+        this.addLog(`${playerName}: Tell me, ${enemyName}, what do you desire most?`, 'dialogue');
         
         setTimeout(() => {
             this.addLog(`${enemyName}: If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
