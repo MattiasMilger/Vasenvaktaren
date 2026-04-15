@@ -154,20 +154,11 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         `;
     }).join('');
 
-    // Compute untamed indicator for enemy side in wild encounters
-    const showUntamed = side === 'enemy' &&
-        battle.isWildEncounter &&
-        !gameState.vasenCollection.some(v => v.speciesName === vasen.speciesName);
-    const untamedHtml = showUntamed
-        ? '<span class="combatant-untamed">Untamed</span>'
-        : '';
-
     // Build combatant panel
     panel.innerHTML = `
         <div class="combatant-scroll-inner">
         <span class="combat-card-toggle" onclick="ui.toggleCombatCards()">${this.combatCardsMinimized ? '»' : '«'}</span>
         <div class="combatant-header">
-            ${untamedHtml}
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
             <span class="combatant-level">Lvl ${vasen.level}</span>
         </div>
@@ -430,7 +421,7 @@ UIController.prototype.renderActionButtons = function(battle) {
     const offerBtn = document.getElementById('btn-offer');
     offerBtn.disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter ||
-        battle.offersGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven || battle.isAutoBattle;
+        battle.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven || battle.isAutoBattle;
 
     // NEW: First combat tutorial - blink Offer Item button if player has matching item
     if (!gameState.firstCombatTutorialShown && battle.isWildEncounter && !offerBtn.disabled) {
@@ -497,32 +488,40 @@ UIController.prototype.colorCodeCombatMessage = function(message) {
         let result = message;
 
         // 1. Color megin references (blue)
+        // Matches: "used X megin", "X megin", "megin"
         result = result.replace(/(\d+)\s+(megin)/gi, '<span class="combat-megin">$1 $2</span>');
         result = result.replace(/\b(megin)\b(?![^<]*>)/gi, '<span class="combat-megin">$1</span>');
 
-        // 2. Color reflected damage (red)
+        // 2. Color reflected damage (red) - MUST come before general damage
+        // Matches: "X reflected damage"
         result = result.replace(/(\d+)\s+(reflected)\s+(damage)/gi,
             '<span class="combat-damage">$1 $2 $3</span>');
 
-        // 3. Color damage numbers (red)
+        // 3. Color damage numbers and the word "damage" (red)
+        // Matches: "deals X damage", "X damage", "takes X damage"
         result = result.replace(/(deals|takes)\s+(\d+)\s+(damage)/gi,
             '$1 <span class="combat-damage">$2 $3</span>');
         result = result.replace(/(\d+)\s+(damage)/gi, '<span class="combat-damage">$1 $2</span>');
 
         // 4. Color positive stat changes (green)
+        // Matches: "raised by X stage", "raised by X stages", "increased X stage", etc.
         result = result.replace(/(raised|increased|boosted)(\s+by)?\s+(\d+)\s+(stages?)/gi,
             '<span class="combat-buff">$1$2 $3 $4</span>');
+        // Also matches: "was raised", "was increased", "was boosted"
         result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi,
             '<span class="combat-buff">$1 $2</span>');
 
         // 5. Color negative stat changes (red)
+        // Matches: "lowered by X stage", "lowered by X stages", "decreased X stage", etc.
         result = result.replace(/(lowered|decreased|reduced)(\s+by)?\s+(\d+)\s+(stages?)/gi,
             '<span class="combat-debuff">$1$2 $3 $4</span>');
+        // Also matches: "was lowered", "was decreased", "was reduced"
         result = result.replace(/\b(was)\s+(lowered|decreased|reduced)/gi,
             '<span class="combat-debuff">$1 $2</span>');
 
-        result = result.replace(/\b(attributes)\s+(were)\s+(lowered)\b/gi,
-            '<span class="combat-debuff">$1 $2 $3</span>');
+        //Color "attributes were lowered" (red)
+result = result.replace(/\b(attributes)\s+(were)\s+(lowered)\b/gi,
+    '<span class="combat-debuff">$1 $2 $3</span>');
 
         return result;
 };
@@ -536,12 +535,13 @@ UIController.prototype.flashCombatant = function(side, matchup = 'NEUTRAL') {
     const panel = document.getElementById(`${side}-panel`);
     if (!panel) return;
 
+    // Determine the hit class based on matchup
     let hitClass = 'hit-neutral';
     let animationDuration = 400;
 
     if (matchup === 'KNOCKOUT') {
         hitClass = 'hit-knockout';
-        animationDuration = 180;
+        animationDuration = 180; // Very fast for knockout
     } else if (matchup === 'POTENT') {
         hitClass = 'hit-potent';
     } else if (matchup === 'WEAK') {
@@ -549,6 +549,8 @@ UIController.prototype.flashCombatant = function(side, matchup = 'NEUTRAL') {
     } else if (matchup === 'DEBUFF') {
         hitClass = 'hit-debuff';
     }
+
+    // Don't clear attack animations - allow hit flash to play simultaneously with attack movement
 
     panel.dataset.hitAnimation = 'true';
     panel.dataset.hitAnimationTime = Date.now();
@@ -560,9 +562,10 @@ UIController.prototype.flashCombatant = function(side, matchup = 'NEUTRAL') {
         imageContainer.classList.add(hitClass);
     }
 
+    // Only shake on POTENT hits
     if (matchup === 'POTENT' || matchup === 'KNOCKOUT') {
         panel.classList.remove('hit-shake');
-        void panel.offsetWidth;
+        void panel.offsetWidth; // restart animation
         panel.classList.add('hit-shake');
     }
 
@@ -578,6 +581,8 @@ UIController.prototype.flashCombatant = function(side, matchup = 'NEUTRAL') {
             if (imageContainer) {
                 imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak', 'hit-knockout', 'hit-debuff');
             }
+
+            // Always remove shake after duration
             panel.classList.remove('hit-shake');
         }
     }, animationDuration);
@@ -587,11 +592,18 @@ UIController.prototype.triggerAttackAnimation = function(side, abilityType) {
         const panel = document.getElementById(`${side}-panel`);
         if (!panel) return;
 
+        // Check if higher priority animation is playing
         const currentPriority = parseInt(panel.dataset.animationPriority || '999');
         const newPriority = (abilityType === ATTACK_TYPES.UTILITY) ? 3 : 2;
 
-        if (currentPriority <= newPriority) return;
+        // Block if higher or equal priority animation is playing
+        if (currentPriority <= newPriority) {
+            return; // Don't play this animation
+        }
 
+        // Don't clear animations - allow attack to play alongside hit flash
+
+        // Determine animation type based on ability type
         let animationClass = '';
         let duration = 0;
 
@@ -604,9 +616,11 @@ UIController.prototype.triggerAttackAnimation = function(side, abilityType) {
             animationClass = side === 'player' ? 'attacking-player' : 'attacking-enemy';
             duration = 500;
         } else {
+            // No animation for non-ability actions (pass, offer, ask, surrender)
             return;
         }
 
+        // Store animation state with priority
         panel.dataset.attackAnimation = 'true';
         panel.dataset.attackAnimationTime = Date.now();
         panel.dataset.attackAnimationClass = animationClass;
@@ -640,6 +654,8 @@ UIController.prototype.clearAllAnimations = function(panel) {
     if (imageContainer) {
         imageContainer.classList.remove('hit-potent', 'hit-neutral', 'hit-weak', 'hit-knockout', 'hit-debuff');
     }
+
+    // Remove shake from panel
     panel.classList.remove('hit-shake');
 
     delete panel.dataset.hitAnimation;
@@ -659,6 +675,7 @@ UIController.prototype.reapplyAnimations = function(side) {
     const imageContainer = panel.querySelector('.combatant-image-container');
     if (!imageContainer) return;
 
+    // Hit animation
     if (panel.dataset.hitAnimation === 'true') {
         const elapsed = now - parseInt(panel.dataset.hitAnimationTime || 0);
         if (elapsed < 400) {
@@ -667,6 +684,7 @@ UIController.prototype.reapplyAnimations = function(side) {
         }
     }
 
+    // Attack animation
     if (panel.dataset.attackAnimation === 'true') {
         const elapsed = now - parseInt(panel.dataset.attackAnimationTime || 0);
         if (elapsed < 400) {
@@ -685,13 +703,16 @@ UIController.prototype.toggleBattleLog = function() {
         const toggleIcon = toggleBtn.querySelector('.toggle-icon');
 
         if (collapsible.classList.contains('collapsed')) {
+            // Expand
             collapsible.classList.remove('collapsed');
             toggleBtn.classList.remove('collapsed');
             toggleText.textContent = 'Hide Battle Log';
             toggleIcon.textContent = '«';
             localStorage.setItem('battleLogCollapsed', 'false');
+            // Re-size after expand transition
             setTimeout(() => this._sizeCombatLog(), 350);
         } else {
+            // Collapse
             collapsible.classList.add('collapsed');
             toggleBtn.classList.add('collapsed');
             toggleText.textContent = 'Show Battle Log';
@@ -708,6 +729,7 @@ UIController.prototype.restoreBattleLogState = function() {
 
         if (!toggleBtn || !collapsible || !toggleText || !toggleIcon) return;
 
+        // Check if user has saved state, otherwise default to expanded
         const savedState = localStorage.getItem('battleLogCollapsed');
         const isCollapsed = savedState !== null ? savedState === 'true' : false;
 
@@ -738,5 +760,5 @@ UIController.prototype.toggleCombatCards = function() {
 };
 
 UIController.prototype.restoreCombatCardsState = function() {
-        // State is applied during renderCombatantPanel
+        // State is applied during renderCombatantPanel, nothing to restore on init
 };
