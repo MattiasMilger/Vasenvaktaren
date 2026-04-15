@@ -18,7 +18,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 ### Väsen
 - 45 unique creatures based on Swedish folklore
-- 10 families: Vätte, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake
+- 9 families: Vätte, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake
 - 5 elements: Earth, Nature, Water, Fire, Wind
 - 4 rarities: Common, Uncommon, Rare, Mythical
 - 12 temperaments affecting stats
@@ -164,9 +164,9 @@ Vasenvaktaren/
 
 - [x] Finish Main Functionality 
 - [x] Introduce endgame system
-- [ ] Balance Overhaul
 - [ ] Introduce all 45 Väsen (38/45)
 - [ ] Introduce New Abilities
+- [ ] Balance Overhaul
 - [ ] Wiki Page
 
 ## Credits
