@@ -236,6 +236,20 @@ UIController.prototype._applyLoreSearch = function(container, query) {
     });
 };
 
+// Swedish translations for heritage values
+const HERITAGE_TRANSLATIONS_SV = {
+    'Swedish':                  'Svenskt',
+    'Norse':                    'Nordiskt',
+    'Scandinavian':             'Skandinaviskt',
+    'Northern European':        'Nordeuropeiskt',
+    'European':                 'Europeiskt',
+    'Norse / Swedish':          'Nordiskt / Svenskt',
+    'Norse / Germanic':         'Nordiskt / Germanskt',
+    'Scandinavian / Germanic':  'Skandinaviskt / Germanskt',
+    'Norse / Icelandic':        'Nordiskt / Isländskt',
+    'Norse / Swedish':          'Nordiskt / Svenskt'
+};
+
 // Build the HTML for one unlocked lore entry card
 UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
     const desc     = (isSwedish ? entry.swedishDesc : entry.englishDesc) || '';
@@ -246,7 +260,10 @@ UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
         name = entry.name;
     }
     const source   = (isSwedish && entry.sourceSv) ? entry.sourceSv : (entry.source || '-');
-    const heritage = entry.heritage || '-';
+    const heritageRaw = entry.heritage || '-';
+    const heritage = (isSwedish && HERITAGE_TRANSLATIONS_SV[heritageRaw])
+        ? HERITAGE_TRANSLATIONS_SV[heritageRaw]
+        : heritageRaw;
 
     // Extra meta: Family for väsen entries (via VASEN_SPECIES), Väsen name for item entries,
     // and direct family field for god entries and other entries that declare it explicitly.

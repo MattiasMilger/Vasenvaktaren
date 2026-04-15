@@ -927,77 +927,6 @@ const LORE_ENTRIES = {
     },
 
     // =========================================================================
-    // CATEGORY: NAMES
-    // =========================================================================
-
-    'guardian_hjordis': {
-        key: 'guardian_hjordis',
-        name: 'Hjördis',
-        category: 'names',
-        englishDesc: 'Hjördis is an Old Norse name meaning "sword goddess" (hjörr = sword + dís = goddess or female spirit). In Norse mythology and the Völsunga saga, Hjördis is the mother of Sigurd the dragon-slayer, whose fate was tragically bound up with the cursed gold of Fafner. The "dísir" were feminine protective spirits in Norse belief - ancestral spirits who watched over a family or clan, appearing at midwinter festivals and in dreams to offer warning or protection.',
-        swedishDesc: 'Hjördis är ett fornnordiskt namn som betyder "svärdsgudinna" (hjörr = svärd + dis = gudinna eller kvinnlig ande). I nordisk mytologi och Völsunga saga är Hjördis moder till Sigurd drakdräparen, vars öde tragiskt var sammanvävt med Fafners förbannade guld. "Diserna" var kvinnliga skyddsandar i nordisk tro - förfäderliga andar som vakade över en familj eller klan och uppträdde vid midvinterfester och i drömmar för att varna eller skydda.',
-        source: 'Völsunga saga / Norse Mythology',
-        heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'DJUPA_GRUVAN'
-    },
-    'guardian_asa': {
-        key: 'guardian_asa',
-        name: 'Åsa',
-        category: 'names',
-        englishDesc: 'Åsa is a common Swedish feminine name of Old Norse origin, derived from "Áss," meaning "god" - specifically one of the Aesir gods of Norse mythology. The name connects its bearer symbolically to the divine order of Asgard. In Viking Age runestone inscriptions and sagas, women named Ása or variants thereof appear as figures of authority and distinction, often commemorated as matriarchs and keepers of the household.',
-        swedishDesc: 'Åsa är ett vanligt svenskt feminint namn av fornnordiskt ursprung, härrörande från "Áss", som betyder "gud" - specifikt en av asagudarna i nordisk mytologi. Namnet förbinder dess bärare symboliskt med den gudomliga ordningen i Asgård. I vikingatidens runstensinskrifter och sagor framstår kvinnor vid namn Ása eller varianter därav som auktoritetspersoner och framstående figurer, ofta hedrade som matriarker och väktare av hemmet.',
-        source: 'Old Norse Tradition',
-        heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'TROLLSKOGEN'
-    },
-    'guardian_brynhild': {
-        key: 'guardian_brynhild',
-        name: 'Brynhild',
-        category: 'names',
-        englishDesc: 'Brynhild (Old Norse: Brynhildr) is a shieldmaiden of legendary renown from the Völsunga saga and the heroic lays of the Poetic Edda. Her name means "armored battle" (bryn = armor + hildr = battle), reflecting her fierce warrior nature. As punishment by Odin, she was placed in an enchanted sleep surrounded by an unbreakable ring of fire, from which only the fearless hero Sigurd could wake her. The two pledged their hearts to each other, but treachery and the curse of Fafner\'s gold tore them apart - one of the great tragedies of Norse legend.',
-        swedishDesc: 'Brynhild (fornnordiskans Brynhildr) är en sköldemö av legendarisk ryktbarhet från Völsunga saga och hjältedikterna i den poetiska Eddan. Hennes namn betyder "bepansrad strid" (bryn = rustning + hildr = strid), vilket speglar hennes våldsamma krigarnatur. Som straff av Oden försattes hon i en förtrollad sömn omgiven av en obrytbar eldring, ur vilken bara den oförskräckte hjälten Sigurd kunde väcka henne. De lovade sina hjärtan till varandra, men svek och förbannelsen av Fafners guld slet dem isär - en av de stora tragedierna i nordisk legend.',
-        source: 'Völsunga saga / Poetic Edda',
-        heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'URBERGEN'
-    },
-    'guardian_ragnar': {
-        key: 'guardian_ragnar',
-        name: 'Ragnar',
-        category: 'names',
-        englishDesc: 'Ragnar is one of the most iconic Old Norse names, composed of ragn- (counsel, decision, divine power) and -arr (warrior). It was a royal and warrior name throughout the Viking Age, most famously associated with the semi-legendary Ragnar Lothbrok, whose sons were said to have invaded England in the great heathen army of 865 CE. The name evokes strength of will and martial excellence.',
-        swedishDesc: 'Ragnar är ett av de mest ikoniska fornnordiska namnen, sammansatt av ragn- (råd, beslut, gudomlig kraft) och -arr (krigare). Det var ett kungligt och krigarnamn under hela vikingaperioden, mest känt förknippad med den halvlegendariske Ragnar Lodbrok, vars söner sades ha invaderat England i den stora hedniska armén 865 e.Kr. Namnet framkallar viljestyrka och krigslig excellens.',
-        source: 'Old Norse Sagas',
-        heritage: 'Scandinavian',
-        unlockType: 'guardian',
-        unlockKey: 'FOLKETS_BY'
-    },
-    'guardian_sigurd': {
-        key: 'guardian_sigurd',
-        name: 'Sigurd',
-        category: 'names',
-        englishDesc: 'Sigurd is the greatest hero of Norse mythology and the Völsunga saga - the dragon-slayer who killed Fafner and tasted the dragon\'s blood, giving him wisdom and the ability to understand birds. He won the cursed hoard of Andvari, wielded the sword Gramr, and loved the Valkyrie Brynhild before tragedy parted them. His story influenced the German Nibelungenlied and, through it, Richard Wagner\'s Ring Cycle.',
-        swedishDesc: 'Sigurd är den störste hjälten i nordisk mytologi och Völsunga saga - drakdräparen som dödade Fafner och smakade drakens blod, vilket gav honom visdom och förmågan att förstå fåglar. Han vann Andvaris förbannade skatt, svingade svärdet Gramr och älskade Valkyrjan Brynhild innan tragedin skilde dem åt. Hans historia influerade det tyska Nibelungenlied och, genom det, Richard Wagners Ringcykeln.',
-        source: 'Völsunga saga / Poetic Edda',
-        heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'GLIMRANDE_KALLAN'
-    },
-    'guardian_gylfe': {
-        key: 'guardian_gylfe',
-        name: 'Gylfe',
-        category: 'names',
-        englishDesc: 'Gylfe is a Swedish king in the Prose Edda whose journey to Asgard to seek wisdom forms the basis of Snorri Sturluson\'s "Gylfaginning" (the Fooling of Gylfe). Disguising himself as a wanderer named Gangleri, Gylfe enters the divine hall and asks three enthroned figures - named High, Just-as-High, and Third - questions about the nature of the world, the gods, and the cosmos. Their answers constitute one of the most complete accounts of Norse mythology that survives.',
-        swedishDesc: 'Gylfe är en svensk kung i Prosa-Eddan vars resa till Asgård för att söka visdom bildar grunden för Snorri Sturlusons "Gylfaginning" (Gylfes bedrägeri). Förklä till en vandrare vid namn Gangleri träder Gylfe in i den gudomliga salen och frågar tre tronande figurer - vid namn Höge, Lika-höge och Tredje - om världens, gudarnas och kosmosets natur. Deras svar utgör ett av de mest fullständiga redogörelserna för nordisk mytologi som överlever.',
-        source: 'Prose Edda (Gylfaginning, Snorri Sturluson)',
-        heritage: 'Norse',
-        unlockType: 'guardian',
-        unlockKey: 'VARLDENS_ANDE'
-    },
-
-    // =========================================================================
     // CATEGORY: CONCEPTS
     // =========================================================================
 
@@ -1134,25 +1063,20 @@ const LORE_CATEGORIES = {
         labelSv: 'Förmågor',
         order: 3
     },
-    names: {
-        label: 'Names',
-        labelSv: 'Namn',
-        order: 4
-    },
     concepts: {
         label: 'Concepts',
         labelSv: 'Begrepp',
-        order: 5
+        order: 4
     },
     gods: {
         label: 'Gods',
         labelSv: 'Gudar',
-        order: 6
+        order: 5
     },
     families: {
         label: 'Families',
         labelSv: 'Familjer',
-        order: 7
+        order: 6
     }
 };
 
