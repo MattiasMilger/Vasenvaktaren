@@ -32,6 +32,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 - Select a zone from the zone list
 - Click "Explore" to search the zone
+- Find Items, Runes, and Väsen.
 - Click "Challenge Guardian" to face the zone boss
 
 ### Combat System
@@ -49,25 +50,14 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - **Surrender**: Exit combat (reduces party to 5% health)
 - **Auto Battle**: Let AI take control
 
+### Väsen Taming
+- Use correct items to tame väsen
 
 ### Party Management
 - Click Väsen in inventory to view details
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
-
-### Items & Runes
-- Use the tabs in the left panel to switch between Väsen, Runes, and Items
-- Click items to heal your Väsen outside combat
-- Click runes to equip them to party members
-
-## Elements
-
-Earth,
-Nature,
-Water,
-Fire,
-Wind
 
 ### Lore Book
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
