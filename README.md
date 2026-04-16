@@ -35,7 +35,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Find Items, Runes, and Väsen.
 - Click "Challenge Guardian" to face the zone boss
 
-### Combat System
+### Combat System & Taming
 - Turn-based battles with move priority
 - Element matchups
 - Resource management
@@ -49,9 +49,6 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - **Pass**: Skip your turn
 - **Surrender**: Exit combat (reduces party to 5% health)
 - **Auto Battle**: Let AI take control
-
-### Väsen Taming
-- Use correct items to tame väsen
 
 ### Party Management
 - Click Väsen in inventory to view details
