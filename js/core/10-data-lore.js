@@ -8,24 +8,12 @@ const LORE_ENTRIES = {
     // CATEGORY: VÄSEN
     // =========================================================================
 
-    'vasen_term': {
-        key: 'vasen_term',
-        name: 'Väsen',
-        category: 'vasen',
-        englishDesc: 'The Swedish word "väsen" (plural: "väsen" or "väsenden") is a broad, collective term for all manner of supernatural beings found in Scandinavian folk belief. It encompasses everything from helpful house spirits to malevolent forest predators. Unlike the English word "monster," väsen carries no inherent moral judgment - a being is simply a väsen by its very nature. The word itself derives from Old Swedish and is related to the verb "vara" (to be), meaning roughly "a being" or "an entity."',
-        swedishDesc: 'Det svenska ordet "väsen" är ett brett, samlande begrepp för alla slags övernaturliga varelser i skandinavisk folktro. Det omfattar allt från hjälpsamma husandar till illvilliga skogsvarelser. Till skillnad från det engelska ordet "monster" bär väsen ingen inneboende moralisk dom - ett väsen är helt enkelt ett väsen till sin natur. Ordet härstammar från fornskenska och är besläktat med verbet "vara", ungefär synonymt med "ett levande väsen" eller "en entitet."',
-        source: 'Swedish Folklore',
-        sourceSv: 'Svensk folktro',
-        heritage: 'Swedish',
-        unlockType: 'standard'
-    },
-
     'family_vatte': {
         key: 'family_vatte',
         name: 'Vätte',
         category: 'vasen',
-        englishDesc: 'Vätten (singular: vätte) are small, elusive guardian spirits tied to specific places or functions. They inhabit homes, farms, mines, and stretches of wilderness, quietly maintaining order in their domain. Though rarely seen, their presence is felt through the health of animals, the quality of crops, and the peace of the household. They demand respect and can become deeply vindictive if treated with contempt or neglect.',
-        swedishDesc: 'Vätten (singular: vätte) är små, svårfångade skyddsandar knutna till platser eller uppgifter. De bebor hem, gårdar, gruvor och naturmarker och upprätthåller ordning inom sitt område. Även om de sällan syns, märks deras närvaro i djurens hälsa, skördars kvalitet och hemmets lugn. De kräver respekt och kan bli djupt hämndfulla om de behandlas med förakt eller negligeras.',
+        englishDesc: 'Vättar (singular: vätte) are small, elusive guardians tied to specific places or functions. They inhabit homes, farms, mines, and stretches of wilderness, quietly maintaining order in their domain. Though rarely seen, their presence is felt through the health of animals, the quality of crops, and the peace of the household. They demand respect and can become deeply vindictive if treated with contempt or neglect.',
+        swedishDesc: 'Vättar (singular: vätte) är små, svårfångade väktare knutna till platser eller uppgifter. De bebor hem, gårdar, gruvor och naturmarker och upprätthåller ordning inom sitt område. Även om de sällan syns, märks deras närvaro i djurens hälsa, skördars kvalitet och hemmets lugn. De kräver respekt och kan bli djupt hämndfulla om de behandlas med förakt eller negligeras.',
         source: 'Swedish and Scandinavian Folklore',
         sourceSv: 'Svensk och skandinavisk folktro',
         heritage: 'Scandinavian',
@@ -36,7 +24,7 @@ const LORE_ENTRIES = {
         key: 'family_valnad',
         name: 'Vålnad',
         category: 'vasen',
-        englishDesc: 'Vålnader (singular: vålnad) are the restless, tormented spirits of the dead - those who died in violence, grief, or dishonor and could not find peace. They linger in the world of the living, often tied to the place of their death or to the injustice that caused it. Many seek revenge, while others simply spread misery as an extension of their own suffering. Proper burial rites and prayers were considered essential in Swedish folk belief to prevent the creation of a vålnad.',
+        englishDesc: 'Vålnader (singular: vålnad) are restless, tormented spirits of the dead - those who died in violence, grief, or dishonor and could not find peace. They linger in the world of the living, often tied to the place of their death or to the injustice that caused it. Many seek revenge, while others simply spread misery as an extension of their own suffering. Proper burial rites and prayers were considered essential in Swedish folk belief to prevent the creation of a vålnad.',
         swedishDesc: 'Vålnader (singular: vålnad) är de dödas rastlösa, plågade andar - de som dött i våld, sorg eller vanära och inte kunnat finna frid. De dröjer kvar i de levandes värld, ofta bundna till platsen för sin död eller till den orättvisa som orsakade den. Många söker hämnd, medan andra sprider elände som en förlängning av sitt eget lidande. Ordentliga begravningsriter och böner ansågs nödvändiga i svensk folktro för att förhindra uppkomsten av en vålnad.',
         source: 'Swedish Folklore',
         sourceSv: 'Svensk folktro',
@@ -84,8 +72,8 @@ const LORE_ENTRIES = {
         key: 'family_alv',
         name: 'Alv',
         category: 'vasen',
-        englishDesc: 'Alvar (singular: alv) are the elven beings of Norse mythology, divided by Snorri Sturluson in the Prose Edda into the ljusalver (light elves) who dwell in Alfheim, and the svartalver (dark elves) who live underground in Nidavelir / Svartalfheim. The ljusalver are described as more radiant than the sun, while the svartalver are darker than pitch. The svartalver are renowned master craftsmen who forged some of the greatest treasures in Norse myth, including Mjölnir and the binding chain Gleipnir.',
-        swedishDesc: 'Alvar (singular: alv) är de älvlika varelserna i nordisk mytologi, indelade av Snorri Sturluson i Prosa-Eddan i ljusalverna som bor i Alfheim, och svartalverna som lever under jord i Nidavelir / Svartalfheim. Ljusalverna beskrivs som mer strålande än solen, medan svartalverna är mörkare än beck. Svartalverna är berömda mästerhantverkare som smidde några av de största skatterna i nordisk myt, däribland Mjölner och bindningskedjan Gleipner.',
+        englishDesc: 'Alver (singular: alv) are the elven beings of Norse mythology, divided by Snorri Sturluson in the Prose Edda into the ljusalver (light elves) who dwell in Alfheim, and the svartalver (dark elves) who live underground in Nidavelir / Svartalfheim. The ljusalver are described as more radiant than the sun, while the svartalver are darker than pitch. The svartalver are renowned master craftsmen who forged some of the greatest treasures in Norse myth, including Mjölnir and the binding chain Gleipnir.',
+        swedishDesc: 'Alver (singular: alv) är de älvlika varelserna i nordisk mytologi, indelade av Snorri Sturluson i Prosa-Eddan i ljusalverna som bor i Alfheim, och svartalverna som lever under jord i Nidavelir / Svartalfheim. Ljusalverna beskrivs som mer strålande än solen, medan svartalverna är mörkare än beck. Svartalverna är berömda mästerhantverkare som smidde några av de största skatterna i nordisk myt, däribland Mjölner och bindningskedjan Gleipner.',
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'family',
@@ -131,8 +119,8 @@ const LORE_ENTRIES = {
         key: 'vasen_landvatte',
         name: 'Landvätte',
         category: 'vasen',
-        englishDesc: 'The Landvätte (land spirit) is the protector of a specific stretch of wilderness, hill, or natural landmark. In Old Norse sources, including the Heimskringla, King Odin commanded that all Viking ships approaching the Norwegian coast lower their dragon prows so as not to frighten the landvættr - the land spirits who protect the country. Swedish folk belief inherited this tradition, holding that disturbing a landvätte\'s territory would bring misfortune.',
-        swedishDesc: 'Landvättet är skyddaren av ett specifikt naturområde, en kulle eller ett naturlandmärke. I fornnordiska källor, inklusive Heimskringla, befallde kung Oden att alla vikingaskepp som närmade sig den norska kusten skulle sänka sina drakstävar för att inte skrämma landvättrarna - landets andar som skyddar landet. Svensk folktro ärvde denna tradition och höll att störa ett landvätts territorium skulle föra olycka med sig.',
+        englishDesc: 'The Landvätte is the protector of a specific stretch of wilderness, hill, or natural landmark. In Old Norse sourcory would bring misfortune.',
+        swedishDesc: 'Landvätten är skyddaren av ett spes, including the Heimskringla, King Odin commanded that all Viking ships approaching the Norwegian coast lower their dragon prows so as not to frighten the landvættr - the land spirits who protect the country. Swedish folk belief inherited this tradition, holding that disturbing a landvätte\'s territecifikt naturområde, en kulle eller ett naturlandmärke. I fornnordiska källor, inklusive Heimskringla, befallde kung Oden att alla vikingaskepp som närmade sig den norska kusten skulle sänka sina drakstävar för att inte skrämma landvättrarna - landets andar som skyddar landet. Svensk folktro ärvde denna tradition och höll att störa ett landvätts territorium skulle föra olycka med sig.',
         source: 'Heimskringla (Snorri Sturluson) / Swedish Folklore',
         sourceSv: 'Heimskringla (Snorri Sturluson) / Svensk folktro',
         heritage: 'Scandinavian',
@@ -143,7 +131,7 @@ const LORE_ENTRIES = {
         key: 'vasen_gardstomte',
         name: 'Gårdstomte',
         category: 'vasen',
-        englishDesc: 'The Gårdstomte (farm spirit) is the guardian of the farmstead - the barns, the livestock, the outbuildings, and the fields. It is depicted as a small, bearded, elderly man who works invisibly by night to keep the farm in order. The Gårdstomte demands an annual gift of a bowl of porridge (gröt) with a lump of butter on top; neglecting this offering invites disaster, as the tomte may torment the animals, spoil the milk, or move to another farm entirely.',
+        englishDesc: 'The Gårdstomte is the guardian of the farmstead - the barns, the livestock, the outbuildings, and the fields. It is depicted as a small, bearded, elderly man who works invisibly by night to keep the farm in order. The Gårdstomte demands an annual gift of a bowl of porridge (gröt) with a lump of butter on top; neglecting this offering invites disaster, as the tomte may torment the animals, spoil the milk, or move to another farm entirely.',
         swedishDesc: 'Gårdstomten är väktaren av gården - ladugårdarna, boskapen, uthusarna och åkrarna. Det skildras som en liten, skäggig, äldre man som arbetar osynligt om natten för att hålla gården i ordning. Gårdstomten kräver en årlig gåva av en skål gröt med en klick smör på toppen; att försumma detta erbjudande inbjuder till katastrof, då tomten kan plåga djuren, förstöra mjölken eller flytta till en annan gård helt och hållet.',
         source: 'Swedish Folklore',
         sourceSv: 'Svensk folktro',
@@ -155,7 +143,7 @@ const LORE_ENTRIES = {
         key: 'vasen_hustomte',
         name: 'Hustomte',
         category: 'vasen',
-        englishDesc: 'The Hustomte (house spirit) is the beloved domestic guardian found in nearly every Swedish farmhouse tradition. It lives near the hearth or beneath the floorboards, silently watching over the family and their home. The Hustomte is especially associated with the Christmas season, when it traditionally received its most important offering: a bowl of warm sweet porridge (tomtegröt). The modern image of the Swedish Christmas gnome (Jultomte) descends directly from this ancient folk tradition.',
+        englishDesc: 'The Hustomte is the beloved domestic guardian found in nearly every Swedish farmhouse tradition. It lives near the hearth or beneath the floorboards, silently watching over the family and their home. The Hustomte is especially associated with the Christmas season, when it traditionally received its most important offering: a bowl of warm sweet porridge (tomtegröt). The modern image of the Swedish Christmas gnome (Jultomte) descends directly from this ancient folk tradition.',
         swedishDesc: 'Hustomten är den älskade inhemska väktare som finns i nästan varje svensk gårdshustradition. Det bor nära spisen eller under golvbrädorna och vakar tyst över familjen och deras hem. Hustomten är speciellt förknippad med julsäsongen, när den traditionellt fick sitt viktigaste erbjudande: en skål varm söt gröt (tomtegröt). Den moderna bilden av den svenska julnissen (Jultomten) härstammar direkt från denna urgamla folktradition.',
         source: 'Swedish Folklore',
         sourceSv: 'Svensk folktro',
@@ -167,7 +155,7 @@ const LORE_ENTRIES = {
         key: 'vasen_brunnsgubbe',
         name: 'Brunnsgubbe',
         category: 'vasen',
-        englishDesc: 'The Brunnsgubbe (well man) is the capricious guardian of the village well or sacred spring in Swedish folk belief. Wells were vital to daily life and seen as liminal places where the boundaries between the human world and the spirit realm were thin. The well guardian ensured the water stayed clean and the spring kept flowing, demanding in return that the well be kept free of filth and treated with respect. Dropping foreign objects into the well, washing impure things in it, or failing to leave a small offering could provoke the Brunnsgubbe into souring the water or causing the spring to run dry. Similar well-dwelling creatures appear across Northern European folklore.',
+        englishDesc: 'The Brunnsgubbe is the capricious guardian of the village well or sacred spring in Swedish folk belief. Wells were vital to daily life and seen as liminal places where the boundaries between the human world and the spirit realm were thin. The well guardian ensured the water stayed clean and the spring kept flowing, demanding in return that the well be kept free of filth and treated with respect. Dropping foreign objects into the well, washing impure things in it, or failing to leave a small offering could provoke the Brunnsgubbe into souring the water or causing the spring to run dry. Similar well-dwelling creatures appear across Northern European folklore.',
         swedishDesc: 'Brunnsgubben är den nyckfulle väktaren för bybrunnen eller den heliga källan i svensk folktro. Brunnar var avgörande för det dagliga livet och betraktades som liminala platser där gränserna mellan människovärlden och andevärlden var tunna. Brunnsväktaren såg till att vattnet förblev rent och källan fortsatte flöda, och krävde i gengäld att brunnen hölls fri från smuts och behandlades med respekt. Att kasta främmande föremål i brunnen, tvätta orena ting i den, eller att underlåta att lämna ett litet erbjudande kunde reta brunnsgubben till att förstöra vattnet eller få källan att sina. Liknande brunnsboende väsen förekommer i hela nordeuropeisk folktro.',
         source: 'Swedish and North European Folklore',
         sourceSv: 'Svensk och Nordeuropeisk folktro',
@@ -564,7 +552,7 @@ const LORE_ENTRIES = {
         key: 'vasen_norna',
         name: 'Norna',
         category: 'vasen',
-        englishDesc: 'The Nornir (singular: Norn) are the three great weavers of fate in Norse mythology: Urd ("What Has Been"), Verdandi ("What Is Becoming"), and Skuld ("What Shall Be"). They dwell at Urdarbrunnen - the Well of Urd - at the base of Yggdrasil, the World Tree, where they draw water from the sacred spring each day to pour over the tree\'s roots and keep it alive. From this same well they weave the threads of destiny for gods, giants, and mortals alike, carving the fates of each being into wooden runes at the moment of birth. No power in the nine realms - not even Odin himself - can undo what the Nornir have woven. They are described in the Prose Edda as three women of immense wisdom who came from the home of the giants, and their arrival among the gods is said to have marked the end of the golden age. A fourth category of nornir, lesser in stature, are said to attend the birth of every individual, shaping the course of their life. The Well of Urd is also the site where the gods hold their daily council, riding over Bifröst to gather beneath Yggdrasil\'s branches to pass judgment and settle the affairs of the world.',
+        englishDesc: 'The Norns (singular: Norn) are the three great weavers of fate in Norse mythology: Urd ("What Has Been"), Verdandi ("What Is Becoming"), and Skuld ("What Shall Be"). They dwell at Urdarbrunnen - the Well of Urd - at the base of Yggdrasil, the World Tree, where they draw water from the sacred spring each day to pour over the tree\'s roots and keep it alive. From this same well they weave the threads of destiny for gods, giants, and mortals alike, carving the fates of each being into wooden runes at the moment of birth. No power in the nine realms - not even Odin himself - can undo what the Nornir have woven. They are described in the Prose Edda as three women of immense wisdom who came from the home of the giants, and their arrival among the gods is said to have marked the end of the golden age. A fourth category of nornir, lesser in stature, are said to attend the birth of every individual, shaping the course of their life. The Well of Urd is also the site where the gods hold their daily council, riding over Bifröst to gather beneath Yggdrasil\'s branches to pass judgment and settle the affairs of the world.',
         swedishDesc: 'Nornorna (singular: Norn) är de tre stora ödesväverskor i nordisk mytologi: Urd ("Det Som Har Varit"), Verdande ("Det Som Håller På Att Bli") och Skuld ("Det Som Ska Bli"). De bor vid Urdarbrunnen - Urds brunn - vid foten av Yggdrasil, Världsträdet, där de varje dag hämtar vatten från den heliga källan för att ösa över trädets rötter och hålla det vid liv. Från samma brunn väver de ödesträdar för gudar, jättar och dödliga, och ristar varje varelses öde i trärunor vid födseln. Ingen makt i de nio världarna - inte ens Oden själv - kan ta upp det Nornorna har vävt. De beskrivs i Prosa-Eddan som tre kvinnor av enorm visdom som kom från jättarnas hem, och deras ankomst bland gudarna sägs ha markerat slutet på guldåldern. En fjärde kategori av nornor, av lägre rang, sägs närvara vid varje individs födelse och forma loppet av deras liv. Urdarbrunnen är också platsen där gudarna håller sina dagliga råd och rider över Bifrost för att samlas under Yggdrasils grenar för att döma och avgöra världens angelägenheter.',
         source: 'Prose Edda (Gylfaginning) / Poetic Edda (Völuspá)',
         heritage: 'Norse',
@@ -846,7 +834,18 @@ const LORE_ENTRIES = {
     // =========================================================================
     // CATEGORY: CONCEPTS
     // =========================================================================
-
+ 
+    'concept_vasen': {
+        key: 'concept_vasen',
+        name: 'Väsen',
+        category: 'concepts',
+        englishDesc: 'The Swedish word "väsen" is a broad, collective term for all manner of supernatural beings found in Scandinavian folk belief. It encompasses everything from helpful house spirits to malevolent forest predators. Unlike the English word "monster," väsen carries no inherent moral judgment - a being is simply a väsen by its very nature. The word itself derives from Old Swedish and is related to the verb "vara" (to be), meaning roughly "a being" or "an entity."',
+        swedishDesc: 'Det svenska ordet "väsen" är ett brett, samlande begrepp för alla slags övernaturliga varelser i skandinavisk folktro. Det omfattar allt från hjälpsamma husandar till illvilliga skogsvarelser. Till skillnad från det engelska ordet "monster" bär väsen ingen inneboende moralisk dom - ett väsen är helt enkelt ett väsen till sin natur. Ordet härstammar från fornskenska och är besläktat med verbet "vara", ungefär synonymt med "ett levande väsen" eller "en entitet."',
+        source: 'Swedish Folklore',
+        sourceSv: 'Svensk folktro',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
     'concept_megin': {
         key: 'concept_megin',
         name: 'Megin',
