@@ -154,11 +154,20 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         `;
     }).join('');
 
+     // Compute untamed indicator for enemy side in wild encounters
+    const showUntamed = side === 'enemy' &&
+        battle.isWildEncounter &&
+        !gameState.vasenCollection.some(v => v.speciesName === vasen.speciesName);
+    const untamedHtml = showUntamed
+        ? '<span class="combatant-untamed">Untamed</span>'
+        : '';
+
     // Build combatant panel
     panel.innerHTML = `
         <div class="combatant-scroll-inner">
         <span class="combat-card-toggle" onclick="ui.toggleCombatCards()">${this.combatCardsMinimized ? '»' : '«'}</span>
         <div class="combatant-header">
+            ${untamedHtml}
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
             <span class="combatant-level">Lvl ${vasen.level}</span>
         </div>
