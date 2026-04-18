@@ -94,6 +94,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Damp Seaweed',
         image: 'assets/vasen/strandvaskare.png'
     },
+    'Draug': {
+        name: 'Draug',
+        internalName: 'Draug',
+        description: 'A pale, bloated corpse that refuses to rest in its grave. The Draug possesses a twisted physical strength and radiates a chilling aura.',
+        family: FAMILIES.VALNAD,
+        element: ELEMENTS.NATURE,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Wailing Cry', 'Wild Bite', 'Ground Stomp', 'Boulder Toss'],
+        tamingItem: 'Mound Root',
+        image: 'assets/vasen/draug.png'
+    },
 
     // Odjur Family
     'Backahast': {

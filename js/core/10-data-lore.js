@@ -179,6 +179,16 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Strandvaskare'
     },
+    'vasen_draug': {
+        key: 'vasen_draug',
+        name: 'Draug',
+        category: 'vasen',
+        desc: 'The Draug is the reanimated, corporeal corpse of the dead in Norse and Scandinavian folklore. Unlike a ghost, it possesses a physical body with immense strength and the ability to increase its weight at will. They are often found guarding treasures within burial mounds or returning to haunt their former homes. A draug’s presence is marked by a chilling aura of dread and a pervasive "corpse-light." Preventing one from rising required specific rituals, such as placing iron on the casket or pinning the clothes of the deceased to the ground.',
+        source: 'Norse Mythology / Icelandic Sagas',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Draug'
+    },
     'vasen_backahast': {
         key: 'vasen_backahast',
         name: 'Bäckahäst',
@@ -484,6 +494,16 @@ const LORE_ENTRIES = {
     // CATEGORY: ITEMS
     // =========================================================================
 
+    'item_mound_root': {
+        key: 'item_mound_root',
+        name: 'Mound Root',
+        category: 'items',
+        desc: 'In Scandinavian folklore, burial mounds (gravhögar) were considered sacred and dangerous places, the homes of the dead. They often contained treasure but were guarded by the spirits of their occupants, such as the Draug. The roots of trees growing on or near these mounds were thought to absorb the mound\'s power, carrying the essence of the ancient earth and the dead within. A Mound Root was therefore a potent offering, a piece of the grave itself, used to appease or communicate with the undead.',
+        source: 'Scandinavian Folklore / Archaeology',
+        heritage: 'Scandinavian',
+        unlockType: 'item',
+        unlockKey: 'Mound Root'
+    },
     'item_broken_chain': {
         key: 'item_broken_chain',
         name: 'Broken Chain',

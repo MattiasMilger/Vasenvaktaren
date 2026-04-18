@@ -92,7 +92,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'white horse',
         'nocturnal grazer',
         'great wolf',
-        'world\'s winds',
+        'world\\\'s winds',
         'mountain-dwelling giant',
         'forest Troll',
         'changeling child',
@@ -120,7 +120,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'wind-riding elven being',
         'mist-dwelling beings',
         'destiny shaper',
-        'twitching construct'
+        'twitching construct',
+        'undead walker'
     ];
 
     let highlighted = description;
@@ -172,7 +173,7 @@ UIController.prototype.showItemOptions = function(itemId) {
     });
 
     let desc = this.highlightItemKeywords(item.description);
-    const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\\\$&');
     desc = desc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
 
     this.showDialogue(

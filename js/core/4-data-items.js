@@ -196,6 +196,11 @@ const TAMING_ITEMS = {
         name: 'Ancient Log',
         description: 'A section of Ancient Log whose bark is black as iron and warm to the touch. A fitting tribute for a creature born of the Iron-Wood.',
         tamingTarget: 'Jarnvedsjatte'
+    },
+    'Mound Root': {
+        name: 'Mound Root',
+        description: 'A gnarled Mound Root. It smells of ancient earth and decay, a grim souvenir from a grave that might appease an undead walker who refuses to rest.',
+        tamingTarget: 'Draug'
     }
 };
 

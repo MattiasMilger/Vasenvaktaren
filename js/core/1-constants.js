@@ -552,7 +552,7 @@ const ZONES = {
         description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
         image: 'assets/zones/varldensande.png',
         levelRange: [25, 29],
-        spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg'],
+        spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg', 'Draug'],
         guardian: {
             name: 'Gylfe',
             team: [
