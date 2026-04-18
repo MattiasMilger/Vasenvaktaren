@@ -14,23 +14,12 @@ UIController.prototype.hideLore = function() {
     this._loreSearchQuery = '';
 };
 
-// Read the globally remembered lore language ('en' or 'sv')
-UIController.prototype.getLoreLanguage = function() {
-    return localStorage.getItem('lore-language') || 'en';
-};
-
-// Save the lore language preference and re-render while preserving UI state
-UIController.prototype.setLoreLanguage = function(lang) {
-    localStorage.setItem('lore-language', lang);
-    this.renderLore();
-};
-
 // Render the full lore book contents into the modal
 UIController.prototype.renderLore = function() {
     const container = document.getElementById('lore-content');
     if (!container) return;
 
-    // Capture current UI state before re-render so language switch doesn't reset it
+    // Capture current UI state before re-render
     const collapsedCats   = new Set();
     const expandedEntries = new Set();
     container.querySelectorAll('.lore-category[data-cat]').forEach(el => {
@@ -43,17 +32,12 @@ UIController.prototype.renderLore = function() {
     const unlocked  = gameState.unlockedLoreEntries;
     const total     = LORE_TOTAL;
     const count     = unlocked.size;
-    const isSwedish = this.getLoreLanguage() === 'sv';
-
-    // Language button always uses English so the action is self-evident
-    const langBtnLabel = isSwedish ? 'Switch to English' : 'Switch to Swedish';
 
     // Header controls
     let html = `<div class="lore-header-controls">
         <div class="lore-header-top">
             <div class="lore-counter">${count} / ${total} entries collected</div>
             <div class="lore-header-buttons">
-                <button class="btn btn-small lore-global-lang-btn">${langBtnLabel}</button>
                 <button class="btn btn-small lore-collapse-btn">Collapse All</button>
             </div>
         </div>
@@ -82,9 +66,7 @@ UIController.prototype.renderLore = function() {
     sortedCategories.forEach(cat => {
         if (!grouped[cat] || grouped[cat].length === 0) return;
 
-        const catLabel = (isSwedish && LORE_CATEGORIES[cat].labelSv)
-            ? LORE_CATEGORIES[cat].labelSv
-            : LORE_CATEGORIES[cat].label;
+        const catLabel = LORE_CATEGORIES[cat].label;
 
         // data-cat used to restore collapsed state after re-render
         html += `<div class="lore-category" data-cat="${cat}">`;
@@ -94,7 +76,7 @@ UIController.prototype.renderLore = function() {
         grouped[cat].forEach(entry => {
             const isUnlocked = unlocked.has(entry.key);
             if (isUnlocked) {
-                html += this.renderLoreEntryCard(entry, isSwedish);
+                html += this.renderLoreEntryCard(entry);
             } else {
                 html += `<div class="lore-entry-card lore-entry-locked">
                     <span class="lore-entry-name-locked">${entry.name}</span>
@@ -114,14 +96,6 @@ UIController.prototype.renderLore = function() {
     container.querySelectorAll('.lore-entry-card.lore-entry-unlocked[data-key]').forEach(el => {
         if (expandedEntries.has(el.dataset.key)) el.classList.add('lore-entry-expanded');
     });
-
-    // Global language toggle
-    const langBtn = container.querySelector('.lore-global-lang-btn');
-    if (langBtn) {
-        langBtn.addEventListener('click', () => {
-            this.setLoreLanguage(isSwedish ? 'en' : 'sv');
-        });
-    }
 
     // Collapse / Expand All — covers both category sections and individual entry descriptions
     const collapseBtn = container.querySelector('.lore-collapse-btn');
@@ -144,7 +118,6 @@ UIController.prototype.renderLore = function() {
         container.removeEventListener('click', this._loreClickHandler);
     }
     this._loreClickHandler = (e) => {
-        if (e.target.closest('.lore-global-lang-btn')) return;
         if (e.target.closest('.lore-collapse-btn')) return;
         // Category title — collapse/expand entire category
         const catTitle = e.target.closest('.lore-category-title');
@@ -170,7 +143,7 @@ UIController.prototype.renderLore = function() {
     // Search — highlight visible text only, no filtering
     const searchInput = container.querySelector('.lore-search-input');
     if (searchInput) {
-        // Restore any query kept from before re-render (e.g. language switch)
+        // Restore any query kept from before re-render
         if (this._loreSearchQuery) {
             searchInput.value = this._loreSearchQuery;
             this._applyLoreSearch(container, this._loreSearchQuery);
@@ -236,41 +209,19 @@ UIController.prototype._applyLoreSearch = function(container, query) {
     });
 };
 
-// Swedish translations for heritage values
-const HERITAGE_TRANSLATIONS_SV = {
-    'Swedish':                  'Svenskt',
-    'Norse':                    'Nordiskt',
-    'Scandinavian':             'Skandinaviskt',
-    'Northern European':        'Nordeuropeiskt',
-    'European':                 'Europeiskt',
-    'Norse / Swedish':          'Nordiskt / Svenskt',
-    'Norse / Germanic':         'Nordiskt / Germanskt',
-    'Scandinavian / Germanic':  'Skandinaviskt / Germanskt',
-    'Norse / Icelandic':        'Nordiskt / Isländskt',
-    'Norse / Swedish':          'Nordiskt / Svenskt'
-};
-
 // Build the HTML for one unlocked lore entry card
-UIController.prototype.renderLoreEntryCard = function(entry, isSwedish) {
-    const desc     = (isSwedish ? entry.swedishDesc : entry.englishDesc) || '';
-    let name;
-    if (isSwedish && entry.swedishName) {
-        name = entry.swedishName.replace(/\s*\([^)]*\)\s*$/, '').trim();
-    } else {
-        name = entry.name;
-    }
-    const source   = (isSwedish && entry.sourceSv) ? entry.sourceSv : (entry.source || '-');
-    const heritageRaw = entry.heritage || '-';
-    const heritage = (isSwedish && HERITAGE_TRANSLATIONS_SV[heritageRaw])
-        ? HERITAGE_TRANSLATIONS_SV[heritageRaw]
-        : heritageRaw;
+UIController.prototype.renderLoreEntryCard = function(entry) {
+    const desc      = entry.desc || '';
+    const name      = entry.name;
+    const source    = entry.source || '-';
+    const heritage  = entry.heritage || '-';
 
     // Extra meta: Family for väsen entries (via VASEN_SPECIES), Väsen name for item entries,
     // and direct family field for god entries and other entries that declare it explicitly.
-    const labelSource   = isSwedish ? 'Källa:'   : 'Source:';
-    const labelHeritage = isSwedish ? 'Arv:'     : 'Heritage:';
-    const labelFamily   = isSwedish ? 'Familj:'  : 'Family:';
-    const labelVasen    = isSwedish ? 'Väsen:'   : 'Väsen:';
+    const labelSource   = 'Source:';
+    const labelHeritage = 'Heritage:';
+    const labelFamily   = 'Family:';
+    const labelVasen    = 'Väsen:';
 
     let extraMeta = '';
     if (entry.unlockType === 'vasen' && entry.unlockKey && !entry.family) {

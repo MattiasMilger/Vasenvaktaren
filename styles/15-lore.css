@@ -65,7 +65,6 @@
     color: var(--text-muted);
 }
 
-.lore-global-lang-btn,
 .lore-collapse-btn {
     flex-shrink: 0;
 }
@@ -189,7 +188,7 @@ mark.lore-highlight {
     border-color: var(--border-light);
 }
 
-/* Header row: chevron + name + language toggle button */
+/* Header row: chevron + name */
 .lore-entry-header {
     display: flex;
     align-items: center;
@@ -220,31 +219,6 @@ mark.lore-highlight {
     font-weight: var(--font-weight-semibold);
     color: var(--text-accent);
     flex: 1;
-}
-
-/* Language toggle button — small, unobtrusive */
-.lore-lang-btn {
-    flex-shrink: 0;
-    font-size: var(--font-size-xs);
-    padding: 2px var(--spacing-sm);
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    transition: background var(--transition-fast), color var(--transition-fast);
-    white-space: nowrap;
-    /* Hidden when collapsed */
-    display: none;
-}
-
-.lore-entry-unlocked.lore-entry-expanded .lore-lang-btn {
-    display: inline-block;
-}
-
-.lore-lang-btn:hover {
-    background: var(--bg-hover);
-    color: var(--text-secondary);
 }
 
 /* Description text — hidden when collapsed */

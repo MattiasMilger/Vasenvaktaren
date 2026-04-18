@@ -50,7 +50,6 @@ class VasenInstance {
             raPassiveTriggered: false,
             trollPassiveTriggered: false,
             valnadPassiveTriggered: false,
-            vattePassiveDamageBoost: 0, // Stores damage boost percentage
             // Empowerment system
             isEmpowered: false // Tracks if next attack deals bonus damage
         };
@@ -275,7 +274,6 @@ class VasenInstance {
             raPassiveTriggered: false,
             trollPassiveTriggered: false,
             valnadPassiveTriggered: false,
-            vattePassiveDamageBoost: 0,
             // Empowerment system
             isEmpowered: false
         };

@@ -233,15 +233,11 @@ class Battle {
             this.playerActive.battleFlags.hasSwapSickness = false;
             this.playerActive.battleFlags.isFirstRound = false;
             this.playerActive.battleFlags.turnsOnField++;
-            // Clear Vätte damage boost flag
-            this.playerActive.battleFlags.vatteDamageBoost = false;
         }
         if (this.enemyActive) {
             this.enemyActive.battleFlags.hasSwapSickness = false;
             this.enemyActive.battleFlags.isFirstRound = false;
             this.enemyActive.battleFlags.turnsOnField++;
-            // Clear Vätte damage boost flag
-            this.enemyActive.battleFlags.vatteDamageBoost = false;
         }
         
         // Check for battle end
@@ -712,11 +708,6 @@ if (this.isOver && this.onEnd) {
             runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
         }
         
-        // Vätte passive: Tag Team damage boost
-        if (attacker.battleFlags.vatteDamageBoost) {
-            runeMod += FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST;
-        }
-        
         // Calculate damage based on attack type
         let totalDamage = 0;
         
@@ -1080,7 +1071,6 @@ if (this.isOver && this.onEnd) {
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
                 const result = vasen.modifyAttributeStage(randomStat, 1);
                 
-                this.addLog(`${vasen.getDisplayName()}'s Ande spirit empowers it!`, 'passive');
                 this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 
                 // Gifu: share the buff with allies if equipped
@@ -1107,19 +1097,19 @@ if (this.isOver && this.onEnd) {
                     vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
                     vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
                     this.addLog(`${vasen.getDisplayName()}'s bestial rage awakens!`, 'passive');
-                    this.addLog(`${vasen.getDisplayName()}'s Strength and Wisdom were raised!`, 'buff');
+                    this.addLog(`${vasen.getDisplayName()}'s Strength and Wisdom were raised by 1 stage!`, 'buff');
                 }
             }
         }
         
         if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.VATTE) {
-            // Vätte passive: Tag Team - incoming ally gains 30% damage boost for current turn
+            // Vätte passive: Tag Team - raises a random attribute of the incoming ally by 1 stage
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
-                // Set a temporary flag on the incoming väsen for the damage boost
-                incomingVasen.battleFlags.vatteDamageBoost = true;
-                this.addLog(`${vasen.getDisplayName()} tags in ${incomingVasen.getDisplayName()}!`, 'passive');
-                this.addLog(`${incomingVasen.getDisplayName()} gains a damage boost!`, 'buff');
+                const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                incomingVasen.modifyAttributeStage(randomStat, 1);
+                this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
             }
         }
         
@@ -1131,7 +1121,7 @@ if (this.isOver && this.onEnd) {
                 vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
                 vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
                 this.addLog(`${vasen.getDisplayName()}'s draconic scales harden!`, 'passive');
-                this.addLog(`${vasen.getDisplayName()}'s Defense and Durability were raised!`, 'buff');
+                this.addLog(`${vasen.getDisplayName()}'s Defense and Durability were raised by 1 stage!`, 'buff');
             }
         }
         

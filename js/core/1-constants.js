@@ -210,9 +210,6 @@ const FAMILY_PASSIVE_CONFIG = {
     // Troll: Troll Theft - steals positive attribute stages from the enemy when using an ability
     TROLL_STAGE_STEAL: 1,
     
-    // Vätte: Tag Team - incoming ally gains a damage bonus for the current turn when swapping out
-    VATTE_DAMAGE_BOOST: 0.30,
-    
     // Vålnad: Deathless - revives with a fraction of max health upon knockout
     VALNAD_REVIVE_HEALTH_PERCENT: 0.10
 };
@@ -331,7 +328,7 @@ const FAMILIES = {
 };
 
 const FAMILY_DESCRIPTIONS = {
-    [FAMILIES.VATTE]: 'Tiny and elusive wardens of specific domains. They can be helpful if respected, or vengeful if slighted. They are rarely seen by human eyes.',
+    [FAMILIES.VATTE]: 'Tiny and elusive wardens of specific domains. When one tags out, it passes its energy to the incoming ally, raising their fighting spirit. They can be helpful if respected, or vengeful if slighted. They are rarely seen by human eyes.',
     [FAMILIES.VALNAD]: 'The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge or inflict misery on the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the Gods or Giants. They embody raw natural forces and the terrifying elements of the wild.',
     [FAMILIES.TROLL]: 'Ragged inhabitants of the mountains and deep woods, possessing formidable Strength and an ancient, primal cunning. They fear only the dawn, which locks their great bulk into a frozen, inert monument; they turn to stone upon exposure to sunlight.',
@@ -388,9 +385,7 @@ const FAMILY_PASSIVES = {
     },
     [FAMILIES.VATTE]: {
         name: 'Tag Team',
-        get description() {
-            return `When swapping out, the incoming ally gains +${Math.round(FAMILY_PASSIVE_CONFIG.VATTE_DAMAGE_BOOST * 100)}% damage for the current turn.`;
-        }
+        description: 'When swapping out, raises a random attribute of the incoming ally by 1 stage.'
     },
     [FAMILIES.VALNAD]: {
         name: 'Deathless',
