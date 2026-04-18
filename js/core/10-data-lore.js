@@ -5,7 +5,7 @@
 const LORE_ENTRIES = {
 
     // =========================================================================
-    // CATEGORY: VÄSEN
+    // CATEGORY: FAMILY
     // =========================================================================
 
     'family_vatte': {
@@ -97,6 +97,21 @@ const LORE_ENTRIES = {
         heritage: 'European',
         unlockType: 'family',
         unlockKey: 'Drake'
+    },
+
+    // =========================================================================
+    // CATEGORY: VÄSEN
+    // =========================================================================
+
+    'vasen_pyssling': {
+        key: 'vasen_pyssling',
+        name: 'Pyssling',
+        category: 'vasen',
+        desc: 'Pysslingar (singular: pyssling) are the smallest of the humanoid väsen, often no larger than a thumb. While they share traits with vättar, they are more elusive and less tied to human morality, existing in the forgotten corners of the world. They are masters of hiding in plain sight, living within the walls, under floorboards, or in the very drafts that whistle through a house. Folklore suggests they are born from the whispers of the air or the dust of old homes, serving as tiny, fickle guardians of the spaces humans rarely visit.',
+        source: 'Swedish Folklore / Astrid Lindgren',
+        heritage: 'Swedish',
+        unlockType: 'vasen',
+        unlockKey: 'Pyssling'
     },
 
     'vasen_landvatte': {

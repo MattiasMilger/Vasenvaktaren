@@ -121,7 +121,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'mist-dwelling beings',
         'destiny shaper',
         'twitching construct',
-        'undead walker'
+        'undead walker',
+        'tiny dweller'
     ];
 
     let highlighted = description;

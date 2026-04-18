@@ -201,6 +201,11 @@ const TAMING_ITEMS = {
         name: 'Mound Root',
         description: 'A gnarled Mound Root. It smells of ancient earth and decay, a grim souvenir from a grave that might appease an undead walker who refuses to rest.',
         tamingTarget: 'Draug'
+    },
+    'Attic Key': {
+        name: 'Attic Key',
+        description: 'A rusted Attic Key. It feels unusually cold to the touch; a perfect token to entice the tiny dweller out from the drafty shadows of the high rafters.',
+        tamingTarget: 'Pyssling'
     }
 };
 
@@ -329,7 +334,7 @@ const RUNES = {
         fullName: 'Eihwaz',
         flavor: 'The immense durability of the Yew tree and the structure of the cosmos. Drawing upon the earth grants a foundational resilience, shielding both mind and body.',
         get effect() {
-            return `This väsen's Earth Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability Attributes by 1 stage`;
+            return `This väsen\'s Earth Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability Attributes by 1 stage`;
         },
         mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.EARTH, stats: ['defense', 'durability'], chance: 0.30 }
     },
@@ -340,7 +345,7 @@ const RUNES = {
         fullName: 'Pertho',
         flavor: 'The mystery of what is hidden. It grounds the wielder, granting their earth-based powers a greater certainty and irresistible, final impact.',
         get effect() {
-            return `This Väsen's Earth hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
+            return `This Väsen\'s Earth hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
         },
         mechanic: { type: 'element_damage_bonus', element: ELEMENTS.EARTH, value: 0.12 }
     },
@@ -362,7 +367,7 @@ const RUNES = {
         fullName: 'Sol',
         flavor: 'The vitalizing energy of the sun. Commanding the fierce element of fire focuses the wielder, bringing about a moment of physical and mental clarity.',
         get effect() {
-            return `This Väsen's Fire Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Strength and Wisdom attributes by 1 stage`;
+            return `This Väsen\'s Fire Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Strength and Wisdom attributes by 1 stage`;
         },
         mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.FIRE, stats: ['strength', 'wisdom'], chance: 0.30 }
     },
@@ -373,7 +378,7 @@ const RUNES = {
         fullName: 'Tyr',
         flavor: 'The pillar of righteous command and ultimate fairness. The wielder\'s wind attacks gain a fearsome precision, striking with the swift, cutting force of cosmic law.',
         get effect() {
-            return `This Väsen's Wind hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
+            return `This Väsen\'s Wind hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
         },
         mechanic: { type: 'element_damage_bonus', element: ELEMENTS.WIND, value: 0.12 }
     },
@@ -384,7 +389,7 @@ const RUNES = {
         fullName: 'Bjarka',
         flavor: 'The steady, quiet, yet inexorable force of the birch tree. The wielder\'s nature-based attacks strike with the persistent, multiplying force of wild growth.',
         get effect() {
-            return `This Väsen's Nature hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
+            return `This Väsen\'s Nature hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
         },
         mechanic: { type: 'element_damage_bonus', element: ELEMENTS.NATURE, value: 0.12 }
     },
@@ -395,7 +400,7 @@ const RUNES = {
         fullName: 'Ehwaz',
         flavor: 'The swift, coordinated power of the horse and rider. As the wielder moves with the element of wind, their physical frame becomes surprisingly stable and resilient.',
         get effect() {
-            return `This Väsen's Wind Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability attributes by 1 stage`;
+            return `This Väsen\'s Wind Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability attributes by 1 stage`;
         },
         mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.WIND, stats: ['defense', 'durability'], chance: 0.30 }
     },
@@ -417,7 +422,7 @@ const RUNES = {
         fullName: 'Laguz',
         flavor: 'The ceaseless, flowing movement of the ocean current. The wielder\'s water attacks are granted greater momentum, carrying increased tidal power and finality.',
         get effect() {
-            return `This väsen's Water hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
+            return `This väsen\'s Water hits deal ${Math.round(GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST * 100)}% more damage`;
         },
         mechanic: { type: 'element_damage_bonus', element: ELEMENTS.WATER, value: 0.12 }
     },
@@ -428,7 +433,7 @@ const RUNES = {
         fullName: 'Inguz',
         flavor: 'The contained potential of the seed. Even a blow that fails to cause physical damage carries a hidden, draining cost, siphoning the opponent\'s core resources.',
         get effect() {
-            return `This väsen's Weak hits removes ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin from the enemy`;
+            return `This väsen\'s Weak hits removes ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin from the enemy`;
         },
         mechanic: { type: 'megin_drain_on_weak', value: 18 }
     },
@@ -450,7 +455,7 @@ const RUNES = {
         fullName: 'Odal',
         flavor: 'The ancestral strength passed down through lineage. The wielder\'s most familiar, low-cost actions are imbued with deep, inherited knowledge, granting a significant boost.',
         get effect() {
-            return `This Väsen's abilities that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} Megin or less deal ${Math.round(GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST * 100)}% more damage`;
+            return `This Väsen\'s abilities that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} Megin or less deal ${Math.round(GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST * 100)}% more damage`;
         },
         mechanic: { type: 'low_cost_damage_bonus', maxCost: 30, value: 0.1 }
     }

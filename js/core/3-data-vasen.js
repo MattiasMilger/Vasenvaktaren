@@ -48,6 +48,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Water Bucket',
         image: 'assets/vasen/brunnsgubbe.png'
     },
+    'Pyssling': {
+        name: 'Pyssling',
+        internalName: 'Pyssling',
+        description: 'A tiny, quick-footed helper bound to the raft. Helpful when respected, troublesome when ignored.',
+        family: FAMILIES.VATTE,
+        element: ELEMENTS.WIND,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Hail Storm'],
+        tamingItem: 'Attic Key',
+        image: 'assets/vasen/pyssling.png'
+    },
 
     // Vålnad Family
     'Nattramn': {
