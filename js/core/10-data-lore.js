@@ -408,7 +408,7 @@ const LORE_ENTRIES = {
         key: 'vasen_valkyria',
         name: 'Valkyria',
         category: 'vasen',
-        desc: 'The Valkyrior (Valkyries - "choosers of the slain") are the divine shieldmaidens who ride over battlefields at Odin\'s command, selecting which warriors shall die and which shall live. They escort the chosen fallen to Valhalla, where the warriors become Einherjar. Valkyries appear as armored maidens riding through the sky and across the rainbow bridge Bifröst. In later Romantic tradition they became idealized warrior-women, but in older sources they are often portrayed as fearsome and inexorable agents of fate.',
+        desc: 'Valkyrior (Singular: Valkyria) are the divine shieldmaidens who ride over battlefields at Odin\'s command, selecting which warriors shall die and which shall live. They escort the chosen fallen to Valhalla, where the warriors become Einherjar. Valkyries appear as armored maidens riding through the sky and across the rainbow bridge Bifröst. In later Romantic tradition they became idealized warrior-women, but in older sources they are often portrayed as fearsome and inexorable agents of fate.',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
