@@ -336,7 +336,7 @@ const FAMILY_DESCRIPTIONS = {
     [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
     [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
     [FAMILIES.JATTE]: 'Ancient, colossal beings of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir Gods.',
-    [FAMILIES.DRAKE]: 'Terrifying, serpentine creatures of immense magical power, often linked to cosmic forces and the destruction of the world tree.'
+    [FAMILIES.DRAKE]: 'Terrifying, serpentine creatures of immense magical power, often linked to cosmic forces and primordial greed.'
 };
 
 // Family Passive Descriptions (mechanical, player-facing)
