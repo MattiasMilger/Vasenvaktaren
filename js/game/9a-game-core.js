@@ -100,9 +100,6 @@ class Game {
             <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}
         </p>
         <p class="rune-hint">${RUNES.URUZ.effect}</p>
-        <p>Your chosen companion stands ready at your side,
-           equipped with the rune's power.</p>
-        <p>You will also find items to help you tame new Väsen.</p>
     `,
     [
         {
