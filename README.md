@@ -21,7 +21,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 9 families: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake
 - 5 elements: Earth, Nature, Water, Fire, Wind
 - 4 rarities: Common, Uncommon, Rare, Mythical
-- 12 temperaments affecting stats
+- 12 attribute altering temperaments
 
 ### Runes
 - 24 equippable runes with unique effects
