@@ -318,11 +318,21 @@ const LORE_ENTRIES = {
         key: 'vasen_skogsra',
         name: 'Skogsrå',
         category: 'vasen',
-        desc: 'The Skogsrå (forest warden) is one of the most prominent figures in Swedish folklore - a hauntingly beautiful woman who guards the forest and can enchant any hunter or woodsman who ventures into her domain. Her most distinctive feature is her hollow back, often described as looking like a rotten tree trunk, and sometimes a cow\'s tail. Hunters who pleased the skogsrå might find exceptional luck; those who angered her would become hopelessly lost. She is sometimes called "huldra" in Norwegian tradition.',
+        desc: 'The Skogsrå (forest warden) is one of the most prominent figures in Swedish folklore - a hauntingly beautiful woman who guards the forest and can enchant any hunter or woodsman who ventures into her domain. Her most distinctive feature is her hollow back, often described as looking like a rotten tree trunk, and sometimes a cow\'s tail. Hunters who pleased the skogsrå might find exceptional luck; those who angered her would become hopelessly lost.',
         source: 'Swedish Folklore',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Skogsra'
+    },
+    'vasen_huldra': {
+        key: 'vasen_huldra',
+        name: 'Huldra',
+        category: 'vasen',
+        desc: 'The Huldra is a forest warden of striking beauty, known for her long hair, quiet grace, and the cow’s tail she hides beneath her clothing. She appears to wanderers as a lone woman in the deep woods, helpful to the respectful and perilous to the arrogant. Tales speak of her guiding hunters to game, guarding cattle, and shaping the fortunes of those who cross her path. She is closely related to the Swedish Skogsrå, yet remembered for her influence over both hunters and herders.',
+        source: 'Scandinavian Folklore',
+        heritage: 'Scandinavian',
+        unlockType: 'vasen',
+        unlockKey: 'Huldra'
     },
     'vasen_nacken': {
         key: 'vasen_nacken',

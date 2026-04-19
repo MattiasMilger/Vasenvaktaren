@@ -112,6 +112,11 @@ const TAMING_ITEMS = {
         description: 'A down-filled cushion grown unnaturally dense from nocturnal visits. It bears the lingering paralysis of a night spent under the phantom\'s press.',
         tamingTarget: 'Mara'
     },
+    'Brass Cowbell': {
+        name: 'Brass Cowbell',
+        description: 'A worn brass cowbell. Its hollow ringing might attract a charred warden, who longs for the memory of a living forest.',
+        tamingTarget: 'Huldra'
+    },
     'Flicker Dust': {
         name: 'Flicker Dust',
         description: 'A pinch of shimmering Flicker Dust, gathered where flickering canopy lights have been seen at dusk. It might catch the attention of a capricious, wind-riding elven being.',

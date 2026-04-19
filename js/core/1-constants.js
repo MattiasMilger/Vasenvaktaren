@@ -442,7 +442,7 @@ const ZONES = {
         description: 'An enchanted forest where the ancient canopy chokes out the sun. The air is thick with the scent of damp moss, and the unseen inhabitants constantly watch you from the gloom.',
         image: 'assets/zones/trollskogen.png',
         levelRange: [1, 4],
-        spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv', 'Jarnvedsjatte'],
+        spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv', 'Jarnvedsjatte', 'Huldra'],
         guardian: {
             name: 'Åsa',
             team: [
@@ -495,7 +495,7 @@ const ZONES = {
                 { species: 'Fafner', level: 15, temperament: 'WARY', runes: ['KAUNAN'] }
             ],
             dialogue: {
-                challenge: 'The earth\\\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
+                challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
                 lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more Wisdom.',
                 win: 'Your effort is sharper than my ore. The path is clear. The flowing waters of Glimrande Källan await.'
             }
@@ -518,7 +518,7 @@ const ZONES = {
             ],
             dialogue: {
                 challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
-                lose: 'The depths claimed you. Your spirit is not yet strong enough to master the water\\\'s fury.',
+                lose: 'The depths claimed you. Your spirit is not yet strong enough to master the water\'s fury.',
                 win: 'You defied the call of the water. Your journey continues to the ancient, colossal lands of Urbergen.'
             }
         },

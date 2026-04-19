@@ -276,6 +276,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Heavy Pillow',
         image: 'assets/vasen/mara.png'
     },
+    'Huldra': {
+        name: 'Huldra',
+        internalName: 'Huldra',
+        description: 'A soot-streaked warden of the charred woods, dwelling where wildfire has cleared the path for new growth. Her eyes that glow like dying embers.',
+        family: FAMILIES.RA,
+        element: ELEMENTS.FIRE,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Elven Light', 'Lava Jet', 'Skald\'s Mead', 'Landslide'],
+        tamingItem: 'Brass Cowbell',
+        image: 'assets/vasen/huldra.png'
+    },
 
     // Alv Family
     'Alva': {

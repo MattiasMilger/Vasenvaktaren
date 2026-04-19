@@ -92,7 +92,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'white horse',
         'nocturnal grazer',
         'great wolf',
-        'world\\\'s winds',
+        'world\'s winds',
         'mountain-dwelling giant',
         'forest Troll',
         'changeling child',
@@ -124,7 +124,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'undead walker',
         'tiny dweller',
         'serpent king',
-        'waterway guardian'
+        'waterway guardian',
+        'charred warden'
     ];
 
     let highlighted = description;
