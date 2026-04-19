@@ -10,13 +10,13 @@ const LORE_ENTRIES = {
 
     'family_vatte': {
         key: 'family_vatte',
-        name: 'Vätte',
+        name: 'Oknytt',
         category: 'vasen',
-        desc: 'Vättar (singular: vätte) are small, elusive guardians tied to specific places or functions. They inhabit homes, farms, mines, and stretches of wilderness, quietly maintaining order in their domain. Though rarely seen, their presence is felt through the health of animals, the quality of crops, and the peace of the household. They demand respect and can become deeply vindictive if treated with contempt or neglect.',
-        source: 'Swedish and Scandinavian Folklore',
-        heritage: 'Scandinavian',
+        desc: 'Oknytt (singular: oknytt) are small, elusive beings tied to specific places or functions. In Swedish folklore, the term refers to mischievous little folk – prone to pranks and petty spite, yet capable of real help when properly respected. They linger in homes, farms, mines, and hidden corners of the wild, quietly tending to the order of their chosen domain. Their mood shapes the world around them: healthy livestock, steady tools, and peaceful nights often signal a content oknytt, while neglect or disrespect invites mischief and misfortune.',
+        source: 'Swedish Folklore',
+        heritage: 'Swedish',
         unlockType: 'family',
-        unlockKey: 'Vätte'
+        unlockKey: 'Oknytt'
     },
     'family_valnad': {
         key: 'family_valnad',

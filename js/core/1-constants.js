@@ -316,7 +316,7 @@ const EXPLORATION_RATES = {
 };
 
 const FAMILIES = {
-    VATTE: 'Vätte',
+    VATTE: 'Oknytt',
     VALNAD: 'Vålnad',
     ODJUR: 'Odjur',
     TROLL: 'Troll',
@@ -328,7 +328,7 @@ const FAMILIES = {
 };
 
 const FAMILY_DESCRIPTIONS = {
-    [FAMILIES.VATTE]: 'Tiny and elusive wardens of specific domains. When one tags out, it passes its energy to the incoming ally, raising their fighting spirit. They can be helpful if respected, or vengeful if slighted. They are rarely seen by human eyes.',
+    [FAMILIES.VATTE]: 'Tiny and elusive keepers of narrow domains. Mischievous by nature, they delight in small pranks but can be surprisingly helpful when treated with care.',
     [FAMILIES.VALNAD]: 'The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge or inflict misery on the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the Gods or Giants. They embody raw natural forces and the terrifying elements of the wild.',
     [FAMILIES.TROLL]: 'Ragged inhabitants of the mountains and deep woods, possessing formidable Strength and an ancient, primal cunning. They fear only the dawn, which locks their great bulk into a frozen, inert monument; they turn to stone upon exposure to sunlight.',
