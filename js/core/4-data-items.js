@@ -87,6 +87,11 @@ const TAMING_ITEMS = {
         description: 'A strange, small Trollmilk Bottle. It seems to have been left by a sickly, irritable changeling child.',
         tamingTarget: 'Bortbyting'
     },
+    'Bridge Keystone': {
+        name: 'Bridge Keystone',
+        description: 'A heavy, moss-covered Bridge Keystone. It feels ancient and important, a fitting tribute to a waterway guardian.',
+        tamingTarget: 'Backatroll'
+    },
     'Mine Lantern': {
         name: 'Mine Lantern',
         description: 'A sturdy Mine Lantern. The light might please the beautiful mine warden.',

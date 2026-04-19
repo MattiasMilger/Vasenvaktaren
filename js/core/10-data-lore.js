@@ -284,6 +284,16 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Bortbyting'
     },
+    'vasen_backatroll': {
+        key: 'vasen_backatroll',
+        name: 'Bäckatroll',
+        category: 'vasen',
+        desc: 'The Bäckatroll (Stream Troll) is a solitary guardian found throughout Scandinavian folklore. Unlike their larger mountain-dwelling kin, these trolls are strictly territorial, bound to a specific bridge or waterway. Known for being temperamental and greedy, they often demand a toll - be it a coin, a riddle, or a gift - for safe passage. If disrespected or ignored, they are said to lash out by sabotaging the crossing or manipulating the water levels of their domain.',
+        source: 'Scandinavian Folklore',
+        heritage: 'Scandinavian',
+        unlockType: 'vasen',
+        unlockKey: 'Backatroll'
+    },
     'vasen_gryningstroll': {
         key: 'vasen_gryningstroll',
         name: 'Gryningstroll',

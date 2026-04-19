@@ -219,6 +219,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Cooling Grease',
         image: 'assets/vasen/gryningstroll.png'
     },
+    'Backatroll': {
+        name: 'Bäckatroll',
+        internalName: 'Backatroll',
+        description: 'A moss-covered, ponderous troll dwelling beneath old stone bridges or within rushing streams. A stubborn guardian of the waterway, often demanding a toll.',
+        family: FAMILIES.TROLL,
+        element: ELEMENTS.WATER,
+        rarity: RARITIES.UNCOMMON,
+        abilities: ['Drown', 'Tidal Wave', 'Burning Insult', 'Wild Bite'],
+        tamingItem: 'Bridge Keystone',
+        image: 'assets/vasen/backatroll.png'
+    },
 
     // Rå Family
     'Gruvra': {

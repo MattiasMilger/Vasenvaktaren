@@ -123,7 +123,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'twitching construct',
         'undead walker',
         'tiny dweller',
-        'serpent king'
+        'serpent king',
+        'waterway guardian'
     ];
 
     let highlighted = description;
