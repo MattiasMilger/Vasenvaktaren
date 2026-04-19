@@ -198,7 +198,7 @@ const LORE_ENTRIES = {
         key: 'vasen_draug',
         name: 'Draug',
         category: 'vasen',
-        desc: 'The Draug is the reanimated, corporeal corpse of the dead in Norse and Scandinavian folklore. Unlike a ghost, it possesses a physical body with immense strength and the ability to increase its weight at will. They are often found guarding treasures within burial mounds or returning to haunt their former homes. A draug’s presence is marked by a chilling aura of dread and a pervasive "corpse-light." Preventing one from rising required specific rituals, such as placing iron on the casket or pinning the clothes of the deceased to the ground.',
+        desc: 'The Draug is the reanimated, corporeal corpse of the dead in Norse and Scandinavian folklore. Unlike a ghost, it possesses a physical body with immense strength and the ability to increase its weight at will. They are often found guarding treasures within burial mounds or returning to haunt their former homes. A draug\'s presence is marked by a chilling aura of dread and a pervasive "corpse-light." Preventing one from rising required specific rituals, such as placing iron on the casket or pinning the clothes of the deceased to the ground.',
         source: 'Norse Mythology / Icelandic Sagas',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -228,7 +228,7 @@ const LORE_ENTRIES = {
         key: 'vasen_bjara',
         name: 'Bjära',
         category: 'vasen',
-        desc: 'The Bjära (also "mjölkhare") is a supernatural familiar constructed by a witch from wood shavings, yarn, and hair, then animated with three drops of her own blood. Taking the form of a bloated hare or a rolling ball of yarn, it slinks into neighboring farms to suck milk directly from the udders of cows. Upon returning, it vomits the stolen bounty into its mistress\'s churn. This creature represents deep-seated rural anxieties regarding livestock illness and the suspicion that a neighbor’s sudden prosperity was the result of magical theft.',
+        desc: 'The Bjära (also "mjölkhare") is a supernatural familiar constructed by a witch from wood shavings, yarn, and hair, then animated with three drops of her own blood. Taking the form of a bloated hare or a rolling ball of yarn, it slinks into neighboring farms to suck milk directly from the udders of cows. Upon returning, it vomits the stolen bounty into its mistress\'s churn. This creature represents deep-seated rural anxieties regarding livestock illness and the suspicion that a neighbor\'s sudden prosperity was the result of magical theft.',
         source: 'Swedish Folklore (Skånsk, Blekinsk, Småländsk tradition)',
         heritage: 'Swedish',
         unlockType: 'vasen',
@@ -328,7 +328,7 @@ const LORE_ENTRIES = {
         key: 'vasen_huldra',
         name: 'Huldra',
         category: 'vasen',
-        desc: 'The Huldra is a forest warden of striking beauty, known for her long hair, quiet grace, and the cow’s tail she hides beneath her clothing. She appears to wanderers as a lone woman in the deep woods, helpful to the respectful and perilous to the arrogant. Tales speak of her guiding hunters to game, guarding cattle, and shaping the fortunes of those who cross her path. She is closely related to the Swedish Skogsrå, yet remembered for her influence over both hunters and herders.',
+        desc: 'The Huldra is a forest warden of striking beauty, known for her long hair, quiet grace, and the cow\'s tail she hides beneath her clothing. She appears to wanderers as a lone woman in the deep woods, helpful to the respectful and perilous to the arrogant. Tales speak of her guiding hunters to game, guarding cattle, and shaping the fortunes of those who cross her path. She is closely related to the Swedish Skogsrå, yet remembered for her influence over both hunters and herders.',
         source: 'Scandinavian Folklore',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
@@ -434,6 +434,16 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Valkyria'
     },
+    'vasen_fylgja': {
+        key: 'vasen_fylgja',
+        name: 'Fylgja',
+        category: 'vasen',
+        desc: 'The Fylgja (plural: fylgjur) is a personal spirit in Norse belief, inseparably bound to an individual\'s soul from birth until death. It typically takes the form of an animal that reflects the person\'s inner nature, or occasionally a radiant female figure. The Fylgja cannot be seen by ordinary people in waking life - only those with the gift of second sight, or those close to death, may perceive it. In the Icelandic sagas, seeing one\'s own fylgja is invariably an omen of imminent death. After its bearer dies, the Fylgja passes on to the next member of the family, carrying the accumulated fate of the bloodline forward.',
+        source: 'Prose Edda / Icelandic Sagas',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Fylgja'
+    },
     'vasen_jotun': {
         key: 'vasen_jotun',
         name: 'Jotun',
@@ -528,7 +538,7 @@ const LORE_ENTRIES = {
         key: 'vasen_norna',
         name: 'Norna',
         category: 'vasen',
-        desc: 'The Norns are the three great weavers of fate: Urd (the past), Verdandi (the present), and Skuld (the future). From their home at the Well of Urd at the base of Yggdrasil, they draw water to nourish the World Tree and weave the threads of destiny for all beings. Not even the gods can undo what the Nornir have woven; they carve the life-path of every soul into wooden runes at the moment of birth. Their arrival from the land of giants is said to have marked the end of the gods’ golden age.',
+        desc: 'The Norns are the three great weavers of fate: Urd (the past), Verdandi (the present), and Skuld (the future). From their home at the Well of Urd at the base of Yggdrasil, they draw water to nourish the World Tree and weave the threads of destiny for all beings. Not even the gods can undo what the Nornir have woven; they carve the life-path of every soul into wooden runes at the moment of birth. Their arrival from the land of giants is said to have marked the end of the gods\' golden age.',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -632,11 +642,21 @@ const LORE_ENTRIES = {
         key: 'item_morning_dew',
         name: 'Morning Dew',
         category: 'items',
-        desc: 'Morning dew held a special place in Swedish folk belief, especially when gathered during the mystical light of Midsummer. It was credited with healing properties and profound magical significance. Dew collected at first light was considered the breath of the water itself. On Midsummer night, the dew was thought to be so potent that rolling in it could ensure good health, as it captured the peak of the year’s natural power before the sun rose to burn the mist away.',
+        desc: 'Morning dew held a special place in Swedish folk belief, especially when gathered during the mystical light of Midsummer. It was credited with healing properties and profound magical significance. Dew collected at first light was considered the breath of the water itself. On Midsummer night, the dew was thought to be so potent that rolling in it could ensure good health, as it captured the peak of the year\'s natural power before the sun rose to burn the mist away.',
         source: 'Swedish Folk Tradition',
         heritage: 'Swedish',
         unlockType: 'item',
         unlockKey: 'Morning Dew'
+    },
+    'item_hearth_core': {
+        key: 'item_hearth_core',
+        name: 'Hearth Core',
+        category: 'items',
+        desc: 'The hearth fire held a central place in Norse and Swedish folk belief, far beyond its practical function. It was the living heart of the home, and allowing it to go out entirely was considered a grave misfortune - even an omen of death in the household. The fire was tended carefully, and embers were sometimes carried from an old home to a new one to preserve continuity of spirit. In Norse tradition, the hearth was also a liminal space where the boundary between the living and the unseen world grew thin, making it a natural point of contact for spirits like the fylgja, who were believed to linger at the hearthside of those they were bound to.',
+        source: 'Norse Mythology / Swedish Folk Tradition',
+        heritage: 'Norse / Swedish',
+        unlockType: 'item',
+        unlockKey: 'Hearth Core'
     },
 
     // =========================================================================

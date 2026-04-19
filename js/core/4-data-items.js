@@ -162,6 +162,11 @@ const TAMING_ITEMS = {
         description: 'A polished Shield Fragment. It has the mark of a powerful, winged maiden who chooses the worthy slain.',
         tamingTarget: 'Valkyria'
     },
+    'Hearth Core': {
+        name: 'Hearth Core',
+        description: 'A glowing Hearth Core, drawn from the embers of an ancient fire that has burned without interruption for generations. Its warmth feels almost alive, a fitting tribute for a soul-bound spirit who dwells within the flame.',
+        tamingTarget: 'Fylgja'
+    },
     'Giant Rock': {
         name: 'Giant Rock',
         description: 'A surprisingly smooth Giant Rock. A piece of the raw, immense power of the ancient giants.',

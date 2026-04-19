@@ -125,7 +125,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'tiny dweller',
         'serpent king',
         'waterway guardian',
-        'charred warden'
+        'charred warden',
+        'soul-bound spirit'
     ];
 
     let highlighted = description;
