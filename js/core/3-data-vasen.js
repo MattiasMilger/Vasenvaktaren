@@ -3,12 +3,12 @@
 // =============================================================================
 
 const VASEN_SPECIES = {
-    // Vätte Family
+    // Oknytt Family
     'Landvatte': {
         name: 'Landvätte',
         internalName: 'Landvatte',
         description: 'The unseen protector of a patch of ground, hill, or wilderness. They ensure the land\'s prosperity and punish trespassers.',
-        family: FAMILIES.VATTE,
+        family: FAMILIES.OKNYTT,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
         abilities: ['Torch Strike', 'Landslide', 'Smithing', 'Burning Insult'],
@@ -19,7 +19,7 @@ const VASEN_SPECIES = {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
         description: 'A sharp‑eyed, temperamental guardian of the yard, barns, and gardens. It tends animals and tools, rewarding tidy grounds and punishing neglect.',
-        family: FAMILIES.VATTE,
+        family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
         abilities: ['Torch Strike', 'Vine Whip', 'Smithing', 'Thick Coat'],
@@ -30,7 +30,7 @@ const VASEN_SPECIES = {
         name: 'Hustomte',
         internalName: 'Hustomte',
         description: 'A watchful steward dwelling in the house, often near the hearth. It keeps the home safe, but hates dirt and laziness. Offerings of porridge ensure its loyalty.',
-        family: FAMILIES.VATTE,
+        family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
         abilities: ['Torch Strike', 'Flaming Skewer', 'Skald\'s Mead', 'Burning Insult'],
@@ -41,7 +41,7 @@ const VASEN_SPECIES = {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
         description: 'A reclusive warden of the village well. He keeps the water pure and the spring flowing, but demands cleanliness. Defile his domain and he will sour the water.',
-        family: FAMILIES.VATTE,
+        family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
         abilities: ['Drown', 'Torch Strike', 'Burning Insult', 'Wild Bite'],
@@ -52,7 +52,7 @@ const VASEN_SPECIES = {
         name: 'Pyssling',
         internalName: 'Pyssling',
         description: 'A tiny, quick-footed helper bound to the raft. Helpful when respected, troublesome when ignored.',
-        family: FAMILIES.VATTE,
+        family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
         abilities: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Hail Storm'],

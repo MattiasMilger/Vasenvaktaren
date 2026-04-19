@@ -118,8 +118,8 @@ class Battle {
         const vasen = this.playerTeam[index];
         if (!vasen || vasen.isKnockedOut()) return false;
         
-        // Handle Vätte passive for outgoing Väsen
-        if (isSwap && this.playerActive && this.playerActive.species.family === FAMILIES.VATTE) {
+        // Handle Oknytt passive for outgoing Väsen
+        if (isSwap && this.playerActive && this.playerActive.species.family === FAMILIES.OKNYTT) {
             this.applyFamilyPassive('onSwapOut', { 
                 vasen: this.playerActive, 
                 incomingVasen: vasen,
@@ -160,8 +160,8 @@ class Battle {
         const vasen = this.enemyTeam[index];
         if (!vasen || vasen.isKnockedOut()) return false;
         
-        // Handle Vätte passive for outgoing Väsen
-        if (isSwap && this.enemyActive && this.enemyActive.species.family === FAMILIES.VATTE) {
+        // Handle Oknytt passive for outgoing Väsen
+        if (isSwap && this.enemyActive && this.enemyActive.species.family === FAMILIES.OKNYTT) {
             this.applyFamilyPassive('onSwapOut', { 
                 vasen: this.enemyActive, 
                 incomingVasen: vasen,
@@ -1102,8 +1102,8 @@ if (this.isOver && this.onEnd) {
             }
         }
         
-        if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.VATTE) {
-            // Vätte passive: Tag Team - raises a random attribute of the incoming ally by 1 stage
+        if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.OKNYTT) {
+            // Oknytt passive: Tag Team - raises a random attribute of the incoming ally by 1 stage
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];

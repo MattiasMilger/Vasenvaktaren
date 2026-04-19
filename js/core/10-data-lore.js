@@ -107,7 +107,7 @@ const LORE_ENTRIES = {
         key: 'vasen_pyssling',
         name: 'Pyssling',
         category: 'vasen',
-        desc: 'Pysslingar (singular: pyssling) are the smallest of the humanoid väsen, often no larger than a thumb. While they share traits with vättar, they are more elusive and less tied to human morality, existing in the forgotten corners of the world. They are masters of hiding in plain sight, living within the walls, under floorboards, or in the very drafts that whistle through a house. Folklore suggests they are born from the whispers of the air or the dust of old homes, serving as tiny, fickle guardians of the spaces humans rarely visit.',
+        desc: 'Pysslingar (singular: pyssling) are the smallest of the humanoid väsen, often no larger than a thumb. While they share traits with oknytt, they are more elusive and less tied to human morality, existing in the forgotten corners of the world. They are masters of hiding in plain sight, living within the walls, under floorboards, or in the very drafts that whistle through a house. Folklore suggests they are born from the whispers of the air or the dust of old homes, serving as tiny, fickle guardians of the spaces humans rarely visit.',
         source: 'Swedish Folklore / Astrid Lindgren',
         heritage: 'Swedish',
         unlockType: 'vasen',
@@ -688,7 +688,7 @@ const LORE_ENTRIES = {
         unlockKey: "Skald's Mead"
     },
     'ability_burning_insult': {
-        key: 'ability_burning_insult',
+        key: 'ability_burning_insul',
         name: 'Burning Insult',
         category: 'abilities',
         desc: 'The Norse tradition of ritual insult - known as Niding - was a formal, highly skilled verbal contest in which opponents attempted to shame and dishonor one another through increasingly devastating mockery. A successful níð was believed to have real spiritual power to wound. In the game, this is represented by the ability Burning Insult.',

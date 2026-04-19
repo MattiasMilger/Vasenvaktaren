@@ -316,7 +316,7 @@ const EXPLORATION_RATES = {
 };
 
 const FAMILIES = {
-    VATTE: 'Oknytt',
+    OKNYTT: 'Oknytt',
     VALNAD: 'Vålnad',
     ODJUR: 'Odjur',
     TROLL: 'Troll',
@@ -328,7 +328,7 @@ const FAMILIES = {
 };
 
 const FAMILY_DESCRIPTIONS = {
-    [FAMILIES.VATTE]: 'Tiny and elusive keepers of narrow domains. Mischievous by nature, they delight in small pranks but can be surprisingly helpful when treated with care.',
+    [FAMILIES.OKNYTT]: 'Tiny and elusive keepers of narrow domains. Mischievous by nature, they delight in small pranks but can be surprisingly helpful when treated with care.',
     [FAMILIES.VALNAD]: 'The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge or inflict misery on the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the Gods or Giants. They embody raw natural forces and the terrifying elements of the wild.',
     [FAMILIES.TROLL]: 'Ragged inhabitants of the mountains and deep woods, possessing formidable Strength and an ancient, primal cunning. They fear only the dawn, which locks their great bulk into a frozen, inert monument; they turn to stone upon exposure to sunlight.',
@@ -383,7 +383,7 @@ const FAMILY_PASSIVES = {
             return `When using an ability, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
         }
     },
-    [FAMILIES.VATTE]: {
+    [FAMILIES.OKNYTT]: {
         name: 'Tag Team',
         description: 'When swapping out, raises a random attribute of the incoming ally by 1 stage.'
     },
@@ -397,7 +397,7 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.VATTE]: { strength: 70, wisdom: 62, health: 55, defense: 55, durability: 80 },
+    [FAMILIES.OKNYTT]: { strength: 70, wisdom: 62, health: 55, defense: 55, durability: 80 },
     [FAMILIES.VALNAD]: { strength: 62, wisdom: 72, health: 58, defense: 75, durability: 55 },
     [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 46 },
     [FAMILIES.TROLL]: { strength: 65, wisdom: 60, health: 70, defense: 70, durability: 60 },
@@ -495,7 +495,7 @@ const ZONES = {
                 { species: 'Fafner', level: 15, temperament: 'WARY', runes: ['KAUNAN'] }
             ],
             dialogue: {
-                challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
+                challenge: 'The earth\\\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
                 lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more Wisdom.',
                 win: 'Your effort is sharper than my ore. The path is clear. The flowing waters of Glimrande Källan await.'
             }
@@ -518,7 +518,7 @@ const ZONES = {
             ],
             dialogue: {
                 challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
-                lose: 'The depths claimed you. Your spirit is not yet strong enough to master the water\'s fury.',
+                lose: 'The depths claimed you. Your spirit is not yet strong enough to master the water\\\'s fury.',
                 win: 'You defied the call of the water. Your journey continues to the ancient, colossal lands of Urbergen.'
             }
         },
