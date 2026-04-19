@@ -177,6 +177,11 @@ const TAMING_ITEMS = {
         description: 'A flawless Gold Coin, often found in the colossal hoards of avaricious drakes.',
         tamingTarget: 'Fafner'
     },
+    'White Scales': {
+        name: 'White Scales',
+        description: 'A handful of shimmering White Scales. They radiate a faint, ancient hum; a legendary offering meant to bridge the gap between man and the serpent king.',
+        tamingTarget: 'Vitorm'
+    },
     'Fishing Hook': {
         name: 'Fishing Hook',
         description: 'A colossal Fishing Hook. Only the one who tried to catch the World Serpent could have used this.',

@@ -474,6 +474,16 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Fafner'
     },
+    'vasen_vitorm': {
+        key: 'vasen_vitorm',
+        name: 'Vitorm',
+        category: 'vasen',
+        desc: 'The Vitorm (White Serpent) is the fabled King of Serpents and a creature of immense wisdom in Scandinavian legend. Extremely rare and snow-white in color, it is said to be the master of all crawling things. According to folklore, the Vitorm possesses a supernatural essence; those brave enough to taste its flesh or lick its scales are granted the ability to understand the language of birds and gain deep knowledge of the earth\'s hidden secrets.',
+        source: 'North European Folklore',
+        heritage: 'European',
+        unlockType: 'vasen',
+        unlockKey: 'Vitorm'
+    },
     'vasen_jormungandr': {
         key: 'vasen_jormungandr',
         name: 'Jörmungandr',

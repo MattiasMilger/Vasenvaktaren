@@ -438,6 +438,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Gold Coin',
         image: 'assets/vasen/fafner.png'
     },
+    'Vitorm': {
+        name: 'Vitorm',
+        internalName: 'Vitorm',
+        description: 'The snow-white fabled royalty of Snakes, Legends claim that those who consume its essence learn the language of birds and secrets of the earth.',
+        family: FAMILIES.DRAKE,
+        element: ELEMENTS.WIND,
+        rarity: RARITIES.RARE,
+        abilities: ['Fire Breath', 'Storm Claw', 'Sky Dive', 'Wind Gust'],
+        tamingItem: 'White Scales',
+        image: 'assets/vasen/vitorm.png'
+    },
     'Jormungandr': {
         name: 'Jörmungandr',
         internalName: 'Jormungandr',
