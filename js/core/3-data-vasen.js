@@ -382,7 +382,7 @@ const VASEN_SPECIES = {
     'Fylgja': {
         name: 'Fylgja',
         internalName: 'Fylgja',
-        description: 'An ethereal spirit bound to a person\'s soul and destiny. She often manifests within the dancing flames of a hearth or the heat of a battlefield, appearing as a radiant figure to warn of impending danger.',
+        description: 'An ethereal spirit bound to a person\'s soul and destiny. She often manifests within the heat of a battlefield, appearing as a radiant figure to warn of impending danger.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,

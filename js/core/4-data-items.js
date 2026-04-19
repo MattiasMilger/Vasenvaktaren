@@ -164,7 +164,7 @@ const TAMING_ITEMS = {
     },
     'Hearth Core': {
         name: 'Hearth Core',
-        description: 'A glowing Hearth Core, drawn from the embers of an ancient fire that has burned without interruption for generations. Its warmth feels almost alive, a fitting tribute for a soul-bound spirit who dwells within the flame.',
+        description: 'A glowing Hearth Core, drawn from the embers of an ancient fire. Its warmth feels almost alive, a fitting tribute for a soul-bound spirit.',
         tamingTarget: 'Fylgja'
     },
     'Giant Rock': {
