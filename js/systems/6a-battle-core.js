@@ -507,6 +507,18 @@ if (this.isOver && this.onEnd) {
                 }
             }
             
+            // Jera: low cost heal (also applies to utility abilities)
+            if (attacker.hasRune('JERA') && attacker.getAbilityMeginCost(abilityName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+                if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
+                    const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
+                    if (healAmount > 0) {
+                        this.addLog(`${RUNES.JERA.symbol} ${attacker.getDisplayName()}'s ${RUNES.JERA.name} was activated!`, 'rune');
+                        this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                        result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
+                    }
+                }
+            }
+            
             // Trigger debuff flash animation if this is a debuff ability
             if (ability.effect && ability.effect.type === 'debuff' && this.onHit) {
                 setTimeout(() => {
@@ -694,7 +706,7 @@ if (this.isOver && this.onEnd) {
         }
         
         // Odal: low cost bonus
-        if (attacker.hasRune('ODAL') && ability.meginCost <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+        if (attacker.hasRune('ODAL') && attacker.getAbilityMeginCost(abilityName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
             runeMod += GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST;
         }
         
@@ -906,7 +918,7 @@ if (this.isOver && this.onEnd) {
         }
         
         // Jera: low cost heal
-        if (attacker.hasRune('JERA') && ability.meginCost <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+        if (attacker.hasRune('JERA') && attacker.getAbilityMeginCost(result.ability) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
             if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                 if (healAmount > 0) {
