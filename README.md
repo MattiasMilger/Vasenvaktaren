@@ -113,6 +113,7 @@ Vasenvaktaren/
 │   │   ├── 2-data-abilities.js     (ability definitions)
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
+│   │   ├── 4-data-runes.js         (rune definitions)
 │   │   ├── 5-vasen-instance.js     (VasenInstance class)
 │   │   └── 10-data-lore.js         (lore entries, categories, and unlock keys)
 │   │
