@@ -478,7 +478,7 @@ const LORE_ENTRIES = {
         key: 'vasen_jarnvedsjatte',
         name: 'Järnvedsjätte',
         category: 'vasen',
-        desc: 'The Järnvedsjätte takes its name from Järnveden - the Iron-Wood - a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a great troll-woman raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a body and a will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these could rise and walk. The Järnvedsjätte is such a being — its sap runs like molten metal, its bark cannot be cut, and its canopy is so vast that it plunges the ground beneath into permanent shadow.',
+        desc: 'The Järnvedsjätte takes its name from Järnveden - the Iron-Wood - a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a terrifying giantess - Angerboda - raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a body and a will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these could rise and walk. The Järnvedsjätte is such a being — its sap runs like molten metal, its bark cannot be cut, and its canopy is so vast that it plunges the ground beneath into permanent shadow.',
         source: 'Poetic Edda (Völuspá) / Swedish Folklore',
         heritage: 'Norse / Swedish',
         unlockType: 'vasen',
@@ -758,7 +758,7 @@ const LORE_ENTRIES = {
         unlockKey: "Skald's Mead"
     },
     'ability_burning_insult': {
-        key: 'ability_burning_insul',
+        key: 'ability_burning_insult',
         name: 'Burning Insult',
         category: 'abilities',
         desc: 'The Norse tradition of ritual insult - known as Niding - was a formal, highly skilled verbal contest in which opponents attempted to shame and dishonor one another through increasingly devastating mockery. A successful níð was believed to have real spiritual power to wound. In the game, this is represented by the ability Burning Insult.',
