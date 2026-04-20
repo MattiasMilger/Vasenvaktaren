@@ -158,7 +158,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Ground Stomp'],
+        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Loki\'s Betrayal'],
         tamingItem: 'Broken Chain',
         image: 'assets/vasen/fenrir.png'
     },
