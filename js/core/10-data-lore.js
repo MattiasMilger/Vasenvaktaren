@@ -23,7 +23,7 @@ const LORE_ENTRIES = {
         name: 'Vålnad',
         category: 'vasen',
         desc: 'Vålnader (singular: vålnad) are restless, tormented spirits of the dead - those who died in violence, grief, or dishonor and could not find peace. They linger in the world of the living, often tied to the place of their death or to the injustice that caused it. Many seek revenge, while others simply spread misery as an extension of their own suffering. Proper burial rites and prayers were considered essential in Swedish folk belief to prevent the creation of a vålnad.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Afzelius & Stephens (Svenska Folk-Sagor och Äfventyr) / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'family',
         unlockKey: 'Vålnad'
@@ -43,7 +43,7 @@ const LORE_ENTRIES = {
         name: 'Troll',
         category: 'vasen',
         desc: 'Trolls are among the most iconic beings in Scandinavian folklore, found across Sweden, Norway, and Denmark in countless local variations. They are ancient, often enormous beings of great physical strength but limited wisdom, dwelling in mountains and deep forests. The most famous trait of the troll is its weakness to sunlight: a troll caught by the dawn will be frozen forever in stone, which is used to explain the peculiar shapes of many natural rock formations throughout Scandinavia. Church bells were said to drive trolls into a frenzy.',
-        source: 'Scandinavian Folklore',
+        source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr) / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Scandinavian',
         unlockType: 'family',
         unlockKey: 'Troll'
@@ -53,7 +53,7 @@ const LORE_ENTRIES = {
         name: 'Rå',
         category: 'vasen',
         desc: 'Rå are the seductive, nature-bound spirits who serve as wardens of specific natural domains - the forest, the water, the mine, the marsh. They typically appear as strikingly beautiful women who can enchant hunters, fishermen, and miners with irresistible allure. Their true nature is always betrayed by a physical flaw: a hollow back, a cow\'s tail, or backwards feet. Those who fall under a rå\'s power often waste away or vanish entirely. The word "rå" is cognate with Old Norse "rá," meaning a ruler or warden.',
-        source: 'Swedish Folklore',
+        source: 'Scandinavian Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'family',
         unlockKey: 'Rå'
@@ -119,7 +119,7 @@ const LORE_ENTRIES = {
         name: 'Landvätte',
         category: 'vasen',
         desc: 'The Landvätte is the protector of a specific stretch of wilderness, hill, or natural landmark. In Old Norse sources, including the Heimskringla, King Odin commanded that all Viking ships approaching the Norwegian coast lower their dragon prows so as not to frighten the landvættr - the land spirits who protect the country. Swedish folk belief inherited this tradition, holding that disturbing a landvätte\'s territory would bring misfortune.',
-        source: 'Heimskringla (Snorri Sturluson) / Swedish Folklore',
+        source: 'Heimskringla (Snorri Sturluson) / Landnámabók / Swedish Folklore',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Landvatte'
@@ -159,7 +159,7 @@ const LORE_ENTRIES = {
         name: 'Nattramn',
         category: 'vasen',
         desc: 'The Nattramn (night raven) is a spectral bird of ill omen in Swedish folklore, believed to be the restless spirit of a builder who was walled alive into a foundation to strengthen it - a practice said to have occurred during the construction of churches and castles. Its shrieking cry heard at night was a death omen. In some traditions the nattramn has no flesh, only a skeleton of hollow bones, and if you could count all its feathers before dawn you would be protected from its curse.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Nattramn'
@@ -169,7 +169,7 @@ const LORE_ENTRIES = {
         name: 'Myling',
         category: 'vasen',
         desc: 'The Myling (also "myrling" or "utbörding") is one of the most chilling figures in Swedish folklore: the spirit of an infant who was murdered or abandoned by its mother before receiving a name and a Christian burial. Condemned to wander the wilderness, it would leap onto the backs of lone travelers and demand to be carried to the nearest churchyard for proper burial. With each step toward the church, it grew heavier, often crushing its unwilling carrier. These spirits were the embodiment of infanticide\'s cultural shame.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Myling'
@@ -179,7 +179,7 @@ const LORE_ENTRIES = {
         name: 'Irrbloss',
         category: 'vasen',
         desc: 'The Irrbloss (also "lyktgubbe") is the Swedish name for the will-o\'-wisp, the eerie hovering light seen over bogs and marshes. Folk belief held these lights to be the souls of sinful or dishonest men - surveyors who had falsified boundaries, cheats, and murderers - condemned to wander eternally between the living world and the realm of the dead. Those who followed the light would be led astray into bogs, quicksand, or over cliffs.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Irrbloss'
@@ -189,7 +189,7 @@ const LORE_ENTRIES = {
         name: 'Strandvaskare',
         category: 'vasen',
         desc: 'The Strandvaskare (shore washer) is a coastal apparition in Swedish folklore, the tormented ghost of a drowned sailor eternally condemned to haunt the shoreline where it perished. It wails and lures ships toward the reef with deceptive lights and sounds. This figure shares similarities with the "Bean Nighe" (the washer at the ford) found in Celtic tradition and with the banshee - all representing a spectral harbinger encountered near water who portends death.',
-        source: 'Swedish Folklore / Comparative Folklore',
+        source: 'Swedish Folklore',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Strandvaskare'
@@ -199,7 +199,7 @@ const LORE_ENTRIES = {
         name: 'Draug',
         category: 'vasen',
         desc: 'The Draug is the reanimated, corporeal corpse of the dead in Norse and Scandinavian folklore. Unlike a ghost, it possesses a physical body with immense strength and the ability to increase its weight at will. They are often found guarding treasures within burial mounds or returning to haunt their former homes. A draug\'s presence is marked by a chilling aura of dread and a pervasive "corpse-light." Preventing one from rising required specific rituals, such as placing iron on the casket or pinning the clothes of the deceased to the ground.',
-        source: 'Norse Mythology / Icelandic Sagas',
+        source: 'Norse Mythology / Heimskringla (Óláfs saga Tryggvasonar) / Icelandic Sagas (Grettis saga; Eyrbyggja saga; Laxdæla saga)',
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Draug'
@@ -209,7 +209,7 @@ const LORE_ENTRIES = {
         name: 'Bäckahäst',
         category: 'vasen',
         desc: 'The Bäckahäst (brook horse) is a supernatural water horse from Swedish folklore that lurks near rivers and streams in the guise of a beautiful, shimmering white stallion. Anyone who mounts it finds they cannot dismount - the horse then plunges into the water and drowns its rider. This creature is closely related to the Scottish kelpie and the Norwegian nykur. A common protective charm was to name the horse with the words "brook horse" aloud, breaking the spell.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Backahast'
@@ -229,7 +229,7 @@ const LORE_ENTRIES = {
         name: 'Bjära',
         category: 'vasen',
         desc: 'The Bjära (also "mjölkhare") is a supernatural familiar constructed by a witch from wood shavings, yarn, and hair, then animated with three drops of her own blood. Taking the form of a bloated hare or a rolling ball of yarn, it slinks into neighboring farms to suck milk directly from the udders of cows. Upon returning, it vomits the stolen bounty into its mistress\'s churn. This creature represents deep-seated rural anxieties regarding livestock illness and the suspicion that a neighbor\'s sudden prosperity was the result of magical theft.',
-        source: 'Swedish Folklore (Skånsk, Blekinsk, Småländsk tradition)',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Bjara'
@@ -259,7 +259,7 @@ const LORE_ENTRIES = {
         name: 'Bergatroll',
         category: 'vasen',
         desc: 'The Bergatroll (mountain troll) is the classic giant troll of Scandinavian folklore: enormous, slow-witted, ferociously strong, and fond of gold and silver jewelry. Mountain trolls live inside hills and mountains, emerging at night to roam the land. Sunlight turns them instantly to stone - explaining why ancient boulders with unusual shapes are sometimes called "troll rocks" across Norway and Sweden. Some local traditions describe bergatroll as the corrupted spirits of ancient giants.',
-        source: 'Scandinavian Folklore',
+        source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr) / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Bergatroll'
@@ -269,7 +269,7 @@ const LORE_ENTRIES = {
         name: 'Skogstroll',
         category: 'vasen',
         desc: 'The Skogstroll (forest troll) is smaller and more cunning than its mountain cousin, blending into the forest with camouflage of moss, bark, and soil. Swedish folk belief held forest trolls responsible for misleading travelers, stealing livestock, and abducting children to be raised underground. They are deeply connected to the ancient wilderness and regard human settlements as an intrusion. Their howls and strange noises heard at night were interpreted as troll communication echoing through the old forests.',
-        source: 'Swedish Folklore',
+        source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr) / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Skogstroll'
@@ -289,7 +289,7 @@ const LORE_ENTRIES = {
         name: 'Bäckatroll',
         category: 'vasen',
         desc: 'The Bäckatroll (Stream Troll) is a solitary guardian found throughout Scandinavian folklore. Unlike their larger mountain-dwelling kin, these trolls are strictly territorial, bound to a specific bridge or waterway. Known for being temperamental and greedy, they often demand a toll - be it a coin, a riddle, or a gift - for safe passage. If disrespected or ignored, they are said to lash out by sabotaging the crossing or manipulating the water levels of their domain.',
-        source: 'Scandinavian Folklore',
+        source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr)',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Backatroll'
@@ -299,7 +299,7 @@ const LORE_ENTRIES = {
         name: 'Gryningstroll',
         category: 'vasen',
         desc: 'The Gryningstroll (dawn troll) is a tragic figure in Scandinavian myth, defined by the ancient rule that sunlight turns trolls into stone. Unlike their cave-dwelling kin, these trolls are often caught in the open by the first rays of the sun, either due to their own slow-wittedness or a refusal to leave a task unfinished. They are frequently found as solitary, moss-covered statues on hillsides or near crossroads. Folklore suggests that a gryningstroll frozen in stone still retains a glimmer of its former life, waiting in a cold, petrified slumber for a night that never ends.',
-        source: 'Scandinavian Folklore',
+        source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr); Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Gryningstroll'
@@ -309,7 +309,7 @@ const LORE_ENTRIES = {
         name: 'Gruvrå',
         category: 'vasen',
         desc: 'The Gruvrå (mine spirit) is the female warden of the mine - a beautiful, pale woman who may appear as a benevolent guide or a deadly seductress depending on the miner\'s behavior. Sweden\'s long mining history, particularly in the Bergslagen region, gave rise to a rich tradition of mine spirits. Miners would leave offerings and observe strict protocols: never whistle underground, never speak of the rå directly, and always treat the mine\'s resources with respect. The German Berggeist is closely related.',
-        source: 'Swedish Folklore (Bergslagen)',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Gruvra'
@@ -319,7 +319,7 @@ const LORE_ENTRIES = {
         name: 'Skogsrå',
         category: 'vasen',
         desc: 'The Skogsrå (forest warden) is one of the most prominent figures in Swedish folklore - a hauntingly beautiful woman who guards the forest and can enchant any hunter or woodsman who ventures into her domain. Her most distinctive feature is her hollow back, often described as looking like a rotten tree trunk, and sometimes a cow\'s tail. Hunters who pleased the skogsrå might find exceptional luck; those who angered her would become hopelessly lost.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Skogsra'
@@ -329,7 +329,7 @@ const LORE_ENTRIES = {
         name: 'Huldra',
         category: 'vasen',
         desc: 'The Huldra is a forest warden of striking beauty, known for her long hair, quiet grace, and the cow\'s tail she hides beneath her clothing. She appears to wanderers as a lone woman in the deep woods, helpful to the respectful and perilous to the arrogant. Tales speak of her guiding hunters to game, guarding cattle, and shaping the fortunes of those who cross her path. She is closely related to the Swedish Skogsrå, yet remembered for her influence over both hunters and herders.',
-        source: 'Scandinavian Folklore',
+        source: 'Scandinavian Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Huldra'
@@ -349,7 +349,7 @@ const LORE_ENTRIES = {
         name: 'Mara',
         category: 'vasen',
         desc: 'The Mara is a domestic predator - often a living person whose soul wanders at night to torment others. She is the personification of the "night-press," a crushing weight felt upon the chest during sleep that leaves the victim unable to breathe. Famous for weaving "Marlockar" (impossible knots) into the hair of humans and the manes of horses, she was said to ride animals until they were found exhausted at dawn. To stop her, peasants would point shoes away from the bed or plug the keyhole to trap her in her physical form.',
-        source: 'Swedish Folklore / Historical accounts of sleep paralysis',
+        source: 'Swedish Folklore / Svenska Folksägner; Olaus Magnus (Historia om de nordiska folken)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Mara'
@@ -484,6 +484,16 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Jarnvedsjatte'
     },
+    'vasen_stormturs': {
+        key: 'vasen_stormturs',
+        name: 'Stormturs',
+        category: 'vasen',
+        desc: 'The Stormturs is a towering Jotun of wind and thunder, a thunderous giant whose presence chills the air and bends the gale around his massive frame. His thunder-dark eyes can shatter stone and his steps roll like distant storms across the peaks. Old tales tie his power to the strike of Farbauti, the cunning of Kåre, and the sea-born might of Hymer. Among lightning-scarred pillars and vitrified rock, he walks as both guardian and breaker of mountains.',
+        source: 'Poetic Edda (Hymiskviða; Vafþrúðnismál) / Prose Edda (Gylfaginning; Skáldskaparmál)',
+        heritage: 'Norse',
+        unlockType: 'vasen',
+        unlockKey: 'Stormturs'
+    },
     'vasen_lindorm': {
         key: 'vasen_lindorm',
         name: 'Lindorm',
@@ -613,7 +623,7 @@ const LORE_ENTRIES = {
         name: 'Burial Flowers',
         category: 'items',
         desc: 'In Swedish folk belief, an infant who died without baptism - especially one murdered or abandoned - could not pass on to rest and instead became a Myling. The only way to free such a spirit was to give it a proper Christian burial in consecrated ground, complete with the appropriate rites. Flowers placed on a grave were seen as both an offering to the deceased and as a marker for the living - confirming that the dead had been properly honored and laid to rest.',
-        source: 'Swedish Folklore',
+        source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'item',
         unlockKey: 'Burial Flowers'
@@ -657,6 +667,16 @@ const LORE_ENTRIES = {
         heritage: 'Norse / Swedish',
         unlockType: 'item',
         unlockKey: 'Hearth Core'
+    },
+    'item_shattered_pillar': {
+        key: 'item_shattered_pillar',
+        name: 'Shattered Pillar',
+        category: 'items',
+        desc: 'Throughout Norse and Scandinavian mythology, the giants are associated with raw elemental force expressed through the landscape itself: cracked cliffs, split boulders, and shattered standing stones are often attributed to the passage or fury of a great jätte. Stone pillars struck by lightning were regarded with particular awe, believed to mark the footfall or gaze of a wind-giant. The vitrified and fractured rock left behind was thought to carry a residue of trapped storm energy - cold to the touch, humming faintly, and carrying the imprint of whatever immense force had passed through it.',
+        source: 'Norse Mythology / Scandinavian Folklore',
+        heritage: 'Norse',
+        unlockType: 'item',
+        unlockKey: 'Shattered Pillar'
     },
 
     // =========================================================================

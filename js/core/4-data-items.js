@@ -226,6 +226,11 @@ const TAMING_ITEMS = {
         name: 'Attic Key',
         description: 'A rusted Attic Key. It feels unusually cold to the touch; a perfect token to entice the tiny dweller out from the drafty shadows of the high rafters.',
         tamingTarget: 'Pyssling'
+    },
+    'Shattered Pillar': {
+        name: 'Shattered Pillar',
+        description: 'A jagged Shattered Pillar. Its fractured face bears the imprint of a colossal heel. A  thunderous giant would appreciate it.',
+        tamingTarget: 'Stormturs'
     }
 };
 

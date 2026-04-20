@@ -447,6 +447,17 @@ const VASEN_SPECIES = {
         tamingItem: 'Ancient Log',
         image: 'assets/vasen/jarnvedsjatte.png'
     },
+    'Stormturs': {
+        name: 'Stormturs',
+        internalName: 'Stormturs',
+        description: 'A towering force of nature with eyes like thunderheads that can shatter stone pillars with a single glance. His presence is felt in the bone-chilling whistle of the gale.',
+        family: FAMILIES.JATTE,
+        element: ELEMENTS.WIND,
+        rarity: RARITIES.RARE,
+        abilities: ['Ground Stomp', 'Sky Dive', 'Smithing', 'Boulder Toss'],
+        tamingItem: 'Shattered Pillar',
+        image: 'assets/vasen/stormturs.png'
+    },
 
     // Drake Family
     'Lindorm': {
