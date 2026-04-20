@@ -265,7 +265,7 @@ const ELEMENT_MATCHUPS = {
         [ELEMENTS.WIND]: 'WEAK'
     },
     [ELEMENTS.FIRE]: {
-        [ELEMENTS.EARTH]: 'WEAK',
+        [ELEMENTS.EARTH]: 'NEUTRAL',
         [ELEMENTS.NATURE]: 'POTENT',
         [ELEMENTS.WATER]: 'WEAK',
         [ELEMENTS.FIRE]: 'NEUTRAL',
