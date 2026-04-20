@@ -9,7 +9,7 @@ const ITEM_TYPES = {
 const TAMING_ITEMS = {
     'Sturdy Spade': {
         name: 'Sturdy Spade',
-        description: 'A Sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for a diligently working, unseen guardian of the land.',
+        description: 'A Sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for an unseen guardian of the land.',
         tamingTarget: 'Landvatte'
     },
     'Garden Rake': {
@@ -119,7 +119,7 @@ const TAMING_ITEMS = {
     },
     'Flicker Dust': {
         name: 'Flicker Dust',
-        description: 'A pinch of shimmering Flicker Dust, gathered where flickering canopy lights have been seen at dusk. It might catch the attention of a capricious, wind-riding elven being.',
+        description: 'A pinch of shimmering Flicker Dust. It might catch the attention of a capricious, wind-riding elven being.',
         tamingTarget: 'Alva'
     },
     'Morning Dew': {
@@ -194,7 +194,7 @@ const TAMING_ITEMS = {
     },
     'White Scales': {
         name: 'White Scales',
-        description: 'A handful of shimmering White Scales. They radiate a faint, ancient hum; a legendary offering meant to bridge the gap between man and the serpent king.',
+        description: 'A handful of shimmering White Scales. They radiate a faint, ancient hum; an offering to bridge the gap between man and the serpent king.',
         tamingTarget: 'Vitorm'
     },
     'Fishing Hook': {
