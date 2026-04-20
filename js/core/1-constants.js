@@ -486,7 +486,7 @@ const ZONES = {
         description: 'An endless labyrinth of cold, black tunnels carved by greed. Only the muffled echo of a pickaxe and the hungry glow of rare ore disturb the crushing silence, guarded by unforgiving spirits who despise light and trespassers.',
         image: 'assets/zones/djupagruvan.png',
         levelRange: [10, 14],
-        spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner', 'Mara'],
+        spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner', 'Mara', 'Dvarg'],
         guardian: {
             name: 'Hjördis',
             team: [
@@ -530,7 +530,7 @@ const ZONES = {
         description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants battle the very elements that forged them.',
         image: 'assets/zones/urbergen.png',
         levelRange: [20, 24],
-        spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Dvarg', 'Gryningstroll', 'Vitorm', 'Stormturs'],
+        spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Gryningstroll', 'Vitorm', 'Stormturs'],
         guardian: {
             name: 'Brynhild',
             team: [
