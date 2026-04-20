@@ -61,7 +61,7 @@ const GAME_CONFIG = {
     MIXED_ATTACK_WISDOM_PORTION: 0.5,
     
     // Empowerment system for low-tier attacks
-    EMPOWERMENT_DAMAGE_BOOST: 0.08,     // Damage boost on next attack after empowerment
+    EMPOWERMENT_DAMAGE_BOOST: 0.1,     // Damage boost on next attack on standard low megin abilities
     
     // =============================================================================
     // HEALING

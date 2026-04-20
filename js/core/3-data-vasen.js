@@ -11,7 +11,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
-        abilities: ['Torch Strike', 'Landslide', 'Smithing', 'Burning Insult'],
+        abilities: ['Torch Strike', 'Landslide', 'Burning Insult', 'Loki\'s Betrayal'],
         tamingItem: 'Sturdy Spade',
         image: 'assets/vasen/landvatte.png'
     },
@@ -204,7 +204,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Wailing Cry', 'Wild Bite', 'Burning Insult', 'Thick Coat'],
+        abilities: ['Wailing Cry', 'Wild Bite', 'Burning Insult', 'Loki\'s Betrayal'],
         tamingItem: 'Trollmilk Bottle',
         image: 'assets/vasen/bortbyting.png'
     },
@@ -272,7 +272,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Wailing Cry', 'Moon Beam', 'Enchanting Song', 'Wind Gust'],
+        abilities: ['Wailing Cry', 'Wind Gust', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Heavy Pillow',
         image: 'assets/vasen/mara.png'
     },
@@ -283,7 +283,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Lava Jet', 'Skald\'s Mead', 'Landslide'],
+        abilities: ['Lava Jet', 'Landslide', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Brass Cowbell',
         image: 'assets/vasen/huldra.png'
     },

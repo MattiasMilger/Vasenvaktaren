@@ -215,6 +215,19 @@ const ABILITIES = {
         power: 68,
         meginCost: 50
     },
+    'Loki\'s Betrayal': {
+        name: 'Loki\'s Betrayal',
+        flavorDescription: 'A deep cut from the dark, causing more damage to the weak and frail.',
+        get mechanicsDescription() {
+        return `Hits opponent. ${this.opponent_debuff_bonus} extra power if target is debuffed.`;
+    },
+        element: ELEMENTS.FIRE,
+        type: ATTACK_TYPES.WISDOM,
+        power: 50,
+        opponent_debuff_bonus: 35,
+        meginCost: 50,
+        lokiBetrayalBonus: true
+    },
     'Burning Insult': {
         name: 'Burning Insult',
         flavorDescription: 'Hurls a vicious, withering curse that crushes the enemy\'s resolve.',

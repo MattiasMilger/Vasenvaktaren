@@ -152,7 +152,7 @@ Vasenvaktaren/
 - [x] Finish Main Functionality 
 - [x] Introduce endgame system
 - [X] Introduce all 45 Väsen (45/45)
-- [ ] Introduce New Abilities
+- [ ] Introduce New Epic Abilities (1/5)
 - [ ] Balance Overhaul
 - [ ] Wiki Page
 

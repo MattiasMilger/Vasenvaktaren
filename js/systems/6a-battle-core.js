@@ -717,6 +717,15 @@ if (this.isOver && this.onEnd) {
             power = FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER;
         }
         
+        // Loki's Betrayal: +30 power if the defender has any negative attribute stage
+        if (ability.lokiBetrayalBonus) {
+            const defenderStages = defender.attributeStages;
+            const hasNegativeStage = Object.values(defenderStages).some(stage => stage < 0);
+            if (hasNegativeStage) {
+                power += ability.opponent_debuff_bonus;
+            }
+        }
+        
         if (ability.type === ATTACK_TYPES.MIXED) {
             // 50% Strength, 50% Wisdom
             const strengthDamage = this.calculateSingleTypeDamage(

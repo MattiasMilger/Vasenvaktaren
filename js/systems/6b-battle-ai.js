@@ -109,6 +109,15 @@ class EnemyAI {
             if (this.isGuardian) {
                 score += this.scoreRuneSynergy(abilityName);
             }
+            
+            // Loki's Betrayal: bonus if target has a negative attribute stage
+            if (ability.lokiBetrayalBonus) {
+                const targetStages = this.target.attributeStages;
+                const hasNegativeStage = Object.values(targetStages).some(stage => stage < 0);
+                if (hasNegativeStage) {
+                    score += 40;
+                }
+            }
         } else {
             // Utility scoring - only apply bonuses if not overused
             const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);

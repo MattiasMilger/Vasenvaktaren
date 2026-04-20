@@ -807,6 +807,16 @@ const LORE_ENTRIES = {
         unlockType: 'ability',
         unlockKey: 'Fire Breath'
     },
+    'ability_lokis_betrayal': {
+        key: 'ability_lokis_betrayal',
+        name: "Loki's Betrayal",
+        category: 'abilities',
+        desc: 'Loki, the shape-shifting trickster of Norse myth, is defined above all else by his capacity to exploit weakness. Where others strike at strength, Loki seeks the crack already in the stone. His most famous act of betrayal was guiding the blind god Höðr\'s hand to loose the mistletoe dart that slew Baldr - the one thing in all creation that had been overlooked in Frigg\'s oath of protection. The ability Loki\'s Betrayal captures this essence: it is not the mightiest blow, but the precise one, driven deeper into a foe already faltering.',
+        source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
+        heritage: 'Norse',
+        unlockType: 'ability',
+        unlockKey: "Loki's Betrayal"
+    },
 
     // =========================================================================
     // CATEGORY: CONCEPTS
