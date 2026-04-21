@@ -478,7 +478,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Fire Breath', 'Lava Jet', 'Wild Bite', 'Storm Claw'],
+        abilities: ['Fire Breath', 'Storm Claw', 'Wild Bite', 'Giantsbane'],
         tamingItem: 'Gold Coin',
         image: 'assets/vasen/fafner.png'
     },
