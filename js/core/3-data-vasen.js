@@ -436,16 +436,16 @@ const VASEN_SPECIES = {
         tamingItem: 'Ice Crystal',
         image: 'assets/vasen/rimturs.png'
     },
-    'Jarnvedsjatte': {
-        name: 'Järnvedsjätte',
-        internalName: 'Jarnvedsjatte',
-        description: 'A sentinel of the Iron Wood, the primordial forest where giantesses dwell. Its bark is hardened like black iron.',
+    'Jarnvidja': {
+        name: 'Järnvidja',
+        internalName: 'Jarnvidja',
+        description: 'A fearsome giantess of the Iron Wood, the primordial forest where monsters dwell.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
         abilities: ['Vine Whip', 'Ground Stomp', 'Thick Coat', 'Boulder Toss'],
         tamingItem: 'Ancient Log',
-        image: 'assets/vasen/jarnvedsjatte.png'
+        image: 'assets/vasen/jarnvidja.png'
     },
     'Stormturs': {
         name: 'Stormturs',

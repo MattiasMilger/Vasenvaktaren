@@ -77,11 +77,11 @@ Game.prototype.startEndlessTowerBattle = function() {
         this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
         this.currentBattle.onEnd = (result) => this.handleEndlessTowerBattleEnd(result);
 
-        // Add initial input delay at battle start
-        this.currentBattle.waitingForPlayerAction = false;
-
         ui.showCombatUI();
         ui.renderCombat(this.currentBattle);
+
+        // Add initial input delay at battle start
+        this.currentBattle.waitingForPlayerAction = false;
         setTimeout(() => {
             if (this.currentBattle && !this.currentBattle.isOver) {
                 this.currentBattle.waitingForPlayerAction = true;

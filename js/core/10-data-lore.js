@@ -474,15 +474,15 @@ const LORE_ENTRIES = {
         unlockType: 'vasen',
         unlockKey: 'Rimturs'
     },
-    'vasen_jarnvedsjatte': {
-        key: 'vasen_jarnvedsjatte',
-        name: 'Järnvedsjätte',
+    'vasen_jarnvidja': {
+        key: 'vasen_jarnvidja',
+        name: 'Järnvidja',
         category: 'vasen',
-        desc: 'The Järnvedsjätte takes its name from Järnveden - the Iron-Wood - a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a terrifying giantess - Angerboda - raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a body and a will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these could rise and walk. The Järnvedsjätte is such a being — its sap runs like molten metal, its bark cannot be cut, and its canopy is so vast that it plunges the ground beneath into permanent shadow.',
+        desc: 'The Järnvidja takes her name from Järnveden, the Iron-Wood, a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a terrifying giantess, Angerboda, raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a female form and a relentless will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these rise as the Järnvidja. She is a being whose sap runs like molten metal, whose bark cannot be cut, and whose canopy is so vast that it plunges the ground beneath into permanent shadow.',
         source: 'Poetic Edda (Völuspá) / Swedish Folklore',
         heritage: 'Norse / Swedish',
         unlockType: 'vasen',
-        unlockKey: 'Jarnvedsjatte'
+        unlockKey: 'Jarnvidja'
     },
     'vasen_stormturs': {
         key: 'vasen_stormturs',
