@@ -340,7 +340,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Skald\'s Mead'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
         tamingItem: 'Molten Ore',
         image: 'assets/vasen/dvarg.png'
     },
@@ -364,7 +364,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Ground Stomp', 'Flaming Skewer', 'Skald\'s Mead', 'Boulder Toss'],
+        abilities: ['Ground Stomp', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
         tamingItem: 'Valhalla Pork',
         image: 'assets/vasen/einharje.png'
     },
@@ -375,7 +375,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Wailing Cry', 'Sky Dive', 'Smithing', 'Icicle Spear'],
+        abilities: ['Ground Stomp', 'Sky Dive', 'Icicle Spear', 'Giantsbane'],
         tamingItem: 'Shield Fragment',
         image: 'assets/vasen/valkyria.png'
     },

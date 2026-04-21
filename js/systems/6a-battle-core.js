@@ -729,13 +729,18 @@ if (this.isOver && this.onEnd) {
             power = FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER;
         }
         
-        // Loki's Betrayal: +30 power if the defender has any negative attribute stage
+        // Loki's Betrayal: +35 power if the defender has any negative attribute stage
         if (ability.lokiBetrayalBonus) {
             const defenderStages = defender.attributeStages;
             const hasNegativeStage = Object.values(defenderStages).some(stage => stage < 0);
             if (hasNegativeStage) {
                 power += ability.opponent_debuff_bonus;
             }
+        }
+        
+        // Giantsbane: gains power based on target's max HP
+        if (ability.giantsbaneBonus) {
+            power += Math.floor(defender.maxHealth * ability.target_hp_bonus_percent);
         }
         
         if (ability.type === ATTACK_TYPES.MIXED) {

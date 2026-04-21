@@ -63,6 +63,19 @@ const ABILITIES = {
         meginCost: 35,
         effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
     },
+    'Giantsbane': {
+        name: 'Giantsbane',
+        flavorDescription: 'Strikes with the furious might of Thor.',
+        get mechanicsDescription() {
+            return `Hits opponent. Gains power equal to ${Math.round(this.target_hp_bonus_percent * 100)}% of target's max HP.`;
+        },
+        element: ELEMENTS.EARTH,
+        type: ATTACK_TYPES.STRENGTH,
+        power: 15,
+        target_hp_bonus_percent: 0.33,
+        meginCost: 55,
+        giantsbaneBonus: true
+    },
 
     // Nature Abilities
     'Vine Whip': {

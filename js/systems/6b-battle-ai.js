@@ -118,6 +118,14 @@ class EnemyAI {
                     score += 40;
                 }
             }
+            
+            // Giantsbane: bonus if target has high current HP
+            if (ability.giantsbaneBonus) {
+                const hpRatio = this.target.currentHealth / this.target.maxHealth;
+                if (hpRatio > 0.5) {
+                    score += 40;
+                }
+            }
         } else {
             // Utility scoring - only apply bonuses if not overused
             const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);

@@ -817,6 +817,16 @@ const LORE_ENTRIES = {
         unlockType: 'ability',
         unlockKey: "Loki's Betrayal"
     },
+    'ability_giantsbane': {
+        key: 'ability_giantsbane',
+        name: "Giantsbane",
+        category: 'abilities',
+        desc: 'In the iron grip of Norse mythology, the Giants represent the chaotic and primordial forces of the wild. These are beings of such immense scale that they often dwarf the gods themselves. Yet, the thunder god Thor stands as the ultimate deterrent against this chaos. Wielding Mjölnir, he delivers strikes that do not merely bruise flesh but shatter the very foundations of giant kind, turning their own massive bulk into a liability.',
+        source: 'Prose Edda (Snorri Sturluson) / Völuspá',
+        heritage: 'Norse',
+        unlockType: 'ability',
+        unlockKey: "Giantsbane"
+    },
 
     // =========================================================================
     // CATEGORY: CONCEPTS
