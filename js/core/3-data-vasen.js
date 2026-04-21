@@ -439,7 +439,7 @@ const VASEN_SPECIES = {
     'Jarnvidja': {
         name: 'Järnvidja',
         internalName: 'Jarnvidja',
-        description: 'A fearsome giantess of the Iron Wood, the primordial forest where monsters dwell.',
+        description: 'A fearsome giantess of the primordial Iron Forest. She breeds the wolves of chaos and guards the gnarled, ancient thickets with unnatural strength.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
