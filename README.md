@@ -58,8 +58,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 ### Lore Book
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
-- Entries organised into categories: Väsen, Families, Items, Locations, Abilities, Gods, Names, Concepts
-- Each entry has English and Swedish descriptions — toggle with the language button
+- Entries organised into categories: Families, Väsen, Items, Abilities, Locations, Concepts
 
 ## Achievements
 
