@@ -40,7 +40,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Element matchups
 - Resource management
 - Attribute buffs and debuffs
-- 24 unique abilities plus Basic Strike
+- 30 unique abilities
 - **Abilities**: Use learned attacks (cost Megin)
 - **Basic Strike**: Free attack using your element
 - **Swap**: Change active Väsen (causes Swap Sickness)
@@ -63,7 +63,6 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 ## Achievements
 
-Collection based achievements — a green notification appears when you unlock one:
 - **Champion**: Defeat all zone guardians
 - **Rune Master**: Collect all runes
 - **Hoarder**: Tame every Väsen type
@@ -153,7 +152,7 @@ Vasenvaktaren/
 - [x] Finish Main Functionality 
 - [x] Introduce endgame system
 - [X] Introduce all 45 Väsen (45/45)
-- [ ] Introduce New Epic Abilities (1/5)
+- [ ] Introduce All 30 Abilities (26/30)
 - [ ] Balance Overhaul
 - [ ] Wiki Page
 
