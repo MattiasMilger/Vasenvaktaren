@@ -843,9 +843,20 @@ class GameState {
             this.playerLevel = data.playerLevel || 1;
             
             // Restore Vasen collection first (runes are stored on each väsen)
+            // This includes a purge function to remove faulty or outdated väsen from the save
             this.vasenCollection = (data.vasenCollection || []).map(vData => {
-                const vasen = VasenInstance.deserialize(vData);
-                return vasen;
+                try {
+                    const vasen = VasenInstance.deserialize(vData);
+                    // Also check if the species exists in case deserialize() doesn't throw
+                    if (vasen && VASEN_SPECIES[vasen.speciesName]) {
+                        return vasen;
+                    }
+                    console.warn('Purging vasen with non-existent species:', vData.speciesName);
+                    return null;
+                } catch(e) {
+                    console.warn('Error deserializing vasen, removing from save.', e);
+                    return null;
+                }
             }).filter(v => v !== null);
             
             // Restore party with references to collection
