@@ -79,7 +79,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
-        abilities: ['Wailing Cry', 'Sinkhole', 'Burning Insult', 'Landslide'],
+        abilities: ['Wailing Cry', 'Sinkhole', 'Burning Insult', 'Loki\'s Betrayal'],
         tamingItem: 'Burial Flowers',
         image: 'assets/vasen/myling.png'
     },
@@ -158,7 +158,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Loki\'s Betrayal'],
+        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Ground Stomp'],
         tamingItem: 'Broken Chain',
         image: 'assets/vasen/fenrir.png'
     },
