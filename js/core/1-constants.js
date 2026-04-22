@@ -60,8 +60,18 @@ const GAME_CONFIG = {
     MIXED_ATTACK_STRENGTH_PORTION: 0.5,
     MIXED_ATTACK_WISDOM_PORTION: 0.5,
     
-    // Empowerment system for low-tier attacks
-    EMPOWERMENT_DAMAGE_BOOST: 0.1,     // Damage boost on next attack on standard low megin abilities
+    // =============================================================================
+    // ABILITY CONSTANTS
+    // =============================================================================
+    TIER1_ATTACK_ABILITY_POWER: 50,
+    TIER1_ATTACK_ABILITY_MEGIN: 30,
+    TIER1_ATTACK_ABILITY_EMPOWERMENT: 0.1, // Damage boost on next attack
+
+    TIER2_ATTACK_ABILITY_POWER: 68,
+    TIER2_ATTACK_ABILITY_MEGIN: 50,
+
+    GIANTSBANE_BONUS: 0.33, // % of target's max HP as bonus power
+    LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
 
     // =============================================================================
     // HEALING

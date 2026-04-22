@@ -15,12 +15,12 @@ const ABILITIES = {
         name: 'Ground Stomp',
         flavorDescription: 'Slams the ground with force, sending a stunning shockwave through the bedrock.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Boulder Toss': {
@@ -29,19 +29,19 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Sinkhole': {
         name: 'Sinkhole',
         flavorDescription: 'The earth softens and collapses, opening a treacherous pit beneath the enemy.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Landslide': {
@@ -50,8 +50,8 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Smithing': {
         name: 'Smithing',
@@ -67,12 +67,12 @@ const ABILITIES = {
         name: 'Giantsbane',
         flavorDescription: 'Strikes with the  might of a giant slayer.',
         get mechanicsDescription() {
-            return `Hits opponent. Gains power equal to ${Math.round(this.target_hp_bonus_percent * 100)}% of target's max HP.`;
+            return `Hits opponent. Gains power equal to ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's max HP.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
         power: 15,
-        target_hp_bonus_percent: 0.33,
+        target_hp_bonus_percent: GAME_CONFIG.GIANTSBANE_BONUS,
         meginCost: 55,
         giantsbaneBonus: true
     },
@@ -82,12 +82,12 @@ const ABILITIES = {
         name: 'Vine Whip',
         flavorDescription: 'Swift, thorny vines lash out from the wilderness, tangling and striking the target.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Wild Bite': {
@@ -96,19 +96,19 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Elven Light': {
         name: 'Elven Light',
         flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the twilight mist.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Moon Beam': {
@@ -117,8 +117,8 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Thick Coat': {
         name: 'Thick Coat',
@@ -136,12 +136,12 @@ const ABILITIES = {
         name: 'Drown',
         flavorDescription: 'Violently drags the opponent down, with the crushing pressure of water.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Icicle Spear': {
@@ -150,19 +150,19 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Hail Storm': {
         name: 'Hail Storm',
         flavorDescription: 'A sudden, freezing downpour of stinging ice and freezing wind.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Tidal Wave': {
@@ -171,8 +171,8 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Skald\'s Mead': {
         name: 'Skald\'s Mead',
@@ -190,12 +190,12 @@ const ABILITIES = {
         name: 'Torch Strike',
         flavorDescription: 'A searing blow with a burning torch, delivering raw heat.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Flaming Skewer': {
@@ -204,19 +204,19 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Fire Breath': {
         name: 'Fire Breath',
         flavorDescription: 'Exhales a short, scorching gust of flame from the creature\'s core.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Lava Jet': {
@@ -225,19 +225,19 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Loki\'s Betrayal': {
         name: 'Loki\'s Betrayal',
         flavorDescription: 'A deep cut from the dark, causing more damage to the weak and frail.',
         get mechanicsDescription() {
-        return `Hits opponent. ${this.opponent_debuff_bonus} extra power if target is debuffed.`;
+        return `Hits opponent. ${GAME_CONFIG.LOKISBETRAYAL_BONUS} extra power if target is debuffed.`;
     },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        opponent_debuff_bonus: 35,
+        opponent_debuff_bonus: GAME_CONFIG.LOKISBETRAYAL_BONUS,
         meginCost: 50,
         lokiBetrayalBonus: true
     },
@@ -257,12 +257,12 @@ const ABILITIES = {
         name: 'Storm Claw',
         flavorDescription: 'A quick, brutal strike delivered with claws riding the speed of a gale.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Sky Dive': {
@@ -271,19 +271,19 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Wailing Cry': {
         name: 'Wailing Cry',
         flavorDescription: 'Unleashes an agonizing, ghostly shriek that assails the opponent\'s senses.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST * 100)}% more damage.`;
+            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
-        power: 50,
-        meginCost: 30,
+        power: GAME_CONFIG.TIER1_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER1_ATTACK_ABILITY_MEGIN,
         grantsEmpowerment: true
     },
     'Wind Gust': {
@@ -292,8 +292,8 @@ const ABILITIES = {
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
-        power: 68,
-        meginCost: 50
+        power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
+        meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
     'Enchanting Song': {
         name: 'Enchanting Song',

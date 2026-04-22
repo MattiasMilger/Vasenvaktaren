@@ -191,7 +191,7 @@ class EnemyAI {
         
         // Account for empowerment boost
         if (this.vasen.battleFlags.isEmpowered) {
-            elementMod *= (1 + GAME_CONFIG.EMPOWERMENT_DAMAGE_BOOST);
+            elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT);
         }
         
         const power = ability.power;
