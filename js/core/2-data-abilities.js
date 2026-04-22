@@ -65,7 +65,7 @@ const ABILITIES = {
     },
     'Giantsbane': {
         name: 'Giantsbane',
-        flavorDescription: 'Strikes with the furious might of Thor.',
+        flavorDescription: 'Strikes with the  might of a giant slayer.',
         get mechanicsDescription() {
             return `Hits opponent. Gains power equal to ${Math.round(this.target_hp_bonus_percent * 100)}% of target's max HP.`;
         },

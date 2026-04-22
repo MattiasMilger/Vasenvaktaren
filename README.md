@@ -22,6 +22,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 5 elements: Earth, Nature, Water, Fire, Wind
 - 4 rarities: Common, Uncommon, Rare, Mythical
 - 12 attribute altering temperaments
+- 30 unique abilities
 
 ### Runes
 - 24 equippable runes with unique effects
@@ -40,7 +41,6 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Element matchups
 - Resource management
 - Attribute buffs and debuffs
-- 30 unique abilities
 - **Abilities**: Use learned attacks (cost Megin)
 - **Basic Strike**: Free attack using your element
 - **Swap**: Change active Väsen (causes Swap Sickness)
