@@ -98,7 +98,7 @@ class EnemyAI {
                 score += GAME_CONFIG.AI_ELEMENT_POTENT_BONUS;
             } else if (matchup === 'WEAK') {
                 // Check for weak hit runes
-                if (this.vasen.hasRune('NAUDIZ') || this.vasen.hasRune('INGUZ')) {
+                if (this.vasen.hasRune('NAUDIZ')) {
                     score += GAME_CONFIG.AI_ELEMENT_WEAK_WITH_RUNE_PENALTY;
                 } else {
                     score += GAME_CONFIG.AI_ELEMENT_WEAK_WITHOUT_RUNE_PENALTY;

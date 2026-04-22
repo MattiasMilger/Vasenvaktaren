@@ -634,13 +634,16 @@ if (this.isOver && this.onEnd) {
                     result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
                 }
                 
-                // Apply Inguz effect if Thurs user has it and reflection was WEAK
-                if (reflectResult.matchup === 'WEAK' && defender.hasRune('INGUZ')) {
-                    this.addLog(`${RUNES.INGUZ.symbol} ${defender.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
-                    const meginDrain = RUNES.INGUZ.mechanic.value; // Get value from rune definition
-                    attacker.spendMegin(meginDrain);
-                    this.addLog(`${attacker.getDisplayName()} lost ${meginDrain} Megin!`, 'megin');
-                    result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin on weak reflection' });
+                // Apply Inguz effect if Thurs user has it on any reflection hit
+                if (defender.hasRune('INGUZ')) {
+                    if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
+                        this.addLog(`${RUNES.INGUZ.symbol} ${defender.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
+                        const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                        const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                        attacker.modifyAttributeStage(randomStat, -1);
+                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
+                        result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed on reflection' });
+                    }
                 }
             }
         }
@@ -948,13 +951,17 @@ if (this.isOver && this.onEnd) {
                 }
                 result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed' });
             }
-            
-            // Inguz: megin drain on weak hit
-            if (attacker.hasRune('INGUZ')) {
+        }
+
+        // Inguz: 30% chance to lower a random enemy attribute by 1 stage on any hit
+        if (attacker.hasRune('INGUZ')) {
+            if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
                 this.addLog(`${RUNES.INGUZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
-                defender.spendMegin(GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN);
-                this.addLog(`${defender.getDisplayName()} lost ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin!`, 'megin');
-                result.runeEffects.push({ rune: 'INGUZ', effect: 'drained megin' });
+                const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                defender.modifyAttributeStage(randomStat, -1);
+                this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
+                result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed' });
             }
         }
     }

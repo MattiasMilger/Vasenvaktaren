@@ -62,7 +62,7 @@ const GAME_CONFIG = {
     
     // Empowerment system for low-tier attacks
     EMPOWERMENT_DAMAGE_BOOST: 0.1,     // Damage boost on next attack on standard low megin abilities
-    
+
     // =============================================================================
     // HEALING
     // =============================================================================
@@ -125,8 +125,8 @@ const GAME_CONFIG = {
     RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost hit
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
-    // Inguz: Megin drain on weak hits
-    RUNE_INGUZ_MEGIN_DRAIN: 18,          // Drai Megin from enemy on weak hit
+    // Inguz: Chance to debuff and opponents attributes
+    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.30,          // % chance to lower attribute by 1 stage
     
     // Mannaz: Heal on utility ability use
     RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
@@ -397,13 +397,13 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.OKNYTT]: { strength: 70, wisdom: 62, health: 55, defense: 55, durability: 80 },
-    [FAMILIES.VALNAD]: { strength: 62, wisdom: 72, health: 58, defense: 75, durability: 55 },
+    [FAMILIES.OKNYTT]: { strength: 70, wisdom: 62, health: 58, defense: 55, durability: 80 },
+    [FAMILIES.VALNAD]: { strength: 65, wisdom: 72, health: 58, defense: 75, durability: 55 },
     [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 46 },
     [FAMILIES.TROLL]: { strength: 65, wisdom: 60, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 50, wisdom: 80, health: 60, defense: 65, durability: 60 },
     [FAMILIES.ALV]: { strength: 55, wisdom: 85, health: 60, defense: 55, durability: 60 },
-    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 57, defense: 80, durability: 50 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 58, defense: 80, durability: 52 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 50, health: 85, defense: 55, durability: 50 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };

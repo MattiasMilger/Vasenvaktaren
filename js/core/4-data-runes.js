@@ -223,11 +223,11 @@ const RUNES = {
         symbol: 'ᛜ',
         name: 'Inguz',
         fullName: 'Inguz',
-        flavor: 'The contained potential of the seed. Even a blow that fails to cause physical damage carries a hidden, draining cost, siphoning the opponent\'s core resources.',
+        flavor: 'The contained potential of the seed. Every strike plants a creeping instability within the foe, germinating into a sudden rot that withers their fundamental prowess.',
         get effect() {
-            return `This väsen\'s Weak hits removes ${GAME_CONFIG.RUNE_INGUZ_MEGIN_DRAIN} Megin from the enemy`;
+            return `This Väsen's hits have a ${Math.round(GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE * 100)}% chance to lower a random enemy attribute by 1 stage`;
         },
-        mechanic: { type: 'megin_drain_on_weak', value: 18 }
+        mechanic: { type: 'debuff_on_hit', chance: 0.30 }
     },
     'DAGAZ': {
         id: 'DAGAZ',
