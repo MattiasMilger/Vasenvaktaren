@@ -403,7 +403,7 @@ const BASE_ATTRIBUTES = {
     [FAMILIES.TROLL]: { strength: 65, wisdom: 60, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 50, wisdom: 80, health: 60, defense: 65, durability: 60 },
     [FAMILIES.ALV]: { strength: 55, wisdom: 85, health: 60, defense: 55, durability: 60 },
-    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 58, defense: 80, durability: 52 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 58, defense: 80, durability: 50 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 50, health: 85, defense: 55, durability: 50 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
