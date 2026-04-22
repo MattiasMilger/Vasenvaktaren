@@ -15,7 +15,7 @@ const ABILITIES = {
         name: 'Ground Stomp',
         flavorDescription: 'Slams the ground with force, sending a stunning shockwave through the bedrock.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -36,7 +36,7 @@ const ABILITIES = {
         name: 'Sinkhole',
         flavorDescription: 'The earth softens and collapses, opening a treacherous pit beneath the enemy.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
@@ -67,7 +67,7 @@ const ABILITIES = {
         name: 'Giantsbane',
         flavorDescription: 'Strikes with the  might of a giant slayer.',
         get mechanicsDescription() {
-            return `Hits opponent. Gains power equal to ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's max HP.`;
+            return `Hits opponent. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's max HP.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -82,7 +82,7 @@ const ABILITIES = {
         name: 'Vine Whip',
         flavorDescription: 'Swift, thorny vines lash out from the wilderness, tangling and striking the target.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
@@ -103,7 +103,7 @@ const ABILITIES = {
         name: 'Elven Light',
         flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the twilight mist.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
@@ -136,7 +136,7 @@ const ABILITIES = {
         name: 'Drown',
         flavorDescription: 'Violently drags the opponent down, with the crushing pressure of water.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
@@ -157,7 +157,7 @@ const ABILITIES = {
         name: 'Hail Storm',
         flavorDescription: 'A sudden, freezing downpour of stinging ice and freezing wind.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
@@ -190,7 +190,7 @@ const ABILITIES = {
         name: 'Torch Strike',
         flavorDescription: 'A searing blow with a burning torch, delivering raw heat.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
@@ -211,7 +211,7 @@ const ABILITIES = {
         name: 'Fire Breath',
         flavorDescription: 'Exhales a short, scorching gust of flame from the creature\'s core.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
@@ -232,7 +232,7 @@ const ABILITIES = {
         name: 'Loki\'s Betrayal',
         flavorDescription: 'A deep cut from the dark, causing more damage to the weak and frail.',
         get mechanicsDescription() {
-        return `Hits opponent. ${GAME_CONFIG.LOKISBETRAYAL_BONUS} extra power if target is debuffed.`;
+        return `Hits opponent. +${GAME_CONFIG.LOKISBETRAYAL_BONUS} power if target is debuffed.`;
     },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
@@ -257,7 +257,7 @@ const ABILITIES = {
         name: 'Storm Claw',
         flavorDescription: 'A quick, brutal strike delivered with claws riding the speed of a gale.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
@@ -278,7 +278,7 @@ const ABILITIES = {
         name: 'Wailing Cry',
         flavorDescription: 'Unleashes an agonizing, ghostly shriek that assails the opponent\'s senses.',
         get mechanicsDescription() {
-            return `Hits opponent. Next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}% more damage.`;
+            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
