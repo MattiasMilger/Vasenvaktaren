@@ -494,45 +494,41 @@ UIController.prototype.addCombatLog = function(message, type = 'normal') {
 };
 
 UIController.prototype.colorCodeCombatMessage = function(message) {
-        let result = message;
+    let result = message;
 
-        // 1. Color megin references (blue)
-        // Matches: "used X megin", "X megin", "megin"
-        result = result.replace(/(\d+)\s+(megin)/gi, '<span class="combat-megin">$1 $2</span>');
-        result = result.replace(/\b(megin)\b(?![^<]*>)/gi, '<span class="combat-megin">$1</span>');
+    // 1. Color megin references (blue)
+    result = result.replace(/(\d+)\s+(megin)/gi, '<span class="combat-megin">$1 $2</span>');
+    result = result.replace(/\b(megin)\b(?![^<]*>)/gi, '<span class="combat-megin">$1</span>');
 
-        // 2. Color reflected damage (red) - MUST come before general damage
-        // Matches: "X reflected damage"
-        result = result.replace(/(\d+)\s+(reflected)\s+(damage)/gi,
-            '<span class="combat-damage">$1 $2 $3</span>');
+    // 2. Color reflected damage (red)
+    result = result.replace(/(\d+)\s+(reflected)\s+(damage)/gi,
+        '<span class="combat-damage">$1 $2 $3</span>');
 
-        // 3. Color damage numbers and the word "damage" (red)
-        // Matches: "deals X damage", "X damage", "takes X damage"
-        result = result.replace(/(deals|takes)\s+(\d+)\s+(damage)/gi,
-            '$1 <span class="combat-damage">$2 $3</span>');
-        result = result.replace(/(\d+)\s+(damage)/gi, '<span class="combat-damage">$1 $2</span>');
+    // 3. Color damage numbers and the word "damage" (red)
+    result = result.replace(/(deals|takes)\s+(\d+)\s+(damage)/gi,
+        '$1 <span class="combat-damage">$2 $3</span>');
+    result = result.replace(/(\d+)\s+(damage)/gi, '<span class="combat-damage">$1 $2</span>');
 
-        // 4. Color positive stat changes (green)
-        // Matches: "raised by X stage", "raised by X stages", "increased X stage", etc.
-        result = result.replace(/(raised|increased|boosted)(\s+by)?\s+(\d+)\s+(stages?)/gi,
-            '<span class="combat-buff">$1$2 $3 $4</span>');
-        // Also matches: "was raised", "was increased", "was boosted"
-        result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi,
-            '<span class="combat-buff">$1 $2</span>');
+    // 4. Color HP sacrifices/losses (red)
+result = result.replace(/\b(\d+)\s+(HP)\b(?![^<]*>)/gi, '<span class="combat-damage">$1 $2</span>');
 
-        // 5. Color negative stat changes (red)
-        // Matches: "lowered by X stage", "lowered by X stages", "decreased X stage", etc.
-        result = result.replace(/(lowered|decreased|reduced)(\s+by)?\s+(\d+)\s+(stages?)/gi,
-            '<span class="combat-debuff">$1$2 $3 $4</span>');
-        // Also matches: "was lowered", "was decreased", "was reduced"
-        result = result.replace(/\b(was)\s+(lowered|decreased|reduced)/gi,
-            '<span class="combat-debuff">$1 $2</span>');
+    // 5. Color positive stat changes (green)
+    result = result.replace(/(raised|increased|boosted)(\s+by)?\s+(\d+)\s+(stages?)/gi,
+        '<span class="combat-buff">$1$2 $3 $4</span>');
+    result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi,
+        '<span class="combat-buff">$1 $2</span>');
 
-        //Color "attributes were lowered" (red)
-result = result.replace(/\b(attributes)\s+(were)\s+(lowered)\b/gi,
-    '<span class="combat-debuff">$1 $2 $3</span>');
+    // 6. Color negative stat changes (red)
+    result = result.replace(/(lowered|decreased|reduced)(\s+by)?\s+(\d+)\s+(stages?)/gi,
+        '<span class="combat-debuff">$1$2 $3 $4</span>');
+    result = result.replace(/\b(was)\s+(lowered|decreased|reduced)/gi,
+        '<span class="combat-debuff">$1 $2</span>');
 
-        return result;
+    // 7. Color "attributes were lowered" (red)
+    result = result.replace(/\b(attributes)\s+(were)\s+(lowered)\b/gi,
+        '<span class="combat-debuff">$1 $2 $3</span>');
+
+    return result;
 };
 
 UIController.prototype.clearCombatLog = function() {

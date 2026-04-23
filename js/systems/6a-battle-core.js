@@ -502,7 +502,7 @@ if (this.isOver && this.onEnd) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     result.runeEffects.push({ rune: 'MANNAZ', effect: `healed ${healAmount}` });
-                    this.addLog(`${RUNES.MANNAZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.MANNAZ.name} was activated!`, 'rune');
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.MANNAZ.symbol} ${RUNES.MANNAZ.name} was activated!`, 'rune');
                     this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                 }
             }
@@ -512,7 +512,7 @@ if (this.isOver && this.onEnd) {
                 if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
                     const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                     if (healAmount > 0) {
-                        this.addLog(`${RUNES.JERA.symbol} ${attacker.getDisplayName()}'s ${RUNES.JERA.name} was activated!`, 'rune');
+                        this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
                         this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                         result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
                     }
@@ -577,7 +577,7 @@ if (this.isOver && this.onEnd) {
         if (willKnockout) {
             // Hagal rune: Debuff opponent on knockout (triggers BEFORE revive check)
             if (defender.hasRune('HAGAL')) {
-                this.addLog(`${RUNES.HAGAL.symbol} ${defender.getDisplayName()}'s ${RUNES.HAGAL.name} was activated!`, 'rune');
+                this.addLog(`${defender.getDisplayName()}'s ${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
                 ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
                     attacker.modifyAttributeStage(stat, -1);
                 });
@@ -602,7 +602,7 @@ if (this.isOver && this.onEnd) {
         
         // Thurs: damage reflect as Mixed hit (only if not knocked out)
         if (!attacker.isKnockedOut() && defender.hasRune('THURS') && result.damage > 0) {
-            this.addLog(`${RUNES.THURS.symbol} ${defender.getDisplayName()}'s ${RUNES.THURS.name} was activated!`, 'rune');
+            this.addLog(`${defender.getDisplayName()}'s ${RUNES.THURS.symbol} ${RUNES.THURS.name} was activated!`, 'rune');
             
             // Calculate reflected damage as Mixed-type attack
             // The defender (Thurs user) becomes the "attacker" for the reflection
@@ -623,7 +623,7 @@ if (this.isOver && this.onEnd) {
                 
                 // Apply Naudiz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {
-                    this.addLog(`${RUNES.NAUDIZ.symbol} ${defender.getDisplayName()}'s ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                     const stats = ['strength', 'wisdom', 'defense', 'durability'];
                     for (let i = 0; i < 2; i++) {
                         const randomIndex = Math.floor(Math.random() * stats.length);
@@ -637,7 +637,7 @@ if (this.isOver && this.onEnd) {
                 // Apply Inguz effect if Thurs user has it on any reflection hit
                 if (defender.hasRune('INGUZ')) {
                     if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
-                        this.addLog(`${RUNES.INGUZ.symbol} ${defender.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
+                        this.addLog(`${defender.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
                         const stats = ['strength', 'wisdom', 'defense', 'durability'];
                         const randomStat = stats[Math.floor(Math.random() * stats.length)];
                         attacker.modifyAttributeStage(randomStat, -1);
@@ -824,7 +824,7 @@ if (this.isOver && this.onEnd) {
             // Tyr's Sacrifice: sacrifice 40% max HP to raise all stats by 3 stages (lethal if HP runs out)
             const healthCost = Math.floor(user.maxHealth * GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST);
             user.currentHealth = Math.max(0, user.currentHealth - healthCost);
-            this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP!`, 'damage');
+            this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
 
             // Raise all 4 stats by TYRS_SACRIFICE_STAGES stages
             const sacrificeStats = ['strength', 'wisdom', 'defense', 'durability'];
@@ -840,14 +840,15 @@ if (this.isOver && this.onEnd) {
             // Gifu: share the full buff (all 4 stats) with allies
             if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
                 user.battleFlags.gifuTriggered = true;
-                this.addLog(`${RUNES.GIFU.symbol} ${user.getDisplayName()}'s ${RUNES.GIFU.name} was activated!`, 'rune');
+                this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
 
                 const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                const stageWord = Math.abs(GAME_CONFIG.TYRS_SACRIFICE_STAGES) === 1 ? 'stage' : 'stages';
                 allies.forEach(ally => {
                     if (ally !== user && !ally.isKnockedOut()) {
                         sacrificeStats.forEach(stat => {
                             ally.modifyAttributeStage(stat, GAME_CONFIG.TYRS_SACRIFICE_STAGES);
-                            this.addLog(`${ally.getDisplayName()}'s ${stat} was also raised!`, 'buff');
+                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} ${stageWord}!`, 'buff');
                         });
                     }
                 });
@@ -880,13 +881,14 @@ if (this.isOver && this.onEnd) {
                     // Gifu: share first buff
                     if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
                         user.battleFlags.gifuTriggered = true;
-                        this.addLog(`${RUNES.GIFU.symbol} ${user.getDisplayName()}'s ${RUNES.GIFU.name} was activated!`, 'rune');
+                        this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
                         
                         const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                        const stageWord = Math.abs(effect.stages) === 1 ? 'stage' : 'stages';
                         allies.forEach(ally => {
                             if (ally !== user && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(stat, effect.stages);
-                                this.addLog(`${ally.getDisplayName()}'s ${stat} was also raised!`, 'buff');
+                                this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${effect.stages} ${stageWord}!`, 'buff');
                             }
                         });
                     }
@@ -899,7 +901,7 @@ if (this.isOver && this.onEnd) {
             // Wynja: block first debuff
             if (!targetVasen.battleFlags.wynjaTriggered && targetVasen.hasRune('WYNJA')) {
                 targetVasen.battleFlags.wynjaTriggered = true;
-                this.addLog(`${RUNES.WYNJA.symbol} ${targetVasen.getDisplayName()}'s ${RUNES.WYNJA.name} was activated!`, 'rune');
+                this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
                 this.addLog(`${targetVasen.getDisplayName()} blocked the debuff!`, 'block');
                 
                 // Raise random attribute
@@ -940,7 +942,7 @@ if (this.isOver && this.onEnd) {
         if (elementAbilityBuffs[abilityElement] && attacker.hasRune(elementAbilityBuffs[abilityElement].rune)) {
             if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
                 const buffData = elementAbilityBuffs[abilityElement];
-                this.addLog(`${RUNES[buffData.rune].symbol} ${attacker.getDisplayName()}'s ${RUNES[buffData.rune].name} was activated!`, 'rune');
+                this.addLog(`${attacker.getDisplayName()}'s ${RUNES[buffData.rune].symbol} ${RUNES[buffData.rune].name} was activated!`, 'rune');
                 buffData.stats.forEach(stat => {
                     attacker.modifyAttributeStage(stat, 1);
                     this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by 1 stage!`, 'buff');
@@ -954,7 +956,7 @@ if (this.isOver && this.onEnd) {
             if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
                 if (healAmount > 0) {
-                    this.addLog(`${RUNES.ALGIZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.ALGIZ.name} was activated!`, 'rune');
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
                     this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
                 }
@@ -966,7 +968,7 @@ if (this.isOver && this.onEnd) {
             if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                 if (healAmount > 0) {
-                    this.addLog(`${RUNES.JERA.symbol} ${attacker.getDisplayName()}'s ${RUNES.JERA.name} was activated!`, 'rune');
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
                     this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
                 }
@@ -977,7 +979,7 @@ if (this.isOver && this.onEnd) {
         if (damageResult.matchup === 'WEAK') {
             // Naudiz: debuff on weak hit
             if (attacker.hasRune('NAUDIZ')) {
-                this.addLog(`${RUNES.NAUDIZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 for (let i = 0; i < 2; i++) {
                     const randomIndex = Math.floor(Math.random() * stats.length);
@@ -992,7 +994,7 @@ if (this.isOver && this.onEnd) {
         // Inguz: 30% chance to lower a random enemy attribute by 1 stage on any hit
         if (attacker.hasRune('INGUZ')) {
             if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
-                this.addLog(`${RUNES.INGUZ.symbol} ${attacker.getDisplayName()}'s ${RUNES.INGUZ.name} was activated!`, 'rune');
+                this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
                 defender.modifyAttributeStage(randomStat, -1);
@@ -1145,13 +1147,13 @@ if (this.isOver && this.onEnd) {
                 // Gifu: share the buff with allies if equipped
                 if (result.changed !== 0 && !vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
                     vasen.battleFlags.gifuTriggered = true;
-                    this.addLog(`${RUNES.GIFU.symbol} ${vasen.getDisplayName()}'s ${RUNES.GIFU.name} was activated!`, 'rune');
+                    this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
                     
                     const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                     allies.forEach(ally => {
                         if (ally !== vasen && !ally.isKnockedOut()) {
                             ally.modifyAttributeStage(randomStat, 1);
-                            this.addLog(`${ally.getDisplayName()}'s ${randomStat} was also raised!`, 'buff');
+                            this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                         }
                     });
                 }
@@ -1166,7 +1168,8 @@ if (this.isOver && this.onEnd) {
                     vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
                     vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
                     this.addLog(`${vasen.getDisplayName()}'s bestial rage awakens!`, 'passive');
-                    this.addLog(`${vasen.getDisplayName()}'s Strength and Wisdom were raised by 1 stage!`, 'buff');
+                    this.addLog(`${vasen.getDisplayName()}'s Strength was raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage!`, 'buff');
+                    this.addLog(`${vasen.getDisplayName()}'s Wisdom was raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} stage!`, 'buff');
                 }
             }
         }
@@ -1190,7 +1193,8 @@ if (this.isOver && this.onEnd) {
                 vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
                 vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
                 this.addLog(`${vasen.getDisplayName()}'s draconic scales harden!`, 'passive');
-                this.addLog(`${vasen.getDisplayName()}'s Defense and Durability were raised by 1 stage!`, 'buff');
+                this.addLog(`${vasen.getDisplayName()}'s Defense was raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} stage!`, 'buff');
+                this.addLog(`${vasen.getDisplayName()}'s Durability was raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} stage!`, 'buff');
             }
         }
         

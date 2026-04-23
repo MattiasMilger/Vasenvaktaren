@@ -112,7 +112,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Wailing Cry', 'Wild Bite', 'Ground Stomp', 'Giantsbane'],
+        abilities: ['Wailing Cry', 'Wild Bite', 'Ground Stomp', 'Tyr\'s Sacrifice'],
         tamingItem: 'Mound Root',
         image: 'assets/vasen/draug.png'
     },
