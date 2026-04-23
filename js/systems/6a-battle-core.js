@@ -579,9 +579,12 @@ if (this.isOver && this.onEnd) {
             if (defender.hasRune('HAGAL')) {
                 this.addLog(`${defender.getDisplayName()}'s ${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
                 ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
-                    attacker.modifyAttributeStage(stat, -1);
+                    const result = attacker.modifyAttributeStage(stat, -1);
+                    if (result.changed !== 0) {
+                        const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
+                    }
                 });
-                this.addLog(`${attacker.getDisplayName()}'s attributes were lowered!`, 'debuff');
             }
             
             // Vålnad family passive: Deathless - attempt to revive
@@ -1218,7 +1221,7 @@ if (this.isOver && this.onEnd) {
                 }
                 this.addLog(`${vasen.getDisplayName()}'s malicious aura strikes back!`, 'passive');
                 debuffedStats.forEach(stat => {
-                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered!`, 'debuff');
+                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
                 });
             }
         }

@@ -454,7 +454,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Ground Stomp', 'Sky Dive', 'Smithing', 'Boulder Toss'],
+        abilities: ['Sky Dive', 'Boulder Toss', 'Burning Insult', 'Tyr\'s Sacrifice'],
         tamingItem: 'Shattered Pillar',
         image: 'assets/vasen/stormturs.png'
     },
@@ -489,7 +489,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Fire Breath', 'Storm Claw', 'Sky Dive', 'Wind Gust'],
+        abilities: ['Fire Breath', 'Wind Gust', 'Wild Bite', 'Tyr\'s Sacrifice'],
         tamingItem: 'White Scales',
         image: 'assets/vasen/vitorm.png'
     },
