@@ -309,7 +309,7 @@ const ABILITIES = {
         name: 'Tyr\'s Sacrifice',
         flavorDescription: 'A solemn vow sealed in life-essence, mirroring the god Tyr\'s sacrifice of his hand to bind Fenrir.',
         get mechanicsDescription() {
-            return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of max HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages. Can only be used once per battle.`;
+            return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of max HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
