@@ -215,7 +215,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Ground Stomp', 'Lava Jet', 'Thick Coat', 'Boulder Toss'],
+        abilities: ['Ground Stomp', 'Lava Jet', 'Thick Coat', 'Tyr\'s Sacrifice'],
         tamingItem: 'Cooling Grease',
         image: 'assets/vasen/gryningstroll.png'
     },
@@ -410,7 +410,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Ground Stomp', 'Boulder Toss', 'Burning Insult', 'Skald\'s Mead'],
+        abilities: ['Ground Stomp', 'Boulder Toss', 'Skald\'s Mead', 'Tyr\'s Sacrifice'],
         tamingItem: 'Giant Rock',
         image: 'assets/vasen/jotun.png'
     },

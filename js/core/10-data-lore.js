@@ -828,6 +828,17 @@ const LORE_ENTRIES = {
         unlockKey: "Giantsbane"
     },
 
+    'ability_tyrs_sacrifice': {
+        key: 'ability_tyrs_sacrifice',
+        name: "Tyr's Sacrifice",
+        category: 'abilities',
+        desc: 'Tyr is the Norse god of law, justice, and single combat - and his defining myth is one of deliberate, willing self-destruction for the greater good. When the gods sought to bind the monstrous wolf Fenrir with the magical ribbon Gleipnir, Fenrir refused to let it be placed around him unless one of the gods agreed to put their hand in his mouth as a pledge of good faith. Tyr alone stepped forward. As soon as Fenrir found he could not break free, he bit off Tyr\'s hand at the wrist. Tyr lost his hand, and the gods gained the binding of Fenrir until Ragnarök. The sacrifice was not a mistake - it was a calculated exchange of flesh for order, of self for the whole.',
+        source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
+        heritage: 'Norse',
+        unlockType: 'ability',
+        unlockKey: "Tyr's Sacrifice"
+    },
+
     // =========================================================================
     // CATEGORY: CONCEPTS
     // =========================================================================

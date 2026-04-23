@@ -73,6 +73,9 @@ const GAME_CONFIG = {
     GIANTSBANE_BONUS: 0.33, // % of target's max HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
 
+    TYRS_SACRIFICE_HEALTH_COST: 0.40,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
+    TYRS_SACRIFICE_STAGES: 3,           // Attribute stages gained to all stats when using Tyr's Sacrifice
+
     // =============================================================================
     // HEALING
     // =============================================================================

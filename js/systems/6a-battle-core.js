@@ -820,6 +820,42 @@ if (this.isOver && this.onEnd) {
         
         if (!effect) return effects;
         
+        if (effect.type === 'tyrs_sacrifice') {
+            // Tyr's Sacrifice: sacrifice 40% max HP to raise all stats by 3 stages (lethal if HP runs out)
+            const healthCost = Math.floor(user.maxHealth * GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST);
+            user.currentHealth = Math.max(0, user.currentHealth - healthCost);
+            this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP!`, 'damage');
+
+            // Raise all 4 stats by TYRS_SACRIFICE_STAGES stages
+            const sacrificeStats = ['strength', 'wisdom', 'defense', 'durability'];
+            sacrificeStats.forEach(stat => {
+                const result = user.modifyAttributeStage(stat, GAME_CONFIG.TYRS_SACRIFICE_STAGES);
+                if (result.changed !== 0) {
+                    const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                    this.addLog(`${user.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
+                    effects.push({ stat, change: result.changed });
+                }
+            });
+
+            // Gifu: share the full buff (all 4 stats) with allies
+            if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
+                user.battleFlags.gifuTriggered = true;
+                this.addLog(`${RUNES.GIFU.symbol} ${user.getDisplayName()}'s ${RUNES.GIFU.name} was activated!`, 'rune');
+
+                const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                allies.forEach(ally => {
+                    if (ally !== user && !ally.isKnockedOut()) {
+                        sacrificeStats.forEach(stat => {
+                            ally.modifyAttributeStage(stat, GAME_CONFIG.TYRS_SACRIFICE_STAGES);
+                            this.addLog(`${ally.getDisplayName()}'s ${stat} was also raised!`, 'buff');
+                        });
+                    }
+                });
+            }
+
+            return effects;
+        }
+        
         if (effect.type === 'buff') {
             // Determine the target of the buff
             let targetVasen = user;

@@ -49,6 +49,20 @@ class EnemyAI {
     scoreAbility(abilityName) {
         const ability = ABILITIES[abilityName];
         let score = 0;
+
+        // Tyr's Sacrifice: use on turn 1 only, never again
+        if (abilityName === "Tyr's Sacrifice") {
+            // Already used this battle - never choose it again
+            if (this.battle.getEnemyUtilityUsageCount(this.vasen, "Tyr's Sacrifice") > 0) {
+                return -999;
+            }
+            // Use it immediately on the first turn on the field (turnsOnField === 0)
+            if (this.vasen.battleFlags.turnsOnField === 0) {
+                return 200;
+            }
+            // Not turn 1 and not yet used - still penalise heavily so it's never chosen late
+            return -999;
+        }
         
         // Base score
         if (ability.type === ATTACK_TYPES.UTILITY) {
