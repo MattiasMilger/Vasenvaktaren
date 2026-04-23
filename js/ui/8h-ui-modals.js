@@ -78,10 +78,12 @@ modal.classList.add('active');
         if (items.length === 0) {
             itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {
-            // NEW: Check which item is correct for tutorial highlighting
+            // Check which item is correct for tutorial highlighting
             const enemySpecies = battle.enemyActive.speciesName;
             const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
             const shouldShowTutorial = !gameState.firstCombatTutorialShown && battle.isWildEncounter;
+
+            let correctItemBtn = null;
 
             items.forEach(([itemId, count]) => {
                 const item = TAMING_ITEMS[itemId];
@@ -90,9 +92,10 @@ modal.classList.add('active');
                 const itemBtn = document.createElement('button');
                 itemBtn.className = 'offer-item-btn';
 
-                // NEW: Add tutorial class if this is the correct item
+                // Add tutorial class if this is the correct item
                 if (shouldShowTutorial && itemId === correctItem) {
                     itemBtn.classList.add('tutorial-blink');
+                    correctItemBtn = itemBtn;
                 }
 
                 itemBtn.innerHTML = `
@@ -104,6 +107,13 @@ modal.classList.add('active');
                 };
                 itemList.appendChild(itemBtn);
             });
+
+            // Auto-scroll to the correct (glowing) item after the modal is visible
+            if (correctItemBtn) {
+                requestAnimationFrame(() => {
+                    correctItemBtn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                });
+            }
         }
 
         // Show the close button when displaying item list
@@ -130,8 +140,11 @@ modal.classList.add('active');
         const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         offerDesc = offerDesc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
 
-        // Highlight Confirm button during first combat tutorial
-        const confirmClass = !gameState.firstCombatTutorialShown && battle.isWildEncounter
+        // Highlight Confirm button only if this is the correct taming item during the first combat tutorial
+        const enemySpecies = battle.enemyActive.speciesName;
+        const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
+        const isCorrectItem = itemId === correctItem;
+        const confirmClass = !gameState.firstCombatTutorialShown && battle.isWildEncounter && isCorrectItem
             ? 'btn btn-primary tutorial-blink'
             : 'btn btn-primary';
 

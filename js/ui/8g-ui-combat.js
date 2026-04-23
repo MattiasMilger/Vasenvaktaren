@@ -429,7 +429,7 @@ UIController.prototype.renderActionButtons = function(battle) {
 
     const offerBtn = document.getElementById('btn-offer');
     offerBtn.disabled =
-        !battle.waitingForPlayerAction || !battle.isWildEncounter ||
+        !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.isEndlessTower ||
         battle.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven || battle.isAutoBattle;
 
     // NEW: First combat tutorial - blink Offer Item button if player has matching item
@@ -448,7 +448,7 @@ UIController.prototype.renderActionButtons = function(battle) {
     }
 
     document.getElementById('btn-ask').disabled =
-        !battle.waitingForPlayerAction || !battle.isWildEncounter ||
+        !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.isEndlessTower ||
         activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle;
     document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction || battle.isAutoBattle;
     document.getElementById('btn-surrender').disabled = battle.isAutoBattle;
