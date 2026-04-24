@@ -1262,7 +1262,7 @@ if (this.isOver && this.onEnd) {
                 vasen.battleFlags.valnadPassiveTriggered = true;
                 const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
                 vasen.currentHealth = reviveHealth;
-                this.addLog(`${vasen.getDisplayName()} activated Deathless.`, 'passive');
+                this.addLog(`${vasen.getDisplayName()} activated Deathless ᛣ.`, 'passive');
                 this.addLog(`${vasen.getDisplayName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
                 return true; // Signal that the knockout was prevented
             }

@@ -401,9 +401,9 @@ const FAMILY_PASSIVES = {
         description: 'When swapping out, raises a random attribute of the incoming ally by 1 stage.'
     },
     [FAMILIES.VALNAD]: {
-        name: 'Deathless',
+        name: 'Deathless ᛣ',
         get description() {
-            return `Upon knockout, revivesᛣ with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
+            return `Upon knockout, revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
         }
     }
 };

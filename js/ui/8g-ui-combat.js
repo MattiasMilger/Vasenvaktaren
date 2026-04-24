@@ -511,7 +511,7 @@ UIController.prototype.colorCodeCombatMessage = function(message) {
     result = result.replace(/(\d+)\s+(damage)/gi, '<span class="combat-damage">$1 $2</span>');
 
     // 4. Color HP sacrifices/losses (red)
-result = result.replace(/\b(\d+)\s+(HP)\b(?![^<]*>)/gi, '<span class="combat-damage">$1 $2</span>');
+    result = result.replace(/\b(\d+)\s+(HP)\b(?![^<]*>)/gi, '<span class="combat-damage">$1 $2</span>');
 
     // 5. Color positive stat changes (green)
     result = result.replace(/(raised|increased|boosted)(\s+by)?\s+(\d+)\s+(stages?)/gi,
@@ -528,6 +528,9 @@ result = result.replace(/\b(\d+)\s+(HP)\b(?![^<]*>)/gi, '<span class="combat-dam
     // 7. Color "attributes were lowered" (red)
     result = result.replace(/\b(attributes)\s+(were)\s+(lowered)\b/gi,
         '<span class="combat-debuff">$1 $2 $3</span>');
+
+    // 8. Color the rune symbol for the deathless passive (red)
+    result = result.replace(/ᛣ/g, '<span class="combat-damage">ᛣ</span>');
 
     return result;
 };
