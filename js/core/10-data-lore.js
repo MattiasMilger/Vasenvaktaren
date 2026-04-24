@@ -668,16 +668,6 @@ const LORE_ENTRIES = {
         unlockType: 'item',
         unlockKey: 'Hearth Core'
     },
-    'item_shattered_pillar': {
-        key: 'item_shattered_pillar',
-        name: 'Shattered Pillar',
-        category: 'items',
-        desc: 'Throughout Norse and Scandinavian mythology, the giants are associated with raw elemental force expressed through the landscape itself: cracked cliffs, split boulders, and shattered standing stones are often attributed to the passage or fury of a great jätte. Stone pillars struck by lightning were regarded with particular awe, believed to mark the footfall or gaze of a wind-giant. The vitrified and fractured rock left behind was thought to carry a residue of trapped storm energy - cold to the touch, humming faintly, and carrying the imprint of whatever immense force had passed through it.',
-        source: 'Norse Mythology / Scandinavian Folklore',
-        heritage: 'Norse',
-        unlockType: 'item',
-        unlockKey: 'Shattered Pillar'
-    },
 
     // =========================================================================
     // CATEGORY: LOCATIONS
