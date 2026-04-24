@@ -403,7 +403,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.VALNAD]: {
         name: 'Deathless',
         get description() {
-            return `Upon knockout, revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
+            return `Upon knockout, revivesᛣ with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
         }
     }
 };

@@ -179,6 +179,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
                 <img src="${vasen.species.image}" alt="${vasen.species.name}"
                      class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
                 ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
+                ${vasen.battleFlags.valnadPassiveTriggered ? '<span class="deathless-rune">ᛣ</span>' : ''}
             </div>
 
             ${createPartyPortraitHTML(partyPortraits.right, 'right')}

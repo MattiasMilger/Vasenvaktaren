@@ -1839,4 +1839,14 @@ button.tutorial-blink {
     }
 }
 
+.deathless-rune {
+    position: absolute;
+    bottom: -4px;
+    left: -4px;
+    font-size: 24px;
+    color: var(--accent-danger);
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    z-index: 1;
+}
+
 /* End of 10-combat.css */
