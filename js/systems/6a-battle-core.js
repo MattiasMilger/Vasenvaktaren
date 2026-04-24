@@ -59,6 +59,13 @@ class Battle {
         // Initialize active Väsen
         this.setPlayerActive(0);
         this.setEnemyActive(0);
+
+        // Defer initial passives to allow UI to set up loggers
+        setTimeout(() => {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.playerActive, isPlayer: true });
+            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.enemyActive, isPlayer: false });
+            if (this.onUpdate) this.onUpdate();
+        }, 50);
     }
     
     // Execute player action (dispatcher method)
@@ -147,8 +154,8 @@ class Battle {
             this.expTracker.get(vasen.id).participated = true;
         }
         
-        // Trigger Ande passive when entering battlefield (via swap OR at battle start)
-        if (isSwap || !this.playerActive.battleFlags.andePassiveTriggered) {
+        // Trigger Ande passive when entering battlefield (via swap)
+        if (isSwap) {
             this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: true });
         }
         
@@ -178,8 +185,8 @@ class Battle {
         vasen.battleFlags.isFirstRound = true;
         vasen.battleFlags.turnsOnField = 0;
         
-        // Trigger Ande passive when entering battlefield (via swap OR at battle start)
-        if (isSwap || !this.enemyActive.battleFlags.andePassiveTriggered) {
+        // Trigger Ande passive when entering battlefield (via swap)
+        if (isSwap) {
             this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: false });
         }
         
@@ -538,6 +545,13 @@ if (this.isOver && this.onEnd) {
         // Apply damage
         const actualDamage = defender.takeDamage(result.damage);
         this.addLog(`${attacker.getDisplayName()} deals ${actualDamage} damage to ${defender.getDisplayName()}!`, 'damage');
+
+        // Log matchup (always show effectiveness)
+        if (damageResult.matchup === 'POTENT') {
+            this.addLog('Potent hit!', 'potent');
+        } else if (damageResult.matchup === 'WEAK') {
+            this.addLog('Weak hit!', 'weak');
+        }
         
         // Trigger family passives after taking damage
         // Drake: Check health threshold
@@ -561,13 +575,6 @@ if (this.isOver && this.onEnd) {
                     this.onHit(isPlayer ? 'enemy' : 'player', damageResult.matchup);
                 }
             }, 200);
-        }
-        
-        // Log matchup (always show effectiveness)
-        if (damageResult.matchup === 'POTENT') {
-            this.addLog('Potent hit!', 'potent');
-        } else if (damageResult.matchup === 'WEAK') {
-            this.addLog('Weak hit!', 'weak');
         }
         
         // Handle rune effects for hits
@@ -1145,6 +1152,7 @@ if (this.isOver && this.onEnd) {
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
                 const result = vasen.modifyAttributeStage(randomStat, 1);
                 
+                this.addLog(`${vasen.getDisplayName()} activated Ethereal Surge!`, 'passive');
                 this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 
                 // Gifu: share the buff with allies if equipped
@@ -1170,7 +1178,7 @@ if (this.isOver && this.onEnd) {
                     vasen.battleFlags.odjurTriggered = true;
                     vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
                     vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
-                    this.addLog(`${vasen.getDisplayName()}'s bestial rage awakens!`, 'passive');
+                    this.addLog(`${vasen.getDisplayName()} activated Bestial Rage!`, 'passive');
                     this.addLog(`${vasen.getDisplayName()}'s Strength was raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage!`, 'buff');
                     this.addLog(`${vasen.getDisplayName()}'s Wisdom was raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} stage!`, 'buff');
                 }
@@ -1184,6 +1192,7 @@ if (this.isOver && this.onEnd) {
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
                 incomingVasen.modifyAttributeStage(randomStat, 1);
+                this.addLog(`${vasen.getDisplayName()} activated Tag Team!`, 'passive');
                 this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
             }
         }
@@ -1195,7 +1204,7 @@ if (this.isOver && this.onEnd) {
                 vasen.battleFlags.drakePassiveTriggered = true;
                 vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
                 vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
-                this.addLog(`${vasen.getDisplayName()}'s draconic scales harden!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()} activated Draconic Resilience!`, 'passive');
                 this.addLog(`${vasen.getDisplayName()}'s Defense was raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} stage!`, 'buff');
                 this.addLog(`${vasen.getDisplayName()}'s Durability was raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} stage!`, 'buff');
             }
@@ -1219,7 +1228,7 @@ if (this.isOver && this.onEnd) {
                         stats.splice(randomIndex, 1);
                     }
                 }
-                this.addLog(`${vasen.getDisplayName()}'s malicious aura strikes back!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()} activated Malicious Retaliation!`, 'passive');
                 debuffedStats.forEach(stat => {
                     this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
                 });
@@ -1240,7 +1249,7 @@ if (this.isOver && this.onEnd) {
                     const randomStat = stealableStats[Math.floor(Math.random() * stealableStats.length)];
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
-                    this.addLog(`${vasen.getDisplayName()} steals ${defender.getDisplayName()}'s ${randomStat} boost!`, 'passive');
+                    this.addLog(`${vasen.getDisplayName()} activated Troll Theft!`, 'passive');
                     this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
                     this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
                 }
@@ -1253,7 +1262,7 @@ if (this.isOver && this.onEnd) {
                 vasen.battleFlags.valnadPassiveTriggered = true;
                 const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
                 vasen.currentHealth = reviveHealth;
-                this.addLog(`${vasen.getDisplayName()} refuses to fall!`, 'passive');
+                this.addLog(`${vasen.getDisplayName()} activated Deathless.`, 'passive');
                 this.addLog(`${vasen.getDisplayName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
                 return true; // Signal that the knockout was prevented
             }
