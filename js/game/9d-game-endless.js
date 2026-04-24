@@ -13,7 +13,6 @@ Game.prototype.challengeEndlessTower = function() {
     ui.showDialogue(
         'Endless Tower',
         `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength.</p>
-         <p>Battle begins at Floor 1 with Level 30 enemies, increasing by 1 level each floor.</p>
          <p><strong>Warning:</strong> Väsen cannot be tamed in this mode. Victory or defeat will end your run.</p>
          ${gameState.endlessTowerRecord.highestFloor > 0
             ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>`
