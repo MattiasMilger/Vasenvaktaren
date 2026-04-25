@@ -1158,49 +1158,77 @@ class Battle {
     applyFamilyPassive(trigger, context) {
         const { vasen, isPlayer } = context;
         
+        // --- ANDE: ETHEREAL SURGE ---
         if (trigger === 'onEnterBattlefield' && vasen.species.family === FAMILIES.ANDE) {
-            // Ande passive: Gain +1 stage to a random attribute when entering
             if (!vasen.battleFlags.andePassiveTriggered) {
                 vasen.battleFlags.andePassiveTriggered = true;
+                
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                const result = vasen.modifyAttributeStage(randomStat, 1);
-                
+                const stages = FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES;
+                const rollCount = FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES;
+
                 this.addLog(`${vasen.getDisplayName()} activated Ethereal Surge!`, 'passive');
-                this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
-                
-                // Gifu: share the buff with allies if equipped
-                if (result.changed !== 0 && !vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
-                    vasen.battleFlags.gifuTriggered = true;
-                    this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                    
-                    const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-                    allies.forEach(ally => {
-                        if (ally !== vasen && !ally.isKnockedOut()) {
-                            ally.modifyAttributeStage(randomStat, 1);
-                            this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+
+                for (let i = 0; i < rollCount; i++) {
+                    const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                    const result = vasen.modifyAttributeStage(randomStat, stages);
+                    const stageWord = Math.abs(stages) === 1 ? 'stage' : 'stages';
+                    this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
+
+                    if (result.changed !== 0 && vasen.hasRune('GIFU')) {
+                        if (!vasen.battleFlags.gifuTriggered) {
+                            vasen.battleFlags.gifuTriggered = true;
+                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        }
+                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                        allies.forEach(ally => {
+                            if (ally !== vasen && !ally.isKnockedOut()) {
+                                ally.modifyAttributeStage(randomStat, stages);
+                                this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        
+        // --- ODJUR: BESTIAL RAGE ---
+        if (trigger === 'onTurnStart' && vasen.species.family === FAMILIES.ODJUR) {
+            if (vasen.battleFlags.turnsOnField >= FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) {
+                if (!vasen.battleFlags.odjurTriggered) {
+                    vasen.battleFlags.odjurTriggered = true;
+                    this.addLog(`${vasen.getDisplayName()} activated Bestial Rage!`, 'passive');
+
+                    const statsToBuff = [
+                        { name: 'strength', stages: FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES },
+                        { name: 'wisdom', stages: FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES }
+                    ];
+
+                    statsToBuff.forEach(item => {
+                        vasen.modifyAttributeStage(item.name, item.stages);
+                        this.addLog(`${vasen.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+                        
+                        // Gifu Sharing
+                        if (vasen.hasRune('GIFU')) {
+                            if (!vasen.battleFlags.gifuTriggered) {
+                                vasen.battleFlags.gifuTriggered = true;
+                                this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                            }
+                            const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                            allies.forEach(ally => {
+                                if (ally !== vasen && !ally.isKnockedOut()) {
+                                    ally.modifyAttributeStage(item.name, item.stages);
+                                    this.addLog(`${ally.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+                                }
+                            });
                         }
                     });
                 }
             }
         }
         
-        if (trigger === 'onTurnStart' && vasen.species.family === FAMILIES.ODJUR) {
-            // Odjur passive: Bestial Rage - gain Strength and Wisdom stages after 2 turns on field
-            if (vasen.battleFlags.turnsOnField >= FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) {
-                if (!vasen.battleFlags.odjurTriggered) {
-                    vasen.battleFlags.odjurTriggered = true;
-                    vasen.modifyAttributeStage('strength', FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES);
-                    vasen.modifyAttributeStage('wisdom', FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES);
-                    this.addLog(`${vasen.getDisplayName()} activated Bestial Rage!`, 'passive');
-                    this.addLog(`${vasen.getDisplayName()}'s Strength was raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage!`, 'buff');
-                    this.addLog(`${vasen.getDisplayName()}'s Wisdom was raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} stage!`, 'buff');
-                }
-            }
-        }
-        
+        // --- OKNYTT: TAG TEAM ---
         if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.OKNYTT) {
-            // Oknytt passive: Tag Team - raises a random attribute of the incoming ally by 1 stage
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
@@ -1208,29 +1236,49 @@ class Battle {
                 incomingVasen.modifyAttributeStage(randomStat, 1);
                 this.addLog(`${vasen.getDisplayName()} activated Tag Team!`, 'passive');
                 this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                // Note: Tag Team targets a specific incoming ally, so usually Gifu (whole team) isn't applied here unless you want it to.
             }
         }
         
+        // --- DRAKE: DRACONIC RESILIENCE ---
         if (trigger === 'onHealthThreshold' && vasen.species.family === FAMILIES.DRAKE) {
-            // Drake passive: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
             const healthPercent = vasen.currentHealth / vasen.maxHealth;
             if (healthPercent <= FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD && !vasen.battleFlags.drakePassiveTriggered) {
                 vasen.battleFlags.drakePassiveTriggered = true;
-                vasen.modifyAttributeStage('defense', FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES);
-                vasen.modifyAttributeStage('durability', FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES);
                 this.addLog(`${vasen.getDisplayName()} activated Draconic Resilience!`, 'passive');
-                this.addLog(`${vasen.getDisplayName()}'s Defense was raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} stage!`, 'buff');
-                this.addLog(`${vasen.getDisplayName()}'s Durability was raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} stage!`, 'buff');
+
+                const statsToBuff = [
+                    { name: 'defense', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES },
+                    { name: 'durability', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES }
+                ];
+
+                statsToBuff.forEach(item => {
+                    vasen.modifyAttributeStage(item.name, item.stages);
+                    this.addLog(`${vasen.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+
+                    // Gifu Sharing
+                    if (vasen.hasRune('GIFU')) {
+                        if (!vasen.battleFlags.gifuTriggered) {
+                            vasen.battleFlags.gifuTriggered = true;
+                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        }
+                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                        allies.forEach(ally => {
+                            if (ally !== vasen && !ally.isKnockedOut()) {
+                                ally.modifyAttributeStage(item.name, item.stages);
+                                this.addLog(`${ally.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+                            }
+                        });
+                    }
+                });
             }
         }
         
+        // --- RA: MALICIOUS RETALIATION ---
         if (trigger === 'onTakeDamage' && vasen.species.family === FAMILIES.RA) {
-            // Rå passive: Malicious Retaliation - lower two random enemy attributes by 1 stage when hit (FIXED: once per combat)
             const { attacker } = context;
-            if (attacker && !attacker.isKnockedOut()) {
-                // Mark flag so it only triggers once
+            if (attacker && !attacker.isKnockedOut() && !vasen.battleFlags.raPassiveTriggered) {
                 vasen.battleFlags.raPassiveTriggered = true;
-                
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const debuffedStats = [];
                 for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
@@ -1249,13 +1297,11 @@ class Battle {
             }
         }
         
+        // --- TROLL: TROLL THEFT ---
         if (trigger === 'onUseAbility' && vasen.species.family === FAMILIES.TROLL) {
-            // Troll passive: Troll Theft - steal one positive attribute stage from enemy (FIXED: once per combat)
             const { defender } = context;
-            if (defender && !defender.isKnockedOut()) {
-                // Mark flag so it only triggers once
+            if (defender && !defender.isKnockedOut() && !vasen.battleFlags.trollPassiveTriggered) {
                 vasen.battleFlags.trollPassiveTriggered = true;
-                
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const stealableStats = stats.filter(stat => defender.attributeStages[stat] > 0);
                 
@@ -1263,22 +1309,38 @@ class Battle {
                     const randomStat = stealableStats[Math.floor(Math.random() * stealableStats.length)];
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
+                    
                     this.addLog(`${vasen.getDisplayName()} activated Troll Theft!`, 'passive');
                     this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
                     this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+
+                    // Gifu Sharing
+                    if (vasen.hasRune('GIFU')) {
+                        if (!vasen.battleFlags.gifuTriggered) {
+                            vasen.battleFlags.gifuTriggered = true;
+                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        }
+                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                        allies.forEach(ally => {
+                            if (ally !== vasen && !ally.isKnockedOut()) {
+                                ally.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
+                                this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                            }
+                        });
+                    }
                 }
             }
         }
         
+        // --- VALNAD: DEATHLESS ---
         if (trigger === 'onKnockout' && vasen.species.family === FAMILIES.VALNAD) {
-            // Vålnad passive: Deathless - revive with 10% health upon knockout (once per battle)
             if (!vasen.battleFlags.valnadPassiveTriggered) {
                 vasen.battleFlags.valnadPassiveTriggered = true;
                 const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
                 vasen.currentHealth = reviveHealth;
                 this.addLog(`${vasen.getDisplayName()} activated Deathless ᛣ.`, 'passive');
                 this.addLog(`${vasen.getDisplayName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
-                return true; // Signal that the knockout was prevented
+                return true;
             }
         }
     }

@@ -201,8 +201,9 @@ const FAMILY_PASSIVE_CONFIG = {
     // Alv: Innate Megin - increases max Megin
     ALV_MEGIN_BOOST: 0.14,
     
-    // Ande: Ethereal Surge - raises a random attribute by stages when entering battlefield
+    // Ande: Ethereal Surge - raises x random attributes by y stages when entering battlefield
     ANDE_ATTRIBUTE_STAGES: 1,
+    ANDE_ATTRIBUTE_TIMES: 2,
     
     // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
@@ -364,7 +365,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
         get description() {
-            return `When entering the battlefield, raises one random attribute by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`;
+            return `When entering the battlefield, raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attribute by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`; 
         }
     },
     [FAMILIES.DRAKE]: {
