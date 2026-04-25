@@ -73,7 +73,7 @@ const ABILITIES = {
         type: ATTACK_TYPES.STRENGTH,
         power: 15,
         target_hp_bonus_percent: GAME_CONFIG.GIANTSBANE_BONUS,
-        meginCost: 50,
+        meginCost: 45,
         giantsbaneBonus: true
     },
 
