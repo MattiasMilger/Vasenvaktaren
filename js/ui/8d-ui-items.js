@@ -127,7 +127,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'waterway guardian',
         'charred warden',
         'soul-bound spirit',
-        'thunderous giant'
+        'thunderous giant',
+        'Iron Wood native'
     ];
 
     let highlighted = description;
