@@ -72,6 +72,7 @@ const GAME_CONFIG = {
 
     GIANTSBANE_BONUS: 0.33, // % of target's max HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
+    ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
     TYRS_SACRIFICE_HEALTH_COST: 0.40,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
     TYRS_SACRIFICE_STAGES: 3,           // Attribute stages gained to all stats when using Tyr's Sacrifice
@@ -411,9 +412,9 @@ const FAMILY_PASSIVES = {
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
     [FAMILIES.OKNYTT]: { strength: 70, wisdom: 62, health: 58, defense: 55, durability: 80 },
-    [FAMILIES.VALNAD]: { strength: 65, wisdom: 72, health: 58, defense: 75, durability: 55 },
+    [FAMILIES.VALNAD]: { strength: 71, wisdom: 67, health: 58, defense: 75, durability: 55 },
     [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 46 },
-    [FAMILIES.TROLL]: { strength: 65, wisdom: 60, health: 70, defense: 70, durability: 60 },
+    [FAMILIES.TROLL]: { strength: 69, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 50, wisdom: 80, health: 60, defense: 65, durability: 60 },
     [FAMILIES.ALV]: { strength: 55, wisdom: 85, health: 60, defense: 55, durability: 60 },
     [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 58, defense: 80, durability: 50 },

@@ -112,7 +112,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Wailing Cry', 'Wild Bite', 'Ground Stomp', 'Tyr\'s Sacrifice'],
+        abilities: ['Ground Stomp', 'Drown', 'Wild Bite', 'Tyr\'s Sacrifice'],
         tamingItem: 'Mound Root',
         image: 'assets/vasen/draug.png'
     },
@@ -182,7 +182,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
-        abilities: ['Ground Stomp', 'Boulder Toss', 'Smithing', 'Burning Insult'],
+        abilities: ['Ground Stomp', 'Boulder Toss', 'Smithing', 'Rotvalta'],
         tamingItem: 'Silver Necklace',
         image: 'assets/vasen/bergatroll.png'
     },
@@ -193,7 +193,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Wild Bite', 'Thick Coat', 'Skald\'s Mead'],
+        abilities: ['Vine Whip', 'Wild Bite', 'Thick Coat', 'Rotvalta'],
         tamingItem: 'Mossy Bark',
         image: 'assets/vasen/skogstroll.png'
     },
@@ -353,7 +353,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Moon Beam', 'Burning Insult', 'Enchanting Song'],
+        abilities: ['Vine Whip', 'Moon Beam', 'Burning Insult', 'Rotvalta'],
         tamingItem: 'Elderflower Sprig',
         image: 'assets/vasen/hyllemor.png'
     },
@@ -443,7 +443,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Vine Whip', 'Ground Stomp', 'Thick Coat', 'Boulder Toss'],
+        abilities: ['Vine Whip', 'Boulder Toss', 'Thick Coat', 'Rotvalta'],
         tamingItem: 'Ancient Log',
         image: 'assets/vasen/jarnvidja.png'
     },
@@ -467,7 +467,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Fire Breath', 'Wild Bite', 'Thick Coat', 'Storm Claw'],
+        abilities: ['Fire Breath', 'Wild Bite', 'Thick Coat', 'Rotvalta'],
         tamingItem: 'Shedded Scale',
         image: 'assets/vasen/lindorm.png'
     },
@@ -511,7 +511,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Fire Breath', 'Landslide', 'Wild Bite', 'Sky Dive'],
+        abilities: ['Fire Breath', 'Landslide', 'Wild Bite', 'Rotvalta'],
         tamingItem: 'Yggdrasil Root',
         image: 'assets/vasen/nidhogg.png'
     }

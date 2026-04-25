@@ -817,7 +817,16 @@ const LORE_ENTRIES = {
         unlockType: 'ability',
         unlockKey: "Giantsbane"
     },
-
+    'ability_rotvalta': {
+        key: 'ability_rotvalta',
+        name: 'Rotvälta',
+        category: 'abilities',
+        desc: 'A "rotvälta" is the massive, vertical wall of earth and tangled roots exposed when a great tree is torn from the ground by storm or weight. In folk belief, these are not merely natural accidents but the forest’s own defensive reflex. The ability channels this subterranean upheaval; when an enemy strikes with aggression, the earth recoils in kind, erupting in a crushing surge of wood and soil. To strike a practitioner of Rotvälta is to invite the weight of the forest floor to rise up and settle the debt.',
+        source: 'Swedish Folklore / Forest Traditions',
+        heritage: 'Swedish',
+        unlockType: 'ability',
+        unlockKey: 'Rotvalta'
+    },
     'ability_tyrs_sacrifice': {
         key: 'ability_tyrs_sacrifice',
         name: "Tyr's Sacrifice",

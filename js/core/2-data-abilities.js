@@ -99,6 +99,18 @@ const ABILITIES = {
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
         meginCost: GAME_CONFIG.TIER2_ATTACK_ABILITY_MEGIN
     },
+    'Rotvalta': {
+        name: 'Rotvälta',
+        flavorDescription: 'Nature itself recoils. A sudden, crushing eruption of roots triggered by the enemy\'s aggression.',
+        get mechanicsDescription() {
+            return `Hits opponent. +${GAME_CONFIG.ROTVALTA_BONUS} power if they attack you.`;
+        },
+        element: ELEMENTS.NATURE,
+        type: ATTACK_TYPES.STRENGTH,
+        power: 40,
+        meginCost: 55,
+        retaliationBonus: GAME_CONFIG.ROTVALTA_BONUS
+    },
     'Elven Light': {
         name: 'Elven Light',
         flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the twilight mist.',
@@ -134,7 +146,7 @@ const ABILITIES = {
     // Water Abilities
     'Drown': {
         name: 'Drown',
-        flavorDescription: 'Violently drags the opponent down, with the crushing pressure of water.',
+        flavorDescription: 'Violently drags the opponent down and suffocates them.',
         get mechanicsDescription() {
             return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },

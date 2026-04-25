@@ -256,11 +256,11 @@ class Battle {
         }
         
         // Handle battle end with delay to allow death animations to complete
-if (this.isOver && this.onEnd) {
-    setTimeout(() => {
-        this.onEnd(this.getBattleResult());
-    }, GAME_CONFIG.BATTLE_END_ANIMATION_DELAY);
-}
+        if (this.isOver && this.onEnd) {
+            setTimeout(() => {
+                this.onEnd(this.getBattleResult());
+            }, GAME_CONFIG.BATTLE_END_ANIMATION_DELAY);
+        }
     }
     
     // Get battle result
@@ -301,32 +301,40 @@ if (this.isOver && this.onEnd) {
             this.addLog(`${this.playerActive.getDisplayName()} is preparing and cannot act this turn.`, 'status');
             return this.enemyTurn();
         }
-        
+
         const ability = ABILITIES[abilityName];
         if (!ability) return null;
-        
+
         const meginCost = this.playerActive.getAbilityMeginCost(abilityName);
         if (this.playerActive.currentMegin < meginCost) {
             this.addLog('Not enough Megin.', 'error');
             return null;
         }
-        
+
         this.startTurn();
-        
-        // Determine turn order
-        const playerIsUtility = ability.type === ATTACK_TYPES.UTILITY;
+
         const enemyAction = this.getEnemyAction();
         const enemyAbility = ABILITIES[enemyAction.ability];
-        const enemyIsUtility = enemyAbility && enemyAbility.type === ATTACK_TYPES.UTILITY;
-        
-        // Priority: Utility > Swap > Attack
+
+        // Pre-calculation step for Rotvalta
+        if (ability.retaliationBonus && isAbilityDamaging(enemyAction.ability)) {
+            this.playerActive.battleFlags.wasAttackedThisTurn = true;
+        }
+        if (enemyAbility && enemyAbility.retaliationBonus && isAbilityDamaging(abilityName)) {
+            this.enemyActive.battleFlags.wasAttackedThisTurn = true;
+        }
+
+        // Determine turn order based on priority
+        const playerPriority = ability.priority || 0;
+        const enemyPriority = (enemyAbility ? enemyAbility.priority : 0) || 0;
+
         let playerFirst = true;
-        if (!playerIsUtility && enemyIsUtility) {
+        if (enemyPriority > playerPriority) {
             playerFirst = false;
         }
-        
+
         const results = { player: null, enemy: null };
-        
+
         if (playerFirst) {
             results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
             if (!this.enemyActive.isKnockedOut()) {
@@ -338,10 +346,10 @@ if (this.isOver && this.onEnd) {
                 results.player = this.executeAbility(this.playerActive, this.enemyActive, abilityName, true, allyTarget);
             }
         }
-        
+
         this.handlePostTurn(results);
         this.endTurn();
-        
+
         return results;
     }
     
@@ -544,6 +552,7 @@ if (this.isOver && this.onEnd) {
         
         // Apply damage
         const actualDamage = defender.takeDamage(result.damage);
+
         this.addLog(`${attacker.getDisplayName()} deals ${actualDamage} damage to ${defender.getDisplayName()}!`, 'damage');
 
         // Log matchup (always show effectiveness)
@@ -749,6 +758,11 @@ if (this.isOver && this.onEnd) {
             if (hasNegativeStage) {
                 power += ability.opponent_debuff_bonus;
             }
+        }
+        
+        // Rotvälta: +40 power if the attacker was attacked this turn
+        if (ability.retaliationBonus && attacker.battleFlags.wasAttackedThisTurn) {
+            power += ability.retaliationBonus;
         }
         
         // Giantsbane: gains power based on target's max HP
