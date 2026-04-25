@@ -140,7 +140,7 @@ const GAME_CONFIG = {
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
     // Inguz: Chance to debuff and opponents attributes
-    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.30,          // % chance to lower attribute by 1 stage
+    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.40,          // % chance to lower attribute by 1 stage
     
     // Mannaz: Heal on utility ability use
     RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
