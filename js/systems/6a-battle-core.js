@@ -595,7 +595,7 @@ class Battle {
             if (defender.hasRune('HAGAL')) {
                 this.addLog(`${defender.getDisplayName()}'s ${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
                 ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
-                    const result = attacker.modifyAttributeStage(stat, -1);
+                    const result = attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES);
                     if (result.changed !== 0) {
                         const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
                         this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');

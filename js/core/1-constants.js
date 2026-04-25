@@ -129,6 +129,9 @@ const GAME_CONFIG = {
     
     // Fehu: Potent hit damage reduction
     RUNE_FEHU_DAMAGE_REDUCTION: 0.90,   // Multiplier applied to reduce incoming potent hit damage
+
+    // Hagal: attribute stage debuff on death
+    RUNE_HAGAL_DEBUFF_STAGES: 2,
     
     // Element-specific buff runes (Eihwaz/Earth, Sol/Fire, Ehwaz/Wind, Isaz/Water)
     RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // +% chance to trigger attribute buff on hit
