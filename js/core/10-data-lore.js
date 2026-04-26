@@ -837,6 +837,16 @@ const LORE_ENTRIES = {
         unlockType: 'ability',
         unlockKey: "Tyr's Sacrifice"
     },
+    'ability_freyas_tears': {
+        key: 'ability_freyas_tears',
+        name: "Freya's Tears",
+        category: 'abilities',
+        desc: "The goddess Freya, known as Vanadís of the Vanir, famously wept for her husband Óðr when he departed on long journeys. Her sorrow possesses a unique, physical weight that alters the natural world. When her tears strike the soil, they manifest as pure, red gold, while those that descend into the salt of the deep oceans are preserved as translucent amber. This transformation of divine grief into lasting treasure serves as a testament to her immense power over both the earth and the sea, cementing her tears as a symbol of value and endurance across the realms.",
+        source: 'Prose Edda (Gylfaginning) / Skáldskaparmál',
+        heritage: 'Norse',
+        unlockType: 'ability',
+        unlockKey: "Freya's Tears"
+    },
 
     // =========================================================================
     // CATEGORY: CONCEPTS

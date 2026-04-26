@@ -77,6 +77,9 @@ const GAME_CONFIG = {
     TYRS_SACRIFICE_HEALTH_COST: 0.40,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
     TYRS_SACRIFICE_STAGES: 3,           // Attribute stages gained to all stats when using Tyr's Sacrifice
 
+    FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears Megin regen boost lasts
+    FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
+
     // =============================================================================
     // HEALING
     // =============================================================================

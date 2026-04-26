@@ -330,6 +330,21 @@ const ABILITIES = {
         effect: { type: 'tyrs_sacrifice' }
     },
 
+    // Water Utility
+    'Freya\'s Tears': {
+        name: 'Freya\'s Tears',
+        flavorDescription: 'Calls upon Freya to rain down replenishing tears.',
+        get mechanicsDescription() {
+            return `Doubles your team's Megin regeneration for ${GAME_CONFIG.FREYASTEARS_TURNS} turns. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+        },
+        element: ELEMENTS.WATER,
+        type: ATTACK_TYPES.UTILITY,
+        power: 0,
+        meginCost: 50,
+        grantsEmpowerment: true,
+        effect: { type: 'freyastears' }
+    },
+
     // Basic Strike (available to all)
     'Basic Strike': {
         name: 'Basic Strike',

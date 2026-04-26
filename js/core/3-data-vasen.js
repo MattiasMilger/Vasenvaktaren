@@ -22,7 +22,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Torch Strike', 'Vine Whip', 'Smithing', 'Thick Coat'],
+        abilities: ['Torch Strike', 'Vine Whip', 'Smithing', 'Giantsbane'],
         tamingItem: 'Garden Rake',
         image: 'assets/vasen/gardstomte.png'
     },
@@ -33,7 +33,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Skald\'s Mead', 'Burning Insult'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Burning Insult', 'Loki\'s Betrayal'],
         tamingItem: 'Warm Tomtegrot',
         image: 'assets/vasen/hustomte.png'
     },
@@ -44,7 +44,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Drown', 'Torch Strike', 'Burning Insult', 'Wild Bite'],
+        abilities: ['Sinkhole', 'Tidal Wave', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Water Bucket',
         image: 'assets/vasen/brunnsgubbe.png'
     },
@@ -55,7 +55,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Hail Storm'],
+        abilities: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Giantsbane'],
         tamingItem: 'Attic Key',
         image: 'assets/vasen/pyssling.png'
     },
@@ -68,7 +68,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.WIND,
         rarity: RARITIES.COMMON,
-        abilities: ['Storm Claw', 'Sky Dive', 'Hail Storm', 'Icicle Spear'],
+        abilities: ['Storm Claw', 'Icicle Spear', 'Burning Insult', 'Sky Dive'],
         tamingItem: 'Black Feather',
         image: 'assets/vasen/nattramn.png'
     },
@@ -90,7 +90,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Fire Breath', 'Elven Light', 'Wailing Cry', 'Hail Storm'],
+        abilities: ['Fire Breath', 'Tidal Wave', 'Elven Light', 'Wailing Cry'],
         tamingItem: 'Ghastly Lantern',
         image: 'assets/vasen/irrbloss.png'
     },
@@ -101,7 +101,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
-        abilities: ['Drown', 'Tidal Wave', 'Skald\'s Mead', 'Wailing Cry'],
+        abilities: ['Drown', 'Tidal Wave', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Damp Seaweed',
         image: 'assets/vasen/strandvaskare.png'
     },
@@ -147,7 +147,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Storm Claw', 'Wild Bite', 'Thick Coat', 'Enchanting Song'],
+        abilities: ['Storm Claw', 'Wild Bite', 'Enchanting Song', 'Drown'],
         tamingItem: 'Cursed Yarn',
         image: 'assets/vasen/bjara.png'
     },
@@ -169,7 +169,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WIND,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Storm Claw', 'Sky Dive', 'Hail Storm', 'Wind Gust'],
+        abilities: ['Storm Claw', 'Icicle Spear', 'Thick Coat', 'Sky Dive'],
         tamingItem: 'Eagle Quill',
         image: 'assets/vasen/rasvelg.png'
     },
@@ -193,7 +193,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Wild Bite', 'Thick Coat', 'Rotvalta'],
+        abilities: ['Vine Whip', 'Landslide', 'Thick Coat', 'Rotvalta'],
         tamingItem: 'Mossy Bark',
         image: 'assets/vasen/skogstroll.png'
     },
@@ -239,7 +239,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Lava Jet', 'Enchanting Song', 'Landslide'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Mine Lantern',
         image: 'assets/vasen/gruvra.png'
     },
@@ -261,7 +261,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
-        abilities: ['Drown', 'Elven Light', 'Enchanting Song', 'Tidal Wave'],
+        abilities: ['Drown', 'Moon Beam', 'Enchanting Song', 'Tidal Wave'],
         tamingItem: 'Waterlogged Violin',
         image: 'assets/vasen/nacken.png'
     },
@@ -283,7 +283,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Lava Jet', 'Landslide', 'Enchanting Song', 'Loki\'s Betrayal'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Brass Cowbell',
         image: 'assets/vasen/huldra.png'
     },
@@ -296,7 +296,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Wind Gust', 'Enchanting Song', 'Moon Beam'],
+        abilities: ['Elven Light', 'Wind Gust', 'Moon Beam', 'Freya\'s Tears'],
         tamingItem: 'Flicker Dust',
         image: 'assets/vasen/alva.png'
     },
@@ -307,7 +307,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Hail Storm', 'Wind Gust', 'Tidal Wave'],
+        abilities: ['Elven Light', 'Hail Storm', 'Skald\'s Mead', 'Wind Gust'],
         tamingItem: 'Morning Dew',
         image: 'assets/vasen/dimalva.png'
     },
@@ -318,7 +318,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.RARE,
-        abilities: ['Sinkhole', 'Lava Jet', 'Smithing', 'Skald\'s Mead'],
+        abilities: ['Sinkhole', 'Landslide', 'Skald\'s Mead', 'Smithing'],
         tamingItem: 'Anvil Shard',
         image: 'assets/vasen/svartalv.png'
     },
@@ -329,7 +329,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.RARE,
-        abilities: ['Elven Light', 'Hail Storm', 'Enchanting Song', 'Moon Beam'],
+        abilities: ['Elven Light', 'Hail Storm', 'Moon Beam', 'Freya\'s Tears'],
         tamingItem: 'Festive Midsommarkrans',
         image: 'assets/vasen/ljusalv.png'
     },
@@ -340,7 +340,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Skald\'s Mead', 'Smithing'],
         tamingItem: 'Molten Ore',
         image: 'assets/vasen/dvarg.png'
     },
@@ -353,7 +353,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Vine Whip', 'Moon Beam', 'Burning Insult', 'Rotvalta'],
+        abilities: ['Vine Whip', 'Landslide', 'Burning Insult', 'Rotvalta'],
         tamingItem: 'Elderflower Sprig',
         image: 'assets/vasen/hyllemor.png'
     },
@@ -375,7 +375,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Ground Stomp', 'Sky Dive', 'Icicle Spear', 'Giantsbane'],
+        abilities: ['Sky Dive', 'Icicle Spear', 'Smithing', 'Giantsbane'],
         tamingItem: 'Shield Fragment',
         image: 'assets/vasen/valkyria.png'
     },
@@ -386,7 +386,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Enchanting Song', 'Sky Dive'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Sky Dive', 'Freya\'s Tears'],
         tamingItem: 'Hearth Core',
         image: 'assets/vasen/fylgja.png'
     },
@@ -397,7 +397,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Hail Storm', 'Tidal Wave', 'Skald\'s Mead', 'Enchanting Song'],
+        abilities: ['Hail Storm', 'Tidal Wave', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Fate Thread',
         image: 'assets/vasen/norna.png'
     },
@@ -410,7 +410,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Ground Stomp', 'Boulder Toss', 'Skald\'s Mead', 'Tyr\'s Sacrifice'],
+        abilities: ['Ground Stomp', 'Boulder Toss', 'Burning Insult', 'Tyr\'s Sacrifice'],
         tamingItem: 'Giant Rock',
         image: 'assets/vasen/jotun.png'
     },
@@ -421,7 +421,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Boulder Toss'],
+        abilities: ['Torch Strike', 'Boulder Toss', 'Smithing', 'Flaming Skewer'],
         tamingItem: 'Glowing Coal',
         image: 'assets/vasen/eldturs.png'
     },
@@ -432,7 +432,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
-        abilities: ['Hail Storm', 'Icicle Spear', 'Thick Coat', 'Wind Gust'],
+        abilities: ['Drown', 'Icicle Spear', 'Thick Coat', 'Tyr\'s Sacrifice'],
         tamingItem: 'Ice Crystal',
         image: 'assets/vasen/rimturs.png'
     },

@@ -63,6 +63,13 @@ class EnemyAI {
             // Not turn 1 and not yet used - still penalise heavily so it's never chosen late
             return -999;
         }
+
+        // Freya's Tears: use at most once per combat
+        if (abilityName === "Freya's Tears") {
+            if (this.battle.getEnemyUtilityUsageCount(this.vasen, "Freya's Tears") > 0) {
+                return -999;
+            }
+        }
         
         // Base score
         if (ability.type === ATTACK_TYPES.UTILITY) {
