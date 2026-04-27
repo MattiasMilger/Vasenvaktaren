@@ -186,6 +186,14 @@ class GameState {
                 return { success: false, message: 'Only one mythical Väsen allowed in party.' };
             }
         }
+
+        // Check duplicate species limit
+        const duplicateInParty = this.party.filter((v, i) =>
+            v && v.speciesName === vasenInstance.speciesName && i !== slotIndex
+        );
+        if (duplicateInParty.length > 0) {
+            return { success: false, message: `You cannot have two ${vasenInstance.species.name} in your party.` };
+        }
         
         // Väsen keeps their equipped runes (no longer assigned from party slots)
         this.party[slotIndex] = vasenInstance;
