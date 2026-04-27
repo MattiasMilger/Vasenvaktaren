@@ -19,7 +19,7 @@ const TAMING_ITEMS = {
     },
     'Warm Tomtegrot': {
         name: 'Warm Tomtegröt',
-        description: 'A bowl of Warm Tomtegröt. The sweet smell might attract a watchful house spirit who loves this offering.',
+        description: 'A bowl of Warm Tomtegröt. The sweet smell might attract a watchful house steward who loves this offering.',
         tamingTarget: 'Hustomte'
     },
     'Water Bucket': {
@@ -39,7 +39,7 @@ const TAMING_ITEMS = {
     },
     'Ghastly Lantern': {
         name: 'Ghastly Lantern',
-        description: 'A sputtering Ghastly Lantern. Its light is faint and misleading, a lure for a wandering, fire-aligned spirit.',
+        description: 'A sputtering Ghastly Lantern. Its light is faint and misleading, a lure for a wandering, bright phantom.',
         tamingTarget: 'Irrbloss'
     },
     'Damp Seaweed': {

@@ -84,10 +84,10 @@ UIController.prototype.highlightItemKeywords = function(description) {
     const keywords = [
         'guardian of the land',
         'bearded guardian',
-        'house spirit',
+        'house steward',
         'shrieking raven',
         'infant spirit',
-        'fire-aligned spirit',
+        'bright phantom',
         'drowned sailor',
         'white horse',
         'nocturnal grazer',
