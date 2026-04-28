@@ -221,6 +221,20 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
 
         message += `<p><strong>${nextZone.name}</strong> unlocked!</p>`;
 
+        // Award taming items from the next zone (except when unlocking Ginnungagap)
+        if (wasFirstClear && nextZoneId !== 'GINNUNGAGAP') {
+            const nextZoneItems = getItemsForZone(nextZoneId);
+            if (nextZoneItems.length > 0) {
+                const shuffled = [...nextZoneItems].sort(() => Math.random() - 0.5);
+                const itemsToGive = shuffled.slice(0, GAME_CONFIG.NEW_ZONE_ITEMS_AMOUNT);
+                itemsToGive.forEach(itemId => {
+                    gameState.addItem(itemId, 1);
+                    const itemName = TAMING_ITEMS[itemId]?.name || itemId;
+                    message += `<p>You received: <strong>${itemName}</strong>!</p>`;
+                });
+            }
+        }
+
         // Custom callback to switch zone instantly
         callback = () => {
             gameState.currentZone = nextZoneId; // <--- MODIFICATION: Set current zone to the new zone

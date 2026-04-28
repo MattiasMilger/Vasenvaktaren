@@ -22,6 +22,7 @@ const GAME_CONFIG = {
     LEVEL_UP_ACCELERATION: 5,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
     STARTING_ITEMS_AMOUNT: 3,
+    NEW_ZONE_ITEMS_AMOUNT: 1,
     
     // =============================================================================
     // EXPERIENCE DISTRIBUTION
