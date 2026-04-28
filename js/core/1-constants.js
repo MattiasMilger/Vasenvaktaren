@@ -41,7 +41,7 @@ const GAME_CONFIG = {
     BASE_MEGIN: 65,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
-    SAME_ELEMENT_MEGIN_DISCOUNT: 0.15,  // Cost discount when using same-element abilities
+    SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element abilities
     
     // =============================================================================
     // ATTRIBUTE STAGES (BUFFS/DEBUFFS)
@@ -71,7 +71,7 @@ const GAME_CONFIG = {
     TIER2_ATTACK_ABILITY_POWER: 68,
     TIER2_ATTACK_ABILITY_MEGIN: 50,
 
-    GIANTSBANE_BONUS: 0.33, // % of target's max HP as bonus power
+    GIANTSBANE_BONUS: 0.30, // % of target's max HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
@@ -147,7 +147,7 @@ const GAME_CONFIG = {
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
     // Inguz: Chance to debuff and opponents attributes
-    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.40,          // % chance to lower attribute by 1 stage
+    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.30,          // % chance to lower attribute by 1 stage
     
     // Mannaz: Heal on utility ability use
     RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
@@ -311,9 +311,9 @@ const RARITIES = {
 
 const RARITY_MULTIPLIERS = {
     [RARITIES.COMMON]: 1.0,
-    [RARITIES.UNCOMMON]: 1.1,
-    [RARITIES.RARE]: 1.15,
-    [RARITIES.MYTHICAL]: 1.3
+    [RARITIES.UNCOMMON]: 1.06,
+    [RARITIES.RARE]: 1.12,
+    [RARITIES.MYTHICAL]: 1.22
 };
 
 const RARITY_EXP_BONUS = {
