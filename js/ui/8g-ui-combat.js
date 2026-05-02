@@ -162,11 +162,6 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         ? '<span class="combatant-untamed">Untamed</span>'
         : '';
 
-    // Freya's Tears: show wavy blue animation on the active combatant's portrait
-    const freyasTearsActive = side === 'player'
-        ? battle.freyasTearsTurnsPlayer > 0
-        : battle.freyasTearsTurnsEnemy > 0;
-
     // Build combatant panel
     panel.innerHTML = `
         <div class="combatant-scroll-inner">
@@ -267,8 +262,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
     // Apply minimized state if active
     panel.classList.toggle('minimized', this.combatCardsMinimized);
 
-    // Apply Freya's Tears glow to the whole card (party-wide effect)
-    panel.classList.toggle('freyas-tears-active', freyasTearsActive);
+    // Apply Freya's Tears glow if active on this combatant
+    panel.classList.toggle('freyas-tears-active', (vasen.battleFlags.freyasTearsTurnsRemaining || 0) > 0);
 
     // Reapply any active animations after re-render
     this.reapplyAnimations(side);

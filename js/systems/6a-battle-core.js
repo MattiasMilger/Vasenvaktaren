@@ -44,12 +44,6 @@ class Battle {
         
         // Enemy utility usage tracking (for AI)
         this.enemyUtilityUsage = new Map(); // "vasenId-abilityName" -> count
-
-        // Freya's Tears: team Megin regen boost state
-        this.freyasTearsTurnsPlayer = 0;  // Turns remaining on player's side
-        this.freyasTearsTurnsEnemy = 0;   // Turns remaining on enemy's side
-        this.freyasTearsCasterNamePlayer = ''; // Caster name for expiry log (player)
-        this.freyasTearsCasterNameEnemy = ''; // Caster name for expiry log (enemy)
         
         // Callbacks for UI updates
         this.onLog = null;
@@ -221,7 +215,32 @@ class Battle {
             const tracker = this.expTracker.get(this.playerActive.id);
             if (tracker) tracker.turnsOnField++;
         }
-        
+
+        // Freya's Tears: apply health regen + extra megin regen to active combatants
+        [this.playerActive, this.enemyActive].forEach(vasen => {
+            if (!vasen || vasen.isKnockedOut()) return;
+            const turns = vasen.battleFlags.freyasTearsTurnsRemaining || 0;
+            if (turns <= 0) return;
+
+            // Freya's Tears Health regen
+            const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REGEN_PERCENT);
+            if (healAmount > 0) {
+                vasen.heal(healAmount);
+                this.addLog(`${vasen.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health!`, 'heal');
+            }
+
+            // Extra megin regen (applies the additional ticks beyond the base regen in endTurn)
+            for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
+                vasen.regenerateMegin();
+            }
+
+            // Decrement counter and log expiry
+            vasen.battleFlags.freyasTearsTurnsRemaining--;
+            if (vasen.battleFlags.freyasTearsTurnsRemaining === 0) {
+                this.addLog(`Freya's Tears have dried up and are no longer replenishing ${vasen.getDisplayName()}.`, 'status');
+            }
+        });
+
         // Trigger Odjur passive on turn start
         this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
         this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
@@ -229,43 +248,17 @@ class Battle {
     
     // End turn (regenerate megin, clear flags)
     endTurn() {
-        // Regenerate megin for all team members, applying Freya's Tears multiplier if active
+        // Regenerate megin for all team members (base regen only)
         this.playerTeam.forEach(v => {
             if (!v.isKnockedOut()) {
                 v.regenerateMegin();
-                // Apply extra regen for the remaining (multiplier - 1) times
-                if (this.freyasTearsTurnsPlayer > 0) {
-                    for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
-                        v.regenerateMegin();
-                    }
-                }
             }
         });
         this.enemyTeam.forEach(v => {
             if (!v.isKnockedOut()) {
                 v.regenerateMegin();
-                // Apply extra regen for the remaining (multiplier - 1) times
-                if (this.freyasTearsTurnsEnemy > 0) {
-                    for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
-                        v.regenerateMegin();
-                    }
-                }
             }
         });
-
-        // Decrement Freya's Tears counters and log expiry
-        if (this.freyasTearsTurnsPlayer > 0) {
-            this.freyasTearsTurnsPlayer--;
-            if (this.freyasTearsTurnsPlayer === 0) {
-                this.addLog(`Freya's Tears have dried up, and are no longer replenishing ${this.freyasTearsCasterNamePlayer}'s team.`, 'status');
-            }
-        }
-        if (this.freyasTearsTurnsEnemy > 0) {
-            this.freyasTearsTurnsEnemy--;
-            if (this.freyasTearsTurnsEnemy === 0) {
-                this.addLog(`Freya's Tears have dried up, and are no longer replenishing ${this.freyasTearsCasterNameEnemy}'s team.`, 'status');
-            }
-        }
         
         // Clear swap sickness and temporary flags
         if (this.playerActive) {
@@ -845,7 +838,7 @@ class Battle {
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
         // Base reflected damage is 20% of original
-        const baseReflectDamage = originalDamage * 0.20;
+        const baseReflectDamage = originalDamage * GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE;
         
         // Mixed attack: 50% based on Strength, 50% based on Wisdom
         const strengthFactor = defender.getAttribute('strength') / 100;
@@ -914,23 +907,13 @@ class Battle {
         }
 
         if (effect.type === 'freyastears') {
-            // Freya's Tears: triple team Megin regen for FREYASTEARS_TURNS turns (non-stackable)
-            if (isPlayer) {
-                if (this.freyasTearsTurnsPlayer > 0) {
-                    // Already active - do nothing (non-stackable)
-                    return effects;
-                }
-                this.freyasTearsTurnsPlayer = GAME_CONFIG.FREYASTEARS_TURNS;
-                this.freyasTearsCasterNamePlayer = user.getDisplayName();
-            } else {
-                if (this.freyasTearsTurnsEnemy > 0) {
-                    // Already active - do nothing (non-stackable)
-                    return effects;
-                }
-                this.freyasTearsTurnsEnemy = GAME_CONFIG.FREYASTEARS_TURNS;
-                this.freyasTearsCasterNameEnemy = user.getDisplayName();
+            // Freya's Tears: restore health and boost Megin regen on the active combatant for FREYASTEARS_TURNS turns (non-stackable)
+            if ((user.battleFlags.freyasTearsTurnsRemaining || 0) > 0) {
+                // Already active - do nothing (non-stackable)
+                return effects;
             }
-            this.addLog(`Freya's Tears rain down upon ${user.getDisplayName()}'s Team, replenishing their Megin over time.`, 'buff');
+            user.battleFlags.freyasTearsTurnsRemaining = GAME_CONFIG.FREYASTEARS_TURNS;
+            this.addLog(`Freya's Tears rain down upon ${user.getDisplayName()}, replenishing them over time.`, 'buff');
             return effects;
         }
 

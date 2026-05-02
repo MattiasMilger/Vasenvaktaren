@@ -335,13 +335,12 @@ const ABILITIES = {
         name: 'Freya\'s Tears',
         flavorDescription: 'Calls upon Freya to rain down replenishing tears.',
         get mechanicsDescription() {
-            return `Doubles your team's Megin regeneration for ${GAME_CONFIG.FREYASTEARS_TURNS} turns. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Recovers Health and Megin over the next ${GAME_CONFIG.FREYASTEARS_TURNS} turns.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 50,
-        grantsEmpowerment: true,
         effect: { type: 'freyastears' }
     },
 

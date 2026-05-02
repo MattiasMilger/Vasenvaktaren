@@ -66,7 +66,7 @@ const GAME_CONFIG = {
     // =============================================================================
     TIER1_ATTACK_ABILITY_POWER: 50,
     TIER1_ATTACK_ABILITY_MEGIN: 30,
-    TIER1_ATTACK_ABILITY_EMPOWERMENT: 0.1, // Damage boost on next attack
+    TIER1_ATTACK_ABILITY_EMPOWERMENT: 0.12, // Damage boost on next attack
 
     TIER2_ATTACK_ABILITY_POWER: 68,
     TIER2_ATTACK_ABILITY_MEGIN: 50,
@@ -78,8 +78,9 @@ const GAME_CONFIG = {
     TYRS_SACRIFICE_HEALTH_COST: 0.40,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
     TYRS_SACRIFICE_STAGES: 3,           // Attribute stages gained to all stats when using Tyr's Sacrifice
 
-    FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears Megin regen boost lasts
+    FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
     FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
+    FREYASTEARS_HEALTH_REGEN_PERCENT: 0.01, // % of max health restored per turn while Freya's Tears is active
 
     // =============================================================================
     // HEALING
@@ -122,17 +123,17 @@ const GAME_CONFIG = {
     // RUNE EFFECTS
     // =============================================================================
     // Elemental damage boost runes (Kaunan/Fire, Pertho/Earth, Tyr/Wind, Bjarka/Nature, Laguz/Water)
-    RUNE_ELEMENT_DAMAGE_BOOST: 0.12,    // +% damage when using matching element
+    RUNE_ELEMENT_DAMAGE_BOOST: 0.14,    // +% damage when using matching element
     
     // Odal: Low-cost ability damage boost
-    RUNE_ODAL_DAMAGE_BOOST: 0.10,       // +% damage for abilities costing ≤30 Megin
+    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for abilities costing ≤30 Megin
     RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
     
     // Dagaz: First round damage boost
     RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +% damage on first round in battle
     
     // Fehu: Potent hit damage reduction
-    RUNE_FEHU_DAMAGE_REDUCTION: 0.90,   // Multiplier applied to reduce incoming potent hit damage
+    RUNE_FEHU_DAMAGE_REDUCTION: 0.85,   // Multiplier applied to reduce incoming potent hit damage
 
     // Hagal: attribute stage debuff on death
     RUNE_HAGAL_DEBUFF_STAGES: 2,
@@ -146,11 +147,14 @@ const GAME_CONFIG = {
     RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost hit
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
-    // Inguz: Chance to debuff and opponents attributes
+    // Inguz: Chance to debuff opponents attributes
     RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.30,          // % chance to lower attribute by 1 stage
     
     // Mannaz: Heal on utility ability use
     RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
+
+    // Thurs: returns percentage of damage back to attacker
+    RUNE_THURS_RETURN_DAMAGE: 0.20,
     
     // =============================================================================
     // ENEMY AI CONFIGURATION
@@ -206,7 +210,7 @@ const GAME_CONFIG = {
 // Family Passive Configuration
 const FAMILY_PASSIVE_CONFIG = {
     // Alv: Innate Megin - increases max Megin
-    ALV_MEGIN_BOOST: 0.14,
+    ALV_MEGIN_BOOST: 0.12,
     
     // Ande: Ethereal Surge - raises x random attributes by y stages when entering battlefield
     ANDE_ATTRIBUTE_STAGES: 1,

@@ -29,8 +29,9 @@ const RUNES = {
         name: 'Thurs',
         fullName: 'Thurs',
         flavor: 'The violent, chaotic might of the Giants, channeled as a sharp, unyielding thorn. Any harm inflicted upon the bearer is instantly met with a fierce, painful recoil.',
-        effect: 'This väsen returns 35% of damage taken as mixed damage of its own element',
-        mechanic: { type: 'damage_reflect', value: 0.35 }
+        get effect() {
+            return `This väsen returns ${Math.round((GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE) * 100)}% of damage taken as mixed damage of its own element`;
+        },
     },
     'ANSUZ': {
         id: 'ANSUZ',
