@@ -1,0 +1,917 @@
+Väseväktaren
+Catch creatures of Swedish folklore
+By Mattias Milger
+Element:
+
+Element matchups:
+Earth hits:
+Earth: Neutral
+Nature: Weak
+Water: Neutral
+Fire: Potent
+Wind: Potent
+Nature hits:
+Earth: Potent
+Nature: Neutral
+Water: Potent
+Fire: Weak
+Wind: Weak
+Water hits:
+Earth: Potent
+Nature: Neutral
+Water: Neutral
+Fire: Potent
+Wind: Weak
+Fire hits:
+Earth: Neutral
+Nature: Potent
+Water: Weak
+Fire: Neutral
+Wind: Neutral
+Wind hits:
+Earth: Weak
+Nature: Neutral
+Water: Neutral
+Fire: Potent
+Wind: Neutral
+
+
+Weak hits: 0.7 x Damage
+Potent hits: 1.4 x Damage
+Neutral hits: 1 x Damage
+
+Väsen Families:
+Oknytt
+Description: Tiny and elusive keepers of narrow domains. Mischievous by nature, they delight in small pranks but can be surprisingly helpful when treated with care.
+Passive: Tag Team: When swapping out, raises a random attribute of the incoming ally by 1 stage.
+Pyssling
+A tiny, elusive guardian of the high rafters. Born from the wind’s whispers, this Pyssling manifests as a sharp gust or a sudden chill that tangles hair. 
+Family: Vätte
+Element: Wind
+Rarity: Uncommon
+Abilities: Wailing Cry, Wind Gust, Burning Insult, Giantsbane
+Taming item: Attic Key
+Zone: Folkets By
+Landvätte
+The unseen protector of a patch of ground, hill, or wilderness. They ensure the land's prosperity and punish trespassers.
+Family: Vätte
+Element: Earth
+Rarity: Common
+Abilities: Torch Strike, Landslide, Burning Insult, Loki’s Betrayal
+Taming item: Sturdy Spade
+Zone: Djupa Gruvan
+
+Gårdstomte
+A sharp‑eyed, temperamental guardian of the yard, barns, and gardens. It tends animals and tools, rewarding tidy grounds and punishing neglect.
+Family: Vätte
+Element: Nature
+Rarity: Common
+Abilities:Torch Strike, Vine Whip, Smithing, Giantsbane
+Taming item: Garden Rake
+Zone: Folkets By
+
+Hustomte
+A watchful steward dwelling in the house, often near the hearth. It keeps the home safe, but hates dirt and laziness. Offerings of porridge ensure its loyalty.
+Family: Vätte
+Element: Fire
+Rarity: Common
+Abilities: Torch Strike, Flaming Skewer, Burning Insult, Loki’s Betrayal
+Taming item: Warm Tomtegröt
+Zone: Folkets By
+Brunnsgubbe
+A reclusive warden of the village well. He keeps the water pure and the spring flowing, but demands cleanliness. Defile his domain and he will sour the water.
+Family: Vätte
+Element: Water
+Rarity: Uncommon
+Abilities: Sinkhole, Tidal Wave, Skald’s Mead, Freya’s Tears
+Taming item: Water Bucket
+Zone: Folkets By
+
+Vålnad
+Description: The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge or inflict misery on the living.
+Passive: Deathless ᛣ: Upon knockout, revives with 10% of max health (once per battle).
+
+Nattramn
+The shrieking, spectral form of a raven. It is the restless spirit of a soul denied peace, whose shadow spread ill omen.
+Family: Vålnad
+Element: Wind
+Rarity: Common
+Abilities: Storm Claw, Icicle Spear, Burning Insult, Sky Dive
+Taming item: Black Feather
+Zone: Folkets By
+
+Myling
+A perpetually wailing, agonized spirit of a forsaken infant, abandoned or wrongfully slain before receiving a proper burial.
+Family: Vålnad
+Element: Earth
+Rarity: Common
+Abilities: Wailing Cry, Sinkhole, Burning Insult, Loki’s Betrayal
+Taming item: Burial Flowers
+Zone: Djupa Gruvan
+
+Irrbloss
+A ghastly, hovering light that leads travelers astray into bogs and darkness. Said to be the souls of greedy men trapped between realms.
+Family: Vålnad
+Element: Fire
+Rarity: Uncommon
+Abilities: Fire Breath, Tidal Wave, Elven Light, Wailing Cry
+Taming item: Ghastly Lantern
+Zone: Glimrande Källan
+Strandvaskare
+The tormented spirit of a drowned sailor, forever haunting the coast. It lures ships to the reef with mournful cries and deceptive lights.
+Family: Vålnad
+Element: Water
+Rarity: Common
+Abilities: Drown, Tidal Wave, Skald’s Mead, Freya’s Tears
+Taming item: Damp Seaweed
+Zone: Glimrande Källan
+Draug
+A pale, bloated corpse that refuses to rest in its grave. The Draug possesses a twisted physical strength and radiates a chilling aura.
+Family: Vålnad
+Element: Nature
+Rarity: Uncommon
+Abilities: Ground Stomp, Drown, Wild Bite, Tyr’s Sacrifice
+Taming item: Mound Root
+Zone: Världens Ände
+Odjur
+Description: Supernatural beasts and monstrous offspring of the Gods or Giants. They embody raw natural forces and the terrifying elements of the wild.
+Passive: Bestial Rage: After spending 2 full turns on the battlefield, gain +1 Strength stage and +1 Wisdom stage (once per battle).
+
+Bäckahäst
+A deceptive, shimmering white horse that offers a tempting ride. Once mounted, it gallops into the deep current to ensure its victim drowns.
+Family: Odjur
+Element: Water
+Rarity: Uncommon
+Abilities: Drown, Ground Stomp, Thick Coat, Wild Bite 
+Taming item: Drenched saddle
+Zone: Glimrande Källan
+
+Gloson
+A fearsome, gigantic sow with eyes of burning embers. Its monstrous weight travels silently only under the deepest night.
+Family: Odjur
+Element: Fire
+Rarity: Uncommon
+Abilities: Ground Stomp, Flaming Skewer, Thick Coat, Wild Bite 
+Taming item: Delicate Truffle
+Zone: Folkets By
+
+Fenrir
+The monstrous wolf bound by the gods. He is destined to shatter his shackles and devour the sun and moon at the end of the world.
+Family: Odjur
+Element: Earth
+Rarity: Mythical
+Abilities: Storm Claw, Wild Bite, Thick Coat, Ground Stomp
+Taming item: Broken Chain
+Zone: Världens Ände
+Räsvelg
+A massive eagle perched at the edge of the world. The mere beating of its colossal wings generates the freezing, violent winds that sweep across the earth.
+Family: Odjur
+Element: Wind
+Rarity: Mythical
+Abilities: Storm Claw, Icicle Spear, Thick Coat, Sky Dive
+Taming item: Eagle Quill
+Zone: Världens Ände
+Bjära
+A supernatural construct resembling a hare, fashioned from wood shavings, yarn, and hair. It steals milk from the land and carries it back to its master.
+Family: Odjur
+Element: Nature
+Rarity: Uncommon
+Abilities: Storm Claw, Wild Bite, Drown, Rotvälta
+Taming item: Cursed Yarn
+Zone: Folkets By
+Troll
+Description: Ragged inhabitants of the mountains and deep woods, possessing formidable Strength and an ancient, primal cunning. They fear only the dawn, which locks their great bulk into a frozen, inert monument; they turn to stone upon exposure to sunlight.
+Passive: Troll Theft: When using an ability, steals 1 positive attribute stage from the enemy (once per battle).
+
+Bergatroll
+A colossal, mountain-dwelling Troll. Slow to rouse, but its rage is devastating, capable of shaking the bedrock. Driven by greed and loves jewelry.
+Family: Troll
+Element: Earth
+Rarity: Common
+Abilities: Ground Stomp, Boulder Toss, Smithing, Rotvälta
+Taming item: Silver Necklace
+Zone: Urberget
+
+Skogstroll
+A cunning, savage forest Troll, cloaked in moss and bark. It ambushes weary travelers, its primal, echoing howls defining the deepest, untouched woods.
+Family: Troll
+Element: Nature
+Rarity: Common
+Abilities: Vine Whip, Landslide, Thick Coat, Rotvälta
+Taming item: Mossy Bark
+Zone: Trollskogen
+
+Bortbyting
+A sickly, irritable, and demanding Troll child secretly swapped into a human cradle. It carries a malevolent look in its eyes.
+Family: Troll
+Element: Wind
+Rarity: Uncommon
+Abilities: Wailing Cry, Wild Bite, Burning Insult, Loki’s Betrayal
+Taming item: Trollmilk Bottle
+Zone: Folkets By
+Bäckatroll
+A moss-covered, ponderous troll dwelling beneath old stone bridges or within rushing streams. A stubborn guardian of the waterway, often demanding a toll.
+Family: Troll
+Element: Water
+Rarity: Uncommon
+Abilities: Drown, Tidal Wave, Burning Insult, Wild Bite
+Taming item: Bridge Keystone
+Zone: Glimrande Källan
+Gryningstroll
+A hulking Troll caught by the first rays of dawn and turned to stone. Instead of dying, the intense fire in its blood fused with the rock.
+Family: Troll
+Element: Fire
+Rarity: Uncommon
+Abilities: Ground Stomp, Lava Jet, Thick Coat, Tyr’s Sacrifice
+Taming item: Cooling Grease
+Zone: Urbergen
+Rå
+Description: Seductive, nature-bound spirits with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.
+Passive: Malicious Retaliation: When hit by an enemy attack, lowers 2 random enemy attributes by 1 stage each (once per battle).
+
+Gruvrå
+The beautiful, veiled female warden of the mine. She jealously guards the rich veins of ore and will cause immediate cave-ins if her domain is defiled.
+Family: Rå
+Element: Earth
+Rarity: Uncommon
+Abilities: Sinkhole, Lava Jet, Enchanting Song, Loki’s Betrayal
+Taming item: Mine Lantern
+Zone: Djupa Gruvan
+
+Skogsrå
+A stunningly beautiful forest warden, whose presence irresistibly draws men deep into the woods to their demise. Her back is often hollow like an old tree trunk.
+Family: Rå
+Element: Nature
+Rarity: Uncommon
+Abilities: Elven Light, Moon Beam, Enchanting Song, Loki’s Betrayal
+Taming item: Shed Antlers
+Zone: Trollskogen
+
+Näcken
+A male water warden who plays enchanting, sorrowful tunes on his fiddle. His music lures victims into watery graves, and only knowing his songs grants safety.
+Family: Rå
+Element: Water
+Rarity: Rare
+Abilities: Drown, Moon Beam, Enchanting Song, Tidal Wave
+Taming item: Waterlogged Violin
+Zone: Glimrande Källan
+Huldra
+A soot-streaked warden of the charred woods, dwelling where wildfire has cleared the path for new growth. Her eyes that glow like dying embers. 
+Family: Rå
+Element: Fire
+Rarity: Uncommon
+Abilities: Sinkhole, Lava Jet,  Enchanting Song, Loki’s Betrayal
+Taming item: Brass Cowbell
+Zone: Trollskogen
+Mara
+A weightless, shifting phantom of the twilight, capable of thinning her essence to glide through keyholes and the smallest cracks in the timber. She settles upon the chest of sleeping victims.
+Family: Rå
+Element: Wind
+Rarity: Rare
+Abilities: Wailing Cry, Wind Gust, Enchanting Song, Loki’s Betrayal
+Taming item: Heavy Pillow
+Zone: Djupa Gruvan
+Alv
+Description: Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.
+Passive: Innate Megin Increases max Megin by 12%.
+Älva
+A tiny, radiant being that rides high currents and twilight breezes. Known for a capricious nature, it can bring either sudden luck or unexplained sickness.Family: Alv
+Element: Wind
+Rarity: Uncommon
+Abilities: Elven Light, Wind Gust, Moon Beam, Freya’s Tears
+Taming item: Flicker Dust
+Zone: Trollskogen
+
+Svartalv
+Masterful subterranean smiths and craftsmen from Nidavellir. They forge the greatest treasures, weapons, and magical artifacts for the Gods.
+Family: Alv
+Element: Earth
+Rarity: Rare
+Abilities: Sinkhole, Landslide, Skald’s Mead, Smithing
+Taming item: Anvil Shard
+Zone: Djupa Gruvan
+Ljusalv
+Beautiful, radiant beings aligned with the Vanir. They embody the brilliance of life, fertility, and the purest magic of creation.
+Family: Alv
+Element: Nature
+Rarity: Rare
+Abilities: Elven Light, Hail Storm, Moon Beam, Freya’s Tears
+Taming item: Festive Midsommarkrans
+Zone: Trollskogen
+Dvärg
+A master of the forge and close kin to the Svartalv, though where the Svartalv shapes cold stone, the Dvärg commands raw fire to hammer ore into legendary artifacts.
+Family: Alv
+Element: Fire
+Rarity: Rare
+Abilities: Sinkhole, Lava Jet, Skald’s Mead, Giantsbane
+Taming item: Molten Ore
+Zone: Djupa Gruvan
+Dimälva
+A tiny, being out of pure mist that flutters over morning lakes. It weaves a thick supernatural shroud to mask the water's edge, luring the unwary toward the reeds.
+Family: Alv
+Element: Water
+Rarity: Uncommon
+Abilities: Elven Light, Hail Storm, Skald’s Mead, Wind Gust
+Taming item: Morning Dew
+Zone: Glimrande Källan
+Ande
+Description: Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.
+Passive: Ethereal Surge: When entering the battlefield, raises 2 random attribute by 1 stage (once per battle).
+
+Hyllemor
+The Elder Tree's fierce, protective spirit. Fail to ask her permission before cutting, and she will inflict crippling misfortune and devastating sickness on you.
+Family: Ande
+Element: Nature
+Rarity: Common
+Abilities: Vine Whip, Landslide, Burning Insult, Rotvälta
+Taming item: Elderflower Sprig
+Zone: Trollskogen
+
+Einhärje
+The valiant, deceased warriors dwelling in Valhalla. They spend their days in endless feasting upon the ever renewing boar Särimner and in fierce training, preparing for the final battle of Ragnarök.
+Family: Ande
+Element: Earth
+Rarity: Uncommon
+Abilities: Ground Stomp, Flaming Skewer, Smithing, Giantsbane
+Taming item: Valhalla Pork
+Zone: Världens Ände
+
+Valkyria
+A powerful, winged shieldmaiden who rides above the battlefield, choosing the bravest of the slain to escort and guide to Valhalla.
+Family: Ande
+Element: Wind
+Rarity: Rare
+Abilities: Sky Dive, Icicle Spear, Smithing, Giantsbane
+Taming item: Shield Fragment
+Zone: Världens Ände
+Fylgja
+An ethereal spirit bound to a person's soul and destiny. She often manifests within the heat of a battlefield, appearing as a radiant figure or a majestic animal to warn of impending danger.
+Family: Ande
+Element: Fire
+Rarity: Rare
+Abilities: Torch Strike, Flaming Skewer, Sky Dive, Freya’s Tears
+Taming item: Hearth Core
+Zone: Världens Ände
+Norna
+The ancient weaver of fate who tends the sacred waters of Wellspring of Urd. Her touch shapes destiny itself, and even the roots of Yggdrasil bend to her will.
+Family: Ande
+Element: Water
+Rarity: Mythical
+Abilities: Hail Storm, Tidal Wave, Skald’s Mead, Freya’s Tears
+Taming item: Fate Thread
+Zone: Glimrande Källan
+Jätte 
+Description: Ancient, colossal beings of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir Gods.
+Passive: Colossal Power: Basic Strike always has 35 power instead of its default power.
+
+Jotun
+A colossal giant, the embodiment of strength and raw nature. They are immense humanoids from Jotunheim, driven by primal chaos.
+Family: Jätte
+Element: Earth
+Rarity: Uncommon
+Abilities: Ground Stomp, Boulder Toss, Burning Insult, Tyr’s Sacrifice
+Taming item: Giant Rock
+Zone: Urbergen
+
+Eldturs
+Fearsome, fiery beings from the burning realm of Muspelheim. Led by Surtr, their purpose is to raze the world in fire at Ragnarök.
+Family: Jätte
+Element: Fire
+Rarity: Rare
+Abilities: Torch Strike, Boulder Toss, Smithing, Flaming Skewer
+Taming item: Glowing Coal
+Zone: Urbergen
+
+Rimturs
+The original giants, born from the bitter ice of Niflheimr. They are creatures of cold and mist, perpetually hostile to life and warmth.
+Family: Jätte
+Element: Water
+Rarity: Rare
+Abilities: Drown, Icicle Spear, Thick Coat, Tyr’s Sacrifice
+Taming item: Ice Crystal
+Zone: Urbergen
+Stormturs
+A towering force of nature with eyes like thunderheads that can shatter stone pillars with a single glance. His presence is felt in the bone-chilling whistle of the gale.
+Family: Jätte
+Element: Wind
+Rarity: Rare
+Abilities:  Sky Dive, Boulder Toss, Burning Insult, Tyr’s Sacrifice
+Taming item: Shattered Pillar
+Zone: Urbergen
+järnvidja
+A fearsome giantess of the primordial Iron Forest. She breeds the wolves of chaos and guards the gnarled, ancient thickets with unnatural strength.
+Family: Jätte
+Element: Nature
+Rarity: Uncommon
+Abilities:Vine Whip, Boulder Toss, Thick Coat, Rotvälta
+Taming item: Ancient Log
+Zone: Trollskogen
+Drake
+Description: Terrifying, serpentine creatures of immense magical power, often linked to cosmic forces and primordial greed.
+Passive: Draconic Resilience: When current health falls to 50% or lower, gain +1 Defense stage and +1 Durability stage (once per battle).
+
+
+Lindorm
+A massive, serpentine creature with a horse-like mane. Though wingless, this great serpent is a formidable cousin to the dragons.
+Family: Drake
+Element: Nature
+Rarity: Common
+Abilities: Fire Breath, Wild Bite, Thick Coat, Rotvälta
+Taming item: Shedded Scale
+Zone: Trollskogen
+
+Fafner
+A dreadful, cursed dragon who guards a priceless golden hoard. Consuming his heart grants great wisdom and the ability to understand all tongues.
+Family: Drake
+Element: Fire
+Rarity: Rare
+Abilities: Fire Breath, Storm Claw, Wild Bite, Giantsbane
+Taming item: Gold Coin
+Zone: Djupa Gruvan
+
+Jörmungandr
+The monstrous serpent whose infinite coils encircle Midgard, resting in the primordial ocean and awaiting its final battle.
+Family: Drake
+Element: Water
+Rarity: Mythical
+Abilities: Drown, Wild Bite, Tidal Wave, Landslide
+Taming item: Fishing Hook
+Zone: Glimrande Källan
+
+Nidhögg
+A terrifying dragon that perpetually gnaws at the lowest roots of Yggdrasil, constantly threatening the stability of the entire cosmos.
+Family: Drake
+Element: Earth
+Rarity: Mythical
+Abilities: Fire Breath, Landslide, Wild Bite, Rotvälta
+Taming item: Yggdrasil Root
+Zone: Världens Ände
+Vitorm
+The snow-white fabled royalty of Snakes, Legends claim that those who consume its essence learn the language of birds and secrets of the earth.
+Family: Drake
+Element: Wind
+Rarity: Rare
+Abilities: Fire Breath, Wind Gust, Wild Bite, Tyr’s Sacrifice
+Taming item: White Scales
+Zone: Urbergen
+
+
+
+Abilities
+
+Earth abilities
+Ground Stomp
+Slams the ground with force, sending a stunning shockwave through the bedrock. Hits opponent. Empowers next attack by 10%.
+Type: Strength Attack
+Power: 50
+Megin cost: 30
+
+
+Boulder Toss
+Hurls a colossal, jagged rock, delivering the crushing weight of a mountain. Hits opponent.
+Type: Strength Attack
+Power: 68
+Megin cost: 50
+
+
+Sinkhole
+The earth softens and collapses, opening a treacherous pit beneath the enemy. Hits opponent. Empowers next attack by 10%.
+Type: Wisdom Attack
+Power: 50
+Megin cost: 30
+
+
+Landslide
+Summons a chaotic torrent of debris, burying the enemy under loose soil and stone. Hits opponent.
+Type: Wisdom Attack
+Power: 68
+Megin cost: 50
+
+
+Smithing
+Through ancient forging magic, an ally's Strength is raised by 2 stages.
+Type: Utility
+Megin cost: 50
+
+Giantsbane
+Strikes with the might of a giant slayer.
+Hits opponent. Power bonus from 33% of target's max HP.
+Type: Strength Attack
+Power: 15
+Megin cost: 45
+
+
+
+Nature abilities
+Vine Whip
+Swift, thorny vines lash out from the wilderness, tangling and striking the target. Hits opponent. Empowers next attack by 10%.
+Type: Strength Attack
+Power: 50
+Megin cost: 30
+
+
+Wild Bite
+A savage, powerful clenching of jaws, fueled by the primal ferocity of a deep forest beast. Hits opponent.
+Type: Strength Attack
+Power: 68
+Megin cost: 50
+
+
+Elven Light
+Focuses a faint, mesmerizing beam drawn from the twilight mist. Hits opponent. Hits opponent. Empowers next attack by 10%.
+Type: Wisdom Attack
+Power: 50
+Megin cost: 30
+
+
+Moon Beam
+Gathers the potent, chilling energy of the moon into a destructive ray. Hits opponent.
+Type: Wisdom Attack
+Power: 68
+Megin cost: 50
+
+
+Thick Coat
+Grows a thick protective hide. Raises your Defense and Durability by 1 stage.
+Type: Utility
+Megin cost: 35
+
+
+Rotvälta
+Nature itself recoils. A sudden, crushing eruption of roots triggered by the enemy's aggression.
+Hits opponent. +40 power if they attack you.
+Type: Strength Attack
+Power: 40
+Megin cost: 55
+Water abilities
+Drown
+Violently drags the opponent down and suffocates them.
+Hits opponent. Empowers next attack by 10%.
+Type: Strength Attack
+Power: 50
+Megin cost: 30
+
+
+Icicle Spear
+Throws a sharp, glacial shard of ice, capable of piercing thick materials.
+Hits opponent.
+Type: Strength Attack
+Power: 68
+Megin cost: 50
+
+Hail Storm
+A sudden, freezing downpour of stinging ice and freezing wind.
+Hits opponent. Empowers next attack by 10%.
+Type: Wisdom Attack
+Power: 50
+Megin cost: 30
+
+
+Tidal Wave
+Evokes a massive, surging wall of ocean water to engulf the battlefield.
+Hits opponent.
+Type: Wisdom Attack
+Power: 68
+Megin cost: 50
+
+Skald’s Mead
+Passes mead to an ally, clarifying an ally's mind and raising their Wisdom by 2 stages.
+Type: Utility
+Megin cost: 50
+
+Freya’s Tears
+Calls upon Freya to rain down replenishing tears for your combatant.
+Recovers Health and Megin over the next 5 turns.
+Type: Utility
+Megin cost: 50
+
+
+Fire abilities
+Torch Strike
+A searing blow with a burning torch, delivering raw heat.
+Hits opponent. Empowers next attack by 10%.
+Type: Strength Attack
+Power: 50
+Megin cost: 30
+
+
+Flaming Skewer
+Impales the enemy with a lance of fire, leaving a burning, painful wound.
+Hits opponent.
+Type: Strength Attack
+Power: 68
+Megin cost: 50
+
+
+Fire Breath
+Exhales a short, scorching gust of flame from the creature's core. Hits opponent. Empowers next attack by 10%.
+Type: Wisdom Attack
+Power: 50
+Megin cost: 30
+
+Lava Jet
+A volcanic burst, shooting a devastating stream of molten rock. Hits opponent.
+Type: Wisdom Attack
+Power: 68
+Megin cost: 50
+
+
+Burning Insult
+Hurls a vicious, withering curse that crushes the enemy’s resolve and lowers their Defense and Durability by 2 Stages.
+Type: Utility
+Megin cost: 60
+
+Loki’s Betrayal
+A deep cut from the dark, causing more damage to the weak and frail.
+Hits opponent. +35 power if target is debuffed.
+Type: Wisdom Attack
+Power: 50
+Megin cost: 50
+
+
+Wind abilities
+Storm Claw
+A quick, brutal strike delivered with claws riding the speed of a gale. Hits opponent. Empowers next attack by 10%.
+Type: Strength Attack
+Power: 50
+Megin cost: 30
+
+
+Sky Dive
+Plummets from a great height, impacting the target with crushing force. Hits opponent.
+Type: Strength Attack
+Power: 68
+Megin cost: 50
+
+
+Wailing Cry
+Unleashes an agonizing, ghostly shriek that assails the opponent's senses.  Hits opponent. Empowers next attack by 10%.
+Type: Wisdom Attack
+Power: 50
+Megin cost: 30
+
+
+Wind Gust
+Whips up a powerful, chaotic blast of air to push and punish the enemy.  Hits opponent.
+Type: Wisdom Attack
+Power: 68
+Megin cost: 50
+
+Enchanting Song
+Plays a haunting tune that distracts the enemy and lowers their Strength and Wisdom by 1 stage.
+Type: Utility
+Megin cost: 35
+
+
+Tyr’s Sacrifice
+A solemn vow sealed in life‑essence. Sacrifice 40% of your health to raise all stats by 3 stages.
+Type: Utility
+Megin cost: 45
+
+
+Standard Abilities
+Basic Strike
+Hits Opponent.
+Type: Mixed Attack
+Power: 20
+Megin cost: 0
+Note: Basic Strike is an ability available to every Väsen. Mixed attack means 50% of its damage uses Strength (checked against Defense), and the remaining 50% uses Wisdom (checked against Durability).
+
+Rarity
+Rarity represents how difficult it is to find the Väsen. Rarity level increases attributes and affects encounter chance.
+Encounter chance:
+Common: 50%
+Uncommon: 25%
+Rare: 17.5%
+Mythic: 7.5%
+
+Attributes
+Strength - Damage Modifier for Strength Attacks
+Wisdom - Damage Modifier for Wisdom Attacks
+Health - How much damavalkge you can take before you die
+Defense - Reduces damage from Strength Attacks
+Durability - Reduces damage from Wisdom Attacks
+
+Element Modifiers:
+Nature + 5 Health
+Fire + 5 Strength
+Water + 5 Wisdom
+Earth + 5 Defense
+Wind + 5 Durability
+Rarity Modifiers:
+Common: Attributes x 1
+Uncommon: Attributes x 1.06
+Rare: Attributes x 1.12
+Mythic: Attributes x 1.22
+
+Temperament Modifiers:
+Ferocious: +5 Strength / -5 Health
+Brutal: +5 Strength / -5 Defense
+Savage: +5 Strength / -5 Durability
+Alert: +5 Wisdom / -5 Health
+Thoughtful: +5 Wisdom / -5 Defense
+Focused: +5 Wisdom / -5 Durability
+Resilient +5 Health / -5 Defense
+Healthy: +5 Health / -5 Durability
+Wary: +5 Defense / -5 Health
+Stalwart: +5 Defense / -5 Durability
+Enduring: +5 Durability / -5 Health
+Vigilant: +5 Durability / -5 Defense
+
+Base Attributes
+Oknytt: Strength 68, Wisdom 68, Health 58, Defense 55, Durability 80
+Vålnad: Strength 70, Wisdom 67, Health 58, Defense 75, Durability 58
+Odjur: Strength 85, Wisdom 55, Health 65, Defense 55, Durability 46
+Troll: Strength 71, Wisdom 68, Health 70, Defense 70, Durability 60
+Rå: Strength 50, Wisdom 80, Health 60, Defense 65, Durability 60
+Alv: Strength 55, Wisdom 85, Health 60, Defense 55, Durability 60
+Ande: Strength 70, Wisdom 68, Health 58, Defense 80, Durability 50
+Jätte: Strength 75, Wisdom 65, Health 85, Defense 55, Durability 51
+Drake: Strength 65, Wisdom 75, Health 60, Defense 60, Durability 85
+
+Attribute Stages
+Some abilities and runes have stat stages.
+Stat stages go from -5 to +5 and give 10% attribute changes (so maximum -50% or +50%) to a specific attribute. Once they reach the negative cap it cannot go any lower, and once it reaches the positive cap it cannot go any further. -5 and +5 are hard limits.
+These do not persist after a battle ends but do persist in endless tower. Attribute stage changes do not include health, references to “reduce/raise all attributes” only means Defense, durability, strength and wisdom”. Attempting to raise an attribute already at +5 or lower one at -5 has no effect but still costs Megin.
+
+Total Attribute Calculation:
+((Attribute Stage Modifier) * ((Temperament Modifiers + 1 + Attribute Level Scaling Rate * (Level - 1)) * (Rarity Modifiers * (**Base Attributes + Element Modifiers**)))) Round Down Final Number
+
+
+
+Attribute Level Scaling Rate = 0.035
+Attribute Stage Modifier = 1 + ( 0.08 * [stage] )
+
+Resources
+Megin
+Megin - Megin is a resource used to take actions, it is not an attribute and therefore not calculated with your attribute modifiers.
+Abilities of your own element costs 12% less Megin. You regenerate 12% of your max Megin per round. When you are swapped out you still regenerate your Megin.
+
+Megin calculation
+
+Total Megin = Base Megin + ((Level - 1) * Megin Per Level).
+
+
+Base Megin = 60
+Megin Per Level = 2
+
+Megin per round
+
+Megin Per Round = Total Megin * Megin Regen Rate
+
+Megin Regen Rate = 0.12
+
+Megin recovers fully after each combat.
+
+Insufficient Megin
+When you have insufficient Megin abilities will simply be greyed out not allowing you to use them.
+
+Health
+Health persists between battles.
+
+
+Ways to heal:
+After each battle your active party is healed by 5% (even if their life is 0, it  will heal to 5%)
+Outside of combat you can give taming items to your Väsen.
+Wrong item: 50% heal
+Right item: 80% heal
+Sacred Well: When you encounter this,  all your Väsen drink and heal (even the ones not in the party) by 80%
+
+All heal percentages are based on total/max health and not current.
+
+If an enemy would do an action that would heal them (i.e. algiz) but your attack kills them first, they get knocked out because you acted first. But if they act first (because of utility move) and the heal puts them above knockout threshold they stay alive.
+
+Level:
+Maximum Level: 30
+Enemy Maximum Level: Uncapped
+
+Experience:
+Experience needed for level-up:
+
+( (Base Level Up Experience * Current Level) + (Level Up Acceleration  * Current Level²) ) Round Down Final Number
+
+Experience received for defeating enemy:
+
+( (Base Experience Yield * Enemy Level) * Rarity Bonus ) Round Down Final Number
+
+
+Constants:
+
+Base Level Up Experience = 55 (may be changed in development)
+
+Level Up Acceleration = 5 (may be changed in development)
+
+Base Experience Yield = 50 (may be changed in development)
+
+The Väsen which deals the killing blow and ends the battle exclusively gains 100% of the experience. Väsen in the party which were in the field during the combat for at least a turn exclusively gain 70% of the experience. Väsen who were in the party but were not in the field for at least a turn exclusively get 50% of the experience. Väsen in the party who died/fainted do not get any experience at all.
+
+Experience is calculated during and only gained AFTER combat, meaning tactics such as surrendering before combat ends does not yield any experience. Experience is tallied and applied only after combat ends. Mid-battle defeats do not trigger level-ups.
+
+
+Damage
+Damage Calculation:
+((( Power / Power Constant ) Damage Range * Damage Modifier * Element Modifier * Rune Modifier) * ( 1 - (Defense Modifier / (Defense Modifier + Defense Constant )))) Round Down Final Number
+
+Notes and explanations regarding damage calculation:
+Power Constant = 250 (Used to convert the numbers that the abilities show to something that translates better to the overall damage calculation)
+Defense Constant = 200 (Used to convert the defense value to something that translates better to the overall damage calculation)
+Damage Range = a randomized value between 1 and 1.1 to simulate damage ranges
+Damage Modifier = Strength/Wisdom
+Element Modifier = Weak/Normal/potent
+Rune Modifier Adds the percentage bonuses that your runes give. So for example if one gives 10% damage and one gives 20% damage, it gets calculated like: 1 + 0.1 + 0.2 = 1.3
+Runes
+Runes are equippable modifiers to your character. The väsen can only equip one rune from lvl 1 to 29, but gain the ability for two once reached max level (30). Enemy Väsen of all types will have one random rune (two at level 30 and above). You can see what runes you and they have as well as the effect via tooltip. 
+Rune Exclusivity: Your own runes are exclusive (I.E. can only be wielded by one of your Väsen at a time, enemies don't count), and are put in slots in the active party (I.E. they are bound to a party slot). This rule must be obeyed by guardians as well who’s team can’t have duplicate runes (I.E. two ᚱ Raido runes). Starter rune is ᚢ Ur. Once you have a specific rune in your possession it will not show up again in exploration.
+Rune requirement: Enemies MUST have one rune (lvl 1) and two runes (lvl 30).
+As for the player, the rune slots must have a rune in them. When you find new runes while a spot is empty, it will be auto filled with the new rune. When you have all three rune spots filled, there is simply no possibility to have an empty rune. 
+
+ᚠ Fehu - Potent hits deal 10% less damage to this väsen
+ᚢ Uruz - Effect: This Väsen has 20% more Megin
+ᚦ Thurs - Effect: This Väsen return 20% of the damage taken as a hit of the same type
+ᚨ Ansuz - Effect: This Väsen’s Strength attacks are considered Wisdom Attacks
+ᚱ Raido - Effect: This Väsen’s Wisdom attacks are considered Strength Attacks
+ᚲ Kaunan - Effect: This Väsen’s Fire hits deal 14% more damage
+ᚷ Gifu - Effect: The first time This Väsen’s attributes are raised during this battle it is also applied to allies
+ᚹ Wynja - Effect: Blocks the first negative attribute effect this Väsen receives and raise a random attribute by 1 stage when it happens
+ᚺ Hagal - Effect: When this Väsen is knocked out, the opponent gets all attributes lowered by 2 stage (Defense, Durability, Strength, Wisdom)
+ᚾ Naudiz - Effect: This Väsen’s Weak hits lowers two random enemy attributes by 1 stage
+ᛁ Isaz - Effect: This Väsen’s Water Abilities have a 30% chance to raise its Wisdom and Strength attributes by 1 stage
+ᛃ Jera - Effect: This Väsen’s abilities that cost 30 Megin or less have a 30% chance to heal it by 8%
+ᛇ Eihwaz - Effect: This väsen’s Earth Abilities have a 30% chance to raise its Defense and Durability Attributes by 1 stage
+ᛈ Pertho - Effect: This Väsen’s Earth hits deal 14% more damage
+ᛉ Algiz - Effect: This Väsen’s Nature Abilities have a 30% chance to heal it by 8%
+ᛊ Sol - Effect: This Väsen’s Fire Abilities have a 30% chance to raise its Strength and Wisdom attributes by 1 stage
+ᛏ Tyr - Effect: This Väsen’s Wind hits deal 14% more damage
+ᛒ Bjarka - Effect: This Väsen’s Nature hits deal 14% more damage
+ᛖ Ehwaz - Effect: This Väsen’s Wind Abilities have a 30% chance to raise its Defense and Durability attributes by 1 stage
+ᛗ Mannaz - Effect: When this väsen uses a non damaging ability it gets healed by 8%
+ᛚ Laguz - Effect: This Väsen’s Water hits deal 14% more damage
+ᛜ Inguz - Effect: This Väsen’s hits have a 30% chance to lower a random enemy attribute by 1 stage
+ᛞ Dagaz - Effect: This Väsen deals 20% more damage for the first round after entering the battlefield
+ᛟ Odal - Effect: This Väsen’s abilities that cost 30 Megin or less deal 14% more damage
+
+Notes: Jera + Algiz results in a 60% chance to heal with Vine Whip (I.E. It adds the percentages together with one attack).
+
+Thurs damage return gets the same element as the attack and is considered a Wisdom Hit if it was caused by a Wisdom Hit and is checked against Durability, and a Strength Hit if it was caused by a Strength hur and checked against Defense, if it was a mixed attack then it is a mixed hit that deals 50% as Wisdom and 50% as Strength. In addition, Thurs can NOT trigger itself, so there are no possibilities for endless loops. Thurs damage is based on the damage of the hit (I.E. AFTER DEFENSES), so a build opting for thurs damage would go high health low defenses. Order of operations: Damage dealt → Thurs damage calculated → Rune healing triggers → Check knockout. (I.E. if a väsen hits a väsen with thurs and it would put them to 0 health but that attack triggered a heal they will stay alive).
+
+Dagaz includes swap-ins and going first.
+
+Ansuz means Strength Attacks now use this Väsen’s Wisdom stat for damage and are checked against the opponent's Durability
+
+Raido means Wisdom Attacks now use this Väsen’s Strength stat for damage and are checked against the opponent's Defense
+
+Gifu triggers even if the attribute raise comes from a passive source (I.E. Eihwaz), and of course it triggers if an active ability like smithing is used.
+
+Thurs can generate runes such as Inguz and Naudiz since it specifies hits, however it is not considered an ability or attack so it doesn’t trigger on things such as Pertho.
+
+
+
+World
+Zones:
+
+Zone 1: Trollskogen
+Zone Info: An enchanted forest where the ancient canopy chokes out the sun. The air is thick with the scent of damp moss, and the unseen inhabitants constantly watch you from the gloom.
+Väsen Level: 1-4
+Väsen Spawns: Skogstroll, Skogsrå, Hyllemor, Älva, Lindorm, Ljusalv, Järnvedsjätte, Huldra
+Guardian: Hjördis (Lvl 5 Healthy Älva ᚾ Naudiz, Lvl 5 Enduring Skogsrå ᚢ Uruz, Lvl 5 Stalwart Lindorm ᚹ Wynja)
+
+Zone 2: Folkets by
+Zone Info: A cluster of quiet, humble settlements where ancient house spirits live side-by-side with humans. Tread carefully, for the peace is fragile, and the benevolent guardians turn fiercely protective when their homes are threatened.
+Väsen Level: 5-9
+Väsen Spawns: Gårdstomte, Hustomte, Nattramn, Bortbyting, Gloson, Bjära, Loftnisse
+Guardian: Åsa (Lvl 10 Savage Gårdstomte ᚺ Hagal, Lvl 10 Resilient Nattramn ᛖ Ehwaz, Lvl 10 Vigilant Gloson ᛇ Pertho)
+
+Zone 3: Djupa Gruvan
+Zone Info: An endless labyrinth of cold, black tunnels carved by greed. Only the muffled echo of a pickaxe and the hungry glow of rare ore disturb the crushing silence, guarded by unforgiving spirits who despise light and trespassers.
+Väsen Level: 10-14
+Väsen Spawns: Landvätte, Myling, Gruvrå, Svartalv, Fafner, Mara, Dvärg
+Guardian: Gerd (Lvl 15 Alert Svartalv ᚠ Fehu, Lvl 15 Thoughtful Myling ᛟ Odal, Lvl 15 Wary Fafner ᚲ Kaunan)
+
+Zone 4: Glimrande källan
+Zone Info: A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves.
+Väsen Level: 15-19
+Väsen Spawns: Irrbloss, Strandvaskare, Bäckahäst, Näcken, Jörmungandr, Norna, Dimälva
+Guardian: Ragnar (Lvl 20 Brutal Bäckahäst ᚷ Gifu, Lvl 20 Vigilant Irrbloss ᛜ Inguz, Lvl 20 Stalwart Jörmungandr ᛁ Isaz)
+
+Zone 5: Urbergen
+Zone Info: The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants battle the very elements that forged them.
+Väsen Level: 20-24
+Väsen Spawns: Bergatroll, Jotun, Eldturs, Rimturs, Gryningstroll, Stormjätte, Vitorm
+Guardian: Sigurd (Lvl 25 Resilient Bergatroll ᚦ Thurs, Lvl 25 Ferocious Eldturs ᚲ Kaunan, Lvl 25 Wary Rimturs ᚱ Raido)
+
+Zone 6: Världens Ände
+Zone Info: The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos.
+Väsen Level: 25-29
+Väsen Spawns: Einhärje, Valkyria, Räsvelg, Fenrir, Nidhögg, Draug, Fylgja
+Guardian: Gylfe (Lvl 30 Vigilant Fenrir ᚷ Gifu ᚺ Hagal, Lvl 30 Enduring Räsvelg ᚨ Ansuz ᛏ Tyr, Lvl 30 Focused Nidhögg ᚦ Thurs ᚾ Naudiz)
+
+Zone 7: Ginnungagap
+Zone Info: The vast, primordial void that preceded all creation. It is an unending, echoing expanse of pure potential and ultimate challenge, containing every creature from the realms for those who seek the peak of mastery.
+Väsen Level: 30
+Väsen Spawns: All
+Guardian: None
+Note: Final Zone for grinding
+
+You must beat the guardian of a zone to unlock the next one. Enemy Väsen levels are randomly rolled in the level ranges above.
+To reach the next Zone, you must defeat the current Zone’s guardian , who has 3 Väsen in the party. You can not catch those Väsen as they are tamed.
+

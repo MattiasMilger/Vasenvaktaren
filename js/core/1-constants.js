@@ -66,7 +66,7 @@ const GAME_CONFIG = {
     // =============================================================================
     TIER1_ATTACK_ABILITY_POWER: 50,
     TIER1_ATTACK_ABILITY_MEGIN: 30,
-    TIER1_ATTACK_ABILITY_EMPOWERMENT: 0.12, // Damage boost on next attack
+    TIER1_ATTACK_ABILITY_EMPOWERMENT: 0.10, // Damage boost on next attack
 
     TIER2_ATTACK_ABILITY_POWER: 68,
     TIER2_ATTACK_ABILITY_MEGIN: 50,
