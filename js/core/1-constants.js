@@ -79,8 +79,8 @@ const GAME_CONFIG = {
     TYRS_SACRIFICE_STAGES: 3,           // Attribute stages gained to all stats when using Tyr's Sacrifice
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
-    FREYASTEARS_MEGIN_MULTIPLIER: 2.1,    // Multiplier applied to Megin regeneration while Freya's Tears is active
-    FREYASTEARS_HEALTH_REGEN_PERCENT: 0.015, // % of max health restored per turn while Freya's Tears is active
+    FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
+    FREYASTEARS_HEALTH_REGEN_PERCENT: 0.02, // % of max health restored per turn while Freya's Tears is active
 
     // =============================================================================
     // HEALING

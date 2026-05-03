@@ -32,6 +32,9 @@ class Battle {
         this.log = [];
         this.isOver = false;
         this.winner = null;
+
+        this.playerTeamFreyasTears = 0;
+        this.enemyTeamFreyasTears = 0;
         
         // Taming state
         this.giftsGiven = 0;
@@ -217,27 +220,32 @@ class Battle {
         }
 
         // Freya's Tears: apply health regen + extra megin regen to active combatants
-        [this.playerActive, this.enemyActive].forEach(vasen => {
-            if (!vasen || vasen.isKnockedOut()) return;
-            const turns = vasen.battleFlags.freyasTearsTurnsRemaining || 0;
-            if (turns <= 0) return;
+        const teams = [
+            { vasen: this.playerActive, teamFlag: 'playerTeamFreyasTears', teamName: 'your team' },
+            { vasen: this.enemyActive, teamFlag: 'enemyTeamFreyasTears', teamName: 'the opposing team' }
+        ];
+        
+        teams.forEach(team => {
+            if (this[team.teamFlag] > 0 && team.vasen && !team.vasen.isKnockedOut()) {
+                const vasen = team.vasen;
 
-            // Freya's Tears Health regen
-            const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REGEN_PERCENT);
-            if (healAmount > 0) {
-                vasen.heal(healAmount);
-                this.addLog(`${vasen.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health!`, 'heal');
-            }
+                // Health regen
+                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REGEN_PERCENT);
+                if (healAmount > 0) {
+                    vasen.heal(healAmount);
+                    this.addLog(`${vasen.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health!`, 'heal');
+                }
 
-            // Extra megin regen (applies the additional ticks beyond the base regen in endTurn)
-            for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
-                vasen.regenerateMegin();
-            }
+                // Megin regen
+                for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
+                    vasen.regenerateMegin();
+                }
 
-            // Decrement counter and log expiry
-            vasen.battleFlags.freyasTearsTurnsRemaining--;
-            if (vasen.battleFlags.freyasTearsTurnsRemaining === 0) {
-                this.addLog(`Freya's Tears have dried up and are no longer replenishing ${vasen.getDisplayName()}.`, 'status');
+                // Decrement and log expiry
+                this[team.teamFlag]--;
+                if (this[team.teamFlag] === 0) {
+                    this.addLog(`Freya's Tears have dried up for ${team.teamName}.`, 'status');
+                }
             }
         });
 
@@ -907,13 +915,18 @@ class Battle {
         }
 
         if (effect.type === 'freyastears') {
-            // Freya's Tears: restore health and boost Megin regen on the active combatant for FREYASTEARS_TURNS turns (non-stackable)
-            if ((user.battleFlags.freyasTearsTurnsRemaining || 0) > 0) {
-                // Already active - do nothing (non-stackable)
-                return effects;
+            // Freya's Tears: affects the entire team for a few turns.
+            const teamFlag = isPlayer ? 'playerTeamFreyasTears' : 'enemyTeamFreyasTears';
+            const teamName = isPlayer ? 'your team' : 'the enemy team';
+
+            if (this[teamFlag] > 0) {
+                this.addLog(`Freya's Tears are already active for ${teamName}.`, 'status');
+                return effects; // Already active, non-stackable
             }
-            user.battleFlags.freyasTearsTurnsRemaining = GAME_CONFIG.FREYASTEARS_TURNS;
-            this.addLog(`Freya's Tears rain down upon ${user.getDisplayName()}, replenishing them over time.`, 'buff');
+
+            this[teamFlag] = GAME_CONFIG.FREYASTEARS_TURNS;
+            this.addLog(`Freya's Tears rain down, replenishing ${teamName}.`, 'buff');
+            effects.push({ type: 'freyastears', team: isPlayer ? 'player' : 'enemy', turns: GAME_CONFIG.FREYASTEARS_TURNS });
             return effects;
         }
 
