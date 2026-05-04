@@ -219,6 +219,25 @@ class Battle {
             if (tracker) tracker.turnsOnField++;
         }
 
+        // Trigger Odjur passive on turn start
+        this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
+        this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
+    }
+    
+    // End turn (regenerate megin, clear flags)
+    endTurn() {
+        // Regenerate megin for all team members (base regen only)
+        this.playerTeam.forEach(v => {
+            if (!v.isKnockedOut()) {
+                v.regenerateMegin();
+            }
+        });
+        this.enemyTeam.forEach(v => {
+            if (!v.isKnockedOut()) {
+                v.regenerateMegin();
+            }
+        });
+
         // Freya's Tears: apply health regen + extra megin regen to active combatants
         const teams = [
             { vasen: this.playerActive, teamFlag: 'playerTeamFreyasTears', teamName: 'your team' },
@@ -240,33 +259,22 @@ class Battle {
                 for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
                     vasen.regenerateMegin();
                 }
-
-                // Decrement and log expiry
-                this[team.teamFlag]--;
-                if (this[team.teamFlag] === 0) {
-                    this.addLog(`Freya's Tears have dried up for ${team.teamName}.`, 'status');
-                }
             }
         });
-
-        // Trigger Odjur passive on turn start
-        this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
-        this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
-    }
-    
-    // End turn (regenerate megin, clear flags)
-    endTurn() {
-        // Regenerate megin for all team members (base regen only)
-        this.playerTeam.forEach(v => {
-            if (!v.isKnockedOut()) {
-                v.regenerateMegin();
+        
+        // Decrement Freya's Tears counter at the end of the turn
+        if (this.playerTeamFreyasTears > 0) {
+            this.playerTeamFreyasTears--;
+            if (this.playerTeamFreyasTears === 0) {
+                this.addLog(`Freya's Tears have dried up for your team.`, 'status');
             }
-        });
-        this.enemyTeam.forEach(v => {
-            if (!v.isKnockedOut()) {
-                v.regenerateMegin();
+        }
+        if (this.enemyTeamFreyasTears > 0) {
+            this.enemyTeamFreyasTears--;
+            if (this.enemyTeamFreyasTears === 0) {
+                this.addLog(`Freya's Tears have dried up for the opposing team.`, 'status');
             }
-        });
+        }
         
         // Clear swap sickness and temporary flags
         if (this.playerActive) {

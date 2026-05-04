@@ -263,7 +263,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
     panel.classList.toggle('minimized', this.combatCardsMinimized);
 
     // Apply Freya's Tears glow if active on this combatant
-    panel.classList.toggle('freyas-tears-active', (vasen.battleFlags.freyasTearsTurnsRemaining || 0) > 0);
+    const freyasTearsGlow = side === 'player' ? battle.playerTeamFreyasTears > 0 : battle.enemyTeamFreyasTears > 0;
+    panel.classList.toggle('freyas-tears-active', freyasTearsGlow);
 
     // Reapply any active animations after re-render
     this.reapplyAnimations(side);
