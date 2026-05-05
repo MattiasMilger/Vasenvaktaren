@@ -333,9 +333,9 @@ const ABILITIES = {
     // Water Utility
     'Freya\'s Tears': {
         name: 'Freya\'s Tears',
-        flavorDescription: 'Calls upon Freya to rain down replenishing tears for your combatant.',
+        flavorDescription: 'Calls upon Freya to rain down replenishing tears.',
         get mechanicsDescription() {
-            return `Recovers Health and Megin over the next ${GAME_CONFIG.FREYASTEARS_TURNS} turns.`;
+            return `Your side recovers Health and Megin over the next ${GAME_CONFIG.FREYASTEARS_TURNS} turns.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
