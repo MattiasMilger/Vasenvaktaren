@@ -11,25 +11,76 @@ UIController.prototype.renderRuneInventory = function() {
         return;
     }
 
+    if (!this.runeSortOrder) {
+        this.runeSortOrder = 'futhark';
+    }
+
+    const sortMenu = document.createElement('div');
+    sortMenu.className = 'vasen-sort-controls'; // Re-use vasen style
+    sortMenu.innerHTML = `
+        <label for="rune-sort-select">Sort:</label>
+        <select id="rune-sort-select" class="vasen-sort-select">
+            <option value="futhark" ${this.runeSortOrder === 'futhark' ? 'selected' : ''}>Futhark</option>
+            <option value="equipped" ${this.runeSortOrder === 'equipped' ? 'selected' : ''}>Equipped</option>
+        </select>
+    `;
+    container.appendChild(sortMenu);
+
+    sortMenu.querySelector('#rune-sort-select').onchange = (e) => {
+        this.runeSortOrder = e.target.value;
+        this.renderRuneInventory();
+    };
+
+    let runesToRender = RUNE_LIST.filter(runeId => gameState.collectedRunes.has(runeId));
+    
+    if (!gameState.favoriteRunes) gameState.favoriteRunes = new Set();
+
+    runesToRender.sort((a, b) => {
+        const aFav = gameState.favoriteRunes.has(a) ? 1 : 0;
+        const bFav = gameState.favoriteRunes.has(b) ? 1 : 0;
+        if (bFav !== aFav) return bFav - aFav;
+
+        if (this.runeSortOrder === 'equipped') {
+            const aEquipped = this.findRuneEquippedTo(a) ? 1 : 0;
+            const bEquipped = this.findRuneEquippedTo(b) ? 1 : 0;
+            if (bEquipped !== aEquipped) {
+                return bEquipped - aEquipped;
+            }
+        }
+
+        return RUNE_LIST.indexOf(a) - RUNE_LIST.indexOf(b);
+    });
+
     const grid = document.createElement('div');
     grid.className = 'rune-grid';
 
-    RUNE_LIST.forEach(runeId => {
-        if (!gameState.collectedRunes.has(runeId)) return;
-
+    runesToRender.forEach(runeId => {
         const rune = RUNES[runeId];
         const equippedTo = this.findRuneEquippedTo(runeId);
+        const isFavorite = gameState.favoriteRunes.has(runeId);
 
         const card = document.createElement('div');
         card.className = 'rune-card';
         card.innerHTML = `
+            <button class="favorite-toggle ${isFavorite ? 'active' : ''}">${isFavorite ? '★' : '☆'}</button>
             <span class="rune-card-symbol">${rune.symbol}</span>
             <div class="rune-card-info">
                 <span class="rune-card-name">${rune.name}</span>
                 <span class="rune-card-effect">${rune.effect}</span>
-                ${equippedTo ? `<span class="rune-card-equipped">Equipped to ${equippedTo.getName()}</span>` : ''}
+                ${equippedTo ? `<span class="rune-card-equipped">Equipped to ${equippedTo.getDisplayName()}</span>` : ''}
             </div>
         `;
+
+        card.querySelector('.favorite-toggle').onclick = (e) => {
+            e.stopPropagation();
+            if (gameState.favoriteRunes.has(runeId)) {
+                gameState.favoriteRunes.delete(runeId);
+            } else {
+                gameState.favoriteRunes.add(runeId);
+            }
+            this.renderRuneInventory();
+        };
+
         card.onclick = () => this.showRuneOptions(runeId);
 
         grid.appendChild(card);
@@ -46,14 +97,19 @@ UIController.prototype.renderItemInventory = function() {
     const container = this.tabContents.items;
     container.innerHTML = '';
 
-    const itemEntries = Object.entries(gameState.itemInventory);
+    let itemEntries = Object.entries(gameState.itemInventory);
     if (itemEntries.length === 0) {
         container.innerHTML = '<p class="empty-message">You have no items. Explore to find some.</p>';
         return;
     }
 
-    // Sort items alphabetically by name
+    if (!gameState.favoriteItems) gameState.favoriteItems = new Set();
+
     itemEntries.sort(([aId], [bId]) => {
+        const aFav = gameState.favoriteItems.has(aId) ? 1 : 0;
+        const bFav = gameState.favoriteItems.has(bId) ? 1 : 0;
+        if (bFav !== aFav) return bFav - aFav;
+        
         const aName = TAMING_ITEMS[aId]?.name || aId;
         const bName = TAMING_ITEMS[bId]?.name || bId;
         return aName.localeCompare(bName);
@@ -63,14 +119,28 @@ UIController.prototype.renderItemInventory = function() {
         const item = TAMING_ITEMS[itemId];
         if (!item || count <= 0) return;
 
+        const isFavorite = gameState.favoriteItems.has(itemId);
+
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
+            <button class="favorite-toggle ${isFavorite ? 'active' : ''}">${isFavorite ? '★' : '☆'}</button>
             <div class="item-info">
                 <span class="item-name">${item.name}</span>
             </div>
             <span class="item-count">x${count}</span>
         `;
+        
+        card.querySelector('.favorite-toggle').onclick = (e) => {
+            e.stopPropagation();
+            if (gameState.favoriteItems.has(itemId)) {
+                gameState.favoriteItems.delete(itemId);
+            } else {
+                gameState.favoriteItems.add(itemId);
+            }
+            this.renderItemInventory();
+        };
+
         card.onclick = () => this.showItemOptions(itemId);
 
         container.appendChild(card);
@@ -180,7 +250,7 @@ UIController.prototype.showItemOptions = function(itemId) {
     });
 
     let desc = this.highlightItemKeywords(item.description);
-    const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\\\$&');
+    const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     desc = desc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
 
     this.showDialogue(
@@ -298,7 +368,7 @@ UIController.prototype.showRuneEquipModal = function(vasenId, slotIndex = null) 
                 statusText = '<span class="rune-status current">(Equipped)</span>';
                 runeBtn.disabled = true;
             } else if (isOnOtherVasen) {
-                statusText = `<span class="rune-status other">(On ${equippedTo.getName()})</span>`;
+                statusText = `<span class="rune-status other">(On ${equippedTo.getDisplayName()})</span>`;
             }
 
             runeBtn.innerHTML = `

@@ -104,7 +104,8 @@ Vasenvaktaren/
 │   ├── 12-badges.css               (badges & effects)
 │   ├── 13-animations.css           (animations & ability animations)
 │   ├── 14-responsive.css           (responsive design)
-│   └── 15-lore.css                 (lore book styles)
+│   ├── 15-lore.css                 (lore book styles)
+│   └── 16-items-runes.css          (item and rune UI styles)
 │
 ├── js/
 │   ├── core/

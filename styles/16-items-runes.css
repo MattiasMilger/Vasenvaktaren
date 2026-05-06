@@ -1,0 +1,52 @@
+/* =============================================================================
+   16-items-runes.css - Styles for Item and Rune UI
+   ============================================================================= */
+
+/* =============================================================================
+   1. CARD LAYOUT
+   ============================================================================= */
+
+.rune-card, .item-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding-left: 45px; /* Space for favorite button */
+}
+
+.item-card .item-info {
+    flex-grow: 1;
+}
+
+/* =============================================================================
+   2. FAVORITE BUTTON (for Items & Runes)
+   ============================================================================= */
+
+.favorite-toggle {
+    position: absolute;
+    left: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.favorite-toggle:hover {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+.favorite-toggle.active {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
