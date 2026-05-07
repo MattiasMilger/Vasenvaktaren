@@ -651,8 +651,8 @@ UIController.prototype.renderAbilitiesList = function(vasen) {
                         <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event)">${abilityElement}</span>
                         ${this.generateAttackingMatchupsHTML(abilityElement)}
                     </div>
-                    ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
                     <span class="ability-cost">Megin: ${meginCost}</span>
+                    ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
                 </div>
                 <p class="ability-description">${ability.flavorDescription} ${ability.mechanicsDescription}</p>
                 ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}

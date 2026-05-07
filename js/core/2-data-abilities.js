@@ -56,12 +56,12 @@ const ABILITIES = {
     'Smithing': {
         name: 'Smithing',
         flavorDescription: 'Through ancient forging magic, an ally\'s Strength is raised.',
-        mechanicsDescription: 'Raises an ally\'s Strength by 2 stages.',
+        mechanicsDescription: 'Raises an ally\'s Strength by 1 stage.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 50,
-        effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 2 }
+        meginCost: 25,
+        effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
     },
     'Giantsbane': {
         name: 'Giantsbane',
@@ -71,7 +71,7 @@ const ABILITIES = {
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
-        power: 28,
+        power: 30,
         target_hp_bonus_percent: GAME_CONFIG.GIANTSBANE_BONUS,
         meginCost: 50,
         giantsbaneBonus: true
@@ -193,8 +193,8 @@ const ABILITIES = {
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 50,
-        effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 2 }
+        meginCost: 25,
+        effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 }
     },
 
     // Fire Abilities

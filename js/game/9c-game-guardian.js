@@ -40,7 +40,7 @@ Game.prototype.challengeGuardian = function() {
 
 // Start guardian battle
 Game.prototype.startGuardianBattle = function(guardian) {
-    // NEW: Stop showing explore tutorial when first combat starts
+    // Stop showing explore tutorial when first combat starts
     if (!gameState.firstExploreTutorialShown) {
         gameState.firstExploreTutorialShown = true;
         gameState.saveGame();

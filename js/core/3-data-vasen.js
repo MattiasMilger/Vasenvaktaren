@@ -11,7 +11,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
-        abilities: ['Torch Strike', 'Landslide', 'Burning Insult', 'Loki\'s Betrayal'],
+        abilities: ['Torch Strike', 'Landslide', 'Burning Insult', 'Giantsbane'],
         tamingItem: 'Sturdy Spade',
         image: 'assets/vasen/landvatte.png'
     },
@@ -22,7 +22,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Torch Strike', 'Vine Whip', 'Smithing', 'Giantsbane'],
+        abilities: ['Torch Strike', 'Vine Whip', 'Smithing', 'Rotvalta'],
         tamingItem: 'Garden Rake',
         image: 'assets/vasen/gardstomte.png'
     },
@@ -55,7 +55,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Giantsbane'],
+        abilities: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Tyr\'s Sacrifice'],
         tamingItem: 'Attic Key',
         image: 'assets/vasen/pyssling.png'
     },
@@ -318,7 +318,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.RARE,
-        abilities: ['Sinkhole', 'Landslide', 'Skald\'s Mead', 'Smithing'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Skald\'s Mead', 'Landslide'],
         tamingItem: 'Anvil Shard',
         image: 'assets/vasen/svartalv.png'
     },
@@ -340,7 +340,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Sinkhole', 'Lava Jet', 'Skald\'s Mead', 'Smithing'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
         tamingItem: 'Molten Ore',
         image: 'assets/vasen/dvarg.png'
     },

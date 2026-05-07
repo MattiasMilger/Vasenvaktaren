@@ -419,8 +419,8 @@ UIController.prototype.renderActionButtons = function(battle) {
             <span class="ability-btn-type">${ability.type}</span>
             <span class="ability-btn-stats">
                 <span class="ability-btn-element element-${abilityElement.toLowerCase()}">${abilityElement}</span>
-                ${ability.power ? `<span class="ability-btn-power">Power: ${getAbilityPower(abilityName, activeVasen.species.family)}</span>` : ''}
                 <span class="ability-btn-cost">Megin: ${meginCost}</span>
+                ${ability.power ? `<span class="ability-btn-power">Power: ${getAbilityPower(abilityName, activeVasen.species.family)}</span>` : ''}
             </span>
             <span class="ability-btn-desc">${ability.mechanicsDescription}</span>
         `;
@@ -437,7 +437,7 @@ UIController.prototype.renderActionButtons = function(battle) {
         !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.isEndlessTower ||
         battle.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven || battle.isAutoBattle;
 
-    // NEW: First combat tutorial - blink Offer Item button if player has matching item
+    // First combat tutorial - blink Offer Item button if player has matching item
     if (!gameState.firstCombatTutorialShown && battle.isWildEncounter && !offerBtn.disabled) {
         // Check if player has the correct taming item for this enemy
         const enemySpecies = battle.enemyActive.speciesName;

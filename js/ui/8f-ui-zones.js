@@ -108,7 +108,7 @@ UIController.prototype.updateExploreButton = function() {
             this.exploreBtn.innerHTML = `Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
             this.exploreBtn.disabled = !hasParty || gameState.inCombat;
 
-            // NEW: Explore tutorial - blink Explore button until first combat
+            // Explore tutorial - blink Explore button until first combat
             if (!gameState.firstExploreTutorialShown && hasParty && !gameState.inCombat) {
                 if (!this.exploreTutorialActive) {
                     this.exploreBtn.classList.add('tutorial-blink');

@@ -13,7 +13,7 @@ class Game {
 
         // Check for existing save
         if (gameState.loadGame()) {
-            // NEW: Reset tutorial on page load only if player has tamed at least one Vasen
+            // Reset tutorial on page load only if player has tamed at least one Vasen
             // This allows the first tutorial to persist until first tame, but prevents reload exploit after
             if (!gameState.firstCombatTutorialShown && gameState.vasenCollection.length > 1) {
                 // Length > 1 because starter counts as 1
@@ -106,7 +106,7 @@ class Game {
             text: 'Begin Journey',
             class: 'btn-primary',
             callback: () => {
-                // NOW initialize new game and create everything
+                // initialize new game and create everything
                 gameState.resetGame();
 
                 // Create starter Vasen at starter level
@@ -202,7 +202,7 @@ startingItems.forEach(item => {
 
         gameState.inCombat = false;
 
-        // NEW: Stop showing tutorial when battle ends, but only if player has tamed at least one Vasen
+        // Stop showing tutorial when battle ends, but only if player has tamed at least one Vasen
         // This allows the first tutorial to persist across battles until first successful tame
         if (!gameState.firstCombatTutorialShown && gameState.vasenCollection.length > 1) {
             // Length > 1 because starter counts as 1

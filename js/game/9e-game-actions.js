@@ -74,7 +74,7 @@ Game.prototype.handleAskItem = function() {
                     const enemyName = enemy.getDisplayName();
                     const itemName = enemy.species.tamingItem;
 
-                    // NEW: Trigger tutorial by resetting the flag when asking about item
+                    // Trigger tutorial by resetting the flag when asking about item
                     if (this.currentBattle.isWildEncounter) {
                         gameState.firstCombatTutorialShown = false;
                         gameState.saveGame();

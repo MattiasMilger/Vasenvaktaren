@@ -34,7 +34,7 @@ Game.prototype.explore = function() {
 
 // Start battle with wild Vasen
 Game.prototype.startBattle = function(enemyVasen) {
-    // NEW: Stop showing explore tutorial when first combat starts
+    // Stop showing explore tutorial when first combat starts
     if (!gameState.firstExploreTutorialShown) {
         gameState.firstExploreTutorialShown = true;
         gameState.saveGame();

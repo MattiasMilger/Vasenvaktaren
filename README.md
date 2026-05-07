@@ -22,7 +22,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 5 elements: Earth, Nature, Water, Fire, Wind
 - 4 attributes: Strength, Wisdom, Defense, Durability
 - 4 rarities: Common, Uncommon, Rare, Mythical
-- 12 attribute altering temperaments
+- 12 attribute-altering temperaments
 - 30 unique abilities
 
 ### Runes
@@ -126,7 +126,8 @@ Vasenvaktaren/
 │   │   ├── 8a-ui-core.js           (UIController class, initialization, and overlay management)
 │   │   ├── 8b-ui-screens.js        (screen switching and tab navigation)
 │   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, and matchup display)
-│   │   ├── 8d-ui-items.js          (item and rune inventory management)
+│   │   ├── 8d-ui-items.js          (item inventory management)
+│   │   ├── 8d-ui-runes.js          (rune inventory management)
 │   │   ├── 8e-ui-party.js          (party slot management and väsen release)
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
 │   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and battle animations)
