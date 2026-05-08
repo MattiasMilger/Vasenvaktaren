@@ -1289,11 +1289,33 @@ class Battle {
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                incomingVasen.modifyAttributeStage(randomStat, 1);
+                const stages = FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES;
+                const stageWord = stages === 1 ? 'stage' : 'stages';
                 this.addLog(`${vasen.getDisplayName()} activated Tag Team!`, 'passive');
-                this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
-                // Note: Tag Team targets a specific incoming ally, so usually Gifu (whole team) isn't applied here unless you want it to.
+                for (let i = 0; i < FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT; i++) {
+                    if (stats.length === 0) break;
+                    const randomIndex = Math.floor(Math.random() * stats.length);
+                    const randomStat = stats[randomIndex];
+                    stats.splice(randomIndex, 1);
+                    incomingVasen.modifyAttributeStage(randomStat, stages);
+                    this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
+
+                    // Gifu: share the buff to all other allies (excluding the outgoing Oknytt and the
+                    // incoming vasen who already received the buff directly)
+                    if (vasen.hasRune('GIFU')) {
+                        if (!vasen.battleFlags.gifuTriggered) {
+                            vasen.battleFlags.gifuTriggered = true;
+                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        }
+                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                        allies.forEach(ally => {
+                            if (ally !== vasen && ally !== incomingVasen && !ally.isKnockedOut()) {
+                                ally.modifyAttributeStage(randomStat, stages);
+                                this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
+                            }
+                        });
+                    }
+                }
             }
         }
         

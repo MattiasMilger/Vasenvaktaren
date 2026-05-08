@@ -250,7 +250,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Moon Beam', 'Enchanting Song', 'Loki’s Betrayal'],
+        abilities: ['Elven Light', 'Moon Beam', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Shed Antlers',
         image: 'assets/vasen/skogsra.png'
     },
@@ -314,12 +314,12 @@ const VASEN_SPECIES = {
     'Svartalv': {
         name: 'Svartalv',
         internalName: 'Svartalv',
-        description: 'Masterful subterranean smiths and craftsmen from Nidavellir. They forge the greatest treasures, weapons, and magical artifacts for the Gods.',
+        description: 'Masterful subterranean artisans from Nidavellir. They are seekers of rare materials, crafting magical artifacts that bend the rules of creation for the Gods.',
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
-        rarity: RARITIES.RARE,
+        rarity: RARITIES.UNCOMMON,
         abilities: ['Sinkhole', 'Lava Jet', 'Skald\'s Mead', 'Landslide'],
-        tamingItem: 'Anvil Shard',
+        tamingItem: 'Shiny Trinket',
         image: 'assets/vasen/svartalv.png'
     },
     'Ljusalv': {
@@ -336,12 +336,12 @@ const VASEN_SPECIES = {
     'Dvarg': {
         name: 'Dvärg',
         internalName: 'Dvarg',
-        description: 'A master of the forge and close kin to the Svartalv, though where the Svartalv shapes cold stone, the Dvärg commands raw fire to hammer ore into legendary artifacts.',
+        description: 'A master of the forge from the fiery heart of the mountain. Where others see stone and ore, the Dvärg sees legendary weapons waiting to be born from fire and anvil.',
         family: FAMILIES.ALV,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
-        tamingItem: 'Molten Ore',
+        abilities: ['Flaming Skewer', 'Icicle Spear', 'Smithing', 'Giantsbane'],
+        tamingItem: 'Anvil Shard',
         image: 'assets/vasen/dvarg.png'
     },
 

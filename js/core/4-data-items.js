@@ -9,7 +9,7 @@ const ITEM_TYPES = {
 const TAMING_ITEMS = {
     'Sturdy Spade': {
         name: 'Sturdy Spade',
-        description: 'A Sturdy Spade. The well-worn wooden handle and polished steel blade look perfect for turning earth, an ideal offering for an unseen guardian of the land.',
+        description: 'A Sturdy Spade. Its well-worn blade looks perfect for turning earth, a fitting offering for an unseen guardian of the land.',
         tamingTarget: 'Landvatte'
     },
     'Garden Rake': {
@@ -109,7 +109,7 @@ const TAMING_ITEMS = {
     },
     'Heavy Pillow': {
         name: 'Heavy Pillow',
-        description: 'A down-filled cushion grown unnaturally dense from nocturnal visits. It bears the lingering paralysis of a night spent under the phantom\'s press.',
+        description: 'A Heavy Pillow, grown unnaturally dense from the nightly visits of a nocturnal visitor. It bears the lingering paralysis of a night spent under the phantom\'s press.',
         tamingTarget: 'Mara'
     },
     'Brass Cowbell': {
@@ -127,20 +127,20 @@ const TAMING_ITEMS = {
         description: 'A jar containing shimmering Morning Dew. This ethereal substance attracts the tiny, mist-dwelling beings that haunt the water\'s edge.',
         tamingTarget: 'Dimalva'
     },
+    'Shiny Trinket': {
+        name: 'Shiny Trinket',
+        description: 'A small, intricately carved Shiny Trinket. Its metallic sheen hints that it was crafted by masterful subterranean artisans.',
+        tamingTarget: 'Svartalv'
+    },
     'Anvil Shard': {
         name: 'Anvil Shard',
-        description: 'A fragment of an Anvil Shard. It rings with a sound of skilled craftsmanship, belonging to the subterranean smiths.',
-        tamingTarget: 'Svartalv'
+        description: 'A jagged Anvil Shard of glittering, dark metal that hums with latent power. An ideal offering for a master smith who can forge legendary weapons.',
+        tamingTarget: 'Dvarg'
     },
     'Festive Midsommarkrans': {
         name: 'Festive Midsommarkrans',
         description: 'A Festive Midsommarkrans. Its radiance attracts the beautiful, light-aligned beings of creation.',
         tamingTarget: 'Ljusalv'
-    },
-    'Molten Ore': {
-        name: 'Molten Ore',
-        description: 'A chunk of Molten Ore, still pulsing with deep-earth heat. A cinder smith cannot resist such raw, volatile ore.',
-        tamingTarget: 'Dvarg'
     },
     'Cooling Grease': {
         name: 'Cooling Grease',

@@ -233,6 +233,10 @@ const FAMILY_PASSIVE_CONFIG = {
     RA_DEBUFF_COUNT: 2,
     RA_DEBUFF_STAGES: 1,
     
+    // Oknytt: Tag Team - raises random attributes of the incoming ally when swapping out
+    OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT: 2,
+    OKNYTT_TAG_TEAM_STAGES: 1,
+
     // Troll: Troll Theft - steals positive attribute stages from the enemy when using an ability
     TROLL_STAGE_STEAL: 1,
     
@@ -411,7 +415,9 @@ const FAMILY_PASSIVES = {
     },
     [FAMILIES.OKNYTT]: {
         name: 'Tag Team',
-        description: 'When swapping out, raises a random attribute of the incoming ally by 1 stage.'
+        get description() {
+            return `When swapping out, raises ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT} random attributes of the incoming ally by ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES} stage each.`;
+        }
     },
     [FAMILIES.VALNAD]: {
         name: 'Deathless ᛣ',
@@ -423,14 +429,14 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 58, defense: 55, durability: 80 },
+    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 58, defense: 55, durability: 78 },
     [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
-    [FAMILIES.ODJUR]: { strength: 85, wisdom: 55, health: 65, defense: 55, durability: 46 },
+    [FAMILIES.ODJUR]: { strength: 84, wisdom: 55, health: 65, defense: 61, durability: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
-    [FAMILIES.ALV]: { strength: 65, wisdom: 85, health: 60, defense: 54, durability: 62 },
+    [FAMILIES.ALV]: { strength: 68, wisdom: 84, health: 60, defense: 54, durability: 62 },
     [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 58, defense: 80, durability: 50 },
-    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 83, defense: 55, durability: 51 },
+    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 84, defense: 54, durability: 51 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
 
