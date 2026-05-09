@@ -1291,6 +1291,7 @@ class Battle {
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const stages = FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES;
                 const stageWord = stages === 1 ? 'stage' : 'stages';
+                const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                 this.addLog(`${vasen.getDisplayName()} activated Tag Team!`, 'passive');
                 for (let i = 0; i < FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT; i++) {
                     if (stats.length === 0) break;
@@ -1300,16 +1301,30 @@ class Battle {
                     incomingVasen.modifyAttributeStage(randomStat, stages);
                     this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
 
-                    // Gifu: share the buff to all other allies (excluding the outgoing Oknytt and the
-                    // incoming vasen who already received the buff directly)
+                    // Gifu on the incoming vasen: their attributes were just raised, so share to all
+                    // other allies (the outgoing Oknytt is included — it never received the buff directly)
+                    if (incomingVasen.hasRune('GIFU')) {
+                        if (!incomingVasen.battleFlags.gifuTriggered) {
+                            incomingVasen.battleFlags.gifuTriggered = true;
+                            this.addLog(`${incomingVasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        }
+                        allies.forEach(ally => {
+                            if (ally !== incomingVasen && !ally.isKnockedOut()) {
+                                ally.modifyAttributeStage(randomStat, stages);
+                                this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
+                            }
+                        });
+                    }
+
+                    // Gifu on the outgoing Oknytt: it granted the buff, so share to all other allies
+                    // (incomingVasen is excluded — it already received the buff directly above)
                     if (vasen.hasRune('GIFU')) {
                         if (!vasen.battleFlags.gifuTriggered) {
                             vasen.battleFlags.gifuTriggered = true;
                             this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
                         }
-                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                         allies.forEach(ally => {
-                            if (ally !== vasen && ally !== incomingVasen && !ally.isKnockedOut()) {
+                            if (ally !== incomingVasen && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(randomStat, stages);
                                 this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
                             }
