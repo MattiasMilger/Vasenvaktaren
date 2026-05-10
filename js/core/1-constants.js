@@ -589,7 +589,7 @@ const ZONES = {
             name: 'Gylfe',
             team: [
                 { species: 'Draug', level: 30, temperament: 'FEROCIOUS', runes: ['GIFU', 'HAGAL'] },
-                { species: 'Rasvelg', level: 30, temperament: 'ENDURING', runes: ['ANSUZ', 'TYR'] },
+                { species: 'Valkyria', level: 30, temperament: 'BRUTAL', runes: ['FEHU', 'URUZ'] },
                 { species: 'Fenrir', level: 30, temperament: 'VIGILANT', runes: ['ODAL', 'MANNAZ'] }
             ],
             dialogue: {
