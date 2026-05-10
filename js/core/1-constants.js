@@ -100,8 +100,8 @@ const GAME_CONFIG = {
     // EXPLORATION & PITY SYSTEM
     // =============================================================================
     // Pity thresholds for exploration anti-grief system
-    PITY_BATTLE_THRESHOLD: 4,           // Force battle after X non-battle encounters
-    PITY_ITEM_THRESHOLD: 5,             // Force item after X non-item encounters
+    PITY_BATTLE_THRESHOLD: 5,           // Force battle after X non-battle encounters
+    PITY_ITEM_THRESHOLD: 4,             // Force item after X non-item encounters
     PITY_RUNE_THRESHOLD: 20,            // Force rune after X non-rune encounters
     PITY_SACRED_WELL_THRESHOLD: 3,      // Force Sacred Well after X battles
     
