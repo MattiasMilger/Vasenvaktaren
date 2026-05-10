@@ -107,7 +107,7 @@ const ABILITIES = {
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
-        power: 40,
+        power: 38,
         meginCost: 55,
         retaliationBonus: GAME_CONFIG.ROTVALTA_BONUS
     },
