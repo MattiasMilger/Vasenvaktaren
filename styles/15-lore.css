@@ -88,7 +88,7 @@
 
 /* Search highlight */
 mark.lore-highlight {
-    background: rgba(255, 220, 80, 0.35);
+    background: var(--lore-highlight-color);
     color: inherit;
     border-radius: 2px;
     padding: 0 1px;

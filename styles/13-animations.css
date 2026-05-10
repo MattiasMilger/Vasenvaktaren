@@ -87,7 +87,7 @@
 
 @keyframes flashPotent {
     0% { filter: brightness(1); }
-    25% { filter: brightness(1.7) saturate(1.5) drop-shadow(0 0 15px rgba(0,255,0,0.7)); }
+    25% { filter: brightness(1.7) saturate(1.5) drop-shadow(0 0 15px var(--flash-potent-color)); }
     100% { filter: brightness(1); }
 }
 
@@ -98,7 +98,7 @@
 
 @keyframes flashNeutral {
     0% { filter: brightness(1); }
-    25% { filter: brightness(2.2) drop-shadow(0 0 20px rgba(255,255,255,0.8)); }
+    25% { filter: brightness(2.2) drop-shadow(0 0 20px var(--flash-neutral-color)); }
     100% { filter: brightness(1); }
 }
 
@@ -109,7 +109,7 @@
 
 @keyframes flashWeak {
     0% { filter: brightness(1); }
-    25% { filter: brightness(1.6) saturate(1.7) drop-shadow(0 0 15px rgba(255,0,0,0.7)); }
+    25% { filter: brightness(1.6) saturate(1.7) drop-shadow(0 0 15px var(--flash-weak-color)); }
     100% { filter: brightness(1); }
 }
 
@@ -134,7 +134,7 @@
 
 @keyframes flashDebuff {
     0% { filter: brightness(1); }
-    30% { filter: brightness(1.6) saturate(1.4) drop-shadow(0 0 15px rgba(147,51,234,0.6)); }
+    30% { filter: brightness(1.6) saturate(1.4) drop-shadow(0 0 15px var(--flash-debuff-color)); }
     100% { filter: brightness(1); }
 }
 

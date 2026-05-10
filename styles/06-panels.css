@@ -71,7 +71,7 @@
 .tab-btn.active {
     color: var(--accent-gold);
     border-bottom-color: var(--accent-primary);
-    background: rgba(143, 166, 126, 0.08);
+    background: var(--accent-primary-overlay);
 }
 
 /* Panel Content */

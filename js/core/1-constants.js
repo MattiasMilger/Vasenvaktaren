@@ -500,9 +500,9 @@ const ZONES = {
         guardian: {
             name: 'Ragnar',
             team: [
-                { species: 'Gardstomte', level: 10, temperament: 'SAVAGE', runes: ['HAGAL'] },
-                { species: 'Nattramn', level: 10, temperament: 'RESILIENT', runes: ['EHWAZ'] },
-                { species: 'Gloson', level: 10, temperament: 'VIGILANT', runes: ['PERTHO'] }
+            { species: 'Nattramn', level: 10, temperament: 'RESILIENT', runes: ['HAGAL'] },
+            { species: 'Bjara', level: 10, temperament: 'BRUTAL', runes: ['BJARKA'] },
+            { species: 'Gloson', level: 10, temperament: 'VIGILANT', runes: ['PERTHO'] }
             ],
             dialogue: {
                 challenge: 'I am the defender of the quiet folk. Disturbance is not tolerated. Prepare to leave this village.',
@@ -522,9 +522,9 @@ const ZONES = {
         guardian: {
             name: 'Hjördis',
             team: [
-                { species: 'Svartalv', level: 15, temperament: 'ALERT', runes: ['FEHU'] },
-                { species: 'Myling', level: 15, temperament: 'THOUGHTFUL', runes: ['ODAL'] },
-                { species: 'Fafner', level: 15, temperament: 'WARY', runes: ['KAUNAN'] }
+                { species: 'Svartalv', level: 15, temperament: 'STALWART', runes: ['GIFU'] },
+                { species: 'Mara', level: 15, temperament: 'THOUGHTFUL', runes: ['URUZ'] },
+                { species: 'Fafner', level: 15, temperament: 'WARY', runes: ['ANSUZ'] }
             ],
             dialogue: {
                 challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
@@ -544,9 +544,9 @@ const ZONES = {
         guardian: {
             name: 'Sigurd',
             team: [
-                { species: 'Backahast', level: 20, temperament: 'BRUTAL', runes: ['GIFU'] },
-                { species: 'Irrbloss', level: 20, temperament: 'VIGILANT', runes: ['INGUZ'] },
-                { species: 'Jormungandr', level: 20, temperament: 'STALWART', runes: ['ISAZ'] }
+                { species: 'Norna', level: 20, temperament: 'THOUGHTFUL', runes: ['GIFU'] },
+                { species: 'Irrbloss', level: 20, temperament: 'VIGILANT', runes: ['ODAL'] },
+                { species: 'Nacken', level: 20, temperament: 'RESILIENT', runes: ['INGUZ'] }
             ],
             dialogue: {
                 challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
@@ -566,9 +566,9 @@ const ZONES = {
         guardian: {
             name: 'Brynhild',
             team: [
-                { species: 'Bergatroll', level: 25, temperament: 'RESILIENT', runes: ['THURS'] },
-                { species: 'Eldturs', level: 25, temperament: 'FEROCIOUS', runes: ['KAUNAN'] },
-                { species: 'Rimturs', level: 25, temperament: 'WARY', runes: ['RAIDO'] }
+                { species: 'Vitorm', level: 25, temperament: 'HEALTHY', runes: ['GIFU'] },
+                { species: 'Bergatroll', level: 25, temperament: 'VIGILANT', runes: ['PERTHO'] },
+                { species: 'Eldturs', level: 25, temperament: 'RESILIENT', runes: ['MANNAZ'] }
             ],
             dialogue: {
                 challenge: 'We are the forces of chaos, the ancient Strength of the raw elements. Face your doom!',
@@ -588,9 +588,9 @@ const ZONES = {
         guardian: {
             name: 'Gylfe',
             team: [
-                { species: 'Fenrir', level: 30, temperament: 'VIGILANT', runes: ['GIFU', 'HAGAL'] },
+                { species: 'Draug', level: 30, temperament: 'FEROCIOUS', runes: ['GIFU', 'HAGAL'] },
                 { species: 'Rasvelg', level: 30, temperament: 'ENDURING', runes: ['ANSUZ', 'TYR'] },
-                { species: 'Nidhogg', level: 30, temperament: 'FOCUSED', runes: ['THURS', 'NAUDIZ'] }
+                { species: 'Fenrir', level: 30, temperament: 'VIGILANT', runes: ['ODAL', 'MANNAZ'] }
             ],
             dialogue: {
                 challenge: 'This is where destiny is decided. The heroes of Valhalla and their enemies await the end. Prove your fate.',

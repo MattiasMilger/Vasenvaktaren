@@ -669,7 +669,7 @@ button:focus-visible,
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-popup);
     margin-top: 2px;
     pointer-events: auto;
 }
@@ -741,7 +741,7 @@ button:focus-visible,
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-popup);
     margin-top: var(--spacing-xs);
 }
 
@@ -794,7 +794,7 @@ button:focus-visible,
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-popup);
     margin-top: var(--spacing-xs);
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
@@ -829,7 +829,7 @@ button:focus-visible,
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-popup);
     margin-top: 2px;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);

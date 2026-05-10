@@ -16,6 +16,8 @@
     --text-muted: #9898aa;     /* Faded / de-emphasized text */
     --text-accent: #dcc896;    /* Warm gold — names, titles, flavor */
     --text-accent-hover: #e8d8a8; /* Lighter warm gold for hover states */
+    --text-strong: #e6e6f0;    /* Strong readable text — combat log */
+    --text-strong-alt: #ededf8; /* Alt strong text — combat log entries */
 
     /* Accent Colors — UI chrome and decorative states (not semantic actions) */
     --accent-primary: #8fa67e;   /* Muted sage-green — primary buttons, active borders, rune slots */
@@ -23,6 +25,11 @@
     --accent-danger: #c46c6c;    /* Red — damage text, enemy UI, danger states */
     --accent-warning: #d4a933;   /* Bright gold — XP gain, level requirements, alerts */
     --accent-gold: #c9a75a;      /* Warm amber gold — decorative trim, achievement borders */
+
+    /* Accent Primary overlays and glow colors */
+    --accent-primary-overlay: rgba(143, 166, 126, 0.08);       /* Subtle tint for active/selected states */
+    --accent-primary-glow-color: rgba(143, 166, 126, 0.3);     /* Glow color for hover/selected */
+    --accent-primary-glow-strong-color: rgba(143, 166, 126, 0.5); /* Strong glow color */
 
     /* Semantic Action Colors — universal visual language, used across all UI */
     --color-positive: #5fa13a;      /* Add, heal, buff, success, confirm */
@@ -34,6 +41,7 @@
     --border-color: #3f3f52;
     --border-light: #505066;
     --border-focus: #7a92ab;
+    --border-focus-shadow: rgba(80, 80, 102, 0.25); /* Focus ring shadow for inputs */
 
     /* Border Radius */
     --border-radius: 8px;
@@ -107,27 +115,42 @@
     --rarity-mythical-shimmer: rgba(174, 82, 212, 0.6);
     --rarity-mythical-glow: rgba(174, 82, 212, 0.4);
     --rarity-mythical-shadow: rgba(174, 82, 212, 0.2);
+    --rarity-mythical-shadow-mid: rgba(174, 82, 212, 0.35); /* Mid-opacity shadow for animations */
     --rarity-mythical-glow-strong: rgba(174, 82, 212, 0.6);
 
     /* Health/Megin resource bar colors */
     --health-fill: var(--color-positive); /* Green = healthy = positive, intentionally shared */
+    --health-fill-top: #6fb850;           /* Lighter green for bar gradient top */
+    --health-fill-knocked-out: #a85a4a;   /* Muted red for knocked-out portrait HP bar */
     --health-bg: #1e2f1e;
-    --megin-fill: #5d7fb8;       /* Steel blue — magic/energy resource */
+    --megin-fill: #5d7fb8;                /* Steel blue — magic/energy resource */
+    --megin-fill-top: #7292c8;            /* Lighter blue for bar gradient top */
+    --megin-fill-portrait: #5a8aaa;       /* Muted blue for party portrait megin bar */
     --megin-bg: #1e2633;
-    --megin-highlight: #6a9aff;  /* Brighter blue — megin cost display in ability lists */
+    --megin-highlight: #6a9aff;           /* Brighter blue — megin cost display in ability lists */
+    --bar-shine: rgba(255, 255, 255, 0.2); /* Inset shine on HP/MP bars */
 
     /* UI Overlay Colors */
     --color-white: #ffffff;
     --badge-border: #3f3f52;
-    --white-overlay-light: rgba(255, 255, 255, 0.1);
-    --black-overlay: rgba(0, 0, 0, 0.2);
-    --black-overlay-strong: rgba(0, 0, 0, 0.4);
+    --white-overlay-faint: rgba(255, 255, 255, 0.03);  /* Barely-visible texture overlay */
+    --white-overlay-light: rgba(255, 255, 255, 0.1);   /* Subtle highlight overlay */
+    --white-overlay-medium: rgba(255, 255, 255, 0.2);  /* Medium highlight overlay */
+    --black-overlay: rgba(0, 0, 0, 0.2);               /* Light dark overlay */
+    --black-overlay-medium: rgba(0, 0, 0, 0.3);        /* Medium dark overlay / popup shadows */
+    --black-overlay-strong: rgba(0, 0, 0, 0.4);        /* Strong dark overlay */
+    --black-overlay-text-shadow: rgba(0, 0, 0, 0.35);  /* Dark overlay for text-shadow use */
+    --black-overlay-heavy: rgba(0, 0, 0, 0.6);         /* Heavy dark overlay */
+    --black-overlay-darker: rgba(0, 0, 0, 0.7);        /* Darker overlay (icon text-shadow) */
+    --black-overlay-extra: rgba(0, 0, 0, 0.8);         /* Extra dark overlay (title text-shadow) */
+    --modal-overlay-bg: rgba(0, 0, 0, 0.88);           /* Modal backdrop background */
 
     /* Shadows — for depth layering */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-popup: 0 4px 12px rgba(0, 0, 0, 0.3);    /* Dropdown/popup box-shadow */
 
     /* Glows — colored ambient light for interactive elements */
     --glow-primary: 0 0 12px rgba(143, 166, 126, 0.3); /* accent-primary glow */
@@ -139,9 +162,32 @@
 
     /* Combat Panel Colors — blue tint for player side, red tint for enemy side */
     --combat-player-bg: rgba(61, 142, 212, 0.08);
+    --combat-player-overlay: rgba(61, 142, 212, 0.05);          /* Subtle gradient overlay */
     --combat-player-border: #5d7fb8;
+    --combat-player-glow-color: rgba(61, 142, 212, 0.15);       /* Panel glow */
+    --combat-player-glow-strong-color: rgba(61, 142, 212, 0.35); /* Freya's Tears low glow */
+    --combat-player-glow-intense-color: rgba(61, 142, 212, 0.6); /* Freya's Tears peak glow */
     --combat-enemy-bg: rgba(217, 85, 85, 0.08);
+    --combat-enemy-overlay: rgba(217, 85, 85, 0.05);            /* Subtle gradient overlay */
     --combat-enemy-border: #c46c6c;
+    --combat-enemy-glow-color: rgba(217, 85, 85, 0.15);         /* Panel glow */
+
+    /* Combat Log Text Glows */
+    --megin-glow-color: rgba(93, 127, 184, 0.3);    /* Megin text glow */
+    --damage-glow-color: rgba(196, 108, 108, 0.3);  /* Damage text glow */
+    --buff-glow-color: rgba(162, 186, 146, 0.3);    /* Buff text glow */
+
+    /* Combat Flash Colors — hit animation drop-shadows */
+    --flash-potent-color: rgba(0, 255, 0, 0.7);     /* Green flash for potent hits */
+    --flash-neutral-color: rgba(255, 255, 255, 0.8); /* White flash for neutral hits */
+    --flash-weak-color: rgba(255, 0, 0, 0.7);        /* Red flash for weak hits */
+    --flash-debuff-color: rgba(147, 51, 234, 0.6);   /* Purple flash for debuff hits */
+    --combat-flash-bg: rgba(255, 100, 100, 0.15);    /* Red tint background flash */
+
+    /* Auto Battle Button */
+    --auto-battle-color: rgba(100, 160, 220, 0.4);       /* Auto battle pulse glow */
+    --auto-battle-color-transparent: rgba(100, 160, 220, 0); /* Transparent for animation from */
+    --auto-battle-bg: rgba(100, 160, 220, 0.15);           /* Auto battle button hover bg */
 
     /* Transitions */
     --transition-fast: 0.15s ease;
@@ -150,10 +196,21 @@
 
     /* Gold Effects — accent-gold at various opacities for glow/shimmer overlays */
     --accent-gold-overlay: rgba(201, 167, 90, 0.15);
+    --accent-gold-overlay-soft: rgba(201, 167, 90, 0.08);  /* Very subtle gold tint */
+    --accent-gold-glow-soft: rgba(201, 167, 90, 0.3);      /* Soft gold glow / text-shadow */
     --accent-gold-border: #c9a75a;
     --accent-gold-glow: rgba(201, 167, 90, 0.4);
+    --accent-gold-glow-mid: rgba(201, 167, 90, 0.25);      /* Mid-opacity glow for zone selected */
     --accent-gold-shadow: rgba(201, 167, 90, 0.2);
+    --accent-gold-tint: rgba(220, 200, 150, 0.15);         /* Warm gold tint for hover states */
+    --accent-gold-shimmer-faint: rgba(255, 215, 0, 0.1);   /* Faint shimmer inset */
     --accent-gold-shimmer-light: rgba(255, 215, 0, 0.15);
     --accent-gold-shimmer-strong: rgba(255, 215, 0, 0.4);
     --accent-gold-glow-strong: rgba(201, 167, 90, 0.6);
+
+    /* Endless Tower */
+    --endless-tower-glow: rgba(139, 105, 20, 0.5); /* Floor number text glow */
+
+    /* Lore Book */
+    --lore-highlight-color: rgba(255, 220, 80, 0.35); /* Search highlight mark background */
 }

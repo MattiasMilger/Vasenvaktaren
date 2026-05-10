@@ -448,14 +448,14 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 0 8px rgba(143, 166, 126, 0.3);
+    box-shadow: 0 0 8px var(--accent-primary-glow-color);
     animation: runeSlotPulse 2s ease-in-out infinite;
 }
 
 .rune-slot:hover {
     background: var(--bg-hover);
     border-color: var(--accent-primary);
-    box-shadow: 0 0 12px rgba(143, 166, 126, 0.5);
+    box-shadow: 0 0 12px var(--accent-primary-glow-strong-color);
     transform: translateY(-1px);
 }
 
@@ -486,10 +486,10 @@
 /* Subtle pulse animation for empty rune slots */
 @keyframes runeSlotPulse {
     0%, 100% {
-        box-shadow: 0 0 8px rgba(143, 166, 126, 0.3);
+        box-shadow: 0 0 8px var(--accent-primary-glow-color);
     }
     50% {
-        box-shadow: 0 0 12px rgba(143, 166, 126, 0.5);
+        box-shadow: 0 0 12px var(--accent-primary-glow-strong-color);
     }
 }
 

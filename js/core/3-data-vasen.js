@@ -397,7 +397,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
-        abilities: ['Hail Storm', 'Tidal Wave', 'Skald\'s Mead', 'Freya\'s Tears'],
+        abilities: ['Tidal Wave', 'Moon Beam', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Fate Thread',
         image: 'assets/vasen/norna.png'
     },
