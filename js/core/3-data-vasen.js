@@ -307,7 +307,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Hail Storm', 'Skald\'s Mead', 'Wind Gust'],
+        abilities: ['Hail Storm', 'Elven Light', 'Skald\'s Mead', 'Wind Gust'],
         tamingItem: 'Morning Dew',
         image: 'assets/vasen/dimalva.png'
     },
