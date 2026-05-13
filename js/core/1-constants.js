@@ -54,7 +54,7 @@ const GAME_CONFIG = {
     // DAMAGE CALCULATION
     // =============================================================================
     POWER_CONSTANT: 250,            // Divisor that converts an ability's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. An ability with power 250 produces a 1× multiplier against the attacker's stat.
-    DEFENSE_CONSTANT: 200,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
+    DEFENSE_CONSTANT: 190,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
     DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     
     // Mixed-type attacks split damage calculation 50/50 between Strength and Wisdom
@@ -305,9 +305,9 @@ const ELEMENT_MATCHUPS = {
     },
     [ELEMENTS.WIND]: {
         [ELEMENTS.EARTH]: 'WEAK',
-        [ELEMENTS.NATURE]: 'NEUTRAL',
+        [ELEMENTS.NATURE]: 'POTENT',
         [ELEMENTS.WATER]: 'NEUTRAL',
-        [ELEMENTS.FIRE]: 'POTENT',
+        [ELEMENTS.FIRE]: 'NEUTRAL',
         [ELEMENTS.WIND]: 'NEUTRAL'
     }
 };
