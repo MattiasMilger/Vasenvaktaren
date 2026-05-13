@@ -52,8 +52,13 @@ Game.prototype.startEndlessTowerBattle = function() {
     const enemyCount = isDualFloor ? 2 : 1;
     for (let i = 0; i < enemyCount; i++) {
         const usedSpecies = enemyTeam.map(e => e.speciesName);
-        const availableSpecies = allSpecies.filter(s => !usedSpecies.includes(s));
-        const pool = availableSpecies.length > 0 ? availableSpecies : allSpecies;
+        const hasMythical = enemyTeam.some(e => VASEN_SPECIES[e.speciesName].rarity === RARITIES.MYTHICAL);
+        let availableSpecies = allSpecies.filter(s => !usedSpecies.includes(s));
+        // Enforce max 1 mythical per enemy team
+        if (hasMythical) {
+            availableSpecies = availableSpecies.filter(s => VASEN_SPECIES[s].rarity !== RARITIES.MYTHICAL);
+        }
+        const pool = availableSpecies.length > 0 ? availableSpecies : allSpecies.filter(s => !usedSpecies.includes(s));
         const randomSpecies = pool[Math.floor(Math.random() * pool.length)];
         enemyTeam.push(createWildVasen(randomSpecies, enemyLevel));
     }
