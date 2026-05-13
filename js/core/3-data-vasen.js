@@ -386,7 +386,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Sky Dive', 'Freya\'s Tears'],
+        abilities: ['Flaming Skewer', 'Sky Dive', 'Enchanting Song', 'Freya\'s Tears'],
         tamingItem: 'Hearth Core',
         image: 'assets/vasen/fylgja.png'
     },

@@ -47,6 +47,10 @@ class Battle {
         
         // Enemy utility usage tracking (for AI)
         this.enemyUtilityUsage = new Map(); // "vasenId-abilityName" -> count
+
+        // Ally buff first-use tracking (per side, per ability name)
+        this.playerAllyBuffFirstUse = new Set();
+        this.enemyAllyBuffFirstUse = new Set();
         
         // Callbacks for UI updates
         this.onLog = null;
@@ -947,10 +951,34 @@ class Battle {
             } else if (effect.target === 'self') {
                 targetVasen = user;
             }
-            
+
+            // Determine whether this is the first use of an ally buff ability this battle for this side,
+            // and compute the total stages to grant (regular + bonus). The bonus is applied to the
+            // direct target; Gifu then shares the full total to all other allies in one pass.
+            let firstUseBonusStages = 0;
+            if (effect.target === 'ally' && GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS > 0) {
+                const firstUseSet = isPlayer ? this.playerAllyBuffFirstUse : this.enemyAllyBuffFirstUse;
+                if (!firstUseSet.has(ability.name)) {
+                    firstUseSet.add(ability.name);
+                    firstUseBonusStages = GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS;
+                }
+            }
+
+            const totalStagesToShare = effect.stages + firstUseBonusStages;
             const stats = effect.stats || [effect.stat];
-            
+
             stats.forEach(stat => {
+                // Apply bonus stages to the direct target first (if any)
+                if (firstUseBonusStages > 0) {
+                    const bonusResult = targetVasen.modifyAttributeStage(stat, firstUseBonusStages);
+                    if (bonusResult.changed !== 0) {
+                        const stageWord = Math.abs(bonusResult.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`First use bonus! ${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'buff');
+                        effects.push({ stat, change: bonusResult.changed });
+                    }
+                }
+
+                // Apply the regular stages to the direct target
                 const result = targetVasen.modifyAttributeStage(stat, effect.stages);
                 if (result.capped) {
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} cannot be raised any higher.`, 'status');
@@ -958,21 +986,21 @@ class Battle {
                     const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
-                    
-                    // Gifu: share first buff
-                    if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
-                        user.battleFlags.gifuTriggered = true;
-                        this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                        
-                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-                        const stageWord = Math.abs(effect.stages) === 1 ? 'stage' : 'stages';
-                        allies.forEach(ally => {
-                            if (ally !== user && !ally.isKnockedOut()) {
-                                ally.modifyAttributeStage(stat, effect.stages);
-                                this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${effect.stages} ${stageWord}!`, 'buff');
-                            }
-                        });
-                    }
+                }
+
+                // Gifu: share the full total (bonus + regular) to all other allies in one pass
+                if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
+                    user.battleFlags.gifuTriggered = true;
+                    this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+
+                    const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                    const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
+                    allies.forEach(ally => {
+                        if (ally !== user && !ally.isKnockedOut()) {
+                            ally.modifyAttributeStage(stat, totalStagesToShare);
+                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                        }
+                    });
                 }
             });
         } else if (effect.type === 'debuff') {

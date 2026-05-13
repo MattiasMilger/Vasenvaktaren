@@ -658,16 +658,6 @@ const LORE_ENTRIES = {
         unlockType: 'item',
         unlockKey: 'Morning Dew'
     },
-    'item_hearth_core': {
-        key: 'item_hearth_core',
-        name: 'Hearth Core',
-        category: 'items',
-        desc: 'The hearth fire held a central place in Norse and Swedish folk belief, far beyond its practical function. It was the living heart of the home, and allowing it to go out entirely was considered a grave misfortune - even an omen of death in the household. The fire was tended carefully, and embers were sometimes carried from an old home to a new one to preserve continuity of spirit. In Norse tradition, the hearth was also a liminal space where the boundary between the living and the unseen world grew thin, making it a natural point of contact for spirits like the fylgja, who were believed to linger at the hearthside of those they were bound to.',
-        source: 'Norse Mythology / Swedish Folk Tradition',
-        heritage: 'Norse / Swedish',
-        unlockType: 'item',
-        unlockKey: 'Hearth Core'
-    },
 
     // =========================================================================
     // CATEGORY: LOCATIONS

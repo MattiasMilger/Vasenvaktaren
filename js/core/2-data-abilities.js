@@ -56,11 +56,13 @@ const ABILITIES = {
     'Smithing': {
         name: 'Smithing',
         flavorDescription: 'Through ancient forging magic, an ally\'s Strength is raised.',
-        mechanicsDescription: 'Raises an ally\'s Strength by 1 stage.',
+        get mechanicsDescription() {
+            return `Raises an ally\'s Strength by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
+        },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 25,
+        meginCost: 40,
         effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
     },
     'Giantsbane': {
@@ -139,7 +141,7 @@ const ABILITIES = {
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 35,
+        meginCost: 30,
         effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1 }
     },
 
@@ -189,11 +191,13 @@ const ABILITIES = {
     'Skald\'s Mead': {
         name: 'Skald\'s Mead',
         flavorDescription: 'Passes mead to an ally, clarifying their mind.',
-        mechanicsDescription: 'Raises an ally\'s Wisdom by 1 stage.',
+        get mechanicsDescription() {
+            return `Raises an ally\'s Wisdom by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
+        },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 25,
+        meginCost: 40,
         effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 }
     },
 
@@ -314,7 +318,7 @@ const ABILITIES = {
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 35,
+        meginCost: 30,
         effect: { type: 'debuff', target: 'enemy', stats: ['strength', 'wisdom'], stages: 1 }
     },
     'Tyr\'s Sacrifice': {

@@ -75,12 +75,14 @@ const GAME_CONFIG = {
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
-    TYRS_SACRIFICE_HEALTH_COST: 0.40,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
-    TYRS_SACRIFICE_STAGES: 3,           // Attribute stages gained to all stats when using Tyr's Sacrifice
+    TYRS_SACRIFICE_HEALTH_COST: 0.30,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
+    TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all stats when using Tyr's Sacrifice
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
     FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
     FREYASTEARS_HEALTH_REGEN_PERCENT: 0.02, // % of max health restored per turn while Freya's Tears is active
+
+    ALLY_BUFF_FIRST_USE_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead)
 
     // =============================================================================
     // HEALING
@@ -148,7 +150,7 @@ const GAME_CONFIG = {
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
     // Inguz: Chance to debuff opponents attributes
-    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.30,          // % chance to lower attribute by 1 stage
+    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.50,          // % chance to lower attribute by 1 stage
     
     // Mannaz: Heal on utility ability use
     RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
@@ -276,7 +278,7 @@ const ELEMENT_MATCHUPS = {
     [ELEMENTS.EARTH]: {
         [ELEMENTS.EARTH]: 'NEUTRAL',
         [ELEMENTS.NATURE]: 'WEAK',
-        [ELEMENTS.WATER]: 'NEUTRAL',
+        [ELEMENTS.WATER]: 'WEAK',
         [ELEMENTS.FIRE]: 'POTENT',
         [ELEMENTS.WIND]: 'POTENT'
     },
@@ -289,7 +291,7 @@ const ELEMENT_MATCHUPS = {
     },
     [ELEMENTS.WATER]: {
         [ELEMENTS.EARTH]: 'POTENT',
-        [ELEMENTS.NATURE]: 'NEUTRAL',
+        [ELEMENTS.NATURE]: 'WEAK',
         [ELEMENTS.WATER]: 'NEUTRAL',
         [ELEMENTS.FIRE]: 'POTENT',
         [ELEMENTS.WIND]: 'WEAK'
@@ -303,7 +305,7 @@ const ELEMENT_MATCHUPS = {
     },
     [ELEMENTS.WIND]: {
         [ELEMENTS.EARTH]: 'WEAK',
-        [ELEMENTS.NATURE]: 'WEAK',
+        [ELEMENTS.NATURE]: 'NEUTRAL',
         [ELEMENTS.WATER]: 'NEUTRAL',
         [ELEMENTS.FIRE]: 'POTENT',
         [ELEMENTS.WIND]: 'NEUTRAL'
@@ -429,13 +431,13 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 58, defense: 55, durability: 78 },
+    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
     [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
     [FAMILIES.ODJUR]: { strength: 84, wisdom: 55, health: 65, defense: 61, durability: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
     [FAMILIES.ALV]: { strength: 68, wisdom: 84, health: 60, defense: 54, durability: 62 },
-    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 58, defense: 80, durability: 50 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 84, defense: 54, durability: 51 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
