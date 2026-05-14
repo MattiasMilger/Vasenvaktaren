@@ -256,7 +256,7 @@ class Battle {
                 const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REGEN_PERCENT);
                 if (healAmount > 0) {
                     vasen.heal(healAmount);
-                    this.addLog(`${vasen.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health!`, 'heal');
+                    this.addLog(`${vasen.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health!`, 'heal');
                 }
 
                 // Megin regen
@@ -563,7 +563,7 @@ class Battle {
                 if (healAmount > 0) {
                     result.runeEffects.push({ rune: 'MANNAZ', effect: `healed ${healAmount}` });
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.MANNAZ.symbol} ${RUNES.MANNAZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                 }
             }
             
@@ -573,7 +573,7 @@ class Battle {
                     const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                     if (healAmount > 0) {
                         this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
-                        this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                        this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                         result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
                     }
                 }
@@ -1066,7 +1066,7 @@ class Battle {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
                 }
             }
@@ -1078,7 +1078,7 @@ class Battle {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
                 if (healAmount > 0) {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: #a2ba92; font-weight: 700;">${healAmount} health</span>!`);
+                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
                 }
             }
@@ -1461,7 +1461,7 @@ class Battle {
                 const reviveHealth = Math.floor(vasen.maxHealth * FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT);
                 vasen.currentHealth = reviveHealth;
                 this.addLog(`${vasen.getDisplayName()} activated Deathless ᛣ.`, 'passive');
-                this.addLog(`${vasen.getDisplayName()} revived with <span style="color: #a2ba92; font-weight: 700;">${reviveHealth}</span> HP!`);
+                this.addLog(`${vasen.getDisplayName()} revived with <span style="color: var(--color-positive-soft); font-weight: 700;">${reviveHealth}</span> HP!`);
                 return true;
             }
         }
