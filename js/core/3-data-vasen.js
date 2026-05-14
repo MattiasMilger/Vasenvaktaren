@@ -250,7 +250,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Moon Beam', 'Enchanting Song', 'Loki\'s Betrayal'],
+        abilities: ['Elven Light', 'Moon Beam', 'Thick Coat', 'Enchanting Song'],
         tamingItem: 'Shed Antlers',
         image: 'assets/vasen/skogsra.png'
     },
