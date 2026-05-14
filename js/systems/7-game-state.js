@@ -467,17 +467,7 @@ class GameState {
                     LORE_ENTRIES[k].unlockType === 'item' && LORE_ENTRIES[k].unlockKey === species.tamingItem
                 ).forEach(k => unlock(k));
             }
-
-            // Valhalla entries (taming Einharje or Valkyria)
-            if (vasen.speciesName === 'Einharje' || vasen.speciesName === 'Valkyria') {
-                LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => unlock(k));
-            }
         });
-
-        // Valhalla entries from inventory (finding Valhalla Pork)
-        if (this.itemInventory['Valhalla Pork'] > 0) {
-            LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => unlock(k));
-        }
 
         // Zone entries for all zones the player has unlocked
         LORE_ENTRY_KEYS.forEach(k => {

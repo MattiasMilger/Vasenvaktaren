@@ -152,9 +152,9 @@ const TAMING_ITEMS = {
         description: 'A fragrant Elderflower Sprig. Its scent is protective, a necessary offering for the fierce, watchful spirit of the Elder Tree.',
         tamingTarget: 'Hyllemor'
     },
-    'Valhalla Pork': {
-        name: 'Valhalla Pork',
-        description: 'A tempting piece of Valhalla Pork. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla.',
+    'Valhallan Pork': {
+        name: 'Valhallan Pork',
+        description: 'A tempting piece of Valhallan Pork. The scent of victory and feasting lingers, attracting a valiant warrior from Valhalla.',
         tamingTarget: 'Einharje'
     },
     'Shield Fragment': {

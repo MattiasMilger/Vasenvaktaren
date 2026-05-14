@@ -438,7 +438,7 @@ const BASE_ATTRIBUTES = {
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
     [FAMILIES.ALV]: { strength: 68, wisdom: 84, health: 60, defense: 54, durability: 62 },
     [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
-    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 84, defense: 54, durability: 51 },
+    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 82, defense: 54, durability: 51 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
 

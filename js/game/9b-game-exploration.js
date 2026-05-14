@@ -18,13 +18,6 @@ Game.prototype.explore = function() {
         if (gameState.unlockLoreEntry('location_sacred_well')) {
             ui.showLoreUnlockMessage('location_sacred_well');
         }
-    } else if (result.type === 'item' && result.itemId === 'Valhalla Pork') {
-        // Finding Valhalla Pork unlocks Valhalla-related lore entries
-        LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => {
-            if (gameState.unlockLoreEntry(k)) {
-                ui.showLoreUnlockMessage(k);
-            }
-        });
     }
 
     if (result.type !== 'vasen') {

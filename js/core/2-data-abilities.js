@@ -73,7 +73,7 @@ const ABILITIES = {
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
-        power: 30,
+        power: 28,
         target_hp_bonus_percent: GAME_CONFIG.GIANTSBANE_BONUS,
         meginCost: 50,
         giantsbaneBonus: true

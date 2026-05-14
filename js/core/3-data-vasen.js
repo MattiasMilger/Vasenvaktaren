@@ -33,7 +33,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
-        abilities: ['Torch Strike', 'Flaming Skewer', 'Burning Insult', 'Loki\'s Betrayal'],
+        abilities: ['Torch Strike', 'Flaming Skewer', 'Smithing', 'Freya\'s Tears'],
         tamingItem: 'Warm Tomtegrot',
         image: 'assets/vasen/hustomte.png'
     },
@@ -90,7 +90,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Fire Breath', 'Tidal Wave', 'Elven Light', 'Wailing Cry'],
+        abilities: ['Drown', 'Elven Light', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Ghastly Lantern',
         image: 'assets/vasen/irrbloss.png'
     },
@@ -365,7 +365,7 @@ const VASEN_SPECIES = {
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
         abilities: ['Ground Stomp', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
-        tamingItem: 'Valhalla Pork',
+        tamingItem: 'Valhallan Pork',
         image: 'assets/vasen/einharje.png'
     },
     'Valkyria': {

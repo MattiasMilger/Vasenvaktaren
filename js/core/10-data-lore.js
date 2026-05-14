@@ -609,14 +609,16 @@ const LORE_ENTRIES = {
         unlockType: 'item',
         unlockKey: 'Warm Tomtegrot'
     },
-    'item_valhalla_pork': {
-        key: 'item_valhalla_pork',
-        name: 'Valhalla Pork',
+    'item_valhallan_pork': {
+        key: 'item_valhallan_pork',
+        name: 'Valhallan Pork',
         category: 'items',
         desc: 'The boar Särimner is the magical beast of Valhalla described in the Prose Edda: each day the cook Andhrimnir slaughters it and boils it in the great cauldron Eldhrimnir, and each evening the animal is restored completely to life to be slaughtered again the next day. This provides the Einherjar with inexhaustible meat for their nightly feasts. The ever-renewing nature of Saehrimnir reflects the Norse concept of cyclical regeneration and the abundance enjoyed by the honored dead in Valhalla.',
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
-        unlockType: 'valhalla'
+        unlockType: 'item',
+        unlockKey: 'Valhallan Pork'
+
     },
     'item_burial_flowers': {
         key: 'item_burial_flowers',
