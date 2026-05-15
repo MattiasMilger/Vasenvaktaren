@@ -11,6 +11,55 @@
         body.loading .screen {
             display: none !important;
         }
+
+        /* Rarity description popup — mirrors .family-matchup-collapsible/.family-description-popup */
+        .rarity-matchup-collapsible {
+            position: relative;
+            display: inline-block;
+        }
+
+        .rarity-matchup-collapsible .rarity-description-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            min-width: 220px;
+            max-width: 320px;
+            padding: var(--spacing-sm);
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-popup);
+            margin-top: 2px;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            line-height: 1.4;
+            pointer-events: auto;
+        }
+
+        .rarity-matchup-collapsible.open .rarity-description-popup {
+            display: block;
+        }
+
+        .clickable-rarity {
+            cursor: pointer;
+            transition: filter 0.2s ease, transform 0.1s ease;
+        }
+
+        .clickable-rarity:hover {
+            filter: brightness(1.15);
+            transform: scale(1.05);
+        }
+
+        /* Element flavor text inside the matchup details popup */
+        .element-flavor-text {
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin: 0 0 2px 0;
+        }
     </style>
 </head>
 <body class="loading">

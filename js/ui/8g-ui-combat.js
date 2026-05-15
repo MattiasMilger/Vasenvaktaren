@@ -204,24 +204,30 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
                     ${vasen.species.element}
                 </span>
 
-                <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">
-                    ${vasen.species.rarity}
-                </span>
+                <div class="rarity-matchup-collapsible family-matchup-collapsible">
+                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${vasen.species.rarity}</span>
+                    <div class="rarity-description-popup">
+                        <p><strong>${vasen.species.rarity}</strong><br>
+                        ${RARITY_DESCRIPTIONS[vasen.species.rarity] || ''}</p>
+                    </div>
+                </div>
 
                 ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
             </div>
 
-            <div class="family-matchup-collapsible">
-                <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
-                <div class="family-description-popup">
-                    ${FAMILY_PASSIVES[vasen.species.family] ? `
-                        <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
-                        ${FAMILY_PASSIVES[vasen.species.family].description}</p>
-                        <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
-                    ` : ''}
-                    <p>${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
-                </div>
+                    <div class="family-matchup-collapsible">
+            <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
+            <div class="family-description-popup">
+                <p><strong>${vasen.species.family}</strong><br>
+                ${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
+
+                ${FAMILY_PASSIVES[vasen.species.family] ? `
+                    <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                    <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
+                    ${FAMILY_PASSIVES[vasen.species.family].description}</p>
+                ` : ''}
             </div>
+        </div>
         </div>
 
         <div class="combatant-attributes">

@@ -267,6 +267,14 @@ const ELEMENT_COLORS = {
     [ELEMENTS.WIND]: '#9b8fc4'
 };
 
+const ELEMENT_FLAVOR = {
+    [ELEMENTS.EARTH]: 'The element of stone, soil, and endurance. Earth väsen are grounded in the physical world, drawing strength from the land itself.',
+    [ELEMENTS.NATURE]: 'The element of growth, forest, and living things. Nature väsen are tied to the cycle of seasons, and the untamed wilderness.',
+    [ELEMENTS.WATER]: 'The element of rivers, seas, and the deep cold. Water väsen move between worlds as water moves through the earth.',
+    [ELEMENTS.FIRE]: 'The element of flame, heat, and transformation. Fire väsen carry the consuming hunger of the forge and the hearth.',
+    [ELEMENTS.WIND]: 'The element of air, storm, and swiftness. Wind väsen are restless and difficult to pin down.'
+};
+
 const DAMAGE_MULTIPLIERS = {
     POTENT: 1.4,
     NEUTRAL: 1.0,
@@ -333,6 +341,13 @@ const RARITY_EXP_BONUS = {
     [RARITIES.MYTHICAL]: 1.3
 };
 
+const RARITY_DESCRIPTIONS = {
+    [RARITIES.COMMON]: 'Widespread väsen found throughout the land. Though frequently encountered, they are no less a part of the ancient fabric of the world.',
+    [RARITIES.UNCOMMON]: 'Less frequently seen than common väsen, with a notable edge in power or ability. Worth seeking out for the advantages they bring.',
+    [RARITIES.RARE]: 'Seldom encountered väsen of considerable might. Finding and taming one requires both patience and skill.',
+    [RARITIES.MYTHICAL]: 'Legendary väsen of immense power, tied to the gods, the cosmos, or the deepest roots of Norse mythology. Taming one is a feat that will be remembered.'
+};
+
 const ENCOUNTER_RATES = {
     [RARITIES.COMMON]: 0.50,
     [RARITIES.UNCOMMON]: 0.25,
@@ -394,7 +409,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.JATTE]: {
         name: 'Colossal Power',
         get description() {
-            return `Basic Strike always has ${FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER} power instead of its default power.`;
+            return `Basic Strike always has ${FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER} power instead of its default 20 power.`;
         }
     },
     [FAMILIES.ODJUR]: {

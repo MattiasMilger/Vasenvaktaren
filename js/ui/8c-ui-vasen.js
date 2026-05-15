@@ -409,7 +409,11 @@ UIController.prototype.generateDefensiveMatchupsHTML = function(element) {
         else neutral.push(attackerElement);
     });
 
+    const flavor = ELEMENT_FLAVOR[element];
     let html = '<div class="matchup-details">';
+    if (flavor) {
+        html += `<p class="element-flavor-text">${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
+    }
     if (vulnerable.length > 0) {
         html += `<div class="matchup-row vulnerable"><span class="matchup-label">Vulnerable to:</span> ${vulnerable.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
     }
@@ -460,7 +464,13 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                         <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${vasen.species.element}</span>
                         ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
-                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
+                    <div class="rarity-matchup-collapsible family-matchup-collapsible">
+                        <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${vasen.species.rarity}</span>
+                        <div class="rarity-description-popup">
+                            <p><strong>${vasen.species.rarity}</strong><br>
+                            ${RARITY_DESCRIPTIONS[vasen.species.rarity] || ''}</p>
+                        </div>
+                    </div>
                     <div class="family-matchup-collapsible">
                         <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
                         <div class="family-description-popup">
@@ -664,3 +674,36 @@ UIController.prototype.renderAbilitiesList = function(vasen) {
 
     return html;
 };
+
+// Helper function to toggle rarity description collapsibles
+function toggleRarityDescription(element, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+
+    const parent = element.parentElement;
+    const isOpening = !parent.classList.contains('open');
+
+    // Close all rarity collapsibles
+    document.querySelectorAll('.rarity-matchup-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+
+    // Close all element and family collapsibles (mutually exclusive)
+    document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+    document.querySelectorAll('.family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+
+    clearCombatCardPopupStyles();
+
+    if (isOpening) {
+        parent.classList.add('open');
+        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
+            const popup = parent.querySelector('.rarity-description-popup');
+            if (popup) positionPopupForCombatCard(popup, element);
+        }
+    }
+}

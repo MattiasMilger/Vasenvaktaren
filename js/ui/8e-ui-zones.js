@@ -2,9 +2,6 @@
 // 8e-ui-zones.js - UI Controller Extension
 // =============================================================================
 
-
-    };
-
     // Select zone
 UIController.prototype.selectZone = function(zoneId) {
         gameState.currentZone = zoneId;
