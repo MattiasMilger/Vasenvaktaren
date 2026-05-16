@@ -368,7 +368,7 @@ UIController.prototype.toggleDescription = function() {
 };
 
 // Helper: Generate attacking matchups HTML for an element
-UIController.prototype.generateAttackingMatchupsHTML = function(element) {
+UIController.prototype.generateAttackingMatchupsHTML = function(element, showFlavor = true) {
     const matchups = ELEMENT_MATCHUPS[element];
     if (!matchups) return '';
 
@@ -382,7 +382,12 @@ UIController.prototype.generateAttackingMatchupsHTML = function(element) {
         else neutral.push(defElement);
     });
 
+    const flavor = ELEMENT_FLAVOR[element];
     let html = '<div class="matchup-details">';
+    if (showFlavor && flavor) {
+        html += `<p class="element-flavor-text"><strong>${element}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
+    }
+    html += `<p class="matchup-section-label"><strong>Attacking:</strong></p>`;
     if (potent.length > 0) {
         html += `<div class="matchup-row potent"><span class="matchup-label">Potent vs:</span> ${potent.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
     }
@@ -397,7 +402,7 @@ UIController.prototype.generateAttackingMatchupsHTML = function(element) {
 };
 
 // Helper: Generate defensive matchups HTML for an element
-UIController.prototype.generateDefensiveMatchupsHTML = function(element) {
+UIController.prototype.generateDefensiveMatchupsHTML = function(element, showFlavor = true) {
     let resists = [];   // Takes less damage from (attacker is WEAK against this defender)
     let neutral = [];
     let vulnerable = []; // Takes more damage from (attacker is POTENT against this defender)
@@ -411,9 +416,10 @@ UIController.prototype.generateDefensiveMatchupsHTML = function(element) {
 
     const flavor = ELEMENT_FLAVOR[element];
     let html = '<div class="matchup-details">';
-    if (flavor) {
-        html += `<p class="element-flavor-text">${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
+    if (showFlavor && flavor) {
+        html += `<p class="element-flavor-text"><strong>${element}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
     }
+    html += `<p class="matchup-section-label"><strong>Defending:</strong></p>`;
     if (vulnerable.length > 0) {
         html += `<div class="matchup-row vulnerable"><span class="matchup-label">Vulnerable to:</span> ${vulnerable.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
     }

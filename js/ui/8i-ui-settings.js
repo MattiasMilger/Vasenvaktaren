@@ -342,12 +342,10 @@ achievementsHtml += '</div></div>';
                     <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${element}</span>
                     <div class="element-guide-details">
                         <div class="guide-matchup-section">
-                            <strong>Attacking:</strong>
                             ${this.generateAttackingMatchupsHTML(element)}
                         </div>
                         <div class="guide-matchup-section">
-                            <strong>Defending:</strong>
-                            ${this.generateDefensiveMatchupsHTML(element)}
+                            ${this.generateDefensiveMatchupsHTML(element, false)}
                         </div>
                     </div>
                 </div>
@@ -412,4 +410,3 @@ achievementsHtml += '</div></div>';
 
         return html;
     };
-

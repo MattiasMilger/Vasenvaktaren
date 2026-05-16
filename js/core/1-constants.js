@@ -268,11 +268,11 @@ const ELEMENT_COLORS = {
 };
 
 const ELEMENT_FLAVOR = {
-    [ELEMENTS.EARTH]: 'The element of stone, soil, and endurance. Earth väsen are grounded in the physical world, drawing strength from the land itself.',
-    [ELEMENTS.NATURE]: 'The element of growth, forest, and living things. Nature väsen are tied to the cycle of seasons, and the untamed wilderness.',
-    [ELEMENTS.WATER]: 'The element of rivers, seas, and the deep cold. Water väsen move between worlds as water moves through the earth.',
-    [ELEMENTS.FIRE]: 'The element of flame, heat, and transformation. Fire väsen carry the consuming hunger of the forge and the hearth.',
-    [ELEMENTS.WIND]: 'The element of air, storm, and swiftness. Wind väsen are restless and difficult to pin down.'
+    [ELEMENTS.EARTH]: 'The element of stone, soil, and shielding.',
+    [ELEMENTS.NATURE]: 'The element of growth, forest, and life.',
+    [ELEMENTS.WATER]: 'The element of rivers, seas, and insight.',
+    [ELEMENTS.FIRE]: 'The element of flame, heat, and might.',
+    [ELEMENTS.WIND]: 'The element of air, storm, and resilience.'
 };
 
 const DAMAGE_MULTIPLIERS = {

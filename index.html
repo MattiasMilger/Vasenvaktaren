@@ -12,12 +12,7 @@
             display: none !important;
         }
 
-        /* Rarity description popup — mirrors .family-matchup-collapsible/.family-description-popup */
-        .rarity-matchup-collapsible {
-            position: relative;
-            display: inline-block;
-        }
-
+        /* Rarity description popup — the wrapper uses family-matchup-collapsible for positioning/display */
         .rarity-matchup-collapsible .rarity-description-popup {
             display: none;
             position: absolute;
@@ -59,6 +54,12 @@
             color: var(--text-secondary);
             line-height: 1.5;
             margin: 0 0 2px 0;
+        }
+
+        /* Attacking / Defending section label inside matchup popup */
+        .matchup-section-label {
+            font-size: var(--font-size-xs);
+            margin: 4px 0 2px 0;
         }
     </style>
 </head>
