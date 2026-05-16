@@ -812,7 +812,7 @@ class Battle {
         
         // Giantsbane: gains power based on target's max HP
         if (ability.giantsbaneBonus) {
-            power += Math.floor(defender.maxHealth * ability.target_hp_bonus_percent);
+            power += Math.floor(defender.currentHealth * ability.target_hp_bonus_percent);
         }
         
         if (ability.type === ATTACK_TYPES.MIXED) {

@@ -69,13 +69,13 @@ const ABILITIES = {
         name: 'Giantsbane',
         flavorDescription: 'Strikes with the  might of a giant slayer.',
         get mechanicsDescription() {
-            return `Hits opponent. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's max HP.`;
+            return `Hits opponent. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's current HP.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
-        power: 28,
+        power: 1,
         target_hp_bonus_percent: GAME_CONFIG.GIANTSBANE_BONUS,
-        meginCost: 50,
+        meginCost: 100,
         giantsbaneBonus: true
     },
 
