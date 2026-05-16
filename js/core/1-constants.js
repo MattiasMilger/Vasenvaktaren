@@ -71,7 +71,7 @@ const GAME_CONFIG = {
     TIER2_ATTACK_ABILITY_POWER: 68,
     TIER2_ATTACK_ABILITY_MEGIN: 50,
 
-    GIANTSBANE_BONUS: 0.85, // % of target's current HP as bonus power
+    GIANTSBANE_BONUS: 0.75, // % of target's current HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
