@@ -18,6 +18,12 @@ UIController.prototype.switchTab = function(tabName) {
         this.tabContents[tabName].classList.add('active');
 
         this.currentTab = tabName;
+
+        // Show the details panel only on the väsen tab
+        if (this.vasenDetailsPanel) {
+            this.vasenDetailsPanel.style.display = tabName === 'vasen' ? '' : 'none';
+        }
+
         this.refreshCurrentTab();
     };
 
@@ -56,5 +62,10 @@ UIController.prototype.refreshAll = function() {
             }
         } else {
             this.renderVasenDetails(null);
+        }
+
+        // Keep details panel visibility in sync with current tab
+        if (this.vasenDetailsPanel) {
+            this.vasenDetailsPanel.style.display = this.currentTab === 'vasen' ? '' : 'none';
         }
     };
