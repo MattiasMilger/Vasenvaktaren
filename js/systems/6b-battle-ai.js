@@ -70,6 +70,24 @@ class EnemyAI {
                 return -999;
             }
         }
+
+        // Giantsbane: score based on target's current HP ratio
+        if (ability.giantsbaneBonus) {
+            const hpRatio = this.target.currentHealth / this.target.maxHealth;
+            if (hpRatio >= 0.9) {
+                // Target nearly full HP — ideal window, strong bonus
+                score += 80;
+            } else if (hpRatio >= 0.7) {
+                // Still worthwhile
+                score += 40;
+            } else if (hpRatio >= 0.5) {
+                // Marginal — slight bonus
+                score += 10;
+            } else {
+                // Target is low HP — Giantsbane is wasteful, heavy penalty
+                score -= 60;
+            }
+        }
         
         // Base score
         if (ability.type === ATTACK_TYPES.UTILITY) {
@@ -136,14 +154,6 @@ class EnemyAI {
                 const targetStages = this.target.attributeStages;
                 const hasNegativeStage = Object.values(targetStages).some(stage => stage < 0);
                 if (hasNegativeStage) {
-                    score += 40;
-                }
-            }
-            
-            // Giantsbane: bonus if target has high current HP
-            if (ability.giantsbaneBonus) {
-                const hpRatio = this.target.currentHealth / this.target.maxHealth;
-                if (hpRatio > 0.5) {
                     score += 40;
                 }
             }
@@ -215,7 +225,14 @@ class EnemyAI {
             elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT);
         }
         
-        const power = ability.power;
+        // Giantsbane: effective power is derived from target's current HP, not ability.power
+        let power;
+        if (ability.giantsbaneBonus) {
+            power = ability.power + Math.floor(this.target.currentHealth * ability.target_hp_bonus_percent);
+        } else {
+            power = ability.power;
+        }
+
         const attackStat = ability.type === ATTACK_TYPES.WISDOM ? 
             this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
         const defenseStat = ability.type === ATTACK_TYPES.WISDOM ?
