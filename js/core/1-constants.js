@@ -75,7 +75,7 @@ const GAME_CONFIG = {
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
-    TYRS_SACRIFICE_HEALTH_COST: 0.30,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
+    TYRS_SACRIFICE_HEALTH_COST: 0.25,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
     TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all stats when using Tyr's Sacrifice
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
