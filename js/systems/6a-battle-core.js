@@ -689,23 +689,25 @@ class Battle {
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {
                     this.addLog(`${defender.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                     const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                    for (let i = 0; i < 2; i++) {
+                    for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
                         const randomIndex = Math.floor(Math.random() * stats.length);
                         const stat = stats[randomIndex];
-                        attacker.modifyAttributeStage(stat, -1);
-                        this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
+                        attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
+                        const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                        this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                     }
                     result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
                 }
                 
                 // Apply Inguz effect if Thurs user has it on any reflection hit
                 if (defender.hasRune('INGUZ')) {
-                    if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
+                    if (Math.random() < GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE) {
                         this.addLog(`${defender.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
                         const stats = ['strength', 'wisdom', 'defense', 'durability'];
                         const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                        attacker.modifyAttributeStage(randomStat, -1);
-                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
+                        attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
+                        const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                         result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed on reflection' });
                     }
                 }
@@ -857,7 +859,7 @@ class Battle {
         const matchup = getMatchupType(reflectElement, attacker.species.element);
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
-        // Base reflected damage is 20% of original
+        // Base reflected damage is a percentage of original
         const baseReflectDamage = originalDamage * GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE;
         
         // Mixed attack: 50% based on Strength, 50% based on Wisdom
@@ -890,7 +892,7 @@ class Battle {
         if (!effect) return effects;
         
         if (effect.type === 'tyrs_sacrifice') {
-            // Tyr's Sacrifice: sacrifice 40% max HP to raise all stats by 3 stages (lethal if HP runs out)
+            // Tyr's Sacrifice: sacrifice % max HP to raise all stats by stages (lethal if HP runs out)
             const healthCost = Math.floor(user.maxHealth * GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST);
             user.currentHealth = Math.max(0, user.currentHealth - healthCost);
             this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
@@ -1015,8 +1017,9 @@ class Battle {
                 
                 // Raise random attribute
                 const randomStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                targetVasen.modifyAttributeStage(randomStat, 1);
-                this.addLog(`${targetVasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                targetVasen.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
+                const stageWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
+                this.addLog(`${targetVasen.getDisplayName()}'s ${randomStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${stageWord}!`, 'buff');
                 return effects;
             }
             
@@ -1053,8 +1056,9 @@ class Battle {
                 const buffData = elementAbilityBuffs[abilityElement];
                 this.addLog(`${attacker.getDisplayName()}'s ${RUNES[buffData.rune].symbol} ${RUNES[buffData.rune].name} was activated!`, 'rune');
                 buffData.stats.forEach(stat => {
-                    attacker.modifyAttributeStage(stat, 1);
-                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by 1 stage!`, 'buff');
+                    attacker.modifyAttributeStage(stat, GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES);
+                    const stageWord = GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES === 1 ? 'stage' : 'stages';
+                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} ${stageWord}!`, 'buff');
                 });
                 result.runeEffects.push({ rune: buffData.rune, effect: 'buffed' });
             }
@@ -1090,24 +1094,26 @@ class Battle {
             if (attacker.hasRune('NAUDIZ')) {
                 this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                for (let i = 0; i < 2; i++) {
+                for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
                     const randomIndex = Math.floor(Math.random() * stats.length);
                     const stat = stats[randomIndex];
-                    defender.modifyAttributeStage(stat, -1);
-                    this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
+                    defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
+                    const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                 }
                 result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed' });
             }
         }
 
-        // Inguz: 30% chance to lower a random enemy attribute by 1 stage on any hit
+        // Inguz: chance to lower a random enemy attribute on any hit
         if (attacker.hasRune('INGUZ')) {
-            if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
+            if (Math.random() < GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE) {
                 this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
                 const stats = ['strength', 'wisdom', 'defense', 'durability'];
                 const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                defender.modifyAttributeStage(randomStat, -1);
-                this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
+                defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
+                const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed' });
             }
         }
@@ -1414,7 +1420,8 @@ class Battle {
                 }
                 this.addLog(`${vasen.getDisplayName()} activated Malicious Retaliation!`, 'passive');
                 debuffedStats.forEach(stat => {
-                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by 1 stage!`, 'debuff');
+                    const stageWord = FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                 });
             }
         }
@@ -1432,9 +1439,10 @@ class Battle {
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     
+                    const stageWord = FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL === 1 ? 'stage' : 'stages';
                     this.addLog(`${vasen.getDisplayName()} activated Troll Theft!`, 'passive');
-                    this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by 1 stage!`, 'debuff');
-                    this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                    this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'debuff');
+                    this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'buff');
 
                     // Gifu Sharing
                     if (vasen.hasRune('GIFU')) {
@@ -1446,7 +1454,7 @@ class Battle {
                         allies.forEach(ally => {
                             if (ally !== vasen && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
-                                this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by 1 stage!`, 'buff');
+                                this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'buff');
                             }
                         });
                     }

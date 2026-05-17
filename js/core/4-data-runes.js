@@ -20,7 +20,9 @@ const RUNES = {
         name: 'Uruz',
         fullName: 'Uruz',
         flavor: 'The symbol of the mighty, untamed Aurochs. It taps into the deep, foundational power of the wielder, allowing for a vast and enduring wellspring of Megin.',
-        effect: 'This Väsen has 20% more Megin',
+        get effect() {
+            return `This Väsen has ${Math.round(GAME_CONFIG.RUNE_URUZ_MEGIN_BONUS * 100)}% more Megin`;
+        },
         mechanic: { type: 'megin_bonus', value: 0.20 }
     },
     'THURS': {
@@ -77,7 +79,9 @@ const RUNES = {
         name: 'Wynja',
         fullName: 'Wynja',
         flavor: 'The power of success and the protective shield of community. It intercepts hostile curses and transmutes that negative energy into a personal triumph.',
-        effect: 'Blocks the first negative attribute effect this Väsen receives and raise a random attribute by 1 stage when it happens',
+        get effect() {
+            return `Blocks the first negative attribute effect this Väsen receives and raises a random attribute by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} stage when it happens`;
+        },
         mechanic: { type: 'block_first_debuff' }
     },
     'HAGAL': {
@@ -86,9 +90,9 @@ const RUNES = {
         name: 'Hagal',
         fullName: 'Hagal',
         flavor: 'The rune of chaotic, natural destruction. It strips the elegance from arcane power, forcing the wielder\'s insightful attacks to rely instead on overwhelming physical impact.',
-    get effect() {
-        return `When this Väsen is knocked out, the opponent gets all Attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
-    },
+        get effect() {
+            return `When this Väsen is knocked out, the opponent gets all Attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
+        },
         mechanic: { type: 'debuff_on_knockout' }
     },
     'NAUDIZ': {
@@ -97,7 +101,9 @@ const RUNES = {
         name: 'Naudiz',
         fullName: 'Naudiz',
         flavor: 'The painful, inescapable pressure of need. Even the weakest attack carries a profound psychological weight, draining the opponent\'s strength and focus.',
-        effect: 'This Väsen\'s Weak hits lowers two random enemy attributes by 1 stage',
+        get effect() {
+            return `This Väsen's Weak hits lower ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT} random enemy attributes by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} stage`;
+        },
         mechanic: { type: 'debuff_on_weak_hit' }
     },
     'ISAZ': {
@@ -107,7 +113,7 @@ const RUNES = {
         fullName: 'Isaz',
         flavor: 'The enduring patience and silence of concentrated ice. Utilizing water creates a moment of perfect clarity, simultaneously enhancing the wielder\'s body and mind.',
         get effect() {
-            return `This Väsen's Water abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Wisdom and Strength attributes by 1 stage`;
+            return `This Väsen's Water abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Wisdom and Strength attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
         mechanic: { type: 'buff_on_element_hit', element: ELEMENTS.WATER, stats: ['wisdom', 'strength'], chance: 0.30 }
     },
@@ -129,7 +135,7 @@ const RUNES = {
         fullName: 'Eihwaz',
         flavor: 'The immense durability of the Yew tree and the structure of the cosmos. Drawing upon the earth grants a foundational resilience, shielding both mind and body.',
         get effect() {
-            return `This väsen\'s Earth Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability Attributes by 1 stage`;
+            return `This väsen\'s Earth Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability Attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
         mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.EARTH, stats: ['defense', 'durability'], chance: 0.30 }
     },
@@ -162,7 +168,7 @@ const RUNES = {
         fullName: 'Sol',
         flavor: 'The vitalizing energy of the sun. Commanding the fierce element of fire focuses the wielder, bringing about a moment of physical and mental clarity.',
         get effect() {
-            return `This Väsen\'s Fire Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Strength and Wisdom attributes by 1 stage`;
+            return `This Väsen\'s Fire Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Strength and Wisdom attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
         mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.FIRE, stats: ['strength', 'wisdom'], chance: 0.30 }
     },
@@ -195,7 +201,7 @@ const RUNES = {
         fullName: 'Ehwaz',
         flavor: 'The swift, coordinated power of the horse and rider. As the wielder moves with the element of wind, their physical frame becomes surprisingly stable and resilient.',
         get effect() {
-            return `This Väsen\'s Wind Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability attributes by 1 stage`;
+            return `This Väsen\'s Wind Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
         mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.WIND, stats: ['defense', 'durability'], chance: 0.30 }
     },
@@ -228,7 +234,7 @@ const RUNES = {
         fullName: 'Inguz',
         flavor: 'The contained potential of the seed. Every strike plants a creeping instability within the foe, germinating into a sudden rot that withers their fundamental prowess.',
         get effect() {
-            return `This Väsen's hits have a ${Math.round(GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE * 100)}% chance to lower a random enemy attribute by 1 stage`;
+            return `This Väsen's hits have a ${Math.round(GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE * 100)}% chance to lower a random enemy attribute by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} stage`;
         },
         mechanic: { type: 'debuff_on_hit', chance: 0.30 }
     },

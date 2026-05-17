@@ -124,11 +124,14 @@ const GAME_CONFIG = {
     // =============================================================================
     // RUNE EFFECTS
     // =============================================================================
+    // Uruz: Megin bonus
+    RUNE_URUZ_MEGIN_BONUS: 0.20,        // +% max Megin
+
     // Elemental damage boost runes (Kaunan/Fire, Pertho/Earth, Tyr/Wind, Bjarka/Nature, Laguz/Water)
     RUNE_ELEMENT_DAMAGE_BOOST: 0.14,    // +% damage when using matching element
     
     // Odal: Low-cost ability damage boost
-    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for abilities costing ≤30 Megin
+    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for abilities costing ≤threshold Megin
     RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
     
     // Dagaz: First round damage boost
@@ -138,19 +141,28 @@ const GAME_CONFIG = {
     RUNE_FEHU_DAMAGE_REDUCTION: 0.85,   // Multiplier applied to reduce incoming potent hit damage
 
     // Hagal: attribute stage debuff on death
-    RUNE_HAGAL_DEBUFF_STAGES: 2,
-    
+    RUNE_HAGAL_DEBUFF_STAGES: 2,        // Stages all opponent attributes are lowered by on knockout
+
+    // Wynja: block first debuff and counter-raise
+    RUNE_WYNJA_COUNTER_STAGE: 1,        // Attribute stages raised on the random stat when blocking a debuff
+
+    // Naudiz: debuff on weak hit
+    RUNE_NAUDIZ_DEBUFF_COUNT: 2,        // Number of random enemy attributes lowered on a weak hit
+    RUNE_NAUDIZ_DEBUFF_STAGES: 1,       // Stages each attribute is lowered by
+
     // Element-specific buff runes (Eihwaz/Earth, Sol/Fire, Ehwaz/Wind, Isaz/Water)
-    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // +% chance to trigger attribute buff on hit
+    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // % chance to trigger attribute buff on matching-element ability use
+    RUNE_ELEMENT_BUFF_STAGES: 1,         // Attribute stages raised when the buff triggers
     
     // Nature healing runes (Algiz, Jera)
-    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // % chance for Algiz to heal on Nature ability hit
+    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // % chance for Algiz to heal on Nature ability use
     RUNE_ALGIZ_HEAL_PERCENT: 0.08,       // Heal % of max health when triggered
-    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost hit
+    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost ability use
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
-    // Inguz: Chance to debuff opponents attributes
-    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.50,          // % chance to lower attribute by 1 stage
+    // Inguz: Chance to debuff opponent attributes on any hit
+    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.50, // % chance to lower a random attribute by the debuff amount
+    RUNE_INGUZ_DEBUFF_STAGES: 1,         // Stages the random attribute is lowered by
     
     // Mannaz: Heal on utility ability use
     RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
