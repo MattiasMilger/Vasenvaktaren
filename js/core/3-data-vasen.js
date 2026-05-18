@@ -79,7 +79,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
-        abilities: ['Wailing Cry', 'Sinkhole', 'Burning Insult', 'Loki\'s Betrayal'],
+        abilities: ['Sinkhole', 'Wailing Cry', 'Landslide', 'Freya\'s Tears'],
         tamingItem: 'Burial Flowers',
         image: 'assets/vasen/myling.png'
     },
@@ -90,7 +90,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Drown', 'Elven Light', 'Enchanting Song', 'Loki\'s Betrayal'],
+        abilities: ['Hail Storm', 'Elven Light', 'Enchanting Song', 'Loki\'s Betrayal'],
         tamingItem: 'Ghastly Lantern',
         image: 'assets/vasen/irrbloss.png'
     },
@@ -101,7 +101,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
-        abilities: ['Drown', 'Tidal Wave', 'Skald\'s Mead', 'Freya\'s Tears'],
+        abilities: ['Drown', 'Tidal Wave', 'Skald\'s Mead', 'Wind Gust'],
         tamingItem: 'Damp Seaweed',
         image: 'assets/vasen/strandvaskare.png'
     },
@@ -283,7 +283,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Lava Jet', 'Enchanting Song', 'Loki\'s Betrayal'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Burning Insult', 'Loki\'s Betrayal'],
         tamingItem: 'Brass Cowbell',
         image: 'assets/vasen/huldra.png'
     },
