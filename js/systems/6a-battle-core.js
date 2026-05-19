@@ -692,6 +692,17 @@ class Battle {
                     for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
                         const randomIndex = Math.floor(Math.random() * stats.length);
                         const stat = stats[randomIndex];
+                        // Wynja: block first debuff on the original attacker
+                        if (!attacker.battleFlags.wynjaTriggered && attacker.hasRune('WYNJA')) {
+                            attacker.battleFlags.wynjaTriggered = true;
+                            this.addLog(`${attacker.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
+                            this.addLog(`${attacker.getDisplayName()} blocked the debuff!`, 'block');
+                            const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
+                            attacker.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
+                            const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
+                            this.addLog(`${attacker.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
+                            break; // Wynja blocks the entire Naudiz sequence
+                        }
                         attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
                         const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
                         this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
@@ -702,13 +713,24 @@ class Battle {
                 // Apply Inguz effect if Thurs user has it on any reflection hit
                 if (defender.hasRune('INGUZ')) {
                     if (Math.random() < GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE) {
-                        this.addLog(`${defender.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                        const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                        const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                        attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
-                        const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
-                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
-                        result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed on reflection' });
+                        // Wynja: block first debuff on the original attacker
+                        if (!attacker.battleFlags.wynjaTriggered && attacker.hasRune('WYNJA')) {
+                            attacker.battleFlags.wynjaTriggered = true;
+                            this.addLog(`${attacker.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
+                            this.addLog(`${attacker.getDisplayName()} blocked the debuff!`, 'block');
+                            const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
+                            attacker.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
+                            const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
+                            this.addLog(`${attacker.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
+                        } else {
+                            this.addLog(`${defender.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
+                            const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                            const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                            attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
+                            const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                            this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
+                            result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed on reflection' });
+                        }
                     }
                 }
             }
@@ -859,7 +881,7 @@ class Battle {
         const matchup = getMatchupType(reflectElement, attacker.species.element);
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
-        // Base reflected damage is a percentage of original
+        // Base reflected damage is 20% of original
         const baseReflectDamage = originalDamage * GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE;
         
         // Mixed attack: 50% based on Strength, 50% based on Wisdom
@@ -892,7 +914,7 @@ class Battle {
         if (!effect) return effects;
         
         if (effect.type === 'tyrs_sacrifice') {
-            // Tyr's Sacrifice: sacrifice % max HP to raise all stats by stages (lethal if HP runs out)
+            // Tyr's Sacrifice: sacrifice 40% max HP to raise all stats by 3 stages (lethal if HP runs out)
             const healthCost = Math.floor(user.maxHealth * GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST);
             user.currentHealth = Math.max(0, user.currentHealth - healthCost);
             this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
@@ -990,15 +1012,31 @@ class Battle {
                     effects.push({ stat, change: result.changed });
                 }
 
-                // Gifu: share the full total (bonus + regular) to all other allies in one pass
+                const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+
+                // Gifu on the caster (user): share to all allies except the user and the direct target
                 if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
                     user.battleFlags.gifuTriggered = true;
                     this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
 
-                    const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                     const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
                     allies.forEach(ally => {
-                        if (ally !== user && !ally.isKnockedOut()) {
+                        if (ally !== user && ally !== targetVasen && !ally.isKnockedOut()) {
+                            ally.modifyAttributeStage(stat, totalStagesToShare);
+                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                        }
+                    });
+                }
+
+                // Gifu on the recipient (targetVasen): share to all allies except the target itself
+                // This handles the case where a benched ally is buffed and they carry Gifu
+                if (targetVasen !== user && !targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
+                    targetVasen.battleFlags.gifuTriggered = true;
+                    this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+
+                    const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
+                    allies.forEach(ally => {
+                        if (ally !== targetVasen && !ally.isKnockedOut()) {
                             ally.modifyAttributeStage(stat, totalStagesToShare);
                             this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
                         }
@@ -1092,14 +1130,26 @@ class Battle {
         if (damageResult.matchup === 'WEAK') {
             // Naudiz: debuff on weak hit
             if (attacker.hasRune('NAUDIZ')) {
-                this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
-                const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
-                    const randomIndex = Math.floor(Math.random() * stats.length);
-                    const stat = stats[randomIndex];
-                    defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
-                    const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
-                    this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
+                // Wynja: block first debuff on the defender
+                if (!defender.battleFlags.wynjaTriggered && defender.hasRune('WYNJA')) {
+                    defender.battleFlags.wynjaTriggered = true;
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
+                    this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
+                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
+                    defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
+                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
+                    this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
+                } else {
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
+                    const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                    for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
+                        const randomIndex = Math.floor(Math.random() * stats.length);
+                        const stat = stats[randomIndex];
+                        defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
+                        const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                        this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
+                    }
                 }
                 result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed' });
             }
@@ -1108,13 +1158,25 @@ class Battle {
         // Inguz: chance to lower a random enemy attribute on any hit
         if (attacker.hasRune('INGUZ')) {
             if (Math.random() < GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE) {
-                this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                const stats = ['strength', 'wisdom', 'defense', 'durability'];
-                const randomStat = stats[Math.floor(Math.random() * stats.length)];
-                defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
-                const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
-                this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
-                result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed' });
+                // Wynja: block first debuff on the defender
+                if (!defender.battleFlags.wynjaTriggered && defender.hasRune('WYNJA')) {
+                    defender.battleFlags.wynjaTriggered = true;
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
+                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
+                    this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
+                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
+                    defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
+                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
+                    this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
+                } else {
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
+                    const stats = ['strength', 'wisdom', 'defense', 'durability'];
+                    const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                    defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
+                    const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
+                    result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed' });
+                }
             }
         }
     }
@@ -1260,25 +1322,32 @@ class Battle {
 
                 this.addLog(`${vasen.getDisplayName()} activated Ethereal Surge!`, 'passive');
 
+                // Collect which stats were actually raised so Gifu can share them all at once after
+                const raisedStats = [];
                 for (let i = 0; i < rollCount; i++) {
                     const randomStat = stats[Math.floor(Math.random() * stats.length)];
                     const result = vasen.modifyAttributeStage(randomStat, stages);
                     const stageWord = Math.abs(stages) === 1 ? 'stage' : 'stages';
                     this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
+                    if (result.changed !== 0) {
+                        raisedStats.push(randomStat);
+                    }
+                }
 
-                    if (result.changed !== 0 && vasen.hasRune('GIFU')) {
-                        if (!vasen.battleFlags.gifuTriggered) {
-                            vasen.battleFlags.gifuTriggered = true;
-                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                        }
-                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                // Gifu: share each raised stat to allies exactly once
+                if (raisedStats.length > 0 && !vasen.battleFlags.gifuTriggered && vasen.hasRune('GIFU')) {
+                    vasen.battleFlags.gifuTriggered = true;
+                    this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                    const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                    raisedStats.forEach(randomStat => {
+                        const stageWord = Math.abs(stages) === 1 ? 'stage' : 'stages';
                         allies.forEach(ally => {
                             if (ally !== vasen && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(randomStat, stages);
                                 this.addLog(`${ally.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
                             }
                         });
-                    }
+                    });
                 }
             }
         }
