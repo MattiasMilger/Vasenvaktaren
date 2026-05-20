@@ -184,8 +184,6 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
     const vasenList = document.getElementById('rune-to-vasen-list');
     vasenList.innerHTML = '';
 
-    const currentOwner = gameState.findRuneOwner(runeId);
-
     // Show all väsen in collection (runes are bound to individual väsen, not party slots)
     const eligibleVasen = [...gameState.vasenCollection];
 
@@ -231,10 +229,6 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
     };
     ui.showModalOverlay();
     modal.classList.add('active');
-};
-
-UIController.prototype.findRuneOwner = function(runeId) {
-    return gameState.vasenCollection.find(v => v.runes.includes(runeId));
 };
 
 UIController.prototype.equipRune = function(vasenId, runeId, slotIndex = null) {
