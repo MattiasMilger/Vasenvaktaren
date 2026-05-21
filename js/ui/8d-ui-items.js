@@ -94,7 +94,6 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'world tree',
         'well dweller',
         'master smith',
-        'ancient timber giant',
         'sunstruck troll',
         'wind-riding elven being',
         'mist-dwelling beings',
@@ -107,7 +106,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'charred warden',
         'soul-bound spirit',
         'thunderous giant',
-        'Iron Wood native'
+        'Iron Forest native'
     ];
 
     let highlighted = description;

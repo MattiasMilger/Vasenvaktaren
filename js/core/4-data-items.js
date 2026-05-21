@@ -214,7 +214,7 @@ const TAMING_ITEMS = {
     },
     'Ancient Log': {
         name: 'Ancient Log',
-        description: 'A section of Ancient Log whose bark is black as iron and warm to the touch. A fitting tribute for an Iron Wood native.',
+        description: 'A section of Ancient Log whose bark is black as iron and warm to the touch. A fitting tribute for an Iron Forest native.',
         tamingTarget: 'Jarnvidja'
     },
     'Mound Root': {

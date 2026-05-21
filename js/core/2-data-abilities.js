@@ -94,7 +94,7 @@ const ABILITIES = {
     },
     'Wild Bite': {
         name: 'Wild Bite',
-        flavorDescription: 'A savage, powerful clenching of jaws, fueled by the primal ferocity of a deep forest beast.',
+        flavorDescription: 'A savage, powerful clenching of jaws, fueled by the primal ferocity of the deep forest.',
         mechanicsDescription: 'Hits opponent.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,

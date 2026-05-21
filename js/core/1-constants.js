@@ -38,7 +38,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
     // =============================================================================
-    BASE_MEGIN: 65,
+    BASE_MEGIN: 70,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
     SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element abilities
@@ -361,15 +361,15 @@ const RARITY_DESCRIPTIONS = {
 };
 
 const ENCOUNTER_RATES = {
-    [RARITIES.COMMON]: 0.50,
-    [RARITIES.UNCOMMON]: 0.25,
+    [RARITIES.COMMON]: 0.45,
+    [RARITIES.UNCOMMON]: 0.30,
     [RARITIES.RARE]: 0.175,
     [RARITIES.MYTHICAL]: 0.075
 };
 
 const EXPLORATION_RATES = {
-    WILD_VASEN: 0.48,
-    ITEM: 0.30,
+    WILD_VASEN: 0.46,
+    ITEM: 0.32,
     SACRED_WELL: 0.12,
     RUNE: 0.1
 };
@@ -387,11 +387,11 @@ const FAMILIES = {
 };
 
 const FAMILY_DESCRIPTIONS = {
-    [FAMILIES.OKNYTT]: 'Tiny and elusive keepers of narrow domains. Mischievous by nature, they delight in small pranks but can be surprisingly helpful when treated with care.',
-    [FAMILIES.VALNAD]: 'The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge or inflict misery on the living.',
+    [FAMILIES.OKNYTT]: 'Tiny and elusive keepers of narrow domains. They delight in small pranks but can be surprisingly helpful when treated with care.',
+    [FAMILIES.VALNAD]: 'The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge upon the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the Gods or Giants. They embody raw natural forces and the terrifying elements of the wild.',
-    [FAMILIES.TROLL]: 'Ragged inhabitants of the mountains and deep woods, possessing formidable Strength and an ancient, primal cunning. They fear only the dawn, which locks their great bulk into a frozen, inert monument; they turn to stone upon exposure to sunlight.',
-    [FAMILIES.RA]: 'Seductive, nature-bound spirits with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
+    [FAMILIES.TROLL]: 'Ragged inhabitants of the mountains and deep woods, possessing Strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
+    [FAMILIES.RA]: 'Seductive, nature-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
     [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
     [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
     [FAMILIES.JATTE]: 'Ancient, colossal beings of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir Gods.',
