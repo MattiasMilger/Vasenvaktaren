@@ -258,6 +258,23 @@ const FAMILY_PASSIVE_CONFIG = {
     VALNAD_REVIVE_HEALTH_PERCENT: 0.10
 };
 
+// =============================================================================
+// FAMILY KEYWORDS
+// Each family has a descriptive word used in item descriptions, väsen descriptions,
+// and lore entries. Change these here to update them everywhere.
+// =============================================================================
+const FAMILY_KEYWORDS = {
+    OKNYTT: 'prankster',
+    VALNAD: 'phantom',
+    ODJUR:  'beast',
+    TROLL:  'troll',
+    RA:     'warden',
+    ALV:    'elf',
+    ANDE:   'spirit',
+    JATTE:  'giant',
+    DRAKE:  'serpent'
+};
+
 // Starter Väsen options (species keys from VASEN_SPECIES)
 const STARTER_VASEN = ['Landvatte', 'Gardstomte', 'Hustomte'];
 
@@ -387,15 +404,15 @@ const FAMILIES = {
 };
 
 const FAMILY_DESCRIPTIONS = {
-    [FAMILIES.OKNYTT]: 'Tiny and elusive keepers of narrow domains. They delight in small pranks but can be surprisingly helpful when treated with care.',
-    [FAMILIES.VALNAD]: 'The tormented, animated remains or spirits of the dead. Bound to a place or an action, they often seek revenge upon the living.',
-    [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the Gods or Giants. They embody raw natural forces and the terrifying elements of the wild.',
-    [FAMILIES.TROLL]: 'Ragged inhabitants of the mountains and deep woods, possessing Strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
+    [FAMILIES.OKNYTT]: 'Tiny and elusive pranksters of narrow domains. They delight in small pranks but can be surprisingly helpful when treated with care.',
+    [FAMILIES.VALNAD]: 'The tormented, animated remains or phantoms of the dead. Bound to a place or an action, they often seek revenge upon the living.',
+    [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the gods or giants. They embody raw natural forces and the terrifying elements of the wild.',
+    [FAMILIES.TROLL]: 'Ragged wildkin of the mountains and deep woods, possessing great Strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
     [FAMILIES.RA]: 'Seductive, nature-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
     [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
     [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
-    [FAMILIES.JATTE]: 'Ancient, colossal beings of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir Gods.',
-    [FAMILIES.DRAKE]: 'Terrifying, serpentine creatures of immense magical power, often linked to cosmic forces and primordial greed.'
+    [FAMILIES.JATTE]: 'Ancient giants of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir gods.',
+    [FAMILIES.DRAKE]: 'Terrifying serpents of immense magical power, often linked to cosmic forces and primordial greed.'
 };
 
 // Family Passive Descriptions (mechanical, player-facing)

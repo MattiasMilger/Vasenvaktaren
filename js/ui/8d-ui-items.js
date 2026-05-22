@@ -59,54 +59,62 @@ UIController.prototype.renderItemInventory = function() {
 UIController.prototype.highlightItemKeywords = function(description) {
     if (!description) return '';
 
-    // Keywords/phrases that hint at specific väsen
+    // Keywords/phrases that hint at specific väsen — specific association + family keyword
     const keywords = [
-        'guardian of the land',
-        'bearded guardian',
-        'house steward',
-        'shrieking raven',
-        'infant spirit',
-        'bright phantom',
-        'drowned sailor',
-        'white horse',
-        'nocturnal grazer',
-        'great wolf',
-        'world\'s winds',
-        'mountain-dwelling giant',
-        'forest Troll',
-        'changeling child',
+        // Oknytt (Prankster)
+        'land prankster',
+        'garden prankster',
+        'house prankster',
+        'well prankster',
+        'rafter prankster',
+        // Vålnad (Phantom)
+        'raven phantom',
+        'grave phantom',
+        'bog phantom',
+        'shore phantom',
+        'mound phantom',
+        // Odjur (Beast)
+        'river beast',
+        'nocturnal beast',
+        'thieving beast',
+        'wolf beast',
+        'sky beast',
+        // Troll (Troll)
+        'mountain troll',
+        'forest troll',
+        'cradle troll',
+        'petrified troll',
+        'bridge troll',
+        // Rå (Warden)
         'mine warden',
-        'warden of the forest',
-        'water warden',
-        'nocturnal visitor',
-        'beings of the mist',
-        'subterranean artisans',
-        'beings of creation',
-        'Elder Tree',
-        'valiant warrior',
-        'winged maiden',
-        'ancient giants',
-        'fiery elemental',
-        'giants of ice',
-        'wingless serpent',
-        'avaricious drakes',
-        'World Serpent',
-        'world tree',
-        'well dweller',
-        'master smith',
-        'sunstruck troll',
-        'wind-riding elven being',
-        'mist-dwelling beings',
-        'destiny shaper',
-        'twitching construct',
-        'undead walker',
-        'tiny dweller',
-        'serpent king',
-        'waterway guardian',
+        'forest warden',
+        'river warden',
+        'dream warden',
         'charred warden',
-        'soul-bound spirit',
-        'thunderous giant',
-        'Iron Forest native'
+        // Alv (elf)
+        'twilight elf',
+        'mist elf',
+        'cavern elf',
+        'forge elf',
+        'light elf',
+        // Ande (Spirit)
+        'tree spirit',
+        'warrior spirit',
+        'winged spirit',
+        'flame spirit',
+        'weaving spirit',
+        // Jätte (Giant)
+        'primordial giant',
+        'fire giant',
+        'frost giant',
+        'iron forest giant',
+        'storm giant',
+        // Drake (Serpent)
+        'forest serpent',
+        'hoard serpent',
+        'pale serpent',
+        'world serpent',
+        'gnawing serpent'
     ];
 
     let highlighted = description;
@@ -115,8 +123,8 @@ UIController.prototype.highlightItemKeywords = function(description) {
     keywords.sort((a, b) => b.length - a.length);
 
     keywords.forEach(keyword => {
-        // Case-insensitive replacement
-        const regex = new RegExp(`(${keyword})`, 'gi');
+        // Case-sensitive replacement to preserve capitalisation
+        const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'g');
         highlighted = highlighted.replace(regex, '<span class="item-keyword-highlight">$1</span>');
     });
 
