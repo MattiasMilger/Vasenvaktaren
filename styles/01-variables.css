@@ -208,6 +208,11 @@
     --accent-gold-shimmer-strong: rgba(255, 215, 0, 0.4);
     --accent-gold-glow-strong: rgba(201, 167, 90, 0.6);
 
+    /* Taming Ready Glow — green pulse when correct item has been given to a wild väsen */
+    --taming-ready-border: #5fa13a;                          /* Matches --color-positive */
+    --taming-ready-glow-color: rgba(95, 161, 58, 0.35);      /* Low glow */
+    --taming-ready-glow-intense-color: rgba(95, 161, 58, 0.65); /* Peak glow */
+
     /* Endless Tower */
     --endless-tower-glow: rgba(139, 105, 20, 0.5); /* Floor number text glow */
 

@@ -1862,4 +1862,19 @@ button.tutorial-blink {
     animation: freyasTearsGlow 3s ease-in-out infinite;
 }
 
+/* =============================================================================
+   TAMING READY GLOW - Green outline pulse when the correct taming item has been
+   given to a wild väsen. Defined after freyas-tears-active so it wins the
+   cascade if both classes are somehow present simultaneously.
+   ============================================================================= */
+
+@keyframes tamingReadyGlow {
+    0%, 100% { box-shadow: 0 0 6px 1px var(--taming-ready-glow-color); border-color: var(--taming-ready-border); }
+    50%       { box-shadow: 0 0 14px 4px var(--taming-ready-glow-intense-color); border-color: var(--taming-ready-border); }
+}
+
+.combatant-panel.taming-ready-active {
+    animation: tamingReadyGlow 2s ease-in-out infinite;
+}
+
 /* End of 10-combat.css */

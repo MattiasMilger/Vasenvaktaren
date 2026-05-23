@@ -593,7 +593,7 @@ const LORE_ENTRIES = {
         key: 'item_warm_tomtegrot',
         name: 'Warm Tomtegröt',
         category: 'items',
-        desc: 'The Christmas porridge (julgröt or tomtegröt) is the traditional offering given to the house prankster at Yuletide. Swedish families would place a bowl of warm rice or barley porridge with a generous pat of butter in the barn or by the hearth on Christmas Eve. Neglecting this ritual risked angering the prankster, who might then harm the livestock, sour the milk, or cause general misfortune throughout the year. The tradition remains alive symbolically in modern Swedish Christmas culture through the Jultomte (Father Christmas).',
+        desc: 'The yuletide porridge (julgröt or tomtegröt) is the traditional offering given to the house prankster at yuletide. Swedish families would place a bowl of warm rice or barley porridge with a generous pat of butter in the barn or by the hearth on yuletide. Neglecting this ritual risked angering the prankster, who might then harm the livestock, sour the milk, or cause general misfortune throughout the year. The tradition remains alive symbolically in modern Swedish yuletide culture through the Jultomte.',
         source: 'Swedish Folk Tradition',
         heritage: 'Swedish',
         unlockType: 'item',

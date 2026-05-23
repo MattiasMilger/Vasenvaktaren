@@ -268,9 +268,14 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
     // Apply minimized state if active
     panel.classList.toggle('minimized', this.combatCardsMinimized);
 
-    // Apply Freya's Tears glow if active on this combatant
-    const freyasTearsGlow = side === 'player' ? battle.playerTeamFreyasTears > 0 : battle.enemyTeamFreyasTears > 0;
+    // Apply Freya's Tears glow if active on this combatant.
+    // Suppressed on the enemy side when taming-ready is active (taming glow takes priority).
+    const tamingReady = side === 'enemy' && battle.correctItemGiven && battle.isWildEncounter && !vasen.isKnockedOut();
+    const freyasTearsGlow = (side === 'player' ? battle.playerTeamFreyasTears > 0 : battle.enemyTeamFreyasTears > 0) && !tamingReady;
     panel.classList.toggle('freyas-tears-active', freyasTearsGlow);
+
+    // Apply taming-ready glow when the correct item has been given to the active enemy
+    panel.classList.toggle('taming-ready-active', tamingReady);
 
     // Reapply any active animations after re-render
     this.reapplyAnimations(side);
