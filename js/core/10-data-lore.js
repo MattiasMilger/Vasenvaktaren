@@ -148,7 +148,7 @@ const LORE_ENTRIES = {
         key: 'vasen_brunnsgubbe',
         name: 'Brunnsgubbe',
         category: 'vasen',
-        desc: 'The Brunnsgubbe is the capricious well prankster of the village well or sacred spring in Swedish folk belief. Wells were vital to daily life and seen as liminal places where the boundaries between the human world and the spirit realm were thin. This prankster ensured the water stayed clean and the spring kept flowing, demanding in return that the well be kept free of filth and treated with respect. Dropping foreign objects into the well, washing impure things in it, or failing to leave a small offering could provoke the Brunnsgubbe into souring the water or causing the spring to run dry.',
+        desc: 'The Brunnsgubbe is the capricious well inhabitant of the village well or sacred spring in Swedish folk belief. Wells were vital to daily life and seen as liminal places where the boundaries between the human world and the spirit realm were thin. This prankster ensured the water stayed clean and the spring kept flowing, demanding in return that the well be kept free of filth and treated with respect. Dropping foreign objects into the well, washing impure things in it, or failing to leave a small offering could provoke the Brunnsgubbe into souring the water or causing the spring to run dry.',
         source: 'Swedish and North European Folklore',
         heritage: 'Swedish and North European',
         unlockType: 'vasen',

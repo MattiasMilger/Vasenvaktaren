@@ -40,7 +40,7 @@ const VASEN_SPECIES = {
     'Brunnsgubbe': {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
-        description: 'A reclusive well dweller who keeps the water pure. He demands clean surroundings, turning to petty malice whenever he is displeased.',
+        description: 'A reclusive well inhabitant who keeps the water pure. He demands clean surroundings, turning to petty malice whenever he is displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
@@ -147,7 +147,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Storm Claw', 'Wild Bite', 'Drown', 'Rotvalta'],
+        abilities: ['Storm Claw', 'Vine Whip', 'Wild Bite', 'Rotvalta'],
         tamingItem: 'Cursed Yarn',
         image: 'assets/vasen/bjara.png'
     },
@@ -432,7 +432,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
-        abilities: ['Drown', 'Icicle Spear', 'Thick Coat', 'Tyr\'s Sacrifice'],
+        abilities: ['Icicle Spear', 'Boulder Toss', 'Thick Coat', 'Tyr\'s Sacrifice'],
         tamingItem: 'Ice Crystal',
         image: 'assets/vasen/rimturs.png'
     },
@@ -454,7 +454,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.JATTE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
-        abilities: ['Sky Dive', 'Boulder Toss', 'Burning Insult', 'Tyr\'s Sacrifice'],
+        abilities: ['Sky Dive', 'Ground Stomp', 'Boulder Toss', 'Tyr\'s Sacrifice'],
         tamingItem: 'Shattered Pillar',
         image: 'assets/vasen/stormturs.png'
     },
