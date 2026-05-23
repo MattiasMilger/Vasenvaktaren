@@ -559,16 +559,6 @@ const LORE_ENTRIES = {
     // CATEGORY: ITEMS
     // =========================================================================
 
-    'item_mound_root': {
-        key: 'item_mound_root',
-        name: 'Mound Root',
-        category: 'items',
-        desc: 'In Scandinavian folklore, burial mounds (gravhögar) were considered sacred and dangerous places, the homes of the dead. They often contained treasure but were guarded by mound phantoms, such as the Draug. The roots of trees growing on or near these mounds were thought to absorb the mound\'s power, carrying the essence of the ancient earth and the dead within. A Mound Root was therefore a potent offering, a piece of the grave itself, used to appease or communicate with the undead.',
-        source: 'Scandinavian Folklore / Archaeology',
-        heritage: 'Scandinavian',
-        unlockType: 'item',
-        unlockKey: 'Mound Root'
-    },
     'item_broken_chain': {
         key: 'item_broken_chain',
         name: 'Broken Chain',
@@ -633,7 +623,7 @@ const LORE_ENTRIES = {
         key: 'item_yggdrasil_root',
         name: 'Yggdrasil Root',
         category: 'items',
-        desc: 'Yggdrasil ("Ygg\'s steed" - Ygg being one of Odin\'s names) is the immense ash tree at the center of Norse cosmology that connects all nine realms. Its three roots reach to Asgard (where a well of wisdom lies), to Jotunheim (where Mimir\'s Well holds cosmic knowledge), and to Niflheim (where the root serpent Nidhögg endlessly gnaws). The gods hold their daily council at Yggdrasil. A fragment of its root carries the energy of the cosmos itself.',
+        desc: 'Yggdrasil ("Ygg\'s steed" - Ygg being one of Odin\'s names) is the immense ash tree at the center of Norse cosmology that connects all nine realms. Its three roots reach to Asgard (where a well of wisdom lies), to Jotunheim (where Mimir\'s Well holds cosmic knowledge), and to Niflheim (where the terrifying serpent Nidhögg endlessly gnaws). The gods hold their daily council at Yggdrasil. A fragment of its root carries the energy of the cosmos itself.',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'item',
@@ -722,7 +712,7 @@ const LORE_ENTRIES = {
         key: 'ability_drown',
         name: 'Drown',
         category: 'abilities',
-        desc: 'In Swedish folklore, the element of water is often a site of great peril. Many water-dwelling väsen, such as the river beast Bäckahäst or the river warden Näcken, possess an aspect of drowning their victims. This is rarely described as simple predation. Instead, it is often a thematic calling to the depths where the victim is pulled into a space between the living world and the crushing silence of the water. This reflects the ancient fear of the unpredictable power found in lakes and streams.',
+        desc: 'In Swedish folklore, the element of water is often a site of great peril. Many water-dwelling väsen, such as the river horse Bäckahäst or the river warden Näcken, possess an aspect of drowning their victims. This is rarely described as simple predation. Instead, it is often a thematic calling to the depths where the victim is pulled into a space between the living world and the crushing silence of the water. This reflects the ancient fear of the unpredictable power found in lakes and streams.',
         source: 'Swedish Folklore / Oral Tradition',
         heritage: 'Swedish',
         unlockType: 'ability',
@@ -800,7 +790,7 @@ const LORE_ENTRIES = {
     },
     'ability_giantsbane': {
         key: 'ability_giantsbane',
-        name: "giantsbane",
+        name: "Giantsbane",
         category: 'abilities',
         desc: 'In the iron grip of Norse mythology, the giants represent the chaotic and primordial forces of the wild. These are beings of such immense scale that they often dwarf the gods themselves. Yet, the thunder god Thor stands as the ultimate deterrent against this chaos. Wielding Mjölnir, he delivers strikes that do not merely bruise flesh but shatter the very foundations of giant kind, turning their own massive bulk into a liability.',
         source: 'Prose Edda (Snorri Sturluson) / Völuspá',
