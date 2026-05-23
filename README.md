@@ -17,6 +17,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ## Game Features
 
 ### Väsen
+
 | Feature | Details |
 | :--- | :--- |
 | **Unique Creatures** | 45 unique creatures based on Swedish folklore |
@@ -28,6 +29,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Abilities** | 30 unique abilities |
 
 ### Runes
+
 - 24 equippable runes with unique effects
 - One rune slot (two at level 30)
 - Strategic combinations for different builds
@@ -40,6 +42,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click "Challenge Guardian" to face the zone boss
 
 ### Combat System & Taming
+
 | Action | Mechanics |
 | :--- | :--- |
 | **Turn-based battles** | With move priority |
@@ -56,12 +59,14 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Auto Battle** | Let AI take control |
 
 ### Party Management
+
 - Click Väsen in inventory to view details
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
 
 ### Lore Book
+
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
 - Entries organised into categories: Families, Väsen, Items, Abilities, Locations, Concepts
 
@@ -86,7 +91,6 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - No server required - runs as static files
 
 ## Project Structure
-
 ```
 Vasenvaktaren/
 ├── index.html                      (game initialization)
