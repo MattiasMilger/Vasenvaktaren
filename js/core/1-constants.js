@@ -258,23 +258,6 @@ const FAMILY_PASSIVE_CONFIG = {
     VALNAD_REVIVE_HEALTH_PERCENT: 0.10
 };
 
-// =============================================================================
-// FAMILY KEYWORDS
-// Each family has a descriptive word used in item descriptions, väsen descriptions,
-// and lore entries. Change these here to update them everywhere.
-// =============================================================================
-const FAMILY_KEYWORDS = {
-    OKNYTT: 'prankster',
-    VALNAD: 'phantom',
-    ODJUR:  'beast',
-    TROLL:  'troll',
-    RA:     'warden',
-    ALV:    'elf',
-    ANDE:   'spirit',
-    JATTE:  'giant',
-    DRAKE:  'serpent'
-};
-
 // Starter Väsen options (species keys from VASEN_SPECIES)
 const STARTER_VASEN = ['Landvatte', 'Gardstomte', 'Hustomte'];
 

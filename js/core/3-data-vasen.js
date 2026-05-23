@@ -44,7 +44,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Tidal Wave', 'Skald\'s Mead', 'Freya\'s Tears'],
+        abilities: ['Sinkhole', 'Hail Storm', 'Skald\'s Mead', 'Tidal Wave'],
         tamingItem: 'Water Bucket',
         image: 'assets/vasen/brunnsgubbe.png'
     },
@@ -112,7 +112,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Ground Stomp', 'Drown', 'Wild Bite', 'Tyr\'s Sacrifice'],
+        abilities: ['Ground Stomp', 'Vine Whip', 'Wild Bite', 'Tyr\'s Sacrifice'],
         tamingItem: 'Mound Root',
         image: 'assets/vasen/draug.png'
     },
@@ -226,7 +226,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.TROLL,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Drown', 'Tidal Wave', 'Burning Insult', 'Wild Bite'],
+        abilities: ['Drown', 'Tidal Wave', 'Skald\'s Mead', 'Landslide'],
         tamingItem: 'Bridge Keystone',
         image: 'assets/vasen/backatroll.png'
     },
@@ -467,7 +467,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.DRAKE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
-        abilities: ['Fire Breath', 'Wild Bite', 'Thick Coat', 'Rotvalta'],
+        abilities: ['Fire Breath', 'Storm Claw', 'Thick Coat', 'Wild Bite'],
         tamingItem: 'Shedded Scale',
         image: 'assets/vasen/lindorm.png'
     },
