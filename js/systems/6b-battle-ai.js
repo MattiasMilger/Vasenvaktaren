@@ -64,10 +64,14 @@ class EnemyAI {
             return -999;
         }
 
-        // Freya's Tears: use at most once per combat
+        // Freya's Tears: use at most once per combat, and only in the first two turns on field
         if (abilityName === "Freya's Tears") {
             if (this.battle.getEnemyUtilityUsageCount(this.vasen, "Freya's Tears") > 0) {
                 return -999;
+            }
+            // Only worthwhile early; heavily penalise if used late
+            if (this.vasen.battleFlags.turnsOnField > 1) {
+                return -50;
             }
         }
 
@@ -95,13 +99,13 @@ class EnemyAI {
             const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
             
             if (usageCount === 0) {
-                // First use - decent score
+                // First use - modest base score; type-specific bonuses applied below
                 score += GAME_CONFIG.AI_UTILITY_FIRST_USE_SCORE;
             } else if (usageCount === 1) {
-                // Second use - reduced score
+                // Second use - reduced base score; type-specific bonuses may still apply
                 score += GAME_CONFIG.AI_UTILITY_SECOND_USE_SCORE;
             } else {
-                // Third+ use - very low score (make it almost never chosen)
+                // Third+ use - never chosen
                 score += GAME_CONFIG.AI_UTILITY_THIRD_USE_PENALTY;
             }
         } else {
@@ -158,14 +162,45 @@ class EnemyAI {
                 }
             }
         } else {
-            // Utility scoring - only apply bonuses if not overused
+            // Utility-specific scoring: attacks are the bread and butter; utilities are early set-ups.
             const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
-            
-            if (usageCount < 2) {
-                if (ability.effect && ability.effect.type === 'buff') {
+            const turnsOnField = this.vasen.battleFlags.turnsOnField;
+
+            if (ability.effect && ability.effect.type === 'buff') {
+                // Buff moves (Smithing, Skald's Mead, Thick Coat, etc.):
+                // Only give a meaningful bonus on the very first turn on the field and only once.
+                // After that they should not compete with attacks.
+                if (usageCount === 0 && turnsOnField <= 1) {
                     score += GAME_CONFIG.AI_BUFF_BONUS;
-                } else if (ability.effect && ability.effect.type === 'debuff') {
-                    score += GAME_CONFIG.AI_DEBUFF_BONUS;
+                } else {
+                    // Late or repeated buff use: penalise heavily so attacks always win.
+                    score -= 60;
+                }
+
+            } else if (ability.effect && ability.effect.type === 'debuff') {
+                // Debuff moves (Enchanting Song, Burning Insult):
+                // Allowed up to twice if Loki's Betrayal is in the moveset and the target
+                // is not yet debuffed (setting it up for the follow-up attack).
+                // Otherwise, only once early in combat.
+                const hasLokisBetrayal = this.vasen.getAvailableAbilities().includes("Loki's Betrayal");
+                const targetAlreadyDebuffed = Object.values(this.target.attributeStages).some(s => s < 0);
+
+                if (usageCount === 0) {
+                    // First debuff: worthwhile early, or if Loki's Betrayal is available as a set-up.
+                    if (turnsOnField <= 1) {
+                        score += GAME_CONFIG.AI_DEBUFF_BONUS;
+                    } else if (hasLokisBetrayal && !targetAlreadyDebuffed) {
+                        // Mid-combat: only if it sets up Loki's Betrayal and target isn't debuffed yet
+                        score += GAME_CONFIG.AI_DEBUFF_BONUS;
+                    } else {
+                        score -= 40;
+                    }
+                } else if (usageCount === 1 && hasLokisBetrayal && !targetAlreadyDebuffed) {
+                    // Second debuff: only if Loki's Betrayal set-up is still relevant
+                    score += GAME_CONFIG.AI_DEBUFF_BONUS - 15;
+                } else {
+                    // Any further debuff use: heavily penalise
+                    score -= 60;
                 }
             }
         }
