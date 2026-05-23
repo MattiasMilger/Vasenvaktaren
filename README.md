@@ -43,12 +43,13 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 ### Combat System & Taming
 
-| Action | Mechanics |
+- Turn-based battles with move priority
+- Element matchups
+- Resource management
+- Attribute buffs and debuffs
+
+| Combat Action | Mechanics |
 | :--- | :--- |
-| **Turn-based battles** | With move priority |
-| **Element matchups** | Strategic counters |
-| **Resource management** | Tactical decision making |
-| **Attribute buffs and debuffs** | Stat modifications |
 | **Abilities** | Use learned attacks (cost Megin) |
 | **Basic Strike** | Free attack using your element |
 | **Swap** | Change active Väsen (causes Swap Sickness) |
