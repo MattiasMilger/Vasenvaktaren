@@ -613,7 +613,7 @@ const LORE_ENTRIES = {
         key: 'item_burial_flowers',
         name: 'Burial Flowers',
         category: 'items',
-        desc: 'In Swedish folk belief, an infant who perished before receiving their naming rites—especially one abandoned or lost to tragedy—could not find peace, returning instead as a Myling, a restless grave phantom. The only way to grant the spirit rest was to provide a proper, sanctified burial within hallowed ground, complete with traditional final rites. Flowers placed on a grave served as both an offering to the departed and a powerful symbol for the living, confirming that the spirit had been duly honored and peacefully laid to rest.',
+        desc: 'In Swedish folk belief, an infant who perished before receiving their naming rites - especially one abandoned or lost to tragedy - could not find peace, returning instead as a Myling, a restless grave phantom. The only way to grant the spirit rest was to provide a proper, sanctified burial within hallowed ground, complete with traditional final rites. Flowers placed on a grave served as both an offering to the departed and a powerful symbol for the living, confirming that the spirit had been duly honored and peacefully laid to rest.',
         source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'item',

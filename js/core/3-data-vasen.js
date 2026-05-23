@@ -496,7 +496,7 @@ const VASEN_SPECIES = {
     'Jormungandr': {
         name: 'Jörmungandr',
         internalName: 'Jormungandr',
-        description: 'The dreaded world serpent whose infinite coils encircle Midgard, resting in the primordial ocean and awaiting its final battle.',
+        description: 'The boundless world serpent whose infinite coils encircle Midgard, resting in the primordial ocean and awaiting its final battle.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
