@@ -17,13 +17,15 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ## Game Features
 
 ### Väsen
-- 45 unique creatures based on Swedish folklore
-- 9 families: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake
-- 5 elements: Earth, Nature, Water, Fire, Wind
-- 4 attributes: Strength, Wisdom, Defense, Durability
-- 4 rarities: Common, Uncommon, Rare, Mythical
-- 12 attribute-altering temperaments
-- 30 unique abilities
+| Feature | Details |
+| :--- | :--- |
+| **Unique Creatures** | 45 unique creatures based on Swedish folklore |
+| **Families** | 9 families: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake |
+| **Elements** | 5 elements: Earth, Nature, Water, Fire, Wind |
+| **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durability |
+| **Rarities** | 4 rarities: Common, Uncommon, Rare, Mythical |
+| **Temperaments** | 12 attribute-altering temperaments |
+| **Abilities** | 30 unique abilities |
 
 ### Runes
 - 24 equippable runes with unique effects
@@ -38,18 +40,20 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click "Challenge Guardian" to face the zone boss
 
 ### Combat System & Taming
-- Turn-based battles with move priority
-- Element matchups
-- Resource management
-- Attribute buffs and debuffs
-- **Abilities**: Use learned attacks (cost Megin)
-- **Basic Strike**: Free attack using your element
-- **Swap**: Change active Väsen (causes Swap Sickness)
-- **Offer Item**: Offer taming items to wild Väsen
-- **Ask About Item**: Learn what item the Väsen wants
-- **Pass**: Skip your turn
-- **Surrender**: Exit combat (reduces party to 5% health)
-- **Auto Battle**: Let AI take control
+| Action | Mechanics |
+| :--- | :--- |
+| **Turn-based battles** | With move priority |
+| **Element matchups** | Strategic counters |
+| **Resource management** | Tactical decision making |
+| **Attribute buffs and debuffs** | Stat modifications |
+| **Abilities** | Use learned attacks (cost Megin) |
+| **Basic Strike** | Free attack using your element |
+| **Swap** | Change active Väsen (causes Swap Sickness) |
+| **Offer Item** | Offer taming items to wild Väsen |
+| **Ask About Item** | Learn what item the Väsen wants |
+| **Pass** | Skip your turn |
+| **Surrender** | Exit combat (reduces party to 5% health) |
+| **Auto Battle** | Let AI take control |
 
 ### Party Management
 - Click Väsen in inventory to view details
