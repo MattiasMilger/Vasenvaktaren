@@ -90,7 +90,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.VALNAD,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Drown', 'Elven Light', 'Enchanting Song', 'Loki\'s Betrayal'],
+        abilities: ['Fire Breath', 'Elven Light', 'Hail Storm', 'Wailing Cry'],
         tamingItem: 'Ghastly Lantern',
         image: 'assets/vasen/irrbloss.png'
     },
