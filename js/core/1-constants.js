@@ -80,9 +80,11 @@ const GAME_CONFIG = {
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
     FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
-    FREYASTEARS_HEALTH_REGEN_PERCENT: 0.02, // % of max health restored per turn while Freya's Tears is active
+    FREYASTEARS_HEALTH_REGEN_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
     ALLY_BUFF_FIRST_USE_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead)
+
+    THICK_COAT_HEAL_PERCENT: 0.01,      // % of max health restored when using Thick Coat
 
     // =============================================================================
     // HEALING
@@ -256,6 +258,23 @@ const FAMILY_PASSIVE_CONFIG = {
     
     // Vålnad: Deathless - revives with a fraction of max health upon knockout
     VALNAD_REVIVE_HEALTH_PERCENT: 0.10
+};
+
+// =============================================================================
+// FAMILY KEYWORDS
+// Each family has a descriptive word used in item descriptions, väsen descriptions,
+// and lore entries. Change these here to update them everywhere.
+// =============================================================================
+const FAMILY_KEYWORDS = {
+    OKNYTT: 'prankster',
+    VALNAD: 'phantom',
+    ODJUR:  'beast',
+    TROLL:  'troll',
+    RA:     'warden',
+    ALV:    'elf',
+    ANDE:   'spirit',
+    JATTE:  'giant',
+    DRAKE:  'serpent'
 };
 
 // Starter Väsen options (species keys from VASEN_SPECIES)
@@ -459,7 +478,7 @@ const FAMILY_PASSIVES = {
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
     [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
-    [FAMILIES.VALNAD]: { strength: 70, wisdom: 69, health: 58, defense: 75, durability: 58 },
+    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
     [FAMILIES.ODJUR]: { strength: 84, wisdom: 55, health: 65, defense: 61, durability: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },

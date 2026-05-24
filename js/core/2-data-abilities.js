@@ -137,12 +137,14 @@ const ABILITIES = {
     'Thick Coat': {
         name: 'Thick Coat',
         flavorDescription: 'Grows a thick protective hide.',
-        mechanicsDescription: 'Raises your Defense and Durability by 1 stage.',
+        get mechanicsDescription() {
+            return `Raises your Defense and Durability by 1 stage. Heals ${Math.round(GAME_CONFIG.THICK_COAT_HEAL_PERCENT * 100)}% of max HP.`;
+        },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 30,
-        effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1 }
+        meginCost: 33,
+        effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1, selfHealPercent: GAME_CONFIG.THICK_COAT_HEAL_PERCENT }
     },
 
     // Water Abilities

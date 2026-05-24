@@ -578,6 +578,18 @@ class Battle {
                     }
                 }
             }
+
+            // Algiz: Nature ability heal (also applies to utility abilities)
+            if (ability.element === ELEMENTS.NATURE && attacker.hasRune('ALGIZ')) {
+                if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
+                    const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
+                    if (healAmount > 0) {
+                        this.addLog(`${attacker.getDisplayName()}'s ${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
+                        this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
+                        result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
+                    }
+                }
+            }
             
             // Trigger debuff flash animation if this is a debuff ability
             if (ability.effect && ability.effect.type === 'debuff' && this.onHit) {
@@ -1043,6 +1055,14 @@ class Battle {
                     });
                 }
             });
+
+            // Self-heal: applied after buffs if the effect defines a selfHealPercent
+            if (effect.selfHealPercent) {
+                const healAmount = user.healPercent(effect.selfHealPercent);
+                if (healAmount > 0) {
+                    this.addLog(`${user.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
+                }
+            }
         } else if (effect.type === 'debuff') {
     const targetVasen = isPlayer ? target : this.playerActive;
     const stats = effect.stats || [effect.stat];

@@ -147,7 +147,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Storm Claw', 'Vine Whip', 'Wild Bite', 'Rotvalta'],
+        abilities: ['Storm Claw', 'Vine Whip', 'Thick Coat', 'Wild Bite'],
         tamingItem: 'Cursed Yarn',
         image: 'assets/vasen/bjara.png'
     },
