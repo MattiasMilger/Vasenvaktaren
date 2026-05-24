@@ -370,16 +370,19 @@ achievementsHtml += '</div></div>';
         families.forEach((family, index) => {
             const description = FAMILY_DESCRIPTIONS[family] || 'No description available.';
             const passive = FAMILY_PASSIVES[family];
+            
             html += `
                 <div class="family-guide-collapsible">
                     <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${family}</span>
                     <div class="family-description-popup">
+                        <p><strong>${family}</strong><br>
+                        ${description}</p>
+                        
                         ${passive ? `
+                            <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
                             <p><strong>Passive: ${passive.name}</strong><br>
                             ${passive.description}</p>
-                            <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
-                        ` : ''}
-                        <p>${description}</p>
+                        ` : ''} 
                     </div>
                 </div>
             `;
