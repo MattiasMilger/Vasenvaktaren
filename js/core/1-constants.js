@@ -459,7 +459,7 @@ const FAMILY_PASSIVES = {
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
     [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
-    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
+    [FAMILIES.VALNAD]: { strength: 70, wisdom: 69, health: 58, defense: 75, durability: 58 },
     [FAMILIES.ODJUR]: { strength: 84, wisdom: 55, health: 65, defense: 61, durability: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
