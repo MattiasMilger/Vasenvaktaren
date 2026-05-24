@@ -590,7 +590,27 @@ class Battle {
                     }
                 }
             }
-            
+
+            // Eihwaz, Sol, Ehwaz, Isaz: element ability buffs (also apply to utility abilities)
+            const utilityElementBuffs = {
+                [ELEMENTS.EARTH]: { rune: 'EIHWAZ', stats: ['defense', 'durability'] },
+                [ELEMENTS.FIRE]:  { rune: 'SOL',    stats: ['strength', 'wisdom'] },
+                [ELEMENTS.WIND]:  { rune: 'EHWAZ',  stats: ['defense', 'durability'] },
+                [ELEMENTS.WATER]: { rune: 'ISAZ',   stats: ['wisdom', 'strength'] }
+            };
+            const utilityBuffData = utilityElementBuffs[ability.element];
+            if (utilityBuffData && attacker.hasRune(utilityBuffData.rune)) {
+                if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
+                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES[utilityBuffData.rune].symbol} ${RUNES[utilityBuffData.rune].name} was activated!`, 'rune');
+                    utilityBuffData.stats.forEach(stat => {
+                        attacker.modifyAttributeStage(stat, GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES);
+                        const stageWord = GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES === 1 ? 'stage' : 'stages';
+                        this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} ${stageWord}!`, 'buff');
+                    });
+                    result.runeEffects.push({ rune: utilityBuffData.rune, effect: 'buffed' });
+                }
+            }
+
             // Trigger debuff flash animation if this is a debuff ability
             if (ability.effect && ability.effect.type === 'debuff' && this.onHit) {
                 setTimeout(() => {
