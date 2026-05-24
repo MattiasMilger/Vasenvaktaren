@@ -143,7 +143,7 @@ const ABILITIES = {
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 33,
+        meginCost: 30,
         effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1, selfHealPercent: GAME_CONFIG.THICK_COAT_HEAL_PERCENT }
     },
 
