@@ -258,7 +258,7 @@ const LORE_ENTRIES = {
         key: 'vasen_bergatroll',
         name: 'Bergatroll',
         category: 'vasen',
-        desc: 'The Bergatroll is the classic mountain troll of Scandinavian folklore: enormous, slow-witted, ferociously strong, and fond of gold and silver jewelry. Mountain troll live inside hills and mountains, emerging at night to roam the land. Sunlight turns them instantly to stone - explaining why ancient boulders with unusual shapes are sometimes called "troll rocks" across Norway and Sweden. Some local traditions describe the Bergatroll as the corrupted spirits of ancient giants.',
+        desc: 'The Bergatroll is the classic mountain troll of Scandinavian folklore: enormous, slow-witted, ferociously strong, and fond of gold and silver jewelry. Mountain trolls live inside hills and mountains, emerging at night to roam the land. Sunlight turns them instantly to stone, explaining why ancient boulders with unusual shapes are sometimes called "troll rocks" across Norway and Sweden. Their iconic appearance, with bulbous noses and bodies resembling mossy earth, was famously captured in the classic illustrations of John Bauer.',
         source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr) / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
