@@ -266,7 +266,7 @@ const ABILITIES = {
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: 38,
         effect: { type: 'debuff', target: 'enemy', stats: ['defense', 'durability'], stages: 2 }
     },
 

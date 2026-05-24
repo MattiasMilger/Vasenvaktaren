@@ -283,7 +283,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Lava Jet', 'Enchanting Song', 'Loki\'s Betrayal'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Burning Insult', 'Loki\'s Betrayal'],
         tamingItem: 'Brass Cowbell',
         image: 'assets/vasen/huldra.png'
     },
