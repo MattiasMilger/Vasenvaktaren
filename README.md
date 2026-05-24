@@ -160,12 +160,12 @@ Vasenvaktaren/
 ```
 ## Feature roadmap
 
-- [x] Finish Main Functionality 
+- [x] Finish main Functionality 
 - [x] Introduce endgame system
 - [X] Introduce all 45 Väsen
-- [X] Introduce All 30 Abilities
-- [ ] Balance Overhaul
-- [ ] Wiki Page
+- [X] Introduce all 30 Abilities
+- [ ] Balance overhaul
+- [ ] Wiki pages
 
 ## Credits
 
