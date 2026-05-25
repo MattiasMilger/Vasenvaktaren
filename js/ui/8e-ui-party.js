@@ -90,6 +90,115 @@ UIController.prototype.renderParty = function() {
         // Update click handler for slot
         slot.onclick = () => this.handlePartySlotClick(index);
     });
+
+    // Inject the Auto Equip Runes button into the party section (once)
+    this._ensureAutoRunesButton();
+};
+
+// Inject the Auto Equip Runes button after the party slots if it doesn't exist yet
+UIController.prototype._ensureAutoRunesButton = function() {
+    if (document.getElementById('auto-equip-runes-btn')) return;
+
+    const partySection = document.querySelector('.party-section');
+    if (!partySection) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'auto-equip-runes-btn';
+    btn.className = 'btn btn-auto-runes';
+    btn.textContent = 'Auto Equip Runes';
+    btn.title = 'Randomly equip suitable runes to all party members';
+    btn.onclick = () => this.autoEquipRunes();
+
+    partySection.appendChild(btn);
+};
+
+// Auto-equip valid runes to all party members.
+// Builds a shared pool from collected runes, then for each party väsen (in slot
+// order) picks up to maxRunes valid runes at random, removing them from the pool
+// so the same rune cannot land on two different väsen.
+UIController.prototype.autoEquipRunes = function() {
+    if (gameState.inCombat) {
+        this.showMessage('Cannot change runes during combat.', 'error');
+        return;
+    }
+
+    if (gameState.collectedRunes.size === 0) {
+        this.showMessage('You have no runes to equip.', 'error');
+        return;
+    }
+
+    // Build the shared rune pool (all collected runes)
+    const runePool = Array.from(gameState.collectedRunes);
+
+    // Fisher-Yates shuffle the pool so selection order is random
+    for (let i = runePool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [runePool[i], runePool[j]] = [runePool[j], runePool[i]];
+    }
+
+    const partyVasen = gameState.party.filter(v => v !== null);
+
+    if (partyVasen.length === 0) {
+        this.showMessage('Your party is empty.', 'error');
+        return;
+    }
+
+    // Track which runes have been assigned this round
+    const assigned = new Set();
+
+    partyVasen.forEach(vasen => {
+        // Unequip all current runes from this väsen directly
+        // (bypasses gameState.unequipRune to avoid per-call saves)
+        const oldRunes = vasen.runes.slice();
+        vasen.runes = [];
+
+        // Recalculate megin in case Uruz was removed
+        if (oldRunes.includes('URUZ')) {
+            vasen.maxMegin = vasen.calculateMaxMegin();
+            vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+        }
+
+        // Determine slot count for this väsen
+        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+
+        // Get valid runes for this väsen that are still available in the pool
+        const validForThis = getValidRunesForVasen(vasen).filter(
+            runeId => !assigned.has(runeId)
+        );
+
+        // Shuffle valid options (pool was already shuffled globally, but filter
+        // may have changed ordering — re-shuffle the filtered subset)
+        for (let i = validForThis.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [validForThis[i], validForThis[j]] = [validForThis[j], validForThis[i]];
+        }
+
+        // Assign up to maxRunes runes
+        let equipped = 0;
+        for (let i = 0; i < validForThis.length && equipped < maxRunes; i++) {
+            const runeId = validForThis[i];
+            vasen.runes.push(runeId);
+            assigned.add(runeId);
+            equipped++;
+        }
+
+        // Recalculate megin if Uruz was newly assigned
+        if (vasen.hasRune('URUZ')) {
+            vasen.maxMegin = vasen.calculateMaxMegin();
+            vasen.currentMegin = vasen.maxMegin;
+        }
+    });
+
+    gameState.saveGame();
+    this.renderParty();
+    this.refreshCurrentTab();
+
+    // Update vasen details panel if a party member is selected
+    if (this.selectedVasen && partyVasen.some(v => v.id === this.selectedVasen.id)) {
+        this.renderVasenDetails(this.selectedVasen);
+    }
+
+    this.showMessage('Runes auto-equipped to party.');
 };
 
 UIController.prototype.handlePartySlotClick = function(slotIndex) {

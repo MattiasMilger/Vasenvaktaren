@@ -449,6 +449,17 @@ function getValidRunesForVasen(vasen) {
             case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
                 return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
 
+            // Low-cost damage boost rune — only useful if at least one *damaging* ability
+            // costs at or below the threshold after the same-element Megin discount.
+            // Utility abilities deal no damage, so they don't qualify.
+            case 'ODAL': {
+                return availableAbilities.some(abilityName => {
+                    const ability = ABILITIES[abilityName];
+                    if (!ability || ability.type === ATTACK_TYPES.UTILITY) return false;
+                    return vasen.getAbilityMeginCost(abilityName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
+                });
+            }
+
             // All other runes are universally applicable
             default: return true;
         }

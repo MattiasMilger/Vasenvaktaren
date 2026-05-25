@@ -241,3 +241,22 @@
     justify-content: center;
     padding: var(--spacing-lg) var(--spacing-sm);
 }
+
+/* =============================================================================
+   AUTO EQUIP RUNES BUTTON
+   ============================================================================= */
+
+.btn-auto-runes {
+    width: 100%;
+    margin-top: var(--spacing-sm);
+    border-color: var(--accent-warning);
+    color: var(--accent-warning);
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.btn-auto-runes:hover:not(:disabled) {
+    background: rgba(212, 169, 51, 0.15);
+    border-color: var(--accent-warning);
+    box-shadow: 0 0 10px 2px rgba(212, 169, 51, 0.25);
+}
