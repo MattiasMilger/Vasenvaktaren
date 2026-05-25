@@ -161,6 +161,16 @@ class EnemyAI {
                     score += 40;
                 }
             }
+
+            // Rotvälta: estimate the probability the opponent will attack this turn.
+            // Turn 0 is commonly a setup round (buffs, utility), so the chance is lower.
+            // From turn 1 onward attacks are far more likely, so the estimated bonus is higher.
+            // The max bonus (25) is intentionally moderate — the AI cannot know for certain.
+            if (ability.retaliationBonus) {
+                const turnsOnField = this.vasen.battleFlags.turnsOnField;
+                const estimatedAttackProb = turnsOnField === 0 ? 0.35 : 0.70;
+                score += Math.round(estimatedAttackProb * 25);
+            }
         } else {
             // Utility-specific scoring: attacks are the bread and butter; utilities are early set-ups.
             const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
