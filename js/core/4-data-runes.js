@@ -256,7 +256,7 @@ const RUNES = {
         fullName: 'Odal',
         flavor: 'The ancestral strength passed down through lineage. The wielder\'s most familiar, low-cost actions are imbued with deep, inherited knowledge, granting a significant boost.',
         get effect() {
-            return `This Väsen\'s abilities that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} Megin or less deal ${Math.round(GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST * 100)}% more damage`;
+            return `This Väsen\'s attacks that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} Megin or less deal ${Math.round(GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST * 100)}% more damage`;
         },
         mechanic: { type: 'low_cost_damage_bonus', maxCost: 30, value: 0.1 }
     }

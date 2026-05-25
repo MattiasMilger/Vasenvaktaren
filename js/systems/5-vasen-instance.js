@@ -412,13 +412,11 @@ function getValidRunesForVasen(vasen) {
             hasUtilityAbility = true;
         } else {
             if (ability.element) attackElements.add(ability.element);
+            // MIXED attacks (e.g. Basic Strike) split 50/50 between both stats and are
+            // not converted by ANSUZ or RAIDO, so they do not count as pure Strength
+            // or pure Wisdom attacks for the purpose of those rune checks.
             if (ability.type === ATTACK_TYPES.STRENGTH) hasStrengthAttack = true;
             if (ability.type === ATTACK_TYPES.WISDOM)   hasWisdomAttack   = true;
-            // Basic Strike is MIXED — counts for both
-            if (ability.type === ATTACK_TYPES.MIXED) {
-                hasStrengthAttack = true;
-                hasWisdomAttack   = true;
-            }
         }
     });
 

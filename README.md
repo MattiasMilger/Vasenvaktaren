@@ -65,6 +65,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
+- Auto Equip Runes - equip relevant runes to party members
 
 ### Lore Book
 
