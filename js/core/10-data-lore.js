@@ -54,7 +54,7 @@ const LORE_ENTRIES = {
         category: 'vasen',
         desc: 'Rå are the seductive, nature-bound wardens of specific natural domains - the forest, the water, the mine, the marsh. They typically appear as strikingly beautiful beings who can enchant hunters, fishermen, and miners with irresistible allure. A warden\'s true nature is always betrayed by a physical flaw: a hollow back, a cow\'s tail, or backwards feet. Those who fall under a warden\'s power often waste away or vanish entirely. The word "rå" is cognate with Old Norse "rá," meaning a ruler or warden.',
         source: 'Scandinavian Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
-        heritage: 'Swedish',
+        heritage: 'Scandinavian',
         unlockType: 'family',
         unlockKey: 'Rå'
     },
@@ -219,7 +219,7 @@ const LORE_ENTRIES = {
         name: 'Gloson',
         category: 'vasen',
         desc: 'The Gloson is a nocturnal boar from Swedish folklore, described as a monstrous sow with eyes of burning fire that runs silently through the night at supernatural speed. Encountering this beast was considered an omen of death or disaster. It is found primarily in Swedish provincial traditions, particularly in Skåne and other southern regions. The creature is sometimes associated with the souls of women who had committed secret crimes in life.',
-        source: 'Swedish Folklore (Skånsk tradition)',
+        source: 'Swedish Folklore (Southern)',
         heritage: 'Swedish',
         unlockType: 'vasen',
         unlockKey: 'Gloson'
@@ -270,7 +270,7 @@ const LORE_ENTRIES = {
         category: 'vasen',
         desc: 'The Skogstroll is a forest troll, smaller and more cunning than its mountain cousin, blending into the forest with camouflage of moss, bark, and soil. Swedish folk belief held these troll responsible for misleading travelers, stealing livestock, and abducting children to be raised underground. They are deeply connected to the ancient wilderness and regard human settlements as an intrusion. Their howls and strange noises heard at night were interpreted as troll communication echoing through the old forests.',
         source: 'Scandinavian Folklore / Asbjørnsen & Moe (Norske Folkeeventyr) / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
-        heritage: 'Swedish',
+        heritage: 'Scandinavian',
         unlockType: 'vasen',
         unlockKey: 'Skogstroll'
     },
@@ -278,7 +278,7 @@ const LORE_ENTRIES = {
         key: 'vasen_bortbyting',
         name: 'Bortbyting',
         category: 'vasen',
-        desc: 'The Bortbyting is the cradle troll secretly swapped into a human cradle while the real infant is stolen away. This changeling troll is recognizable by its sickly appearance, excessive demands for food, and sinister, knowing eyes despite its infant appearance. Folk remedies to recover a stolen child were often elaborate and sometimes cruel, based on the belief that causing sufficient discomfort to the troll would force the hidden folk to return the real child.',
+        desc: 'The Bortbyting is a  troll secretly swapped into a human cradle while the real infant is stolen away. This changeling is recognizable by its sickly appearance, excessive demands for food, and sinister, knowing eyes despite its infant appearance. Folk remedies to recover a stolen child were often elaborate and sometimes cruel, based on the belief that causing sufficient discomfort to the troll would force the wildkin to return the real child.',
         source: 'Scandinavian Folklore',
         heritage: 'Scandinavian',
         unlockType: 'vasen',
@@ -478,7 +478,7 @@ const LORE_ENTRIES = {
         key: 'vasen_jarnvidja',
         name: 'Järnvidja',
         category: 'vasen',
-        desc: 'The Järnvidja is an Iron Forest giant, taking her name from Järnveden, the Iron-Wood, a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a terrifying giantess, Angerboda, raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a female form and a relentless will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these rise as the Järnvidja. She is a being whose sap runs like molten metal, whose bark cannot be cut, and whose canopy is so vast that it plunges the ground beneath into permanent shadow.',
+        desc: 'The Järnvidja is an Iron Forest giant, taking her name from Järnveden, the Iron-Wood, a dark forest east of Midgard mentioned in the Poetic Edda\'s Völuspá, where a terrifying giantess, Angerboda, raises a brood of wolves. In Swedish folk tradition the deep forest was home to enormous, ancient presences that were neither troll nor giant in the usual sense, but something older: the forest itself given a female form and a relentless will. Trees that had grown for centuries without ever being felled were said to develop a spirit of their own, and the grandest of these rise as the Järnvidja.',
         source: 'Poetic Edda (Völuspá) / Swedish Folklore',
         heritage: 'Norse / Swedish',
         unlockType: 'vasen',
@@ -499,7 +499,7 @@ const LORE_ENTRIES = {
         name: 'Lindorm',
         category: 'vasen',
         desc: 'The Lindorm is a great forest serpent of Scandinavian folklore, distinguished from the fire-breathing European dragon by its wingless, serpentine form. These serpents appear throughout Swedish folk ballads and fairy tales, often as cursed princes or as terrifying beasts slain by heroes. One of the most famous Swedish folk tales, "Prins Lindorm," tells of a prince cursed to live as a serpent who can only be freed through love and sacrifice. Lindorms were associated with the deep forests.',
-        source: 'Swedish Folklore / Folk Ballads',
+        source: 'North European Folklore / Folk Ballads',
         heritage: 'Northern European',
         unlockType: 'vasen',
         unlockKey: 'Lindorm'
@@ -508,7 +508,7 @@ const LORE_ENTRIES = {
         key: 'vasen_fafner',
         name: 'Fafner',
         category: 'vasen',
-        desc: 'Fafner was originally a dwarf - the son of Reidmar - who killed his own father for the cursed gold hoard of the dwarf Andvari. The greed and power of the treasure transformed him into a monstrous hoard serpent guarding the gold on Gnitahed. He was slain by the hero Sigurd, who consumed this serpent\'s heart to gain great wisdom and the ability to understand the speech of birds. His hoard included the ring Andvaranaut, which carried Andvari\'s terrible curse.',
+        desc: 'Fafner was originally a dwarf - the son of Reidmar - who killed his own father for the cursed gold hoard of the dwarf Andvari. The greed and power of the treasure transformed him into a monstrous hoard dragon guarding the gold on Gnitahed. He was slain by the hero Sigurd, who consumed this serpent\'s heart to gain great wisdom and the ability to understand the speech of birds. His hoard included the ring Andvaranaut, which carried Andvari\'s terrible curse.',
         source: 'Völsunga saga / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -628,16 +628,6 @@ const LORE_ENTRIES = {
         heritage: 'Norse',
         unlockType: 'item',
         unlockKey: 'Yggdrasil Root'
-    },
-    'item_anvil_shard': {
-        key: 'item_anvil_shard',
-        name: 'Anvil Shard',
-        category: 'items',
-        desc: 'The art of smithing held near-sacred status in Norse and Germanic cultures - the smith who could work metal was seen as wielding power over creation itself. The mythological forge elf par excellence were dark elves or dwarves, whose anvils rang in the deep places of the earth. Their greatest works - Mjölnir, Gungnir, the ship Skidbladnir - were gifts to the gods. A shard of an elf anvil carries the resonance of that ancient, transformative craft.',
-        source: 'Norse Mythology',
-        heritage: 'Norse / Germanic',
-        unlockType: 'item',
-        unlockKey: 'Anvil Shard'
     },
     'item_morning_dew': {
         key: 'item_morning_dew',
