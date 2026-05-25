@@ -488,8 +488,8 @@ const LORE_ENTRIES = {
         key: 'vasen_stormturs',
         name: 'Stormturs',
         category: 'vasen',
-        desc: 'The Stormturs is a storm giant of wind and thunder whose presence chills the air and bends the gale around his massive frame. His thunder-dark eyes can shatter stone and his steps roll like distant storms across the peaks. Old tales tie this giant\'s power to the strike of Farbauti, the cunning of Kåre, and the sea-born might of Hymer. Among lightning-scarred pillars and vitrified rock, he walks as both guardian and breaker of mountains.',
-        source: 'Poetic Edda (Hymiskviða; Vafþrúðnismál) / Prose Edda (Gylfaginning; Skáldskaparmál)',
+        desc: 'The Stormturs is a storm giant of Norse myth who embodies the destructive forces of wind, sea tempests, and thunder. Norse sources link these elemental powers to ancient jötnar: Farbauti (the striker whose lightning sparked fire), Kåre (the personification of fierce winds), and Hymer (the mighty sea giant who commands crashing waves). They represent the tumultuous weather patterns of the Scandinavian wild, serving as unpredictable adversaries to the Aesir gods.',
+        source: 'Poetic Edda (Hymiskviða) / Prose Edda (Gylfaginning; Skáldskaparmál)',
         heritage: 'Norse',
         unlockType: 'vasen',
         unlockKey: 'Stormturs'
@@ -786,7 +786,7 @@ const LORE_ENTRIES = {
         source: 'Prose Edda (Snorri Sturluson) / Völuspá',
         heritage: 'Norse',
         unlockType: 'ability',
-        unlockKey: "giantsbane"
+        unlockKey: "Giantsbane"
     },
     'ability_rotvalta': {
         key: 'ability_rotvalta',
