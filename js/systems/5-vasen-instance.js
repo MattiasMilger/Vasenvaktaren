@@ -458,6 +458,20 @@ function getValidRunesForVasen(vasen) {
                 });
             }
 
+            // Buff-sharing rune — only useful if the väsen has at least one ability that
+            // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
+            // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
+            // Resilience, Troll: Troll Theft).
+            case 'GIFU': {
+                const familiesWithBuffPassive = [FAMILIES.ANDE, FAMILIES.ODJUR, FAMILIES.DRAKE, FAMILIES.TROLL];
+                if (familiesWithBuffPassive.includes(vasen.species.family)) return true;
+                return availableAbilities.some(abilityName => {
+                    const ability = ABILITIES[abilityName];
+                    if (!ability || !ability.effect) return false;
+                    return ability.effect.type === 'buff' || ability.effect.type === 'tyrs_sacrifice';
+                });
+            }
+
             // All other runes are universally applicable
             default: return true;
         }

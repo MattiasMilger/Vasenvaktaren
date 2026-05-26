@@ -244,19 +244,20 @@
 
 /* =============================================================================
    AUTO EQUIP RUNES BUTTON
+   Mirrors the Auto Battle button style from 10-combat.css:
+   gold text/border (--text-accent), blue hover background (--auto-battle-bg).
    ============================================================================= */
 
 .btn-auto-runes {
     width: 100%;
     margin-top: var(--spacing-sm);
-    border-color: var(--accent-warning);
-    color: var(--accent-warning);
+    border-color: var(--text-accent);
+    color: var(--text-accent);
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .btn-auto-runes:hover:not(:disabled) {
-    background: rgba(212, 169, 51, 0.15);
-    border-color: var(--accent-warning);
-    box-shadow: 0 0 10px 2px rgba(212, 169, 51, 0.25);
+    background: var(--auto-battle-bg);
+    border-color: var(--text-accent);
 }

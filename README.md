@@ -33,6 +33,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 24 equippable runes with unique effects
 - One rune slot (two at level 30)
 - Strategic combinations for different builds
+- **Auto Equip Runes** button in the Active Party panel randomly assigns suitable runes from your collection to all party members, filtering out runes that would have no effect for a given väsen
 
 ### Exploration
 
@@ -65,7 +66,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
-- Auto Equip Runes - equip relevant runes to party members
+- **Auto Equip Runes**: assigns random but valid runes from your collection to all party members at once
 
 ### Lore Book
 
@@ -107,7 +108,7 @@ Vasenvaktaren/
 │   ├── 05-buttons.css              (button styles)
 │   ├── 06-panels.css               (panels & tabs)
 │   ├── 07-vasen.css                (väsen UI)
-│   ├── 08-party.css                (party section)
+│   ├── 08-party.css                (party section; Auto Equip Runes button styles)
 │   ├── 09-zones.css                (zone section)
 │   ├── 10-combat.css               (combat UI)
 │   ├── 11-modals.css               (modal styles)
@@ -124,7 +125,7 @@ Vasenvaktaren/
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
 │   │   ├── 4-data-runes.js         (rune definitions)
-│   │   ├── 5-vasen-instance.js     (VasenInstance class)
+│   │   ├── 5-vasen-instance.js     (VasenInstance class; getValidRunesForVasen smart rune filter used by Auto Equip and wild enemy rune assignment)
 │   │   └── 10-data-lore.js         (lore entries, categories, and unlock keys)
 │   │
 │   ├── systems/
@@ -138,7 +139,7 @@ Vasenvaktaren/
 │   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, and matchup display)
 │   │   ├── 8d-ui-items.js          (item inventory management)
 │   │   ├── 8d-ui-runes.js          (rune inventory management)
-│   │   ├── 8e-ui-party.js          (party slot management and väsen release)
+│   │   ├── 8e-ui-party.js          (party slot management, väsen release, and Auto Equip Runes)
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
 │   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and battle animations)
 │   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
