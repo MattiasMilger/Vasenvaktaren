@@ -125,7 +125,7 @@ Vasenvaktaren/
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
 │   │   ├── 4-data-runes.js         (rune definitions)
-│   │   ├── 5-vasen-instance.js     (VasenInstance class; getValidRunesForVasen smart rune filter used by Auto Equip and wild enemy rune assignment)
+│   │   ├── 5-vasen-instance.js     (VasenInstance class; smart rune filter)
 │   │   └── 10-data-lore.js         (lore entries, categories, and unlock keys)
 │   │
 │   ├── systems/
