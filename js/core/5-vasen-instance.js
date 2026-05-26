@@ -412,13 +412,11 @@ function getValidRunesForVasen(vasen) {
             hasUtilityAbility = true;
         } else {
             if (ability.element) attackElements.add(ability.element);
+            // MIXED attacks (e.g. Basic Strike) split 50/50 between both stats and are
+            // not converted by ANSUZ or RAIDO, so they do not count as pure Strength
+            // or pure Wisdom attacks for the purpose of those rune checks.
             if (ability.type === ATTACK_TYPES.STRENGTH) hasStrengthAttack = true;
             if (ability.type === ATTACK_TYPES.WISDOM)   hasWisdomAttack   = true;
-            // Basic Strike is MIXED — counts for both
-            if (ability.type === ATTACK_TYPES.MIXED) {
-                hasStrengthAttack = true;
-                hasWisdomAttack   = true;
-            }
         }
     });
 
@@ -448,6 +446,31 @@ function getValidRunesForVasen(vasen) {
                 return hasStrengthAttack && vasen.calculateAttribute('wisdom') > vasen.calculateAttribute('strength');
             case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
                 return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
+
+            // Low-cost damage boost rune — only useful if at least one *damaging* ability
+            // costs at or below the threshold after the same-element Megin discount.
+            // Utility abilities deal no damage, so they don't qualify.
+            case 'ODAL': {
+                return availableAbilities.some(abilityName => {
+                    const ability = ABILITIES[abilityName];
+                    if (!ability || ability.type === ATTACK_TYPES.UTILITY) return false;
+                    return vasen.getAbilityMeginCost(abilityName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
+                });
+            }
+
+            // Buff-sharing rune — only useful if the väsen has at least one ability that
+            // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
+            // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
+            // Resilience, Troll: Troll Theft).
+            case 'GIFU': {
+                const familiesWithBuffPassive = [FAMILIES.ANDE, FAMILIES.ODJUR, FAMILIES.DRAKE, FAMILIES.TROLL];
+                if (familiesWithBuffPassive.includes(vasen.species.family)) return true;
+                return availableAbilities.some(abilityName => {
+                    const ability = ABILITIES[abilityName];
+                    if (!ability || !ability.effect) return false;
+                    return ability.effect.type === 'buff' || ability.effect.type === 'tyrs_sacrifice';
+                });
+            }
 
             // All other runes are universally applicable
             default: return true;
