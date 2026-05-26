@@ -294,7 +294,13 @@ class GameState {
             // Recalculate megin if Uruz was added or removed
             if (runeId === 'URUZ' || removedRune === 'URUZ') {
                 vasen.maxMegin = vasen.calculateMaxMegin();
-                vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+                if (runeId === 'URUZ') {
+                    // Uruz added: fill to new max
+                    vasen.currentMegin = vasen.maxMegin;
+                } else {
+                    // Uruz removed: cap to new (lower) max
+                    vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+                }
             }
         }
 
