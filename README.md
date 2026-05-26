@@ -33,7 +33,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 24 equippable runes with unique effects
 - One rune slot (two at level 30)
 - Strategic combinations for different builds
-- **Auto Equip Runes** button in the Active Party panel randomly assigns suitable runes from your collection to all party members, filtering out runes that would have no effect for a given väsen
+- Auto Equip Runes randomly assigns suitable runes to all party members
 
 ### Exploration
 
