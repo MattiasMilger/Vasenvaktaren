@@ -1263,8 +1263,28 @@ class Battle {
             if (ability && ability.type === ATTACK_TYPES.UTILITY) {
                 this.trackEnemyUtilityUsage(this.enemyActive, action.ability);
             }
-            
-            return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false, null);
+
+            // For ally-targeting buff abilities, pick the best alive non-active enemy team member.
+            // Prefer the ally with the lowest current value of the stat being buffed (gains most
+            // from the buff); break ties by highest HP ratio (most likely to survive to use it).
+            let enemyAllyTarget = null;
+            if (ability && ability.effect && ability.effect.target === 'ally') {
+                const buffStat = ability.effect.stat || (ability.effect.stats && ability.effect.stats[0]);
+                const candidates = this.enemyTeam.filter(v => v !== this.enemyActive && !v.isKnockedOut());
+                if (candidates.length > 0) {
+                    enemyAllyTarget = candidates.reduce((best, v) => {
+                        const vStatVal   = buffStat ? v.calculateAttribute(buffStat)    : 0;
+                        const bStatVal   = buffStat ? best.calculateAttribute(buffStat) : 0;
+                        if (vStatVal !== bStatVal) return vStatVal < bStatVal ? v : best;
+                        // Tiebreak: higher HP ratio
+                        const vHpRatio   = v.currentHealth    / v.maxHealth;
+                        const bestHpRatio = best.currentHealth / best.maxHealth;
+                        return vHpRatio > bestHpRatio ? v : best;
+                    });
+                }
+            }
+
+            return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false, enemyAllyTarget);
         }
         
         return null;
