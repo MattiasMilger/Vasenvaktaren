@@ -264,3 +264,93 @@ const RUNES = {
 
 const RUNE_LIST = Object.keys(RUNES);
 const STARTER_RUNE = 'URUZ';
+
+// =============================================================================
+// Returns the subset of RUNE_LIST that are useful for a given VasenInstance.
+// Runes that require a specific element or attack type the väsen never uses
+// are excluded. All other runes are always considered valid.
+// =============================================================================
+function getValidRunesForVasen(vasen) {
+    const availableAbilities = vasen.getAvailableAbilities();
+
+    // Collect all elements the väsen can attack with
+    const attackElements = new Set();
+    attackElements.add(vasen.species.element); // Basic Strike always uses own element
+
+    let hasStrengthAttack = false;
+    let hasWisdomAttack   = false;
+    let hasUtilityAbility = false;
+
+    availableAbilities.forEach(abilityName => {
+        const ability = ABILITIES[abilityName];
+        if (!ability) return;
+
+        if (ability.type === ATTACK_TYPES.UTILITY) {
+            hasUtilityAbility = true;
+        } else {
+            if (ability.element) attackElements.add(ability.element);
+            // MIXED attacks (e.g. Basic Strike) split 50/50 between both stats and are
+            // not converted by ANSUZ or RAIDO, so they do not count as pure Strength
+            // or pure Wisdom attacks for the purpose of those rune checks.
+            if (ability.type === ATTACK_TYPES.STRENGTH) hasStrengthAttack = true;
+            if (ability.type === ATTACK_TYPES.WISDOM)   hasWisdomAttack   = true;
+        }
+    });
+
+    return RUNE_LIST.filter(runeId => {
+        switch (runeId) {
+            // Element damage boost runes — only useful if the väsen has attacks of that element
+            case 'KAUNAN': return attackElements.has(ELEMENTS.FIRE);
+            case 'PERTHO': return attackElements.has(ELEMENTS.EARTH);
+            case 'TYR':    return attackElements.has(ELEMENTS.WIND);
+            case 'BJARKA': return attackElements.has(ELEMENTS.NATURE);
+            case 'LAGUZ':  return attackElements.has(ELEMENTS.WATER);
+
+            // Element proc buff runes — same requirement
+            case 'EIHWAZ': return attackElements.has(ELEMENTS.EARTH);
+            case 'SOL':    return attackElements.has(ELEMENTS.FIRE);
+            case 'EHWAZ':  return attackElements.has(ELEMENTS.WIND);
+            case 'ISAZ':   return attackElements.has(ELEMENTS.WATER);
+            case 'ALGIZ':  return attackElements.has(ELEMENTS.NATURE);
+
+            // Utility heal rune — only useful if the väsen has at least one utility ability
+            case 'MANNAZ': return hasUtilityAbility;
+
+            // Attack-type conversion runes — only useful if the väsen has attacks of the source
+            // type AND the target stat is strictly higher than the source stat (converting to
+            // a weaker or equal stat is never beneficial).
+            case 'ANSUZ':  // Converts Strength attacks → uses Wisdom instead
+                return hasStrengthAttack && vasen.calculateAttribute('wisdom') > vasen.calculateAttribute('strength');
+            case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
+                return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
+
+            // Low-cost damage boost rune — only useful if at least one *damaging* ability
+            // costs at or below the threshold after the same-element Megin discount.
+            // Utility abilities deal no damage, so they don't qualify.
+            case 'ODAL': {
+                return availableAbilities.some(abilityName => {
+                    const ability = ABILITIES[abilityName];
+                    if (!ability || ability.type === ATTACK_TYPES.UTILITY) return false;
+                    return vasen.getAbilityMeginCost(abilityName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
+                });
+            }
+
+            // Buff-sharing rune — only useful if the väsen has at least one ability that
+            // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
+            // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
+            // Resilience, Troll: Troll Theft).
+            case 'GIFU': {
+                const familiesWithBuffPassive = [FAMILIES.ANDE, FAMILIES.ODJUR, FAMILIES.DRAKE, FAMILIES.TROLL];
+                if (familiesWithBuffPassive.includes(vasen.species.family)) return true;
+                return availableAbilities.some(abilityName => {
+                    const ability = ABILITIES[abilityName];
+                    if (!ability || !ability.effect) return false;
+                    return ability.effect.type === 'buff' || ability.effect.type === 'tyrs_sacrifice';
+                });
+            }
+
+            // All other runes are universally applicable
+            default: return true;
+        }
+    });
+}
