@@ -296,7 +296,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Elven Light', 'Wind Gust', 'Moon Beam', 'Freya\'s Tears'],
+        abilities: ['Elven Light', 'Wind Gust', 'Landslide', 'Moon Beam'],
         tamingItem: 'Flicker Dust',
         image: 'assets/vasen/alva.png'
     },
@@ -318,7 +318,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
-        abilities: ['Sinkhole', 'Lava Jet', 'Skald\'s Mead', 'Landslide'],
+        abilities: ['Sinkhole', 'Lava Jet', 'Smithing', 'Landslide'],
         tamingItem: 'Shiny Trinket',
         image: 'assets/vasen/svartalv.png'
     },

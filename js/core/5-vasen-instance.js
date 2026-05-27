@@ -117,11 +117,6 @@ class VasenInstance {
             megin = Math.floor(megin * 1.20);
         }
         
-        // Alv family passive: Innate Megin
-        if (this.species.family === FAMILIES.ALV) {
-            megin = Math.floor(megin * (1 + FAMILY_PASSIVE_CONFIG.ALV_MEGIN_BOOST));
-        }
-        
         return megin;
     }
     

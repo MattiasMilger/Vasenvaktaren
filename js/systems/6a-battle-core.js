@@ -1083,6 +1083,23 @@ class Battle {
                     this.addLog(`${user.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                 }
             }
+
+            // --- ALV: ELVEN CRAFTSMANSHIP ---
+            // If the user is Alv family and the ability buffs only Strength or only Wisdom,
+            // also apply the same total stages to the mirror stat on the target.
+            if (user.species.family === FAMILIES.ALV) {
+                const mirrorMap = { strength: 'wisdom', wisdom: 'strength' };
+                if (stats.length === 1 && mirrorMap[stats[0]]) {
+                    const mirrorStat = mirrorMap[stats[0]];
+                    const mirrorResult = targetVasen.modifyAttributeStage(mirrorStat, totalStagesToShare);
+                    if (mirrorResult.changed !== 0) {
+                        const stageWord = Math.abs(mirrorResult.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`${user.getDisplayName()} activated Elven Craftsmanship!`, 'passive');
+                        this.addLog(`${targetVasen.getDisplayName()}'s ${mirrorStat} was raised by ${Math.abs(mirrorResult.changed)} ${stageWord}!`, 'buff');
+                        effects.push({ stat: mirrorStat, change: mirrorResult.changed });
+                    }
+                }
+            }
         } else if (effect.type === 'debuff') {
     const targetVasen = isPlayer ? target : this.playerActive;
     const stats = effect.stats || [effect.stat];

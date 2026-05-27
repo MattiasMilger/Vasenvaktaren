@@ -38,7 +38,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
     // =============================================================================
-    BASE_MEGIN: 70,
+    BASE_MEGIN: 73,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
     SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element abilities
@@ -225,17 +225,14 @@ const GAME_CONFIG = {
 
 // Family Passive Configuration
 const FAMILY_PASSIVE_CONFIG = {
-    // Alv: Innate Megin - increases max Megin
-    ALV_MEGIN_BOOST: 0.12,
-    
     // Ande: Ethereal Surge - raises x random attributes by y stages when entering battlefield
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
     // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
-    DRAKE_DEFENSE_STAGES: 1,
-    DRAKE_DURABILITY_STAGES: 1,
+    DRAKE_DEFENSE_STAGES: 2,
+    DRAKE_DURABILITY_STAGES: 2,
     
     // Jätte: Colossal Power - Basic Strike always has a fixed power
     JATTE_BASIC_STRIKE_POWER: 35,
@@ -420,10 +417,8 @@ const FAMILY_DESCRIPTIONS = {
 // Family Passive Descriptions (mechanical, player-facing)
 const FAMILY_PASSIVES = {
     [FAMILIES.ALV]: {
-        name: 'Innate Megin',
-        get description() {
-            return `Increases max Megin by ${Math.round(FAMILY_PASSIVE_CONFIG.ALV_MEGIN_BOOST * 100)}%.`;
-        }
+        name: 'Elven Craftsmanship',
+        description: 'When using an ability that buffs only Strength, also buffs Wisdom by the same amount, and vice versa.'
     },
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
