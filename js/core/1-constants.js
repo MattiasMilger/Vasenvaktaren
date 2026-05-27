@@ -57,7 +57,7 @@ const GAME_CONFIG = {
     DEFENSE_CONSTANT: 190,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
     DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     
-    // Mixed-type attacks split damage calculation 50/50 between Strength and Wisdom
+    // Mixed-type attacks split damage calculation 50/50 between strength and wisdom
     MIXED_ATTACK_STRENGTH_PORTION: 0.5,
     MIXED_ATTACK_WISDOM_PORTION: 0.5,
     
@@ -237,7 +237,7 @@ const FAMILY_PASSIVE_CONFIG = {
     // Jätte: Colossal Power - Basic Strike always has a fixed power
     JATTE_BASIC_STRIKE_POWER: 35,
     
-    // Odjur: Bestial Rage - gain Strength and Wisdom stages after spending several turns on battlefield
+    // Odjur: Bestial Rage - gain strength and wisdom stages after spending several turns on battlefield
     ODJUR_TURNS_REQUIRED: 2,
     ODJUR_STRENGTH_STAGES: 1,
     ODJUR_WISDOM_STAGES: 1,
@@ -406,7 +406,7 @@ const FAMILY_DESCRIPTIONS = {
     [FAMILIES.OKNYTT]: 'Tiny and elusive pranksters of narrow domains. They delight in small pranks but can be surprisingly helpful when treated with care.',
     [FAMILIES.VALNAD]: 'The tormented, animated remains or phantoms of the dead. Bound to a place or an action, they often seek revenge upon the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the gods or giants. They embody raw natural forces and the terrifying elements of the wild.',
-    [FAMILIES.TROLL]: 'Ragged wildkin of the mountains and deep woods, possessing great Strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
+    [FAMILIES.TROLL]: 'Ragged wildkin of the mountains and deep woods, possessing great strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
     [FAMILIES.RA]: 'Seductive, nature-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
     [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
     [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
@@ -418,7 +418,7 @@ const FAMILY_DESCRIPTIONS = {
 const FAMILY_PASSIVES = {
     [FAMILIES.ALV]: {
         name: 'Elven Craftsmanship',
-        description: 'When using an ability that buffs only Strength, also buffs Wisdom by the same amount, and vice versa.'
+        description: 'When using an ability that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
     },
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
@@ -441,7 +441,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
         get description() {
-            return `After spending ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} full turns on the battlefield, gain +${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} Strength stage and +${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} Wisdom stage (once per battle).`;
+            return `After spending ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} full turns on the battlefield, gain +${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} strength stage and +${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} wisdom stage (once per battle).`;
         }
     },
     [FAMILIES.RA]: {
@@ -526,7 +526,7 @@ const ZONES = {
                 { species: 'Lindorm', level: 5, temperament: 'STALWART', runes: ['WYNJA'] }
             ],
             dialogue: {
-                challenge: 'The forest tests all who enter. Show me your Strength, little one.',
+                challenge: 'The forest tests all who enter. Show me your strength, little one.',
                 lose: 'You lack the true spirit of the woods. Train more, and perhaps this enchanted realm will accept you.',
                 win: 'Impressive. You have earned passage through this realm. The way to Folkets By is now open.'
             }
@@ -571,7 +571,7 @@ const ZONES = {
             ],
             dialogue: {
                 challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
-                lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more Wisdom.',
+                lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more wisdom.',
                 win: 'Your effort is sharper than my ore. The path is clear. The flowing waters of Glimrande Källan await.'
             }
         },
@@ -614,7 +614,7 @@ const ZONES = {
                 { species: 'Eldturs', level: 25, temperament: 'RESILIENT', runes: ['MANNAZ'] }
             ],
             dialogue: {
-                challenge: 'We are the forces of chaos, the ancient Strength of the raw elements. Face your doom!',
+                challenge: 'We are the forces of chaos, the ancient strength of the raw elements. Face your doom!',
                 lose: 'You are just dust beneath the mountains. The giants will not be bested by such weakness.',
                 win: 'A colossal effort! Your power is vast. Behold, the final frontier: Världens Ände.'
             }
