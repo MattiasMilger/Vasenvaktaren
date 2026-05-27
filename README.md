@@ -33,7 +33,6 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 24 equippable runes with unique effects
 - One rune slot (two at level 30)
 - Strategic combinations for different builds
-- Auto Equip Runes randomly assigns suitable runes to all party members
 
 ### Exploration
 
@@ -51,7 +50,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 | Combat Action | Mechanics |
 | :--- | :--- |
-| **Abilities** | Use learned attacks (cost Megin) |
+| **Abilities** | Use learned abilities (cost Megin) |
 | **Basic Strike** | Free attack using your element |
 | **Swap** | Change active Väsen (causes Swap Sickness) |
 | **Offer Item** | Offer taming items to wild Väsen |
@@ -66,7 +65,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
-- **Auto Equip Runes**: assigns random but valid runes from your collection to all party members at once
+- Auto Equip Runes: assigns random but valid runes to all party members
 
 ### Lore Book
 
