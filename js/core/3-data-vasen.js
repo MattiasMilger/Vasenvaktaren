@@ -329,7 +329,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.RARE,
-        abilities: ['Elven Light', 'Hail Storm', 'Moon Beam', 'Freya\'s Tears'],
+        abilities: ['Elven Light', 'Moon Beam', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Festive Midsommarkrans',
         image: 'assets/vasen/ljusalv.png'
     },

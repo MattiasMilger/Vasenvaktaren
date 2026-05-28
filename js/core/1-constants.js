@@ -491,7 +491,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.WIND]: { durability: 5 }
 };
 
-const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
+const ABILITY_LEARN_LEVELS = [1, 5, 10, 15];
 
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },
