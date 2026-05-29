@@ -236,10 +236,10 @@ const FAMILY_PASSIVE_CONFIG = {
     // Jätte: Colossal Power - Basic Strike always has a fixed power
     JATTE_BASIC_STRIKE_POWER: 35,
     
-    // Odjur: Bestial Rage - gain strength and wisdom stages after spending several turns on battlefield
-    ODJUR_TURNS_REQUIRED: 2,
+    // Odjur: Bestial Rage - gain strength and lose wisdom after completing one turn.
+    ODJUR_TURNS_REQUIRED: 1,
     ODJUR_STRENGTH_STAGES: 1,
-    ODJUR_WISDOM_STAGES: 1,
+    ODJUR_WISDOM_STAGES: -1,
     
     // Rå: Malicious Retaliation - lowers several random enemy attributes by stages when hit
     RA_DEBUFF_COUNT: 2,
@@ -440,7 +440,12 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
         get description() {
-            return `After spending ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} full turns on the battlefield, gain +${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} strength stage and +${FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES} wisdom stage (once per battle).`;
+            const turns = FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED;
+            const turnWord = turns === 1 ? 'turn' : 'turns';
+            const str = FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES;
+            const wis = FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES;
+            const wisSign = wis >= 0 ? '+' : '';
+            return `After completing ${turns} full ${turnWord} on the battlefield, gain +${str} strength stage and ${wisSign}${wis} wisdom stage (once per battle).`;
         }
     },
     [FAMILIES.RA]: {
@@ -473,12 +478,12 @@ const FAMILY_PASSIVES = {
 const BASE_ATTRIBUTES = {
     [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
     [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
-    [FAMILIES.ODJUR]: { strength: 84, wisdom: 55, health: 65, defense: 61, durability: 48 },
+    [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durability: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
-    [FAMILIES.ALV]: { strength: 68, wisdom: 84, health: 60, defense: 54, durability: 62 },
+    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 60, defense: 54, durability: 62 },
     [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
-    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 82, defense: 54, durability: 51 },
+    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durability: 51 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
 

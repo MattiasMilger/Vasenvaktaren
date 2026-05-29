@@ -226,10 +226,6 @@ class Battle {
             const tracker = this.expTracker.get(this.playerActive.id);
             if (tracker) tracker.turnsOnField++;
         }
-
-        // Trigger Odjur passive on turn start
-        this.applyFamilyPassive('onTurnStart', { vasen: this.playerActive, isPlayer: true });
-        this.applyFamilyPassive('onTurnStart', { vasen: this.enemyActive, isPlayer: false });
     }
     
     // End turn (regenerate megin, clear flags)
@@ -296,6 +292,10 @@ class Battle {
             this.enemyActive.battleFlags.turnsOnField++;
         }
         
+        // Trigger Odjur passive at the end of the turn
+        this.applyFamilyPassive('onTurnEnd', { vasen: this.playerActive, isPlayer: true });
+        this.applyFamilyPassive('onTurnEnd', { vasen: this.enemyActive, isPlayer: false });
+
         // Check for battle end
         this.checkBattleEnd();
         
@@ -1428,20 +1428,25 @@ class Battle {
         }
         
         // --- ODJUR: BESTIAL RAGE ---
-        if (trigger === 'onTurnStart' && vasen.species.family === FAMILIES.ODJUR) {
+        if (trigger === 'onTurnEnd' && vasen.species.family === FAMILIES.ODJUR) {
             if (vasen.battleFlags.turnsOnField >= FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) {
                 if (!vasen.battleFlags.odjurTriggered) {
                     vasen.battleFlags.odjurTriggered = true;
                     this.addLog(`${vasen.getDisplayName()} activated Bestial Rage!`, 'passive');
 
-                    const statsToBuff = [
+                    const statsToChange = [
                         { name: 'strength', stages: FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES },
                         { name: 'wisdom', stages: FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES }
                     ];
 
-                    statsToBuff.forEach(item => {
-                        vasen.modifyAttributeStage(item.name, item.stages);
-                        this.addLog(`${vasen.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+                    statsToChange.forEach(item => {
+                        const result = vasen.modifyAttributeStage(item.name, item.stages);
+                        if (result.changed !== 0) {
+                            const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                            const actionWord = result.changed > 0 ? 'raised' : 'lowered';
+                            const logType = result.changed > 0 ? 'buff' : 'debuff';
+                            this.addLog(`${vasen.getDisplayName()}'s ${item.name} was ${actionWord} by ${Math.abs(result.changed)} ${stageWord}!`, logType);
+                        }
                         
                         // Gifu Sharing
                         if (vasen.hasRune('GIFU')) {
@@ -1452,8 +1457,13 @@ class Battle {
                             const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                             allies.forEach(ally => {
                                 if (ally !== vasen && !ally.isKnockedOut()) {
-                                    ally.modifyAttributeStage(item.name, item.stages);
-                                    this.addLog(`${ally.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+                                    const allyResult = ally.modifyAttributeStage(item.name, item.stages);
+                                     if (allyResult.changed !== 0) {
+                                        const stageWord = Math.abs(allyResult.changed) === 1 ? 'stage' : 'stages';
+                                        const actionWord = allyResult.changed > 0 ? 'raised' : 'lowered';
+                                        const logType = allyResult.changed > 0 ? 'buff' : 'debuff';
+                                        this.addLog(`${ally.getDisplayName()}'s ${item.name} was ${actionWord} by ${Math.abs(allyResult.changed)} ${stageWord}!`, logType);
+                                    }
                                 }
                             });
                         }
