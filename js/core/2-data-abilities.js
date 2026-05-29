@@ -136,7 +136,7 @@ const ABILITIES = {
     },
     'Thick Coat': {
         name: 'Thick Coat',
-        flavorDescription: 'Toughens your body to endure the harshest elements and most brutal enemy strikes.',
+        flavorDescription: 'Toughens your body to endure the harshest elements and fiercest strikes.',
         get mechanicsDescription() {
             return `Raises your Defense and Durability by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
         },
