@@ -34,7 +34,7 @@ const ABILITIES = {
     },
     'Sinkhole': {
         name: 'Sinkhole',
-        flavorDescription: 'The earth softens and collapses, opening a treacherous pit beneath the enemy.',
+        flavorDescription: 'Collapses and softens the earth, opening a treacherous pit beneath the enemy.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
@@ -55,7 +55,7 @@ const ABILITIES = {
     },
     'Smithing': {
         name: 'Smithing',
-        flavorDescription: 'Through ancient forging magic, an ally\'s Strength is raised.',
+        flavorDescription: 'Channels ancient forging magic to an ally, awakening their might.',
         get mechanicsDescription() {
             return `Raises an ally\'s Strength by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
         },
@@ -94,7 +94,7 @@ const ABILITIES = {
     },
     'Wild Bite': {
         name: 'Wild Bite',
-        flavorDescription: 'A savage, powerful clenching of jaws, fueled by the primal ferocity of the deep forest.',
+        flavorDescription: 'Snaps with savage, powerful jaws fueled by the primal ferocity of the deep forest.',
         mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
@@ -103,7 +103,7 @@ const ABILITIES = {
     },
     'Rotvalta': {
         name: 'Rotvälta',
-        flavorDescription: 'A sudden, crushing eruption of roots triggered by the enemy\'s aggression.',
+        flavorDescription: 'Triggers a sudden, crushing eruption of roots amplified by the enemy\'s aggression.',
         get mechanicsDescription() {
             return `Hits enemy. +${GAME_CONFIG.ROTVALTA_BONUS} power if they attack you.`;
         },
@@ -192,7 +192,7 @@ const ABILITIES = {
     },
     'Skald\'s Mead': {
         name: 'Skald\'s Mead',
-        flavorDescription: 'Passes mead to an ally, clarifying their mind.',
+        flavorDescription: 'Passes mead to an ally, clarifying their mind and sharpening their focus.',
         get mechanicsDescription() {
             return `Raises an ally\'s Wisdom by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
         },
@@ -206,7 +206,7 @@ const ABILITIES = {
     // Fire Abilities
     'Torch Strike': {
         name: 'Torch Strike',
-        flavorDescription: 'A searing blow with a burning torch, delivering raw heat.',
+        flavorDescription: 'Delivers a searing blow with a burning torch, releasing raw heat.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
@@ -239,7 +239,7 @@ const ABILITIES = {
     },
     'Lava Jet': {
         name: 'Lava Jet',
-        flavorDescription: 'A volcanic burst, shooting a devastating stream of molten rock.',
+        flavorDescription: 'Unleashes a volcanic burst, shooting a devastating stream of molten rock.',
         mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
@@ -263,7 +263,7 @@ const ABILITIES = {
         name: 'Burning Insult',
         flavorDescription: 'Hurls a vicious, withering curse that crushes the enemy\'s resolve.',
         get mechanicsDescription() {
-            return `Lowers enemy Defense and Durability by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
+            return `Lowers enemy\'s defense and durability by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
@@ -317,9 +317,9 @@ const ABILITIES = {
     },
     'Enchanting Song': {
         name: 'Enchanting Song',
-        flavorDescription: 'Plays a haunting tune that distracts the enemy.',
+        flavorDescription: 'Plays a haunting, otherworldly tune that deeply entrances the enemy.',
         get mechanicsDescription() {
-            return `Lowers enemy Strength and Wisdom by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
+            return `Lowers enemy\'s strength and wisdom by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
@@ -329,7 +329,7 @@ const ABILITIES = {
     },
     'Tyr\'s Sacrifice': {
         name: 'Tyr\'s Sacrifice',
-        flavorDescription: 'Severs a piece of your own vitality to secure a desperate, war-turning blessing.',
+        flavorDescription: 'Severs a piece of your own vitality to secure a desperate, fateful blessing.',
         get mechanicsDescription() {
             return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of max HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
         },
@@ -357,7 +357,7 @@ const ABILITIES = {
     // Basic Strike (available to all)
     'Basic Strike': {
         name: 'Basic Strike',
-        flavorDescription: 'A reflexive and adaptable strike fueled by your element.',
+        flavorDescription: 'Delivers a reflexive and adaptable strike empowered by native elemental energy.',
         mechanicsDescription: 'Hits enemy.',
         element: null, // Uses the Väsen's own element
         type: ATTACK_TYPES.MIXED,
