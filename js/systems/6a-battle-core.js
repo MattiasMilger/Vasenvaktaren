@@ -51,6 +51,10 @@ class Battle {
         // Ally buff first-use tracking (per side, per ability name)
         this.playerAllyBuffFirstUse = new Set();
         this.enemyAllyBuffFirstUse = new Set();
+
+        // Debuff first-use tracking (per side, per ability name)
+        this.playerDebuffFirstUse = new Set();
+        this.enemyDebuffFirstUse = new Set();
         
         // Callbacks for UI updates
         this.onLog = null;
@@ -1008,11 +1012,12 @@ class Battle {
                 targetVasen = user;
             }
 
-            // Determine whether this is the first use of an ally buff ability this battle for this side,
-            // and compute the total stages to grant (regular + bonus). The bonus is applied to the
-            // direct target; Gifu then shares the full total to all other allies in one pass.
+            // Determine whether this is the first use of a buff ability this battle for this side
+            // (applies to both ally-targeted and self-targeted buffs).
+            // The bonus is applied to the direct target; Gifu then shares the full total to all
+            // other allies in one pass.
             let firstUseBonusStages = 0;
-            if (effect.target === 'ally' && GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS > 0) {
+            if ((effect.target === 'ally' || effect.target === 'self') && GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS > 0) {
                 const firstUseSet = isPlayer ? this.playerAllyBuffFirstUse : this.enemyAllyBuffFirstUse;
                 if (!firstUseSet.has(ability.name)) {
                     firstUseSet.add(ability.name);
@@ -1076,14 +1081,6 @@ class Battle {
                 }
             });
 
-            // Self-heal: applied after buffs if the effect defines a selfHealPercent
-            if (effect.selfHealPercent) {
-                const healAmount = user.healPercent(effect.selfHealPercent);
-                if (healAmount > 0) {
-                    this.addLog(`${user.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
-                }
-            }
-
             // --- ALV: ELVEN CRAFTSMANSHIP ---
             // If the user is Alv family and the ability buffs only Strength or only Wisdom,
             // also apply the same total stages to the mirror stat on the target.
@@ -1101,10 +1098,10 @@ class Battle {
                 }
             }
         } else if (effect.type === 'debuff') {
-    const targetVasen = isPlayer ? target : this.playerActive;
-    const stats = effect.stats || [effect.stat];
+            const targetVasen = isPlayer ? target : this.playerActive;
+            const stats = effect.stats || [effect.stat];
             
-            // Wynja: block first debuff
+            // Wynja: block first debuff entirely (including the first-use bonus)
             if (!targetVasen.battleFlags.wynjaTriggered && targetVasen.hasRune('WYNJA')) {
                 targetVasen.battleFlags.wynjaTriggered = true;
                 this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
@@ -1117,8 +1114,29 @@ class Battle {
                 this.addLog(`${targetVasen.getDisplayName()}'s ${randomStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${stageWord}!`, 'buff');
                 return effects;
             }
-            
+
+            // Determine whether this is the first use of this debuff ability this battle for this side.
+            let firstUseBonusStages = 0;
+            if (GAME_CONFIG.DEBUFF_FIRST_USE_BONUS > 0) {
+                const firstUseSet = isPlayer ? this.playerDebuffFirstUse : this.enemyDebuffFirstUse;
+                if (!firstUseSet.has(ability.name)) {
+                    firstUseSet.add(ability.name);
+                    firstUseBonusStages = GAME_CONFIG.DEBUFF_FIRST_USE_BONUS;
+                }
+            }
+
             stats.forEach(stat => {
+                // Apply bonus stages on first use (extra lowering)
+                if (firstUseBonusStages > 0) {
+                    const bonusResult = targetVasen.modifyAttributeStage(stat, -firstUseBonusStages);
+                    if (bonusResult.changed !== 0) {
+                        const stageWord = Math.abs(bonusResult.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`First use bonus! ${targetVasen.getDisplayName()}'s ${stat} was lowered by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'debuff');
+                        effects.push({ stat, change: bonusResult.changed });
+                    }
+                }
+
+                // Apply the regular stages
                 const result = targetVasen.modifyAttributeStage(stat, -effect.stages);
                 if (result.capped) {
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} cannot be lowered any further.`, 'status');
@@ -1263,28 +1281,8 @@ class Battle {
             if (ability && ability.type === ATTACK_TYPES.UTILITY) {
                 this.trackEnemyUtilityUsage(this.enemyActive, action.ability);
             }
-
-            // For ally-targeting buff abilities, pick the best alive non-active enemy team member.
-            // Prefer the ally with the lowest current value of the stat being buffed (gains most
-            // from the buff); break ties by highest HP ratio (most likely to survive to use it).
-            let enemyAllyTarget = null;
-            if (ability && ability.effect && ability.effect.target === 'ally') {
-                const buffStat = ability.effect.stat || (ability.effect.stats && ability.effect.stats[0]);
-                const candidates = this.enemyTeam.filter(v => v !== this.enemyActive && !v.isKnockedOut());
-                if (candidates.length > 0) {
-                    enemyAllyTarget = candidates.reduce((best, v) => {
-                        const vStatVal   = buffStat ? v.calculateAttribute(buffStat)    : 0;
-                        const bStatVal   = buffStat ? best.calculateAttribute(buffStat) : 0;
-                        if (vStatVal !== bStatVal) return vStatVal < bStatVal ? v : best;
-                        // Tiebreak: higher HP ratio
-                        const vHpRatio   = v.currentHealth    / v.maxHealth;
-                        const bestHpRatio = best.currentHealth / best.maxHealth;
-                        return vHpRatio > bestHpRatio ? v : best;
-                    });
-                }
-            }
-
-            return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false, enemyAllyTarget);
+            
+            return this.executeAbility(this.enemyActive, this.playerActive, action.ability, false, null);
         }
         
         return null;

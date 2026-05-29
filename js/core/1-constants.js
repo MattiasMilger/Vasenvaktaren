@@ -82,9 +82,8 @@ const GAME_CONFIG = {
     FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
     FREYASTEARS_HEALTH_REGEN_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
-    ALLY_BUFF_FIRST_USE_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead)
-
-    THICK_COAT_HEAL_PERCENT: 0.01,      // % of max health restored when using Thick Coat
+    ALLY_BUFF_FIRST_USE_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead, Thick Coat)
+    DEBUFF_FIRST_USE_BONUS: 1,          // Extra attribute stages lowered on the first use of a debuff ability per side (Enchanting Song, Burning Insult)
 
     // =============================================================================
     // HEALING
@@ -491,7 +490,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.WIND]: { durability: 5 }
 };
 
-const ABILITY_LEARN_LEVELS = [1, 5, 10, 15];
+const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
 
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },

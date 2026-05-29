@@ -110,7 +110,7 @@ const ABILITIES = {
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
         power: 38,
-        meginCost: 55,
+        meginCost: 50,
         retaliationBonus: GAME_CONFIG.ROTVALTA_BONUS
     },
     'Elven Light': {
@@ -138,13 +138,13 @@ const ABILITIES = {
         name: 'Thick Coat',
         flavorDescription: 'Grows a thick protective hide.',
         get mechanicsDescription() {
-            return `Raises your Defense and Durability by 1 stage. Heals ${Math.round(GAME_CONFIG.THICK_COAT_HEAL_PERCENT * 100)}% of max HP.`;
+            return `Raises your Defense and Durability by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 30,
-        effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1, selfHealPercent: GAME_CONFIG.THICK_COAT_HEAL_PERCENT }
+        effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1 }
     },
 
     // Water Abilities
@@ -262,12 +262,14 @@ const ABILITIES = {
     'Burning Insult': {
         name: 'Burning Insult',
         flavorDescription: 'Hurls a vicious, withering curse that crushes the enemy\'s resolve.',
-        mechanicsDescription: 'Lowers enemy Defense and Durability by 2 stages.',
+        get mechanicsDescription() {
+            return `Lowers enemy Defense and Durability by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
+        },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 38,
-        effect: { type: 'debuff', target: 'enemy', stats: ['defense', 'durability'], stages: 2 }
+        meginCost: 30,
+        effect: { type: 'debuff', target: 'enemy', stats: ['defense', 'durability'], stages: 1 }
     },
 
     // Wind Abilities
@@ -316,7 +318,9 @@ const ABILITIES = {
     'Enchanting Song': {
         name: 'Enchanting Song',
         flavorDescription: 'Plays a haunting tune that distracts the enemy.',
-        mechanicsDescription: 'Lowers enemy Strength and Wisdom by 1 stage.',
+        get mechanicsDescription() {
+            return `Lowers enemy Strength and Wisdom by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
+        },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
