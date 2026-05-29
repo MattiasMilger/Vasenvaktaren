@@ -463,7 +463,7 @@ UIController.prototype.renderActionButtons = function(battle) {
         offerBtn.classList.remove('tutorial-blink');
     }
 
-    document.getElementById('btn-ask').disabled =
+    document.getElementById('btn-interrogate').disabled =
         !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.isEndlessTower ||
         activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle;
     document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction || battle.isAutoBattle;
@@ -640,7 +640,7 @@ UIController.prototype.triggerAttackAnimation = function(side, abilityType) {
             animationClass = side === 'player' ? 'attacking-player' : 'attacking-enemy';
             duration = 500;
         } else {
-            // No animation for non-ability actions (pass, offer, ask, surrender)
+            // No animation for non-ability actions (pass, offer, interrogate, surrender)
             return;
         }
 

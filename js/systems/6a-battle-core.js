@@ -48,13 +48,9 @@ class Battle {
         // Enemy utility usage tracking (for AI)
         this.enemyUtilityUsage = new Map(); // "vasenId-abilityName" -> count
 
-        // Ally buff first-use tracking (per side, per ability name)
-        this.playerAllyBuffFirstUse = new Set();
-        this.enemyAllyBuffFirstUse = new Set();
-
-        // Debuff first-use tracking (per side, per ability name)
-        this.playerDebuffFirstUse = new Set();
-        this.enemyDebuffFirstUse = new Set();
+        // Initial Bonus tracking (per side, per ability name)
+        this.playerInitialBonusUsed = new Set();
+        this.enemyInitialBonusUsed = new Set();
         
         // Callbacks for UI updates
         this.onLog = null;
@@ -103,8 +99,8 @@ class Battle {
             case 'offer':
                 result = this.offerItem(action.itemId);
                 break;
-            case 'ask':
-                result = this.askAboutItem();
+            case 'interrogate':
+                result = this.interrogate();
                 break;
             case 'pass':
                 result = this.playerPass();
@@ -482,8 +478,8 @@ class Battle {
         return { success: true, correct: isCorrect };
     }
     
-    // Player action: ask about item
-    askAboutItem() {
+    // Player action: Interrogate
+    interrogate() {
         if (this.isOver) return null;
         
         this.startTurn();
@@ -495,7 +491,7 @@ class Battle {
         
         // 2. Enemy acts (player passes)
         const enemyAction = this.getEnemyAction();
-        const results = { player: { action: 'ask' }, enemy: null };
+        const results = { player: { action: 'interrogate' }, enemy: null };
         results.enemy = this.executeEnemyAction(enemyAction);
         
         // 3. Add the dialogue with Colons so the UI can bold the names
@@ -1012,29 +1008,29 @@ class Battle {
                 targetVasen = user;
             }
 
-            // Determine whether this is the first use of a buff ability this battle for this side
+            // Determine whether this is the first use of a buff ability this battle for this side.
             // (applies to both ally-targeted and self-targeted buffs).
             // The bonus is applied to the direct target; Gifu then shares the full total to all
             // other allies in one pass.
-            let firstUseBonusStages = 0;
-            if ((effect.target === 'ally' || effect.target === 'self') && GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS > 0) {
-                const firstUseSet = isPlayer ? this.playerAllyBuffFirstUse : this.enemyAllyBuffFirstUse;
-                if (!firstUseSet.has(ability.name)) {
-                    firstUseSet.add(ability.name);
-                    firstUseBonusStages = GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS;
+            let initialBonusStages = 0;
+            if (ability.initialBonus) {
+                const initialBonusSet = isPlayer ? this.playerInitialBonusUsed : this.enemyInitialBonusUsed;
+                if (!initialBonusSet.has(ability.name)) {
+                    initialBonusSet.add(ability.name);
+                    initialBonusStages = ability.initialBonus;
                 }
             }
 
-            const totalStagesToShare = effect.stages + firstUseBonusStages;
+            const totalStagesToShare = effect.stages + initialBonusStages;
             const stats = effect.stats || [effect.stat];
 
             stats.forEach(stat => {
                 // Apply bonus stages to the direct target first (if any)
-                if (firstUseBonusStages > 0) {
-                    const bonusResult = targetVasen.modifyAttributeStage(stat, firstUseBonusStages);
+                if (initialBonusStages > 0) {
+                    const bonusResult = targetVasen.modifyAttributeStage(stat, initialBonusStages);
                     if (bonusResult.changed !== 0) {
                         const stageWord = Math.abs(bonusResult.changed) === 1 ? 'stage' : 'stages';
-                        this.addLog(`First use bonus! ${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'buff');
+                        this.addLog(`Initial bonus! ${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'buff');
                         effects.push({ stat, change: bonusResult.changed });
                     }
                 }
@@ -1116,22 +1112,22 @@ class Battle {
             }
 
             // Determine whether this is the first use of this debuff ability this battle for this side.
-            let firstUseBonusStages = 0;
-            if (GAME_CONFIG.DEBUFF_FIRST_USE_BONUS > 0) {
-                const firstUseSet = isPlayer ? this.playerDebuffFirstUse : this.enemyDebuffFirstUse;
-                if (!firstUseSet.has(ability.name)) {
-                    firstUseSet.add(ability.name);
-                    firstUseBonusStages = GAME_CONFIG.DEBUFF_FIRST_USE_BONUS;
+            let initialBonusStages = 0;
+            if (ability.initialBonus) {
+                const initialBonusSet = isPlayer ? this.playerInitialBonusUsed : this.enemyInitialBonusUsed;
+                if (!initialBonusSet.has(ability.name)) {
+                    initialBonusSet.add(ability.name);
+                    initialBonusStages = ability.initialBonus;
                 }
             }
 
             stats.forEach(stat => {
                 // Apply bonus stages on first use (extra lowering)
-                if (firstUseBonusStages > 0) {
-                    const bonusResult = targetVasen.modifyAttributeStage(stat, -firstUseBonusStages);
+                if (initialBonusStages > 0) {
+                    const bonusResult = targetVasen.modifyAttributeStage(stat, -initialBonusStages);
                     if (bonusResult.changed !== 0) {
                         const stageWord = Math.abs(bonusResult.changed) === 1 ? 'stage' : 'stages';
-                        this.addLog(`First use bonus! ${targetVasen.getDisplayName()}'s ${stat} was lowered by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'debuff');
+                        this.addLog(`Initial bonus! ${targetVasen.getDisplayName()}'s ${stat} was lowered by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'debuff');
                         effects.push({ stat, change: bonusResult.changed });
                     }
                 }
@@ -1449,7 +1445,7 @@ class Battle {
                         }
                         
                         // Gifu Sharing
-                        if (vasen.hasRune('GIFU')) {
+                        if (vasen.hasRune('GIFU') && item.stages > 0) {
                             if (!vasen.battleFlags.gifuTriggered) {
                                 vasen.battleFlags.gifuTriggered = true;
                                 this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');

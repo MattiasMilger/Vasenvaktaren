@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Combat action buttons
     document.getElementById('btn-offer').addEventListener('click', () => game.showOfferModal());
-    document.getElementById('btn-ask').addEventListener('click', () => game.handleAskItem());
+    document.getElementById('btn-interrogate').addEventListener('click', () => game.handleInterrogate());
     document.getElementById('btn-pass').addEventListener('click', () => game.handlePass());
     document.getElementById('btn-surrender').addEventListener('click', () => game.handleSurrender());
     document.getElementById('btn-auto-battle').addEventListener('click', () => game.handleAutoBattle());

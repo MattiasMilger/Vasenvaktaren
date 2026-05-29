@@ -54,14 +54,14 @@ Game.prototype.handleOfferItem = function(itemId) {
     this.currentBattle.executePlayerAction({ type: 'offer', itemId });
 };
 
-// Handle ask about item confirmation
-Game.prototype.handleAskItem = function() {
+// Handle Interrogate confirmation
+Game.prototype.handleInterrogate = function() {
     if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
     if (!this.currentBattle.isWildEncounter) return;
 
     // Show the confirmation dialog
     ui.showDialogue(
-        'Ask About Item',
+        'Interrogate',
         '<p>Beware, this action will cost a turn.</p>',
         [
             {
@@ -82,7 +82,7 @@ Game.prototype.handleAskItem = function() {
 
                     // Execute the action with pre-formatted names so the UI can bold them
                     this.currentBattle.executePlayerAction({ 
-                        type: 'ask',
+                        type: 'interrogate',
                         playerLine: `${player}: Tell me ${enemyName}, what is it that you desire the most?`,
                         enemyLine: `${enemyName}: If you must know, ${itemName} is what I desire most.`
                     });

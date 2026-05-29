@@ -55,7 +55,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Basic Strike** | Free attack using your element |
 | **Swap** | Change active Väsen (causes Swap Sickness) |
 | **Offer Item** | Offer taming items to wild Väsen |
-| **Ask About Item** | Learn what item the Väsen wants |
+| **Interrogate** | Learn what item the Väsen wants |
 | **Pass** | Skip your turn |
 | **Surrender** | Exit combat (reduces party to 5% health) |
 | **Auto Battle** | Let AI take control |

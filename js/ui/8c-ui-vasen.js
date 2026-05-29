@@ -671,6 +671,7 @@ UIController.prototype.renderAbilitiesList = function(vasen) {
                     </div>
                     <span class="ability-cost">Megin: ${meginCost}</span>
                     ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
+                    ${ability.initialBonus ? `<span class="ability-initial-bonus">Initial Bonus: ${ability.initialBonus}</span>` : ''}
                 </div>
                 <p class="ability-description">${ability.flavorDescription} ${ability.mechanicsDescription}</p>
                 ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}

@@ -56,20 +56,19 @@ const ABILITIES = {
     'Smithing': {
         name: 'Smithing',
         flavorDescription: 'Channels ancient forging magic to an ally, awakening their might.',
-        get mechanicsDescription() {
-            return `Raises an ally\'s Strength by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
-        },
+        mechanicsDescription: `Raises an ally\'s Strength by 1 stage.`,
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 40,
-        effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 }
+        effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 },
+        initialBonus: 1
     },
     'Giantsbane': {
         name: 'Giantsbane',
         flavorDescription: 'Delivers a crushing blow that turns an enemy\'s vitality into their own downfall.',
         get mechanicsDescription() {
-            return `Hits enemy. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's current HP.`;
+            return `Hits enemy. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target\'s current HP.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -137,14 +136,13 @@ const ABILITIES = {
     'Thick Coat': {
         name: 'Thick Coat',
         flavorDescription: 'Toughens your body to endure the harshest elements and fiercest strikes.',
-        get mechanicsDescription() {
-            return `Raises your Defense and Durability by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
-        },
+        mechanicsDescription: `Raises your Defense and Durability by 1 stage.`,
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 30,
-        effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1 }
+        effect: { type: 'buff', target: 'self', stats: ['defense', 'durability'], stages: 1 },
+        initialBonus: 1
     },
 
     // Water Abilities
@@ -193,14 +191,13 @@ const ABILITIES = {
     'Skald\'s Mead': {
         name: 'Skald\'s Mead',
         flavorDescription: 'Passes mead to an ally, clarifying their mind and sharpening their focus.',
-        get mechanicsDescription() {
-            return `Raises an ally\'s Wisdom by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
-        },
+        mechanicsDescription: `Raises an ally\'s Wisdom by 1 stage.`,
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 40,
-        effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 }
+        effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 },
+        initialBonus: 1
     },
 
     // Fire Abilities
@@ -262,14 +259,13 @@ const ABILITIES = {
     'Burning Insult': {
         name: 'Burning Insult',
         flavorDescription: 'Hurls a vicious, withering curse that crushes the enemy\'s resolve.',
-        get mechanicsDescription() {
-            return `Lowers enemy\'s defense and durability by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
-        },
+        mechanicsDescription: `Lowers enemy\'s defense and durability by 1 stage.`,
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 30,
-        effect: { type: 'debuff', target: 'enemy', stats: ['defense', 'durability'], stages: 1 }
+        effect: { type: 'debuff', target: 'enemy', stats: ['defense', 'durability'], stages: 1 },
+        initialBonus: 1
     },
 
     // Wind Abilities
@@ -318,25 +314,24 @@ const ABILITIES = {
     'Enchanting Song': {
         name: 'Enchanting Song',
         flavorDescription: 'Plays a haunting, otherworldly tune that deeply entrances the enemy.',
-        get mechanicsDescription() {
-            return `Lowers enemy\'s strength and wisdom by 1 stage. -${GAME_CONFIG.DEBUFF_FIRST_USE_BONUS} extra on first use.`;
-        },
+        mechanicsDescription: `Lowers enemy\'s strength and wisdom by 1 stage.`,
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 30,
-        effect: { type: 'debuff', target: 'enemy', stats: ['strength', 'wisdom'], stages: 1 }
+        effect: { type: 'debuff', target: 'enemy', stats: ['strength', 'wisdom'], stages: 1 },
+        initialBonus: 1
     },
     'Tyr\'s Sacrifice': {
         name: 'Tyr\'s Sacrifice',
         flavorDescription: 'Severs a piece of your own vitality to secure a desperate, fateful blessing.',
         get mechanicsDescription() {
-            return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of max HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
+            return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of current HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 45,
+        meginCost: 30,
         effect: { type: 'tyrs_sacrifice' }
     },
 

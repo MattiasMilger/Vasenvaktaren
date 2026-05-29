@@ -75,15 +75,14 @@ const GAME_CONFIG = {
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
-    TYRS_SACRIFICE_HEALTH_COST: 0.25,   // Fraction of max HP sacrificed when using Tyr's Sacrifice
+    TYRS_SACRIFICE_HEALTH_COST: 0.3,   // Fraction of current HP sacrificed when using Tyr's Sacrifice
     TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all stats when using Tyr's Sacrifice
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
     FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
     FREYASTEARS_HEALTH_REGEN_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
-    ALLY_BUFF_FIRST_USE_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead, Thick Coat)
-    DEBUFF_FIRST_USE_BONUS: 1,          // Extra attribute stages lowered on the first use of a debuff ability per side (Enchanting Song, Burning Insult)
+    INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead, Thick Coat)
 
     // =============================================================================
     // HEALING

@@ -211,7 +211,7 @@
                     <div class="action-buttons">
                         <button id="btn-swap" class="btn btn-action">Swap</button>
                         <button id="btn-offer" class="btn btn-action">Offer Item</button>
-                        <button id="btn-ask" class="btn btn-action">Ask About Item</button>
+                        <button id="btn-interrogate" class="btn btn-action">Interrogate</button>
                         <button id="btn-pass" class="btn btn-action">Pass</button>
                         <button id="btn-surrender" class="btn btn-danger">Surrender</button>
                         <button id="btn-auto-battle" class="btn btn-action btn-auto-battle">Auto Battle</button>
@@ -404,7 +404,7 @@
             <h3 class="modal-title">Game Guide</h3> <br>
             <div class="tips-content">
                 <h4>Taming</h4>
-                <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or asking the Väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
+                <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
 
                 <!-- Attributes Section -->
                 <h4>Attributes</h4>
@@ -446,6 +446,9 @@
                 <h4>Attribute Stages</h4>
                 <p>Some abilities and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
                 <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
+                
+                <h4>Initial Bonus</h4>
+                <p>Certain utility abilities have an "Initial Bonus" that grants extra attribute stages on their first use in a battle. This bonus is tracked per ability, per side, and only applies once per combat.</p>
 
                 <h4>Experience & Leveling</h4>
                 <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
