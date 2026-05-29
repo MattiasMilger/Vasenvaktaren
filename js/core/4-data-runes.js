@@ -91,7 +91,7 @@ const RUNES = {
         fullName: 'Hagal',
         flavor: 'The rune of chaotic, natural destruction. It strips the elegance from arcane power, forcing the wielder\'s insightful attacks to rely instead on overwhelming physical impact.',
         get effect() {
-            return `When this väsen is knocked out, the opponent gets all Attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
+            return `When this väsen is knocked out, the enemy gets all Attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
         },
         mechanic: { type: 'debuff_on_knockout' }
     },
@@ -100,7 +100,7 @@ const RUNES = {
         symbol: 'ᚾ',
         name: 'Naudiz',
         fullName: 'Naudiz',
-        flavor: 'The painful, inescapable pressure of need. Even the weakest attack carries a profound psychological weight, draining the opponent\'s strength and focus.',
+        flavor: 'The painful, inescapable pressure of need. Even the weakest attack carries a profound psychological weight, draining the enemy\'s strength and focus.',
         get effect() {
             return `This väsen's weak hits lower ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT} random enemy attributes by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} stage`;
         },

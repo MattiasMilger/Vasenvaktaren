@@ -15,7 +15,7 @@ const ABILITIES = {
         name: 'Ground Stomp',
         flavorDescription: 'Slams the ground with force, sending a stunning shockwave through the bedrock.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -26,7 +26,7 @@ const ABILITIES = {
     'Boulder Toss': {
         name: 'Boulder Toss',
         flavorDescription: 'Hurls a colossal, jagged rock, delivering the crushing weight of a mountain.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -36,7 +36,7 @@ const ABILITIES = {
         name: 'Sinkhole',
         flavorDescription: 'The earth softens and collapses, opening a treacherous pit beneath the enemy.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
@@ -47,7 +47,7 @@ const ABILITIES = {
     'Landslide': {
         name: 'Landslide',
         flavorDescription: 'Summons a chaotic torrent of debris, burying the enemy under loose soil and stone.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.WISDOM,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -67,9 +67,9 @@ const ABILITIES = {
     },
     'Giantsbane': {
         name: 'Giantsbane',
-        flavorDescription: 'Strikes with the  might of a giant slayer.',
+        flavorDescription: 'Delivers a crushing blow that turns a towering enemy\'s massive vitality into their own downfall.',
         get mechanicsDescription() {
-            return `Hits opponent. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's current HP.`;
+            return `Hits enemy. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's current HP.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -82,9 +82,9 @@ const ABILITIES = {
     // Nature Abilities
     'Vine Whip': {
         name: 'Vine Whip',
-        flavorDescription: 'Swift, thorny vines lash out from the wilderness, tangling and striking the target.',
+        flavorDescription: 'Commands swift, thorny briars to explode from the wilderness and lash the enemy.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
@@ -95,7 +95,7 @@ const ABILITIES = {
     'Wild Bite': {
         name: 'Wild Bite',
         flavorDescription: 'A savage, powerful clenching of jaws, fueled by the primal ferocity of the deep forest.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -103,9 +103,9 @@ const ABILITIES = {
     },
     'Rotvalta': {
         name: 'Rotvälta',
-        flavorDescription: 'Nature itself recoils. A sudden, crushing eruption of roots triggered by the enemy\'s aggression.',
+        flavorDescription: 'A sudden, crushing eruption of roots triggered by the enemy\'s aggression.',
         get mechanicsDescription() {
-            return `Hits opponent. +${GAME_CONFIG.ROTVALTA_BONUS} power if they attack you.`;
+            return `Hits enemy. +${GAME_CONFIG.ROTVALTA_BONUS} power if they attack you.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.STRENGTH,
@@ -117,7 +117,7 @@ const ABILITIES = {
         name: 'Elven Light',
         flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the twilight mist.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
@@ -128,7 +128,7 @@ const ABILITIES = {
     'Moon Beam': {
         name: 'Moon Beam',
         flavorDescription: 'Gathers the potent, chilling energy of the moon into a destructive ray.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -136,7 +136,7 @@ const ABILITIES = {
     },
     'Thick Coat': {
         name: 'Thick Coat',
-        flavorDescription: 'Grows a thick protective hide.',
+        flavorDescription: 'Toughens your body to endure the harshest elements and most brutal enemy strikes.',
         get mechanicsDescription() {
             return `Raises your Defense and Durability by 1 stage. +${GAME_CONFIG.ALLY_BUFF_FIRST_USE_BONUS} on first use.`;
         },
@@ -150,9 +150,9 @@ const ABILITIES = {
     // Water Abilities
     'Drown': {
         name: 'Drown',
-        flavorDescription: 'Violently drags the opponent down and suffocates them.',
+        flavorDescription: 'Violently drags the enemy down and suffocates them.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
@@ -163,7 +163,7 @@ const ABILITIES = {
     'Icicle Spear': {
         name: 'Icicle Spear',
         flavorDescription: 'Throws a sharp, glacial shard of ice, capable of piercing thick materials.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.STRENGTH,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -173,7 +173,7 @@ const ABILITIES = {
         name: 'Hail Storm',
         flavorDescription: 'A sudden, freezing downpour of stinging ice and freezing wind.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
@@ -184,7 +184,7 @@ const ABILITIES = {
     'Tidal Wave': {
         name: 'Tidal Wave',
         flavorDescription: 'Evokes a massive, surging wall of ocean water to engulf the battlefield.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -208,7 +208,7 @@ const ABILITIES = {
         name: 'Torch Strike',
         flavorDescription: 'A searing blow with a burning torch, delivering raw heat.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
@@ -219,7 +219,7 @@ const ABILITIES = {
     'Flaming Skewer': {
         name: 'Flaming Skewer',
         flavorDescription: 'Impales the enemy with a lance of fire, leaving a burning, painful wound.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.STRENGTH,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -229,7 +229,7 @@ const ABILITIES = {
         name: 'Fire Breath',
         flavorDescription: 'Exhales a short, scorching gust of flame from the creature\'s core.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
@@ -240,7 +240,7 @@ const ABILITIES = {
     'Lava Jet': {
         name: 'Lava Jet',
         flavorDescription: 'A volcanic burst, shooting a devastating stream of molten rock.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -250,12 +250,12 @@ const ABILITIES = {
         name: 'Loki\'s Betrayal',
         flavorDescription: 'A deep cut from the dark, causing more damage to the weak and frail.',
         get mechanicsDescription() {
-        return `Hits opponent. +${GAME_CONFIG.LOKISBETRAYAL_BONUS} power if target is debuffed.`;
+        return `Hits enemy. +${GAME_CONFIG.LOKISBETRAYAL_BONUS} power if enemy is debuffed.`;
     },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,
         power: 50,
-        opponent_debuff_bonus: GAME_CONFIG.LOKISBETRAYAL_BONUS,
+        enemy_debuff_bonus: GAME_CONFIG.LOKISBETRAYAL_BONUS,
         meginCost: 50,
         lokiBetrayalBonus: true
     },
@@ -277,7 +277,7 @@ const ABILITIES = {
         name: 'Storm Claw',
         flavorDescription: 'A quick, brutal strike delivered with claws riding the speed of a gale.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
@@ -287,8 +287,8 @@ const ABILITIES = {
     },
     'Sky Dive': {
         name: 'Sky Dive',
-        flavorDescription: 'Plummets from a great height, impacting the target with crushing force.',
-        mechanicsDescription: 'Hits opponent.',
+        flavorDescription: 'Plummets from a great height, impacting the enemy with crushing force.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.STRENGTH,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -296,9 +296,9 @@ const ABILITIES = {
     },
     'Wailing Cry': {
         name: 'Wailing Cry',
-        flavorDescription: 'Unleashes an agonizing, ghostly shriek that assails the opponent\'s senses.',
+        flavorDescription: 'Unleashes an agonizing, ghostly shriek that assails the enemy\'s senses.',
         get mechanicsDescription() {
-            return `Hits opponent. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
+            return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
@@ -309,7 +309,7 @@ const ABILITIES = {
     'Wind Gust': {
         name: 'Wind Gust',
         flavorDescription: 'Whips up a powerful, chaotic blast of air to push and punish the enemy.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.WISDOM,
         power: GAME_CONFIG.TIER2_ATTACK_ABILITY_POWER,
@@ -329,7 +329,7 @@ const ABILITIES = {
     },
     'Tyr\'s Sacrifice': {
         name: 'Tyr\'s Sacrifice',
-        flavorDescription: 'A solemn vow sealed in life-essence, mirroring the god Tyr\'s sacrifice of his hand to bind Fenrir.',
+        flavorDescription: 'Severs a piece of your own vitality to secure a desperate, war-turning blessing.',
         get mechanicsDescription() {
             return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of max HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
         },
@@ -358,7 +358,7 @@ const ABILITIES = {
     'Basic Strike': {
         name: 'Basic Strike',
         flavorDescription: 'A reflexive and adaptable strike fueled by your element.',
-        mechanicsDescription: 'Hits opponent.',
+        mechanicsDescription: 'Hits enemy.',
         element: null, // Uses the Väsen's own element
         type: ATTACK_TYPES.MIXED,
         power: 20,

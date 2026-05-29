@@ -672,7 +672,7 @@ class Battle {
         
         // Check knockout
         if (willKnockout) {
-            // Hagal rune: Debuff opponent on knockout (triggers BEFORE revive check)
+            // Hagal rune: Debuff enemy on knockout (triggers BEFORE revive check)
             if (defender.hasRune('HAGAL')) {
                 this.addLog(`${defender.getDisplayName()}'s ${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
                 ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
@@ -861,7 +861,7 @@ class Battle {
             const defenderStages = defender.attributeStages;
             const hasNegativeStage = Object.values(defenderStages).some(stage => stage < 0);
             if (hasNegativeStage) {
-                power += ability.opponent_debuff_bonus;
+                power += ability.enemy_debuff_bonus;
             }
         }
         

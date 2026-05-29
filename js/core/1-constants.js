@@ -295,7 +295,7 @@ const ELEMENT_COLORS = {
 };
 
 const ELEMENT_FLAVOR = {
-    [ELEMENTS.EARTH]: 'The element of stone, soil, and shielding.',
+    [ELEMENTS.EARTH]: 'The element of stone, soil, and the forge.',
     [ELEMENTS.NATURE]: 'The element of growth, forest, and life.',
     [ELEMENTS.WATER]: 'The element of rivers, seas, and insight.',
     [ELEMENTS.FIRE]: 'The element of flame, heat, and might.',
