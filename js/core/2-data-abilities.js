@@ -67,7 +67,7 @@ const ABILITIES = {
     },
     'Giantsbane': {
         name: 'Giantsbane',
-        flavorDescription: 'Delivers a crushing blow that turns a towering enemy\'s massive vitality into their own downfall.',
+        flavorDescription: 'Delivers a crushing blow that turns an enemy\'s vitality into their own downfall.',
         get mechanicsDescription() {
             return `Hits enemy. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target's current HP.`;
         },
