@@ -162,7 +162,7 @@ class EnemyAI {
                 }
             }
 
-            // Rotvälta: estimate the probability the opponent will attack this turn.
+            // Rotvälta: estimate the probability the enemy will attack this turn.
             // Turn 0 is commonly a setup round (buffs, utility), so the chance is lower.
             // From turn 1 onward attacks are far more likely, so the estimated bonus is higher.
             // The max bonus (25) is intentionally moderate — the AI cannot know for certain.

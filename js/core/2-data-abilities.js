@@ -82,7 +82,7 @@ const ABILITIES = {
     // Nature Abilities
     'Vine Whip': {
         name: 'Vine Whip',
-        flavorDescription: 'Commands swift, thorny briars to explode from the wilderness and lash the enemy.',
+        flavorDescription: 'Commands swift, thorny briars from the wilderness to lash the enemy.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT * 100)}%.`;
         },
