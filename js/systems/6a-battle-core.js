@@ -820,7 +820,23 @@ class Battle {
         }
         
         // Element matchup
-        const matchup = getMatchupType(abilityElement, defender.species.element);
+        let matchup = getMatchupType(abilityElement, defender.species.element);
+        
+        // Jätte passive: Jotun's Fury
+        if (
+            attacker.species.family === FAMILIES.JATTE &&
+            !attacker.battleFlags.jattePassiveTriggered &&
+            attacker.currentHealth / attacker.maxHealth <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD
+        ) {
+            attacker.battleFlags.jattePassiveTriggered = true;
+            this.addLog(`${attacker.getDisplayName()} activated Jotun\'s Fury!`, 'passive');
+            if (matchup === 'WEAK') {
+                matchup = 'NEUTRAL';
+            } else if (matchup === 'NEUTRAL') {
+                matchup = 'POTENT';
+            }
+        }
+
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
         // Damage range
@@ -860,11 +876,7 @@ class Battle {
         // Calculate damage based on attack type
         let totalDamage = 0;
         
-        // Jätte passive: Basic Strike has higher power
         let power = ability.power;
-        if (abilityName === 'Basic Strike' && attacker.species.family === FAMILIES.JATTE) {
-            power = FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER;
-        }
         
         // Loki's Betrayal: +35 power if the defender has any negative attribute stage
         if (ability.lokiBetrayalBonus) {
@@ -924,7 +936,23 @@ class Battle {
         const reflectElement = defender.species.element;
         
         // Element matchup for the reflection
-        const matchup = getMatchupType(reflectElement, attacker.species.element);
+        let matchup = getMatchupType(reflectElement, attacker.species.element);
+        
+        // Jätte passive on reflection
+        if (
+            defender.species.family === FAMILIES.JATTE &&
+            !defender.battleFlags.jattePassiveTriggered &&
+            defender.currentHealth / defender.maxHealth <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD
+        ) {
+            defender.battleFlags.jattePassiveTriggered = true;
+            this.addLog(`${defender.getDisplayName()} activated Jotun\'s Fury!`, 'passive');
+            if (matchup === 'WEAK') {
+                matchup = 'NEUTRAL';
+            } else if (matchup === 'NEUTRAL') {
+                matchup = 'POTENT';
+            }
+        }
+        
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
         // Base reflected damage is 20% of original

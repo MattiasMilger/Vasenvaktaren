@@ -232,8 +232,8 @@ const FAMILY_PASSIVE_CONFIG = {
     DRAKE_DEFENSE_STAGES: 2,
     DRAKE_DURABILITY_STAGES: 2,
     
-    // Jätte: Colossal Power - Basic Strike always has a fixed power
-    JATTE_BASIC_STRIKE_POWER: 35,
+    // Jätte: Jotun's Fury - Upgrades an attack when health is low
+    JATTE_HEALTH_THRESHOLD: 0.50,
     
     // Odjur: Bestial Rage - gain strength and lose wisdom after completing one turn.
     ODJUR_TURNS_REQUIRED: 1,
@@ -431,9 +431,9 @@ const FAMILY_PASSIVES = {
         }
     },
     [FAMILIES.JATTE]: {
-        name: 'Colossal Power',
+        name: 'Jotun\'s Fury',
         get description() {
-            return `Basic Strike always has ${FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER} power instead of its default 20 power.`;
+            return `An attack hit will be upgraded (weak to normal, and normal to potent) when current health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower (once per battle).`;
         }
     },
     [FAMILIES.ODJUR]: {
