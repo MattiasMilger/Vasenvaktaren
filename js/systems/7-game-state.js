@@ -724,23 +724,34 @@ class GameState {
     
     // Use taming item on own Vasen for healing
     useItemOnVasen(itemId, vasenInstance) {
+        if (vasenInstance.currentHealth >= vasenInstance.maxHealth) {
+            return { success: false, message: `${vasenInstance.displayName} is already at full health.` };
+        }
+
+        const initialHealth = vasenInstance.currentHealth;
+
         if (!this.removeItem(itemId, 1)) {
             return { success: false, message: 'You do not have this item.' };
         }
+
+        const isCorrectItem = vasenInstance.species.tamingItem === itemId;
+        const healPercent = isCorrectItem ? 1.0 : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT;
+
+        const calculatedHealAmount = Math.floor(vasenInstance.maxHealth * healPercent);
         
-        const item = TAMING_ITEMS[itemId];
-        const isCorrectItem = vasenInstance.tamingItem === itemId;
-        const healPercent = isCorrectItem ? CORRECT_ITEM_HEAL_PERCENT : WRONG_ITEM_HEAL_PERCENT;
-        const healAmount = Math.floor(vasenInstance.maxHealth * healPercent);
-        
-        vasenInstance.currentHealth = Math.min(vasenInstance.maxHealth, vasenInstance.currentHealth + healAmount);
-        
-        this.saveGame();
-        
+        // Determine the actual health restored, capping at maxHealth
+        const newHealth = Math.min(vasenInstance.maxHealth, initialHealth + calculatedHealAmount);
+        const healAmount = newHealth - initialHealth;
+        vasenInstance.currentHealth = newHealth;
+
         const percentDisplay = Math.round(healPercent * 100);
-        return { 
-            success: true, 
-            message: `${vasenInstance.displayName} health restored ${percentDisplay}%.`,
+        const message = `${vasenInstance.displayName} health restored ${percentDisplay}%. (+${healAmount} HP)`;
+
+        this.saveGame();
+
+        return {
+            success: true,
+            message: message,
             healAmount: healAmount
         };
     }

@@ -93,6 +93,7 @@ UIController.prototype.renderParty = function() {
 
     // Inject the Auto Equip Runes button into the party section (once)
     this._ensureAutoRunesButton();
+    this._ensureAutoHealButton();
 };
 
 // Inject the Auto Equip Runes button after the party slots if it doesn't exist yet
@@ -558,4 +559,94 @@ UIController.prototype.confirmReleaseVasen = function(vasenId) {
             }
         ]
     );
+};
+
+UIController.prototype._ensureAutoHealButton = function() {
+    if (document.getElementById('auto-heal-btn')) return;
+
+    const partySection = document.querySelector('.party-section');
+    if (!partySection) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'auto-heal-btn';
+    btn.className = 'btn btn-auto-runes';
+    btn.textContent = 'Auto Heal';
+    btn.title = 'Heal your party using taming items.';
+    btn.onclick = () => this.confirmAutoHeal();
+
+    partySection.appendChild(btn);
+};
+
+UIController.prototype.confirmAutoHeal = function() {
+    this.showDialogue(
+        'Auto Heal Party?',
+        '<p>WARNING: This will consume taming items that could otherwise be used for taming väsen.</p>',
+        [
+            {
+                text: 'Heal',
+                class: 'btn-primary',
+                callback: () => this.autoHealParty()
+            },
+            {
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: null
+            }
+        ]
+    );
+};
+
+UIController.prototype.autoHealParty = function() {
+    if (gameState.inCombat) {
+        this.showMessage('Cannot heal during combat.', 'error');
+        return;
+    }
+
+    const partyVasenToHeal = gameState.party.filter(v => v && v.currentHealth < v.maxHealth);
+
+    if (partyVasenToHeal.length === 0) {
+        this.showMessage('All party väsen are at full health.', 'info');
+        return;
+    }
+
+    let vasenHealedCount = 0;
+
+    partyVasenToHeal.forEach(vasen => {
+        let itemToUse = null;
+
+        // 1. Prefer associated item
+        const associatedItem = vasen.species.tamingItem;
+        if (associatedItem && gameState.getItemCount(associatedItem) > 0) {
+            itemToUse = associatedItem;
+        } else {
+            // 2. Otherwise, use most plentiful taming item
+            const availableTamingItems = Object.keys(gameState.itemInventory)
+                .filter(itemName => gameState.getItemCount(itemName) > 0 && TAMING_ITEMS[itemName])
+                .sort((a, b) => gameState.getItemCount(b) - gameState.getItemCount(a));
+
+            if (availableTamingItems.length > 0) {
+                itemToUse = availableTamingItems[0];
+            }
+        }
+
+        if (itemToUse) {
+            const result = gameState.useItemOnVasen(itemToUse, vasen);
+            if (result.success) {
+                vasenHealedCount++;
+                this.showMessage(result.message, 'success');
+            }
+        }
+    });
+
+    if (vasenHealedCount > 0) {
+        gameState.saveGame();
+        this.renderParty();
+        this.refreshCurrentTab();
+
+        if (this.selectedVasen && gameState.party.some(v => v && v.id === this.selectedVasen.id)) {
+            this.renderVasenDetails(this.selectedVasen);
+        }
+    } else {
+        this.showMessage('No taming items available to heal.', 'error');
+    }
 };
