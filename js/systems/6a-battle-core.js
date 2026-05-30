@@ -143,6 +143,9 @@ class Battle {
         
         if (this.playerActive) {
             this.playerActive.battleFlags.hasSwapSickness = false;
+            if (isSwap) {
+                this.playerActive.battleFlags.odjurPassiveTriggered = false;
+            }
         }
         
         this.playerActive = vasen;
@@ -185,6 +188,9 @@ class Battle {
         
         if (this.enemyActive) {
             this.enemyActive.battleFlags.hasSwapSickness = false;
+            if (isSwap) {
+                this.enemyActive.battleFlags.odjurPassiveTriggered = false;
+            }
         }
         
         this.enemyActive = vasen;
@@ -280,17 +286,25 @@ class Battle {
         if (this.playerActive) {
             this.playerActive.battleFlags.hasSwapSickness = false;
             this.playerActive.battleFlags.isFirstRound = false;
-            this.playerActive.battleFlags.turnsOnField++;
         }
         if (this.enemyActive) {
             this.enemyActive.battleFlags.hasSwapSickness = false;
             this.enemyActive.battleFlags.isFirstRound = false;
-            this.enemyActive.battleFlags.turnsOnField++;
         }
         
-        // Trigger Odjur passive at the end of the turn
+        // Trigger Odjur passive at the end of the turn, before incrementing
+        // turnsOnField so the counter represents turns fully completed before
+        // this check — prevents the swap-in turn from immediately satisfying
+        // the Odjur threshold on re-entry
         this.applyFamilyPassive('onTurnEnd', { vasen: this.playerActive, isPlayer: true });
         this.applyFamilyPassive('onTurnEnd', { vasen: this.enemyActive, isPlayer: false });
+
+        if (this.playerActive) {
+            this.playerActive.battleFlags.turnsOnField++;
+        }
+        if (this.enemyActive) {
+            this.enemyActive.battleFlags.turnsOnField++;
+        }
 
         // Check for battle end
         this.checkBattleEnd();
@@ -1426,8 +1440,8 @@ class Battle {
         // --- ODJUR: BESTIAL RAGE ---
         if (trigger === 'onTurnEnd' && vasen.species.family === FAMILIES.ODJUR) {
             if (vasen.battleFlags.turnsOnField >= FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) {
-                if (!vasen.battleFlags.odjurTriggered) {
-                    vasen.battleFlags.odjurTriggered = true;
+                if (!vasen.battleFlags.odjurPassiveTriggered) {
+                    vasen.battleFlags.odjurPassiveTriggered = true;
                     this.addLog(`${vasen.getDisplayName()} activated Bestial Rage!`, 'passive');
 
                     const statsToChange = [
