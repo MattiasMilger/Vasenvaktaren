@@ -136,7 +136,7 @@ const ABILITIES = {
     'Thick Coat': {
         name: 'Thick Coat',
         flavorDescription: 'Toughens your body to endure the harshest elements and fiercest strikes.',
-        mechanicsDescription: `Raises your Defense and Durability by 1 stage.`,
+        mechanicsDescription: `Raises your defense and durability by 1 stage.`,
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
@@ -326,7 +326,7 @@ const ABILITIES = {
         name: 'Tyr\'s Sacrifice',
         flavorDescription: 'Severs a piece of your own vitality to secure a desperate, fateful blessing.',
         get mechanicsDescription() {
-            return `Sacrifice ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of current HP to raise all stats by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
+            return `Sacrifices ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of current HP to raise all attributes by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,

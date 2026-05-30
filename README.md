@@ -33,14 +33,14 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 24 equippable runes with unique effects
 - One rune slot (two at level 30)
 - Strategic combinations for different builds
-- Auto Equip Runes randomly assigns suitable runes to all party members
 
 ### Exploration
 
 - Select a zone from the zone list
 - Click "Explore" to search the zone
-- Find Items, Runes, and Väsen.
+- Find Items, Runes, and Väsen
 - Click "Challenge Guardian" to face the zone boss
+- Click "Challenge Endless Tower" for endgame challenge
 
 ### Combat System & Taming
 
@@ -66,7 +66,6 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
-- **Auto Equip Runes**: assigns random but valid runes from your collection to all party members at once
 
 ### Lore Book
 
