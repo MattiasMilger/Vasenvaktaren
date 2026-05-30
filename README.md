@@ -38,7 +38,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 - Select a zone from the zone list
 - Click "Explore" to search the zone
-- Find Items, Runes, and Väsen
+- Find items, runes, and väsen
 - Click "Challenge Guardian" to face the zone boss
 - Click "Challenge Endless Tower" for endgame challenge
 
