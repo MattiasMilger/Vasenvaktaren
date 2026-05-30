@@ -51,7 +51,7 @@ const VASEN_SPECIES = {
     'Pyssling': {
         name: 'Pyssling',
         internalName: 'Pyssling',
-        description: 'A tiny, quick-footed rafter spirit bound to high beams. Helpful when respected, they orchestrate subtle sabotage if you neglect their needs.',
+        description: 'A tiny, quick-footed rafter dweller bound to high beams. Helpful when respected, they orchestrate subtle sabotage if you neglect their needs.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
@@ -75,7 +75,7 @@ const VASEN_SPECIES = {
     'Myling': {
         name: 'Myling',
         internalName: 'Myling',
-        description: 'A perpetually wailing, agonized grave phantom of a forsaken infant, abandoned or wrongfully slain before receiving a proper burial.',
+        description: 'A perpetually wailing, agonized phantom of a forsaken infant, abandoned or wrongfully slain before receiving a proper burial.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
