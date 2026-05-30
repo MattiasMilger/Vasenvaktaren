@@ -254,10 +254,14 @@ class Battle {
             if (this[team.teamFlag] > 0 && team.vasen && !team.vasen.isKnockedOut()) {
                 const vasen = team.vasen;
 
+                // 1. Log Freya's Tears effect first
+                this.addLog(`Freya's Tears rain on ${vasen.getDisplayName()}`, 'status');
+
                 // Health regen
                 const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REGEN_PERCENT);
                 if (healAmount > 0) {
                     vasen.heal(healAmount);
+                    // 2. Log gained health right after
                     this.addLog(`${vasen.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health!`, 'heal');
                 }
 
