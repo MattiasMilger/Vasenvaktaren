@@ -107,7 +107,7 @@ Vasenvaktaren/
 │   ├── 05-buttons.css              (button styles)
 │   ├── 06-panels.css               (panels & tabs)
 │   ├── 07-vasen.css                (väsen UI)
-│   ├── 08-party.css                (party section; Auto Equip Runes button styles)
+│   ├── 08-party.css                (party section)
 │   ├── 09-zones.css                (zone section)
 │   ├── 10-combat.css               (combat UI)
 │   ├── 11-modals.css               (modal styles)
