@@ -670,6 +670,13 @@
     margin-left: var(--spacing-xs);
 }
 
+.skill-btn-initialbonus {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-left: var(--spacing-xs);
+}
+
 
 /* Action Buttons (Combat) */
 .action-buttons {

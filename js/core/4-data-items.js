@@ -236,7 +236,7 @@ const TAMING_ITEMS = {
     },
     'White Scales': {
         name: 'White Scales',
-        description: 'A handful of shimmering white scales. They radiate a faint, ancient hum; an offering to bridge the gap between man and the pale serpent king.',
+        description: 'A handful of shimmering white scales. They radiate a faint, ancient hum; an offering befitting a pale serpent.',
         tamingTarget: 'Vitorm'
     },
     'Fishing Hook': {
