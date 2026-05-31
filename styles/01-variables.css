@@ -127,7 +127,7 @@
     --megin-fill-top: #7292c8;            /* Lighter blue for bar gradient top */
     --megin-fill-portrait: #5a8aaa;       /* Muted blue for party portrait megin bar */
     --megin-bg: #1e2633;
-    --megin-highlight: #6a9aff;           /* Brighter blue — megin cost display in ability lists */
+    --megin-highlight: #6a9aff;           /* Brighter blue — megin cost display in skill lists */
     --bar-shine: rgba(255, 255, 255, 0.2); /* Inset shine on HP/MP bars */
 
     /* UI Overlay Colors */

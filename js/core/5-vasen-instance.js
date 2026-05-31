@@ -34,7 +34,7 @@ class VasenInstance {
             strength: 0,
             wisdom: 0,
             defense: 0,
-            durability: 0
+            durskill: 0
         };
         
         this.battleFlags = {
@@ -125,28 +125,28 @@ class VasenInstance {
         return Math.floor(this.maxMegin * GAME_CONFIG.MEGIN_REGEN_RATE);
     }
     
-    // Get available abilities based on level
-    getAvailableAbilities() {
-        const abilities = [];
+    // Get available skills based on level
+    getAvailableSkills() {
+        const skills = [];
         
         for (let i = 0; i < ABILITY_LEARN_LEVELS.length; i++) {
             if (this.level >= ABILITY_LEARN_LEVELS[i]) {
-                const abilityName = this.species.abilities[i];
-                if (abilityName && ABILITIES[abilityName]) {
-                    abilities.push(abilityName);
+                const skillName = this.species.skills[i];
+                if (skillName && ABILITIES[skillName]) {
+                    skills.push(skillName);
                 }
             }
         }
         
         // Basic Strike is always last
-        abilities.push('Basic Strike');
+        skills.push('Basic Strike');
         
-        return abilities;
+        return skills;
     }
     
-    // Get all ability names (for display, even if not learned)
-    getAllAbilityNames() {
-        return this.species.abilities;
+    // Get all skill names (for display, even if not learned)
+    getAllSkillNames() {
+        return this.species.skills;
     }
     
     // Check if has a specific rune
@@ -185,14 +185,14 @@ class VasenInstance {
         return true;
     }
     
-    // Get megin cost for an ability
-    getAbilityMeginCost(abilityName) {
-        return getAbilityMeginCost(abilityName, this.species.element);
+    // Get megin cost for an skill
+    getSkillMeginCost(skillName) {
+        return getSkillMeginCost(skillName, this.species.element);
     }
     
-    // Can use ability (has enough megin)
-    canUseAbility(abilityName) {
-        return this.currentMegin >= this.getAbilityMeginCost(abilityName);
+    // Can use skill (has enough megin)
+    canUseSkill(skillName) {
+        return this.currentMegin >= this.getSkillMeginCost(skillName);
     }
     
     // Spend megin
@@ -254,7 +254,7 @@ class VasenInstance {
             strength: 0,
             wisdom: 0,
             defense: 0,
-            durability: 0
+            durskill: 0
         };
         this.battleFlags = {
             hasSwapSickness: false,
@@ -272,6 +272,20 @@ class VasenInstance {
             // Empowerment system
             isEmpowered: false
         };
+    }
+
+    // Reset only the once-per-battle passive and rune flags, without touching
+    // attribute stages, health, megin, or turn counters.
+    // Used by Idunn's Apples between Endless Tower floors.
+    resetOncePerBattleFlags() {
+        this.battleFlags.gifuTriggered = false;
+        this.battleFlags.wynjaTriggered = false;
+        this.battleFlags.andePassiveTriggered = false;
+        this.battleFlags.drakePassiveTriggered = false;
+        this.battleFlags.odjurPassiveTriggered = false;
+        this.battleFlags.raPassiveTriggered = false;
+        this.battleFlags.trollPassiveTriggered = false;
+        this.battleFlags.valnadPassiveTriggered = false;
     }
     
     // Restore full resources
@@ -326,16 +340,16 @@ class VasenInstance {
         };
     }
     
-    // Get attack elements (for UI display) - only includes learned abilities
+    // Get attack elements (for UI display) - only includes learned skills
     getAttackElements() {
         const elements = new Set();
         elements.add(this.species.element); // Basic Strike uses own element
         
-        const availableAbilities = this.getAvailableAbilities();
-        availableAbilities.forEach(abilityName => {
-            const ability = ABILITIES[abilityName];
-            if (ability && ability.type !== ATTACK_TYPES.UTILITY && ability.element) {
-                elements.add(ability.element);
+        const availableSkills = this.getAvailableSkills();
+        availableSkills.forEach(skillName => {
+            const skill = ABILITIES[skillName];
+            if (skill && skill.type !== ATTACK_TYPES.UTILITY && skill.element) {
+                elements.add(skill.element);
             }
         });
         

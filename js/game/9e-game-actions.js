@@ -2,24 +2,24 @@
 // 9e-game-actions.js - Combat Action Handlers
 // =============================================================================
 
-// Handle ability use
-Game.prototype.handleAbilityUse = function(abilityName) {
+// Handle skill use
+Game.prototype.handleSkillUse = function(skillName) {
     if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
 
-    // Check if ability requires ally targeting
-    if (abilityRequiresAllyTarget(abilityName)) {
-        ui.showAllySelectionModal(this.currentBattle, abilityName, (allyIndex) => {
-            // Execute the ability on the selected ally
+    // Check if skill requires ally targeting
+    if (skillRequiresAllyTarget(skillName)) {
+        ui.showAllySelectionModal(this.currentBattle, skillName, (allyIndex) => {
+            // Execute the skill on the selected ally
             this.currentBattle.executePlayerAction({
-                type: 'ability',
-                abilityName: abilityName,
+                type: 'skill',
+                skillName: skillName,
                 targetAllyIndex: allyIndex
             });
         });
         return;
     }
 
-    this.currentBattle.executePlayerAction({ type: 'ability', abilityName });
+    this.currentBattle.executePlayerAction({ type: 'skill', skillName });
 };
 
 // Handle swap
@@ -227,10 +227,10 @@ Game.prototype.autoBattleTick = function() {
     if (!action) return;
 
     // Track utility usage for the player auto AI
-    if (action.type === 'ability') {
-        const ability = ABILITIES[action.abilityName];
-        if (ability && ability.type === ATTACK_TYPES.UTILITY && battle.playerAutoUtilityUsage) {
-            const key = `auto-${battle.playerActive.id}-${action.abilityName}`;
+    if (action.type === 'skill') {
+        const skill = ABILITIES[action.skillName];
+        if (skill && skill.type === ATTACK_TYPES.UTILITY && battle.playerAutoUtilityUsage) {
+            const key = `auto-${battle.playerActive.id}-${action.skillName}`;
             const count = battle.playerAutoUtilityUsage.get(key) || 0;
             battle.playerAutoUtilityUsage.set(key, count + 1);
         }
@@ -259,9 +259,9 @@ Game.prototype.getAutoBattleAction = function() {
         enemyActiveIndex: battle.playerActiveIndex,
         playerActiveIndex: battle.enemyActiveIndex,
         isWildEncounter: battle.isWildEncounter,
-        getEnemyUtilityUsageCount: (vasen, abilityName) => {
+        getEnemyUtilityUsageCount: (vasen, skillName) => {
             // Track player-side utility usage with a separate key prefix
-            const key = `auto-${vasen.id}-${abilityName}`;
+            const key = `auto-${vasen.id}-${skillName}`;
             return battle.playerAutoUtilityUsage ? (battle.playerAutoUtilityUsage.get(key) || 0) : 0;
         }
     };
@@ -271,8 +271,8 @@ Game.prototype.getAutoBattleAction = function() {
     const aiAction = ai.chooseAction();
 
     // Map AI action back to a player action
-    if (aiAction.type === 'ability') {
-        return { type: 'ability', abilityName: aiAction.ability };
+    if (aiAction.type === 'skill') {
+        return { type: 'skill', skillName: aiAction.skill };
     } else if (aiAction.type === 'swap') {
         const targetIndex = battle.playerTeam.indexOf(aiAction.target);
         if (targetIndex !== -1) {
@@ -281,5 +281,5 @@ Game.prototype.getAutoBattleAction = function() {
     }
 
     // Fallback to basic strike
-    return { type: 'ability', abilityName: 'Basic Strike' };
+    return { type: 'skill', skillName: 'Basic Strike' };
 };

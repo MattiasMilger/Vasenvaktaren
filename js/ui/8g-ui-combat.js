@@ -234,7 +234,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
             <div class="combat-attr"><span class="combat-attr-name">Str</span><span class="combat-attr-value">${vasen.getAttribute('strength')}</span></div>
             <div class="combat-attr"><span class="combat-attr-name">Wis</span><span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span></div>
             <div class="combat-attr"><span class="combat-attr-name">Def</span><span class="combat-attr-value">${vasen.getAttribute('defense')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
+            <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durskill')}</span></div>
         </div>
 
         <div class="combatant-description">
@@ -285,7 +285,7 @@ UIController.prototype.renderAttributeStages = function(vasen) {
         const stages = vasen.attributeStages;
         let html = '';
 
-        ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+        ['strength', 'wisdom', 'defense', 'durskill'].forEach(attr => {
             const stage = stages[attr];
             if (stage !== 0) {
                 const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -310,7 +310,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
         // Build attribute stages HTML (only for combat info)
         let stagesHtml = '';
         if (showCombatInfo) {
-            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+            ['strength', 'wisdom', 'defense', 'durskill'].forEach(attr => {
                 const stage = vasen.attributeStages[attr];
                 if (stage !== 0) {
                     const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -352,7 +352,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
                     <span class="mini-attr"><span class="attr-label">STR</span> ${getAttrValue('strength')}</span>
                     <span class="mini-attr"><span class="attr-label">WIS</span> ${getAttrValue('wisdom')}</span>
                     <span class="mini-attr"><span class="attr-label">DEF</span> ${getAttrValue('defense')}</span>
-                    <span class="mini-attr"><span class="attr-label">DUR</span> ${getAttrValue('durability')}</span>
+                    <span class="mini-attr"><span class="attr-label">DUR</span> ${getAttrValue('durskill')}</span>
                 </div>
                 ${stagesHtml ? `<div class="standard-vasen-stages">${stagesHtml}</div>` : ''}
                 ${runesHtml ? `<div class="standard-vasen-runes">${runesHtml}</div>` : ''}
@@ -405,37 +405,37 @@ UIController.prototype.renderSwapOptions = function(battle) {
 };
 
 UIController.prototype.renderActionButtons = function(battle) {
-    const actionsContainer = document.getElementById('ability-buttons');
+    const actionsContainer = document.getElementById('skill-buttons');
     actionsContainer.innerHTML = '';
 
     const activeVasen = battle.playerTeam[battle.playerActiveIndex];
     if (!activeVasen || activeVasen.isKnockedOut()) return;
 
-    const abilities = activeVasen.getAvailableAbilities();
+    const skills = activeVasen.getAvailableSkills();
 
-    abilities.forEach(abilityName => {
-        const ability = ABILITIES[abilityName];
-        if (!ability) return;
+    skills.forEach(skillName => {
+        const skill = ABILITIES[skillName];
+        if (!skill) return;
 
-        const meginCost = activeVasen.getAbilityMeginCost(abilityName);
-        const canUse = activeVasen.canUseAbility(abilityName) && !activeVasen.battleFlags.hasSwapSickness;
+        const meginCost = activeVasen.getSkillMeginCost(skillName);
+        const canUse = activeVasen.canUseSkill(skillName) && !activeVasen.battleFlags.hasSwapSickness;
 
-        const abilityElement = ability.element || activeVasen.species.element;
+        const skillElement = skill.element || activeVasen.species.element;
 
         const btn = document.createElement('button');
-        btn.className = `ability-btn element-${abilityElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
+        btn.className = `skill-btn element-${skillElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
         btn.disabled = !canUse || !battle.waitingForPlayerAction || battle.isAutoBattle;
         btn.innerHTML = `
-            <span class="ability-btn-name">${ability.name}</span>
-            <span class="ability-btn-type">${ability.type}</span>
-            <span class="ability-btn-stats">
-                <span class="ability-btn-element element-${abilityElement.toLowerCase()}">${abilityElement}</span>
-                <span class="ability-btn-cost">Megin: ${meginCost}</span>
-                ${ability.power ? `<span class="ability-btn-power">Power: ${getAbilityPower(abilityName, activeVasen.species.family)}</span>` : ''}
+            <span class="skill-btn-name">${skill.name}</span>
+            <span class="skill-btn-type">${skill.type}</span>
+            <span class="skill-btn-attributes">
+                <span class="skill-btn-element element-${skillElement.toLowerCase()}">${skillElement}</span>
+                <span class="skill-btn-cost">Megin: ${meginCost}</span>
+                ${skill.power ? `<span class="skill-btn-power">Power: ${getSkillPower(skillName, activeVasen.species.family)}</span>` : ''}
             </span>
-            <span class="ability-btn-desc">${ability.mechanicsDescription}</span>
+            <span class="skill-btn-desc">${skill.mechanicsDescription}</span>
         `;
-        btn.onclick = () => game.handleAbilityUse(abilityName);
+        btn.onclick = () => game.handleSkillUse(skillName);
         actionsContainer.appendChild(btn);
     });
 
@@ -612,13 +612,13 @@ UIController.prototype.flashCombatant = function(side, matchup = 'NEUTRAL') {
     }, animationDuration);
 };
 
-UIController.prototype.triggerAttackAnimation = function(side, abilityType) {
+UIController.prototype.triggerAttackAnimation = function(side, skillType) {
         const panel = document.getElementById(`${side}-panel`);
         if (!panel) return;
 
         // Check if higher priority animation is playing
         const currentPriority = parseInt(panel.dataset.animationPriority || '999');
-        const newPriority = (abilityType === ATTACK_TYPES.UTILITY) ? 3 : 2;
+        const newPriority = (skillType === ATTACK_TYPES.UTILITY) ? 3 : 2;
 
         // Block if higher or equal priority animation is playing
         if (currentPriority <= newPriority) {
@@ -627,20 +627,20 @@ UIController.prototype.triggerAttackAnimation = function(side, abilityType) {
 
         // Don't clear animations - allow attack to play alongside hit flash
 
-        // Determine animation type based on ability type
+        // Determine animation type based on skill type
         let animationClass = '';
         let duration = 0;
 
-        if (abilityType === ATTACK_TYPES.UTILITY) {
+        if (skillType === ATTACK_TYPES.UTILITY) {
             animationClass = 'using-utility';
             duration = 600;
-        } else if (abilityType === ATTACK_TYPES.STRENGTH ||
-                   abilityType === ATTACK_TYPES.WISDOM ||
-                   abilityType === ATTACK_TYPES.MIXED) {
+        } else if (skillType === ATTACK_TYPES.STRENGTH ||
+                   skillType === ATTACK_TYPES.WISDOM ||
+                   skillType === ATTACK_TYPES.MIXED) {
             animationClass = side === 'player' ? 'attacking-player' : 'attacking-enemy';
             duration = 500;
         } else {
-            // No animation for non-ability actions (pass, offer, interrogate, surrender)
+            // No animation for non-skill actions (pass, offer, interrogate, surrender)
             return;
         }
 

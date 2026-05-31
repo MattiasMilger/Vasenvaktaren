@@ -388,7 +388,7 @@
 .details-resources,
 .details-attributes,
 .details-temperament,
-.details-abilities,
+.details-skills,
 .details-actions {
     margin-bottom: var(--spacing-md);
 }
@@ -397,7 +397,7 @@
 .details-attributes h4,
 .details-temperament h4,
 .details-taming-item h4,
-.details-abilities h4 {
+.details-skills h4 {
     font-size: var(--font-size-sm);
     color: var(--text-muted);
     margin-bottom: var(--spacing-xs);
@@ -610,44 +610,44 @@
     color: var(--text-secondary);
 }
 
-/* Abilities List */
-.abilities-list {
+/* Skills List */
+.skills-list {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
 }
 
-.ability-item {
+.skill-item {
     padding: var(--spacing-sm);
     background: var(--bg-card);
     border-radius: var(--border-radius-sm);
     border: 2px solid var(--border-color);
 }
 
-.ability-item.element-earth { border-left: 4px solid var(--element-earth); }
-.ability-item.element-nature { border-left: 4px solid var(--element-nature); }
-.ability-item.element-water { border-left: 4px solid var(--element-water); }
-.ability-item.element-fire { border-left: 4px solid var(--element-fire); }
-.ability-item.element-wind { border-left: 4px solid var(--element-wind); }
+.skill-item.element-earth { border-left: 4px solid var(--element-earth); }
+.skill-item.element-nature { border-left: 4px solid var(--element-nature); }
+.skill-item.element-water { border-left: 4px solid var(--element-water); }
+.skill-item.element-fire { border-left: 4px solid var(--element-fire); }
+.skill-item.element-wind { border-left: 4px solid var(--element-wind); }
 
-.ability-item.locked {
+.skill-item.locked {
     opacity: 0.6;
     border-left-color: var(--text-muted);
 }
 
-.ability-header {
+.skill-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--spacing-xs);
 }
 
-.ability-name {
+.skill-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);
 }
 
-.ability-type-tag {
+.skill-type-tag {
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
     padding: 1px 4px;
@@ -655,36 +655,36 @@
     border-radius: 2px;
 }
 
-.ability-stats {
+.skill-attributes {
     display: flex;
     gap: var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
     font-size: var(--font-size-xs);
 }
 
-.ability-element {
+.skill-element {
     padding: 1px 4px;
     border-radius: 2px;
     color: var(--color-white);
 }
 
-.ability-element.element-earth { background: var(--element-earth); }
-.ability-element.element-nature { background: var(--element-nature); }
-.ability-element.element-water { background: var(--element-water); }
-.ability-element.element-fire { background: var(--element-fire); }
-.ability-element.element-wind { background: var(--element-wind); }
+.skill-element.element-earth { background: var(--element-earth); }
+.skill-element.element-nature { background: var(--element-nature); }
+.skill-element.element-water { background: var(--element-water); }
+.skill-element.element-fire { background: var(--element-fire); }
+.skill-element.element-wind { background: var(--element-wind); }
 
-.ability-power {
+.skill-power {
     color: var(--text-secondary);
     font-weight: 600;
 }
 
-.ability-cost {
+.skill-cost {
     color: var(--megin-highlight);
     font-weight: 600;
 }
 
-.ability-description {
+.skill-description {
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
     margin: 0;

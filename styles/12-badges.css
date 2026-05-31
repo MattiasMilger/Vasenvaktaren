@@ -414,7 +414,7 @@
     animation: fadeInScale 0.3s ease;
 }
 
-.ability-btn {
+.skill-btn {
     animation: fadeInUp 0.2s ease;
 }
 
@@ -454,7 +454,7 @@
 /* Smooth transitions for interactive elements */
 .rune-slot,
 .attribute-item,
-.ability-item {
+.skill-item {
     transition: all var(--transition-base);
 }
 

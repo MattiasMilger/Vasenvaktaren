@@ -600,7 +600,7 @@ button:focus-visible,
     outline-offset: 2px;
 }
 
-.ability-btn:focus-visible {
+.skill-btn:focus-visible {
     outline: 2px solid var(--border-light);
     outline-offset: 2px;
 }
@@ -618,7 +618,7 @@ button:focus-visible,
     .vasen-card,
     .zone-item,
     .party-slot,
-    .ability-btn,
+    .skill-btn,
     .starter-card {
         animation: none !important;
     }
@@ -869,8 +869,8 @@ button:focus-visible,
     max-width: min(350px, calc(100vw - 32px));
 }
 
-/* Adjustments for ability stats element badge */
-.ability-stats .element-matchup-collapsible {
+/* Adjustments for skill attributes element badge */
+.skill-attributes .element-matchup-collapsible {
     display: inline-block;
 }
 
@@ -1028,7 +1028,7 @@ button:focus-visible,
 }
 
 .combat-log,
-.ability-buttons,
+.skill-buttons,
 .action-buttons {
     flex-shrink: 0;
 }

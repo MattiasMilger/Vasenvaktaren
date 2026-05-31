@@ -41,7 +41,7 @@ const RUNES = {
         name: 'Ansuz',
         fullName: 'Ansuz',
         flavor: 'The voice of the gods. It transforms the brute force of the wielder\'s body into a calculated, insightful display of esoteric power.',
-        effect: 'This Väsen\'s strength attacks are considered wisdom attacks (they use wisdom and are checked against durability)',
+        effect: 'This Väsen\'s strength attacks are considered wisdom attacks (they use wisdom and are checked against durskill)',
         mechanic: { type: 'convert_strength_to_wisdom' }
     },
     'RAIDO': {
@@ -113,9 +113,9 @@ const RUNES = {
         fullName: 'Isaz',
         flavor: 'The enduring patience and silence of concentrated ice. Utilizing water creates a moment of perfect clarity, simultaneously enhancing the wielder\'s body and mind.',
         get effect() {
-            return `This väsen's water abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its wisdom and strength attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
+            return `This väsen's water skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its wisdom and strength attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
-        mechanic: { type: 'buff_on_element_hit', element: ELEMENTS.WATER, stats: ['wisdom', 'strength'], chance: 0.30 }
+        mechanic: { type: 'buff_on_element_hit', element: ELEMENTS.WATER, attributes: ['wisdom', 'strength'], chance: 0.30 }
     },
     'JERA': {
         id: 'JERA',
@@ -124,7 +124,7 @@ const RUNES = {
         fullName: 'Jera',
         flavor: 'The long, fertile cycle of the year. Quick, efficient efforts consistently yield their harvest, causing the wielder\'s life force to be subtly replenished after short actions.',
         get effect() {
-            return `This Väsen's abilities that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} megin or less have a ${Math.round(GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE * 100)}% chance to heal it by ${Math.round(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT * 100)}%`;
+            return `This Väsen's skills that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} megin or less have a ${Math.round(GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE * 100)}% chance to heal it by ${Math.round(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT * 100)}%`;
         },
         mechanic: { type: 'heal_on_low_cost', maxCost: 30, chance: 0.30, healPercent: 0.08 }
     },
@@ -133,11 +133,11 @@ const RUNES = {
         symbol: 'ᛇ',
         name: 'Eihwaz',
         fullName: 'Eihwaz',
-        flavor: 'The immense durability of the Yew tree and the structure of the cosmos. Drawing upon the earth grants a foundational resilience, shielding both mind and body.',
+        flavor: 'The immense durskill of the Yew tree and the structure of the cosmos. Drawing upon the earth grants a foundational resilience, shielding both mind and body.',
         get effect() {
-            return `This väsen\'s Earth Abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability Attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
+            return `This väsen\'s Earth Skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durskill Attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
-        mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.EARTH, stats: ['defense', 'durability'], chance: 0.30 }
+        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.EARTH, attributes: ['defense', 'durskill'], chance: 0.30 }
     },
     'PERTHO': {
         id: 'PERTHO',
@@ -157,9 +157,9 @@ const RUNES = {
         fullName: 'Algiz',
         flavor: 'The potent sign of spiritual sanctuary and protection from the wild. Channeling the power of Nature automatically reinforces the wielder\'s vitality.',
         get effect() {
-            return `This väsen's nature abilities have a ${Math.round(GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE * 100)}% chance to heal it by ${Math.round(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT * 100)}%`;
+            return `This väsen's nature skills have a ${Math.round(GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE * 100)}% chance to heal it by ${Math.round(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT * 100)}%`;
         },
-        mechanic: { type: 'heal_on_element_ability', element: ELEMENTS.NATURE, chance: 0.30, healPercent: 0.08 }
+        mechanic: { type: 'heal_on_element_skill', element: ELEMENTS.NATURE, chance: 0.30, healPercent: 0.08 }
     },
     'SOL': {
         id: 'SOL',
@@ -168,9 +168,9 @@ const RUNES = {
         fullName: 'Sol',
         flavor: 'The vitalizing energy of the sun. Commanding the fierce element of fire focuses the wielder, bringing about a moment of physical and mental clarity.',
         get effect() {
-            return `This väsen\'s fire abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its strength and wisdom attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
+            return `This väsen\'s fire skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its strength and wisdom attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
-        mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.FIRE, stats: ['strength', 'wisdom'], chance: 0.30 }
+        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.FIRE, attributes: ['strength', 'wisdom'], chance: 0.30 }
     },
     'TYR': {
         id: 'TYR',
@@ -201,9 +201,9 @@ const RUNES = {
         fullName: 'Ehwaz',
         flavor: 'The swift, coordinated power of the horse and rider. As the wielder moves with the element of wind, their physical frame becomes surprisingly stable and resilient.',
         get effect() {
-            return `This väsen\'s wind abilities have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its defense and durability attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
+            return `This väsen\'s wind skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its defense and durskill attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
-        mechanic: { type: 'buff_on_element_ability', element: ELEMENTS.WIND, stats: ['defense', 'durability'], chance: 0.30 }
+        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.WIND, attributes: ['defense', 'durskill'], chance: 0.30 }
     },
     'MANNAZ': {
         id: 'MANNAZ',
@@ -212,7 +212,7 @@ const RUNES = {
         fullName: 'Mannaz',
         flavor: 'The quiet strength of self-reflection and intellect. Taking a measured pause for a non-offensive action allows the wielder to collect their fragmented spirit and mend damage.',
         get effect() {
-            return `When this väsen uses a utility ability it heals by ${Math.round(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT * 100)}%`;
+            return `When this väsen uses a utility skill it heals by ${Math.round(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT * 100)}%`;
         },
         mechanic: { type: 'heal_on_utility', healPercent: 0.08 }
     },
@@ -232,7 +232,7 @@ const RUNES = {
         symbol: 'ᛜ',
         name: 'Inguz',
         fullName: 'Inguz',
-        flavor: 'The contained potential of the seed. Every strike plants a creeping instability within the foe, germinating into a sudden rot that withers their fundamental prowess.',
+        flavor: 'The contained potential of the seed. Every strike plants a creeping instskill within the foe, germinating into a sudden rot that withers their fundamental prowess.',
         get effect() {
             return `This väsen's hits have a ${Math.round(GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE * 100)}% chance to lower a random enemy attribute by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} stage`;
         },
@@ -271,7 +271,7 @@ const STARTER_RUNE = 'URUZ';
 // are excluded. All other runes are always considered valid.
 // =============================================================================
 function getValidRunesForVasen(vasen) {
-    const availableAbilities = vasen.getAvailableAbilities();
+    const availableSkills = vasen.getAvailableSkills();
 
     // Collect all elements the väsen can attack with
     const attackElements = new Set();
@@ -279,21 +279,21 @@ function getValidRunesForVasen(vasen) {
 
     let hasStrengthAttack = false;
     let hasWisdomAttack   = false;
-    let hasUtilityAbility = false;
+    let hasUtilitySkill = false;
 
-    availableAbilities.forEach(abilityName => {
-        const ability = ABILITIES[abilityName];
-        if (!ability) return;
+    availableSkills.forEach(skillName => {
+        const skill = ABILITIES[skillName];
+        if (!skill) return;
 
-        if (ability.type === ATTACK_TYPES.UTILITY) {
-            hasUtilityAbility = true;
+        if (skill.type === ATTACK_TYPES.UTILITY) {
+            hasUtilitySkill = true;
         } else {
-            if (ability.element) attackElements.add(ability.element);
-            // MIXED attacks (e.g. Basic Strike) split 50/50 between both stats and are
+            if (skill.element) attackElements.add(skill.element);
+            // MIXED attacks (e.g. Basic Strike) split 50/50 between both attributes and are
             // not converted by ANSUZ or RAIDO, so they do not count as pure Strength
             // or pure Wisdom attacks for the purpose of those rune checks.
-            if (ability.type === ATTACK_TYPES.STRENGTH) hasStrengthAttack = true;
-            if (ability.type === ATTACK_TYPES.WISDOM)   hasWisdomAttack   = true;
+            if (skill.type === ATTACK_TYPES.STRENGTH) hasStrengthAttack = true;
+            if (skill.type === ATTACK_TYPES.WISDOM)   hasWisdomAttack   = true;
         }
     });
 
@@ -313,8 +313,8 @@ function getValidRunesForVasen(vasen) {
             case 'ISAZ':   return attackElements.has(ELEMENTS.WATER);
             case 'ALGIZ':  return attackElements.has(ELEMENTS.NATURE);
 
-            // Utility heal rune — only useful if the väsen has at least one utility ability
-            case 'MANNAZ': return hasUtilityAbility;
+            // Utility heal rune — only useful if the väsen has at least one utility skill
+            case 'MANNAZ': return hasUtilitySkill;
 
             // Attack-type conversion runes — only useful if the väsen has attacks of the source
             // type AND the target stat is strictly higher than the source stat (converting to
@@ -324,28 +324,28 @@ function getValidRunesForVasen(vasen) {
             case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
                 return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
 
-            // Low-cost damage boost rune — only useful if at least one *damaging* ability
+            // Low-cost damage boost rune — only useful if at least one *damaging* skill
             // costs at or below the threshold after the same-element megin discount.
-            // Utility abilities deal no damage, so they don't qualify.
+            // Utility skills deal no damage, so they don't qualify.
             case 'ODAL': {
-                return availableAbilities.some(abilityName => {
-                    const ability = ABILITIES[abilityName];
-                    if (!ability || ability.type === ATTACK_TYPES.UTILITY) return false;
-                    return vasen.getAbilityMeginCost(abilityName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
+                return availableSkills.some(skillName => {
+                    const skill = ABILITIES[skillName];
+                    if (!skill || skill.type === ATTACK_TYPES.UTILITY) return false;
+                    return vasen.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
                 });
             }
 
-            // Buff-sharing rune — only useful if the väsen has at least one ability that
+            // Buff-sharing rune — only useful if the väsen has at least one skill that
             // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
             // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
             // Resilience, Troll: Troll Theft).
             case 'GIFU': {
                 const familiesWithBuffPassive = [FAMILIES.ANDE, FAMILIES.ODJUR, FAMILIES.DRAKE, FAMILIES.TROLL];
                 if (familiesWithBuffPassive.includes(vasen.species.family)) return true;
-                return availableAbilities.some(abilityName => {
-                    const ability = ABILITIES[abilityName];
-                    if (!ability || !ability.effect) return false;
-                    return ability.effect.type === 'buff' || ability.effect.type === 'tyrs_sacrifice';
+                return availableSkills.some(skillName => {
+                    const skill = ABILITIES[skillName];
+                    if (!skill || !skill.effect) return false;
+                    return skill.effect.type === 'buff' || skill.effect.type === 'tyrs_sacrifice';
                 });
             }
 

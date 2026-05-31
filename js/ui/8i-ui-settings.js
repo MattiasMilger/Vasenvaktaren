@@ -125,7 +125,7 @@ achievementsHtml += '</div></div>';
             <div class="profile-collection-section">
                 <h4>Collection:</h4>
                 <div class="achievement">
-                    <div class="collection-stats">
+                    <div class="collection-attributes">
                         <div class="collection-stat">
                             <span class="collection-label">Runes Collected</span>
                             <span class="collection-value">${gameState.collectedRunes.size} / ${RUNE_LIST.length}</span>

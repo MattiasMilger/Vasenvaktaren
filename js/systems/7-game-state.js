@@ -460,10 +460,10 @@ class GameState {
                 LORE_ENTRIES[k].unlockType === 'element' && LORE_ENTRIES[k].unlockKey === species.element
             ).forEach(k => unlock(k));
 
-            // Ability entries — only abilities the väsen has actually learned at its current level
-            vasen.getAvailableAbilities().forEach(abilityName => {
+            // Skill entries — only skills the väsen has actually learned at its current level
+            vasen.getAvailableSkills().forEach(skillName => {
                 LORE_ENTRY_KEYS.filter(k =>
-                    LORE_ENTRIES[k].unlockType === 'ability' && LORE_ENTRIES[k].unlockKey === abilityName
+                    LORE_ENTRIES[k].unlockType === 'skill' && LORE_ENTRIES[k].unlockKey === skillName
                 ).forEach(k => unlock(k));
             });
 

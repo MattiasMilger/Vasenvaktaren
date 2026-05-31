@@ -10,10 +10,14 @@ Game.prototype.challengeEndlessTower = function() {
         return;
     }
 
+    const interval = GAME_CONFIG.ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL;
+    const healPercent = Math.round(GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT * 100);
+
     ui.showDialogue(
         'Endless Tower',
         `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength.</p>
          <p><strong>Warning:</strong> Väsen cannot be tamed in this mode. Victory or defeat will end your run.</p>
+         <p><strong>Idunn's Apples:</strong> Every ${interval} floors, Idunn replenishes your team - healing ${healPercent}% health, cleansing debuffs, and renewing passives.</p>
          ${gameState.endlessTowerRecord.highestFloor > 0
             ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>`
             : ''}`,
@@ -79,7 +83,7 @@ Game.prototype.startEndlessTowerBattle = function() {
         this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
         this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
         this.currentBattle.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-        this.currentBattle.onAttack = (side, abilityType) => ui.triggerAttackAnimation(side, abilityType);
+        this.currentBattle.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
         this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
         this.currentBattle.onEnd = (result) => this.handleEndlessTowerBattleEnd(result);
 
@@ -133,6 +137,44 @@ Game.prototype.startEndlessTowerBattle = function() {
     } else {
         ui.addCombatLog(`Floor ${floor}: A wild ${enemyTeam[0].getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');
     }
+};
+
+// Apply Idunn's Apples effect to all alive party members.
+// Heals by a percentage of max health, cleanses up to N negative attribute stages
+// per attribute, and resets all once-per-battle passive and rune flags.
+Game.prototype.applyIdunnApples = function() {
+    const healPercent  = GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT;
+    const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
+    const attrs = ['strength', 'wisdom', 'defense', 'durskill'];
+
+    gameState.party.forEach(v => {
+        if (!v || v.isKnockedOut()) return;
+
+        // Heal
+        v.healPercent(healPercent);
+
+        // Cleanse up to cleanseStages negative stages per attribute (raise toward 0, never above)
+        attrs.forEach(attr => {
+            if (v.attributeStages[attr] < 0) {
+                const cleanse = Math.min(cleanseStages, -v.attributeStages[attr]);
+                v.attributeStages[attr] += cleanse;
+            }
+        });
+
+        // Reset once-per-battle passive and rune flags
+        v.resetOncePerBattleFlags();
+    });
+
+    // Also reset the battle-level initial bonus tracking so utility skills
+    // can trigger their initial bonus again in the next floor.
+    if (this.currentBattle) {
+        this.currentBattle.playerInitialBonusUsed = new Set();
+    }
+
+    ui.addCombatLog(
+        'Idunn replenished the team with her apples of youth - cleansing debuffs, restoring health and renewing their passives.',
+        'heal'
+    );
 };
 
 // Handle Endless Tower battle end
@@ -225,25 +267,30 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
 
         // Add log message for floor completion
         ui.addCombatLog(`Floor ${floor} complete! Advancing to Floor ${nextFloor}...`, 'victory');
-        ui.addCombatLog('Your team was replenished slightly.');
 
-        // Apply post-victory heal for both HP and Megin (endless tower specific)
-gameState.party.forEach(v => {
-    if (!v) return;
+        // Check if this completed floor is an Idunn's Apples milestone
+        const isIdunnFloor = floor % GAME_CONFIG.ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL === 0;
 
-    // Skip knocked-out väsen
-    if (v.currentHealth <= 0) return;
+        if (isIdunnFloor) {
+            // Apply Idunn's Apples before the standard per-floor heal
+            this.applyIdunnApples();
+        } else {
+            // Standard per-floor partial heal
+            ui.addCombatLog('Your team was replenished slightly.');
 
-    const healthHeal = Math.floor(v.maxHealth * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
-    const meginHeal = Math.floor(v.maxMegin * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
+            gameState.party.forEach(v => {
+                if (!v) return;
+                if (v.currentHealth <= 0) return;
 
-    // Correct clamping
-    v.currentHealth = Math.min(v.maxHealth, v.currentHealth + healthHeal);
-    v.currentMegin = Math.min(v.maxMegin, v.currentMegin + meginHeal);
-});
+                const healthHeal = Math.floor(v.maxHealth * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
+                const meginHeal  = Math.floor(v.maxMegin  * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
 
+                v.currentHealth = Math.min(v.maxHealth, v.currentHealth + healthHeal);
+                v.currentMegin  = Math.min(v.maxMegin,  v.currentMegin  + meginHeal);
+            });
+        }
 
-        // Small delay before next floor for readability
+        // Small delay before next floor for readskill
         setTimeout(() => {
             this.startEndlessTowerBattle();
         }, 1500);

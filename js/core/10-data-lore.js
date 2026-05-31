@@ -198,7 +198,7 @@ const LORE_ENTRIES = {
         key: 'vasen_draug',
         name: 'Draug',
         category: 'vasen',
-        desc: 'The Draug is a mound phantom - the reanimated, corporeal corpse of the dead in Norse and Scandinavian folklore. Unlike a ghost, this phantom possesses a physical body with immense strength and the ability to increase its weight at will. They are often found guarding treasures within burial mounds or returning to haunt their former homes. A draug\'s presence is marked by a chilling aura of dread and a pervasive "corpse-light." Preventing one from rising required specific rituals, such as placing iron on the casket or pinning the clothes of the deceased to the ground.',
+        desc: 'The Draug is a mound phantom - the reanimated, corporeal corpse of the dead in Norse and Scandinavian folklore. Unlike a ghost, this phantom possesses a physical body with immense strength and the skill to increase its weight at will. They are often found guarding treasures within burial mounds or returning to haunt their former homes. A draug\'s presence is marked by a chilling aura of dread and a pervasive "corpse-light." Preventing one from rising required specific rituals, such as placing iron on the casket or pinning the clothes of the deceased to the ground.',
         source: 'Norse Mythology / Heimskringla (Óláfs saga Tryggvasonar) / Icelandic Sagas (Grettis saga; Eyrbyggja saga; Laxdæla saga)',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -508,7 +508,7 @@ const LORE_ENTRIES = {
         key: 'vasen_fafner',
         name: 'Fafner',
         category: 'vasen',
-        desc: 'Fafner was originally a dwarf - the son of Reidmar - who killed his own father for the cursed gold hoard of the dwarf Andvari. The greed and power of the treasure transformed him into a monstrous hoard dragon guarding the gold on Gnitahed. He was slain by the hero Sigurd, who consumed this serpent\'s heart to gain great wisdom and the ability to understand the speech of birds. His hoard included the ring Andvaranaut, which carried Andvari\'s terrible curse.',
+        desc: 'Fafner was originally a dwarf - the son of Reidmar - who killed his own father for the cursed gold hoard of the dwarf Andvari. The greed and power of the treasure transformed him into a monstrous hoard dragon guarding the gold on Gnitahed. He was slain by the hero Sigurd, who consumed this serpent\'s heart to gain great wisdom and the skill to understand the speech of birds. His hoard included the ring Andvaranaut, which carried Andvari\'s terrible curse.',
         source: 'Völsunga saga / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'vasen',
@@ -518,7 +518,7 @@ const LORE_ENTRIES = {
         key: 'vasen_vitorm',
         name: 'Vitorm',
         category: 'vasen',
-        desc: 'The Vitorm is the pale serpent king, fabled royalty among all crawling things in Scandinavian legend. Extremely rare and snow-white in color, this serpent is said to be the master of all crawling things. According to folklore, the Vitorm possesses a supernatural essence; those brave enough to taste its flesh or lick its scales are granted the ability to understand the language of birds and gain deep knowledge of the earth\'s hidden secrets.',
+        desc: 'The Vitorm is the pale serpent king, fabled royalty among all crawling things in Scandinavian legend. Extremely rare and snow-white in color, this serpent is said to be the master of all crawling things. According to folklore, the Vitorm possesses a supernatural essence; those brave enough to taste its flesh or lick its scales are granted the skill to understand the language of birds and gain deep knowledge of the earth\'s hidden secrets.',
         source: 'North European Folklore',
         heritage: 'European',
         unlockType: 'vasen',
@@ -688,134 +688,134 @@ const LORE_ENTRIES = {
     // CATEGORY: ABILITIES
     // =========================================================================
 
-    'ability_smithing': {
-        key: 'ability_smithing',
+    'skill_smithing': {
+        key: 'skill_smithing',
         name: 'Smithing',
-        category: 'abilities',
-        desc: 'Smithing held an almost sacred status in Norse culture - the smith who could transform raw ore into weapons and tools was seen as wielding creative power akin to the gods. The mythological forge elves of Norse myth were the dark elves or dwarves, who crafted the greatest treasures of the gods: Mjölnir, Gungnir, Gleipnir, and the ship Skidbladnir. In Swedish folk tradition, the smith was a figure of both respect and some unease - their mastery of fire and metal made them liminal, connected to forces beyond ordinary human ability.',
+        category: 'skills',
+        desc: 'Smithing held an almost sacred status in Norse culture - the smith who could transform raw ore into weapons and tools was seen as wielding creative power akin to the gods. The mythological forge elves of Norse myth were the dark elves or dwarves, who crafted the greatest treasures of the gods: Mjölnir, Gungnir, Gleipnir, and the ship Skidbladnir. In Swedish folk tradition, the smith was a figure of both respect and some unease - their mastery of fire and metal made them liminal, connected to forces beyond ordinary human skill.',
         source: 'Norse Mythology / Swedish Folk Tradition',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Smithing'
     },
-    'ability_drown': {
-        key: 'ability_drown',
+    'skill_drown': {
+        key: 'skill_drown',
         name: 'Drown',
-        category: 'abilities',
+        category: 'skills',
         desc: 'In Swedish folklore, the element of water is often a site of great peril. Many water-dwelling väsen, such as the river horse Bäckahäst or the river warden Näcken, possess an aspect of drowning their victims. This is rarely described as simple predation. Instead, it is often a thematic calling to the depths where the victim is pulled into a space between the living world and the crushing silence of the water. This reflects the ancient fear of the unpredictable power found in lakes and streams.',
         source: 'Swedish Folklore / Oral Tradition',
         heritage: 'Swedish',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Drown'
     },
-    'ability_skalds_mead': {
-        key: 'ability_skalds_mead',
+    'skill_skalds_mead': {
+        key: 'skill_skalds_mead',
         name: "Skald's Mead",
-        category: 'abilities',
+        category: 'skills',
         desc: 'The Mead of Poetry (Skáldskaparmál, or the Mead of Skalds) is one of the most fascinating myths in Norse tradition. The gods and the Vanir made peace by creating Kvasir - a being so wise he could answer any question - from their combined saliva. Two dwarves killed Kvasir and mixed his blood with honey to create a mead that granted the gift of poetry and wisdom to anyone who drank it. Odin eventually stole the mead for the gods after transforming himself into a serpent and then an eagle to escape with it.',
         source: 'Prose Edda (Skáldskaparmál)',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: "Skald's Mead"
     },
-    'ability_burning_insult': {
-        key: 'ability_burning_insult',
+    'skill_burning_insult': {
+        key: 'skill_burning_insult',
         name: 'Burning Insult',
-        category: 'abilities',
-        desc: 'The Norse tradition of ritual insult - known as Niding - was a formal, highly skilled verbal contest in which opponents attempted to shame and dishonor one another through increasingly devastating mockery. A successful níð was believed to have real spiritual power to wound. In the game, this is represented by the ability Burning Insult.',
+        category: 'skills',
+        desc: 'The Norse tradition of ritual insult - known as Niding - was a formal, highly skilled verbal contest in which opponents attempted to shame and dishonor one another through increasingly devastating mockery. A successful níð was believed to have real spiritual power to wound. In the game, this is represented by the skill Burning Insult.',
         source: 'Poetic Edda (Lokasenna)',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Burning Insult'
     },
-    'ability_enchanting_song': {
-        key: 'ability_enchanting_song',
+    'skill_enchanting_song': {
+        key: 'skill_enchanting_song',
         name: 'Enchanting Song',
-        category: 'abilities',
+        category: 'skills',
         desc: 'Music as supernatural enchantment is a recurring motif in Scandinavian folklore, most powerfully represented by the river warden Näcken\'s fiddle playing. The näcken is said to play by the water\'s edge with such devastating beauty that listeners cannot control themselves - they must dance, and they will dance until they die unless someone can break the spell by calling the warden by name. Näcken could also teach his art to humans, but only for a price. Similar traditions appear across Northern Europe, from the Irish fiddle spirits to the Scottish faerie musicians.',
         source: 'Swedish Folklore',
         heritage: 'Swedish',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Enchanting Song'
     },
-    'ability_boulder_toss': {
-        key: 'ability_boulder_toss',
+    'skill_boulder_toss': {
+        key: 'skill_boulder_toss',
         name: 'Boulder Toss',
-        category: 'abilities',
+        category: 'skills',
         desc: 'Across Scandinavia, local legends explain numerous large boulders and rock formations as evidence of giants and troll hurling stones. One widespread tradition holds that troll, infuriated by the sound of church bells - which drove them away from human settlements - would hurl enormous boulders at churches in retaliation. Many Swedish churches claim to have old boulders in their environs that were thrown by nearby troll. Geologically, these are typically glacial erratics - rocks transported and deposited by glaciers thousands of years ago, which perfectly suited the legendary explanation.',
         source: 'Scandinavian Folklore',
         heritage: 'Scandinavian',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Boulder Toss'
     },
-    'ability_elven_light': {
-        key: 'ability_elven_light',
+    'skill_elven_light': {
+        key: 'skill_elven_light',
         name: 'Elven Light',
-        category: 'abilities',
+        category: 'skills',
         desc: 'In Swedish folklore, elves and related beings were associated with mysterious lights seen in meadows, forests, and over marshes at twilight - the "älvornas dans" (the dance of the elves). A ring of flattened grass in a meadow, found in the morning, was called an "älvring" (elf ring) - the mark left by these elves dancing through the night. The lights themselves, hovering and drifting, were interpreted as the elve\'s own luminescence or as lanterns they carried. Seeing such lights was considered an omen that required caution and respect.',
         source: 'Swedish Folklore',
         heritage: 'Swedish',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Elven Light'
     },
-    'ability_fire_breath': {
-        key: 'ability_fire_breath',
+    'skill_fire_breath': {
+        key: 'skill_fire_breath',
         name: 'Fire Breath',
-        category: 'abilities',
+        category: 'skills',
         desc: 'The fire-breathing dragon is one of the most universal figures in European mythology, and in Norse tradition serpents like Fafner guard their hoards with deadly flame. The image may derive from the association between serpents and poison - a venomous serpent\'s bite as a form of burning from within. In Beowulf, the Anglo-Saxon epic closely related to Norse tradition, the dragon breathes fire to defend its treasure. The fire breath represents the destructive potential of hoarded power, turned outward against any who dare approach.',
         source: 'Norse Mythology / European Folklore',
         heritage: 'European',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Fire Breath'
     },
-    'ability_lokis_betrayal': {
-        key: 'ability_lokis_betrayal',
+    'skill_lokis_betrayal': {
+        key: 'skill_lokis_betrayal',
         name: "Loki's Betrayal",
-        category: 'abilities',
-        desc: 'Loki, the shape-shifting trickster of Norse myth, is defined above all else by his capacity to exploit weakness. Where others strike at strength, Loki seeks the crack already in the stone. His most famous act of betrayal was guiding the blind god Höðr\'s hand to loose the mistletoe dart that slew Baldr - the one thing in all creation that had been overlooked in Frigg\'s oath of protection. The ability Loki\'s Betrayal captures this essence: it is not the mightiest blow, but the precise one, driven deeper into a foe already faltering.',
+        category: 'skills',
+        desc: 'Loki, the shape-shifting trickster of Norse myth, is defined above all else by his capacity to exploit weakness. Where others strike at strength, Loki seeks the crack already in the stone. His most famous act of betrayal was guiding the blind god Höðr\'s hand to loose the mistletoe dart that slew Baldr - the one thing in all creation that had been overlooked in Frigg\'s oath of protection. The skill Loki\'s Betrayal captures this essence: it is not the mightiest blow, but the precise one, driven deeper into a foe already faltering.',
         source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: "Loki's Betrayal"
     },
-    'ability_giantsbane': {
-        key: 'ability_giantsbane',
+    'skill_giantsbane': {
+        key: 'skill_giantsbane',
         name: "Giantsbane",
-        category: 'abilities',
-        desc: 'In the iron grip of Norse mythology, the giants represent the chaotic and primordial forces of the wild. These are beings of such immense scale that they often dwarf the gods themselves. Yet, the thunder god Thor stands as the ultimate deterrent against this chaos. Wielding Mjölnir, he delivers strikes that do not merely bruise flesh but shatter the very foundations of giant kind, turning their own massive bulk into a liability.',
+        category: 'skills',
+        desc: 'In the iron grip of Norse mythology, the giants represent the chaotic and primordial forces of the wild. These are beings of such immense scale that they often dwarf the gods themselves. Yet, the thunder god Thor stands as the ultimate deterrent against this chaos. Wielding Mjölnir, he delivers strikes that do not merely bruise flesh but shatter the very foundations of giant kind, turning their own massive bulk into a liskill.',
         source: 'Prose Edda (Snorri Sturluson) / Völuspá',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: "Giantsbane"
     },
-    'ability_rotvalta': {
-        key: 'ability_rotvalta',
+    'skill_rotvalta': {
+        key: 'skill_rotvalta',
         name: 'Rotvälta',
-        category: 'abilities',
-        desc: 'A "rotvälta" is the massive, vertical wall of earth and tangled roots exposed when a great tree is torn from the ground by storm or weight. In folk belief, these are not merely natural accidents but the forest\'s own defensive reflex. The ability channels this subterranean upheaval; when an enemy strikes with aggression, the earth recoils in kind, erupting in a crushing surge of wood and soil. To strike a practitioner of Rotvälta is to invite the weight of the forest floor to rise up and settle the debt.',
+        category: 'skills',
+        desc: 'A "rotvälta" is the massive, vertical wall of earth and tangled roots exposed when a great tree is torn from the ground by storm or weight. In folk belief, these are not merely natural accidents but the forest\'s own defensive reflex. The skill channels this subterranean upheaval; when an enemy strikes with aggression, the earth recoils in kind, erupting in a crushing surge of wood and soil. To strike a practitioner of Rotvälta is to invite the weight of the forest floor to rise up and settle the debt.',
         source: 'Swedish Folklore / Forest Traditions',
         heritage: 'Swedish',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: 'Rotvalta'
     },
-    'ability_tyrs_sacrifice': {
-        key: 'ability_tyrs_sacrifice',
+    'skill_tyrs_sacrifice': {
+        key: 'skill_tyrs_sacrifice',
         name: "Tyr's Sacrifice",
-        category: 'abilities',
+        category: 'skills',
         desc: 'Tyr is the Norse god of law, justice, and single combat - and his defining myth is one of deliberate, willing self-destruction for the greater good. When the gods sought to bind the monstrous wolf beast Fenrir with the magical ribbon Gleipnir, this beast refused to let it be placed around him unless one of the gods agreed to put their hand in his mouth as a pledge of good faith. Tyr alone stepped forward. As soon as Fenrir found he could not break free, he bit off Tyr\'s hand at the wrist. Tyr lost his hand, and the gods gained the binding of the wolf beast until Ragnarök. The sacrifice was not a mistake - it was a calculated exchange of flesh for order, of self for the whole.',
         source: 'Prose Edda (Snorri Sturluson) / Poetic Edda',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: "Tyr's Sacrifice"
     },
-    'ability_freyas_tears': {
-        key: 'ability_freyas_tears',
+    'skill_freyas_tears': {
+        key: 'skill_freyas_tears',
         name: "Freya's Tears",
-        category: 'abilities',
+        category: 'skills',
         desc: "The goddess Freya, known as Vanadís of the Vanir, famously wept for her husband Óðr when he departed on long journeys. Her sorrow possesses a unique, physical weight that alters the natural world. When her tears strike the soil, they manifest as pure, red gold, while those that descend into the salt of the deep oceans are preserved as translucent amber. This transformation of divine grief into lasting treasure serves as a testament to her immense power over both the earth and the sea, cementing her tears as a symbol of value and endurance across the realms.",
         source: 'Prose Edda (Gylfaginning) / Skáldskaparmál',
         heritage: 'Norse',
-        unlockType: 'ability',
+        unlockType: 'skill',
         unlockKey: "Freya's Tears"
     },
 
@@ -849,6 +849,15 @@ const LORE_ENTRIES = {
         source: 'Swedish and Scandinavian Runestones',
         heritage: 'Scandinavian / Germanic',
         unlockType: 'standard'
+    },
+    'concept_idunn': {
+        key: 'concept_idunn',
+        name: "Idunn's Apples",
+        category: 'concepts',
+        desc: 'Idunn is the Norse goddess of youth and keeper of the magical golden apples that grant the Aesir gods their immortality. Without her apples, the gods would age and wither like ordinary mortals. Her myth is most fully told in the Prose Edda\'s Skáldskaparmál: the trickster Loki, coerced by the giant Þjazi, lured Idunn out of Asgard, causing the gods to rapidly age. Desperate, they forced Loki to retrieve her. He transformed into a falcon, carried Idunn back to Asgard, and the gods were restored. In the Endless Tower, Idunn\'s blessing descends upon your party at regular milestones - her apples of youth healing wounds, cleansing afflictions, and renewing the inner power of your Väsen.',
+        source: 'Prose Edda (Skáldskaparmál) / Haustlöng (Þjóðólfr of Hvinir)',
+        heritage: 'Norse',
+        unlockType: 'standard'
     }
 };
 
@@ -872,8 +881,8 @@ const LORE_CATEGORIES = {
         label: 'Locations',
         order: 4
     },
-    abilities: {
-        label: 'Abilities',
+    skills: {
+        label: 'Skills',
         order: 3
     },
     concepts: {

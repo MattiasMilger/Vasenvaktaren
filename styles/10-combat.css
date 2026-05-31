@@ -78,7 +78,7 @@
 }
 
 .combatant-panel {
-    position: relative; /* For ability animation overlay positioning */
+    position: relative; /* For skill animation overlay positioning */
     flex: 1;
     max-width: 240px;
     background: var(--bg-card);
@@ -515,15 +515,15 @@
     font-weight: 700;
 }
 
-/* Ability Buttons */
-.ability-buttons {
+/* Skill Buttons */
+.skill-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 6px;
     margin-bottom: 12px;
 }
 
-.ability-btn {
+.skill-btn {
     padding: 4px 10px;
     background: var(--bg-card);
     border: 2px solid var(--border-color);
@@ -541,7 +541,7 @@
     box-shadow: var(--shadow-sm);
 }
 
-.ability-btn:hover:not(:disabled) {
+.skill-btn:hover:not(:disabled) {
     background: var(--bg-hover);
     border-color: var(--border-light);
     transform: translateY(-2px);
@@ -549,63 +549,63 @@
 }
 
 
-/* Element-colored left borders for ability buttons */
-.ability-btn[data-element="Earth"],
-.ability-btn.element-earth {
+/* Element-colored left borders for skill buttons */
+.skill-btn[data-element="Earth"],
+.skill-btn.element-earth {
     border-left: 4px solid var(--element-earth);
 }
 
-.ability-btn[data-element="Nature"],
-.ability-btn.element-nature {
+.skill-btn[data-element="Nature"],
+.skill-btn.element-nature {
     border-left: 4px solid var(--element-nature);
 }
 
-.ability-btn[data-element="Water"],
-.ability-btn.element-water {
+.skill-btn[data-element="Water"],
+.skill-btn.element-water {
     border-left: 4px solid var(--element-water);
 }
 
-.ability-btn[data-element="Fire"],
-.ability-btn.element-fire {
+.skill-btn[data-element="Fire"],
+.skill-btn.element-fire {
     border-left: 4px solid var(--element-fire);
 }
 
-.ability-btn[data-element="Wind"],
-.ability-btn.element-wind {
+.skill-btn[data-element="Wind"],
+.skill-btn.element-wind {
     border-left: 4px solid var(--element-wind);
 }
 
-.ability-btn[data-element="Earth"]:hover:not(:disabled),
-.ability-btn.element-earth:hover:not(:disabled) {
+.skill-btn[data-element="Earth"]:hover:not(:disabled),
+.skill-btn.element-earth:hover:not(:disabled) {
     border-left-color: var(--element-earth);
     box-shadow: var(--shadow-md), var(--element-earth-glow-shadow);
 }
 
-.ability-btn[data-element="Nature"]:hover:not(:disabled),
-.ability-btn.element-nature:hover:not(:disabled) {
+.skill-btn[data-element="Nature"]:hover:not(:disabled),
+.skill-btn.element-nature:hover:not(:disabled) {
     border-left-color: var(--element-nature);
     box-shadow: var(--shadow-md), var(--element-nature-glow-shadow);
 }
 
-.ability-btn[data-element="Water"]:hover:not(:disabled),
-.ability-btn.element-water:hover:not(:disabled) {
+.skill-btn[data-element="Water"]:hover:not(:disabled),
+.skill-btn.element-water:hover:not(:disabled) {
     border-left-color: var(--element-water);
     box-shadow: var(--shadow-md), var(--element-water-glow-shadow);
 }
 
-.ability-btn[data-element="Fire"]:hover:not(:disabled),
-.ability-btn.element-fire:hover:not(:disabled) {
+.skill-btn[data-element="Fire"]:hover:not(:disabled),
+.skill-btn.element-fire:hover:not(:disabled) {
     border-left-color: var(--element-fire);
     box-shadow: var(--shadow-md), var(--element-fire-glow-shadow);
 }
 
-.ability-btn[data-element="Wind"]:hover:not(:disabled),
-.ability-btn.element-wind:hover:not(:disabled) {
+.skill-btn[data-element="Wind"]:hover:not(:disabled),
+.skill-btn.element-wind:hover:not(:disabled) {
     border-left-color: var(--element-wind);
     box-shadow: var(--shadow-md), var(--element-wind-glow-shadow);
 }
 
-.ability-btn:disabled {
+.skill-btn:disabled {
     opacity: 0.4 !important;
     cursor: not-allowed !important;
     transition: none !important;
@@ -616,26 +616,26 @@
     pointer-events: none;
 }
 
-.ability-btn-name {
+.skill-btn-name {
     display: block;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
 }
 
-.ability-btn-type {
+.skill-btn-type {
     display: block;
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
 }
 
-.ability-btn-stats {
+.skill-btn-attributes {
     display: block;
     font-size: var(--font-size-xs);
     color: var(--text-muted);
 }
 
-.ability-btn-desc {
+.skill-btn-desc {
     display: block;
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
@@ -643,13 +643,13 @@
     line-height: 1.2;
 }
 
-.ability-btn-cost {
+.skill-btn-cost {
     font-size: var(--font-size-xs);
     color: var(--megin-highlight);
     font-weight: 600;
 }
 
-.ability-btn-element {
+.skill-btn-element {
     display: inline-block;
     padding: 1px 4px;
     border-radius: 2px;
@@ -657,13 +657,13 @@
     font-size: var(--font-size-xs);
 }
 
-.ability-btn-element.element-earth { background: var(--element-earth); }
-.ability-btn-element.element-nature { background: var(--element-nature); }
-.ability-btn-element.element-water { background: var(--element-water); }
-.ability-btn-element.element-fire { background: var(--element-fire); }
-.ability-btn-element.element-wind { background: var(--element-wind); }
+.skill-btn-element.element-earth { background: var(--element-earth); }
+.skill-btn-element.element-nature { background: var(--element-nature); }
+.skill-btn-element.element-water { background: var(--element-water); }
+.skill-btn-element.element-fire { background: var(--element-fire); }
+.skill-btn-element.element-wind { background: var(--element-wind); }
 
-.ability-btn-power {
+.skill-btn-power {
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
     font-weight: 600;
@@ -1735,23 +1735,23 @@ button.tutorial-blink {
 }
 
 /* =============================================================================
-   MOBILE OVERRIDES - Ability Button Grid
+   MOBILE OVERRIDES - Skill Button Grid
    ============================================================================= */
 
 @media (max-width: 600px) {
-    .ability-buttons {
+    .skill-buttons {
         /* Forces exactly two columns regardless of button width */
         grid-template-columns: repeat(2, 1fr); 
         gap: var(--spacing-xs); /* Tighter gap for small screens */
     }
 
-    .ability-btn {
+    .skill-btn {
         /* Reduce padding slightly to fit content in smaller boxes */
         padding: var(--spacing-sm); 
         min-width: 0; /* Prevents buttons from overflowing the 1fr column */
     }
 
-    .ability-btn-desc {
+    .skill-btn-desc {
         /* Optional: Hide description on very small screens to keep height consistent */
         display: -webkit-box;
         -webkit-line-clamp: 2;

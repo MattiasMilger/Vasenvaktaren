@@ -207,7 +207,7 @@
                         </div>
                     </div>
 
-                    <div id="ability-buttons" class="ability-buttons"></div>
+                    <div id="skill-buttons" class="skill-buttons"></div>
                     <div class="action-buttons">
                         <button id="btn-swap" class="btn btn-action">Swap</button>
                         <button id="btn-offer" class="btn btn-action">Offer Item</button>
@@ -239,7 +239,7 @@
     <div id="ally-select-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Select Target for <span id="ally-select-ability-name"></span></h3>
+                <h3 class="modal-title">Select Target for <span id="ally-select-skill-name"></span></h3>
                 <button id="close-ally-select-modal" class="modal-close">×</button>
             </div>
             <div class="modal-body">
@@ -411,11 +411,11 @@
                 <p><strong>Strength (STR)</strong> - increases damage with Strength attacks.<br>
                     <strong>Wisdom (WIS)</strong> - increases damage with Wisdom attacks.<br>
                     <strong>Defense (DEF)</strong> - Reduces damage taken from Strength attacks.<br>
-                    <strong>Durability (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
+                    <strong>Durskill (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
                 
                 <h4>Resources</h4>
                 <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between battles.<br>
-                <strong>Megin (MP)</strong> - Used to perform abilities. Megin fully restores after each combat.</p>
+                <strong>Megin (MP)</strong> - Used to perform skills. Megin fully restores after each combat.</p>
 
                 <!-- Dynamic Element Matchups Section -->
                 <div id="dynamic-element-matchups"></div>
@@ -427,11 +427,11 @@
                 <div id="dynamic-temperaments"></div>
 
                 <h4>Runes</h4>
-                <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the ability to equip two runes.</p>
+                <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.</p>
 
                 <h4>Megin System</h4>
                 <p><strong>Regeneration:</strong> <span id="guide-megin-regen"></span> of max Megin restored per turn<br>
-                <strong>Same-Element Discount:</strong> Abilities aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin<br>
+                <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin<br>
 
                 <h4>Healing</h4>
                 <p><strong>Post-Battle:</strong> Active party heals <span id="guide-post-battle-heal"></span> of max HP (even from 0 HP)<br>
@@ -441,14 +441,14 @@
                 <em>Note: All healing is based on max health, not current health.</em></p>
 
                 <h4>Power</h4>
-                <p>Power is a value shown on each ability that represents the basic damage multiplier, which is scaled by the associated damage attribute (Strength/Wisdom).</p>
+                <p>Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (Strength/Wisdom).</p>
 
                 <h4>Attribute Stages</h4>
-                <p>Some abilities and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
+                <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
                 <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
                 
                 <h4>Initial Bonus</h4>
-                <p>Certain utility abilities have an "Initial Bonus" that grants extra attribute stages on their first use in a battle. This bonus is tracked per ability, per side, and only applies once per combat.</p>
+                <p>Certain utility skills have an "Initial Bonus" that grants extra attribute stages on their first use in a battle. This bonus is tracked per skill, per side, and only applies once per combat.</p>
 
                 <h4>Experience & Leveling</h4>
                 <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
@@ -460,7 +460,7 @@
                 <em>Experience is only awarded after combat ends.</em></p>
                 
                                 <h4>Move Priority</h4>
-                <p>Swapping > Utility Abilities > Attack Abilities.<br>The player moves first inside each category.</p>
+                <p>Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
                 <br>
             </div>
             <button id="close-combat-tips" class="btn btn-secondary">Close</button>
@@ -471,7 +471,7 @@
     
     <!-- Core Data & Logic -->
     <script src="js/core/1-constants.js"></script>
-    <script src="js/core/2-data-abilities.js"></script>
+    <script src="js/core/2-data-skills.js"></script>
     <script src="js/core/3-data-vasen.js"></script>
     <script src="js/core/4-data-items.js"></script>
     <script src="js/core/4-data-runes.js"></script>

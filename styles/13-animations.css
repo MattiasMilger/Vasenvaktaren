@@ -65,7 +65,7 @@
     100% { transform: translateX(0) scale(1); }
 }
 
-/* Utility ability - Faster "hop" */
+/* Utility skill - Faster "hop" */
 .combatant-image-container.using-utility {
     animation: combatUtility 0.6s ease-in-out !important;
 }

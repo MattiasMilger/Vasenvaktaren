@@ -48,7 +48,7 @@ Game.prototype.startBattle = function(enemyVasen) {
     this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
     this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
     this.currentBattle.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-    this.currentBattle.onAttack = (side, abilityType) => ui.triggerAttackAnimation(side, abilityType);
+    this.currentBattle.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
     this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
     this.currentBattle.onEnd = (result) => this.handleBattleEnd(result);
 
@@ -89,14 +89,14 @@ Game.prototype.unlockTamingLoreEntries = function(newVasen) {
         ui.showLoreUnlockMessage(elementKey);
     }
 
-    // Ability entries — only abilities the väsen has actually learned at its current level
-    newVasen.getAvailableAbilities().forEach(abilityName => {
-        const abilityKey = LORE_ENTRY_KEYS.find(k =>
-            LORE_ENTRIES[k].unlockType === 'ability' &&
-            LORE_ENTRIES[k].unlockKey === abilityName
+    // Skill entries — only skills the väsen has actually learned at its current level
+    newVasen.getAvailableSkills().forEach(skillName => {
+        const skillKey = LORE_ENTRY_KEYS.find(k =>
+            LORE_ENTRIES[k].unlockType === 'skill' &&
+            LORE_ENTRIES[k].unlockKey === skillName
         );
-        if (abilityKey && gameState.unlockLoreEntry(abilityKey)) {
-            ui.showLoreUnlockMessage(abilityKey);
+        if (skillKey && gameState.unlockLoreEntry(skillKey)) {
+            ui.showLoreUnlockMessage(skillKey);
         }
     });
 
@@ -196,14 +196,14 @@ Game.prototype.handleBattleEnd = function(result) {
             if (levelResult.leveledUp) {
                 ui.addCombatLog(`${vasen.getName()} reached level ${levelResult.newLevel}!`, 'levelup');
 
-                // Check if leveling up unlocked a new ability with a lore entry
-                vasen.getAvailableAbilities().forEach(abilityName => {
-                    const abilityKey = LORE_ENTRY_KEYS.find(k =>
-                        LORE_ENTRIES[k].unlockType === 'ability' &&
-                        LORE_ENTRIES[k].unlockKey === abilityName
+                // Check if leveling up unlocked a new skill with a lore entry
+                vasen.getAvailableSkills().forEach(skillName => {
+                    const skillKey = LORE_ENTRY_KEYS.find(k =>
+                        LORE_ENTRIES[k].unlockType === 'skill' &&
+                        LORE_ENTRIES[k].unlockKey === skillName
                     );
-                    if (abilityKey && gameState.unlockLoreEntry(abilityKey)) {
-                        ui.showLoreUnlockMessage(abilityKey);
+                    if (skillKey && gameState.unlockLoreEntry(skillKey)) {
+                        ui.showLoreUnlockMessage(skillKey);
                     }
                 });
             }

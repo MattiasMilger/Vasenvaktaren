@@ -168,10 +168,10 @@ modal.classList.add('active');
     };
 
     // Show ally select modal (for target selection)
-    UIController.prototype.showAllySelectionModal = function(battle, abilityName, callback) {
+    UIController.prototype.showAllySelectionModal = function(battle, skillName, callback) {
         const modal = document.getElementById('ally-select-modal');
-        const ability = ABILITIES[abilityName];
-        document.getElementById('ally-select-ability-name').textContent = ability ? ability.name : abilityName;
+        const skill = ABILITIES[skillName];
+        document.getElementById('ally-select-skill-name').textContent = skill ? skill.name : skillName;
 
         const list = document.getElementById('ally-select-list');
         list.innerHTML = '';

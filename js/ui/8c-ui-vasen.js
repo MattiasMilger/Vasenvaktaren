@@ -52,11 +52,11 @@ UIController.prototype.getSortedVasenCollection = function() {
                 const diff = b.calculateAttribute('defense') - a.calculateAttribute('defense');
                 return diff !== 0 ? diff : alphabetical(a, b);
             });
-        case 'durability':
+        case 'durskill':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
-                const diff = b.calculateAttribute('durability') - a.calculateAttribute('durability');
+                const diff = b.calculateAttribute('durskill') - a.calculateAttribute('durskill');
                 return diff !== 0 ? diff : alphabetical(a, b);
             });
         case 'strength':
@@ -112,7 +112,7 @@ UIController.prototype.renderVasenInventory = function() {
             <option value="element" ${this.vasenSortBy === 'element' ? 'selected' : ''}>Element</option>
             <option value="health" ${this.vasenSortBy === 'health' ? 'selected' : ''}>Health</option>
             <option value="defense" ${this.vasenSortBy === 'defense' ? 'selected' : ''}>Defense</option>
-            <option value="durability" ${this.vasenSortBy === 'durability' ? 'selected' : ''}>Durability</option>
+            <option value="durskill" ${this.vasenSortBy === 'durskill' ? 'selected' : ''}>Durskill</option>
             <option value="strength" ${this.vasenSortBy === 'strength' ? 'selected' : ''}>Strength</option>
             <option value="wisdom" ${this.vasenSortBy === 'wisdom' ? 'selected' : ''}>Wisdom</option>
             <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
@@ -303,7 +303,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.calculateAttribute('strength')}</span>
             <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.calculateAttribute('wisdom')}</span>
             <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.calculateAttribute('defense')}</span>
-            <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durability')}</span>
+            <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durskill')}</span>
         </div>
         ${vasen.runes && vasen.runes.length > 0 ? `
         <div class="vasen-card-runes">
@@ -548,8 +548,8 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                     <span class="attr-value">${vasen.calculateAttribute('defense')}</span>
                 </div>
                 <div class="attribute-item">
-                    <span class="attr-name">Durability</span>
-                    <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
+                    <span class="attr-name">Durskill</span>
+                    <span class="attr-value">${vasen.calculateAttribute('durskill')}</span>
                 </div>
             </div>
         </div>
@@ -571,10 +571,10 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         </div>
         <br>
 
-        <div class="details-abilities">
-            <h4>Abilities</h4>
-            <div class="abilities-list">
-                ${this.renderAbilitiesList(vasen)}
+        <div class="details-skills">
+            <h4>Skills</h4>
+            <div class="skills-list">
+                ${this.renderSkillsList(vasen)}
             </div>
         </div>
 
@@ -641,39 +641,39 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     return html;
 };
 
-// Render abilities list (väsen details: flavor + mechanics)
-UIController.prototype.renderAbilitiesList = function(vasen) {
-    const allAbilities = vasen.getAllAbilityNames();
-    const availableAbilities = vasen.getAvailableAbilities();
+// Render skills list (väsen details: flavor + mechanics)
+UIController.prototype.renderSkillsList = function(vasen) {
+    const allSkills = vasen.getAllSkillNames();
+    const availableSkills = vasen.getAvailableSkills();
     let html = '';
 
-    allAbilities.forEach((abilityName, index) => {
-        const ability = ABILITIES[abilityName];
-        if (!ability) return;
+    allSkills.forEach((skillName, index) => {
+        const skill = ABILITIES[skillName];
+        if (!skill) return;
 
         const learnLevel = ABILITY_LEARN_LEVELS[index];
-        const isLearned = availableAbilities.includes(abilityName);
-        const meginCost = vasen.getAbilityMeginCost(abilityName);
+        const isLearned = availableSkills.includes(skillName);
+        const meginCost = vasen.getSkillMeginCost(skillName);
 
         // Handle Basic Strike's null element - use Väsen's element
-        const abilityElement = ability.element || vasen.species.element;
+        const skillElement = skill.element || vasen.species.element;
 
         html += `
-            <div class="ability-item element-${abilityElement.toLowerCase()} ${isLearned ? 'learned' : 'locked'}">
-                <div class="ability-header">
-                    <span class="ability-name">${ability.name}</span>
-                    <span class="ability-type-tag">${ability.type}</span>
+            <div class="skill-item element-${skillElement.toLowerCase()} ${isLearned ? 'learned' : 'locked'}">
+                <div class="skill-header">
+                    <span class="skill-name">${skill.name}</span>
+                    <span class="skill-type-tag">${skill.type}</span>
                 </div>
-                <div class="ability-stats">
+                <div class="skill-attributes">
                     <div class="element-matchup-collapsible">
-                        <span class="ability-element element-${abilityElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event)">${abilityElement}</span>
-                        ${this.generateAttackingMatchupsHTML(abilityElement)}
+                        <span class="skill-element element-${skillElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event)">${skillElement}</span>
+                        ${this.generateAttackingMatchupsHTML(skillElement)}
                     </div>
-                    <span class="ability-cost">Megin: ${meginCost}</span>
-                    ${ability.power ? `<span class="ability-power">Power: ${getAbilityPower(abilityName, vasen.species.family)}</span>` : ''}
-                    ${ability.initialBonus ? `<span class="ability-initial-bonus">Initial Bonus: ${ability.initialBonus}</span>` : ''}
+                    <span class="skill-cost">Megin: ${meginCost}</span>
+                    ${skill.power ? `<span class="skill-power">Power: ${getSkillPower(skillName, vasen.species.family)}</span>` : ''}
+                    ${skill.initialBonus ? `<span class="skill-initial-bonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
                 </div>
-                <p class="ability-description">${ability.flavorDescription}<br>${ability.mechanicsDescription}</p>
+                <p class="skill-description">${skill.flavorDescription}<br>${skill.mechanicsDescription}</p>
                 ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}
             </div>
         `;

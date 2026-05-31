@@ -17,18 +17,18 @@ class EnemyAI {
         actions.sort((a, b) => b.score - a.score);
         
         // Return best action
-        return actions[0] || { type: 'ability', ability: 'Basic Strike' };
+        return actions[0] || { type: 'skill', skill: 'Basic Strike' };
     }
     
     scoreAllActions() {
         const actions = [];
         
-        // Score abilities
-        const abilities = this.vasen.getAvailableAbilities();
-        abilities.forEach(abilityName => {
-            if (this.vasen.canUseAbility(abilityName)) {
-                const score = this.scoreAbility(abilityName);
-                actions.push({ type: 'ability', ability: abilityName, score });
+        // Score skills
+        const skills = this.vasen.getAvailableSkills();
+        skills.forEach(skillName => {
+            if (this.vasen.canUseSkill(skillName)) {
+                const score = this.scoreSkill(skillName);
+                actions.push({ type: 'skill', skill: skillName, score });
             }
         });
         
@@ -46,12 +46,12 @@ class EnemyAI {
         return actions;
     }
     
-    scoreAbility(abilityName) {
-        const ability = ABILITIES[abilityName];
+    scoreSkill(skillName) {
+        const skill = ABILITIES[skillName];
         let score = 0;
 
         // Tyr's Sacrifice: use on turn 1 only, never again
-        if (abilityName === "Tyr's Sacrifice") {
+        if (skillName === "Tyr's Sacrifice") {
             // Already used this battle - never choose it again
             if (this.battle.getEnemyUtilityUsageCount(this.vasen, "Tyr's Sacrifice") > 0) {
                 return -999;
@@ -65,7 +65,7 @@ class EnemyAI {
         }
 
         // Freya's Tears: use at most once per combat, and only in the first two turns on field
-        if (abilityName === "Freya's Tears") {
+        if (skillName === "Freya's Tears") {
             if (this.battle.getEnemyUtilityUsageCount(this.vasen, "Freya's Tears") > 0) {
                 return -999;
             }
@@ -76,7 +76,7 @@ class EnemyAI {
         }
 
         // Giantsbane: score based on target's current HP ratio
-        if (ability.giantsbaneBonus) {
+        if (skill.giantsbaneBonus) {
             const hpRatio = this.target.currentHealth / this.target.maxHealth;
             if (hpRatio >= 0.9) {
                 // Target nearly full HP — ideal window, strong bonus
@@ -94,9 +94,9 @@ class EnemyAI {
         }
         
         // Base score
-        if (ability.type === ATTACK_TYPES.UTILITY) {
-            // Check usage count for utility abilities
-            const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
+        if (skill.type === ATTACK_TYPES.UTILITY) {
+            // Check usage count for utility skills
+            const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, skillName);
             
             if (usageCount === 0) {
                 // First use - modest base score; type-specific bonuses applied below
@@ -113,8 +113,8 @@ class EnemyAI {
         }
         
         // Damage bonus
-        if (ability.type !== ATTACK_TYPES.UTILITY) {
-            const predictedDamage = this.predictDamage(abilityName);
+        if (skill.type !== ATTACK_TYPES.UTILITY) {
+            const predictedDamage = this.predictDamage(skillName);
             
             if (predictedDamage >= this.target.currentHealth) {
                 score += GAME_CONFIG.AI_KNOCKOUT_BONUS; // Knockout bonus
@@ -123,19 +123,19 @@ class EnemyAI {
             }
             
             // Empowerment strategy: 
-            // If not empowered and ability grants empowerment, give bonus for setting up
-            // If empowered and ability is high-power, give bonus for using empowerment
-            if (!this.vasen.battleFlags.isEmpowered && abilityGrantsEmpowerment(abilityName)) {
+            // If not empowered and skill grants empowerment, give bonus for setting up
+            // If empowered and skill is high-power, give bonus for using empowerment
+            if (!this.vasen.battleFlags.isEmpowered && skillGrantsEmpowerment(skillName)) {
                 // Give bonus to low-tier attacks if we're not empowered (setup for next turn)
                 score += GAME_CONFIG.AI_EMPOWERMENT_SETUP_BONUS;
-            } else if (this.vasen.battleFlags.isEmpowered && !abilityGrantsEmpowerment(abilityName) && ability.power >= GAME_CONFIG.AI_HIGH_POWER_THRESHOLD) {
+            } else if (this.vasen.battleFlags.isEmpowered && !skillGrantsEmpowerment(skillName) && skill.power >= GAME_CONFIG.AI_HIGH_POWER_THRESHOLD) {
                 // Give significant bonus to high-power attacks if we're empowered
                 score += GAME_CONFIG.AI_EMPOWERED_HIGH_POWER_BONUS;
             }
             
             // Element bonus
-            const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
-            const matchup = getMatchupType(abilityElement, this.target.species.element);
+            const skillElement = getSkillElement(skillName, this.vasen.species.element);
+            const matchup = getMatchupType(skillElement, this.target.species.element);
             
             if (matchup === 'POTENT') {
                 score += GAME_CONFIG.AI_ELEMENT_POTENT_BONUS;
@@ -150,11 +150,11 @@ class EnemyAI {
             
             // Rune synergy bonus
             if (this.isGuardian) {
-                score += this.scoreRuneSynergy(abilityName);
+                score += this.scoreRuneSynergy(skillName);
             }
             
             // Loki's Betrayal: bonus if target has a negative attribute stage
-            if (ability.lokiBetrayalBonus) {
+            if (skill.lokiBetrayalBonus) {
                 const targetStages = this.target.attributeStages;
                 const hasNegativeStage = Object.values(targetStages).some(stage => stage < 0);
                 if (hasNegativeStage) {
@@ -162,21 +162,21 @@ class EnemyAI {
                 }
             }
 
-            // Rotvälta: estimate the probability the enemy will attack this turn.
+            // Rotvälta: estimate the probskill the enemy will attack this turn.
             // Turn 0 is commonly a setup round (buffs, utility), so the chance is lower.
             // From turn 1 onward attacks are far more likely, so the estimated bonus is higher.
             // The max bonus (25) is intentionally moderate — the AI cannot know for certain.
-            if (ability.retaliationBonus) {
+            if (skill.retaliationBonus) {
                 const turnsOnField = this.vasen.battleFlags.turnsOnField;
                 const estimatedAttackProb = turnsOnField === 0 ? 0.35 : 0.70;
                 score += Math.round(estimatedAttackProb * 25);
             }
         } else {
             // Utility-specific scoring: attacks are the bread and butter; utilities are early set-ups.
-            const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, abilityName);
+            const usageCount = this.battle.getEnemyUtilityUsageCount(this.vasen, skillName);
             const turnsOnField = this.vasen.battleFlags.turnsOnField;
 
-            if (ability.effect && ability.effect.type === 'buff') {
+            if (skill.effect && skill.effect.type === 'buff') {
                 // Buff moves (Smithing, Skald's Mead, Thick Coat, etc.):
                 // Only give a meaningful bonus on the very first turn on the field and only once.
                 // After that they should not compete with attacks.
@@ -187,12 +187,12 @@ class EnemyAI {
                     score -= 60;
                 }
 
-            } else if (ability.effect && ability.effect.type === 'debuff') {
+            } else if (skill.effect && skill.effect.type === 'debuff') {
                 // Debuff moves (Enchanting Song, Burning Insult):
                 // Allowed up to twice if Loki's Betrayal is in the moveset and the target
                 // is not yet debuffed (setting it up for the follow-up attack).
                 // Otherwise, only once early in combat.
-                const hasLokisBetrayal = this.vasen.getAvailableAbilities().includes("Loki's Betrayal");
+                const hasLokisBetrayal = this.vasen.getAvailableSkills().includes("Loki's Betrayal");
                 const targetAlreadyDebuffed = Object.values(this.target.attributeStages).some(s => s < 0);
 
                 if (usageCount === 0) {
@@ -216,7 +216,7 @@ class EnemyAI {
         }
         
         // Megin penalty
-        const meginCost = this.vasen.getAbilityMeginCost(abilityName);
+        const meginCost = this.vasen.getSkillMeginCost(skillName);
         if (meginCost > this.vasen.currentMegin * GAME_CONFIG.AI_MEGIN_PENALTY_THRESHOLD) {
             score += GAME_CONFIG.AI_MEGIN_PENALTY;
         }
@@ -256,13 +256,13 @@ class EnemyAI {
         return score;
     }
     
-    predictDamage(abilityName) {
-        const ability = ABILITIES[abilityName];
-        if (ability.type === ATTACK_TYPES.UTILITY) return 0;
+    predictDamage(skillName) {
+        const skill = ABILITIES[skillName];
+        if (skill.type === ATTACK_TYPES.UTILITY) return 0;
         
         // Simplified damage prediction
-        const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
-        const matchup = getMatchupType(abilityElement, this.target.species.element);
+        const skillElement = getSkillElement(skillName, this.vasen.species.element);
+        const matchup = getMatchupType(skillElement, this.target.species.element);
         let elementMod = DAMAGE_MULTIPLIERS[matchup];
         
         // Account for empowerment boost
@@ -270,18 +270,18 @@ class EnemyAI {
             elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT);
         }
         
-        // Giantsbane: effective power is derived from target's current HP, not ability.power
+        // Giantsbane: effective power is derived from target's current HP, not skill.power
         let power;
-        if (ability.giantsbaneBonus) {
-            power = ability.power + Math.floor(this.target.currentHealth * ability.target_hp_bonus_percent);
+        if (skill.giantsbaneBonus) {
+            power = skill.power + Math.floor(this.target.currentHealth * skill.target_hp_bonus_percent);
         } else {
-            power = ability.power;
+            power = skill.power;
         }
 
-        const attackStat = ability.type === ATTACK_TYPES.WISDOM ? 
+        const attackStat = skill.type === ATTACK_TYPES.WISDOM ? 
             this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
-        const defenseStat = ability.type === ATTACK_TYPES.WISDOM ?
-            this.target.getAttribute('durability') : this.target.getAttribute('defense');
+        const defenseStat = skill.type === ATTACK_TYPES.WISDOM ?
+            this.target.getAttribute('durskill') : this.target.getAttribute('defense');
         
         const powerFactor = power / GAME_CONFIG.POWER_CONSTANT;
         const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));
@@ -289,10 +289,10 @@ class EnemyAI {
         return Math.floor(powerFactor * attackStat * elementMod * defenseReduction);
     }
     
-    scoreRuneSynergy(abilityName) {
+    scoreRuneSynergy(skillName) {
         let bonus = 0;
-        const ability = ABILITIES[abilityName];
-        const abilityElement = getAbilityElement(abilityName, this.vasen.species.element);
+        const skill = ABILITIES[skillName];
+        const skillElement = getSkillElement(skillName, this.vasen.species.element);
         
         // Element damage runes
         const elementRunes = {
@@ -303,12 +303,12 @@ class EnemyAI {
             [ELEMENTS.WATER]: 'LAGUZ'
         };
         
-        if (this.vasen.hasRune(elementRunes[abilityElement])) {
+        if (this.vasen.hasRune(elementRunes[skillElement])) {
             bonus += 10;
         }
         
         // Low cost runes
-        if (ability.meginCost <= 30) {
+        if (skill.meginCost <= 30) {
             if (this.vasen.hasRune('ODAL')) bonus += 10;
             if (this.vasen.hasRune('JERA')) bonus += 5;
         }

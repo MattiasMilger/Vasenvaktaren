@@ -41,7 +41,7 @@ const GAME_CONFIG = {
     BASE_MEGIN: 73,
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
-    SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element abilities
+    SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element skills
     
     // =============================================================================
     // ATTRIBUTE STAGES (BUFFS/DEBUFFS)
@@ -53,7 +53,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // DAMAGE CALCULATION
     // =============================================================================
-    POWER_CONSTANT: 250,            // Divisor that converts an ability's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. An ability with power 250 produces a 1× multiplier against the attacker's stat.
+    POWER_CONSTANT: 250,            // Divisor that converts an skill's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. An skill with power 250 produces a 1× multiplier against the attacker's stat.
     DEFENSE_CONSTANT: 190,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
     DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     
@@ -75,14 +75,14 @@ const GAME_CONFIG = {
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
 
-    TYRS_SACRIFICE_HEALTH_COST: 0.3,   // Fraction of current HP sacrificed when using Tyr's Sacrifice
-    TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all stats when using Tyr's Sacrifice
+    TYRS_SACRIFICE_HEALTH_COST: 0.25,   // Fraction of current HP sacrificed when using Tyr's Sacrifice
+    TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all attributes when using Tyr's Sacrifice
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
     FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
     FREYASTEARS_HEALTH_REGEN_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
-    INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff ability per side (Smithing, Skald's Mead, Thick Coat)
+    INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff skill per side (Smithing, Skald's Mead, Thick Coat)
 
     // =============================================================================
     // HEALING
@@ -120,6 +120,11 @@ const GAME_CONFIG = {
     // =============================================================================
     ENDLESS_TOWER_START_LEVEL: 30,
     ENDLESS_TOWER_MAX_FLOOR: 999,
+
+    // Idunn's Apples - milestone healing and cleansing every N floors
+    ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL: 5,   // Every X floors, Idunn's Apples trigger
+    ENDLESS_TOWER_IDUNN_HEAL_PERCENT: 0.50,  // % of max health restored to each alive väsen
+    ENDLESS_TOWER_IDUNN_CLEANSE_STAGES: 1,   // Number of negative attribute stages removed per attribute (per väsen)
     
     // =============================================================================
     // RUNE EFFECTS
@@ -130,8 +135,8 @@ const GAME_CONFIG = {
     // Elemental damage boost runes (Kaunan/Fire, Pertho/Earth, Tyr/Wind, Bjarka/Nature, Laguz/Water)
     RUNE_ELEMENT_DAMAGE_BOOST: 0.14,    // +% damage when using matching element
     
-    // Odal: Low-cost ability damage boost
-    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for abilities costing ≤threshold Megin
+    // Odal: Low-cost skill damage boost
+    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for skills costing ≤threshold Megin
     RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
     
     // Dagaz: First round damage boost
@@ -151,21 +156,21 @@ const GAME_CONFIG = {
     RUNE_NAUDIZ_DEBUFF_STAGES: 1,       // Stages each attribute is lowered by
 
     // Element-specific buff runes (Eihwaz/Earth, Sol/Fire, Ehwaz/Wind, Isaz/Water)
-    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // % chance to trigger attribute buff on matching-element ability use
+    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // % chance to trigger attribute buff on matching-element skill use
     RUNE_ELEMENT_BUFF_STAGES: 1,         // Attribute stages raised when the buff triggers
     
     // Nature healing runes (Algiz, Jera)
-    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // % chance for Algiz to heal on Nature ability use
+    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // % chance for Algiz to heal on Nature skill use
     RUNE_ALGIZ_HEAL_PERCENT: 0.08,       // Heal % of max health when triggered
-    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost ability use
+    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost skill use
     RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
     
     // Inguz: Chance to debuff opponent attributes on any hit
     RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.50, // % chance to lower a random attribute by the debuff amount
     RUNE_INGUZ_DEBUFF_STAGES: 1,         // Stages the random attribute is lowered by
     
-    // Mannaz: Heal on utility ability use
-    RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility ability
+    // Mannaz: Heal on utility skill use
+    RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility skill
 
     // Thurs: returns percentage of damage back to attacker
     RUNE_THURS_RETURN_DAMAGE: 0.20,
@@ -174,12 +179,12 @@ const GAME_CONFIG = {
     // ENEMY AI CONFIGURATION
     // =============================================================================
     
-    // --- Ability Scoring Weights ---
-    // Base scores for different ability types
-    AI_UTILITY_FIRST_USE_SCORE: 30,      // First use of utility ability
-    AI_UTILITY_SECOND_USE_SCORE: 10,     // Second use of utility ability (diminishing value)
+    // --- Skill Scoring Weights ---
+    // Base scores for different skill types
+    AI_UTILITY_FIRST_USE_SCORE: 30,      // First use of utility skill
+    AI_UTILITY_SECOND_USE_SCORE: 10,     // Second use of utility skill (diminishing value)
     AI_UTILITY_THIRD_USE_PENALTY: -80,   // Third+ use penalty (avoid spam)
-    AI_NON_UTILITY_BASE_SCORE: 20,       // Base score for damaging abilities
+    AI_NON_UTILITY_BASE_SCORE: 20,       // Base score for damaging skills
     
     // Damage-based bonuses
     AI_KNOCKOUT_BONUS: 100,              // Bonus if predicted damage will KO the target
@@ -196,12 +201,12 @@ const GAME_CONFIG = {
     AI_ELEMENT_WEAK_WITH_RUNE_PENALTY: -5,    // Small penalty for weak hit if has Naudiz/Inguz
     AI_ELEMENT_WEAK_WITHOUT_RUNE_PENALTY: -30, // Large penalty for weak hit without runes
     
-    // Utility ability bonuses
-    AI_BUFF_BONUS: 40,                   // Bonus for buff utility abilities
-    AI_DEBUFF_BONUS: 30,                 // Bonus for debuff utility abilities
+    // Utility skill bonuses
+    AI_BUFF_BONUS: 40,                   // Bonus for buff utility skills
+    AI_DEBUFF_BONUS: 30,                 // Bonus for debuff utility skills
     
     // Resource management penalties
-    AI_MEGIN_PENALTY_THRESHOLD: 0.5,     // Penalize if ability costs more than this fraction of current Megin
+    AI_MEGIN_PENALTY_THRESHOLD: 0.5,     // Penalize if skill costs more than this fraction of current Megin
     AI_MEGIN_PENALTY: -15,               // Penalty applied when above threshold
     
     // Risk assessment penalties
@@ -227,7 +232,7 @@ const FAMILY_PASSIVE_CONFIG = {
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
-    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
+    // Drake: Draconic Resilience - gain Defense and Durskill when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
     DRAKE_DEFENSE_STAGES: 2,
     DRAKE_DURABILITY_STAGES: 2,
@@ -248,7 +253,7 @@ const FAMILY_PASSIVE_CONFIG = {
     OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT: 2,
     OKNYTT_TAG_TEAM_STAGES: 1,
 
-    // Troll: Troll Theft - steals positive attribute stages from the enemy when using an ability
+    // Troll: Troll Theft - steals positive attribute stages from the enemy when using an skill
     TROLL_STAGE_STEAL: 1,
     
     // Vålnad: Deathless - revives with a fraction of max health upon knockout
@@ -369,7 +374,7 @@ const RARITY_EXP_BONUS = {
 
 const RARITY_DESCRIPTIONS = {
     [RARITIES.COMMON]: 'Widespread väsen found throughout the land. Though frequently encountered, they are no less a part of the ancient fabric of the world.',
-    [RARITIES.UNCOMMON]: 'Less frequently seen than common väsen, with a notable edge in power or ability. Worth seeking out for the advantages they bring.',
+    [RARITIES.UNCOMMON]: 'Less frequently seen than common väsen, with a notable edge in power or skill. Worth seeking out for the advantages they bring.',
     [RARITIES.RARE]: 'Seldom encountered väsen of considerable might. Finding and taming one requires both patience and skill.',
     [RARITIES.MYTHICAL]: 'Legendary väsen of immense power, tied to the gods, the cosmos, or the deepest roots of Norse mythology. Taming one is a feat that will be remembered.'
 };
@@ -416,7 +421,7 @@ const FAMILY_DESCRIPTIONS = {
 const FAMILY_PASSIVES = {
     [FAMILIES.ALV]: {
         name: 'Elven Craftsmanship',
-        description: 'When using an ability that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
+        description: 'When using an skill that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
     },
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
@@ -427,7 +432,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When current health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durability stage (once per battle).`;
+            return `When current health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durskill stage (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {
@@ -456,7 +461,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.TROLL]: {
         name: 'Troll Theft',
         get description() {
-            return `When using an ability, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
+            return `When using an skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
         }
     },
     [FAMILIES.OKNYTT]: {
@@ -475,15 +480,15 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
-    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
-    [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durability: 48 },
-    [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
-    [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
-    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 60, defense: 54, durability: 62 },
-    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
-    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durability: 51 },
-    [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
+    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durskill: 78 },
+    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durskill: 58 },
+    [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durskill: 48 },
+    [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durskill: 60 },
+    [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durskill: 60 },
+    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 60, defense: 54, durskill: 62 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durskill: 50 },
+    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durskill: 51 },
+    [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durskill: 85 }
 };
 
 const ELEMENT_BONUSES = {
@@ -491,7 +496,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.NATURE]: { health: 5 },
     [ELEMENTS.WATER]: { wisdom: 5 },
     [ELEMENTS.FIRE]: { strength: 5 },
-    [ELEMENTS.WIND]: { durability: 5 }
+    [ELEMENTS.WIND]: { durskill: 5 }
 };
 
 const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
@@ -499,16 +504,16 @@ const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },
     BRUTAL:     { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: 5 },
-    SAVAGE:     { name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: 5 },
+    SAVAGE:     { name: 'Savage',     positive: 'strength',   negative: 'durskill', modifier: 5 },
     ALERT:      { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: 5 },
     THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: 5 },
-    FOCUSED:    { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: 5 },
+    FOCUSED:    { name: 'Focused',    positive: 'wisdom',     negative: 'durskill', modifier: 5 },
     RESILIENT:  { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: 5 },
-    HEALTHY:    { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: 5 },
+    HEALTHY:    { name: 'Healthy',    positive: 'health',     negative: 'durskill', modifier: 5 },
     WARY:       { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: 5 },
-    STALWART:   { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: 5 },
-    ENDURING:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: 5 },
-    VIGILANT:   { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: 5 }
+    STALWART:   { name: 'Stalwart',   positive: 'defense',    negative: 'durskill', modifier: 5 },
+    ENDURING:   { name: 'Enduring',   positive: 'durskill', negative: 'health',     modifier: 5 },
+    VIGILANT:   { name: 'Vigilant',   positive: 'durskill', negative: 'defense',    modifier: 5 }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);

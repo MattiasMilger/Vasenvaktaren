@@ -12,7 +12,7 @@ UIController.prototype.renderParty = function() {
             slotContent.classList.remove('empty');
 
             let stagesHtml = '';
-            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+            ['strength', 'wisdom', 'defense', 'durskill'].forEach(attr => {
                 const stage = vasen.attributeStages[attr];
                 if (stage !== 0) {
                     const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -69,7 +69,7 @@ UIController.prototype.renderParty = function() {
                         <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.getAttribute('strength')}</span>
                         <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.getAttribute('wisdom')}</span>
                         <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.getAttribute('defense')}</span>
-                        <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.getAttribute('durability')}</span>
+                        <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.getAttribute('durskill')}</span>
                     </div>
 
                     ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
@@ -450,7 +450,7 @@ UIController.prototype.showSwapIntoPartyModal = function(vasenId) {
         gameState.party.forEach((partyVasen, index) => {
             if (partyVasen) {
                 const slotLabel = index === 0 ? 'Lead' : `Slot ${index + 1}`;
-                // Use standardized card HTML (with combat info since party shows current stats)
+                // Use standardized card HTML (with combat info since party shows current attributes)
                 buttons.push({
                     text: `
                         <div class="swap-party-card-wrapper">

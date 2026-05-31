@@ -3,7 +3,7 @@
 // =============================================================================
 
     // Helper: count unique caught species and total catchable species for a zone
-UIController.prototype.getZoneCaughtStats = function(zoneId) {
+UIController.prototype.getZoneCaughtAttributes = function(zoneId) {
         const zone = ZONES[zoneId];
         if (!zone) return { caught: 0, total: 0 };
 
@@ -36,7 +36,7 @@ UIController.prototype.renderZones = function() {
         zoneBtn.disabled = !isUnlocked;
 
         if (isUnlocked) {
-            const { caught, total } = this.getZoneCaughtStats(zoneId);
+            const { caught, total } = this.getZoneCaughtAttributes(zoneId);
             const allCaught = caught === total;
 
             zoneBtn.innerHTML = `

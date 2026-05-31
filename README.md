@@ -23,10 +23,10 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Unique Creatures** | 45 unique creatures based on Swedish folklore |
 | **Families** | 9 families: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake |
 | **Elements** | 5 elements: Earth, Nature, Water, Fire, Wind |
-| **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durability |
+| **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durskill |
 | **Rarities** | 4 rarities: Common, Uncommon, Rare, Mythical |
 | **Temperaments** | 12 attribute-altering temperaments |
-| **Abilities** | 30 unique abilities |
+| **Skills** | 30 unique skills |
 
 ### Runes
 
@@ -51,7 +51,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 | Combat Action | Mechanics |
 | :--- | :--- |
-| **Abilities** | Use learned attacks (cost Megin) |
+| **Skills** | Use learned attacks (cost Megin) |
 | **Basic Strike** | Free attack using your element |
 | **Swap** | Change active Väsen (causes Swap Sickness) |
 | **Offer Item** | Offer taming items to wild Väsen |
@@ -70,7 +70,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ### Lore Book
 
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
-- Entries organised into categories: Families, Väsen, Items, Abilities, Locations, Concepts
+- Entries organised into categories: Families, Väsen, Items, Skills, Locations, Concepts
 
 ## Achievements
 
@@ -112,7 +112,7 @@ Vasenvaktaren/
 │   ├── 10-combat.css               (combat UI)
 │   ├── 11-modals.css               (modal styles)
 │   ├── 12-badges.css               (badges & effects)
-│   ├── 13-animations.css           (animations & ability animations)
+│   ├── 13-animations.css           (animations & skill animations)
 │   ├── 14-responsive.css           (responsive design)
 │   ├── 15-lore.css                 (lore book styles)
 │   └── 16-items-runes.css          (item and rune UI styles)
@@ -120,7 +120,7 @@ Vasenvaktaren/
 ├── js/
 │   ├── core/
 │   │   ├── 1-constants.js          (game constants)
-│   │   ├── 2-data-abilities.js     (ability definitions)
+│   │   ├── 2-data-skills.js     (skill definitions)
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
 │   │   ├── 4-data-runes.js         (rune definitions; smart rune filter)
@@ -164,7 +164,7 @@ Vasenvaktaren/
 - [x] Finish main Functionality 
 - [x] Introduce endgame system
 - [X] Introduce all 45 Väsen
-- [X] Introduce all 30 Abilities
+- [X] Introduce all 30 Skills
 - [ ] Balance overhaul
 - [ ] Wiki pages
 
