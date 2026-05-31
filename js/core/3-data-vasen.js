@@ -507,7 +507,7 @@ const VASEN_SPECIES = {
     'Nidhogg': {
         name: 'Nidhögg',
         internalName: 'Nidhogg',
-        description: 'A terrifying serpent that perpetually gnaws at the lowest roots of Yggdrasil, constantly threatening the stskill of the entire cosmos.',
+        description: 'A terrifying serpent that perpetually gnaws at the lowest roots of Yggdrasil, constantly threatening the stability of the entire cosmos.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
