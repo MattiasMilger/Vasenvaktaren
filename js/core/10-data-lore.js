@@ -850,14 +850,6 @@ const LORE_ENTRIES = {
         heritage: 'Scandinavian / Germanic',
         unlockType: 'standard'
     },
-    'concept_idunnsapples': {
-        key: 'concept_idunnsapples',
-        name: "Idunn's Apples",
-        category: 'concepts',
-        desc: 'Idunn is the Norse goddess of youth and keeper of the magical golden apples that grant the Aesir gods their immortality. Without her apples, the gods would age and wither like ordinary mortals. Her myth is most fully told in the Prose Edda\'s Skáldskaparmál: the trickster Loki, coerced by the giant Þjazi, lured Idunn out of Asgard, causing the gods to rapidly age. Desperate, they forced Loki to retrieve her. He transformed into a falcon, carried Idunn back to Asgard, and the gods were restored. In the Endless Tower, Idunn\'s blessing descends upon your party at regular milestones - her apples of youth healing wounds, cleansing afflictions, and renewing the inner power of your Väsen.',
-        source: 'Prose Edda (Skáldskaparmál) / Haustlöng (Þjóðólfr of Hvinir)',
-        heritage: 'Norse',
-    }
 };
 
 // =========================================================================
