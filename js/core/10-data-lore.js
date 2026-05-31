@@ -308,7 +308,7 @@ const LORE_ENTRIES = {
         key: 'vasen_gruvra',
         name: 'Gruvrå',
         category: 'vasen',
-        desc: 'The Gruvrå is the mine warden – a beautiful, pale figure who may appear as a benevolent guide or a deadly seductress depending on the miner\'s behavior. Sweden\'s long mining history, particularly in the Bergslagen region, gave rise to a rich tradition of these underground guardians. Miners would leave offerings and observe strict protocols: never whistle underground, never speak of the warden directly, and always treat the mine\'s resources with respect. Knocking on the tunnel walls was often interpreted as her warning of an imminent collapse.',
+        desc: 'The Gruvrå is the mine warden – a beautiful, pale figure who may appear as a benevolent guide or a deadly seductress depending on the miner\'s behavior. Sweden\'s long mining history, particularly in the Bergslagen region, gave rise to a rich tradition of these underground guardians. Miners would leave offerings or and observe strict protocols: never whistle underground, never speak of the warden directly, and always treat the mine\'s resources with respect. Knocking on the tunnel walls was often interpreted as her warning of an imminent collapse.',
         source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'vasen',
@@ -668,7 +668,7 @@ const LORE_ENTRIES = {
         key: 'location_sacred_well',
         name: 'Sacred Wells',
         category: 'locations',
-        desc: 'Sacred springs (heliga källor or offerkällor - "offering sources") are one of the oldest and most widespread forms of folk religious practice in Sweden and Scandinavia. Natural springs were seen as places where the boundary between the human world and the realm of spirits was especially thin. Offerings - coins, pins, rags, flowers - were cast into the water in exchange for healing, luck, or divine intercession. Many sacred springs became associated with specific saints after Christianization, but the practice itself is far older, rooted in pre-Christian reverence for water as a sacred element.',
+        desc: 'Sacred springs (heliga källor or offerkällor - "offering wells") are one of the oldest and most widespread forms of folk religious practice in Sweden and Scandinavia. Natural springs were seen as places where the boundary between the human world and the realm of spirits was especially thin. Offerings or blot - coins, pins, rags, flowers - were cast into the water in exchange for healing, luck, or divine intercession. Many sacred springs became associated with specific saints after Christianization, but the practice itself is far older, rooted in pagan reverence for water as a sacred element.',
         source: 'Swedish Folk Belief / Scandinavian Archaeology',
         heritage: 'Swedish',
         unlockType: 'zone',
@@ -850,14 +850,13 @@ const LORE_ENTRIES = {
         heritage: 'Scandinavian / Germanic',
         unlockType: 'standard'
     },
-    'concept_idunn': {
-        key: 'concept_idunn',
+    'concept_idunnsapples': {
+        key: 'concept_idunnsapples',
         name: "Idunn's Apples",
         category: 'concepts',
         desc: 'Idunn is the Norse goddess of youth and keeper of the magical golden apples that grant the Aesir gods their immortality. Without her apples, the gods would age and wither like ordinary mortals. Her myth is most fully told in the Prose Edda\'s Skáldskaparmál: the trickster Loki, coerced by the giant Þjazi, lured Idunn out of Asgard, causing the gods to rapidly age. Desperate, they forced Loki to retrieve her. He transformed into a falcon, carried Idunn back to Asgard, and the gods were restored. In the Endless Tower, Idunn\'s blessing descends upon your party at regular milestones - her apples of youth healing wounds, cleansing afflictions, and renewing the inner power of your Väsen.',
         source: 'Prose Edda (Skáldskaparmál) / Haustlöng (Þjóðólfr of Hvinir)',
         heritage: 'Norse',
-        unlockType: 'standard'
     }
 };
 
