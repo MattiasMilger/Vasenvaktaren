@@ -485,7 +485,7 @@ const BASE_ATTRIBUTES = {
     [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durskill: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durskill: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durskill: 60 },
-    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 60, defense: 54, durskill: 62 },
+    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 61, defense: 55, durskill: 62 },
     [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durskill: 50 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durskill: 51 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durskill: 85 }
