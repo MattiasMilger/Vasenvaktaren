@@ -485,7 +485,7 @@ const VASEN_SPECIES = {
     'Vitorm': {
         name: 'Vitorm',
         internalName: 'Vitorm',
-        description: 'The snow-white serpent sovereign. Legends claim that consuming its flesh reveals hidden secrets buried deep beneath the earth.',
+        description: 'The snow-white serpent sovereign. Legends claim that consuming its flesh reveals hidden secrets and the ability to understand all tongues.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
