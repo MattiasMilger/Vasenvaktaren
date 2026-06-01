@@ -383,7 +383,9 @@ class VasenInstance {
         }
         instance.experience = data.experience || 0;
         instance.currentHealth = data.currentHealth !== undefined ? data.currentHealth : instance.maxHealth;
-        instance.currentMegin = data.currentMegin !== undefined ? data.currentMegin : instance.maxMegin;
+        // Megin is always fully restored outside of an active battle session.
+        // Always recalculate from current maxMegin so constant changes take effect immediately.
+        instance.currentMegin = instance.maxMegin;
         return instance;
     }
 }

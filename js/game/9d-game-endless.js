@@ -119,9 +119,12 @@ Game.prototype.startEndlessTowerBattle = function() {
             }
         }
 
-        // Reset offers but keep taming disabled
-        this.currentBattle.offersGiven = 0;
+        // Reset per-floor battle state
+        this.currentBattle.giftsGiven = 0;
         this.currentBattle.correctItemGiven = false;
+        this.currentBattle.enemyTeamFreyasTears = 0;
+        this.currentBattle.enemyInitialBonusUsed = new Set();
+        this.currentBattle.enemyUtilityUsage = new Map();
 
         ui.renderCombat(this.currentBattle);
 
