@@ -40,7 +40,7 @@ const VASEN_SPECIES = {
     'Brunnsgubbe': {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
-        description: 'A reclusive well-keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
+        description: 'A reclusive well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
@@ -108,7 +108,7 @@ const VASEN_SPECIES = {
     'Draug': {
         name: 'Draug',
         internalName: 'Draug',
-        description: 'A pale, bloated mound-phantom that refuses to rest in the grave, possessing unnatural strength and radiating a cold, unsettling presence.',
+        description: 'A pale, bloated phantom that refuses to rest in the grave, possessing unnatural strength and radiating a cold, unsettling presence.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -121,7 +121,7 @@ const VASEN_SPECIES = {
     'Backahast': {
         name: 'Bäckahäst',
         internalName: 'Backahast',
-        description: 'A deceptive white river-horse that offers a tempting ride, carrying riders into deep water where escape becomes impossible.',
+        description: 'A deceptive white horse that offers a tempting ride, carrying riders into deep water where escape becomes impossible.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
@@ -268,7 +268,7 @@ const VASEN_SPECIES = {
     'Mara': {
         name: 'Mara',
         internalName: 'Mara',
-        description: 'A shifting dream-warden capable of slipping through narrow cracks, settling upon sleeping victims and burdening every breath with a crushing weight.',
+        description: 'A shifting dream warden capable of slipping through narrow cracks, settling upon sleeping victims and burdening every breath with a crushing weight.',
         family: FAMILIES.RA,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -439,7 +439,7 @@ const VASEN_SPECIES = {
     'Jarnvidja': {
         name: 'Järnvidja',
         internalName: 'Jarnvidja',
-        description: 'A grim iron-wood giant who breeds the wolves of chaos, guarding ancient thickets with relentless strength and fierce determination.',
+        description: 'A grim iron wood giant who breeds the wolves of chaos, guarding ancient thickets with relentless strength and fierce determination.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -474,7 +474,7 @@ const VASEN_SPECIES = {
     'Fafner': {
         name: 'Fafner',
         internalName: 'Fafner',
-        description: 'A dreadful hoard-serpent cursed by greed and obsession. Vast piles of stolen treasure surround its lair, claimed through fear and bloodshed.',
+        description: 'A dreadful serpent cursed by greed and obsession. Vast piles of stolen treasure surround its lair, claimed through fear and bloodshed.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -496,7 +496,7 @@ const VASEN_SPECIES = {
     'Jormungandr': {
         name: 'Jörmungandr',
         internalName: 'Jormungandr',
-        description: 'The boundless world-serpent whose endless coils encircle Midgard, resting within the primordial ocean while awaiting the final battle.',
+        description: 'The boundless serpent whose endless coils encircle Midgard, resting within the primordial ocean while awaiting the final battle.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
