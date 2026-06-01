@@ -299,11 +299,11 @@ const ELEMENT_COLORS = {
 };
 
 const ELEMENT_FLAVOR = {
-    [ELEMENTS.EARTH]: 'The element of stone, soil, and the forge.',
-    [ELEMENTS.NATURE]: 'The element of growth, forest, and life.',
-    [ELEMENTS.WATER]: 'The element of rivers, seas, and insight.',
-    [ELEMENTS.FIRE]: 'The element of flame, heat, and might.',
-    [ELEMENTS.WIND]: 'The element of air, storm, and resilience.'
+    [ELEMENTS.EARTH]:  'The element of stone, soil, and might.',
+    [ELEMENTS.NATURE]: 'The element of seed, sprout, and light.',
+    [ELEMENTS.WATER]:  'The element of river, rain, and insight.',
+    [ELEMENTS.FIRE]:   'The element of flame, fury, and spite.',
+    [ELEMENTS.WIND]:   'The element of storm, sky, and flight.'
 };
 
 const DAMAGE_MULTIPLIERS = {
