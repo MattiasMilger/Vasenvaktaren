@@ -426,7 +426,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
         get description() {
-            return `When entering the battlefield, raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attribute by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`; 
+            return `When entering the battlefield, raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`; 
         }
     },
     [FAMILIES.DRAKE]: {
