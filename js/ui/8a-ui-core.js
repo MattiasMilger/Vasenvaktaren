@@ -16,7 +16,7 @@ class UIController {
         this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : true;
         const savedCards = localStorage.getItem('combatCardsMinimized');
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
-        this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durskill, strength, wisdom, rarity
+        this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
     // Initialize UI elements

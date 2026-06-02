@@ -232,7 +232,7 @@ const FAMILY_PASSIVE_CONFIG = {
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
-    // Drake: Draconic Resilience - gain Defense and Durskill when health drops to 50% or lower
+    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
     DRAKE_DEFENSE_STAGES: 2,
     DRAKE_DURABILITY_STAGES: 2,
@@ -432,7 +432,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When current health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durskill stage (once per battle).`;
+            return `When current health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durability stage (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {
@@ -480,15 +480,15 @@ const FAMILY_PASSIVES = {
 
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
-    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durskill: 78 },
-    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durskill: 58 },
-    [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durskill: 48 },
-    [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durskill: 60 },
-    [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durskill: 60 },
-    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 61, defense: 55, durskill: 62 },
-    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durskill: 50 },
-    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durskill: 51 },
-    [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durskill: 85 }
+    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
+    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
+    [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durability: 48 },
+    [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
+    [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
+    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 61, defense: 55, durability: 62 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
+    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durability: 51 },
+    [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
 };
 
 const ELEMENT_BONUSES = {
@@ -496,7 +496,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.NATURE]: { health: 5 },
     [ELEMENTS.WATER]: { wisdom: 5 },
     [ELEMENTS.FIRE]: { strength: 5 },
-    [ELEMENTS.WIND]: { durskill: 5 }
+    [ELEMENTS.WIND]: { durability: 5 }
 };
 
 const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
@@ -504,16 +504,16 @@ const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },
     BRUTAL:     { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: 5 },
-    SAVAGE:     { name: 'Savage',     positive: 'strength',   negative: 'durskill', modifier: 5 },
+    SAVAGE:     { name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: 5 },
     ALERT:      { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: 5 },
     THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: 5 },
-    FOCUSED:    { name: 'Focused',    positive: 'wisdom',     negative: 'durskill', modifier: 5 },
+    FOCUSED:    { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: 5 },
     RESILIENT:  { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: 5 },
-    HEALTHY:    { name: 'Healthy',    positive: 'health',     negative: 'durskill', modifier: 5 },
+    HEALTHY:    { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: 5 },
     WARY:       { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: 5 },
-    STALWART:   { name: 'Stalwart',   positive: 'defense',    negative: 'durskill', modifier: 5 },
-    ENDURING:   { name: 'Enduring',   positive: 'durskill', negative: 'health',     modifier: 5 },
-    VIGILANT:   { name: 'Vigilant',   positive: 'durskill', negative: 'defense',    modifier: 5 }
+    STALWART:   { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: 5 },
+    ENDURING:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: 5 },
+    VIGILANT:   { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: 5 }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);

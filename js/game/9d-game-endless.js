@@ -148,7 +148,7 @@ Game.prototype.startEndlessTowerBattle = function() {
 Game.prototype.applyIdunnApples = function() {
     const healPercent  = GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT;
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
-    const attrs = ['strength', 'wisdom', 'defense', 'durskill'];
+    const attrs = ['strength', 'wisdom', 'defense', 'durability'];
 
     gameState.party.forEach(v => {
         if (!v || v.isKnockedOut()) return;

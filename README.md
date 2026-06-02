@@ -23,7 +23,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Unique Creatures** | 45 unique creatures based on Swedish folklore |
 | **Families** | 9 families: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake |
 | **Elements** | 5 elements: Earth, Nature, Water, Fire, Wind |
-| **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durskill |
+| **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durability |
 | **Rarities** | 4 rarities: Common, Uncommon, Rare, Mythical |
 | **Temperaments** | 12 attribute-altering temperaments |
 | **Skills** | 30 unique skills |

@@ -41,7 +41,7 @@ const RUNES = {
         name: 'Ansuz',
         fullName: 'Ansuz',
         flavor: 'The voice of the gods. It transforms the brute force of the wielder\'s body into a calculated, insightful display of esoteric power.',
-        effect: 'This Väsen\'s strength attacks are considered wisdom attacks (they use wisdom and are checked against durskill)',
+        effect: 'This Väsen\'s strength attacks are considered wisdom attacks (they use wisdom and are checked against durability)',
         mechanic: { type: 'convert_strength_to_wisdom' }
     },
     'RAIDO': {
@@ -133,11 +133,11 @@ const RUNES = {
         symbol: 'ᛇ',
         name: 'Eihwaz',
         fullName: 'Eihwaz',
-        flavor: 'The immense durskill of the Yew tree and the structure of the cosmos. Drawing upon the earth grants a foundational resilience, shielding both mind and body.',
+        flavor: 'The immense durability of the Yew tree and the structure of the cosmos. Drawing upon the earth grants a foundational resilience, shielding both mind and body.',
         get effect() {
-            return `This väsen\'s Earth Skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durskill Attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
+            return `This väsen\'s Earth Skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its Defense and Durability Attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
-        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.EARTH, attributes: ['defense', 'durskill'], chance: 0.30 }
+        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.EARTH, attributes: ['defense', 'durability'], chance: 0.30 }
     },
     'PERTHO': {
         id: 'PERTHO',
@@ -201,9 +201,9 @@ const RUNES = {
         fullName: 'Ehwaz',
         flavor: 'The swift, coordinated power of the horse and rider. As the wielder moves with the element of wind, their physical frame becomes surprisingly stable and resilient.',
         get effect() {
-            return `This väsen\'s wind skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its defense and durskill attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
+            return `This väsen\'s wind skills have a ${Math.round(GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE * 100)}% chance to raise its defense and durability attributes by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} stage`;
         },
-        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.WIND, attributes: ['defense', 'durskill'], chance: 0.30 }
+        mechanic: { type: 'buff_on_element_skill', element: ELEMENTS.WIND, attributes: ['defense', 'durability'], chance: 0.30 }
     },
     'MANNAZ': {
         id: 'MANNAZ',

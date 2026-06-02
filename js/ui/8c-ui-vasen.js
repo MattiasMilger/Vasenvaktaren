@@ -52,11 +52,11 @@ UIController.prototype.getSortedVasenCollection = function() {
                 const diff = b.calculateAttribute('defense') - a.calculateAttribute('defense');
                 return diff !== 0 ? diff : alphabetical(a, b);
             });
-        case 'durskill':
+        case 'durability':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
-                const diff = b.calculateAttribute('durskill') - a.calculateAttribute('durskill');
+                const diff = b.calculateAttribute('durability') - a.calculateAttribute('durability');
                 return diff !== 0 ? diff : alphabetical(a, b);
             });
         case 'strength':
@@ -112,7 +112,7 @@ UIController.prototype.renderVasenInventory = function() {
             <option value="element" ${this.vasenSortBy === 'element' ? 'selected' : ''}>Element</option>
             <option value="health" ${this.vasenSortBy === 'health' ? 'selected' : ''}>Health</option>
             <option value="defense" ${this.vasenSortBy === 'defense' ? 'selected' : ''}>Defense</option>
-            <option value="durskill" ${this.vasenSortBy === 'durskill' ? 'selected' : ''}>Durskill</option>
+            <option value="durability" ${this.vasenSortBy === 'durability' ? 'selected' : ''}>Durability</option>
             <option value="strength" ${this.vasenSortBy === 'strength' ? 'selected' : ''}>Strength</option>
             <option value="wisdom" ${this.vasenSortBy === 'wisdom' ? 'selected' : ''}>Wisdom</option>
             <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
@@ -303,7 +303,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.calculateAttribute('strength')}</span>
             <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.calculateAttribute('wisdom')}</span>
             <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.calculateAttribute('defense')}</span>
-            <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durskill')}</span>
+            <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durability')}</span>
         </div>
         ${vasen.runes && vasen.runes.length > 0 ? `
         <div class="vasen-card-runes">
@@ -548,8 +548,8 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                     <span class="attr-value">${vasen.calculateAttribute('defense')}</span>
                 </div>
                 <div class="attribute-item">
-                    <span class="attr-name">Durskill</span>
-                    <span class="attr-value">${vasen.calculateAttribute('durskill')}</span>
+                    <span class="attr-name">Durability</span>
+                    <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
                 </div>
             </div>
         </div>

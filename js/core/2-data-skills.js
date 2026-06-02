@@ -136,12 +136,12 @@ const ABILITIES = {
     'Thick Coat': {
         name: 'Thick Coat',
         flavorDescription: 'Toughens your body to endure the harshest elements and fiercest strikes.',
-        mechanicsDescription: `Raises your defense and durskill by 1 stage.`,
+        mechanicsDescription: `Raises your defense and durability by 1 stage.`,
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 30,
-        effect: { type: 'buff', target: 'self', attributes: ['defense', 'durskill'], stages: 1 },
+        effect: { type: 'buff', target: 'self', attributes: ['defense', 'durability'], stages: 1 },
         initialBonus: 1
     },
 
@@ -259,12 +259,12 @@ const ABILITIES = {
     'Burning Insult': {
         name: 'Burning Insult',
         flavorDescription: 'Hurls a vicious, withering curse that crushes the enemy\'s resolve.',
-        mechanicsDescription: `Lowers enemy\'s defense and durskill by 1 stage.`,
+        mechanicsDescription: `Lowers enemy\'s defense and durability by 1 stage.`,
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 30,
-        effect: { type: 'debuff', target: 'enemy', attributes: ['defense', 'durskill'], stages: 1 },
+        effect: { type: 'debuff', target: 'enemy', attributes: ['defense', 'durability'], stages: 1 },
         initialBonus: 1
     },
 

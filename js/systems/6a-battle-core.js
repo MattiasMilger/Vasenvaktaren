@@ -612,9 +612,9 @@ class Battle {
 
             // Eihwaz, Sol, Ehwaz, Isaz: element skill buffs (also apply to utility skills)
             const utilityElementBuffs = {
-                [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durskill'] },
+                [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durability'] },
                 [ELEMENTS.FIRE]:  { rune: 'SOL',    attributes: ['strength', 'wisdom'] },
-                [ELEMENTS.WIND]:  { rune: 'EHWAZ',  attributes: ['defense', 'durskill'] },
+                [ELEMENTS.WIND]:  { rune: 'EHWAZ',  attributes: ['defense', 'durability'] },
                 [ELEMENTS.WATER]: { rune: 'ISAZ',   attributes: ['wisdom', 'strength'] }
             };
             const utilityBuffData = utilityElementBuffs[skill.element];
@@ -690,7 +690,7 @@ class Battle {
             // Hagal rune: Debuff enemy on knockout (triggers BEFORE revive check)
             if (defender.hasRune('HAGAL')) {
                 this.addLog(`${defender.getDisplayName()}'s ${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
-                ['strength', 'wisdom', 'defense', 'durskill'].forEach(stat => {
+                ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
                     const result = attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES);
                     if (result.changed !== 0) {
                         const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
@@ -739,7 +739,7 @@ class Battle {
                 // Apply Naudiz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {
                     this.addLog(`${defender.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                     for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
                         const randomIndex = Math.floor(Math.random() * attributes.length);
                         const stat = attributes[randomIndex];
@@ -748,7 +748,7 @@ class Battle {
                             attacker.battleFlags.wynjaTriggered = true;
                             this.addLog(`${attacker.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
                             this.addLog(`${attacker.getDisplayName()} blocked the debuff!`, 'block');
-                            const counterStat = ['strength', 'wisdom', 'defense', 'durskill'][Math.floor(Math.random() * 4)];
+                            const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                             attacker.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
                             const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
                             this.addLog(`${attacker.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
@@ -769,13 +769,13 @@ class Battle {
                             attacker.battleFlags.wynjaTriggered = true;
                             this.addLog(`${attacker.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
                             this.addLog(`${attacker.getDisplayName()} blocked the debuff!`, 'block');
-                            const counterStat = ['strength', 'wisdom', 'defense', 'durskill'][Math.floor(Math.random() * 4)];
+                            const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                             attacker.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
                             const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
                             this.addLog(`${attacker.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
                         } else {
                             this.addLog(`${defender.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                            const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                            const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                             const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
                             attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
                             const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
@@ -910,7 +910,7 @@ class Battle {
             ) * GAME_CONFIG.MIXED_ATTACK_STRENGTH_PORTION;
             
             const wisdomDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('wisdom'), defender.getAttribute('durskill'),
+                power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
                 damageRange, elementMod, runeMod
             ) * GAME_CONFIG.MIXED_ATTACK_WISDOM_PORTION;
             
@@ -922,7 +922,7 @@ class Battle {
             );
         } else if (useWisdom) {
             totalDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('wisdom'), defender.getAttribute('durskill'),
+                power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
                 damageRange, elementMod, runeMod
             );
         }
@@ -999,7 +999,7 @@ class Battle {
             this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
 
             // Raise all 4 attributes by TYRS_SACRIFICE_STAGES stages
-            const sacrificeAttributes = ['strength', 'wisdom', 'defense', 'durskill'];
+            const sacrificeAttributes = ['strength', 'wisdom', 'defense', 'durability'];
             sacrificeAttributes.forEach(stat => {
                 const result = user.modifyAttributeStage(stat, GAME_CONFIG.TYRS_SACRIFICE_STAGES);
                 if (result.changed !== 0) {
@@ -1151,7 +1151,7 @@ class Battle {
                 this.addLog(`${targetVasen.getDisplayName()} blocked the debuff!`, 'block');
                 
                 // Raise random attribute
-                const randomStat = ['strength', 'wisdom', 'defense', 'durskill'][Math.floor(Math.random() * 4)];
+                const randomStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                 targetVasen.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
                 const stageWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
                 this.addLog(`${targetVasen.getDisplayName()}'s ${randomStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${stageWord}!`, 'buff');
@@ -1201,9 +1201,9 @@ class Battle {
         
         // Element skill buffs (Eihwaz, Sol, Ehwaz, Isaz)
         const elementSkillBuffs = {
-            [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durskill'] },
+            [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durability'] },
             [ELEMENTS.FIRE]: { rune: 'SOL', attributes: ['strength', 'wisdom'] },
-            [ELEMENTS.WIND]: { rune: 'EHWAZ', attributes: ['defense', 'durskill'] },
+            [ELEMENTS.WIND]: { rune: 'EHWAZ', attributes: ['defense', 'durability'] },
             [ELEMENTS.WATER]: { rune: 'ISAZ', attributes: ['wisdom', 'strength'] }
         };
         
@@ -1254,13 +1254,13 @@ class Battle {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
                     this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
                     this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
-                    const counterStat = ['strength', 'wisdom', 'defense', 'durskill'][Math.floor(Math.random() * 4)];
+                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                     defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
                     const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
                     this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
                 } else {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                     for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
                         const randomIndex = Math.floor(Math.random() * attributes.length);
                         const stat = attributes[randomIndex];
@@ -1282,13 +1282,13 @@ class Battle {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
                     this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
                     this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
-                    const counterStat = ['strength', 'wisdom', 'defense', 'durskill'][Math.floor(Math.random() * 4)];
+                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
                     defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
                     const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
                     this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
                 } else {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                     const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
                     defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
                     const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
@@ -1434,7 +1434,7 @@ class Battle {
             if (!vasen.battleFlags.andePassiveTriggered) {
                 vasen.battleFlags.andePassiveTriggered = true;
                 
-                const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                 const stages = FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES;
                 const rollCount = FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES;
 
@@ -1519,7 +1519,7 @@ class Battle {
         if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.OKNYTT) {
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
-                const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                 const stages = FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES;
                 const stageWord = stages === 1 ? 'stage' : 'stages';
                 const allies = isPlayer ? this.playerTeam : this.enemyTeam;
@@ -1574,7 +1574,7 @@ class Battle {
 
                 const attributesToBuff = [
                     { name: 'defense', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES },
-                    { name: 'durskill', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES }
+                    { name: 'durability', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES }
                 ];
 
                 attributesToBuff.forEach(item => {
@@ -1604,7 +1604,7 @@ class Battle {
             const { attacker } = context;
             if (attacker && !attacker.isKnockedOut() && !vasen.battleFlags.raPassiveTriggered) {
                 vasen.battleFlags.raPassiveTriggered = true;
-                const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                 const debuffedAttributes = [];
                 for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
                     if (attributes.length > 0) {
@@ -1628,7 +1628,7 @@ class Battle {
             const { defender } = context;
             if (defender && !defender.isKnockedOut() && !vasen.battleFlags.trollPassiveTriggered) {
                 vasen.battleFlags.trollPassiveTriggered = true;
-                const attributes = ['strength', 'wisdom', 'defense', 'durskill'];
+                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                 const stealableAttributes = attributes.filter(stat => defender.attributeStages[stat] > 0);
                 
                 if (stealableAttributes.length > 0) {

@@ -34,7 +34,7 @@ class VasenInstance {
             strength: 0,
             wisdom: 0,
             defense: 0,
-            durskill: 0
+            durability: 0
         };
         
         this.battleFlags = {
@@ -254,7 +254,7 @@ class VasenInstance {
             strength: 0,
             wisdom: 0,
             defense: 0,
-            durskill: 0
+            durability: 0
         };
         this.battleFlags = {
             hasSwapSickness: false,

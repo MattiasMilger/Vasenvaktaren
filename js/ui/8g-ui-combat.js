@@ -234,7 +234,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
             <div class="combat-attr"><span class="combat-attr-name">Str</span><span class="combat-attr-value">${vasen.getAttribute('strength')}</span></div>
             <div class="combat-attr"><span class="combat-attr-name">Wis</span><span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span></div>
             <div class="combat-attr"><span class="combat-attr-name">Def</span><span class="combat-attr-value">${vasen.getAttribute('defense')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durskill')}</span></div>
+            <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
         </div>
 
         <div class="combatant-description">
@@ -285,7 +285,7 @@ UIController.prototype.renderAttributeStages = function(vasen) {
         const stages = vasen.attributeStages;
         let html = '';
 
-        ['strength', 'wisdom', 'defense', 'durskill'].forEach(attr => {
+        ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
             const stage = stages[attr];
             if (stage !== 0) {
                 const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -310,7 +310,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
         // Build attribute stages HTML (only for combat info)
         let stagesHtml = '';
         if (showCombatInfo) {
-            ['strength', 'wisdom', 'defense', 'durskill'].forEach(attr => {
+            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
                 const stage = vasen.attributeStages[attr];
                 if (stage !== 0) {
                     const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -352,7 +352,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
                     <span class="mini-attr"><span class="attr-label">STR</span> ${getAttrValue('strength')}</span>
                     <span class="mini-attr"><span class="attr-label">WIS</span> ${getAttrValue('wisdom')}</span>
                     <span class="mini-attr"><span class="attr-label">DEF</span> ${getAttrValue('defense')}</span>
-                    <span class="mini-attr"><span class="attr-label">DUR</span> ${getAttrValue('durskill')}</span>
+                    <span class="mini-attr"><span class="attr-label">DUR</span> ${getAttrValue('durability')}</span>
                 </div>
                 ${stagesHtml ? `<div class="standard-vasen-stages">${stagesHtml}</div>` : ''}
                 ${runesHtml ? `<div class="standard-vasen-runes">${runesHtml}</div>` : ''}

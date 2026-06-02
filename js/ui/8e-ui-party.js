@@ -12,7 +12,7 @@ UIController.prototype.renderParty = function() {
             slotContent.classList.remove('empty');
 
             let stagesHtml = '';
-            ['strength', 'wisdom', 'defense', 'durskill'].forEach(attr => {
+            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
                 const stage = vasen.attributeStages[attr];
                 if (stage !== 0) {
                     const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -69,7 +69,7 @@ UIController.prototype.renderParty = function() {
                         <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.getAttribute('strength')}</span>
                         <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.getAttribute('wisdom')}</span>
                         <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.getAttribute('defense')}</span>
-                        <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.getAttribute('durskill')}</span>
+                        <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.getAttribute('durability')}</span>
                     </div>
 
                     ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
