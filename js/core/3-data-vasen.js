@@ -292,7 +292,7 @@ const VASEN_SPECIES = {
     'Alva': {
         name: 'Älva',
         internalName: 'Alva',
-        description: 'A tiny, shimmering twilight elf carried upon high currents and evening breezes, leaving behind sudden luck or ill fortune while passing through.',
+        description: 'A tiny twilight faerie carried upon high currents and evening breezes, leaving behind sudden luck or ill fortune while passing through.',
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Dimalva': {
         name: 'Dimälva',
         internalName: 'Dimalva',
-        description: 'A minuscule mist elf fluttering above lakes at dawn, weaving dense fog across the shoreline and drawing the unwary toward the reeds.',
+        description: 'A minuscule mist faerie fluttering above lakes at dawn, weaving dense fog across the shoreline and drawing the unwary toward the reeds.',
         family: FAMILIES.ALV,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
