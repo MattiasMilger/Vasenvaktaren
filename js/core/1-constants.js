@@ -17,7 +17,7 @@ const GAME_CONFIG = {
     // =============================================================================
     MAX_LEVEL: 30,
     ENEMY_MAX_LEVEL: 999,
-    STARTER_LEVEL: 10,
+    STARTER_LEVEL: 9,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
     LEVEL_UP_ACCELERATION: 5,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
@@ -481,11 +481,11 @@ const FAMILY_PASSIVES = {
 // Base attributes for each family
 const BASE_ATTRIBUTES = {
     [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
-    [FAMILIES.VALNAD]: { strength: 70, wisdom: 67, health: 58, defense: 75, durability: 58 },
+    [FAMILIES.VALNAD]: { strength: 70, wisdom: 69, health: 58, defense: 75, durability: 58 },
     [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durability: 48 },
     [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
     [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
-    [FAMILIES.ALV]: { strength: 68, wisdom: 83, health: 61, defense: 55, durability: 62 },
+    [FAMILIES.ALV]: { strength: 66, wisdom: 82, health: 61, defense: 55, durability: 59 },
     [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
     [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 81, defense: 54, durability: 51 },
     [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
