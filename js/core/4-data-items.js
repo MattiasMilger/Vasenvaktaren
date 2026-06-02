@@ -30,7 +30,7 @@ const TAMING_ITEMS = {
     },
     'Attic Key': {
         name: 'Attic Key',
-        description: 'A rusted attic key. It feels unusually cold to the touch; a perfect token to entice the rafter prankster out from the high beams.',
+        description: 'A rusted attic key. It feels unusually cold to the touch; a perfect token to entice the loft prankster out from the high beams.',
         tamingTarget: 'Pyssling'
     },
 

@@ -66,7 +66,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'garden prankster',
         'house prankster',
         'well prankster',
-        'rafter prankster',
+        'loft prankster',
         // Vålnad (Phantom)
         'raven phantom',
         'grave phantom',

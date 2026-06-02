@@ -850,6 +850,16 @@ const LORE_ENTRIES = {
         heritage: 'Scandinavian / Germanic',
         unlockType: 'standard'
     },
+    'concept_idunn_apples': {
+        key: 'concept_idunn_apples',
+        name: "Idunn's Apples",
+        category: 'concepts',
+        desc: "Idunn is the Norse goddess of youth and the keeper of the golden apples that sustain the immortality of the Aesir gods. Without her apples, the gods would age and wither like ordinary mortals. The most famous myth surrounding Idunn involves the trickster Loki, who - under duress from the giant Þjazi - lured Idunn and her apples out of Asgard, causing the gods to rapidly grow old and feeble. Loki was forced to rescue her by transforming her into a nut and flying her back to Asgard in the shape of a falcon. Her apples represent the cyclical renewal of strength and vitality - a brief respite from the inevitable toll of battle and time.",
+        source: 'Prose Edda (Skáldskaparmál) / Poetic Edda (Haustlöng)',
+        heritage: 'Norse',
+        unlockType: 'zone',
+        unlockKey: 'GINNUNGAGAP'
+    },
 };
 
 // =========================================================================
