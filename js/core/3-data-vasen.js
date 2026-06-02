@@ -439,7 +439,7 @@ const VASEN_SPECIES = {
     'Jarnvidja': {
         name: 'Järnvidja',
         internalName: 'Jarnvidja',
-        description: 'A grim iron wood giant who breeds the wolves of chaos, guarding ancient thickets with relentless strength and fierce determination.',
+        description: 'A grim iron wood giantess who breeds the wolves of chaos, guarding ancient thickets with relentless strength and fierce determination.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
