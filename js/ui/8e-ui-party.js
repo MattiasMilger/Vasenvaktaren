@@ -107,7 +107,6 @@ UIController.prototype._ensureAutoRunesButton = function() {
     btn.id = 'auto-equip-runes-btn';
     btn.className = 'btn btn-auto-runes';
     btn.textContent = 'Auto Equip Runes';
-    btn.title = 'Randomly equip suitable runes to all party members';
     btn.onclick = () => this.autoEquipRunes();
 
     partySection.appendChild(btn);
@@ -571,7 +570,6 @@ UIController.prototype._ensureAutoHealButton = function() {
     btn.id = 'auto-heal-btn';
     btn.className = 'btn btn-auto-runes';
     btn.textContent = 'Auto Heal';
-    btn.title = 'Heal your party using taming items.';
     btn.onclick = () => this.confirmAutoHeal();
 
     partySection.appendChild(btn);
