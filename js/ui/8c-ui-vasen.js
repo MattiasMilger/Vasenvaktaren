@@ -196,8 +196,8 @@ UIController.prototype.renderVasenByElement = function(container) {
         byElement[element].push(vasen);
     });
 
-    // Use defined element order from constants
-    const elementOrder = Object.values(ELEMENTS);
+    // Use alphabetical element order (Earth > Fire > Nature > Water > Wind)
+    const elementOrder = Object.values(ELEMENTS).sort();
 
     elementOrder.forEach(element => {
         if (!byElement[element] || byElement[element].length === 0) return;

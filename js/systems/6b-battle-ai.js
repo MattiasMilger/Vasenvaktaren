@@ -28,7 +28,12 @@ class EnemyAI {
         skills.forEach(skillName => {
             if (this.vasen.canUseSkill(skillName)) {
                 const score = this.scoreSkill(skillName);
-                actions.push({ type: 'skill', skill: skillName, score });
+                const action = { type: 'skill', skill: skillName, score };
+                // For ally-targeted buff skills, pre-select the best target
+                if (skillRequiresAllyTarget(skillName)) {
+                    action.selectedAllyTarget = this.chooseBestAllyTarget(skillName);
+                }
+                actions.push(action);
             }
         });
         
@@ -267,7 +272,7 @@ class EnemyAI {
         
         // Account for empowerment boost
         if (this.vasen.battleFlags.isEmpowered) {
-            elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT);
+            elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT);
         }
         
         // Giantsbane: effective power is derived from target's current HP, not skill.power
@@ -281,7 +286,7 @@ class EnemyAI {
         const attackStat = skill.type === ATTACK_TYPES.WISDOM ? 
             this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
         const defenseStat = skill.type === ATTACK_TYPES.WISDOM ?
-            this.target.getAttribute('durability') : this.target.getAttribute('defense');
+            this.target.getAttribute('durskill') : this.target.getAttribute('defense');
         
         const powerFactor = power / GAME_CONFIG.POWER_CONSTANT;
         const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));
@@ -316,6 +321,53 @@ class EnemyAI {
         return bonus;
     }
     
+    // Choose the best ally target for a buff skill.
+    // Returns the VasenInstance to target (could be the caster itself).
+    chooseBestAllyTarget(skillName) {
+        const skill = ABILITIES[skillName];
+        if (!skill || !skill.effect || skill.effect.target !== 'ally') return null;
+
+        // Build the candidate pool: all alive members of the enemy team
+        const candidates = this.battle.enemyTeam.filter(v => !v.isKnockedOut());
+        if (candidates.length === 0) return null;
+        if (candidates.length === 1) return candidates[0];
+
+        const isAlv = this.vasen.species.family === FAMILIES.ALV;
+
+        // Smithing buffs Strength (and also Wisdom for Alv via Elven Craftsmanship)
+        // Skald's Mead buffs Wisdom (and also Strength for Alv via Elven Craftsmanship)
+        // For Alv, both skills end up buffing both stats equally, so rank by STR+WIS combined.
+        // For non-Alv: Smithing -> highest Strength, Skald's Mead -> highest Wisdom.
+        let scoreFn;
+        if (isAlv) {
+            scoreFn = v => v.calculateAttribute('strength') + v.calculateAttribute('wisdom');
+        } else if (skillName === 'Smithing') {
+            scoreFn = v => v.calculateAttribute('strength');
+        } else if (skillName === "Skald's Mead") {
+            scoreFn = v => v.calculateAttribute('wisdom');
+        } else {
+            // Generic fallback: pick whoever has the highest value of the buffed stat
+            const buffedStat = skill.effect.stat || (skill.effect.attributes && skill.effect.attributes[0]);
+            if (buffedStat) {
+                scoreFn = v => v.calculateAttribute(buffedStat);
+            } else {
+                // No recognisable stat — just return the caster
+                return this.vasen;
+            }
+        }
+
+        let best = candidates[0];
+        let bestScore = scoreFn(candidates[0]);
+        for (let i = 1; i < candidates.length; i++) {
+            const s = scoreFn(candidates[i]);
+            if (s > bestScore) {
+                bestScore = s;
+                best = candidates[i];
+            }
+        }
+        return best;
+    }
+
     assessThreat() {
         // Estimate threat level from 0 to 1
         const healthRatio = this.vasen.currentHealth / this.vasen.maxHealth;
