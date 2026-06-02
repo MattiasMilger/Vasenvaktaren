@@ -10,7 +10,7 @@ const VASEN_SPECIES = {
         description: 'A masterful subterranean artisan from Nidavellir who seeks rare materials and crafts magical artifacts that bend the rules of reality.',
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.RARE,
         skills: ['Sinkhole', 'Lava Jet', 'Smithing', 'Landslide'],
         tamingItem: 'Shiny Trinket',
         image: 'assets/vasen/svartalv.png'
