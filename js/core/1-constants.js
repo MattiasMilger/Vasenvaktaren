@@ -17,7 +17,7 @@ const GAME_CONFIG = {
     // =============================================================================
     MAX_LEVEL: 30,
     ENEMY_MAX_LEVEL: 999,
-    STARTER_LEVEL: 8,
+    STARTER_LEVEL: 10,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
     LEVEL_UP_ACCELERATION: 5,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
@@ -278,7 +278,7 @@ const FAMILY_KEYWORDS = {
 };
 
 // Starter Väsen options (species keys from VASEN_SPECIES)
-const STARTER_VASEN = ['Landvatte', 'Gardstomte', 'Hustomte'];
+const STARTER_VASEN = ['Landvatte', 'Hustomte', 'Gardstomte'];
 
 const ELEMENTS = {
     EARTH: 'Earth',
