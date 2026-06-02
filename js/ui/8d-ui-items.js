@@ -110,7 +110,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'iron forest giant',
         'storm giant',
         // Drake (Serpent)
-        'forest serpent',
+        'slithering serpent',
         'hoard serpent',
         'pale serpent',
         'world serpent',

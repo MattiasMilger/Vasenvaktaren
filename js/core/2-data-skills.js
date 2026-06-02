@@ -361,13 +361,13 @@ const ABILITIES = {
     }
 };
 
-// Helper function to check if an skill is damaging
+// Helper function to check if a skill is damaging
 function isSkillDamaging(skillName) {
     const skill = ABILITIES[skillName];
     return skill && skill.type !== ATTACK_TYPES.UTILITY;
 }
 
-// Helper function to check if an skill grants empowerment
+// Helper function to check if a skill grants empowerment
 function skillGrantsEmpowerment(skillName) {
     const skill = ABILITIES[skillName];
     return skill && skill.grantsEmpowerment === true;

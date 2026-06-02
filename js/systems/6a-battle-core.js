@@ -543,7 +543,7 @@ class Battle {
         return { surrendered: true };
     }
     
-    // Execute an skill
+    // Execute a skill
     executeSkill(attacker, defender, skillName, isPlayer, selectedAllyTarget = null) {
         const skill = ABILITIES[skillName];
         if (!skill) return null;

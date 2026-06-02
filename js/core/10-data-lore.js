@@ -692,7 +692,7 @@ const LORE_ENTRIES = {
         key: 'skill_smithing',
         name: 'Smithing',
         category: 'skills',
-        desc: 'Smithing held an almost sacred status in Norse culture - the smith who could transform raw ore into weapons and tools was seen as wielding creative power akin to the gods. The mythological forge elves of Norse myth were the dark elves or dwarves, who crafted the greatest treasures of the gods: Mjölnir, Gungnir, Gleipnir, and the ship Skidbladnir. In Swedish folk tradition, the smith was a figure of both respect and some unease - their mastery of fire and metal made them liminal, connected to forces beyond ordinary human skill.',
+        desc: 'Smithing held an almost sacred status in Norse culture - the smith who could transform raw ore into weapons and tools was seen as wielding creative power akin to the gods. The mythological forge elves of Norse myth were the dark elves or dwarves, who crafted the greatest treasures of the gods: Mjölnir, Gungnir, Gleipnir, and the ship Skidbladnir. In Swedish folk tradition, the smith was a figure of both respect and some unease - their mastery of fire and metal made them liminal, connected to forces beyond ordinary human ability.',
         source: 'Norse Mythology / Swedish Folk Tradition',
         heritage: 'Norse',
         unlockType: 'skill',

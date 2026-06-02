@@ -226,7 +226,7 @@ const TAMING_ITEMS = {
     // Drake (Serpent)
     'Shedded Scale': {
         name: 'Shedded Scale',
-        description: 'A large, slick shedded scale. It belonged to a massive forest serpent of the forgotten woodlands.',
+        description: 'A large, heavy shedded scale. It belonged to a massive slithering serpent of the forgotten lands.',
         tamingTarget: 'Lindorm'
     },
     'Gold Coin': {

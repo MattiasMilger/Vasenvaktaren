@@ -53,7 +53,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // DAMAGE CALCULATION
     // =============================================================================
-    POWER_CONSTANT: 250,            // Divisor that converts an skill's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. An skill with power 250 produces a 1× multiplier against the attacker's stat.
+    POWER_CONSTANT: 250,            // Divisor that converts a skill's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. A skill with power 250 produces a 1× multiplier against the attacker's stat.
     DEFENSE_CONSTANT: 190,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
     DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     
@@ -253,7 +253,7 @@ const FAMILY_PASSIVE_CONFIG = {
     OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT: 2,
     OKNYTT_TAG_TEAM_STAGES: 1,
 
-    // Troll: Troll Theft - steals positive attribute stages from the enemy when using an skill
+    // Troll: Troll Theft - steals positive attribute stages from the enemy when using a skill
     TROLL_STAGE_STEAL: 1,
     
     // Vålnad: Deathless - revives with a fraction of max health upon knockout
@@ -410,7 +410,7 @@ const FAMILY_DESCRIPTIONS = {
     [FAMILIES.VALNAD]: 'The tormented, animated remains or phantoms of the dead. Bound to a place or an action, they often seek revenge upon the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the gods or giants. They embody raw natural forces and the terrifying elements of the wild.',
     [FAMILIES.TROLL]: 'Ragged wildkin of the mountains and deep woods, possessing great strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
-    [FAMILIES.RA]: 'Seductive, nature-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
+    [FAMILIES.RA]: 'Seductive, wilderness-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
     [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
     [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
     [FAMILIES.JATTE]: 'Ancient giants of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir gods.',
@@ -421,7 +421,7 @@ const FAMILY_DESCRIPTIONS = {
 const FAMILY_PASSIVES = {
     [FAMILIES.ALV]: {
         name: 'Elven Craftsmanship',
-        description: 'When using an skill that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
+        description: 'When using a skill that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
     },
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
@@ -449,7 +449,7 @@ const FAMILY_PASSIVES = {
             const str = FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES;
             const wis = FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES;
             const wisSign = wis >= 0 ? '+' : '';
-            return `After completing ${turns} full ${turnWord} on the battlefield, gain +${str} strength stage and ${wisSign}${wis} wisdom stage (once per battle).`;
+            return `After ${turns}  ${turnWord} on the battlefield, gain +${str} strength stage and ${wisSign}${wis} wisdom stage (once per battle).`;
         }
     },
     [FAMILIES.RA]: {
@@ -461,7 +461,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.TROLL]: {
         name: 'Troll Theft',
         get description() {
-            return `When using an skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
+            return `When using a skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
         }
     },
     [FAMILIES.OKNYTT]: {

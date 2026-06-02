@@ -185,7 +185,7 @@ class VasenInstance {
         return true;
     }
     
-    // Get megin cost for an skill
+    // Get megin cost for a skill
     getSkillMeginCost(skillName) {
         return getSkillMeginCost(skillName, this.species.element);
     }
