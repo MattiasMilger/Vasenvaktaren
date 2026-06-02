@@ -18,7 +18,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A sharp-eyed keeper of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
+        description: 'A sharp-eyed custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -292,7 +292,7 @@ const VASEN_SPECIES = {
     'Alva': {
         name: 'Älva',
         internalName: 'Alva',
-        description: 'A tiny twilight faerie carried upon high currents and evening breezes, leaving behind sudden luck or ill fortune while passing through.',
+        description: 'A tiny twilight elf carried upon high currents and evening breezes, leaving behind sudden luck or ill fortune while passing through.',
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Dimalva': {
         name: 'Dimälva',
         internalName: 'Dimalva',
-        description: 'A minuscule mist faerie fluttering above lakes at dawn, weaving dense fog across the shoreline and drawing the unwary toward the reeds.',
+        description: 'A minuscule mist elf fluttering above lakes at dawn, weaving dense fog across the shoreline and drawing the unwary toward the reeds.',
         family: FAMILIES.ALV,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
@@ -463,7 +463,7 @@ const VASEN_SPECIES = {
     'Lindorm': {
         name: 'Lindorm',
         internalName: 'Lindorm',
-        description: 'A slithering wyrm crowned with a horse-like mane. Wingless yet formidable, it stands among the greatest cousins of dragons.',
+        description: 'A slithering wild serpent crowned with a horse-like mane. Wingless yet formidable, it stands among the greatest cousins of dragons.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -474,7 +474,7 @@ const VASEN_SPECIES = {
     'Fafner': {
         name: 'Fafner',
         internalName: 'Fafner',
-        description: 'The dreadful dragon of legends, cursed by greed and obsession, guarding vast piles of stolen treasure claimed through fear and bloodshed.',
+        description: 'The dreadful serpent of legends, cursed by greed and obsession, guarding vast piles of stolen treasure claimed through fear and bloodshed.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.MYTHICAL,
