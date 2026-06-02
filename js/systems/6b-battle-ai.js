@@ -267,7 +267,7 @@ class EnemyAI {
         
         // Account for empowerment boost
         if (this.vasen.battleFlags.isEmpowered) {
-            elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT);
+            elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT);
         }
         
         // Giantsbane: effective power is derived from target's current HP, not skill.power

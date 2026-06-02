@@ -651,7 +651,7 @@ UIController.prototype.renderSkillsList = function(vasen) {
         const skill = ABILITIES[skillName];
         if (!skill) return;
 
-        const learnLevel = ABILITY_LEARN_LEVELS[index];
+        const learnLevel = SKILL_LEARN_LEVELS[index];
         const isLearned = availableSkills.includes(skillName);
         const meginCost = vasen.getSkillMeginCost(skillName);
 

@@ -62,14 +62,14 @@ const GAME_CONFIG = {
     MIXED_ATTACK_WISDOM_PORTION: 0.5,
     
     // =============================================================================
-    // ABILITY CONSTANTS
+    // SKILL CONSTANTS
     // =============================================================================
-    TIER1_ATTACK_ABILITY_POWER: 50,
-    TIER1_ATTACK_ABILITY_MEGIN: 30,
-    TIER1_ATTACK_ABILITY_EMPOWERMENT: 0.10, // Damage boost on next attack
+    TIER1_ATTACK_SKILL_POWER: 50,
+    TIER1_ATTACK_SKILL_MEGIN: 30,
+    TIER1_ATTACK_SKILL_EMPOWERMENT: 0.10, // Damage boost on next attack
 
-    TIER2_ATTACK_ABILITY_POWER: 68,
-    TIER2_ATTACK_ABILITY_MEGIN: 50,
+    TIER2_ATTACK_SKILL_POWER: 68,
+    TIER2_ATTACK_SKILL_MEGIN: 50,
 
     GIANTSBANE_BONUS: 0.80, // % of target's current HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
@@ -79,7 +79,7 @@ const GAME_CONFIG = {
     TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all attributes when using Tyr's Sacrifice
 
     FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
-    FREYASTEARS_MEGIN_MULTIPLIER: 2.2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
+    FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
     FREYASTEARS_HEALTH_REGEN_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
     INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff skill per side (Smithing, Skald's Mead, Thick Coat)
@@ -499,7 +499,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.WIND]: { durability: 5 }
 };
 
-const ABILITY_LEARN_LEVELS = [1, 5, 10, 20];
+const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
 
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },

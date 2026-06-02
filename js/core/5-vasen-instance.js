@@ -129,8 +129,8 @@ class VasenInstance {
     getAvailableSkills() {
         const skills = [];
         
-        for (let i = 0; i < ABILITY_LEARN_LEVELS.length; i++) {
-            if (this.level >= ABILITY_LEARN_LEVELS[i]) {
+        for (let i = 0; i < SKILL_LEARN_LEVELS.length; i++) {
+            if (this.level >= SKILL_LEARN_LEVELS[i]) {
                 const skillName = this.species.skills[i];
                 if (skillName && ABILITIES[skillName]) {
                     skills.push(skillName);
