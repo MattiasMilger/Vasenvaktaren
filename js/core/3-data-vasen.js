@@ -43,7 +43,7 @@ const VASEN_SPECIES = {
         description: 'A reclusive well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.COMMON,
         skills: ['Sinkhole', 'Hail Storm', 'Skald\'s Mead', 'Tidal Wave'],
         tamingItem: 'Water Bucket',
         image: 'assets/vasen/brunnsgubbe.png'
@@ -51,10 +51,10 @@ const VASEN_SPECIES = {
     'Pyssling': {
         name: 'Pyssling',
         internalName: 'Pyssling',
-        description: 'A pocket-sized drafter and lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when forgotten or neglected.',
+        description: 'A pocket-sized lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.COMMON,
         skills: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Tyr\'s Sacrifice'],
         tamingItem: 'Attic Key',
         image: 'assets/vasen/pyssling.png'
@@ -86,7 +86,7 @@ const VASEN_SPECIES = {
     'Irrbloss': {
         name: 'Irrbloss',
         internalName: 'Irrbloss',
-        description: 'A ghastly, hovering phantom that leads travelers astray into bogs and darkness, rumored to be the soul of a greedy man trapped between realms.',
+        description: 'A ghastly, hovering phantom that leads travelers astray into bogs, rumored to be the soul of a greedy man trapped between realms.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
@@ -225,7 +225,7 @@ const VASEN_SPECIES = {
         description: 'A moss-covered troll dwelling beneath old bridges in rushing streams, guarding waterways with stubborn determination while demanding passage tolls.',
         family: FAMILIES.TROLL,
         element: ELEMENTS.WATER,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.COMMON,
         skills: ['Drown', 'Tidal Wave', 'Ground Stomp', 'Boulder Toss'],
         tamingItem: 'Bridge Keystone',
         image: 'assets/vasen/backatroll.png'
@@ -246,7 +246,7 @@ const VASEN_SPECIES = {
     'Skogsra': {
         name: 'Skogsrå',
         internalName: 'Skogsra',
-        description: 'A stunning forest warden whose beauty draws wanderers deep among the trees, though a hollow back resembling an ancient trunk reveals a hidden nature.',
+        description: 'A stunning forest warden whose beauty draws wanderers deep among the trees, though a hollow back reveals a sinister nature.',
         family: FAMILIES.RA,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -279,7 +279,7 @@ const VASEN_SPECIES = {
     'Huldra': {
         name: 'Huldra',
         internalName: 'Huldra',
-        description: 'A soot-streaked woodland warden dwelling among charred groves and burned clearings, her glowing eyes shining like fading embers among blackened trees.',
+        description: 'A soot-streaked warden dwelling among charred groves and burned clearings, her glowing eyes shining like fading embers among blackened trees.',
         family: FAMILIES.RA,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
@@ -507,7 +507,7 @@ const VASEN_SPECIES = {
     'Nidhogg': {
         name: 'Nidhögg',
         internalName: 'Nidhogg',
-        description: 'The terrifying serpent that gnaws endlessly at the roots of Yggdrasil, constantly threatening the stability of the cosmos through a relentless hunger.',
+        description: 'The terrifying serpent that gnaws endlessly at the roots of Yggdrasil, threatening the stability of the cosmos through a relentless hunger.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
