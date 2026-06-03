@@ -80,20 +80,28 @@ class EnemyAI {
             }
         }
 
-        // Giantsbane: score based on target's current HP ratio
+        // Giantsbane: score based on target's current HP ratio, but only when the hit
+        // is not WEAK — a weak Giantsbane deals reduced damage and loses most of its value.
         if (skill.giantsbaneBonus) {
-            const hpRatio = this.target.currentHealth / this.target.maxHealth;
-            if (hpRatio >= 0.9) {
-                // Target nearly full HP — ideal window, strong bonus
-                score += 80;
-            } else if (hpRatio >= 0.7) {
-                // Still worthwhile
-                score += 40;
-            } else if (hpRatio >= 0.5) {
-                // Marginal — slight bonus
-                score += 10;
+            const skillElement = getSkillElement(skillName, this.vasen.species.element);
+            const giantsbaneMatchup = getMatchupType(skillElement, this.target.species.element);
+            if (giantsbaneMatchup !== 'WEAK') {
+                const hpRatio = this.target.currentHealth / this.target.maxHealth;
+                if (hpRatio >= 0.9) {
+                    // Target nearly full HP — ideal window, strong bonus
+                    score += 80;
+                } else if (hpRatio >= 0.7) {
+                    // Still worthwhile
+                    score += 40;
+                } else if (hpRatio >= 0.5) {
+                    // Marginal — slight bonus
+                    score += 10;
+                } else {
+                    // Target is low HP — Giantsbane is wasteful, heavy penalty
+                    score -= 60;
+                }
             } else {
-                // Target is low HP — Giantsbane is wasteful, heavy penalty
+                // Weak hit: Giantsbane loses its key advantage — penalise heavily
                 score -= 60;
             }
         }
