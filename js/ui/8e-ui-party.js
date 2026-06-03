@@ -180,6 +180,13 @@ UIController.prototype.autoEquipRunes = function() {
             vasen.runes.push(runeId);
             assigned.add(runeId);
             equipped++;
+
+            // Strip this rune from any other väsen in the entire collection
+            gameState.vasenCollection.forEach(other => {
+                if (other.id !== vasen.id && other.runes.includes(runeId)) {
+                    other.unequipRune(runeId);
+                }
+            });
         }
 
         // Recalculate megin if Uruz was newly assigned
