@@ -10,7 +10,7 @@ const VASEN_SPECIES = {
         description: 'A masterful subterranean artisan from Nidavellir who seeks rare materials and crafts magical artifacts that bend the rules of reality.',
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
-        rarity: RARITIES.RARE,
+        rarity: RARITIES.UNCOMMON,
         skills: ['Sinkhole', 'Lava Jet', 'Smithing', 'Landslide'],
         tamingItem: 'Shiny Trinket',
         image: 'assets/vasen/svartalv.png'
@@ -67,7 +67,7 @@ const VASEN_SPECIES = {
         description: 'A deceased valiant warrior dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the final battle of Ragnarök.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.RARE,
         skills: ['Ground Stomp', 'Flaming Skewer', 'Smithing', 'Giantsbane'],
         tamingItem: 'Valhallan Pork',
         image: 'assets/vasen/einharje.png'
