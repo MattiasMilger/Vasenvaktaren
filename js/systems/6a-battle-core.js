@@ -1094,6 +1094,12 @@ class Battle {
 
                 const allies = isPlayer ? this.playerTeam : this.enemyTeam;
 
+                // Determine Elven Craftsmanship mirror stat (Alv family, single-stat buff only)
+                const mirrorMap = { strength: 'wisdom', wisdom: 'strength' };
+                const elvMirrorStat = (user.species.family === FAMILIES.ALV && attributes.length === 1 && mirrorMap[stat])
+                    ? mirrorMap[stat]
+                    : null;
+
                 // Gifu on the caster (user): share to all allies except the user and the direct target
                 if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
                     user.battleFlags.gifuTriggered = true;
@@ -1104,6 +1110,11 @@ class Battle {
                         if (ally !== user && ally !== targetVasen && !ally.isKnockedOut()) {
                             ally.modifyAttributeStage(stat, totalStagesToShare);
                             this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                            // Also share the mirror stat via Elven Craftsmanship as part of the same Gifu activation
+                            if (elvMirrorStat) {
+                                ally.modifyAttributeStage(elvMirrorStat, totalStagesToShare);
+                                this.addLog(`${ally.getDisplayName()}'s ${elvMirrorStat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                            }
                         }
                     });
                 }
@@ -1119,6 +1130,11 @@ class Battle {
                         if (ally !== targetVasen && !ally.isKnockedOut()) {
                             ally.modifyAttributeStage(stat, totalStagesToShare);
                             this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                            // Also share the mirror stat via Elven Craftsmanship as part of the same Gifu activation
+                            if (elvMirrorStat) {
+                                ally.modifyAttributeStage(elvMirrorStat, totalStagesToShare);
+                                this.addLog(`${ally.getDisplayName()}'s ${elvMirrorStat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                            }
                         }
                     });
                 }
@@ -1126,7 +1142,8 @@ class Battle {
 
             // --- ALV: ELVEN CRAFTSMANSHIP ---
             // If the user is Alv family and the skill buffs only Strength or only Wisdom,
-            // also apply the same total stages to the mirror stat on the target.
+            // also apply the same total stages to the mirror stat on the direct target.
+            // Gifu sharing of the mirror stat is handled inside the Gifu blocks above.
             if (user.species.family === FAMILIES.ALV) {
                 const mirrorMap = { strength: 'wisdom', wisdom: 'strength' };
                 if (attributes.length === 1 && mirrorMap[attributes[0]]) {
@@ -1383,10 +1400,11 @@ class Battle {
     calculateExperience() {
         if (this.winner !== 'player') return [];
         
-        const results = [];
         const totalEnemyExp = this.enemyTeam.reduce((sum, enemy) => {
             return sum + getExpYield(enemy.level, enemy.species.rarity);
         }, 0);
+        
+        const results = [];
         
         this.playerTeam.forEach(vasen => {
             if (vasen.isKnockedOut()) return; // Fainted get nothing
