@@ -60,7 +60,7 @@ const ABILITIES = {
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: GAME_CONFIG.TIER1_UTILITY_SKILL_MEGIN,
         effect: { type: 'buff', target: 'ally', stat: 'strength', stages: 1 },
         initialBonus: 1
     },
@@ -128,7 +128,7 @@ const ABILITIES = {
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 30,
+        meginCost: GAME_CONFIG.TIER1_UTILITY_SKILL_MEGIN,
         effect: { type: 'debuff', target: 'enemy', attributes: ['defense', 'durability'], stages: 1 },
         initialBonus: 1
     },
@@ -196,7 +196,7 @@ const ABILITIES = {
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 30,
+        meginCost: GAME_CONFIG.TIER1_UTILITY_SKILL_MEGIN,
         effect: { type: 'buff', target: 'self', attributes: ['defense', 'durability'], stages: 1 },
         initialBonus: 1
     },
@@ -263,7 +263,7 @@ const ABILITIES = {
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 40,
+        meginCost: GAME_CONFIG.TIER1_UTILITY_SKILL_MEGIN,
         effect: { type: 'buff', target: 'ally', stat: 'wisdom', stages: 1 },
         initialBonus: 1
     },
@@ -334,7 +334,7 @@ const ABILITIES = {
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
-        meginCost: 30,
+        meginCost: GAME_CONFIG.TIER1_UTILITY_SKILL_MEGIN,
         effect: { type: 'debuff', target: 'enemy', attributes: ['strength', 'wisdom'], stages: 1 },
         initialBonus: 1
     },

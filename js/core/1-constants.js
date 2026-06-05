@@ -71,6 +71,8 @@ const GAME_CONFIG = {
     TIER2_ATTACK_SKILL_POWER: 68,
     TIER2_ATTACK_SKILL_MEGIN: 50,
 
+    TIER1_UTILITY_SKILL_MEGIN: 30,
+
     GIANTSBANE_BONUS: 0.80, // % of target's current HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
     ROTVALTA_BONUS: 40, // Extra power if opponent attacks
