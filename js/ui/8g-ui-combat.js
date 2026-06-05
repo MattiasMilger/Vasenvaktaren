@@ -431,6 +431,7 @@ UIController.prototype.renderActionButtons = function(battle) {
             <span class="skill-btn-attributes">
                 <span class="skill-btn-element element-${skillElement.toLowerCase()}">${skillElement}</span>
                 <span class="skill-btn-cost">Megin: ${meginCost}</span>
+                ${skill.healthCost ? `<span class="skill-btn-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                 ${skill.power ? `<span class="skill-btn-power">Power: ${getSkillPower(skillName, activeVasen.species.family)}</span>` : ''}
                 ${skill.initialBonus ? `<span class="skill-btn-initialbonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
             </span>

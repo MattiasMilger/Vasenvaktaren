@@ -670,6 +670,7 @@ UIController.prototype.renderSkillsList = function(vasen) {
                         ${this.generateAttackingMatchupsHTML(skillElement)}
                     </div>
                     <span class="skill-cost">Megin: ${meginCost}</span>
+                    ${skill.healthCost ? `<span class="skill-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                     ${skill.power ? `<span class="skill-power">Power: ${getSkillPower(skillName, vasen.species.family)}</span>` : ''}
                     ${skill.initialBonus ? `<span class="skill-initial-bonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
                 </div>

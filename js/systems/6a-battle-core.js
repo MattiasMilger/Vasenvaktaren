@@ -994,7 +994,7 @@ class Battle {
         
         if (effect.type === 'tyrs_sacrifice') {
             // Tyr's Sacrifice: sacrifice 40% max HP to raise all attributes by 3 stages (lethal if HP runs out)
-            const healthCost = Math.floor(user.maxHealth * GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST);
+            const healthCost = Math.floor(user.maxHealth * skill.healthCost);
             user.currentHealth = Math.max(0, user.currentHealth - healthCost);
             this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
 

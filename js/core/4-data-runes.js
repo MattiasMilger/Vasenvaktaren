@@ -70,7 +70,7 @@ const RUNES = {
         name: 'Gifu',
         fullName: 'Gifu',
         flavor: 'The sacred exchange of powers between equals. The first significant boon received by the wielder is considered a communal gift, extending the effect to all allies.',
-        effect: 'The first time this Väsen\'s attributes are raised during this battle it is also applied to allies',
+        effect: 'When this Väsen\'s attributes are raised it is also applied to allies (once per battle)',
         mechanic: { type: 'share_first_buff' }
     },
     'WYNJA': {
@@ -80,7 +80,7 @@ const RUNES = {
         fullName: 'Wynja',
         flavor: 'The power of success and the protective shield of community. It intercepts hostile curses and transmutes that negative energy into a personal triumph.',
         get effect() {
-            return `Blocks the first negative attribute effect this Väsen receives and raises a random attribute by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} stage when it happens`;
+            return `Blocks a debuff and raises a random attribute by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} stage when it happens (once per battle)`;
         },
         mechanic: { type: 'block_first_debuff' }
     },

@@ -342,12 +342,13 @@ const ABILITIES = {
         name: 'Tyr\'s Sacrifice',
         flavorDescription: 'Severs a piece of your own vitality to secure a desperate, fateful blessing.',
         get mechanicsDescription() {
-            return `Sacrifices ${Math.round(GAME_CONFIG.TYRS_SACRIFICE_HEALTH_COST * 100)}% of max HP to raise all attributes by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
+            return `Sacrifices health to raise all attributes by ${GAME_CONFIG.TYRS_SACRIFICE_STAGES} stages.`;
         },
         element: ELEMENTS.WIND,
         type: ATTACK_TYPES.UTILITY,
         power: 0,
         meginCost: 35,
+        healthCost: 0.25,
         effect: { type: 'tyrs_sacrifice' }
     },
 

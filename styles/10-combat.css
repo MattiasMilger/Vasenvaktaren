@@ -649,6 +649,12 @@
     font-weight: 600;
 }
 
+.skill-btn-health-cost {
+    font-size: var(--font-size-xs);
+    color: var(--accent-danger);
+    font-weight: 600;
+}
+
 .skill-btn-element {
     display: inline-block;
     padding: 1px 4px;
