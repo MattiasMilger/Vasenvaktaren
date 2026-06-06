@@ -218,4 +218,7 @@
 
     /* Lore Book */
     --lore-highlight-color: rgba(255, 220, 80, 0.35); /* Search highlight mark background */
+
+    /* Futhark Ornament — decorative rune backdrop in panel-right */
+    --futhark-ornament-color: #2f2f3f; /* Slightly above bg-tertiary, visible but unobtrusive */
 }

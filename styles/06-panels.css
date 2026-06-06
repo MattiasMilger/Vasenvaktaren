@@ -100,3 +100,54 @@
     padding: var(--spacing-lg);
     font-style: italic;
 }
+
+/* =============================================================================
+   FUTHARK ORNAMENT — decorative rune backdrop in panel-right
+   Sits in the flex flow of panel-right, after zone-description, filling the
+   remaining empty space below it. Runes tile in a 12-column grid with a
+   zigzag wave (every other rune shifted down). Fades out toward the bottom
+   via mask-image gradient.
+   ============================================================================= */
+
+.futhark-ornament {
+    position: relative;
+    flex: 1;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-content: start;
+    padding: var(--spacing-md);
+    gap: 0;
+    overflow: hidden;
+    /* Fade out toward the bottom */
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+
+.futhark-ornament span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: var(--futhark-ornament-color);
+    font-family: serif;
+    user-select: none;
+}
+
+/* Zigzag: every even-positioned rune drops down half a line */
+.futhark-ornament span:nth-child(even) {
+    transform: translateY(0.5em);
+}
+
+/* Hide ornament during combat — combat-area becomes visible (display: flex),
+   zone-description is hidden. Target ornament when it follows a hidden zone-desc. */
+#zone-description[style*="display: none"] + .futhark-ornament,
+#zone-description:not([style]) + .futhark-ornament {
+    /* ornament is always shown when zone-description is in normal flow */
+}
+
+/* Simpler: hide ornament whenever combat-area is active */
+.panel-right:has(#combat-area:not([style*="display: none"])) .futhark-ornament {
+    display: none;
+}
