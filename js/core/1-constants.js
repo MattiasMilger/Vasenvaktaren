@@ -22,7 +22,7 @@ const GAME_CONFIG = {
     LEVEL_UP_ACCELERATION: 5,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
     STARTING_ITEMS_AMOUNT: 3,
-    NEW_ZONE_ITEMS_AMOUNT: 1,
+    NEW_ZONE_ITEMS_AMOUNT: 2,
     
     // =============================================================================
     // EXPERIENCE DISTRIBUTION
@@ -124,7 +124,7 @@ const GAME_CONFIG = {
 
     // Idunn's Apples - milestone healing and cleansing every N floors
     ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL: 5,   // Every X floors, Idunn's Apples trigger
-    ENDLESS_TOWER_IDUNN_HEAL_PERCENT: 0.50,  // % of max health restored to each alive väsen
+    ENDLESS_TOWER_IDUNN_HEAL_PERCENT: 0.30,  // % of max health restored to each alive väsen
     ENDLESS_TOWER_IDUNN_CLEANSE_STAGES: 1,   // Number of negative attribute stages removed per attribute (per väsen)
     
     // =============================================================================
@@ -500,7 +500,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.WIND]: { durability: 5 }
 };
 
-const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
+const SKILL_LEARN_LEVELS = [1, 5, 10, 15];
 
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },

@@ -82,7 +82,7 @@ const LORE_ENTRIES = {
         key: 'family_jatte',
         name: 'Jätte',
         category: 'vasen',
-        desc: 'Jättar are the immense, primordial giants of Norse mythology known as Jötnar or Tursar. They are among the oldest beings in existence, born before the gods, and represent the raw chaos and elemental forces that the Aesir gods struggle to keep in check. These giants dwell in Jotunheim, beyond the walls of Asgard and Midgard. Despite being home to the gods\' great enemies, many gods have giant blood or take giant spouses, blurring the line between divine and primordial.',
+        desc: 'Jättar are the immense, primordial giants of Norse mythology also known as Jötnar, Tursar or Risar. They are among the oldest beings in existence, born before the gods, and represent the raw chaos and elemental forces that the Aesir gods struggle to keep in check. These giants dwell in Jotunheim, beyond the walls of Asgard and Midgard. Despite being home to the gods\' great enemies, many gods have giant blood or take giant spouses, blurring the line between divine and primordial.',
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'family',
