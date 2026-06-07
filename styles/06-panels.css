@@ -151,3 +151,29 @@
 .panel-right:has(#combat-area:not([style*="display: none"])) .futhark-ornament {
     display: none;
 }
+
+/* =============================================================================
+   FUTHARK ORNAMENT — MAIN MENU BACKDROP
+   Positioned absolutely to fill the entire main menu screen behind the content.
+   No fade mask — covers continuously. Slightly brighter than the in-game ornament.
+   ============================================================================= */
+
+#main-menu-screen .futhark-ornament,
+#starter-select-screen .futhark-ornament {
+    position: absolute;
+    inset: 0;
+    flex: none;
+    z-index: 0;
+    align-content: start;
+    overflow: hidden;
+    /* Fade out toward the bottom — same as the in-game ornament */
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    --futhark-ornament-color: #383848;
+}
+
+#main-menu-screen .main-menu-content,
+#starter-select-screen .starter-content {
+    position: relative;
+    z-index: 1;
+}

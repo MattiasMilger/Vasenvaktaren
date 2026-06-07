@@ -111,6 +111,7 @@
     transition: all var(--transition-base);
     text-align: center;
     box-shadow: var(--shadow-md);
+    user-select: none;
 }
 
 .starter-card:hover {
@@ -123,7 +124,7 @@
 .starter-card.selected {
     border-color: var(--accent-primary);
     box-shadow: var(--glow-primary), var(--shadow-lg);
-    background: var(--accent-primary-overlay);
+    background: var(--bg-card);
 }
 
 .starter-image-container {
