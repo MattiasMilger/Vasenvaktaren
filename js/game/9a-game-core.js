@@ -61,9 +61,29 @@ class Game {
                 </div>
                 <h3 class="starter-name">${species.name}</h3>
                 <div class="starter-badges">
-                    <span class="element-badge element-${species.element.toLowerCase()}">${species.element}</span>
-                    <span class="rarity-badge rarity-${species.rarity.toLowerCase()}">${species.rarity}</span>
-                    <span class="family-badge">${species.family}</span>
+                    <div class="element-matchup-collapsible">
+                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${species.element}</span>
+                        ${ui.generateDefensiveMatchupsHTML(species.element)}
+                    </div>
+                    <div class="rarity-matchup-collapsible family-matchup-collapsible">
+                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${species.rarity}</span>
+                        <div class="rarity-description-popup">
+                            <p><strong>${species.rarity}</strong><br>
+                            ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
+                        </div>
+                    </div>
+                    <div class="family-matchup-collapsible">
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${species.family}</span>
+                        <div class="family-description-popup">
+                            <p><strong>${species.family}</strong><br>
+                            ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
+                            ${FAMILY_PASSIVES[species.family] ? `
+                                <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                                <p><strong>Passive: ${FAMILY_PASSIVES[species.family].name}</strong><br>
+                                ${FAMILY_PASSIVES[species.family].description}</p>
+                            ` : ''}
+                        </div>
+                    </div>
                 </div>
                 <p class="starter-description">${species.description}</p>
             `;

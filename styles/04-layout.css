@@ -186,6 +186,12 @@
     line-height: 1.4;
 }
 
+/* Ensure card popups render above the Confirm button */
+.starter-options {
+    position: relative;
+    z-index: 2;
+}
+
 /* =============================================================================
    10. GAME SCREEN LAYOUT
    ============================================================================= */
