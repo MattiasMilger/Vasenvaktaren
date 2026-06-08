@@ -1058,7 +1058,7 @@ class Battle {
             // Determine whether this is the first use of a buff skill this battle for this side.
             // (applies to both ally-targeted and self-targeted buffs).
             // The bonus is applied to the direct target; Gifu then shares the full total to all
-            // other allies in one pass.
+            // other allies in one pass after the loop.
             let initialBonusStages = 0;
             if (skill.initialBonus) {
                 const initialBonusSet = isPlayer ? this.playerInitialBonusUsed : this.enemyInitialBonusUsed;
@@ -1071,6 +1071,9 @@ class Battle {
             const totalStagesToShare = effect.stages + initialBonusStages;
             const attributes = effect.attributes || [effect.stat];
 
+            // Apply all attribute buffs to the direct target first.
+            // Gifu sharing is done in a single pass after this loop so that ALL
+            // buffed attributes (not just the first one) are shared to allies.
             attributes.forEach(stat => {
                 // Apply bonus stages to the direct target first (if any)
                 if (initialBonusStages > 0) {
@@ -1091,72 +1094,66 @@ class Battle {
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
                 }
-
-                const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-
-                // Determine Elven Craftsmanship mirror stat (Alv family, single-stat buff only)
-                const mirrorMap = { strength: 'wisdom', wisdom: 'strength' };
-                const elvMirrorStat = (user.species.family === FAMILIES.ALV && attributes.length === 1 && mirrorMap[stat])
-                    ? mirrorMap[stat]
-                    : null;
-
-                // Gifu on the caster (user): share to all allies except the user and the direct target
-                if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
-                    user.battleFlags.gifuTriggered = true;
-                    this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-
-                    const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
-                    allies.forEach(ally => {
-                        if (ally !== user && ally !== targetVasen && !ally.isKnockedOut()) {
-                            ally.modifyAttributeStage(stat, totalStagesToShare);
-                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
-                            // Also share the mirror stat via Elven Craftsmanship as part of the same Gifu activation
-                            if (elvMirrorStat) {
-                                ally.modifyAttributeStage(elvMirrorStat, totalStagesToShare);
-                                this.addLog(`${ally.getDisplayName()}'s ${elvMirrorStat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
-                            }
-                        }
-                    });
-                }
-
-                // Gifu on the recipient (targetVasen): share to all allies except the target itself
-                // This handles the case where a benched ally is buffed and they carry Gifu
-                if (targetVasen !== user && !targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
-                    targetVasen.battleFlags.gifuTriggered = true;
-                    this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-
-                    const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
-                    allies.forEach(ally => {
-                        if (ally !== targetVasen && !ally.isKnockedOut()) {
-                            ally.modifyAttributeStage(stat, totalStagesToShare);
-                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
-                            // Also share the mirror stat via Elven Craftsmanship as part of the same Gifu activation
-                            if (elvMirrorStat) {
-                                ally.modifyAttributeStage(elvMirrorStat, totalStagesToShare);
-                                this.addLog(`${ally.getDisplayName()}'s ${elvMirrorStat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
-                            }
-                        }
-                    });
-                }
             });
+
+            const allies = isPlayer ? this.playerTeam : this.enemyTeam;
 
             // --- ALV: ELVEN CRAFTSMANSHIP ---
             // If the user is Alv family and the skill buffs only Strength or only Wisdom,
             // also apply the same total stages to the mirror stat on the direct target.
-            // Gifu sharing of the mirror stat is handled inside the Gifu blocks above.
+            // The mirror stat will also be shared by Gifu in the pass below.
+            let elvMirrorStat = null;
             if (user.species.family === FAMILIES.ALV) {
                 const mirrorMap = { strength: 'wisdom', wisdom: 'strength' };
                 if (attributes.length === 1 && mirrorMap[attributes[0]]) {
-                    const mirrorStat = mirrorMap[attributes[0]];
-                    const mirrorResult = targetVasen.modifyAttributeStage(mirrorStat, totalStagesToShare);
+                    elvMirrorStat = mirrorMap[attributes[0]];
+                    const mirrorResult = targetVasen.modifyAttributeStage(elvMirrorStat, totalStagesToShare);
                     if (mirrorResult.changed !== 0) {
                         const stageWord = Math.abs(mirrorResult.changed) === 1 ? 'stage' : 'stages';
                         this.addLog(`${user.getDisplayName()} activated Elven Craftsmanship!`, 'passive');
-                        this.addLog(`${targetVasen.getDisplayName()}'s ${mirrorStat} was raised by ${Math.abs(mirrorResult.changed)} ${stageWord}!`, 'buff');
-                        effects.push({ stat: mirrorStat, change: mirrorResult.changed });
+                        this.addLog(`${targetVasen.getDisplayName()}'s ${elvMirrorStat} was raised by ${Math.abs(mirrorResult.changed)} ${stageWord}!`, 'buff');
+                        effects.push({ stat: elvMirrorStat, change: mirrorResult.changed });
                     }
                 }
             }
+
+            // Build the full list of stats to share via Gifu (all buffed attributes +
+            // the Elven Craftsmanship mirror stat if applicable).
+            const statsToShare = elvMirrorStat ? [...attributes, elvMirrorStat] : [...attributes];
+
+            // Gifu on the caster (user): share ALL buffed stats to allies in one activation.
+            if (!user.battleFlags.gifuTriggered && user.hasRune('GIFU')) {
+                user.battleFlags.gifuTriggered = true;
+                this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+
+                const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
+                allies.forEach(ally => {
+                    if (ally !== user && ally !== targetVasen && !ally.isKnockedOut()) {
+                        statsToShare.forEach(stat => {
+                            ally.modifyAttributeStage(stat, totalStagesToShare);
+                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                        });
+                    }
+                });
+            }
+
+            // Gifu on the recipient (targetVasen): share ALL buffed stats to allies in one activation.
+            // This handles the case where a benched ally is buffed and they carry Gifu.
+            if (targetVasen !== user && !targetVasen.battleFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
+                targetVasen.battleFlags.gifuTriggered = true;
+                this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+
+                const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
+                allies.forEach(ally => {
+                    if (ally !== targetVasen && !ally.isKnockedOut()) {
+                        statsToShare.forEach(stat => {
+                            ally.modifyAttributeStage(stat, totalStagesToShare);
+                            this.addLog(`${ally.getDisplayName()}'s ${stat} was raised by ${totalStagesToShare} ${stageWord}!`, 'buff');
+                        });
+                    }
+                });
+            }
+
         } else if (effect.type === 'debuff') {
             const targetVasen = isPlayer ? target : this.playerActive;
             const attributes = effect.attributes || [effect.stat];
@@ -1600,22 +1597,22 @@ class Battle {
                 attributesToBuff.forEach(item => {
                     vasen.modifyAttributeStage(item.name, item.stages);
                     this.addLog(`${vasen.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
+                });
 
-                    // Gifu Sharing
-                    if (vasen.hasRune('GIFU')) {
-                        if (!vasen.battleFlags.gifuTriggered) {
-                            vasen.battleFlags.gifuTriggered = true;
-                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                        }
-                        const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-                        allies.forEach(ally => {
-                            if (ally !== vasen && !ally.isKnockedOut()) {
+                // Gifu Sharing: share all buffed attributes in one activation (once per battle)
+                if (vasen.hasRune('GIFU') && !vasen.battleFlags.gifuTriggered) {
+                    vasen.battleFlags.gifuTriggered = true;
+                    this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                    const allies = isPlayer ? this.playerTeam : this.enemyTeam;
+                    allies.forEach(ally => {
+                        if (ally !== vasen && !ally.isKnockedOut()) {
+                            attributesToBuff.forEach(item => {
                                 ally.modifyAttributeStage(item.name, item.stages);
                                 this.addLog(`${ally.getDisplayName()}'s ${item.name} was raised by ${item.stages} stage!`, 'buff');
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+                }
             }
         }
         
@@ -1661,12 +1658,10 @@ class Battle {
                     this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'debuff');
                     this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'buff');
 
-                    // Gifu Sharing
-                    if (vasen.hasRune('GIFU')) {
-                        if (!vasen.battleFlags.gifuTriggered) {
-                            vasen.battleFlags.gifuTriggered = true;
-                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
-                        }
+                    // Gifu Sharing (once per battle)
+                    if (vasen.hasRune('GIFU') && !vasen.battleFlags.gifuTriggered) {
+                        vasen.battleFlags.gifuTriggered = true;
+                        this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
                         const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                         allies.forEach(ally => {
                             if (ally !== vasen && !ally.isKnockedOut()) {
