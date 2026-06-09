@@ -68,7 +68,7 @@ const ABILITIES = {
         name: 'Giantsbane',
         flavorDescription: 'Delivers a crushing blow that turns an enemy\'s vitality into their own downfall.',
         get mechanicsDescription() {
-            return `Hits enemy. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of target\'s current HP.`;
+            return `Hits enemy. Power bonus from ${Math.round(GAME_CONFIG.GIANTSBANE_BONUS * 100)}% of their current HP.`;
         },
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -136,7 +136,7 @@ const ABILITIES = {
         name: 'Loki\'s Betrayal',
         flavorDescription: 'A deep cut from the dark, causing more damage to the weak and frail.',
         get mechanicsDescription() {
-            return `Hits enemy. +${GAME_CONFIG.LOKISBETRAYAL_BONUS} power if enemy is debuffed.`;
+            return `Hits enemy. +${GAME_CONFIG.LOKISBETRAYAL_BONUS} power if they are debuffed.`;
         },
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.WISDOM,

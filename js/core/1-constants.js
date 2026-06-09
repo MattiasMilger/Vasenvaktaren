@@ -19,7 +19,7 @@ const GAME_CONFIG = {
     ENEMY_MAX_LEVEL: 999,
     STARTER_LEVEL: 9,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
-    LEVEL_UP_ACCELERATION: 5,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
+    LEVEL_UP_ACCELERATION: 6,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
     STARTING_ITEMS_AMOUNT: 3,
     NEW_ZONE_ITEMS_AMOUNT: 2,
@@ -433,7 +433,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When current health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durability stage (once per battle).`;
+            return `When health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durability stage (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {

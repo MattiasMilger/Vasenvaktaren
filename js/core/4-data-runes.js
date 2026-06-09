@@ -91,7 +91,7 @@ const RUNES = {
         fullName: 'Hagal',
         flavor: 'The rune of chaotic, natural destruction. It strips the elegance from arcane power, forcing the wielder\'s insightful attacks to rely instead on overwhelming physical impact.',
         get effect() {
-            return `When this väsen is knocked out, the enemy gets all Attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
+            return `When this väsen is knocked out, the enemy gets all attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
         },
         mechanic: { type: 'debuff_on_knockout' }
     },
