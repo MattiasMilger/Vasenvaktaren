@@ -115,7 +115,7 @@ Vasenvaktaren/
 │   ├── 13-animations.css           (animations & skill animations)
 │   ├── 14-responsive.css           (responsive design)
 │   ├── 15-lore.css                 (lore book styles)
-│   └── 16-items-runes.css          (item and rune UI styles)
+│   └── 16-loot.css                 (loot UI styles)
 │
 ├── js/
 │   ├── core/
