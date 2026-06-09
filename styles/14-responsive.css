@@ -19,3 +19,15 @@
     max-height: 0;
 }
 
+/* =============================================================================
+   MODAL SCROLL LOCK
+   Prevents the background page from scrolling/jumping when a modal is open.
+   Applied via JS (showModalOverlay / hideModalOverlay).
+   ============================================================================= */
+
+body.modal-open {
+    overflow: hidden;
+    /* Prevent iOS rubber-band scroll bleed-through */
+    position: fixed;
+    width: 100%;
+}

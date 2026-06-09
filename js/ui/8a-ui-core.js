@@ -205,6 +205,9 @@ document.addEventListener('click', (e) => {
         if (this.modalOverlay) {
             this.modalOverlay.classList.add('active');
         }
+
+        // Lock background scroll on mobile
+        document.body.classList.add('modal-open');
     }
 
     // Check if any modals are active and hide overlay if none are
@@ -220,6 +223,13 @@ document.addEventListener('click', (e) => {
             if (activeModals.length === 0 && this.modalOverlay) {
                 this.modalOverlay.classList.remove('active');
             }
+
+            // Only remove scroll lock when no modals at all are active
+            const anyActiveModal = document.querySelectorAll('.modal.active');
+            if (anyActiveModal.length === 0) {
+                document.body.classList.remove('modal-open');
+            }
+
             this.overlayHideTimeout = null;
         }, 50); // 50ms delay - enough to prevent flash but not noticeable to user
     }
@@ -229,6 +239,9 @@ document.addEventListener('click', (e) => {
         if (this.modalOverlay) {
             this.modalOverlay.classList.remove('active');
         }
+
+        // Remove scroll lock
+        document.body.classList.remove('modal-open');
     }
 }
 
