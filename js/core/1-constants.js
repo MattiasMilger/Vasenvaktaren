@@ -244,7 +244,7 @@ const FAMILY_PASSIVE_CONFIG = {
     // Odjur: Bestial Rage - gain strength and lose wisdom after completing one turn.
     ODJUR_TURNS_REQUIRED: 1,
     ODJUR_STRENGTH_STAGES: 1,
-    ODJUR_WISDOM_STAGES: -1,
+    ODJUR_WISDOM_STAGES: -2,
     
     // Rå: Malicious Retaliation - lowers several random enemy attributes by stages when hit
     RA_DEBUFF_COUNT: 2,
@@ -500,7 +500,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.WIND]: { durability: 5 }
 };
 
-const SKILL_LEARN_LEVELS = [1, 5, 10, 15];
+const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
 
 const TEMPERAMENTS = {
     FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },
