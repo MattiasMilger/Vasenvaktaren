@@ -450,7 +450,7 @@ const FAMILY_PASSIVES = {
             const str = FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES;
             const wis = FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES;
             const wisSign = wis >= 0 ? '+' : '';
-            return `After ${turns}  ${turnWord} on the battlefield, gain +${str} strength stage and ${wisSign}${wis} wisdom stage (once per battle).`;
+            return `After ${turns}  ${turnWord} on the battlefield, gain +${str} strength stage and ${wisSign}${wis} wisdom stages (once per battle).`;
         }
     },
     [FAMILIES.RA]: {
