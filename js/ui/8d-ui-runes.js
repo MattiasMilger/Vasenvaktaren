@@ -199,7 +199,7 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
     } else {
         eligibleVasen.forEach(vasen => {
             const currentRunes = vasen.runes;
-            const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+            const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
             const hasThisRune = currentRunes.includes(runeId);
             const isInParty = gameState.party.some(p => p && p.id === vasen.id);
 

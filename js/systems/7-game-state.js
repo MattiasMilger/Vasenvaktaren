@@ -256,7 +256,7 @@ class GameState {
         }
 
         // Determine rune slot limit
-        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+        const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 
         // Already has this rune?
         if (vasen.runes.includes(runeId)) {
@@ -383,7 +383,7 @@ class GameState {
         for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
             const vasen = this.party[i];
             if (vasen) {
-                const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+                const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
                 if (vasen.runes.length < maxRunes) {
                     vasen.equipRune(runeId);
                     break;

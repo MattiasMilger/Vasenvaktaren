@@ -31,7 +31,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ### Runes
 
 - 24 equippable runes with unique effects
-- One rune slot (two at level 30)
+- One rune slot (two at level 25)
 - Strategic combinations for different builds
 
 ### Exploration

@@ -449,7 +449,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
     const canSwap = !isInParty && !hasEmptySlot && !gameState.inCombat;
     const isFavorite = gameState.isFavorite(vasen.id);
 
-    const runeSlots = vasen.level >= 30 ? 2 : 1;
+    const runeSlots = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
     const expProgress = vasen.getExpProgress();
 
     panel.innerHTML = `
@@ -609,7 +609,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
 
 // Render rune slots for details panel
 UIController.prototype.renderRuneSlots = function(vasen) {
-    const maxSlots = vasen.level >= 30 ? 2 : 1;
+    const maxSlots = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
     let html = '';
 
     for (let i = 0; i < maxSlots; i++) {

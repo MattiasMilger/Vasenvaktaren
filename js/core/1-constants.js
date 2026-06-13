@@ -16,6 +16,7 @@ const GAME_CONFIG = {
     // LEVEL & PROGRESSION
     // =============================================================================
     MAX_LEVEL: 30,
+    TWO_RUNE_LEVEL: 25,             // Level at which a Väsen unlocks a second rune slot
     ENEMY_MAX_LEVEL: 999,
     STARTER_LEVEL: 9,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)

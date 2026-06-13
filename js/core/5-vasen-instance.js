@@ -17,7 +17,7 @@ class VasenInstance {
         this.level = Math.min(Math.max(1, level), maxLevel);
         this.temperamentKey = temperamentKey || getRandomTemperament();
         this.temperament = TEMPERAMENTS[this.temperamentKey];
-        this.runes = runes.slice(0, this.level >= 30 ? 2 : 1);
+        this.runes = runes.slice(0, this.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1);
         
         this.experience = 0;
         
@@ -156,7 +156,7 @@ class VasenInstance {
     
     // Equip a rune
     equipRune(runeId) {
-        const maxRunes = this.level >= 30 ? 2 : 1;
+        const maxRunes = this.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
         if (this.runes.length >= maxRunes) {
             return false;
         }
@@ -404,7 +404,7 @@ function createWildVasen(speciesName, level) {
     const vasen = new VasenInstance(speciesName, level, null, [], true); // Mark as enemy
 
     // Determine how many rune slots this väsen has
-    const numRunes = level >= 30 ? 2 : 1;
+    const numRunes = level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 
     // Get the valid rune pool for this väsen and shuffle it
     const validRunes = getValidRunesForVasen(vasen).slice();

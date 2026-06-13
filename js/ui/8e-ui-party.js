@@ -159,7 +159,7 @@ UIController.prototype.autoEquipRunes = function() {
         }
 
         // Determine slot count for this väsen
-        const maxRunes = vasen.level >= GAME_CONFIG.MAX_LEVEL ? 2 : 1;
+        const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 
         // Get valid runes for this väsen that are collected and still available in the pool
         const validForThis = getValidRunesForVasen(vasen).filter(

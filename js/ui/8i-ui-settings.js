@@ -311,7 +311,7 @@ achievementsHtml += '</div></div>';
         setText('guide-exp-party', `${Math.round(GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED * 100)}%`);
 
         // Runes (max level for 2 runes)
-        setText('guide-max-level-runes', GAME_CONFIG.MAX_LEVEL);
+        setText('guide-max-level-runes', GAME_CONFIG.TWO_RUNE_LEVEL);
 
         // Power & Damage
         setText('guide-damage-variance', `${Math.round(GAME_CONFIG.DAMAGE_RANGE_VARIANCE * 100)}%`);
