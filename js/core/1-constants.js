@@ -619,9 +619,9 @@ const ZONES = {
         guardian: {
             name: 'Brynhild',
             team: [
-                { species: 'Vitorm', level: 25, temperament: 'HEALTHY', runes: ['GIFU'] },
-                { species: 'Bergatroll', level: 25, temperament: 'VIGILANT', runes: ['PERTHO'] },
-                { species: 'Eldturs', level: 25, temperament: 'RESILIENT', runes: ['MANNAZ'] }
+                { species: 'Vitorm', level: 25, temperament: 'HEALTHY', runes: ['GIFU', 'TYR'] },
+                { species: 'Bergatroll', level: 25, temperament: 'VIGILANT', runes: ['PERTHO', 'EIHWAZ']},
+                { species: 'Eldturs', level: 25, temperament: 'RESILIENT', runes: ['MANNAZ', 'KAUNAN'] }
             ],
             dialogue: {
                 challenge: 'We are the forces of chaos, the ancient strength of the raw elements. Face your doom!',
