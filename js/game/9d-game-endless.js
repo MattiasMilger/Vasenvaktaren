@@ -174,7 +174,10 @@ Game.prototype.applyIdunnApples = function() {
         );
         v.healPercent(healPercent);
         if (healAmount > 0) {
-            ui.addCombatLog(`${displayName} gained ${healAmount} health!`, 'heal');
+            ui.addCombatLog(
+                `${displayName} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`,
+                'heal'
+            );
         }
 
         // Reset once-per-battle passive and rune flags
@@ -208,6 +211,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
                 v.restoreFully();
             }
         });
+        gameState.saveGame();
         ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
         ui.showMessage('Your party was healed to full!', 'success');
 
@@ -251,6 +255,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
                     v.restoreFully();
                 }
             });
+            gameState.saveGame();
             ui.addCombatLog('Your party has been fully restored after conquering the tower!', 'heal');
             ui.showMessage('Your party was healed to full!', 'success');
 
@@ -321,6 +326,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
                 v.restoreFully();
             }
         });
+        gameState.saveGame();
         ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
         ui.showMessage('Your party was healed to full!', 'success');
 

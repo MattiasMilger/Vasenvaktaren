@@ -920,6 +920,9 @@ class GameState {
     
     // Save game to localStorage
     saveGame() {
+        // Never save mid-combat — party health is in a transient battle state.
+        // All end-of-battle paths set inCombat = false before saving.
+        if (this.inCombat) return true;
         try {
             const saveData = JSON.stringify(this.serialize());
             localStorage.setItem(SAVE_KEY, saveData);
