@@ -536,6 +536,12 @@ UIController.prototype.colorCodeCombatMessage = function(message) {
     result = result.replace(/\b(was)\s+(raised|increased|boosted)/gi,
         '<span class="combat-buff">$1 $2</span>');
 
+    // 5b. Color cleanse stat changes (green)
+    result = result.replace(/(cleansed)(\s+by)?\s+(\d+)\s+(stages?)/gi,
+        '<span class="combat-buff">$1$2 $3 $4</span>');
+    result = result.replace(/\b(was)\s+(cleansed)/gi,
+        '<span class="combat-buff">$1 $2</span>');
+
     // 6. Color negative stat changes (red)
     result = result.replace(/(lowered|decreased|reduced)(\s+by)?\s+(\d+)\s+(stages?)/gi,
         '<span class="combat-debuff">$1$2 $3 $4</span>');

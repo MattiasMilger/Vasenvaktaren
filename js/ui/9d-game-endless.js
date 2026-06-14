@@ -150,7 +150,7 @@ Game.prototype.applyIdunnApples = function() {
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
     const attrs = ['strength', 'wisdom', 'defense', 'durability'];
 
-    ui.addCombatLog("Idunn's Apples of youth replenish the team!", 'heal');
+    ui.addCombatLog('Idunn\'s Apples of youth replenish the team!', 'heal');
 
     gameState.party.forEach(v => {
         if (!v || v.isKnockedOut()) return;
@@ -174,7 +174,10 @@ Game.prototype.applyIdunnApples = function() {
         );
         v.healPercent(healPercent);
         if (healAmount > 0) {
-            ui.addCombatLog(`${displayName} gained ${healAmount} health!`, 'heal');
+            ui.addCombatLog(
+                `${displayName} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`,
+                'heal'
+            );
         }
 
         // Reset once-per-battle passive and rune flags
