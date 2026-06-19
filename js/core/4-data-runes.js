@@ -472,7 +472,7 @@ const BIND_RUNES = [
     {
         runes: ['ANSUZ', 'RAIDO'],
         type: 'use_best_stat',
-        get effectText() { return `All attacks use your highest attacking attribute`; },
+        get effectText() { return `This väsen's attacks use the highest attacking attribute`; },
         symbols: `${RUNES.ANSUZ.symbol}${RUNES.RAIDO.symbol}`,
         names: `${RUNES.ANSUZ.name} ${RUNES.RAIDO.name}`
     },
