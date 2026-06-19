@@ -33,6 +33,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - 24 equippable runes with unique effects
 - One rune slot (two at level 25)
 - Strategic combinations for different builds
+- Bindrunes: certain rune pairs unlock a hidden combined effect when equipped together
 
 ### Exploration
 
@@ -44,7 +45,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 ### Combat System & Taming
 
-- Turn-based battles with move priority
+- Turn-based battles
 - Element matchups
 - Resource management
 - Attribute buffs and debuffs
@@ -120,7 +121,7 @@ Vasenvaktaren/
 ├── js/
 │   ├── core/
 │   │   ├── 1-constants.js          (game constants)
-│   │   ├── 2-data-skills.js     (skill definitions)
+│   │   ├── 2-data-skills.js        (skill definitions)
 │   │   ├── 3-data-vasen.js         (väsen species data)
 │   │   ├── 4-data-items.js         (item definitions)
 │   │   ├── 4-data-runes.js         (rune definitions; smart rune filter)
@@ -147,10 +148,10 @@ Vasenvaktaren/
 │   │
 │   └── game/
 │       ├── 9a-game-core.js         (Game class, menu flow, and core lifecycle)
-│       ├── 9b-game-exploration.js   (wild encounters and battle handling)
-│       ├── 9c-game-guardian.js      (guardian battles)
-│       ├── 9d-game-endless.js       (endless tower mode)
-│       ├── 9e-game-actions.js       (combat action handlers)
+│       ├── 9b-game-exploration.js  (wild encounters and battle handling)
+│       ├── 9c-game-guardian.js     (guardian battles)
+│       ├── 9d-game-endless.js      (endless tower mode)
+│       ├── 9e-game-actions.js      (combat action handlers)
 │       └── 9f-game-init.js         (bootstrap and event bindings)
 │
 └── assets/

@@ -32,7 +32,7 @@ const RUNES = {
         fullName: 'Thurs',
         flavor: 'The violent, chaotic might of the giants, channeled as a sharp, unyielding thorn. Any harm inflicted upon the bearer is instantly met with a fierce, painful recoil.',
         get effect() {
-            return `This väsen returns ${Math.round((GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE) * 100)}% of damage taken as mixed damage of its own element`;
+            return `This väsen returns ${Math.round((GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE) * 100)}% of damage taken from attack hits as mixed damage of its own element`;
         },
     },
     'ANSUZ': {
@@ -264,6 +264,282 @@ const RUNES = {
 
 const RUNE_LIST = Object.keys(RUNES);
 const STARTER_RUNE = 'URUZ';
+
+// =============================================================================
+// BIND RUNES
+// Each entry defines a pair of runes that, when equipped together, produce a
+// combined effect beyond what either rune does individually.
+// runes:      [runeA, runeB] — order does not matter
+// type:       internal effect type used by the battle system
+// effectText: human-readable description shown in UI
+// symbols:    combined symbol string for the battle log
+// names:      combined name string for the battle log
+// =============================================================================
+const BIND_RUNES = [
+    // ── ELEMENTAL CONVERSION BIND RUNES ──────────────────────────────────────
+    // SOURCE rune defines which element gets converted; CONVERSION rune defines
+    // the target element. Only hits that originally match the source element are
+    // affected.  sourceElement → convertedElement for matchup and damage.
+    //
+    // EIHWAZ (Earth source) pairs
+    {
+        runes: ['EIHWAZ', 'KAUNAN'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.EARTH,
+        convertedElement: ELEMENTS.FIRE,
+        get effectText() { return `Earth hits converted to fire`; },
+        symbols: `${RUNES.EIHWAZ.symbol}${RUNES.KAUNAN.symbol}`,
+        names: `${RUNES.EIHWAZ.name} ${RUNES.KAUNAN.name}`
+    },
+    {
+        runes: ['EIHWAZ', 'TYR'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.EARTH,
+        convertedElement: ELEMENTS.WIND,
+        get effectText() { return `Earth hits converted to wind`; },
+        symbols: `${RUNES.EIHWAZ.symbol}${RUNES.TYR.symbol}`,
+        names: `${RUNES.EIHWAZ.name} ${RUNES.TYR.name}`
+    },
+    {
+        runes: ['EIHWAZ', 'BJARKA'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.EARTH,
+        convertedElement: ELEMENTS.NATURE,
+        get effectText() { return `Earth hits converted to nature`; },
+        symbols: `${RUNES.EIHWAZ.symbol}${RUNES.BJARKA.symbol}`,
+        names: `${RUNES.EIHWAZ.name} ${RUNES.BJARKA.name}`
+    },
+    {
+        runes: ['EIHWAZ', 'LAGUZ'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.EARTH,
+        convertedElement: ELEMENTS.WATER,
+        get effectText() { return `Earth hits converted to water`; },
+        symbols: `${RUNES.EIHWAZ.symbol}${RUNES.LAGUZ.symbol}`,
+        names: `${RUNES.EIHWAZ.name} ${RUNES.LAGUZ.name}`
+    },
+    // ISAZ (Water source) pairs
+    {
+        runes: ['ISAZ', 'KAUNAN'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WATER,
+        convertedElement: ELEMENTS.FIRE,
+        get effectText() { return `Water hits converted to fire`; },
+        symbols: `${RUNES.ISAZ.symbol}${RUNES.KAUNAN.symbol}`,
+        names: `${RUNES.ISAZ.name} ${RUNES.KAUNAN.name}`
+    },
+    {
+        runes: ['ISAZ', 'PERTHO'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WATER,
+        convertedElement: ELEMENTS.EARTH,
+        get effectText() { return `Water hits converted to earth`; },
+        symbols: `${RUNES.ISAZ.symbol}${RUNES.PERTHO.symbol}`,
+        names: `${RUNES.ISAZ.name} ${RUNES.PERTHO.name}`
+    },
+    {
+        runes: ['ISAZ', 'TYR'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WATER,
+        convertedElement: ELEMENTS.WIND,
+        get effectText() { return `Water hits converted to wind`; },
+        symbols: `${RUNES.ISAZ.symbol}${RUNES.TYR.symbol}`,
+        names: `${RUNES.ISAZ.name} ${RUNES.TYR.name}`
+    },
+    {
+        runes: ['ISAZ', 'BJARKA'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WATER,
+        convertedElement: ELEMENTS.NATURE,
+        get effectText() { return `Water hits converted to nature`; },
+        symbols: `${RUNES.ISAZ.symbol}${RUNES.BJARKA.symbol}`,
+        names: `${RUNES.ISAZ.name} ${RUNES.BJARKA.name}`
+    },
+    // SOL (Fire source) pairs
+    {
+        runes: ['SOL', 'PERTHO'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.FIRE,
+        convertedElement: ELEMENTS.EARTH,
+        get effectText() { return `Fire hits converted to earth`; },
+        symbols: `${RUNES.SOL.symbol}${RUNES.PERTHO.symbol}`,
+        names: `${RUNES.SOL.name} ${RUNES.PERTHO.name}`
+    },
+    {
+        runes: ['SOL', 'TYR'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.FIRE,
+        convertedElement: ELEMENTS.WIND,
+        get effectText() { return `Fire hits converted to wind`; },
+        symbols: `${RUNES.SOL.symbol}${RUNES.TYR.symbol}`,
+        names: `${RUNES.SOL.name} ${RUNES.TYR.name}`
+    },
+    {
+        runes: ['SOL', 'BJARKA'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.FIRE,
+        convertedElement: ELEMENTS.NATURE,
+        get effectText() { return `Fire hits converted to nature`; },
+        symbols: `${RUNES.SOL.symbol}${RUNES.BJARKA.symbol}`,
+        names: `${RUNES.SOL.name} ${RUNES.BJARKA.name}`
+    },
+    {
+        runes: ['SOL', 'LAGUZ'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.FIRE,
+        convertedElement: ELEMENTS.WATER,
+        get effectText() { return `Fire hits converted to Water`; },
+        symbols: `${RUNES.SOL.symbol}${RUNES.LAGUZ.symbol}`,
+        names: `${RUNES.SOL.name} ${RUNES.LAGUZ.name}`
+    },
+    // ALGIZ (Nature source) pairs
+    {
+        runes: ['ALGIZ', 'KAUNAN'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.NATURE,
+        convertedElement: ELEMENTS.FIRE,
+        get effectText() { return `Nature hits converted to fire`; },
+        symbols: `${RUNES.ALGIZ.symbol}${RUNES.KAUNAN.symbol}`,
+        names: `${RUNES.ALGIZ.name} ${RUNES.KAUNAN.name}`
+    },
+    {
+        runes: ['ALGIZ', 'PERTHO'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.NATURE,
+        convertedElement: ELEMENTS.EARTH,
+        get effectText() { return `Nature hits converted to earth`; },
+        symbols: `${RUNES.ALGIZ.symbol}${RUNES.PERTHO.symbol}`,
+        names: `${RUNES.ALGIZ.name} ${RUNES.PERTHO.name}`
+    },
+    {
+        runes: ['ALGIZ', 'TYR'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.NATURE,
+        convertedElement: ELEMENTS.WIND,
+        get effectText() { return `Nature hits converted to wind`; },
+        symbols: `${RUNES.ALGIZ.symbol}${RUNES.TYR.symbol}`,
+        names: `${RUNES.ALGIZ.name} ${RUNES.TYR.name}`
+    },
+    {
+        runes: ['ALGIZ', 'LAGUZ'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.NATURE,
+        convertedElement: ELEMENTS.WATER,
+        get effectText() { return `Nature hits converted to water`; },
+        symbols: `${RUNES.ALGIZ.symbol}${RUNES.LAGUZ.symbol}`,
+        names: `${RUNES.ALGIZ.name} ${RUNES.LAGUZ.name}`
+    },
+    // EHWAZ (Wind source) pairs
+    {
+        runes: ['EHWAZ', 'KAUNAN'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WIND,
+        convertedElement: ELEMENTS.FIRE,
+        get effectText() { return `Wind hits converted to fire`; },
+        symbols: `${RUNES.EHWAZ.symbol}${RUNES.KAUNAN.symbol}`,
+        names: `${RUNES.EHWAZ.name} ${RUNES.KAUNAN.name}`
+    },
+    {
+        runes: ['EHWAZ', 'PERTHO'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WIND,
+        convertedElement: ELEMENTS.EARTH,
+        get effectText() { return `Wind hits converted to earth`; },
+        symbols: `${RUNES.EHWAZ.symbol}${RUNES.PERTHO.symbol}`,
+        names: `${RUNES.EHWAZ.name} ${RUNES.PERTHO.name}`
+    },
+    {
+        runes: ['EHWAZ', 'BJARKA'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WIND,
+        convertedElement: ELEMENTS.NATURE,
+        get effectText() { return `Wind hits converted to nature`; },
+        symbols: `${RUNES.EHWAZ.symbol}${RUNES.BJARKA.symbol}`,
+        names: `${RUNES.EHWAZ.name} ${RUNES.BJARKA.name}`
+    },
+    {
+        runes: ['EHWAZ', 'LAGUZ'],
+        type: 'element_conversion',
+        sourceElement: ELEMENTS.WIND,
+        convertedElement: ELEMENTS.WATER,
+        get effectText() { return `Wind hits converted to water`; },
+        symbols: `${RUNES.EHWAZ.symbol}${RUNES.LAGUZ.symbol}`,
+        names: `${RUNES.EHWAZ.name} ${RUNES.LAGUZ.name}`
+    },
+
+    // ── ANSUZ + RAIDO ─────────────────────────────────────────────────────────
+    // All attacks use the attacker's highest attacking attribute (Strength or Wisdom).
+    {
+        runes: ['ANSUZ', 'RAIDO'],
+        type: 'use_best_stat',
+        get effectText() { return `All attacks use your highest attacking attribute`; },
+        symbols: `${RUNES.ANSUZ.symbol}${RUNES.RAIDO.symbol}`,
+        names: `${RUNES.ANSUZ.name} ${RUNES.RAIDO.name}`
+    },
+
+    // ── THURS + HAGAL ─────────────────────────────────────────────────────────
+    // Killing attack hits against this väsen return a percentage of damage as
+    // mixed damage of its own element back to the attacker. Triggers on attack
+    // hits only (not on reflected/recoil damage such as Thurs's own reflect),
+    // since Thurs reflection applies damage directly rather than going through
+    // the attack-hit pipeline, so it can never re-trigger this bind rune.
+    // Fires even when Vålnad's family passive revives this väsen — see
+    // battle-core's executeSkill for that placement.
+    {
+        runes: ['THURS', 'HAGAL'],
+        type: 'killing_reflect',
+        get effectText() {
+            return `Killing attack hits against this väsen return ${Math.round(GAME_CONFIG.RUNE_BIND_THURS_HAGAL_RETURN_DAMAGE * 100)}% of damage as mixed damage`;
+        },
+        symbols: `${RUNES.THURS.symbol}${RUNES.HAGAL.symbol}`,
+        names: `${RUNES.THURS.name} ${RUNES.HAGAL.name}`
+    }
+];
+
+// Returns an array of active bind rune definitions for a given VasenInstance.
+// A bind rune is active only when the väsen has BOTH runes in the pair equipped.
+function getActiveBindRunes(vasen) {
+    if (!vasen || !vasen.runes || vasen.runes.length < 2) return [];
+    return BIND_RUNES.filter(br =>
+        br.runes.every(r => vasen.runes.includes(r))
+    );
+}
+
+// Returns the active elemental conversion bind rune for a given VasenInstance
+// (if any), or null. Only the first match is returned since a väsen can only
+// equip two runes and therefore only one elemental conversion pair at a time.
+function getElementConversionBindRune(vasen) {
+    return getActiveBindRunes(vasen).find(br => br.type === 'element_conversion') || null;
+}
+
+// Returns true if the väsen has the ANSUZ + RAIDO use_best_stat bind rune active.
+function hasUseBestStatBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'use_best_stat');
+}
+
+// Returns true if the väsen has the THURS + HAGAL killing_reflect bind rune active.
+function hasKillingReflectBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'killing_reflect');
+}
+
+// Returns HTML string for displaying active bind rune effects.
+// Used in combat panel and väsen details.
+function getBindRuneDisplayHTML(vasen, isOpen = false) {
+    const active = getActiveBindRunes(vasen);
+    if (active.length === 0) return '';
+    const openClass = isOpen ? 'open' : '';
+    return active.map(br => `
+        <div class="rune-collapsible ${openClass}">
+            <div class="rune-collapsible-header" onclick="toggleRuneDescriptions()">
+                <span class="toggle-icon"></span>
+                ${br.symbols} Bindrune
+            </div>
+            <div class="rune-collapsible-body">
+                ${br.effectText}
+            </div>
+        </div>
+    `).join('');
+}
 
 // =============================================================================
 // Returns the subset of RUNE_LIST that are useful for a given VasenInstance.

@@ -128,7 +128,6 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         ? `${vasen.runes.map(r => {
                 const rune = RUNES[r];
                 if (!rune) return '';
-
                 return `
                     <div class="rune-collapsible ${runeOpen}">
                         <div class="rune-collapsible-header" onclick="toggleRuneDescriptions()">
@@ -142,6 +141,13 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
                 `;
            }).join('')}`
         : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
+
+    // Bind rune effect text — shown below the rune list (outside both rune
+    // boxes), not inside either individual rune's collapsible body.
+    const activeBindRunesForPanel = getActiveBindRunes(vasen);
+    const bindRuneTextHtml = activeBindRunesForPanel.length > 0
+        ? `<div class="rune-bind-effect">${activeBindRunesForPanel[0].symbols} Bindrune: ${activeBindRunesForPanel[0].effectText}</div>`
+        : '';
 
     // Build attacking matchups for attack elements
     const attackElements = vasen.getAttackElements();
@@ -252,6 +258,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
 
         <div class="combatant-runes">
             ${runesHtml}
+            ${bindRuneTextHtml}
         </div>
 
         <div class="combatant-stages">
@@ -305,6 +312,14 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
                 const rune = RUNES[runeId];
                 return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
             }).join('');
+        }
+
+        // Bind Rune: add a compact indicator badge for any active bind rune pair
+        const activeBindRunes = getActiveBindRunes(vasen);
+        if (activeBindRunes.length > 0) {
+            runesHtml += activeBindRunes.map(br =>
+                `<span class="mini-rune mini-bind-rune">${br.symbols} Bindrune</span>`
+            ).join('');
         }
 
         // Build attribute stages HTML (only for combat info)

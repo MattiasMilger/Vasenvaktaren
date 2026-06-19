@@ -651,6 +651,22 @@ class Battle {
 
         this.addLog(`${attacker.getDisplayName()} deals ${actualDamage} damage to ${defender.getDisplayName()}!`, 'damage');
 
+        // Bind Rune — Elemental Conversion: log when element was converted
+        if (damageResult.bindRuneEleConverted) {
+            const br = getElementConversionBindRune(attacker);
+            if (br) {
+                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${br.symbols} ${br.names} was activated!`, 'rune');
+            }
+        }
+
+        // Bind Rune — Use Best Stat (Ansuz + Raido): log when activated
+        if (damageResult.bindRuneUseBestStat) {
+            const br = getActiveBindRunes(attacker).find(b => b.type === 'use_best_stat');
+            if (br) {
+                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${br.symbols} ${br.names} was activated!`, 'rune');
+            }
+        }
+
         // Log matchup (always show effectiveness)
         if (damageResult.matchup === 'POTENT') {
             this.addLog('Potent hit!', 'potent');
@@ -701,6 +717,24 @@ class Battle {
             
             // Vålnad family passive: Deathless - attempt to revive
             const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
+
+            // Bind Rune — THURS + HAGAL: on a killing attack hit, return a percentage
+            // of damage as mixed damage of the defender's own element to the attacker.
+            // Fires even if Vålnad's family passive revives the defender — this is an
+            // intentional synergy that makes Vålnad's passive stronger.
+            // No cascade-loop guard is needed here: this only runs inside executeSkill's
+            // direct attack-hit path. The THURS reflect below applies damage via
+            // attacker.takeDamage() directly rather than calling executeSkill again, so
+            // a THURS hit can never re-enter this block or trigger it on itself.
+            if (hasKillingReflectBindRune(defender) && result.damage > 0 && !attacker.isKnockedOut()) {
+                const thurshagalBR = getActiveBindRunes(defender).find(b => b.type === 'killing_reflect');
+                this.addLog(`${defender.getDisplayName()}'s Bindrune ${thurshagalBR.symbols} ${thurshagalBR.names} was activated!`, 'rune');
+                const reflectDamage = Math.floor(result.damage * GAME_CONFIG.RUNE_BIND_THURS_HAGAL_RETURN_DAMAGE);
+                if (reflectDamage > 0) {
+                    attacker.takeDamage(reflectDamage);
+                    this.addLog(`${attacker.getDisplayName()} took ${reflectDamage} damage!`, 'damage');
+                }
+            }
             
             if (!revived) {
                 // If not revived, log the knockout
@@ -800,7 +834,17 @@ class Battle {
     // Calculate damage
     calculateDamage(attacker, defender, skillName) {
         const skill = ABILITIES[skillName];
-        const skillElement = getSkillElement(skillName, attacker.species.element);
+        let skillElement = getSkillElement(skillName, attacker.species.element);
+
+        // Bind Rune — Elemental Conversion: if the attacker has an active elemental
+        // conversion bind rune and this skill's element matches the source element,
+        // override skillElement to the converted element for matchup and damage.
+        const eleConversionBR = getElementConversionBindRune(attacker);
+        let bindRuneEleConverted = false;
+        if (eleConversionBR && skillElement === eleConversionBR.sourceElement) {
+            skillElement = eleConversionBR.convertedElement;
+            bindRuneEleConverted = true;
+        }
         
         // Determine attack type (considering Ansuz and Raido)
         let attackType = skill.type;
@@ -823,6 +867,10 @@ class Battle {
             useStrength = true;
             useWisdom = false;
         }
+
+        // Bind Rune — Use Best Stat (Ansuz + Raido): all attacks use whichever of
+        // the attacker's Strength or Wisdom (with stage modifiers) is currently higher.
+        const bindRuneUseBestStat = hasUseBestStatBindRune(attacker);
         
         // Element matchup
         let matchup = getMatchupType(skillElement, defender.species.element);
@@ -903,35 +951,66 @@ class Battle {
         }
         
         if (skill.type === ATTACK_TYPES.MIXED) {
-            // 50% Strength, 50% Wisdom
-            const strengthDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
-                damageRange, elementMod, runeMod
-            ) * GAME_CONFIG.MIXED_ATTACK_STRENGTH_PORTION;
-            
-            const wisdomDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
-                damageRange, elementMod, runeMod
-            ) * GAME_CONFIG.MIXED_ATTACK_WISDOM_PORTION;
-            
-            totalDamage = strengthDamage + wisdomDamage;
+            if (bindRuneUseBestStat) {
+                // Use the higher of strength/wisdom for both halves
+                const bestStat = attacker.getAttribute('strength') >= attacker.getAttribute('wisdom')
+                    ? attacker.getAttribute('strength')
+                    : attacker.getAttribute('wisdom');
+                const bestDef = attacker.getAttribute('strength') >= attacker.getAttribute('wisdom')
+                    ? defender.getAttribute('defense')
+                    : defender.getAttribute('durability');
+                totalDamage = this.calculateSingleTypeDamage(
+                    power, bestStat, bestDef, damageRange, elementMod, runeMod
+                );
+            } else {
+                // 50% Strength, 50% Wisdom
+                const strengthDamage = this.calculateSingleTypeDamage(
+                    power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
+                    damageRange, elementMod, runeMod
+                ) * GAME_CONFIG.MIXED_ATTACK_STRENGTH_PORTION;
+                
+                const wisdomDamage = this.calculateSingleTypeDamage(
+                    power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
+                    damageRange, elementMod, runeMod
+                ) * GAME_CONFIG.MIXED_ATTACK_WISDOM_PORTION;
+                
+                totalDamage = strengthDamage + wisdomDamage;
+            }
         } else if (useStrength) {
-            totalDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
-                damageRange, elementMod, runeMod
-            );
+            if (bindRuneUseBestStat && attacker.getAttribute('wisdom') > attacker.getAttribute('strength')) {
+                // Wisdom is higher — use wisdom stat, check vs durability
+                totalDamage = this.calculateSingleTypeDamage(
+                    power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
+                    damageRange, elementMod, runeMod
+                );
+            } else {
+                totalDamage = this.calculateSingleTypeDamage(
+                    power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
+                    damageRange, elementMod, runeMod
+                );
+            }
         } else if (useWisdom) {
-            totalDamage = this.calculateSingleTypeDamage(
-                power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
-                damageRange, elementMod, runeMod
-            );
+            if (bindRuneUseBestStat && attacker.getAttribute('strength') > attacker.getAttribute('wisdom')) {
+                // Strength is higher — use strength stat, check vs defense
+                totalDamage = this.calculateSingleTypeDamage(
+                    power, attacker.getAttribute('strength'), defender.getAttribute('defense'),
+                    damageRange, elementMod, runeMod
+                );
+            } else {
+                totalDamage = this.calculateSingleTypeDamage(
+                    power, attacker.getAttribute('wisdom'), defender.getAttribute('durability'),
+                    damageRange, elementMod, runeMod
+                );
+            }
         }
         
         return {
             damage: Math.floor(Math.max(1, totalDamage)),
             matchup: matchup,
             attackType: skill.type,
-            element: skillElement
+            element: skillElement,
+            bindRuneEleConverted: bindRuneEleConverted,
+            bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED)
         };
     }
     

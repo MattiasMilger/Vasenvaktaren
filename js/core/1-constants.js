@@ -176,6 +176,10 @@ const GAME_CONFIG = {
 
     // Thurs: returns percentage of damage back to attacker
     RUNE_THURS_RETURN_DAMAGE: 0.20,
+
+    // Bind Runes
+    // Thurs + Hagal: killing hits return a percentage of damage taken as mixed damage
+    RUNE_BIND_THURS_HAGAL_RETURN_DAMAGE: 0.30,
     
     // =============================================================================
     // ENEMY AI CONFIGURATION

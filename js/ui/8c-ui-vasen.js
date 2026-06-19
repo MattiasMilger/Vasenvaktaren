@@ -499,6 +499,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
             <div class="rune-slots">
                 ${this.renderRuneSlots(vasen)}
             </div>
+            ${this.renderBindRuneEffectText(vasen)}
         </div>
 
         <div class="details-description">
@@ -639,6 +640,16 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     }
 
     return html;
+};
+
+// Render the active bind rune effect text (if any), shown below the rune
+// slot boxes rather than inside either individual slot.
+UIController.prototype.renderBindRuneEffectText = function(vasen) {
+    const activeBindRunes = getActiveBindRunes(vasen);
+    if (activeBindRunes.length === 0) return '';
+
+    const br = activeBindRunes[0];
+    return `<div class="rune-bind-effect">${br.symbols} Bindrune: ${br.effectText}</div>`;
 };
 
 // Render skills list (väsen details: flavor + mechanics)
