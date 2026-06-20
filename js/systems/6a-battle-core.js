@@ -699,6 +699,16 @@ class Battle {
             }
         }
 
+        // Bind Rune — Odal + Fehu: log when the enemy-strength damage reduction
+        // applied to this hit. This is the defender's rune, since it's their own
+        // received damage that was reduced.
+        if (damageResult.bindRuneEnemyStrengthReduction) {
+            const br = getActiveBindRunes(defender).find(b => b.type === 'enemy_strength_damage_reduction');
+            if (br) {
+                this.addLog(`${defender.getDisplayName()}'s Bindrune ${br.symbols} ${br.names} was activated!`, 'rune');
+            }
+        }
+
         // Log matchup (always show effectiveness)
         if (damageResult.matchup === 'POTENT') {
             this.addLog('Potent hit!', 'potent');
@@ -961,6 +971,13 @@ class Battle {
         if (matchup === 'POTENT' && defender.hasRune('FEHU')) {
             runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
         }
+
+        // Bind Rune — Odal + Fehu: reduce damage taken based on how much
+        // stronger the attacker's total base attributes are than the defender's.
+        const enemyStrengthReductionMod = getEnemyStrengthDamageReductionMod(attacker, defender);
+        if (enemyStrengthReductionMod < 1) {
+            runeMod *= enemyStrengthReductionMod;
+        }
         
         // Calculate damage based on attack type
         let totalDamage = 0;
@@ -1047,7 +1064,8 @@ class Battle {
             element: skillElement,
             bindRuneEleConverted: bindRuneEleConverted,
             bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED),
-            bindRuneDefDurSwapped: bindRuneDefDurSwapped
+            bindRuneDefDurSwapped: bindRuneDefDurSwapped,
+            bindRuneEnemyStrengthReduction: enemyStrengthReductionMod < 1
         };
     }
     

@@ -528,6 +528,26 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.EHWAZ.symbol}${RUNES.EIHWAZ.symbol}`,
         names: `${RUNES.EHWAZ.name} ${RUNES.EIHWAZ.name}`
+    },
+
+    // ── ODAL + FEHU ───────────────────────────────────────────────────────────
+    // This väsen takes less damage based on how much stronger the enemy's
+    // total base attributes (Strength + Wisdom + Defense + Durability + Health,
+    // using calculateAttribute — i.e. before in-battle attribute stages) are
+    // compared to this väsen's own total. Scales linearly from 0% reduction at
+    // a difference of 0 (or the enemy being weaker/equal) up to the maximum
+    // reduction at or beyond the configured difference threshold. Only affects
+    // damage this väsen RECEIVES as the defender, on every damaging hit —
+    // identical in mechanism to Fehu's own unconditional damage-reduction
+    // multiplier, and stacks multiplicatively with it.
+    {
+        runes: ['ODAL', 'FEHU'],
+        type: 'enemy_strength_damage_reduction',
+        get effectText() {
+            return `This väsen takes less damage based on the enemy's total base attributes, up to ${Math.round(GAME_CONFIG.RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION * 100)}%`;
+        },
+        symbols: `${RUNES.ODAL.symbol}${RUNES.FEHU.symbol}`,
+        names: `${RUNES.ODAL.name} ${RUNES.FEHU.name}`
     }
 ];
 
@@ -586,6 +606,38 @@ function hasDefenseDurabilitySwapBindRune(vasen) {
 function getDefensiveStatName(defender, normalStat) {
     if (!hasDefenseDurabilitySwapBindRune(defender)) return normalStat;
     return normalStat === 'defense' ? 'durability' : 'defense';
+}
+
+// Returns true if the väsen has the ODAL + FEHU enemy_strength_damage_reduction bind rune active.
+function hasEnemyStrengthDamageReductionBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'enemy_strength_damage_reduction');
+}
+
+// Returns the total of a väsen's base attributes (Strength, Wisdom, Defense,
+// Durability, Health) using calculateAttribute — i.e. before in-battle
+// attribute stage modifiers are applied.
+function getTotalBaseAttributes(vasen) {
+    return ['strength', 'wisdom', 'defense', 'durability', 'health']
+        .reduce((sum, stat) => sum + vasen.calculateAttribute(stat), 0);
+}
+
+// Returns the damage reduction multiplier (e.g. 0.90 for a 10% reduction) granted
+// by the ODAL + FEHU bind rune for a hit from `attacker` against `defender`.
+// Returns 1 (no reduction) if the bind rune is inactive or the enemy is not
+// stronger. Scales linearly from 0% at a 0 (or negative) attribute difference
+// up to RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION at or beyond a difference of
+// RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX.
+function getEnemyStrengthDamageReductionMod(attacker, defender) {
+    if (!hasEnemyStrengthDamageReductionBindRune(defender)) return 1;
+
+    const difference = getTotalBaseAttributes(attacker) - getTotalBaseAttributes(defender);
+    if (difference <= 0) return 1;
+
+    const cappedDifference = Math.min(difference, GAME_CONFIG.RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX);
+    const reduction = (cappedDifference / GAME_CONFIG.RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX)
+        * GAME_CONFIG.RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION;
+
+    return 1 - reduction;
 }
 
 // Returns HTML string for displaying active bind rune effects.

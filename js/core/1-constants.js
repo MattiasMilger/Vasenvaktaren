@@ -182,6 +182,9 @@ const GAME_CONFIG = {
     RUNE_BIND_THURS_HAGAL_RETURN_DAMAGE: 0.30,
     // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per battle)
     // Ehwaz + Eihwaz: reverses which attribute (Defense/Durability) reduces incoming Strength/Wisdom damage (no tunable value)
+    // Odal + Fehu: damage taken is reduced based on how much stronger the enemy's total base attributes are
+    RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION: 0.15,   // Maximum % damage reduction (reached at or above the difference threshold below)
+    RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX: 150,      // Total base attribute difference (enemy - self) at which the max reduction is reached
     
     // =============================================================================
     // ENEMY AI CONFIGURATION
