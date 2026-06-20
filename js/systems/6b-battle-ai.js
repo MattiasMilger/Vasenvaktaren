@@ -229,7 +229,7 @@ class EnemyAI {
         }
         
         // Megin penalty
-        const meginCost = this.vasen.getSkillMeginCost(skillName);
+        const meginCost = this.vasen.getEffectiveSkillMeginCost(skillName);
         if (meginCost > this.vasen.currentMegin * GAME_CONFIG.AI_MEGIN_PENALTY_THRESHOLD) {
             score += GAME_CONFIG.AI_MEGIN_PENALTY;
         }

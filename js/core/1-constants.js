@@ -49,7 +49,7 @@ const GAME_CONFIG = {
     // =============================================================================
     MAX_ATTRIBUTE_STAGE: 5,
     MIN_ATTRIBUTE_STAGE: -5,
-    ATTRIBUTE_STAGE_MODIFIER: 0.1,      // Per-stage modifier added/subtracted per attribute stage
+    ATTRIBUTE_STAGE_MODIFIER: 0.12,      // Per-stage modifier added/subtracted per attribute stage
     
     // =============================================================================
     // DAMAGE CALCULATION
@@ -185,6 +185,7 @@ const GAME_CONFIG = {
     // Odal + Fehu: damage taken is reduced based on how much stronger the enemy's total base attributes are
     RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION: 0.15,   // Maximum % damage reduction (reached at or above the difference threshold below)
     RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX: 150,      // Total base attribute difference (enemy - self) at which the max reduction is reached
+    // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
     
     // =============================================================================
     // ENEMY AI CONFIGURATION
