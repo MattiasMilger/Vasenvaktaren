@@ -20,7 +20,7 @@
     --text-strong-alt: #ededf8; /* Alt strong text — combat log entries */
 
     /* Accent Colors — UI chrome and decorative states (not semantic actions) */
-    --accent-primary: #8fa67e;   /* Muted sage-green — primary buttons, active borders, rune slots */
+    --accent-primary: #a2ba92;   /* Muted sage-green — primary buttons, active borders, rune slots */
     --accent-secondary: #7a92ab; /* Steel blue-gray — secondary borders, info tints */
     --accent-danger: #c46c6c;    /* Red — damage text, enemy UI, danger states */
     --accent-warning: #d4a933;   /* Bright gold — XP gain, level requirements, alerts */
