@@ -287,7 +287,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.EARTH,
         convertedElement: ELEMENTS.FIRE,
-        get effectText() { return `Earth hits converted to fire`; },
+        get effectText() { return `This väsen's earth hits are converted to fire`; },
         symbols: `${RUNES.EIHWAZ.symbol}${RUNES.KAUNAN.symbol}`,
         names: `${RUNES.EIHWAZ.name} ${RUNES.KAUNAN.name}`
     },
@@ -296,7 +296,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.EARTH,
         convertedElement: ELEMENTS.WIND,
-        get effectText() { return `Earth hits converted to wind`; },
+        get effectText() { return `This väsen's earth hits are converted to wind`; },
         symbols: `${RUNES.EIHWAZ.symbol}${RUNES.TYR.symbol}`,
         names: `${RUNES.EIHWAZ.name} ${RUNES.TYR.name}`
     },
@@ -305,7 +305,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.EARTH,
         convertedElement: ELEMENTS.NATURE,
-        get effectText() { return `Earth hits converted to nature`; },
+        get effectText() { return `This väsen's earth hits are converted to nature`; },
         symbols: `${RUNES.EIHWAZ.symbol}${RUNES.BJARKA.symbol}`,
         names: `${RUNES.EIHWAZ.name} ${RUNES.BJARKA.name}`
     },
@@ -314,7 +314,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.EARTH,
         convertedElement: ELEMENTS.WATER,
-        get effectText() { return `Earth hits converted to water`; },
+        get effectText() { return `This väsen's earth hits are converted to water`; },
         symbols: `${RUNES.EIHWAZ.symbol}${RUNES.LAGUZ.symbol}`,
         names: `${RUNES.EIHWAZ.name} ${RUNES.LAGUZ.name}`
     },
@@ -324,7 +324,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WATER,
         convertedElement: ELEMENTS.FIRE,
-        get effectText() { return `Water hits converted to fire`; },
+        get effectText() { return `This väsen's water hits are converted to fire`; },
         symbols: `${RUNES.ISAZ.symbol}${RUNES.KAUNAN.symbol}`,
         names: `${RUNES.ISAZ.name} ${RUNES.KAUNAN.name}`
     },
@@ -333,7 +333,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WATER,
         convertedElement: ELEMENTS.EARTH,
-        get effectText() { return `Water hits converted to earth`; },
+        get effectText() { return `This väsen's water hits are converted to earth`; },
         symbols: `${RUNES.ISAZ.symbol}${RUNES.PERTHO.symbol}`,
         names: `${RUNES.ISAZ.name} ${RUNES.PERTHO.name}`
     },
@@ -342,7 +342,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WATER,
         convertedElement: ELEMENTS.WIND,
-        get effectText() { return `Water hits converted to wind`; },
+        get effectText() { return `This väsen's water hits are converted to wind`; },
         symbols: `${RUNES.ISAZ.symbol}${RUNES.TYR.symbol}`,
         names: `${RUNES.ISAZ.name} ${RUNES.TYR.name}`
     },
@@ -351,7 +351,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WATER,
         convertedElement: ELEMENTS.NATURE,
-        get effectText() { return `Water hits converted to nature`; },
+        get effectText() { return `This väsen's water hits are converted to nature`; },
         symbols: `${RUNES.ISAZ.symbol}${RUNES.BJARKA.symbol}`,
         names: `${RUNES.ISAZ.name} ${RUNES.BJARKA.name}`
     },
@@ -361,7 +361,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.FIRE,
         convertedElement: ELEMENTS.EARTH,
-        get effectText() { return `Fire hits converted to earth`; },
+        get effectText() { return `This väsen's fire hits are converted to earth`; },
         symbols: `${RUNES.SOL.symbol}${RUNES.PERTHO.symbol}`,
         names: `${RUNES.SOL.name} ${RUNES.PERTHO.name}`
     },
@@ -370,7 +370,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.FIRE,
         convertedElement: ELEMENTS.WIND,
-        get effectText() { return `Fire hits converted to wind`; },
+        get effectText() { return `This väsen's fire hits are converted to wind`; },
         symbols: `${RUNES.SOL.symbol}${RUNES.TYR.symbol}`,
         names: `${RUNES.SOL.name} ${RUNES.TYR.name}`
     },
@@ -379,7 +379,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.FIRE,
         convertedElement: ELEMENTS.NATURE,
-        get effectText() { return `Fire hits converted to nature`; },
+        get effectText() { return `This väsen's fire hits are converted to nature`; },
         symbols: `${RUNES.SOL.symbol}${RUNES.BJARKA.symbol}`,
         names: `${RUNES.SOL.name} ${RUNES.BJARKA.name}`
     },
@@ -388,7 +388,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.FIRE,
         convertedElement: ELEMENTS.WATER,
-        get effectText() { return `Fire hits converted to Water`; },
+        get effectText() { return `This väsen's fire hits are converted to water`; },
         symbols: `${RUNES.SOL.symbol}${RUNES.LAGUZ.symbol}`,
         names: `${RUNES.SOL.name} ${RUNES.LAGUZ.name}`
     },
@@ -398,7 +398,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.NATURE,
         convertedElement: ELEMENTS.FIRE,
-        get effectText() { return `Nature hits converted to fire`; },
+        get effectText() { return `This väsen's nature hits are converted to fire`; },
         symbols: `${RUNES.ALGIZ.symbol}${RUNES.KAUNAN.symbol}`,
         names: `${RUNES.ALGIZ.name} ${RUNES.KAUNAN.name}`
     },
@@ -407,7 +407,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.NATURE,
         convertedElement: ELEMENTS.EARTH,
-        get effectText() { return `Nature hits converted to earth`; },
+        get effectText() { return `This väsen's nature hits are converted to earth`; },
         symbols: `${RUNES.ALGIZ.symbol}${RUNES.PERTHO.symbol}`,
         names: `${RUNES.ALGIZ.name} ${RUNES.PERTHO.name}`
     },
@@ -416,7 +416,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.NATURE,
         convertedElement: ELEMENTS.WIND,
-        get effectText() { return `Nature hits converted to wind`; },
+        get effectText() { return `This väsen's nature hits are converted to wind`; },
         symbols: `${RUNES.ALGIZ.symbol}${RUNES.TYR.symbol}`,
         names: `${RUNES.ALGIZ.name} ${RUNES.TYR.name}`
     },
@@ -425,7 +425,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.NATURE,
         convertedElement: ELEMENTS.WATER,
-        get effectText() { return `Nature hits converted to water`; },
+        get effectText() { return `This väsen's nature hits are converted to water`; },
         symbols: `${RUNES.ALGIZ.symbol}${RUNES.LAGUZ.symbol}`,
         names: `${RUNES.ALGIZ.name} ${RUNES.LAGUZ.name}`
     },
@@ -435,7 +435,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WIND,
         convertedElement: ELEMENTS.FIRE,
-        get effectText() { return `Wind hits converted to fire`; },
+        get effectText() { return `This väsen's wind hits are converted to fire`; },
         symbols: `${RUNES.EHWAZ.symbol}${RUNES.KAUNAN.symbol}`,
         names: `${RUNES.EHWAZ.name} ${RUNES.KAUNAN.name}`
     },
@@ -444,7 +444,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WIND,
         convertedElement: ELEMENTS.EARTH,
-        get effectText() { return `Wind hits converted to earth`; },
+        get effectText() { return `This väsen's wind hits are converted to earth`; },
         symbols: `${RUNES.EHWAZ.symbol}${RUNES.PERTHO.symbol}`,
         names: `${RUNES.EHWAZ.name} ${RUNES.PERTHO.name}`
     },
@@ -453,7 +453,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WIND,
         convertedElement: ELEMENTS.NATURE,
-        get effectText() { return `Wind hits converted to nature`; },
+        get effectText() { return `This väsen's wind hits are converted to nature`; },
         symbols: `${RUNES.EHWAZ.symbol}${RUNES.BJARKA.symbol}`,
         names: `${RUNES.EHWAZ.name} ${RUNES.BJARKA.name}`
     },
@@ -462,7 +462,7 @@ const BIND_RUNES = [
         type: 'element_conversion',
         sourceElement: ELEMENTS.WIND,
         convertedElement: ELEMENTS.WATER,
-        get effectText() { return `Wind hits converted to water`; },
+        get effectText() { return `This väsen's wind hits are converted to water`; },
         symbols: `${RUNES.EHWAZ.symbol}${RUNES.LAGUZ.symbol}`,
         names: `${RUNES.EHWAZ.name} ${RUNES.LAGUZ.name}`
     },
