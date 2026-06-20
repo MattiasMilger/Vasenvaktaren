@@ -293,8 +293,9 @@ class EnemyAI {
 
         const attackStat = skill.type === ATTACK_TYPES.WISDOM ? 
             this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
-        const defenseStat = skill.type === ATTACK_TYPES.WISDOM ?
-            this.target.getAttribute('durability') : this.target.getAttribute('defense');
+        const defenseStatName = skill.type === ATTACK_TYPES.WISDOM ?
+            getDefensiveStatName(this.target, 'durability') : getDefensiveStatName(this.target, 'defense');
+        const defenseStat = this.target.getAttribute(defenseStatName);
         
         const powerFactor = power / GAME_CONFIG.POWER_CONSTANT;
         const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));

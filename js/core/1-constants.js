@@ -180,6 +180,8 @@ const GAME_CONFIG = {
     // Bind Runes
     // Thurs + Hagal: killing hits return a percentage of damage taken as mixed damage
     RUNE_BIND_THURS_HAGAL_RETURN_DAMAGE: 0.30,
+    // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per battle)
+    // Ehwaz + Eihwaz: reverses which attribute (Defense/Durability) reduces incoming Strength/Wisdom damage (no tunable value)
     
     // =============================================================================
     // ENEMY AI CONFIGURATION

@@ -689,16 +689,6 @@ class Battle {
             }
         }
 
-        // Bind Rune — Defense/Durability Swap (Ehwaz + Eihwaz): log when activated.
-        // This is the defender's rune, since it's their own received-damage stat
-        // that was swapped for this hit.
-        if (damageResult.bindRuneDefDurSwapped) {
-            const br = getActiveBindRunes(defender).find(b => b.type === 'defense_durability_swap');
-            if (br) {
-                this.addLog(`${defender.getDisplayName()}'s Bindrune ${br.symbols} ${br.names} was activated!`, 'rune');
-            }
-        }
-
         // Log matchup (always show effectiveness)
         if (damageResult.matchup === 'POTENT') {
             this.addLog('Potent hit!', 'potent');
@@ -903,10 +893,6 @@ class Battle {
         // Bind Rune — Use Best Stat (Ansuz + Raido): all attacks use whichever of
         // the attacker's Strength or Wisdom (with stage modifiers) is currently higher.
         const bindRuneUseBestStat = hasUseBestStatBindRune(attacker);
-
-        // Bind Rune — Defense/Durability Swap (Ehwaz + Eihwaz): the defender's
-        // Defense and Durability damage-reduction roles are reversed for this hit.
-        const bindRuneDefDurSwapped = hasDefenseDurabilitySwapBindRune(defender);
         
         // Element matchup
         let matchup = getMatchupType(skillElement, defender.species.element);
@@ -1046,8 +1032,7 @@ class Battle {
             attackType: skill.type,
             element: skillElement,
             bindRuneEleConverted: bindRuneEleConverted,
-            bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED),
-            bindRuneDefDurSwapped: bindRuneDefDurSwapped
+            bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED)
         };
     }
     

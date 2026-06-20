@@ -493,16 +493,62 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.THURS.symbol}${RUNES.HAGAL.symbol}`,
         names: `${RUNES.THURS.name} ${RUNES.HAGAL.name}`
+    },
+
+    // ── GIFU + MANNAZ ─────────────────────────────────────────────────────────
+    // The first time this väsen's Mannaz heal triggers this battle (from any
+    // utility skill, including ones that don't otherwise interact with Gifu,
+    // such as Freya's Tears), the heal is also extended to all allies. Tracked
+    // via its own dedicated mannazTeamHealTriggered flag (not gifuTriggered),
+    // so it fires independently of other Gifu-shared buffs. Reset to false by
+    // resetOncePerBattleFlags(), so Endless Tower's Idunn's Apples milestone
+    // floors renew it like every other once-per-battle rune trigger.
+    {
+        runes: ['GIFU', 'MANNAZ'],
+        type: 'mannaz_team_heal',
+        get effectText() {
+            return `This väsen's first Mannaz heal also heals allies by ${Math.round(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT * 100)}% (once per battle)`;
+        },
+        symbols: `${RUNES.GIFU.symbol}${RUNES.MANNAZ.symbol}`,
+        names: `${RUNES.GIFU.name} ${RUNES.MANNAZ.name}`
+    },
+
+    // ── EHWAZ + EIHWAZ ────────────────────────────────────────────────────────
+    // Reverses which of this väsen's own attributes reduces incoming damage:
+    // Defense (normally reduces Strength-attack damage) instead reduces
+    // Wisdom-attack damage, and Durability (normally reduces Wisdom-attack
+    // damage) instead reduces Strength-attack damage. This only affects damage
+    // this väsen RECEIVES as the defender — it has no effect on the damage it
+    // deals, and no effect on any other väsen.
+    {
+        runes: ['EHWAZ', 'EIHWAZ'],
+        type: 'defense_durability_swap',
+        get effectText() {
+            return `Defense and durability effects are reversed`;
+        },
+        symbols: `${RUNES.EHWAZ.symbol}${RUNES.EIHWAZ.symbol}`,
+        names: `${RUNES.EHWAZ.name} ${RUNES.EIHWAZ.name}`
     }
 ];
 
 // Returns an array of active bind rune definitions for a given VasenInstance.
 // A bind rune is active only when the väsen has BOTH runes in the pair equipped.
+// The returned objects are shallow copies with `symbols` and `names` recomputed
+// to follow the order the runes actually appear in vasen.runes (i.e. the order
+// the player equipped them), rather than the fixed order baked into BIND_RUNES.
 function getActiveBindRunes(vasen) {
     if (!vasen || !vasen.runes || vasen.runes.length < 2) return [];
-    return BIND_RUNES.filter(br =>
-        br.runes.every(r => vasen.runes.includes(r))
-    );
+    return BIND_RUNES
+        .filter(br => br.runes.every(r => vasen.runes.includes(r)))
+        .map(br => {
+            // Order the pair's rune IDs the same way they appear in vasen.runes
+            const orderedIds = vasen.runes.filter(r => br.runes.includes(r));
+            return {
+                ...br,
+                symbols: orderedIds.map(id => RUNES[id].symbol).join(''),
+                names: orderedIds.map(id => RUNES[id].name).join(' ')
+            };
+        });
 }
 
 // Returns the active elemental conversion bind rune for a given VasenInstance
@@ -520,6 +566,26 @@ function hasUseBestStatBindRune(vasen) {
 // Returns true if the väsen has the THURS + HAGAL killing_reflect bind rune active.
 function hasKillingReflectBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'killing_reflect');
+}
+
+// Returns true if the väsen has the GIFU + MANNAZ mannaz_team_heal bind rune active.
+function hasMannazTeamHealBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'mannaz_team_heal');
+}
+
+// Returns true if the väsen has the EHWAZ + EIHWAZ defense_durability_swap bind rune active.
+function hasDefenseDurabilitySwapBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'defense_durability_swap');
+}
+
+// Given a defender and the attribute that would normally be checked for
+// damage reduction ('defense' for Strength-type attacks, 'durability' for
+// Wisdom-type attacks), returns the attribute that should actually be used —
+// swapped if the defender has the EHWAZ + EIHWAZ bind rune active, otherwise
+// unchanged. Only ever called with 'defense' or 'durability'.
+function getDefensiveStatName(defender, normalStat) {
+    if (!hasDefenseDurabilitySwapBindRune(defender)) return normalStat;
+    return normalStat === 'defense' ? 'durability' : 'defense';
 }
 
 // Returns HTML string for displaying active bind rune effects.
