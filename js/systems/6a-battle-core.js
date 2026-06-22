@@ -548,15 +548,7 @@ class Battle {
         const skill = ABILITIES[skillName];
         if (!skill) return null;
 
-        const normalMeginCost = attacker.getSkillMeginCost(skillName);
-
-        // Bind Rune — Uruz + Dagaz: this väsen's first skill use of the battle
-        // costs 0 Megin. Check and consume the flag before computing the
-        // effective cost so it only ever discounts a single skill use.
-        const freeFirstSkillActive = !attacker.battleFlags.hasUsedFirstSkill && hasFreeFirstSkillBindRune(attacker);
-        attacker.battleFlags.hasUsedFirstSkill = true;
-
-        const meginCost = freeFirstSkillActive ? 0 : normalMeginCost;
+        const meginCost = attacker.getSkillMeginCost(skillName);
         attacker.spendMegin(meginCost);
         
         // Log skill use
@@ -567,11 +559,7 @@ class Battle {
             this.onAttack(isPlayer ? 'player' : 'enemy', skill.type);
         }
 
-        if (freeFirstSkillActive && normalMeginCost > 0) {
-            const uruzDagazBR = getActiveBindRunes(attacker).find(b => b.type === 'free_first_skill');
-            this.addLog(`${attacker.getDisplayName()}'s Bindrune ${uruzDagazBR.symbols} ${uruzDagazBR.names} was activated!`, 'rune');
-            this.addLog(`${attacker.getDisplayName()} used 0 Megin!`, 'megin');
-        } else if (meginCost > 0) {
+        if (meginCost > 0) {
             this.addLog(`${attacker.getDisplayName()} used ${meginCost} Megin!`, 'megin');
         }
         

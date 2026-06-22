@@ -44,7 +44,6 @@ class VasenInstance {
             gifuTriggered: false,
             wynjaTriggered: false,
             mannazTeamHealTriggered: false,
-            hasUsedFirstSkill: false,
             // Family passive flags
             andePassiveTriggered: false,
             drakePassiveTriggered: false,
@@ -192,13 +191,8 @@ class VasenInstance {
         return getSkillMeginCost(skillName, this.species.element);
     }
 
-    // Get the actual megin cost for a skill this turn, accounting for the
-    // Uruz + Dagaz bind rune, which makes this väsen's first skill use of
-    // the battle cost 0 Megin.
+    // Get the actual megin cost for a skill this turn.
     getEffectiveSkillMeginCost(skillName) {
-        if (!this.battleFlags.hasUsedFirstSkill && hasFreeFirstSkillBindRune(this)) {
-            return 0;
-        }
         return this.getSkillMeginCost(skillName);
     }
     
@@ -275,7 +269,6 @@ class VasenInstance {
             gifuTriggered: false,
             wynjaTriggered: false,
             mannazTeamHealTriggered: false,
-            hasUsedFirstSkill: false,
             // Family passive flags
             andePassiveTriggered: false,
             drakePassiveTriggered: false,
@@ -295,7 +288,6 @@ class VasenInstance {
         this.battleFlags.gifuTriggered = false;
         this.battleFlags.wynjaTriggered = false;
         this.battleFlags.mannazTeamHealTriggered = false;
-        this.battleFlags.hasUsedFirstSkill = false;
         this.battleFlags.andePassiveTriggered = false;
         this.battleFlags.drakePassiveTriggered = false;
         this.battleFlags.odjurPassiveTriggered = false;

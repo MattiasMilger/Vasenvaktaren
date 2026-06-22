@@ -548,22 +548,6 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.ODAL.symbol}${RUNES.FEHU.symbol}`,
         names: `${RUNES.ODAL.name} ${RUNES.FEHU.name}`
-    },
-
-    // ── URUZ + DAGAZ ──────────────────────────────────────────────────────────
-    // This väsen's first skill use of the battle costs 0 Megin. Only applies
-    // to this väsen's own first skill use — has no effect on any other väsen,
-    // and has no effect on this väsen's second or later skill uses. Tracked via
-    // its own dedicated hasUsedFirstSkill flag, reset by resetOncePerBattleFlags()
-    // so Endless Tower's Idunn's Apples milestone floors renew it.
-    {
-        runes: ['URUZ', 'DAGAZ'],
-        type: 'free_first_skill',
-        get effectText() {
-            return `This väsen's first skill used in combat costs 0 Megin`;
-        },
-        symbols: `${RUNES.URUZ.symbol}${RUNES.DAGAZ.symbol}`,
-        names: `${RUNES.URUZ.name} ${RUNES.DAGAZ.name}`
     }
 ];
 
@@ -627,11 +611,6 @@ function getDefensiveStatName(defender, normalStat) {
 // Returns true if the väsen has the ODAL + FEHU enemy_strength_damage_reduction bind rune active.
 function hasEnemyStrengthDamageReductionBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enemy_strength_damage_reduction');
-}
-
-// Returns true if the väsen has the URUZ + DAGAZ free_first_skill bind rune active.
-function hasFreeFirstSkillBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'free_first_skill');
 }
 
 // Returns the total of a väsen's base attributes (Strength, Wisdom, Defense,
