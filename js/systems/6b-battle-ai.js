@@ -81,27 +81,27 @@ class EnemyAI {
         }
 
         // Giantsbane: score based on target's current HP ratio, but only when the hit
-        // is not WEAK — a weak Giantsbane deals reduced damage and loses most of its value.
+        // is not WEAK - a weak Giantsbane deals reduced damage and loses most of its value.
         if (skill.giantsbaneBonus) {
             const skillElement = getSkillElement(skillName, this.vasen.species.element);
             const giantsbaneMatchup = getMatchupType(skillElement, this.target.species.element);
             if (giantsbaneMatchup !== 'WEAK') {
                 const hpRatio = this.target.currentHealth / this.target.maxHealth;
                 if (hpRatio >= 0.9) {
-                    // Target nearly full HP — ideal window, strong bonus
+                    // Target nearly full HP - ideal window, strong bonus
                     score += 80;
                 } else if (hpRatio >= 0.7) {
                     // Still worthwhile
                     score += 40;
                 } else if (hpRatio >= 0.5) {
-                    // Marginal — slight bonus
+                    // Marginal - slight bonus
                     score += 10;
                 } else {
-                    // Target is low HP — Giantsbane is wasteful, heavy penalty
+                    // Target is low HP - Giantsbane is wasteful, heavy penalty
                     score -= 60;
                 }
             } else {
-                // Weak hit: Giantsbane loses its key advantage — penalise heavily
+                // Weak hit: Giantsbane loses its key advantage - penalise heavily
                 score -= 60;
             }
         }
@@ -178,7 +178,7 @@ class EnemyAI {
             // Rotvälta: estimate the probskill the enemy will attack this turn.
             // Turn 0 is commonly a setup round (buffs, utility), so the chance is lower.
             // From turn 1 onward attacks are far more likely, so the estimated bonus is higher.
-            // The max bonus (25) is intentionally moderate — the AI cannot know for certain.
+            // The max bonus (25) is intentionally moderate - the AI cannot know for certain.
             if (skill.retaliationBonus) {
                 const turnsOnField = this.vasen.battleFlags.turnsOnField;
                 const estimatedAttackProb = turnsOnField === 0 ? 0.35 : 0.70;
@@ -360,7 +360,7 @@ class EnemyAI {
             if (buffedStat) {
                 scoreFn = v => v.calculateAttribute(buffedStat);
             } else {
-                // No recognisable stat — just return the caster
+                // No recognisable stat - just return the caster
                 return this.vasen;
             }
         }

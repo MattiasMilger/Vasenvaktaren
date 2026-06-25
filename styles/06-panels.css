@@ -102,7 +102,7 @@
 }
 
 /* =============================================================================
-   FUTHARK ORNAMENT — decorative rune backdrop in panel-right
+   FUTHARK ORNAMENT - decorative rune backdrop in panel-right
    Sits in the flex flow of panel-right, after zone-description, filling the
    remaining empty space below it. Runes tile in a 12-column grid with a
    zigzag wave (every other rune shifted down). Fades out toward the bottom
@@ -140,7 +140,7 @@
     transform: translateY(0.5em);
 }
 
-/* Hide ornament during combat — combat-area becomes visible (display: flex),
+/* Hide ornament during combat - combat-area becomes visible (display: flex),
    zone-description is hidden. Target ornament when it follows a hidden zone-desc. */
 #zone-description[style*="display: none"] + .futhark-ornament,
 #zone-description:not([style]) + .futhark-ornament {
@@ -153,9 +153,9 @@
 }
 
 /* =============================================================================
-   FUTHARK ORNAMENT — MAIN MENU BACKDROP
+   FUTHARK ORNAMENT - MAIN MENU BACKDROP
    Positioned absolutely to fill the entire main menu screen behind the content.
-   No fade mask — covers continuously. Slightly brighter than the in-game ornament.
+   No fade mask - covers continuously. Slightly brighter than the in-game ornament.
    ============================================================================= */
 
 #main-menu-screen .futhark-ornament,
@@ -166,7 +166,7 @@
     z-index: 0;
     align-content: start;
     overflow: hidden;
-    /* Fade out toward the bottom — same as the in-game ornament */
+    /* Fade out toward the bottom - same as the in-game ornament */
     -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
     --futhark-ornament-color: #383848;

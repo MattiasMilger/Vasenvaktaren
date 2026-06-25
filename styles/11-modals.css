@@ -924,7 +924,7 @@ button:focus-visible,
         flex-wrap: nowrap;
     }
     
-    /* Combatant panel popups use position:fixed via JS — rows wrap to fit width */
+    /* Combatant panel popups use position:fixed via JS - rows wrap to fit width */
     .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
         flex-wrap: wrap;
     }
@@ -952,7 +952,7 @@ button:focus-visible,
         min-width: 300px;
     }
 
-    /* No forced min-width inside combatant card — content wraps instead */
+    /* No forced min-width inside combatant card - content wraps instead */
     .combatant-panel .family-matchup-collapsible .family-description-popup > * {
         min-width: 0;
     }
@@ -1075,7 +1075,7 @@ button:focus-visible,
     overflow-x: hidden;
 }
 
-/* Scrollbar on the inner scroll wrapper — panel's overflow:hidden clips it to rounded corners */
+/* Scrollbar on the inner scroll wrapper - panel's overflow:hidden clips it to rounded corners */
 .combatant-panel .combatant-scroll-inner::-webkit-scrollbar-track {
     background: transparent;
 }

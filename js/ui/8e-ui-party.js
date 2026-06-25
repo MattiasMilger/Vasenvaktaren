@@ -167,7 +167,7 @@ UIController.prototype.autoEquipRunes = function() {
         );
 
         // Shuffle valid options (pool was already shuffled globally, but filter
-        // may have changed ordering — re-shuffle the filtered subset)
+        // may have changed ordering - re-shuffle the filtered subset)
         for (let i = validForThis.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [validForThis[i], validForThis[j]] = [validForThis[j], validForThis[i]];

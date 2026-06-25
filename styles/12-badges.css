@@ -12,11 +12,11 @@
 .family-badge {
     display: inline-block;
     padding: 2px 6px;
-    border: 2px solid transparent; /* all badges reserve border space — rarity/family override color */
+    border: 2px solid transparent; /* all badges reserve border space - rarity/family override color */
     border-radius: var(--border-radius-sm);
     font-size: var(--font-size-xs);
     font-weight: 500;              /* consistent weight across all badge types */
-    line-height: 1.4;              /* explicit — prevents height variation from parent inheritance */
+    line-height: 1.4;              /* explicit - prevents height variation from parent inheritance */
     vertical-align: middle;        /* align consistently with surrounding text */
     white-space: nowrap;           /* never wrap badge text */
     box-sizing: border-box;

@@ -420,12 +420,12 @@ class GameState {
     // Unlock all standard lore entries and the starting zone entry
     unlockStandardLoreEntries() {
         LORE_STANDARD_KEYS.forEach(k => this.unlockLoreEntry(k));
-        // Trollskogen is always the starting zone — unlock its lore entry
+        // Trollskogen is always the starting zone - unlock its lore entry
         this.unlockLoreEntry('location_trollskogen');
     }
 
     // Scan existing game state and retroactively unlock all earned lore entries.
-    // Uses batch pattern — adds directly to the Set, single save at the end.
+    // Uses batch pattern - adds directly to the Set, single save at the end.
     retroactivelyUnlockLoreEntries() {
         // Remove stale keys from deleted or renamed lore entries so the count stays accurate
         this.unlockedLoreEntries.forEach(k => {
@@ -460,7 +460,7 @@ class GameState {
                 LORE_ENTRIES[k].unlockType === 'element' && LORE_ENTRIES[k].unlockKey === species.element
             ).forEach(k => unlock(k));
 
-            // Skill entries — only skills the väsen has actually learned at its current level
+            // Skill entries - only skills the väsen has actually learned at its current level
             vasen.getAvailableSkills().forEach(skillName => {
                 LORE_ENTRY_KEYS.filter(k =>
                     LORE_ENTRIES[k].unlockType === 'skill' && LORE_ENTRIES[k].unlockKey === skillName
@@ -585,7 +585,7 @@ class GameState {
             }
         }
         
-        // Prevent consecutive Sacred Wells — re-roll as a battle encounter
+        // Prevent consecutive Sacred Wells - re-roll as a battle encounter
         if (encounterType === 'well' && this.lastEncounterType === 'well') {
             encounterType = 'vasen';
         }
@@ -920,7 +920,7 @@ class GameState {
     
     // Save game to localStorage
     saveGame() {
-        // Never save mid-combat — party health is in a transient battle state.
+        // Never save mid-combat - party health is in a transient battle state.
         // All end-of-battle paths set inCombat = false before saving.
         if (this.inCombat) return true;
         try {

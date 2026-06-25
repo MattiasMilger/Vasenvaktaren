@@ -142,7 +142,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
            }).join('')}`
         : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
 
-    // Bind rune effect text — shown below the rune list (outside both rune
+    // Bind rune effect text - shown below the rune list (outside both rune
     // boxes), not inside either individual rune's collapsible body.
     const activeBindRunesForPanel = getActiveBindRunes(vasen);
     const bindRuneTextHtml = activeBindRunesForPanel.length > 0

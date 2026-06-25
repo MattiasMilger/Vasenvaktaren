@@ -269,7 +269,7 @@ const STARTER_RUNE = 'URUZ';
 // BIND RUNES
 // Each entry defines a pair of runes that, when equipped together, produce a
 // combined effect beyond what either rune does individually.
-// runes:      [runeA, runeB] — order does not matter
+// runes:      [runeA, runeB] - order does not matter
 // type:       internal effect type used by the battle system
 // effectText: human-readable description shown in UI
 // symbols:    combined symbol string for the battle log
@@ -483,7 +483,7 @@ const BIND_RUNES = [
     // hits only (not on reflected/recoil damage such as Thurs's own reflect),
     // since Thurs reflection applies damage directly rather than going through
     // the attack-hit pipeline, so it can never re-trigger this bind rune.
-    // Fires even when Vålnad's family passive revives this väsen — see
+    // Fires even when Vålnad's family passive revives this väsen - see
     // battle-core's executeSkill for that placement.
     {
         runes: ['THURS', 'HAGAL'],
@@ -518,7 +518,7 @@ const BIND_RUNES = [
     // Defense (normally reduces Strength-attack damage) instead reduces
     // Wisdom-attack damage, and Durability (normally reduces Wisdom-attack
     // damage) instead reduces Strength-attack damage. This only affects damage
-    // this väsen RECEIVES as the defender — it has no effect on the damage it
+    // this väsen RECEIVES as the defender - it has no effect on the damage it
     // deals, and no effect on any other väsen.
     {
         runes: ['EHWAZ', 'EIHWAZ'],
@@ -533,11 +533,11 @@ const BIND_RUNES = [
     // ── ODAL + FEHU ───────────────────────────────────────────────────────────
     // This väsen takes less damage based on how much stronger the enemy's
     // total base attributes (Strength + Wisdom + Defense + Durability + Health,
-    // using calculateAttribute — i.e. before in-battle attribute stages) are
+    // using calculateAttribute - i.e. before in-battle attribute stages) are
     // compared to this väsen's own total. Scales linearly from 0% reduction at
     // a difference of 0 (or the enemy being weaker/equal) up to the maximum
     // reduction at or beyond the configured difference threshold. Only affects
-    // damage this väsen RECEIVES as the defender, on every damaging hit —
+    // damage this väsen RECEIVES as the defender, on every damaging hit -
     // identical in mechanism to Fehu's own unconditional damage-reduction
     // multiplier, and stacks multiplicatively with it.
     {
@@ -600,7 +600,7 @@ function hasDefenseDurabilitySwapBindRune(vasen) {
 
 // Given a defender and the attribute that would normally be checked for
 // damage reduction ('defense' for Strength-type attacks, 'durability' for
-// Wisdom-type attacks), returns the attribute that should actually be used —
+// Wisdom-type attacks), returns the attribute that should actually be used -
 // swapped if the defender has the EHWAZ + EIHWAZ bind rune active, otherwise
 // unchanged. Only ever called with 'defense' or 'durability'.
 function getDefensiveStatName(defender, normalStat) {
@@ -614,7 +614,7 @@ function hasEnemyStrengthDamageReductionBindRune(vasen) {
 }
 
 // Returns the total of a väsen's base attributes (Strength, Wisdom, Defense,
-// Durability, Health) using calculateAttribute — i.e. before in-battle
+// Durability, Health) using calculateAttribute - i.e. before in-battle
 // attribute stage modifiers are applied.
 function getTotalBaseAttributes(vasen) {
     return ['strength', 'wisdom', 'defense', 'durability', 'health']
@@ -693,24 +693,24 @@ function getValidRunesForVasen(vasen) {
 
     return RUNE_LIST.filter(runeId => {
         switch (runeId) {
-            // Element damage boost runes — only useful if the väsen has attacks of that element
+            // Element damage boost runes - only useful if the väsen has attacks of that element
             case 'KAUNAN': return attackElements.has(ELEMENTS.FIRE);
             case 'PERTHO': return attackElements.has(ELEMENTS.EARTH);
             case 'TYR':    return attackElements.has(ELEMENTS.WIND);
             case 'BJARKA': return attackElements.has(ELEMENTS.NATURE);
             case 'LAGUZ':  return attackElements.has(ELEMENTS.WATER);
 
-            // Element proc buff runes — same requirement
+            // Element proc buff runes - same requirement
             case 'EIHWAZ': return attackElements.has(ELEMENTS.EARTH);
             case 'SOL':    return attackElements.has(ELEMENTS.FIRE);
             case 'EHWAZ':  return attackElements.has(ELEMENTS.WIND);
             case 'ISAZ':   return attackElements.has(ELEMENTS.WATER);
             case 'ALGIZ':  return attackElements.has(ELEMENTS.NATURE);
 
-            // Utility heal rune — only useful if the väsen has at least one utility skill
+            // Utility heal rune - only useful if the väsen has at least one utility skill
             case 'MANNAZ': return hasUtilitySkill;
 
-            // Attack-type conversion runes — only useful if the väsen has attacks of the source
+            // Attack-type conversion runes - only useful if the väsen has attacks of the source
             // type AND the target stat is strictly higher than the source stat (converting to
             // a weaker or equal stat is never beneficial).
             case 'ANSUZ':  // Converts Strength attacks → uses Wisdom instead
@@ -718,7 +718,7 @@ function getValidRunesForVasen(vasen) {
             case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
                 return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
 
-            // Low-cost damage boost rune — only useful if at least one *damaging* skill
+            // Low-cost damage boost rune - only useful if at least one *damaging* skill
             // costs at or below the threshold after the same-element megin discount.
             // Utility skills deal no damage, so they don't qualify.
             case 'ODAL': {
@@ -729,7 +729,7 @@ function getValidRunesForVasen(vasen) {
                 });
             }
 
-            // Buff-sharing rune — only useful if the väsen has at least one skill that
+            // Buff-sharing rune - only useful if the väsen has at least one skill that
             // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
             // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
             // Resilience, Troll: Troll Theft).

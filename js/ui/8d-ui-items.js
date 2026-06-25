@@ -59,7 +59,7 @@ UIController.prototype.renderItemInventory = function() {
 UIController.prototype.highlightItemKeywords = function(description) {
     if (!description) return '';
 
-    // Keywords/phrases that hint at specific väsen — specific association + family keyword
+    // Keywords/phrases that hint at specific väsen - specific association + family keyword
     const keywords = [
         // Oknytt (Prankster)
         'land prankster',

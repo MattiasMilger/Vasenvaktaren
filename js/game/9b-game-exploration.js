@@ -89,7 +89,7 @@ Game.prototype.unlockTamingLoreEntries = function(newVasen) {
         ui.showLoreUnlockMessage(elementKey);
     }
 
-    // Skill entries — only skills the väsen has actually learned at its current level
+    // Skill entries - only skills the väsen has actually learned at its current level
     newVasen.getAvailableSkills().forEach(skillName => {
         const skillKey = LORE_ENTRY_KEYS.find(k =>
             LORE_ENTRIES[k].unlockType === 'skill' &&

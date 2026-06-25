@@ -97,7 +97,7 @@ UIController.prototype.renderLore = function() {
         if (expandedEntries.has(el.dataset.key)) el.classList.add('lore-entry-expanded');
     });
 
-    // Collapse / Expand All — covers both category sections and individual entry descriptions
+    // Collapse / Expand All - covers both category sections and individual entry descriptions
     const collapseBtn = container.querySelector('.lore-collapse-btn');
     if (collapseBtn) {
         collapseBtn.addEventListener('click', () => {
@@ -119,7 +119,7 @@ UIController.prototype.renderLore = function() {
     }
     this._loreClickHandler = (e) => {
         if (e.target.closest('.lore-collapse-btn')) return;
-        // Category title — collapse/expand entire category
+        // Category title - collapse/expand entire category
         const catTitle = e.target.closest('.lore-category-title');
         if (catTitle) {
             const category = catTitle.closest('.lore-category');
@@ -129,7 +129,7 @@ UIController.prototype.renderLore = function() {
             }
             return;
         }
-        // Entry header — expand/collapse individual card
+        // Entry header - expand/collapse individual card
         const header = e.target.closest('.lore-entry-header');
         if (!header) return;
         const card = header.closest('.lore-entry-card');
@@ -140,7 +140,7 @@ UIController.prototype.renderLore = function() {
     };
     container.addEventListener('click', this._loreClickHandler);
 
-    // Search — highlight visible text only, no filtering
+    // Search - highlight visible text only, no filtering
     const searchInput = container.querySelector('.lore-search-input');
     if (searchInput) {
         // Restore any query kept from before re-render

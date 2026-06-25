@@ -324,7 +324,7 @@ function toggleElementMatchup(element, event) {
     // If we're opening this one, add the open class
     if (isOpening) {
         parent.classList.add('open');
-        // In a combatant card or vasen details panel the popup is clipped by overflow — use fixed positioning instead
+        // In a combatant card or vasen details panel the popup is clipped by overflow - use fixed positioning instead
         if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
             const popup = parent.querySelector('.matchup-details');
             if (popup) positionPopupForCombatCard(popup, element);
@@ -357,7 +357,7 @@ function toggleFamilyDescription(element, event) {
     // If we're opening this one, add the open class
     if (isOpening) {
         parent.classList.add('open');
-        // In a combatant card or vasen details panel the popup is clipped by overflow — use fixed positioning instead
+        // In a combatant card or vasen details panel the popup is clipped by overflow - use fixed positioning instead
         if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
             const popup = parent.querySelector('.family-description-popup');
             if (popup) positionPopupForCombatCard(popup, element);

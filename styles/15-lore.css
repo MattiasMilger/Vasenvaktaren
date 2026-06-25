@@ -151,7 +151,7 @@ mark.lore-highlight {
 }
 
 /* =============================================================================
-   LOCKED ENTRY — name only, greyed out
+   LOCKED ENTRY - name only, greyed out
    ============================================================================= */
 
 .lore-entry-locked {
@@ -173,7 +173,7 @@ mark.lore-highlight {
 }
 
 /* =============================================================================
-   UNLOCKED ENTRY — full card
+   UNLOCKED ENTRY - full card
    ============================================================================= */
 
 .lore-entry-unlocked {
@@ -197,7 +197,7 @@ mark.lore-highlight {
     user-select: none;
 }
 
-/* Chevron — « when collapsed, » when expanded */
+/* Chevron - « when collapsed, » when expanded */
 .lore-entry-chevron {
     flex-shrink: 0;
     font-size: var(--font-size-xs);
@@ -221,7 +221,7 @@ mark.lore-highlight {
     flex: 1;
 }
 
-/* Description text — hidden when collapsed */
+/* Description text - hidden when collapsed */
 .lore-entry-body {
     display: none;
     margin-top: var(--spacing-xs);
@@ -239,7 +239,7 @@ mark.lore-highlight {
     margin: 0;
 }
 
-/* Meta row: source | heritage — hidden when collapsed */
+/* Meta row: source | heritage - hidden when collapsed */
 .lore-entry-meta {
     display: none;
     flex-wrap: wrap;
@@ -279,7 +279,7 @@ mark.lore-highlight {
 }
 
 /* =============================================================================
-   RESPONSIVE — MOBILE
+   RESPONSIVE - MOBILE
    ============================================================================= */
 
 @media (max-width: 768px) {

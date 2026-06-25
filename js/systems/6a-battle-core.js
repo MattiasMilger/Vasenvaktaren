@@ -299,7 +299,7 @@ class Battle {
         
         // Trigger Odjur passive at the end of the turn, before incrementing
         // turnsOnField so the counter represents turns fully completed before
-        // this check — prevents the swap-in turn from immediately satisfying
+        // this check - prevents the swap-in turn from immediately satisfying
         // the Odjur threshold on re-entry
         this.applyFamilyPassive('onTurnEnd', { vasen: this.playerActive, isPlayer: true });
         this.applyFamilyPassive('onTurnEnd', { vasen: this.enemyActive, isPlayer: false });
@@ -585,7 +585,7 @@ class Battle {
                     this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                 }
 
-                // Bind Rune — GIFU + MANNAZ: the first time this väsen's Mannaz heal
+                // Bind Rune - GIFU + MANNAZ: the first time this väsen's Mannaz heal
                 // triggers this battle, also heal all allies by the same Mannaz heal
                 // percent. Uses its own dedicated flag (not gifuTriggered) so it fires
                 // independently of any other Gifu-shared buff that may have already
@@ -673,7 +673,7 @@ class Battle {
 
         this.addLog(`${attacker.getDisplayName()} deals ${actualDamage} damage to ${defender.getDisplayName()}!`, 'damage');
 
-        // Bind Rune — Elemental Conversion: log when element was converted
+        // Bind Rune - Elemental Conversion: log when element was converted
         if (damageResult.bindRuneEleConverted) {
             const br = getElementConversionBindRune(attacker);
             if (br) {
@@ -681,7 +681,7 @@ class Battle {
             }
         }
 
-        // Bind Rune — Use Best Stat (Ansuz + Raido): log when activated
+        // Bind Rune - Use Best Stat (Ansuz + Raido): log when activated
         if (damageResult.bindRuneUseBestStat) {
             const br = getActiveBindRunes(attacker).find(b => b.type === 'use_best_stat');
             if (br) {
@@ -689,7 +689,7 @@ class Battle {
             }
         }
 
-        // Bind Rune — Defense/Durability Swap (Ehwaz + Eihwaz): log when activated.
+        // Bind Rune - Defense/Durability Swap (Ehwaz + Eihwaz): log when activated.
         // This is the defender's rune, since it's their own received-damage stat
         // that was swapped for this hit.
         if (damageResult.bindRuneDefDurSwapped) {
@@ -699,7 +699,7 @@ class Battle {
             }
         }
 
-        // Bind Rune — Odal + Fehu: log when the enemy-strength damage reduction
+        // Bind Rune - Odal + Fehu: log when the enemy-strength damage reduction
         // applied to this hit. This is the defender's rune, since it's their own
         // received damage that was reduced.
         if (damageResult.bindRuneEnemyStrengthReduction) {
@@ -760,9 +760,9 @@ class Battle {
             // Vålnad family passive: Deathless - attempt to revive
             const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
 
-            // Bind Rune — THURS + HAGAL: on a killing attack hit, return a percentage
+            // Bind Rune - THURS + HAGAL: on a killing attack hit, return a percentage
             // of damage as mixed damage of the defender's own element to the attacker.
-            // Fires even if Vålnad's family passive revives the defender — this is an
+            // Fires even if Vålnad's family passive revives the defender - this is an
             // intentional synergy that makes Vålnad's passive stronger.
             // No cascade-loop guard is needed here: this only runs inside executeSkill's
             // direct attack-hit path. The THURS reflect below applies damage via
@@ -878,7 +878,7 @@ class Battle {
         const skill = ABILITIES[skillName];
         let skillElement = getSkillElement(skillName, attacker.species.element);
 
-        // Bind Rune — Elemental Conversion: if the attacker has an active elemental
+        // Bind Rune - Elemental Conversion: if the attacker has an active elemental
         // conversion bind rune and this skill's element matches the source element,
         // override skillElement to the converted element for matchup and damage.
         const eleConversionBR = getElementConversionBindRune(attacker);
@@ -910,11 +910,11 @@ class Battle {
             useWisdom = false;
         }
 
-        // Bind Rune — Use Best Stat (Ansuz + Raido): all attacks use whichever of
+        // Bind Rune - Use Best Stat (Ansuz + Raido): all attacks use whichever of
         // the attacker's Strength or Wisdom (with stage modifiers) is currently higher.
         const bindRuneUseBestStat = hasUseBestStatBindRune(attacker);
 
-        // Bind Rune — Defense/Durability Swap (Ehwaz + Eihwaz): the defender's
+        // Bind Rune - Defense/Durability Swap (Ehwaz + Eihwaz): the defender's
         // Defense and Durability damage-reduction roles are reversed for this hit.
         const bindRuneDefDurSwapped = hasDefenseDurabilitySwapBindRune(defender);
         
@@ -972,7 +972,7 @@ class Battle {
             runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
         }
 
-        // Bind Rune — Odal + Fehu: reduce damage taken based on how much
+        // Bind Rune - Odal + Fehu: reduce damage taken based on how much
         // stronger the attacker's total base attributes are than the defender's.
         const enemyStrengthReductionMod = getEnemyStrengthDamageReductionMod(attacker, defender);
         if (enemyStrengthReductionMod < 1) {
@@ -1031,7 +1031,7 @@ class Battle {
             }
         } else if (useStrength) {
             if (bindRuneUseBestStat && attacker.getAttribute('wisdom') > attacker.getAttribute('strength')) {
-                // Wisdom is higher — use wisdom stat, check vs durability
+                // Wisdom is higher - use wisdom stat, check vs durability
                 totalDamage = this.calculateSingleTypeDamage(
                     power, attacker.getAttribute('wisdom'), defender.getAttribute(getDefensiveStatName(defender, 'durability')),
                     damageRange, elementMod, runeMod
@@ -1044,7 +1044,7 @@ class Battle {
             }
         } else if (useWisdom) {
             if (bindRuneUseBestStat && attacker.getAttribute('strength') > attacker.getAttribute('wisdom')) {
-                // Strength is higher — use strength stat, check vs defense
+                // Strength is higher - use strength stat, check vs defense
                 totalDamage = this.calculateSingleTypeDamage(
                     power, attacker.getAttribute('strength'), defender.getAttribute(getDefensiveStatName(defender, 'defense')),
                     damageRange, elementMod, runeMod
@@ -1684,7 +1684,7 @@ class Battle {
                     this.addLog(`${incomingVasen.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
 
                     // Gifu on the incoming vasen: their attributes were just raised, so share to all
-                    // other allies (the outgoing Oknytt is included — it never received the buff directly)
+                    // other allies (the outgoing Oknytt is included - it never received the buff directly)
                     if (incomingVasen.hasRune('GIFU')) {
                         if (!incomingVasen.battleFlags.gifuTriggered) {
                             incomingVasen.battleFlags.gifuTriggered = true;
@@ -1699,7 +1699,7 @@ class Battle {
                     }
 
                     // Gifu on the outgoing Oknytt: it granted the buff, so share to all other allies
-                    // (incomingVasen is excluded — it already received the buff directly above)
+                    // (incomingVasen is excluded - it already received the buff directly above)
                     if (vasen.hasRune('GIFU')) {
                         if (!vasen.battleFlags.gifuTriggered) {
                             vasen.battleFlags.gifuTriggered = true;

@@ -178,7 +178,7 @@ const VASEN_SPECIES = {
     'Jotun': {
         name: 'Jotun',
         internalName: 'Jotun',
-        description: 'A mighty giant embodying immense strength and untamed nature, manifesting as an enormous humanoid from Jotunheim driven by primordial chaos.',
+        description: 'A mighty giant embodying immense strength and untamed terrain, manifesting as an enormous humanoid from Jotunheim driven by primordial chaos.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,

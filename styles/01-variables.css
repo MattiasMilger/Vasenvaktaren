@@ -3,8 +3,8 @@
    ============================================================================= */
 
 :root {
-    /* Background Colors — darkest to lightest, for layered depth */
-    --bg-primary: #16161c;   /* Deepest — page background */
+    /* Background Colors - darkest to lightest, for layered depth */
+    --bg-primary: #16161c;   /* Deepest - page background */
     --bg-secondary: #1e1e28; /* Panels, sidebars */
     --bg-tertiary: #252533;  /* Nested sections, sub-panels */
     --bg-card: #2a2a3a;      /* Cards, list items */
@@ -14,27 +14,27 @@
     --text-primary: #f4f4f8;   /* Main readable text */
     --text-secondary: #d0d0dc; /* Supporting text, labels */
     --text-muted: #9898aa;     /* Faded / de-emphasized text */
-    --text-accent: #dcc896;    /* Warm gold — names, titles, flavor */
+    --text-accent: #dcc896;    /* Warm gold - names, titles, flavor */
     --text-accent-hover: #e8d8a8; /* Lighter warm gold for hover states */
-    --text-strong: #e6e6f0;    /* Strong readable text — combat log */
-    --text-strong-alt: #ededf8; /* Alt strong text — combat log entries */
+    --text-strong: #e6e6f0;    /* Strong readable text - combat log */
+    --text-strong-alt: #ededf8; /* Alt strong text - combat log entries */
 
-    /* Accent Colors — UI chrome and decorative states (not semantic actions) */
-    --accent-primary: #a2ba92;   /* Muted sage-green — primary buttons, active borders, rune slots */
-    --accent-secondary: #7a92ab; /* Steel blue-gray — secondary borders, info tints */
-    --accent-danger: #c46c6c;    /* Red — damage text, enemy UI, danger states */
-    --accent-warning: #d4a933;   /* Bright gold — XP gain, level requirements, alerts */
-    --accent-gold: #c9a75a;      /* Warm amber gold — decorative trim, achievement borders */
+    /* Accent Colors - UI chrome and decorative states (not semantic actions) */
+    --accent-primary: #a2ba92;   /* Muted sage-green - primary buttons, active borders, rune slots */
+    --accent-secondary: #7a92ab; /* Steel blue-gray - secondary borders, info tints */
+    --accent-danger: #c46c6c;    /* Red - damage text, enemy UI, danger states */
+    --accent-warning: #d4a933;   /* Bright gold - XP gain, level requirements, alerts */
+    --accent-gold: #c9a75a;      /* Warm amber gold - decorative trim, achievement borders */
 
     /* Accent Primary overlays and glow colors */
     --accent-primary-overlay: rgba(143, 166, 126, 0.08);       /* Subtle tint for active/selected states */
     --accent-primary-glow-color: rgba(143, 166, 126, 0.3);     /* Glow color for hover/selected */
     --accent-primary-glow-strong-color: rgba(143, 166, 126, 0.5); /* Strong glow color */
 
-    /* Semantic Action Colors — universal visual language, used across all UI */
+    /* Semantic Action Colors - universal visual language, used across all UI */
     --color-positive: #5fa13a;      /* Add, heal, buff, success, confirm */
-    --color-positive-soft: #a2ba92; /* Softer positive — combat log text, button hover tint */
-    --color-negative-soft: #d68080; /* Softer negative — combat log text, button hover tint */
+    --color-positive-soft: #a2ba92; /* Softer positive - combat log text, button hover tint */
+    --color-negative-soft: #d68080; /* Softer negative - combat log text, button hover tint */
     --color-disabled: #555566;      /* Locked, unavailable */
 
     /* Border Colors */
@@ -73,26 +73,26 @@
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
 
-    /* Element Colors — each must be visually distinct from each other and from rarity tiers */
+    /* Element Colors - each must be visually distinct from each other and from rarity tiers */
     --element-earth: #a67c3a;   /* Brown-gold */
-    --element-nature: #3d9e52;  /* Deep forest green — distinct from health/uncommon lime */
-    --element-water: #3d8ed4;   /* Royal blue — distinct from rare cyan */
-    --element-fire: #e0622a;    /* Orange-red — distinct from danger red */
-    --element-wind: #9b8fc4;    /* Blue-purple — distinct from mythical magenta */
+    --element-nature: #3d9e52;  /* Deep forest green - distinct from health/uncommon lime */
+    --element-water: #3d8ed4;   /* Royal blue - distinct from rare cyan */
+    --element-fire: #e0622a;    /* Orange-red - distinct from danger red */
+    --element-wind: #9b8fc4;    /* Blue-purple - distinct from mythical magenta */
 
-    /* Element hover glow shadows — rgba of each element color at 30% opacity */
+    /* Element hover glow shadows - rgba of each element color at 30% opacity */
     --element-earth-glow-shadow: -2px 0 8px rgba(166, 124, 58, 0.3);
     --element-nature-glow-shadow: -2px 0 8px rgba(61, 158, 82, 0.3);
     --element-water-glow-shadow: -2px 0 8px rgba(61, 142, 212, 0.3);
     --element-fire-glow-shadow: -2px 0 8px rgba(224, 98, 42, 0.3);
     --element-wind-glow-shadow: -2px 0 8px rgba(155, 143, 196, 0.3);
 
-    /* Rarity Colors — standard gray→green→blue→purple tier progression,
+    /* Rarity Colors - standard gray→green→blue→purple tier progression,
        shifted to avoid overlap with element colors */
     --rarity-common: #9898aa;    /* Cool silver-gray */
-    --rarity-uncommon: #67c040;  /* Muted lime-green — distinct from Nature's forest green */
-    --rarity-rare: #3aafc4;      /* Muted cyan — distinct from Water's royal blue */
-    --rarity-mythical: #ae52d4;  /* Amethyst — distinct from Wind's blue-purple */
+    --rarity-uncommon: #67c040;  /* Muted lime-green - distinct from Nature's forest green */
+    --rarity-rare: #3aafc4;      /* Muted cyan - distinct from Water's royal blue */
+    --rarity-mythical: #ae52d4;  /* Amethyst - distinct from Wind's blue-purple */
 
     /* Rarity card hover/selected glow shadows */
     --rarity-common-glow-shadow: 0 2px 8px rgba(152, 152, 170, 0.3);
@@ -104,7 +104,7 @@
     --rarity-rare-selected-shadow: 0 0 12px rgba(58, 175, 196, 0.4);
     --rarity-mythical-selected-shadow: 0 0 16px rgba(174, 82, 212, 0.5);
 
-    /* Rarity shimmer/glow colors — for badge animations */
+    /* Rarity shimmer/glow colors - for badge animations */
     --rarity-common-shimmer-light: rgba(152, 152, 170, 0.15);
     --rarity-common-shimmer: rgba(152, 152, 170, 0.3);
     --rarity-uncommon-shimmer-light: rgba(103, 192, 64, 0.2);
@@ -123,11 +123,11 @@
     --health-fill-top: #6fb850;           /* Lighter green for bar gradient top */
     --health-fill-knocked-out: #a85a4a;   /* Muted red for knocked-out portrait HP bar */
     --health-bg: #1e2f1e;
-    --megin-fill: #5d7fb8;                /* Steel blue — magic/energy resource */
+    --megin-fill: #5d7fb8;                /* Steel blue - magic/energy resource */
     --megin-fill-top: #7292c8;            /* Lighter blue for bar gradient top */
     --megin-fill-portrait: #5a8aaa;       /* Muted blue for party portrait megin bar */
     --megin-bg: #1e2633;
-    --megin-highlight: #6a9aff;           /* Brighter blue — megin cost display in skill lists */
+    --megin-highlight: #6a9aff;           /* Brighter blue - megin cost display in skill lists */
     --bar-shine: rgba(255, 255, 255, 0.2); /* Inset shine on HP/MP bars */
 
     /* UI Overlay Colors */
@@ -145,14 +145,14 @@
     --black-overlay-extra: rgba(0, 0, 0, 0.8);         /* Extra dark overlay (title text-shadow) */
     --modal-overlay-bg: rgba(0, 0, 0, 0.88);           /* Modal backdrop background */
 
-    /* Shadows — for depth layering */
+    /* Shadows - for depth layering */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.6);
     --shadow-popup: 0 4px 12px rgba(0, 0, 0, 0.3);    /* Dropdown/popup box-shadow */
 
-    /* Glows — colored ambient light for interactive elements */
+    /* Glows - colored ambient light for interactive elements */
     --glow-primary: 0 0 12px rgba(143, 166, 126, 0.3); /* accent-primary glow */
     --glow-danger: 0 0 12px rgba(196, 108, 108, 0.3);   /* accent-danger glow */
     --glow-element: 0 0 8px currentColor;               /* generic element glow, inherits color */
@@ -160,7 +160,7 @@
     /* Tutorial Highlight */
     --tutorial-color: #46dc5a;
 
-    /* Combat Panel Colors — blue tint for player side, red tint for enemy side */
+    /* Combat Panel Colors - blue tint for player side, red tint for enemy side */
     --combat-player-bg: rgba(61, 142, 212, 0.08);
     --combat-player-overlay: rgba(61, 142, 212, 0.05);          /* Subtle gradient overlay */
     --combat-player-border: #5d7fb8;
@@ -177,7 +177,7 @@
     --damage-glow-color: rgba(196, 108, 108, 0.3);  /* Damage text glow */
     --buff-glow-color: rgba(162, 186, 146, 0.3);    /* Buff text glow */
 
-    /* Combat Flash Colors — hit animation drop-shadows */
+    /* Combat Flash Colors - hit animation drop-shadows */
     --flash-potent-color: rgba(0, 255, 0, 0.7);     /* Green flash for potent hits */
     --flash-neutral-color: rgba(255, 255, 255, 0.8); /* White flash for neutral hits */
     --flash-weak-color: rgba(255, 0, 0, 0.7);        /* Red flash for weak hits */
@@ -194,7 +194,7 @@
     --transition-base: 0.2s ease;
     --transition-slow: 0.3s ease;
 
-    /* Gold Effects — accent-gold at various opacities for glow/shimmer overlays */
+    /* Gold Effects - accent-gold at various opacities for glow/shimmer overlays */
     --accent-gold-overlay: rgba(201, 167, 90, 0.15);
     --accent-gold-overlay-soft: rgba(201, 167, 90, 0.08);  /* Very subtle gold tint */
     --accent-gold-glow-soft: rgba(201, 167, 90, 0.3);      /* Soft gold glow / text-shadow */
@@ -208,7 +208,7 @@
     --accent-gold-shimmer-strong: rgba(255, 215, 0, 0.4);
     --accent-gold-glow-strong: rgba(201, 167, 90, 0.6);
 
-    /* Taming Ready Glow — green pulse when correct item has been given to a wild väsen */
+    /* Taming Ready Glow - green pulse when correct item has been given to a wild väsen */
     --taming-ready-border: #5fa13a;                          /* Matches --color-positive */
     --taming-ready-glow-color: rgba(95, 161, 58, 0.35);      /* Low glow */
     --taming-ready-glow-intense-color: rgba(95, 161, 58, 0.65); /* Peak glow */
@@ -219,6 +219,6 @@
     /* Lore Book */
     --lore-highlight-color: rgba(255, 220, 80, 0.35); /* Search highlight mark background */
 
-    /* Futhark Ornament — decorative rune backdrop in panel-right */
+    /* Futhark Ornament - decorative rune backdrop in panel-right */
     --futhark-ornament-color: #2f2f3f; /* Slightly above bg-tertiary, visible but unobtrusive */
 }
