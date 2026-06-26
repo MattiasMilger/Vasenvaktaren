@@ -142,13 +142,22 @@ UIController.prototype.showRuneEquipModal = function(vasenId, slotIndex = null) 
             const isOnThisVasen = vasen.runes.includes(runeId);
             const isOnOtherVasen = equippedTo && equippedTo.id !== vasenId;
 
+            // Distinguish "equipped in the exact slot the player clicked" (a true
+            // no-op, should be disabled) from "equipped in this väsen's other
+            // slot" (clicking it should swap the two runes' slots, so it stays
+            // clickable while still showing the Equipped status label).
+            const isInClickedSlot = isOnThisVasen && slotIndex !== null && slotIndex !== undefined &&
+                vasen.runes[slotIndex] === runeId;
+
             const runeBtn = document.createElement('button');
             runeBtn.className = `rune-equip-btn ${isOnThisVasen ? 'equipped-here' : ''} ${isOnOtherVasen ? 'equipped-elsewhere' : ''}`;
 
             let statusText = '';
             if (isOnThisVasen) {
                 statusText = '<span class="rune-status current">(Equipped)</span>';
-                runeBtn.disabled = true;
+                if (isInClickedSlot) {
+                    runeBtn.disabled = true;
+                }
             } else if (isOnOtherVasen) {
                 statusText = `<span class="rune-status other">(On ${equippedTo.getDisplayName()})</span>`;
             }
@@ -160,7 +169,7 @@ UIController.prototype.showRuneEquipModal = function(vasenId, slotIndex = null) 
                 <span class="rune-effect">${rune.effect}</span>
             `;
 
-            if (!isOnThisVasen) {
+            if (!isInClickedSlot) {
                 runeBtn.onclick = () => {
                     modal.classList.remove('active');
                     ui.checkAndHideOverlay();
@@ -199,6 +208,9 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
     } else {
         eligibleVasen.forEach(vasen => {
             const currentRunes = vasen.runes;
+            // Count only actually-equipped runes (ignore null placeholders used
+            // internally to preserve which exact slot a rune was equipped into).
+            const equippedCount = currentRunes.filter(r => r !== null).length;
             const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
             const hasThisRune = currentRunes.includes(runeId);
             const isInParty = gameState.party.some(p => p && p.id === vasen.id);
@@ -209,7 +221,7 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
             vasenBtn.innerHTML = `
                 ${this.createStandardVasenCardHTML(vasen, false)}
                 <div class="rune-status-overlay">
-                    <span class="rune-status">${currentRunes.length}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}${isInParty ? ' ★' : ''}</span>
+                    <span class="rune-status">${equippedCount}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}${isInParty ? ' ★' : ''}</span>
                 </div>
             `;
             if (!hasThisRune) {

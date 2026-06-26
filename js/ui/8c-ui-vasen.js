@@ -305,7 +305,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.calculateAttribute('defense')}</span>
             <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durability')}</span>
         </div>
-        ${vasen.runes && vasen.runes.length > 0 ? `
+        ${vasen.runes && vasen.runes.filter(r => r !== null).length > 0 ? `
         <div class="vasen-card-runes">
             ${vasen.runes.map(runeId => {
                 const rune = RUNES[runeId];
@@ -450,6 +450,9 @@ UIController.prototype.renderVasenDetails = function(vasen) {
     const isFavorite = gameState.isFavorite(vasen.id);
 
     const runeSlots = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+    // Count only actually-equipped runes (ignore null placeholders used internally
+    // to preserve which exact slot a rune was equipped into).
+    const equippedRuneCount = vasen.runes.filter(r => r !== null).length;
     const expProgress = vasen.getExpProgress();
 
     panel.innerHTML = `
@@ -495,7 +498,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         </div>
 
         <div class="details-runes">
-            <h4>Runes (${vasen.runes.length}/${runeSlots})</h4>
+            <h4>Runes (${equippedRuneCount}/${runeSlots})</h4>
             <div class="rune-slots">
                 ${this.renderRuneSlots(vasen)}
             </div>

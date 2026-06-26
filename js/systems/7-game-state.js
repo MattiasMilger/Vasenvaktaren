@@ -258,8 +258,39 @@ class GameState {
         // Determine rune slot limit
         const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 
-        // Already has this rune?
-        if (vasen.runes.includes(runeId)) {
+        // Already has this rune equipped somewhere on this same väsen?
+        const currentIndexOnThisVasen = vasen.runes.indexOf(runeId);
+        if (currentIndexOnThisVasen !== -1) {
+            const hasValidExplicitSlotForSwap = slotIndex !== null && slotIndex !== undefined &&
+                slotIndex >= 0 && slotIndex < maxRunes;
+
+            // If a specific (different) slot was clicked, treat this as a swap:
+            // move this rune into the clicked slot, and move whatever was
+            // occupying the clicked slot (if anything) into this rune's old slot.
+            if (hasValidExplicitSlotForSwap && slotIndex !== currentIndexOnThisVasen) {
+                // Pad the array if the clicked slot is beyond the current length
+                while (vasen.runes.length <= slotIndex) {
+                    vasen.runes.push(null);
+                }
+
+                const displacedRune = vasen.runes[slotIndex];
+                vasen.runes[slotIndex] = runeId;
+                vasen.runes[currentIndexOnThisVasen] = displacedRune;
+
+                // A swap never changes whether Uruz is equipped on this väsen,
+                // only which slot it occupies, so maxMegin is unaffected.
+
+                // Trim any trailing null placeholders left behind
+                while (vasen.runes.length > 0 && vasen.runes[vasen.runes.length - 1] === null) {
+                    vasen.runes.pop();
+                }
+
+                this.saveGame();
+                return { success: true, message: `Rune swapped on ${vasen.getDisplayName()}.` };
+            }
+
+            // No valid distinct slot given - this is the rune already sitting in
+            // the targeted slot (or no slot context at all), so there's nothing to do.
             return { success: false, message: 'This Väsen already has this rune equipped.' };
         }
 
@@ -271,25 +302,24 @@ class GameState {
             }
         }
 
-        // Handle equipping based on current rune count
-        if (vasen.runes.length < maxRunes) {
-            // Empty slot - just add the rune
-            vasen.runes.push(runeId);
-            // Recalculate megin if Uruz
-            if (runeId === 'URUZ') {
-                vasen.maxMegin = vasen.calculateMaxMegin();
-                vasen.currentMegin = vasen.maxMegin;
-            }
-        } else {
-            // Slots are full - replace at specific index
-            const indexToReplace = (slotIndex !== null && slotIndex >= 0 && slotIndex < vasen.runes.length)
-                ? slotIndex
-                : vasen.runes.length - 1;
+        // Determine which slot index to place the rune in.
+        // A valid, explicit slotIndex (within the väsen's current slot range) is
+        // always honored exactly as clicked - whether that slot is currently
+        // filled (replace), the next slot in sequence, or an empty slot reached
+        // only by skipping over other empty slots (e.g. clicking the right slot
+        // while both slots are empty) - rather than always appending to the
+        // first available position regardless of which slot was clicked.
+        // Empty slots that are skipped over are recorded as `null` placeholders
+        // so the rune lands in the exact slot the player chose; these placeholders
+        // render and behave as empty slots everywhere they're read.
+        const hasValidExplicitSlot = slotIndex !== null && slotIndex !== undefined &&
+            slotIndex >= 0 && slotIndex < maxRunes;
 
-            const removedRune = vasen.runes[indexToReplace];
-
-            // Directly replace at the index
-            vasen.runes[indexToReplace] = runeId;
+        if (hasValidExplicitSlot && slotIndex < vasen.runes.length) {
+            // Targeted slot is within the current array - replace (or fill, if it
+            // currently holds a null placeholder) directly at that index
+            const removedRune = vasen.runes[slotIndex];
+            vasen.runes[slotIndex] = runeId;
 
             // Recalculate megin if Uruz was added or removed
             if (runeId === 'URUZ' || removedRune === 'URUZ') {
@@ -300,6 +330,59 @@ class GameState {
                 } else {
                     // Uruz removed: cap to new (lower) max
                     vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+                }
+            }
+        } else if (hasValidExplicitSlot && slotIndex >= vasen.runes.length) {
+            // Targeted slot is beyond the current array - pad any skipped slots
+            // with a null placeholder (rendered/treated as empty) so the rune
+            // lands exactly at the clicked index
+            while (vasen.runes.length < slotIndex) {
+                vasen.runes.push(null);
+            }
+            vasen.runes.push(runeId);
+            if (runeId === 'URUZ') {
+                vasen.maxMegin = vasen.calculateMaxMegin();
+                vasen.currentMegin = vasen.maxMegin;
+            }
+        } else {
+            // No explicit (or invalid) slot specified.
+            // Count actually-equipped runes (ignoring null placeholders), since
+            // array length alone is no longer a reliable measure of how many
+            // slots are truly filled once null placeholders can exist.
+            const equippedCount = vasen.runes.filter(r => r !== null).length;
+            const nullIndex = vasen.runes.indexOf(null);
+
+            if (nullIndex !== -1) {
+                // An empty (null) slot exists - fill it first
+                vasen.runes[nullIndex] = runeId;
+                if (runeId === 'URUZ') {
+                    vasen.maxMegin = vasen.calculateMaxMegin();
+                    vasen.currentMegin = vasen.maxMegin;
+                }
+            } else if (equippedCount < maxRunes) {
+                // Room remains and no null placeholder exists - just add the rune
+                vasen.runes.push(runeId);
+                if (runeId === 'URUZ') {
+                    vasen.maxMegin = vasen.calculateMaxMegin();
+                    vasen.currentMegin = vasen.maxMegin;
+                }
+            } else {
+                // Slots are genuinely full - replace the last slot
+                const indexToReplace = vasen.runes.length - 1;
+                const removedRune = vasen.runes[indexToReplace];
+
+                vasen.runes[indexToReplace] = runeId;
+
+                // Recalculate megin if Uruz was added or removed
+                if (runeId === 'URUZ' || removedRune === 'URUZ') {
+                    vasen.maxMegin = vasen.calculateMaxMegin();
+                    if (runeId === 'URUZ') {
+                        // Uruz added: fill to new max
+                        vasen.currentMegin = vasen.maxMegin;
+                    } else {
+                        // Uruz removed: cap to new (lower) max
+                        vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+                    }
                 }
             }
         }
@@ -325,7 +408,14 @@ class GameState {
         }
         
         vasen.unequipRune(runeId);
-        
+
+        // Trim any trailing null placeholders left behind (e.g. if the only
+        // remaining slot ahead of the removed rune was itself an empty
+        // placeholder), so the array doesn't accumulate unnecessary clutter.
+        while (vasen.runes.length > 0 && vasen.runes[vasen.runes.length - 1] === null) {
+            vasen.runes.pop();
+        }
+
         this.saveGame();
         return { success: true, message: `Rune removed from ${vasen.getDisplayName()}.` };
     }
