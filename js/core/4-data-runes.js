@@ -477,24 +477,6 @@ const BIND_RUNES = [
         names: `${RUNES.ANSUZ.name} ${RUNES.RAIDO.name}`
     },
 
-    // ── THURS + HAGAL ─────────────────────────────────────────────────────────
-    // Killing attack hits against this väsen return a percentage of damage as
-    // mixed damage of its own element back to the attacker. Triggers on attack
-    // hits only (not on reflected/recoil damage such as Thurs's own reflect),
-    // since Thurs reflection applies damage directly rather than going through
-    // the attack-hit pipeline, so it can never re-trigger this bind rune.
-    // Fires even when Vålnad's family passive revives this väsen - see
-    // battle-core's executeSkill for that placement.
-    {
-        runes: ['THURS', 'HAGAL'],
-        type: 'killing_reflect',
-        get effectText() {
-            return `Killing attack hits against this väsen return ${Math.round(GAME_CONFIG.RUNE_BIND_THURS_HAGAL_RETURN_DAMAGE * 100)}% of damage as mixed damage`;
-        },
-        symbols: `${RUNES.THURS.symbol}${RUNES.HAGAL.symbol}`,
-        names: `${RUNES.THURS.name} ${RUNES.HAGAL.name}`
-    },
-
     // ── GIFU + MANNAZ ─────────────────────────────────────────────────────────
     // The first time this väsen's Mannaz heal triggers this battle (from any
     // utility skill, including ones that don't otherwise interact with Gifu,
@@ -511,43 +493,6 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.GIFU.symbol}${RUNES.MANNAZ.symbol}`,
         names: `${RUNES.GIFU.name} ${RUNES.MANNAZ.name}`
-    },
-
-    // ── EHWAZ + EIHWAZ ────────────────────────────────────────────────────────
-    // Reverses which of this väsen's own attributes reduces incoming damage:
-    // Defense (normally reduces Strength-attack damage) instead reduces
-    // Wisdom-attack damage, and Durability (normally reduces Wisdom-attack
-    // damage) instead reduces Strength-attack damage. This only affects damage
-    // this väsen RECEIVES as the defender - it has no effect on the damage it
-    // deals, and no effect on any other väsen.
-    {
-        runes: ['EHWAZ', 'EIHWAZ'],
-        type: 'defense_durability_swap',
-        get effectText() {
-            return `This väsen's defense and durability effects are reversed`;
-        },
-        symbols: `${RUNES.EHWAZ.symbol}${RUNES.EIHWAZ.symbol}`,
-        names: `${RUNES.EHWAZ.name} ${RUNES.EIHWAZ.name}`
-    },
-
-    // ── ODAL + FEHU ───────────────────────────────────────────────────────────
-    // This väsen takes less damage based on how much stronger the enemy's
-    // total base attributes (Strength + Wisdom + Defense + Durability + Health,
-    // using calculateAttribute - i.e. before in-battle attribute stages) are
-    // compared to this väsen's own total. Scales linearly from 0% reduction at
-    // a difference of 0 (or the enemy being weaker/equal) up to the maximum
-    // reduction at or beyond the configured difference threshold. Only affects
-    // damage this väsen RECEIVES as the defender, on every damaging hit -
-    // identical in mechanism to Fehu's own unconditional damage-reduction
-    // multiplier, and stacks multiplicatively with it.
-    {
-        runes: ['ODAL', 'FEHU'],
-        type: 'enemy_strength_damage_reduction',
-        get effectText() {
-            return `This väsen takes ${Math.round(GAME_CONFIG.RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION * 100)}% less damage based on how overpowering the enemy is`;
-        },
-        symbols: `${RUNES.ODAL.symbol}${RUNES.FEHU.symbol}`,
-        names: `${RUNES.ODAL.name} ${RUNES.FEHU.name}`
     },
 
     // ── INGUZ + DAGAZ ─────────────────────────────────────────────────────────
@@ -599,66 +544,14 @@ function hasUseBestStatBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'use_best_stat');
 }
 
-// Returns true if the väsen has the THURS + HAGAL killing_reflect bind rune active.
-function hasKillingReflectBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'killing_reflect');
-}
-
 // Returns true if the väsen has the GIFU + MANNAZ mannaz_team_heal bind rune active.
 function hasMannazTeamHealBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'mannaz_team_heal');
 }
 
-// Returns true if the väsen has the EHWAZ + EIHWAZ defense_durability_swap bind rune active.
-function hasDefenseDurabilitySwapBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'defense_durability_swap');
-}
-
 // Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bind rune active.
 function hasEnterBattlefieldDebuffBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enter_battlefield_debuff');
-}
-
-// Given a defender and the attribute that would normally be checked for
-// damage reduction ('defense' for Strength-type attacks, 'durability' for
-// Wisdom-type attacks), returns the attribute that should actually be used -
-// swapped if the defender has the EHWAZ + EIHWAZ bind rune active, otherwise
-// unchanged. Only ever called with 'defense' or 'durability'.
-function getDefensiveStatName(defender, normalStat) {
-    if (!hasDefenseDurabilitySwapBindRune(defender)) return normalStat;
-    return normalStat === 'defense' ? 'durability' : 'defense';
-}
-
-// Returns true if the väsen has the ODAL + FEHU enemy_strength_damage_reduction bind rune active.
-function hasEnemyStrengthDamageReductionBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'enemy_strength_damage_reduction');
-}
-
-// Returns the total of a väsen's base attributes (Strength, Wisdom, Defense,
-// Durability, Health) using calculateAttribute - i.e. before in-battle
-// attribute stage modifiers are applied.
-function getTotalBaseAttributes(vasen) {
-    return ['strength', 'wisdom', 'defense', 'durability', 'health']
-        .reduce((sum, stat) => sum + vasen.calculateAttribute(stat), 0);
-}
-
-// Returns the damage reduction multiplier (e.g. 0.90 for a 10% reduction) granted
-// by the ODAL + FEHU bind rune for a hit from `attacker` against `defender`.
-// Returns 1 (no reduction) if the bind rune is inactive or the enemy is not
-// stronger. Scales linearly from 0% at a 0 (or negative) attribute difference
-// up to RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION at or beyond a difference of
-// RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX.
-function getEnemyStrengthDamageReductionMod(attacker, defender) {
-    if (!hasEnemyStrengthDamageReductionBindRune(defender)) return 1;
-
-    const difference = getTotalBaseAttributes(attacker) - getTotalBaseAttributes(defender);
-    if (difference <= 0) return 1;
-
-    const cappedDifference = Math.min(difference, GAME_CONFIG.RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX);
-    const reduction = (cappedDifference / GAME_CONFIG.RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX)
-        * GAME_CONFIG.RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION;
-
-    return 1 - reduction;
 }
 
 // Returns HTML string for displaying active bind rune effects.
