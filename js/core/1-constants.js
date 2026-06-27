@@ -186,6 +186,8 @@ const GAME_CONFIG = {
     RUNE_BIND_ODAL_FEHU_MAX_DAMAGE_REDUCTION: 0.15,   // Maximum % damage reduction (reached at or above the difference threshold below)
     RUNE_BIND_ODAL_FEHU_DIFFERENCE_FOR_MAX: 150,      // Total base attribute difference (enemy - self) at which the max reduction is reached
     // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
+    // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the battlefield
+    RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES: 1,           // Stages the random enemy attribute is lowered by
     
     // =============================================================================
     // ENEMY AI CONFIGURATION

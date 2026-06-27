@@ -548,6 +548,22 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.ODAL.symbol}${RUNES.FEHU.symbol}`,
         names: `${RUNES.ODAL.name} ${RUNES.FEHU.name}`
+    },
+
+    // ── INGUZ + DAGAZ ─────────────────────────────────────────────────────────
+    // Lowers a random enemy attribute by a stage whenever this väsen enters
+    // the battlefield - both at battle start and on every swap-in, matching
+    // the same "entering the battlefield" trigger Dagaz's own first-round
+    // damage bonus uses. Can be blocked by the enemy's Wynja rune, same as
+    // Inguz's own hit-based debuff.
+    {
+        runes: ['INGUZ', 'DAGAZ'],
+        type: 'enter_battlefield_debuff',
+        get effectText() {
+            return `This väsen lowers a random enemy attribute by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} stage when entering the battlefield`;
+        },
+        symbols: `${RUNES.INGUZ.symbol}${RUNES.DAGAZ.symbol}`,
+        names: `${RUNES.INGUZ.name} ${RUNES.DAGAZ.name}`
     }
 ];
 
@@ -596,6 +612,11 @@ function hasMannazTeamHealBindRune(vasen) {
 // Returns true if the väsen has the EHWAZ + EIHWAZ defense_durability_swap bind rune active.
 function hasDefenseDurabilitySwapBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'defense_durability_swap');
+}
+
+// Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bind rune active.
+function hasEnterBattlefieldDebuffBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'enter_battlefield_debuff');
 }
 
 // Given a defender and the attribute that would normally be checked for

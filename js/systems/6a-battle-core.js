@@ -1819,6 +1819,36 @@ class Battle {
                 return true;
             }
         }
+
+        // --- BIND RUNE: INGUZ + DAGAZ (enter battlefield debuff) ---
+        // Lowers a random enemy attribute whenever this väsen enters the
+        // battlefield (battle start or any swap-in), re-triggering on every
+        // entry just like Dagaz's own first-round damage bonus. Can be
+        // blocked by the enemy's Wynja rune, same as Inguz's hit-based debuff.
+        if (trigger === 'onEnterBattlefield' && hasEnterBattlefieldDebuffBindRune(vasen)) {
+            const opponent = isPlayer ? this.enemyActive : this.playerActive;
+            if (opponent && !opponent.isKnockedOut()) {
+                const inguzDagazBR = getActiveBindRunes(vasen).find(b => b.type === 'enter_battlefield_debuff');
+
+                if (!opponent.battleFlags.wynjaTriggered && opponent.hasRune('WYNJA')) {
+                    opponent.battleFlags.wynjaTriggered = true;
+                    this.addLog(`${vasen.getDisplayName()}'s Bindrune ${inguzDagazBR.symbols} ${inguzDagazBR.names} was activated!`, 'rune');
+                    this.addLog(`${opponent.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
+                    this.addLog(`${opponent.getDisplayName()} blocked the debuff!`, 'block');
+                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
+                    opponent.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
+                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
+                    this.addLog(`${opponent.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
+                } else {
+                    this.addLog(`${vasen.getDisplayName()}'s Bindrune ${inguzDagazBR.symbols} ${inguzDagazBR.names} was activated!`, 'rune');
+                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                    const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                    opponent.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
+                    const stageWord = GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    this.addLog(`${opponent.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
+                }
+            }
+        }
     }
     
     // Get how many times an enemy has used a specific utility skill
