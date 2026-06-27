@@ -182,6 +182,9 @@ const GAME_CONFIG = {
     // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
     // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the battlefield
     RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES: 1,           // Stages the random enemy attribute is lowered by
+    // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
+    RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
+    RUNE_BIND_JERA_ODAL_BUFF_STAGES: 1,               // Stages the random attribute is raised by
     
     // =============================================================================
     // ENEMY AI CONFIGURATION

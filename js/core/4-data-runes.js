@@ -509,6 +509,22 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.INGUZ.symbol}${RUNES.DAGAZ.symbol}`,
         names: `${RUNES.INGUZ.name} ${RUNES.DAGAZ.name}`
+    },
+
+    // ── JERA + ODAL ───────────────────────────────────────────────────────────
+    // This väsen's skills that cost RUNE_ODAL_COST_THRESHOLD megin or less have
+    // a chance to raise a random attribute by a stage. Applies to any qualifying
+    // skill, including utility skills - same scope as Jera's own low-cost heal
+    // proc, checked at the same two call sites (utility skill use and damaging
+    // hit resolution).
+    {
+        runes: ['JERA', 'ODAL'],
+        type: 'low_cost_random_buff',
+        get effectText() {
+            return `This väsen's skills that cost ${GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD} megin or less have a ${Math.round(GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE * 100)}% chance to raise a random attribute by ${GAME_CONFIG.RUNE_BIND_JERA_ODAL_BUFF_STAGES} stage`;
+        },
+        symbols: `${RUNES.JERA.symbol}${RUNES.ODAL.symbol}`,
+        names: `${RUNES.JERA.name} ${RUNES.ODAL.name}`
     }
 ];
 
@@ -552,6 +568,11 @@ function hasMannazTeamHealBindRune(vasen) {
 // Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bind rune active.
 function hasEnterBattlefieldDebuffBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enter_battlefield_debuff');
+}
+
+// Returns true if the väsen has the JERA + ODAL low_cost_random_buff bind rune active.
+function hasLowCostRandomBuffBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'low_cost_random_buff');
 }
 
 // Returns HTML string for displaying active bind rune effects.

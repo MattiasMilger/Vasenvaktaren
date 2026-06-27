@@ -620,6 +620,24 @@ class Battle {
                 }
             }
 
+            // Bind Rune - Jera + Odal: low cost skills have a chance to raise a
+            // random attribute (also applies to utility skills, same scope as Jera's heal proc)
+            if (hasLowCostRandomBuffBindRune(attacker) && attacker.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+                if (Math.random() < GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE) {
+                    const jeraOdalBR = getActiveBindRunes(attacker).find(b => b.type === 'low_cost_random_buff');
+                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                    const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                    const buffResult = attacker.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_BIND_JERA_ODAL_BUFF_STAGES);
+                    this.addLog(`${attacker.getDisplayName()}'s Bindrune ${jeraOdalBR.symbols} ${jeraOdalBR.names} was activated!`, 'rune');
+                    if (buffResult.capped) {
+                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} cannot be raised any higher.`, 'status');
+                    } else if (buffResult.changed !== 0) {
+                        const stageWord = Math.abs(buffResult.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was raised by ${Math.abs(buffResult.changed)} ${stageWord}!`, 'buff');
+                    }
+                }
+            }
+
             // Algiz: Nature skill heal (also applies to utility skills)
             if (skill.element === ELEMENTS.NATURE && attacker.hasRune('ALGIZ')) {
                 if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
@@ -1337,6 +1355,23 @@ class Battle {
                     this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
                     this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
                     result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
+                }
+            }
+        }
+
+        // Bind Rune - Jera + Odal: low cost skills have a chance to raise a random attribute
+        if (hasLowCostRandomBuffBindRune(attacker) && attacker.getSkillMeginCost(result.skill) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
+            if (Math.random() < GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE) {
+                const jeraOdalBR = getActiveBindRunes(attacker).find(b => b.type === 'low_cost_random_buff');
+                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                const buffResult = attacker.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_BIND_JERA_ODAL_BUFF_STAGES);
+                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${jeraOdalBR.symbols} ${jeraOdalBR.names} was activated!`, 'rune');
+                if (buffResult.capped) {
+                    this.addLog(`${attacker.getDisplayName()}'s ${randomStat} cannot be raised any higher.`, 'status');
+                } else if (buffResult.changed !== 0) {
+                    const stageWord = Math.abs(buffResult.changed) === 1 ? 'stage' : 'stages';
+                    this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was raised by ${Math.abs(buffResult.changed)} ${stageWord}!`, 'buff');
                 }
             }
         }
