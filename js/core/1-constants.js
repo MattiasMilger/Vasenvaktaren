@@ -248,8 +248,7 @@ const FAMILY_PASSIVE_CONFIG = {
     
     // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
-    DRAKE_DEFENSE_STAGES: 2,
-    DRAKE_DURABILITY_STAGES: 2,
+    DRAKE_DEFENSE_DURABILITY_STAGES: 2,
     
     // Jätte: Jotun's Fury - Upgrades an attack when health is low
     JATTE_HEALTH_THRESHOLD: 0.50,
@@ -435,59 +434,54 @@ const FAMILY_DESCRIPTIONS = {
 const FAMILY_PASSIVES = {
     [FAMILIES.ALV]: {
         name: 'Elven Craftsmanship',
-        description: 'When using a skill that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
+        description: 'When this väsen uses a skill that buffs only strength, also buffs wisdom by the same amount, and vice versa.'
     },
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
         get description() {
-            return `When entering the battlefield, raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`; 
+            return `When this väsen enters the battlefield, raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`; 
         }
     },
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, gain +${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES} Defense stage and +${FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES} Durability stage (once per battle).`;
+            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, raise defense and durability by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {
         name: 'Jotun\'s Fury',
         get description() {
-            return `An attack hit will be upgraded (weak to normal, and normal to potent) when current health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower (once per battle).`;
+            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, an attack hit will be upgraded (weak to normal, and normal to potent) (once per battle).`;
         }
     },
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
         get description() {
-            const turns = FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED;
-            const turnWord = turns === 1 ? 'turn' : 'turns';
-            const str = FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES;
-            const wis = FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES;
-            const wisSign = wis >= 0 ? '+' : '';
-            return `After ${turns}  ${turnWord} on the battlefield, gain +${str} strength stage and ${wisSign}${wis} wisdom stages (once per battle).`;
+            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the battlefield, raise strength by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and lower wisdom by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per battle).`;
         }
     },
     [FAMILIES.RA]: {
         name: 'Malicious Retaliation',
         get description() {
-            return `When hit by an enemy attack, lowers ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT} random enemy attributes by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} stage each (once per battle).`;
+            return `When this väsen is hit by an enemy attack, lowers ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT} random enemy attributes by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} stage each (once per battle).`;
         }
     },
     [FAMILIES.TROLL]: {
         name: 'Troll Theft',
         get description() {
-            return `When using a skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
+            return `When this väsen uses a skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
         }
     },
     [FAMILIES.OKNYTT]: {
         name: 'Tag Team',
         get description() {
-            return `When swapping out, raises ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT} random attributes of the incoming ally by ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES} stage each.`;
+            return `When this väsen swaps out, raises ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT} random attributes of the incoming ally by ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES} stage each.`;
         }
     },
     [FAMILIES.VALNAD]: {
         name: 'Deathless ᛣ',
         get description() {
-            return `Upon knockout, revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
+            return `When this väsen is knocked out, revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
         }
     }
 };

@@ -1708,8 +1708,8 @@ class Battle {
                 this.addLog(`${vasen.getDisplayName()} activated Draconic Resilience!`, 'passive');
 
                 const attributesToBuff = [
-                    { name: 'defense', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_STAGES },
-                    { name: 'durability', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DURABILITY_STAGES }
+                    { name: 'defense', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES },
+                    { name: 'durability', stages: FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES }
                 ];
 
                 attributesToBuff.forEach(item => {
