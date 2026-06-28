@@ -44,6 +44,7 @@ class VasenInstance {
             gifuTriggered: false,
             wynjaTriggered: false,
             mannazTeamHealTriggered: false,
+            fehuWynjaPassiveTriggered: false,
             // Family passive flags
             andePassiveTriggered: false,
             drakePassiveTriggered: false,
@@ -269,6 +270,7 @@ class VasenInstance {
             gifuTriggered: false,
             wynjaTriggered: false,
             mannazTeamHealTriggered: false,
+            fehuWynjaPassiveTriggered: false,
             // Family passive flags
             andePassiveTriggered: false,
             drakePassiveTriggered: false,
@@ -288,6 +290,7 @@ class VasenInstance {
         this.battleFlags.gifuTriggered = false;
         this.battleFlags.wynjaTriggered = false;
         this.battleFlags.mannazTeamHealTriggered = false;
+        this.battleFlags.fehuWynjaPassiveTriggered = false;
         this.battleFlags.andePassiveTriggered = false;
         this.battleFlags.drakePassiveTriggered = false;
         this.battleFlags.odjurPassiveTriggered = false;

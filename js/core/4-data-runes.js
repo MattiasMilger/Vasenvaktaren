@@ -525,6 +525,21 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.JERA.symbol}${RUNES.ODAL.symbol}`,
         names: `${RUNES.JERA.name} ${RUNES.ODAL.name}`
+    },
+
+    // ── FEHU + WYNJA ──────────────────────────────────────────────────────────
+    // When this väsen's health falls to the configured threshold or lower,
+    // raise all four attribute stages by 1 (once per battle). Checked at the
+    // same onHealthThreshold trigger point used by Drake's family passive,
+    // which fires after this väsen takes damage from an attack.
+    {
+        runes: ['FEHU', 'WYNJA'],
+        type: 'health_threshold_buff_all',
+        get effectText() {
+            return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or lower, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per battle)`;
+        },
+        symbols: `${RUNES.FEHU.symbol}${RUNES.WYNJA.symbol}`,
+        names: `${RUNES.FEHU.name} ${RUNES.WYNJA.name}`
     }
 ];
 
@@ -573,6 +588,11 @@ function hasEnterBattlefieldDebuffBindRune(vasen) {
 // Returns true if the väsen has the JERA + ODAL low_cost_random_buff bind rune active.
 function hasLowCostRandomBuffBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'low_cost_random_buff');
+}
+
+// Returns true if the väsen has the FEHU + WYNJA health_threshold_buff_all bind rune active.
+function hasHealthThresholdBuffAllBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'health_threshold_buff_all');
 }
 
 // Returns HTML string for displaying active bind rune effects.

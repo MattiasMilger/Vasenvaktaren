@@ -1733,7 +1733,30 @@ class Battle {
                 }
             }
         }
-        
+
+        // --- BIND RUNE: FEHU + WYNJA (health threshold all-attribute buff) ---
+        // When this väsen's health falls to the configured threshold or lower,
+        // raise all four attribute stages by 1. Triggers once per battle, at
+        // the same onHealthThreshold point used by Drake's family passive
+        // (after this väsen takes damage from an attack).
+        if (trigger === 'onHealthThreshold' && hasHealthThresholdBuffAllBindRune(vasen)) {
+            const healthPercent = vasen.currentHealth / vasen.maxHealth;
+            if (healthPercent <= GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD && !vasen.battleFlags.fehuWynjaPassiveTriggered) {
+                vasen.battleFlags.fehuWynjaPassiveTriggered = true;
+                const fehuWynjaBR = getActiveBindRunes(vasen).find(b => b.type === 'health_threshold_buff_all');
+                this.addLog(`${vasen.getDisplayName()}'s Bindrune ${fehuWynjaBR.symbols} ${fehuWynjaBR.names} was activated!`, 'rune');
+
+                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                attributes.forEach(stat => {
+                    const result = vasen.modifyAttributeStage(stat, GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES);
+                    if (result.changed !== 0) {
+                        const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`${vasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
+                    }
+                });
+            }
+        }
+
         // --- RA: MALICIOUS RETALIATION ---
         if (trigger === 'onTakeDamage' && vasen.species.family === FAMILIES.RA) {
             const { attacker } = context;

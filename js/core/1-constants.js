@@ -185,6 +185,9 @@ const GAME_CONFIG = {
     // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
     RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
     RUNE_BIND_JERA_ODAL_BUFF_STAGES: 1,               // Stages the random attribute is raised by
+    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or lower (once per battle)
+    RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD: 0.50,      // Health fraction at or below which the bind rune triggers
+    RUNE_BIND_FEHU_WYNJA_BUFF_STAGES: 1,              // Stages each attribute is raised by
     
     // =============================================================================
     // ENEMY AI CONFIGURATION
