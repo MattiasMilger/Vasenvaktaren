@@ -297,19 +297,20 @@ class Battle {
             this.enemyActive.battleFlags.isFirstRound = false;
         }
         
-        // Trigger Odjur passive at the end of the turn, before incrementing
-        // turnsOnField so the counter represents turns fully completed before
-        // this check - prevents the swap-in turn from immediately satisfying
-        // the Odjur threshold on re-entry
-        this.applyFamilyPassive('onTurnEnd', { vasen: this.playerActive, isPlayer: true });
-        this.applyFamilyPassive('onTurnEnd', { vasen: this.enemyActive, isPlayer: false });
-
+        // turnsOnField is incremented now that this turn has fully completed,
+        // so it represents turns fully completed on the battlefield. The
+        // Odjur passive check runs immediately after, using the updated
+        // count, so the buff is already active by the time the UI re-renders
+        // for the next turn's planning phase (before any action is taken).
         if (this.playerActive) {
             this.playerActive.battleFlags.turnsOnField++;
         }
         if (this.enemyActive) {
             this.enemyActive.battleFlags.turnsOnField++;
         }
+
+        this.applyFamilyPassive('onTurnEnd', { vasen: this.playerActive, isPlayer: true });
+        this.applyFamilyPassive('onTurnEnd', { vasen: this.enemyActive, isPlayer: false });
 
         // Check for battle end
         this.checkBattleEnd();
