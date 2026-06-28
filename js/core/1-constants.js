@@ -457,7 +457,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
         get description() {
-            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the battlefield, raise its strength by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and lower its wisdom by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per battle).`;
+            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the battlefield, its strength is raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and wisdom lowered by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per battle).`;
         }
     },
     [FAMILIES.RA]: {
@@ -475,7 +475,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.OKNYTT]: {
         name: 'Tag Team',
         get description() {
-            return `When this väsen swaps out, it raises ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT} random attributes of the incoming ally by ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES} stage each.`;
+            return `When this väsen swaps out, ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT} random attributes of the incoming ally are raised by ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES} stage each.`;
         }
     },
     [FAMILIES.VALNAD]: {
