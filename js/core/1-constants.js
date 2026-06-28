@@ -445,7 +445,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, raise its defense and durability by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
+            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {
