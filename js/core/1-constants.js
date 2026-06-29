@@ -65,7 +65,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // SKILL CONSTANTS
     // =============================================================================
-    TIER1_ATTACK_SKILL_POWER: 50,
+    TIER1_ATTACK_SKILL_POWER: 53,
     TIER1_ATTACK_SKILL_MEGIN: 30,
     TIER1_ATTACK_SKILL_EMPOWERMENT: 0.10, // Damage boost on next attack
 
