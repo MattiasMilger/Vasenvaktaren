@@ -214,6 +214,13 @@ class VasenInstance {
         return regen;
     }
     
+    // Gain a flat amount of megin, capped at maxMegin. Returns the actual amount gained.
+    gainMegin(amount) {
+        const actualGain = Math.min(this.maxMegin - this.currentMegin, Math.max(0, amount));
+        this.currentMegin += actualGain;
+        return actualGain;
+    }
+    
     // Take damage
     takeDamage(amount) {
         const actualDamage = Math.min(this.currentHealth, Math.max(0, amount));

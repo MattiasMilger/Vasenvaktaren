@@ -792,6 +792,18 @@ class Battle {
                 } else if (reflectResult.matchup === 'WEAK') {
                     this.addLog('Weak hit!', 'weak');
                 }
+
+                // Bind Rune - Uruz + Thurs: gain megin equal to a percentage of the
+                // reflected damage dealt. Only logs/applies if the resulting gain is above 0.
+                if (hasThursMeginGainBindRune(defender)) {
+                    const meginGainAmount = Math.floor(reflectResult.damage * GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT);
+                    const actualMeginGained = defender.gainMegin(meginGainAmount);
+                    if (actualMeginGained > 0) {
+                        const uruzThursBR = getActiveBindRunes(defender).find(b => b.type === 'thurs_megin_gain');
+                        this.addLog(`${defender.getDisplayName()}'s Bindrune ${uruzThursBR.symbols} ${uruzThursBR.names} was activated!`, 'rune');
+                        this.addLog(`${defender.getDisplayName()} gained ${actualMeginGained} Megin!`, 'megin');
+                    }
+                }
                 
                 // Apply Naudiz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {

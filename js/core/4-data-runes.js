@@ -540,6 +540,19 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.FEHU.symbol}${RUNES.WYNJA.symbol}`,
         names: `${RUNES.FEHU.name} ${RUNES.WYNJA.name}`
+    },
+
+    // ── URUZ + THURS ──────────────────────────────────────────────────────────
+    // When this väsen's Thurs reflection deals damage, it gains a percentage of
+    // that reflected damage as megin (only if the resulting gain is above 0).
+    {
+        runes: ['URUZ', 'THURS'],
+        type: 'thurs_megin_gain',
+        get effectText() {
+            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of Thurs reflection damage as megin`;
+        },
+        symbols: `${RUNES.URUZ.symbol}${RUNES.THURS.symbol}`,
+        names: `${RUNES.URUZ.name} ${RUNES.THURS.name}`
     }
 ];
 
@@ -593,6 +606,11 @@ function hasLowCostRandomBuffBindRune(vasen) {
 // Returns true if the väsen has the FEHU + WYNJA health_threshold_buff_all bind rune active.
 function hasHealthThresholdBuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'health_threshold_buff_all');
+}
+
+// Returns true if the väsen has the URUZ + THURS thurs_megin_gain bind rune active.
+function hasThursMeginGainBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'thurs_megin_gain');
 }
 
 // Returns HTML string for displaying active bind rune effects.

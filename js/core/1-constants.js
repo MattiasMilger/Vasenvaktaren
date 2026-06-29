@@ -188,6 +188,8 @@ const GAME_CONFIG = {
     // Fehu + Wynja: raises all attribute stages when health falls to the threshold or lower (once per battle)
     RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD: 0.50,      // Health fraction at or below which the bind rune triggers
     RUNE_BIND_FEHU_WYNJA_BUFF_STAGES: 1,              // Stages each attribute is raised by
+    // Uruz + Thurs: gain megin equal to a percentage of Thurs reflection damage dealt
+    RUNE_BIND_URUZ_THURS_MEGIN_PERCENT: 0.30,         // % of Thurs reflection damage gained as megin
     
     // =============================================================================
     // ENEMY AI CONFIGURATION
