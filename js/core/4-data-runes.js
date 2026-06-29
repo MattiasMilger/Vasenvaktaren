@@ -543,13 +543,13 @@ const BIND_RUNES = [
     },
 
     // ── URUZ + THURS ──────────────────────────────────────────────────────────
-    // When this väsen's Thurs reflection deals damage, it gains a percentage of
+    // When this väsen's Thurs deals damage, it gains a percentage of
     // that reflected damage as megin (only if the resulting gain is above 0).
     {
         runes: ['URUZ', 'THURS'],
         type: 'thurs_megin_gain',
         get effectText() {
-            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of Thurs reflection damage as megin`;
+            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of Thurs damage as megin`;
         },
         symbols: `${RUNES.URUZ.symbol}${RUNES.THURS.symbol}`,
         names: `${RUNES.URUZ.name} ${RUNES.THURS.name}`
