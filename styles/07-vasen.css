@@ -689,6 +689,11 @@
     font-weight: 600;
 }
 
+.skill-initial-bonus {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
 .skill-cost {
     color: var(--megin-highlight);
     font-weight: 600;
