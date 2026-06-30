@@ -185,12 +185,12 @@ const GAME_CONFIG = {
     // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
     RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
     RUNE_BIND_JERA_ODAL_BUFF_STAGES: 1,               // Stages the random attribute is raised by
-    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or lower (once per battle)
+    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or less (once per battle)
     RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD: 0.50,      // Health fraction at or below which the bind rune triggers
     RUNE_BIND_FEHU_WYNJA_BUFF_STAGES: 1,              // Stages each attribute is raised by
     // Uruz + Thurs: gain megin equal to a percentage of Thurs damage dealt
     RUNE_BIND_URUZ_THURS_MEGIN_PERCENT: 0.30,         // % of Thurs damage gained as megin
-    // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or lower (once per battle)
+    // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per battle)
     RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD: 0.50,    // Enemy health fraction at or below which the bind rune triggers
     RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES: 1,          // Stages each of the enemy's attributes is lowered by
     
@@ -251,7 +251,7 @@ const FAMILY_PASSIVE_CONFIG = {
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
-    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
+    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or less
     DRAKE_HEALTH_THRESHOLD: 0.50,
     DRAKE_DEFENSE_DURABILITY_STAGES: 2,
     
@@ -450,13 +450,13 @@ const FAMILY_PASSIVES = {
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
+            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or less, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {
         name: 'Jotun\'s Fury',
         get description() {
-            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent) (once per battle).`;
+            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or less, its attack hit will be upgraded (weak to normal, and normal to potent) (once per battle).`;
         }
     },
     [FAMILIES.ODJUR]: {

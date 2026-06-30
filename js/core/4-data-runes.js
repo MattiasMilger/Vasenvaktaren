@@ -528,7 +528,7 @@ const BIND_RUNES = [
     },
 
     // ── FEHU + WYNJA ──────────────────────────────────────────────────────────
-    // When this väsen's health falls to the configured threshold or lower,
+    // When this väsen's health falls to the configured threshold or less,
     // raise all four attribute stages by 1 (once per battle). Checked at the
     // same onHealthThreshold trigger point used by Drake's family passive,
     // which fires after this väsen takes damage from an attack.
@@ -536,7 +536,7 @@ const BIND_RUNES = [
         runes: ['FEHU', 'WYNJA'],
         type: 'health_threshold_buff_all',
         get effectText() {
-            return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or lower, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per battle)`;
+            return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or less, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per battle)`;
         },
         symbols: `${RUNES.FEHU.symbol}${RUNES.WYNJA.symbol}`,
         names: `${RUNES.FEHU.name} ${RUNES.WYNJA.name}`
@@ -556,14 +556,14 @@ const BIND_RUNES = [
     },
 
     // ── HAGAL + NAUDIZ ────────────────────────────────────────────────────────
-    // When an enemy's health falls to the configured threshold or lower, lowers
+    // When an enemy's health falls to the configured threshold or less, lowers
     // all of their attribute stages by 1 (once per battle). Triggered from the
     // attacker's side, checked right after damage is dealt to the defender.
     {
         runes: ['HAGAL', 'NAUDIZ'],
         type: 'enemy_health_threshold_debuff_all',
         get effectText() {
-            return `When an enemy's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or lower, lowers all of their attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} (once per battle)`;
+            return `This väsen lowers all of an enemy's attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} when their health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or less (once per battle).`;
         },
         symbols: `${RUNES.HAGAL.symbol}${RUNES.NAUDIZ.symbol}`,
         names: `${RUNES.HAGAL.name} ${RUNES.NAUDIZ.name}`
