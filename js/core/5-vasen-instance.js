@@ -420,15 +420,22 @@ function getRandomTemperament() {
     return TEMPERAMENT_LIST[Math.floor(Math.random() * TEMPERAMENT_LIST.length)];
 }
 
-// Create a wild Väsen for encounters
-function createWildVasen(speciesName, level) {
+// Create a wild Väsen for encounters.
+// excludedRunes: optional Set of rune IDs already assigned to other väsen in
+// the same enemy team, so the same rune cannot appear on two teammates.
+function createWildVasen(speciesName, level, excludedRunes = null) {
     const vasen = new VasenInstance(speciesName, level, null, [], true); // Mark as enemy
 
     // Determine how many rune slots this väsen has
     const numRunes = level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 
-    // Get the valid rune pool for this väsen and shuffle it
-    const validRunes = getValidRunesForVasen(vasen).slice();
+    // Get the valid rune pool for this väsen, excluding any already assigned
+    // to a teammate this same team-creation pass
+    const validRunes = getValidRunesForVasen(vasen).filter(
+        r => !excludedRunes || !excludedRunes.has(r)
+    );
+
+    // Shuffle
     for (let i = validRunes.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [validRunes[i], validRunes[j]] = [validRunes[j], validRunes[i]];

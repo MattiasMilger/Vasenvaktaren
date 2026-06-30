@@ -54,6 +54,7 @@ Game.prototype.startEndlessTowerBattle = function() {
     const allSpecies = Object.keys(VASEN_SPECIES);
     const enemyTeam = [];
     const enemyCount = isDualFloor ? 2 : 1;
+    const usedEnemyRunes = new Set(); // Track runes already assigned in this team
     for (let i = 0; i < enemyCount; i++) {
         const usedSpecies = enemyTeam.map(e => e.speciesName);
         const hasMythical = enemyTeam.some(e => VASEN_SPECIES[e.speciesName].rarity === RARITIES.MYTHICAL);
@@ -64,7 +65,9 @@ Game.prototype.startEndlessTowerBattle = function() {
         }
         const pool = availableSpecies.length > 0 ? availableSpecies : allSpecies.filter(s => !usedSpecies.includes(s));
         const randomSpecies = pool[Math.floor(Math.random() * pool.length)];
-        enemyTeam.push(createWildVasen(randomSpecies, enemyLevel));
+        const newVasen = createWildVasen(randomSpecies, enemyLevel, usedEnemyRunes);
+        newVasen.runes.forEach(r => usedEnemyRunes.add(r));
+        enemyTeam.push(newVasen);
     }
 
     // Get player team

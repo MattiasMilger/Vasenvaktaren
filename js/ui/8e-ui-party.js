@@ -116,6 +116,12 @@ UIController.prototype._ensureAutoRunesButton = function() {
 // Builds a shared pool from collected runes, then for each party väsen (in slot
 // order) picks up to maxRunes valid runes at random, removing them from the pool
 // so the same rune cannot land on two different väsen.
+//
+// For väsen with 2 rune slots, a completable bindrune pair (both runes valid for
+// this väsen, both still unassigned, and the pair's bindrune viability condition
+// met) is treated as a single candidate in the same random pool as individual
+// runes - giving it roughly the same odds as landing any one solo rune, rather
+// than requiring two lucky solo picks in a row to land a matching pair.
 UIController.prototype.autoEquipRunes = function() {
     if (gameState.inCombat) {
         this.showMessage('Cannot change runes during combat.', 'error');
@@ -166,20 +172,63 @@ UIController.prototype.autoEquipRunes = function() {
             runeId => gameState.collectedRunes.has(runeId) && !assigned.has(runeId)
         );
 
-        // Shuffle valid options (pool was already shuffled globally, but filter
-        // may have changed ordering - re-shuffle the filtered subset)
-        for (let i = validForThis.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [validForThis[i], validForThis[j]] = [validForThis[j], validForThis[i]];
+        let selectedRunes = [];
+
+        if (maxRunes === 2) {
+            // Determine which bindrune pairs are viable for this väsen at all
+            // (element requirements, utility skill presence, low-cost skill presence, etc.)
+            const bindRuneEligible = getBindRuneEligibleRunes(vasen);
+
+            // A pair candidate requires: the pair is bindrune-viable for this väsen,
+            // AND both runes in the pair are currently in validForThis (collected,
+            // still unassigned this round, and individually valid for this väsen).
+            const viablePairs = BIND_RUNES.filter(br =>
+                br.runes.every(r => bindRuneEligible.has(r) && validForThis.includes(r))
+            );
+
+            // Build a combined candidate pool: each solo rune is one candidate,
+            // each viable pair is one candidate (equal weighting between the two kinds).
+            const candidates = [
+                ...validForThis.map(runeId => ({ type: 'solo', runes: [runeId] })),
+                ...viablePairs.map(br => ({ type: 'pair', runes: br.runes.slice() }))
+            ];
+
+            // Shuffle the combined candidate pool
+            for (let i = candidates.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+            }
+
+            // Walk the shuffled candidates, picking the first that still fits
+            // (its runes must still be unselected and unassigned at the time it's reached).
+            for (const candidate of candidates) {
+                if (selectedRunes.length >= maxRunes) break;
+
+                const fits = candidate.runes.every(r =>
+                    !selectedRunes.includes(r) && !assigned.has(r)
+                ) && (selectedRunes.length + candidate.runes.length) <= maxRunes;
+
+                if (fits) {
+                    selectedRunes.push(...candidate.runes);
+                }
+            }
+        } else {
+            // Single-slot väsen: shuffle the valid pool and take the first one
+            // (bindrunes are impossible with only one slot)
+            const shuffled = validForThis.slice();
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            if (shuffled.length > 0) {
+                selectedRunes.push(shuffled[0]);
+            }
         }
 
-        // Assign up to maxRunes runes
-        let equipped = 0;
-        for (let i = 0; i < validForThis.length && equipped < maxRunes; i++) {
-            const runeId = validForThis[i];
+        // Assign the selected runes
+        selectedRunes.forEach(runeId => {
             vasen.runes.push(runeId);
             assigned.add(runeId);
-            equipped++;
 
             // Strip this rune from any other väsen in the entire collection
             gameState.vasenCollection.forEach(other => {
@@ -187,7 +236,7 @@ UIController.prototype.autoEquipRunes = function() {
                     other.unequipRune(runeId);
                 }
             });
-        }
+        });
 
         // Recalculate megin if Uruz was newly assigned
         if (vasen.hasRune('URUZ')) {
