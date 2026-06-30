@@ -549,10 +549,24 @@ const BIND_RUNES = [
         runes: ['URUZ', 'THURS'],
         type: 'thurs_megin_gain',
         get effectText() {
-            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of Thurs damage as megin`;
+            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of thurs damage as megin`;
         },
         symbols: `${RUNES.URUZ.symbol}${RUNES.THURS.symbol}`,
         names: `${RUNES.URUZ.name} ${RUNES.THURS.name}`
+    },
+
+    // ── HAGAL + NAUDIZ ────────────────────────────────────────────────────────
+    // When an enemy's health falls to the configured threshold or lower, lowers
+    // all of their attribute stages by 1 (once per battle). Triggered from the
+    // attacker's side, checked right after damage is dealt to the defender.
+    {
+        runes: ['HAGAL', 'NAUDIZ'],
+        type: 'enemy_health_threshold_debuff_all',
+        get effectText() {
+            return `When an enemy's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or lower, lowers all of their attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} (once per battle)`;
+        },
+        symbols: `${RUNES.HAGAL.symbol}${RUNES.NAUDIZ.symbol}`,
+        names: `${RUNES.HAGAL.name} ${RUNES.NAUDIZ.name}`
     }
 ];
 
@@ -613,6 +627,11 @@ function hasThursMeginGainBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'thurs_megin_gain');
 }
 
+// Returns true if the väsen has the HAGAL + NAUDIZ enemy_health_threshold_debuff_all bind rune active.
+function hasEnemyHealthThresholdDebuffAllBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'enemy_health_threshold_debuff_all');
+}
+
 // Returns HTML string for displaying active bind rune effects.
 // Used in combat panel and väsen details.
 function getBindRuneDisplayHTML(vasen, isOpen = false) {
@@ -633,9 +652,91 @@ function getBindRuneDisplayHTML(vasen, isOpen = false) {
 }
 
 // =============================================================================
+// Returns the set of rune IDs that are eligible due to bindrune viability,
+// independent of whether the rune passes its own solo filter rule.
+// For each bindrune pair, both runes in the pair are added to the result set
+// when the pair's viability condition is met for this väsen:
+//   - Elemental conversion pairs: väsen has the pair's source element as an
+//     attack element (including Basic Strike).
+//   - ANSUZ + RAIDO: always viable.
+//   - GIFU + MANNAZ: väsen has at least one utility skill.
+//   - INGUZ + DAGAZ: always viable.
+//   - JERA + ODAL: väsen has at least one skill (including utility skills)
+//     costing RUNE_ODAL_COST_THRESHOLD megin or less.
+//   - FEHU + WYNJA: always viable.
+//   - URUZ + THURS: always viable.
+//   - HAGAL + NAUDIZ: always viable.
+// =============================================================================
+function getBindRuneEligibleRunes(vasen) {
+    const eligible = new Set();
+
+    const availableSkills = vasen.getAvailableSkills();
+
+    const attackElements = new Set();
+    attackElements.add(vasen.species.element); // Basic Strike always uses own element
+    availableSkills.forEach(skillName => {
+        const skill = ABILITIES[skillName];
+        if (!skill) return;
+        if (skill.type !== ATTACK_TYPES.UTILITY && skill.element) {
+            attackElements.add(skill.element);
+        }
+    });
+
+    const hasUtilitySkill = availableSkills.some(skillName => {
+        const skill = ABILITIES[skillName];
+        return skill && skill.type === ATTACK_TYPES.UTILITY;
+    });
+
+    // Any skill (including utility) costing at or below the Odal threshold
+    const hasLowCostSkill = availableSkills.some(skillName => {
+        return vasen.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
+    });
+
+    BIND_RUNES.forEach(br => {
+        let viable = false;
+
+        switch (br.type) {
+            case 'element_conversion':
+                viable = attackElements.has(br.sourceElement);
+                break;
+            case 'use_best_stat': // ANSUZ + RAIDO
+                viable = true;
+                break;
+            case 'mannaz_team_heal': // GIFU + MANNAZ
+                viable = hasUtilitySkill;
+                break;
+            case 'enter_battlefield_debuff': // INGUZ + DAGAZ
+                viable = true;
+                break;
+            case 'low_cost_random_buff': // JERA + ODAL
+                viable = hasLowCostSkill;
+                break;
+            case 'health_threshold_buff_all': // FEHU + WYNJA
+                viable = true;
+                break;
+            case 'thurs_megin_gain': // URUZ + THURS
+                viable = true;
+                break;
+            case 'enemy_health_threshold_debuff_all': // HAGAL + NAUDIZ
+                viable = true;
+                break;
+            default:
+                viable = false;
+        }
+
+        if (viable) {
+            br.runes.forEach(runeId => eligible.add(runeId));
+        }
+    });
+
+    return eligible;
+}
+
+// =============================================================================
 // Returns the subset of RUNE_LIST that are useful for a given VasenInstance.
-// Runes that require a specific element or attack type the väsen never uses
-// are excluded. All other runes are always considered valid.
+// A rune is included if it passes its own solo filter rule, OR if it is part
+// of a bindrune pair whose viability condition is met for this väsen (see
+// getBindRuneEligibleRunes above). All other runes are always considered valid.
 // =============================================================================
 function getValidRunesForVasen(vasen) {
     const availableSkills = vasen.getAvailableSkills();
@@ -664,7 +765,11 @@ function getValidRunesForVasen(vasen) {
         }
     });
 
+    const bindRuneEligible = getBindRuneEligibleRunes(vasen);
+
     return RUNE_LIST.filter(runeId => {
+        if (bindRuneEligible.has(runeId)) return true;
+
         switch (runeId) {
             // Element damage boost runes - only useful if the väsen has attacks of that element
             case 'KAUNAN': return attackElements.has(ELEMENTS.FIRE);
