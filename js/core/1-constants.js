@@ -43,6 +43,7 @@ const GAME_CONFIG = {
     MEGIN_PER_LEVEL: 2,
     MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
     SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element skills
+    MAX_MEGIN_CAP: 180,                 // Hard cap on base max Megin before rune bonuses (e.g. Uruz) are applied. Mainly relevant for enemies in Endless Tower, who have no level cap.
     
     // =============================================================================
     // ATTRIBUTE STAGES (BUFFS/DEBUFFS)
@@ -65,7 +66,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // SKILL CONSTANTS
     // =============================================================================
-    TIER1_ATTACK_SKILL_POWER: 53,
+    TIER1_ATTACK_SKILL_POWER: 50,
     TIER1_ATTACK_SKILL_MEGIN: 30,
     TIER1_ATTACK_SKILL_EMPOWERMENT: 0.10, // Damage boost on next attack
 
@@ -251,7 +252,7 @@ const FAMILY_PASSIVE_CONFIG = {
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
-    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or less
+    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
     DRAKE_HEALTH_THRESHOLD: 0.50,
     DRAKE_DEFENSE_DURABILITY_STAGES: 2,
     
@@ -450,13 +451,13 @@ const FAMILY_PASSIVES = {
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or less, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
+            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
         }
     },
     [FAMILIES.JATTE]: {
         name: 'Jotun\'s Fury',
         get description() {
-            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or less, its attack hit will be upgraded (weak to normal, and normal to potent) (once per battle).`;
+            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent) (once per battle).`;
         }
     },
     [FAMILIES.ODJUR]: {
