@@ -275,7 +275,7 @@ const ABILITIES = {
         const meginMultiplier = GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER;
         const turns = GAME_CONFIG.FREYASTEARS_TURNS;
 
-        return `Your side recovers ${totalHealthPercent}% Health and ${meginMultiplier}x Megin over the next ${turns} turns.`;
+        return `Your side restores ${totalHealthPercent}% health and ${meginMultiplier}x megin over the next ${turns} turns.`;
     },
     element: ELEMENTS.WATER,
     type: ATTACK_TYPES.UTILITY,
