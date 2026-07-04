@@ -11,6 +11,14 @@
         this.settingsModal.classList.remove('active');
     };
 
+    // Toggle the Verbose Battle Log setting (persisted via localStorage, like
+    // the other combat display toggles: combatRunesVisible, combatDescriptionVisible,
+    // combatCardsMinimized).
+    UIController.prototype.toggleVerboseBattleLog = function(enabled) {
+        this.verboseBattleLog = enabled;
+        localStorage.setItem('verboseBattleLog', this.verboseBattleLog ? 'true' : 'false');
+    };
+
     UIController.prototype.exportSave = function() {
         const saveData = gameState.exportSave();
         navigator.clipboard.writeText(saveData).then(() => {

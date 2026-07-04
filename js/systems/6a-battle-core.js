@@ -233,6 +233,17 @@ class Battle {
     
     // End turn (regenerate megin, clear flags)
     endTurn() {
+        const verboseBattleLog = typeof ui !== 'undefined' && ui.verboseBattleLog;
+
+        // Snapshot pre-regen megin values so verbose logging can report the
+        // TOTAL megin gained this turn (base regen + any Freya's Tears bonus
+        // regen applied further below), rather than just the base amount.
+        const meginBeforeRegen = new Map();
+        if (verboseBattleLog) {
+            this.playerTeam.forEach(v => meginBeforeRegen.set(v.id, v.currentMegin));
+            this.enemyTeam.forEach(v => meginBeforeRegen.set(v.id, v.currentMegin));
+        }
+
         // Regenerate megin for all team members (base regen only)
         this.playerTeam.forEach(v => {
             if (!v.isKnockedOut()) {
@@ -272,6 +283,27 @@ class Battle {
                 }
             }
         });
+
+        // Verbose battle log: report TOTAL megin gained this turn per väsen
+        // (base regen plus any Freya's Tears bonus regen applied above).
+        if (verboseBattleLog) {
+            this.playerTeam.forEach(v => {
+                if (!v.isKnockedOut()) {
+                    const gained = v.currentMegin - (meginBeforeRegen.get(v.id) || 0);
+                    if (gained > 0) {
+                        this.addLog(`${v.getDisplayName()} gained ${gained} Megin!`, 'megin');
+                    }
+                }
+            });
+            this.enemyTeam.forEach(v => {
+                if (!v.isKnockedOut()) {
+                    const gained = v.currentMegin - (meginBeforeRegen.get(v.id) || 0);
+                    if (gained > 0) {
+                        this.addLog(`${v.getDisplayName()} gained ${gained} Megin!`, 'megin');
+                    }
+                }
+            });
+        }
         
         // Decrement Freya's Tears counter at the end of the turn
         if (this.playerTeamFreyasTears > 0) {
@@ -718,40 +750,6 @@ class Battle {
         // Trigger family passives after taking damage
         // Drake: Check health threshold
         this.applyFamilyPassive('onHealthThreshold', { vasen: defender, isPlayer: !isPlayer });
-
-        // Bind Rune - Hagal + Naudiz: when an enemy's (defender's) health falls to
-        // the configured threshold or lower, lower all of their attribute stages by
-        // the configured amount. Tracked on the attacker (the bind rune holder) so
-        // it triggers once per battle for the holder, not once per target. Can be
-        // blocked by the defender's Wynja rune, same as Inguz's hit-based debuff.
-        if (hasEnemyHealthThresholdDebuffAllBindRune(attacker) && !attacker.battleFlags.hagalNaudizPassiveTriggered) {
-            const defenderHealthPercent = defender.currentHealth / defender.maxHealth;
-            if (defenderHealthPercent <= GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD && !defender.isKnockedOut()) {
-                attacker.battleFlags.hagalNaudizPassiveTriggered = true;
-                const hagalNaudizBR = getActiveBindRunes(attacker).find(b => b.type === 'enemy_health_threshold_debuff_all');
-
-                if (!defender.battleFlags.wynjaTriggered && defender.hasRune('WYNJA')) {
-                    defender.battleFlags.wynjaTriggered = true;
-                    this.addLog(`${attacker.getDisplayName()}'s Bindrune ${hagalNaudizBR.symbols} ${hagalNaudizBR.names} was activated!`, 'rune');
-                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                    this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
-                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                    defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                    this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
-                } else {
-                    this.addLog(`${attacker.getDisplayName()}'s Bindrune ${hagalNaudizBR.symbols} ${hagalNaudizBR.names} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                    attributes.forEach(stat => {
-                        const stageResult = defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES);
-                        if (stageResult.changed !== 0) {
-                            const stageWord = Math.abs(stageResult.changed) === 1 ? 'stage' : 'stages';
-                            this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${Math.abs(stageResult.changed)} ${stageWord}!`, 'debuff');
-                        }
-                    });
-                }
-            }
-        }
         
         // Rå: Malicious Retaliation when hit (FIXED: only once per combat)
         if (!defender.battleFlags.raPassiveTriggered) {
@@ -825,18 +823,6 @@ class Battle {
                     this.addLog('Potent hit!', 'potent');
                 } else if (reflectResult.matchup === 'WEAK') {
                     this.addLog('Weak hit!', 'weak');
-                }
-
-                // Bind Rune - Uruz + Thurs: gain megin equal to a percentage of the
-                // reflected damage dealt. Only logs/applies if the resulting gain is above 0.
-                if (hasThursMeginGainBindRune(defender)) {
-                    const meginGainAmount = Math.floor(reflectResult.damage * GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT);
-                    const actualMeginGained = defender.gainMegin(meginGainAmount);
-                    if (actualMeginGained > 0) {
-                        const uruzThursBR = getActiveBindRunes(defender).find(b => b.type === 'thurs_megin_gain');
-                        this.addLog(`${defender.getDisplayName()}'s Bindrune ${uruzThursBR.symbols} ${uruzThursBR.names} was activated!`, 'rune');
-                        this.addLog(`${defender.getDisplayName()} gained ${actualMeginGained} Megin!`, 'megin');
-                    }
                 }
                 
                 // Apply Naudiz effect if Thurs user has it and reflection was WEAK

@@ -1018,6 +1018,78 @@
     margin-bottom: var(--spacing-md);
 }
 
+/* =============================================================================
+   TOGGLE SWITCH - used for the Verbose Battle Log setting
+   ============================================================================= */
+.toggle-switch-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    margin-bottom: var(--spacing-xs);
+    user-select: none;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: 24px;
+    transition: background var(--transition-base), border-color var(--transition-base);
+}
+
+.toggle-switch-slider::before {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    top: 2px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    transition: transform var(--transition-base), background var(--transition-base);
+}
+
+.toggle-switch input:checked + .toggle-switch-slider {
+    background: var(--accent-primary-overlay);
+    border-color: var(--accent-primary);
+}
+
+.toggle-switch input:checked + .toggle-switch-slider::before {
+    transform: translateX(18px);
+    background: var(--accent-primary);
+}
+
+.toggle-switch input:focus-visible + .toggle-switch-slider {
+    outline: 2px solid var(--border-light);
+    outline-offset: 2px;
+}
+
+.toggle-switch-label-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
 .save-buttons {
     display: flex;
     gap: var(--spacing-sm);

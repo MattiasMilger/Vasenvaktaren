@@ -306,8 +306,27 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
                 const healthHeal = Math.floor(v.maxHealth * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
                 const meginHeal  = Math.floor(v.maxMegin  * GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT);
 
+                const beforeHealth = v.currentHealth;
+                const beforeMegin  = v.currentMegin;
+
                 v.currentHealth = Math.min(v.maxHealth, v.currentHealth + healthHeal);
                 v.currentMegin  = Math.min(v.maxMegin,  v.currentMegin  + meginHeal);
+
+                if (ui.verboseBattleLog) {
+                    const actualHealthGained = v.currentHealth - beforeHealth;
+                    const actualMeginGained  = v.currentMegin - beforeMegin;
+                    const displayName = v.getDisplayName();
+
+                    if (actualHealthGained > 0) {
+                        ui.addCombatLog(
+                            `${displayName} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${actualHealthGained} health</span>!`,
+                            'heal'
+                        );
+                    }
+                    if (actualMeginGained > 0) {
+                        ui.addCombatLog(`${displayName} gained ${actualMeginGained} Megin!`, 'megin');
+                    }
+                }
             });
         }
 

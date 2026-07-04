@@ -16,6 +16,8 @@ class UIController {
         this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : true;
         const savedCards = localStorage.getItem('combatCardsMinimized');
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
+        const savedVerboseBattleLog = localStorage.getItem('verboseBattleLog');
+        this.verboseBattleLog = savedVerboseBattleLog !== null ? savedVerboseBattleLog === 'true' : false;
         this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
@@ -99,6 +101,15 @@ class UIController {
 document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
 document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
 document.getElementById('export-save-btn').addEventListener('click', () => this.exportSave());
+
+// Verbose battle log toggle
+const verboseBattleLogToggle = document.getElementById('verbose-battle-log-toggle');
+if (verboseBattleLogToggle) {
+    verboseBattleLogToggle.checked = this.verboseBattleLog;
+    verboseBattleLogToggle.addEventListener('change', () => {
+        this.toggleVerboseBattleLog(verboseBattleLogToggle.checked);
+    });
+}
 
 // IMPORT SAVE
 const importTextarea = document.getElementById('import-save-data');
