@@ -276,6 +276,14 @@
     color: var(--text-secondary);
 }
 
+/* Standardize individual rune effect descriptions in combat panel to the same
+   grey used elsewhere in the UI (rune inventory cards, rune equip modal, etc.),
+   without affecting the shared .rune-collapsible-body used by the species
+   Description toggle. */
+.combatant-runes .rune-collapsible-body {
+    color: var(--text-muted);
+}
+
 .runes-toggle {
     cursor: pointer;
     user-select: none;

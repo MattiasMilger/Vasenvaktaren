@@ -646,13 +646,16 @@ UIController.prototype.renderRuneSlots = function(vasen) {
 };
 
 // Render the active bind rune effect text (if any), shown below the rune
-// slot boxes rather than inside either individual slot.
+// slot boxes rather than inside either individual slot. The label (symbols +
+// "Bindrune:") and the effect description are wrapped in separate spans so
+// they can be colored independently (label white, description grey), matching
+// the standard used for rune names/effects elsewhere in the UI.
 UIController.prototype.renderBindRuneEffectText = function(vasen) {
     const activeBindRunes = getActiveBindRunes(vasen);
     if (activeBindRunes.length === 0) return '';
 
     const br = activeBindRunes[0];
-    return `<div class="rune-bind-effect">${br.symbols} Bindrune: ${br.effectText}</div>`;
+    return `<div class="rune-bind-effect"><span class="rune-bind-label">${br.symbols} Bindrune:</span> <span class="rune-bind-desc">${br.effectText}</span></div>`;
 };
 
 // Render skills list (väsen details: flavor + mechanics)

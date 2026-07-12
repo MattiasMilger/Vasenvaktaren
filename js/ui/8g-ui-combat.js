@@ -143,10 +143,14 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
         : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
 
     // Bind rune effect text - shown below the rune list (outside both rune
-    // boxes), not inside either individual rune's collapsible body.
+    // boxes), not inside either individual rune's collapsible body. The
+    // label (symbols + "Bindrune:") and effect description are wrapped in
+    // separate spans so they can be colored independently (label white,
+    // description grey), matching the standard used for rune names/effects
+    // elsewhere in the UI.
     const activeBindRunesForPanel = getActiveBindRunes(vasen);
     const bindRuneTextHtml = activeBindRunesForPanel.length > 0
-        ? `<div class="rune-bind-effect">${activeBindRunesForPanel[0].symbols} Bindrune: ${activeBindRunesForPanel[0].effectText}</div>`
+        ? `<div class="rune-bind-effect"><span class="rune-bind-label">${activeBindRunesForPanel[0].symbols} Bindrune:</span> <span class="rune-bind-desc">${activeBindRunesForPanel[0].effectText}</span></div>`
         : '';
 
     // Build attacking matchups for attack elements

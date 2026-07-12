@@ -504,7 +504,7 @@
 
 .rune-name {
     font-size: var(--font-size-xs);
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .rune-slot .rune-effect {
@@ -516,13 +516,22 @@
 }
 
 /* Bind rune effect text - shown under the second rune slot in inventory
-   and inside the second rune's collapsible body in combat cards */
+   and inside the second rune's collapsible body in combat cards.
+   Label (symbols + "Bindrune:") is white, matching rune names elsewhere;
+   the effect description is grey, matching other rune effect text. */
 .rune-bind-effect {
     display: block;
     font-size: var(--font-size-xs);
-    color: var(--color-positive-soft);
     margin-top: var(--spacing-xs);
     line-height: 1.3;
+}
+
+.rune-bind-label {
+    color: var(--text-primary);
+}
+
+.rune-bind-desc {
+    color: var(--text-primary);
 }
 
 .rune-placeholder {
@@ -685,11 +694,6 @@
 .skill-element.element-wind { background: var(--element-wind); }
 
 .skill-power {
-    color: var(--text-secondary);
-    font-weight: 600;
-}
-
-.skill-initial-bonus {
     color: var(--text-secondary);
     font-weight: 600;
 }
