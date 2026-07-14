@@ -16,11 +16,14 @@
     margin-bottom: var(--spacing-xs);
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
 }
 
 .rune-card:hover {
     background: var(--bg-hover);
     border-color: var(--border-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 .rune-card-symbol {
@@ -36,6 +39,7 @@
 .rune-card-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
 }
 
 .rune-card-effect {
@@ -63,11 +67,14 @@
     margin-bottom: var(--spacing-xs);
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
 }
 
 .item-card:hover {
     background: var(--bg-hover);
     border-color: var(--border-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 .item-info {
@@ -77,6 +84,7 @@
 .item-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
 }
 
 .item-desc {

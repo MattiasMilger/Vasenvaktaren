@@ -272,7 +272,8 @@
 
 .zone-item:hover {
     background: var(--bg-hover);
-    transform: translateX(4px);
+    border-color: var(--border-light);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
 

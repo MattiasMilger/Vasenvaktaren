@@ -229,7 +229,7 @@
 .endless-tower-floor {
     font-size: var(--font-size-lg);
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--accent-gold);
     margin-bottom: 0.5rem;
     text-shadow: 0 0 10px var(--endless-tower-glow);
 }
@@ -263,7 +263,7 @@
 }
 
 .record-floor strong {
-    color: var(--primary-color);
+    color: var(--text-primary);
     font-size: var(--font-size-sm);
     font-weight: 600;
 }
@@ -300,17 +300,17 @@
 
 .record-vasen-runes {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--primary-color);
+    color: var(--text-secondary);
 }
 
 .record-new {
-    color: var(--success-color);
+    color: var(--color-positive);
     font-weight: 600;
     margin: 0.5rem 0;
 }
 
 .record-reminder {
-    color: var(--primary-color);
+    color: var(--text-muted);
     font-style: italic;
     margin-top: 0.5rem;
 }

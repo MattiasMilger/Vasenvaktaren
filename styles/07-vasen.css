@@ -68,16 +68,20 @@
 /* Vasen Cards */
 .vasen-card {
     background: var(--bg-card);
-    border: 3px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
 }
 
 .vasen-card:hover {
     background: var(--bg-hover);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 
@@ -180,6 +184,7 @@
 .vasen-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -222,9 +227,10 @@
     filter: brightness(1.1);
 }
 
-/* Favorite Button (shared between inventory and details panel) */
+/* Favorite Button (shared between väsen inventory, details panel, and item/rune cards) */
 .vasen-favorite-btn,
-.details-favorite-btn {
+.details-favorite-btn,
+.favorite-toggle {
     width: 28px;
     height: 28px;
     padding: 0;
@@ -240,13 +246,15 @@
 }
 
 .vasen-favorite-btn:hover,
-.details-favorite-btn:hover {
+.details-favorite-btn:hover,
+.favorite-toggle:hover {
     color: var(--accent-warning);
     border-color: var(--accent-warning);
 }
 
 .vasen-favorite-btn.active,
-.details-favorite-btn.active {
+.details-favorite-btn.active,
+.favorite-toggle.active {
     color: var(--accent-warning);
     border-color: var(--accent-warning);
 }
@@ -517,8 +525,9 @@
 
 /* Bind rune effect text - shown under the second rune slot in inventory
    and inside the second rune's collapsible body in combat cards.
-   Label (symbols + "Bindrune:") is white, matching rune names elsewhere;
-   the effect description is grey, matching other rune effect text. */
+   The whole line (label + description) is white, distinguishing it as a
+   combined bindrune effect rather than a single rune's own effect text
+   (which uses grey, see .rune-slot .rune-effect / .rune-collapsible-body). */
 .rune-bind-effect {
     display: block;
     font-size: var(--font-size-xs);

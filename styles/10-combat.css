@@ -756,7 +756,7 @@
     padding: var(--spacing-sm);
     display: none;
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+    color: var(--text-muted);
     line-height: 1.4;
     font-weight: var(--font-weight-normal);
 }
@@ -1913,7 +1913,7 @@ button.tutorial-blink {
 }
 
 .btn-auto-battle:hover:not(:disabled) {
-    background: var(--auto-battle-bg);
+    background: var(--accent-gold-tint);
     border-color: var(--text-accent);
 }
 

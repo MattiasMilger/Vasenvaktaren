@@ -60,6 +60,9 @@
 
 .party-slot:hover {
     background: var(--bg-hover);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 .party-slot.filled {
@@ -97,6 +100,7 @@
 .slot-vasen-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -152,6 +156,7 @@
     display: block;
     font-size: var(--font-size-sm);
     color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -209,6 +214,12 @@
     font-size: var(--font-size-sm);
 }
 
+.mini-bind-rune {
+    font-size: var(--font-size-sm);
+    color: var(--accent-gold);
+    font-weight: var(--font-weight-semibold);
+}
+
 .party-slot-actions {
     display: flex;
     gap: var(--spacing-xs);
@@ -244,8 +255,8 @@
 
 /* =============================================================================
    AUTO EQUIP RUNES BUTTON
-   Mirrors the Auto Battle button style from 10-combat.css:
-   gold text/border (--text-accent), blue hover background (--auto-battle-bg).
+   Mirrors the Auto Battle button style from 10-combat.css and #challenge-btn:
+   gold text/border (--text-accent), gold-tinted hover (--accent-gold-tint).
    ============================================================================= */
 
 .btn-auto-runes {
@@ -258,6 +269,6 @@
 }
 
 .btn-auto-runes:hover:not(:disabled) {
-    background: var(--auto-battle-bg);
+    background: var(--accent-gold-tint);
     border-color: var(--text-accent);
 }
