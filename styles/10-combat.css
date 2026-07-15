@@ -276,12 +276,10 @@
     color: var(--text-secondary);
 }
 
-/* Standardize individual rune effect descriptions in combat panel to the same
-   grey used elsewhere in the UI (rune inventory cards, rune equip modal, etc.),
-   without affecting the shared .rune-collapsible-body used by the species
-   Description toggle. */
+/* Individual rune effect descriptions in combat panel: white, matching the
+   details panel rune slots and the väsen description toggle. */
 .combatant-runes .rune-collapsible-body {
-    color: var(--text-muted);
+    color: var(--text-primary);
 }
 
 .runes-toggle {
@@ -756,7 +754,7 @@
     padding: var(--spacing-sm);
     display: none;
     font-size: var(--font-size-sm);
-    color: var(--text-muted);
+    color: var(--text-primary);
     line-height: 1.4;
     font-weight: var(--font-weight-normal);
 }
