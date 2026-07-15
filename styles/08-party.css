@@ -216,7 +216,7 @@
 
 .mini-bind-rune {
     font-size: var(--font-size-sm);
-    color: var(--accent-gold);
+    color: var(--text-primary);
     font-weight: var(--font-weight-semibold);
 }
 
