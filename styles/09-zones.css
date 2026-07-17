@@ -272,8 +272,7 @@
 
 .zone-item:hover {
     background: var(--bg-hover);
-    border-color: var(--border-light);
-    transform: translateY(-1px);
+    transform: translateX(4px);
     box-shadow: var(--shadow-md);
 }
 
@@ -311,7 +310,7 @@
 
 .zone-level {
     font-size: var(--font-size-xs);
-    color: var(--text-secondary);
+    color: var(--text-muted);
     width: 80px;
     text-align: center;
     flex-shrink: 0;

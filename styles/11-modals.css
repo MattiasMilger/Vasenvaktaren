@@ -44,7 +44,7 @@
 
 .rune-card-effect {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: var(--text-primary);
 }
 
 .rune-card-equipped {
@@ -805,7 +805,7 @@ button:focus-visible,
     box-shadow: var(--shadow-popup);
     margin-top: var(--spacing-xs);
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.4;
 }
 
@@ -840,7 +840,7 @@ button:focus-visible,
     box-shadow: var(--shadow-popup);
     margin-top: 2px;
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.4;
     pointer-events: auto;
 }
@@ -1148,7 +1148,7 @@ button:focus-visible,
 
 .offer-item-description {
     font-size: var(--font-size-xs);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.5;
     margin: 0;
 }
@@ -1165,7 +1165,7 @@ button:focus-visible,
 /* Item description (in confirmation dialogue) */
 .offer-confirmation .offer-item-description {
     font-size: var(--font-size-base);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.6;
     margin: 0;
     text-align: left;

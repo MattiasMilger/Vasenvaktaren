@@ -234,7 +234,7 @@ mark.lore-highlight {
 
 .lore-desc {
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.6;
     margin: 0;
 }
@@ -262,7 +262,7 @@ mark.lore-highlight {
 }
 
 .lore-meta-value {
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .lore-meta-sep {

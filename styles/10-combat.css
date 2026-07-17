@@ -953,7 +953,7 @@
 }
 
 .dialogue-message .rune-flavor {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     font-style: italic;
     margin: 0;
 }
@@ -1223,13 +1223,13 @@
 
 .collection-label {
     font-size: var(--font-size-sm);
-    color: var(--text-primary);
+    color: var(--text-muted);
     font-weight: 600;
 }
 
 .collection-value {
     font-size: var(--font-size-xs);
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .achievement-list {
@@ -1376,7 +1376,7 @@
 .heal-amount {
     font-size: var(--font-size-sm);
     font-weight: 600;
-    color: var(--text-success);
+    color: var(--color-positive-soft);
 }
 
 .rune-to-vasen-btn {
@@ -1488,7 +1488,7 @@
 
 .rune-info-effect {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: var(--text-primary);
 }
 
 /* Ally Select Modal */
@@ -1500,7 +1500,7 @@
 
 .rune-hint {
     font-size: var(--font-size-sm);
-    color: var(--text-muted);
+    color: var(--text-primary);
     font-style: italic;
 }
 
