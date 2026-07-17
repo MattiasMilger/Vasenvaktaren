@@ -153,7 +153,7 @@ Game.prototype.applyIdunnApples = function() {
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
     const attrs = ['strength', 'wisdom', 'defense', 'durability'];
 
-    ui.addCombatLog("Idunn's Apples of youth replenish the team!", 'heal');
+    ui.addCombatLog(`<span style="color: var(--color-positive-soft); font-weight: 700;">Idunn's Apples of youth replenish the team!</span>`, 'heal');
 
     gameState.party.forEach(v => {
         if (!v || v.isKnockedOut()) return;
