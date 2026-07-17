@@ -5,6 +5,7 @@
 class Game {
     constructor() {
         this.currentBattle = null;
+        this.pendingFirstTameMessage = false;
     }
 
     // Initialize the game
@@ -242,6 +243,21 @@ startingItems.forEach(item => {
         ui.hideCombatUI();
         this.refreshUI();
         gameState.saveGame();
+
+        // Show the first-tame guidance popup once, right after returning to
+        // exploration (i.e. once the Victory dialogue's Continue button has
+        // been clicked), mirroring the explore popups (title + confirm button).
+        if (this.pendingFirstTameMessage) {
+            this.pendingFirstTameMessage = false;
+            ui.showDialogue(
+                'First Tame!',
+                `<p>Well done! You've tamed your first väsen.</p>
+                 <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read their item descriptions carefully to figure out what they desire.</p>
+                 <p>You can find more tips in the <strong>Game Guide</strong>.</p>`,
+                [{ text: 'Confirm', callback: null }],
+                false
+            );
+        }
     }
 
     // Heal vasen with item

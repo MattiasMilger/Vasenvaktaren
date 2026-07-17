@@ -31,3 +31,13 @@ body.modal-open {
     position: fixed;
     width: 100%;
 }
+
+/* On tablet/mobile layouts, #game-screen (not body) is the actual scrolling
+   container (see 11-modals.css), so locking body alone doesn't stop the
+   background from scrolling behind an open modal/dialogue (e.g. after
+   pressing Explore). Lock it too whenever modal-open is active. This uses
+   an ID selector so it overrides #game-screen's own overflow-y: auto rules
+   regardless of cascade order. */
+body.modal-open #game-screen {
+    overflow: hidden;
+}

@@ -245,6 +245,16 @@ if (result.tamed && result.tamedVasen) {
 
     // Unlock lore entries earned by taming this väsen
     this.unlockTamingLoreEntries(newVasen);
+
+    // Show a one-time guidance popup the first time the player successfully
+    // tames a väsen, once the battle result dialogue has been dismissed.
+    // Flagged here and shown in endBattle() so it appears after the normal
+    // Victory dialogue's "Continue" flow, mirroring the explore popups.
+    if (!gameState.firstTameMessageShown) {
+        gameState.firstTameMessageShown = true;
+        this.pendingFirstTameMessage = true;
+        gameState.saveGame();
+    }
 }
 
     // Apply post-battle heal

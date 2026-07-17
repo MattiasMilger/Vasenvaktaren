@@ -46,6 +46,7 @@ class GameState {
         this.runeMenuFirstOpen = false;
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
+        this.firstTameMessageShown = false;
         
         // Endless Tower tracking
         this.endlessTowerRecord = {
@@ -925,6 +926,7 @@ class GameState {
             runeMenuFirstOpen: this.runeMenuFirstOpen,
             firstCombatTutorialShown: this.firstCombatTutorialShown,
             firstExploreTutorialShown: this.firstExploreTutorialShown,
+            firstTameMessageShown: this.firstTameMessageShown,
             settings: this.settings,
             endlessTowerRecord: this.endlessTowerRecord,
             // Pity counters for exploration anti-grief system
@@ -986,6 +988,7 @@ class GameState {
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
             this.firstCombatTutorialShown = data.firstCombatTutorialShown || false;
             this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
+            this.firstTameMessageShown = data.firstTameMessageShown || false;
             
             // Restore Endless Tower record
             this.endlessTowerRecord = data.endlessTowerRecord || {
@@ -1089,6 +1092,7 @@ class GameState {
         this.runeMenuFirstOpen = false;
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
+        this.firstTameMessageShown = false;
         this.currentBattle = null;
         this.currentEncounter = null;
         this.inCombat = false;
