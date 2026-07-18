@@ -125,7 +125,7 @@ const GAME_CONFIG = {
     ENDLESS_TOWER_MAX_FLOOR: 999,
 
     // Idunn's Apples - milestone healing and cleansing every N floors
-    ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL: 5,   // Every X floors, Idunn's Apples trigger
+    ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL: 3,   // Every X floors, Idunn's Apples trigger
     ENDLESS_TOWER_IDUNN_HEAL_PERCENT: 0.30,  // % of max health restored to each alive väsen
     ENDLESS_TOWER_IDUNN_CLEANSE_STAGES: 1,   // Number of negative attribute stages removed per attribute (per väsen)
     
