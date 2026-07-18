@@ -32,7 +32,7 @@ Game.prototype.challengeEndlessTower = function() {
                 callback: null
             }
         ],
-        false
+        true
     );
 };
 
@@ -153,7 +153,7 @@ Game.prototype.applyIdunnApples = function() {
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
     const attrs = ['strength', 'wisdom', 'defense', 'durability'];
 
-    ui.addCombatLog(`<span style="color: var(--color-positive-soft); font-weight: 700;">Idunn's Apples of youth replenish the team!</span>`, 'heal');
+    ui.addCombatLog("Idunn's Apples of youth replenish the team!", 'heal');
 
     gameState.party.forEach(v => {
         if (!v || v.isKnockedOut()) return;

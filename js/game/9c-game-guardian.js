@@ -33,7 +33,7 @@ Game.prototype.challengeGuardian = function() {
             callback: null
         }
     ],
-    false // non‑dismissible
+    true
 );
 
 };
