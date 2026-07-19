@@ -95,6 +95,9 @@
     height: 48px;
     image-rendering: pixelated;
     margin-bottom: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 6px var(--black-overlay-medium);
 }
 
 .slot-vasen-name {
@@ -138,6 +141,9 @@
     height: 48px;
     image-rendering: pixelated;
     display: block;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 6px var(--black-overlay-medium);
 }
 
 .party-vasen-info {
