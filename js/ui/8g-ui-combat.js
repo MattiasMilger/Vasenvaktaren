@@ -423,6 +423,27 @@ UIController.prototype.renderSwapOptions = function(battle) {
     modal.classList.add('active');
 };
 
+// Determine the potency shine class for an attack skill button - 'potency-potent',
+// 'potency-weak', or '' for neutral/utility skills. Accounts for active elemental
+// conversion bind runes (e.g. Eihwaz+Kaunan) by converting the skill's element
+// before checking the matchup, mirroring the same conversion Battle.calculateDamage
+// applies when actually resolving damage.
+UIController.prototype.getSkillPotencyClass = function(skill, skillElement, attacker, defender) {
+    if (!skill || skill.type === ATTACK_TYPES.UTILITY) return '';
+    if (!attacker || !defender) return '';
+
+    let effectiveElement = skillElement;
+    const eleConversionBR = getElementConversionBindRune(attacker);
+    if (eleConversionBR && effectiveElement === eleConversionBR.sourceElement) {
+        effectiveElement = eleConversionBR.convertedElement;
+    }
+
+    const matchup = getMatchupType(effectiveElement, defender.species.element);
+    if (matchup === 'POTENT') return 'potency-potent';
+    if (matchup === 'WEAK') return 'potency-weak';
+    return '';
+};
+
 UIController.prototype.renderActionButtons = function(battle) {
     const actionsContainer = document.getElementById('skill-buttons');
     actionsContainer.innerHTML = '';
@@ -441,8 +462,12 @@ UIController.prototype.renderActionButtons = function(battle) {
 
         const skillElement = skill.element || activeVasen.species.element;
 
+        const potencyClass = (this.potencyIndicatorEnabled !== false && battle.enemyActive)
+            ? this.getSkillPotencyClass(skill, skillElement, activeVasen, battle.enemyActive)
+            : '';
+
         const btn = document.createElement('button');
-        btn.className = `skill-btn element-${skillElement.toLowerCase()} ${canUse ? '' : 'disabled'}`;
+        btn.className = `skill-btn element-${skillElement.toLowerCase()} ${canUse ? '' : 'disabled'} ${potencyClass}`;
         btn.disabled = !canUse || !battle.waitingForPlayerAction || battle.isAutoBattle;
         btn.innerHTML = `
             <span class="skill-btn-name">${skill.name}</span>

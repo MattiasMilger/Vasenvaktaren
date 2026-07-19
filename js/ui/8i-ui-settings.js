@@ -19,6 +19,14 @@
         localStorage.setItem('verboseBattleLog', this.verboseBattleLog ? 'true' : 'false');
     };
 
+    // Toggle the Potency Indicator setting (persisted via localStorage, like
+    // the other combat display toggles: combatRunesVisible, combatDescriptionVisible,
+    // combatCardsMinimized, verboseBattleLog).
+    UIController.prototype.togglePotencyIndicator = function(enabled) {
+        this.potencyIndicatorEnabled = enabled;
+        localStorage.setItem('potencyIndicator', this.potencyIndicatorEnabled ? 'true' : 'false');
+    };
+
     UIController.prototype.exportSave = function() {
         const saveData = gameState.exportSave();
         navigator.clipboard.writeText(saveData).then(() => {

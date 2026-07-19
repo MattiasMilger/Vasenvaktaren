@@ -18,6 +18,8 @@ class UIController {
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
         const savedVerboseBattleLog = localStorage.getItem('verboseBattleLog');
         this.verboseBattleLog = savedVerboseBattleLog !== null ? savedVerboseBattleLog === 'true' : false;
+        const savedPotencyIndicator = localStorage.getItem('potencyIndicator');
+        this.potencyIndicatorEnabled = savedPotencyIndicator !== null ? savedPotencyIndicator === 'true' : true;
         this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
@@ -101,6 +103,15 @@ class UIController {
 document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
 document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
 document.getElementById('export-save-btn').addEventListener('click', () => this.exportSave());
+
+// Potency indicator toggle
+const potencyIndicatorToggle = document.getElementById('potency-indicator-toggle');
+if (potencyIndicatorToggle) {
+    potencyIndicatorToggle.checked = this.potencyIndicatorEnabled;
+    potencyIndicatorToggle.addEventListener('change', () => {
+        this.togglePotencyIndicator(potencyIndicatorToggle.checked);
+    });
+}
 
 // Verbose battle log toggle
 const verboseBattleLogToggle = document.getElementById('verbose-battle-log-toggle');

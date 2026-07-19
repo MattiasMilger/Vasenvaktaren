@@ -622,6 +622,44 @@
     pointer-events: none;
 }
 
+/* =============================================================================
+   POTENCY INDICATOR - shine on attack skill buttons showing element matchup
+   effectiveness against the current enemy (green = potent, red = weak).
+   Layered glow intensity matches .tutorial-blink for clear visibility; only
+   box-shadow is animated (not border-color) so it doesn't fight with the
+   element-colored left border already present on skill buttons. Neutral
+   matchups get no class and therefore no shine. Overridden by
+   .skill-btn:disabled's !important box-shadow when the skill cannot
+   currently be used.
+   ============================================================================= */
+@keyframes skillPotencyPotent {
+    0%, 100% {
+        box-shadow: 0 0 4px 0 color-mix(in srgb, var(--color-positive-soft) 30%, transparent);
+    }
+    50% {
+        box-shadow: 0 0 14px 3px color-mix(in srgb, var(--color-positive-soft) 85%, transparent),
+                    0 0 24px 5px color-mix(in srgb, var(--color-positive-soft) 40%, transparent);
+    }
+}
+
+@keyframes skillPotencyWeak {
+    0%, 100% {
+        box-shadow: 0 0 4px 0 color-mix(in srgb, var(--accent-danger) 30%, transparent);
+    }
+    50% {
+        box-shadow: 0 0 14px 3px color-mix(in srgb, var(--accent-danger) 85%, transparent),
+                    0 0 24px 5px color-mix(in srgb, var(--accent-danger) 40%, transparent);
+    }
+}
+
+.skill-btn.potency-potent {
+    animation: skillPotencyPotent 1.8s ease-in-out infinite;
+}
+
+.skill-btn.potency-weak {
+    animation: skillPotencyWeak 1.8s ease-in-out infinite;
+}
+
 .skill-btn-name {
     display: block;
     font-size: var(--font-size-sm);
