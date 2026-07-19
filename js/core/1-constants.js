@@ -68,7 +68,7 @@ const GAME_CONFIG = {
     // =============================================================================
     TIER1_ATTACK_SKILL_POWER: 50,
     TIER1_ATTACK_SKILL_MEGIN: 30,
-    TIER1_ATTACK_SKILL_EMPOWERMENT: 0.10, // Damage boost on next attack
+    TIER1_ATTACK_SKILL_EMPOWERMENT: 0.12, // Damage boost on next attack
 
     TIER2_ATTACK_SKILL_POWER: 68,
     TIER2_ATTACK_SKILL_MEGIN: 50,
@@ -681,9 +681,9 @@ const ZONE_ORDER = ['TROLLSKOGEN', 'FOLKETS_BY', 'DJUPA_GRUVAN', 'GLIMRANDE_KALL
 
 const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },
-    RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
     HOARDER: { id: 'hoarder', name: 'Hoarder', description: 'Tame every Väsen type' },
     LORE_MASTER: { id: 'lore_master', name: 'Lore Master', description: 'Collect all Lore Entries' },
+    RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
 };
 
 // Helper functions for constants

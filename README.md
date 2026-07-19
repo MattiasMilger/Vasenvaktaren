@@ -76,9 +76,9 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ## Achievements
 
 - **Champion**: Defeat all zone guardians
-- **Rune Master**: Collect all runes
 - **Hoarder**: Tame every Väsen type
 - **Lore Master**: Collect all lore entries
+- **Rune Master**: Collect all runes
 
 ## Save System
 
