@@ -70,7 +70,7 @@ const RUNES = {
         name: 'Gifu',
         fullName: 'Gifu',
         flavor: 'The sacred exchange of powers between equals. The first significant boon received by the wielder is considered a communal gift, extending the effect to all allies.',
-        effect: 'When this Väsen\'s attributes are raised it is also applied to allies (once per battle)',
+        effect: 'When this Väsen\'s attributes are raised it is also applied to allies (once per combat)',
         mechanic: { type: 'share_first_buff' }
     },
     'WYNJA': {
@@ -80,7 +80,7 @@ const RUNES = {
         fullName: 'Wynja',
         flavor: 'The power of success and the protective shield of community. It intercepts hostile curses and transmutes that negative energy into a personal triumph.',
         get effect() {
-            return `Blocks a debuff and raises a random attribute by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} stage when it happens (once per battle)`;
+            return `Blocks a debuff and raises a random attribute by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} stage when it happens (once per combat)`;
         },
         mechanic: { type: 'block_first_debuff' }
     },
@@ -245,7 +245,7 @@ const RUNES = {
         fullName: 'Dagaz',
         flavor: 'The clarifying, explosive power of the new dawn. The wielder\'s entry into combat marks a potent transition, granting a momentary burst of supreme destructive potential.',
         get effect() {
-            return `This väsen deals ${Math.round(GAME_CONFIG.RUNE_DAGAZ_DAMAGE_BOOST * 100)}% more damage for the first round after entering the battlefield`;
+            return `This väsen deals ${Math.round(GAME_CONFIG.RUNE_DAGAZ_DAMAGE_BOOST * 100)}% more damage for the first round after entering the combatfield`;
         },
         mechanic: { type: 'first_round_damage_bonus', value: 0.20 }
     },
@@ -270,10 +270,10 @@ const STARTER_RUNE = 'URUZ';
 // Each entry defines a pair of runes that, when equipped together, produce a
 // combined effect beyond what either rune does individually.
 // runes:      [runeA, runeB] - order does not matter
-// type:       internal effect type used by the battle system
+// type:       internal effect type used by the combat system
 // effectText: human-readable description shown in UI
-// symbols:    combined symbol string for the battle log
-// names:      combined name string for the battle log
+// symbols:    combined symbol string for the combat log
+// names:      combined name string for the combat log
 // =============================================================================
 const BIND_RUNES = [
     // ── ELEMENTAL CONVERSION BIND RUNES ──────────────────────────────────────
@@ -478,18 +478,18 @@ const BIND_RUNES = [
     },
 
     // ── GIFU + MANNAZ ─────────────────────────────────────────────────────────
-    // The first time this väsen's Mannaz heal triggers this battle (from any
+    // The first time this väsen's Mannaz heal triggers this combat (from any
     // utility skill, including ones that don't otherwise interact with Gifu,
     // such as Freya's Tears), the heal is also extended to all allies. Tracked
     // via its own dedicated mannazTeamHealTriggered flag (not gifuTriggered),
     // so it fires independently of other Gifu-shared buffs. Reset to false by
-    // resetOncePerBattleFlags(), so Endless Tower's Idunn's Apples milestone
-    // floors renew it like every other once-per-battle rune trigger.
+    // resetOncePerCombatFlags(), so Endless Tower's Idunn's Apples milestone
+    // floors renew it like every other once-per-combat rune trigger.
     {
         runes: ['GIFU', 'MANNAZ'],
         type: 'mannaz_team_heal',
         get effectText() {
-            return `This väsen's Mannaz also heals allies (once per battle)`;
+            return `This väsen's Mannaz also heals allies (once per combat)`;
         },
         symbols: `${RUNES.GIFU.symbol}${RUNES.MANNAZ.symbol}`,
         names: `${RUNES.GIFU.name} ${RUNES.MANNAZ.name}`
@@ -497,15 +497,15 @@ const BIND_RUNES = [
 
     // ── INGUZ + DAGAZ ─────────────────────────────────────────────────────────
     // Lowers a random enemy attribute by a stage whenever this väsen enters
-    // the battlefield - both at battle start and on every swap-in, matching
-    // the same "entering the battlefield" trigger Dagaz's own first-round
+    // the combatfield - both at combat start and on every swap-in, matching
+    // the same "entering the combatfield" trigger Dagaz's own first-round
     // damage bonus uses. Can be blocked by the enemy's Wynja rune, same as
     // Inguz's own hit-based debuff.
     {
         runes: ['INGUZ', 'DAGAZ'],
-        type: 'enter_battlefield_debuff',
+        type: 'enter_combatfield_debuff',
         get effectText() {
-            return `This väsen lowers a random enemy attribute by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} stage when entering the battlefield`;
+            return `This väsen lowers a random enemy attribute by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} stage when entering the combatfield`;
         },
         symbols: `${RUNES.INGUZ.symbol}${RUNES.DAGAZ.symbol}`,
         names: `${RUNES.INGUZ.name} ${RUNES.DAGAZ.name}`
@@ -529,14 +529,14 @@ const BIND_RUNES = [
 
     // ── FEHU + WYNJA ──────────────────────────────────────────────────────────
     // When this väsen's health falls to the configured threshold or less,
-    // raise all four attribute stages by 1 (once per battle). Checked at the
+    // raise all four attribute stages by 1 (once per combat). Checked at the
     // same onHealthThreshold trigger point used by Drake's family passive,
     // which fires after this väsen takes damage from an attack.
     {
         runes: ['FEHU', 'WYNJA'],
         type: 'health_threshold_buff_all',
         get effectText() {
-            return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or less, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per battle)`;
+            return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or less, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per combat)`;
         },
         symbols: `${RUNES.FEHU.symbol}${RUNES.WYNJA.symbol}`,
         names: `${RUNES.FEHU.name} ${RUNES.WYNJA.name}`
@@ -557,13 +557,13 @@ const BIND_RUNES = [
 
     // ── HAGAL + NAUDIZ ────────────────────────────────────────────────────────
     // When an enemy's health falls to the configured threshold or less, lowers
-    // all of their attribute stages by 1 (once per battle). Triggered from the
+    // all of their attribute stages by 1 (once per combat). Triggered from the
     // attacker's side, checked right after damage is dealt to the defender.
     {
         runes: ['HAGAL', 'NAUDIZ'],
         type: 'enemy_health_threshold_debuff_all',
         get effectText() {
-            return `This väsen lowers all of an enemy's attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} when their health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or less (once per battle).`;
+            return `This väsen lowers all of an enemy's attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} when their health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or less (once per combat).`;
         },
         symbols: `${RUNES.HAGAL.symbol}${RUNES.NAUDIZ.symbol}`,
         names: `${RUNES.HAGAL.name} ${RUNES.NAUDIZ.name}`
@@ -607,9 +607,9 @@ function hasMannazTeamHealBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'mannaz_team_heal');
 }
 
-// Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bind rune active.
-function hasEnterBattlefieldDebuffBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'enter_battlefield_debuff');
+// Returns true if the väsen has the INGUZ + DAGAZ enter_combatfield_debuff bind rune active.
+function hasEnterCombatfieldDebuffBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'enter_combatfield_debuff');
 }
 
 // Returns true if the väsen has the JERA + ODAL low_cost_random_buff bind rune active.
@@ -705,7 +705,7 @@ function getBindRuneEligibleRunes(vasen) {
             case 'mannaz_team_heal': // GIFU + MANNAZ
                 viable = hasUtilitySkill;
                 break;
-            case 'enter_battlefield_debuff': // INGUZ + DAGAZ
+            case 'enter_combatfield_debuff': // INGUZ + DAGAZ
                 viable = true;
                 break;
             case 'low_cost_random_buff': // JERA + ODAL

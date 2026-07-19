@@ -55,8 +55,8 @@ class GameState {
             timestamp: null
         };
         
-        // Current battle state (not saved)
-        this.currentBattle = null;
+        // Current combat state (not saved)
+        this.currentCombat = null;
         this.currentEncounter = null;
         this.inCombat = false;
 
@@ -64,10 +64,10 @@ class GameState {
         this.uiLocked = false;
         
         // Exploration pity counters (anti-grief system)
-        this.battleCounter = 0;      // Increments on non-combat, resets on combat
+        this.combatCounter = 0;      // Increments on non-combat, resets on combat
         this.itemCounter = 0;        // Increments on non-item, resets on item
         this.runeCounter = 0;        // Increments on non-rune, resets on rune
-        this.sacredWellCounter = 0;  // Increments on battles only, resets on Sacred Well
+        this.sacredWellCounter = 0;  // Increments on combats only, resets on Sacred Well
         this.lastEncounterType = null; // Tracks last encounter to prevent consecutive Sacred Wells
     }
     
@@ -243,7 +243,7 @@ class GameState {
     
     // Equip rune to a specific väsen (by vasen ID)
     equipRune(runeId, vasenId, slotIndex = null) {
-        if (this.currentBattle || this.inCombat) {
+        if (this.currentCombat || this.inCombat) {
             return { success: false, message: 'You cannot change runes during combat.' };
         }
         if (!this.collectedRunes.has(runeId)) {
@@ -395,7 +395,7 @@ class GameState {
     
     // Unequip rune from a specific väsen
     unequipRune(vasenId, runeId) {
-        if (this.currentBattle || this.inCombat) {
+        if (this.currentCombat || this.inCombat) {
             return { success: false, message: 'You cannot change runes during combat.' };
         }
         // Find the väsen in collection
@@ -644,12 +644,12 @@ class GameState {
         
         let encounterType;
         
-        // Priority 1: Sacred Well pity (triggers after threshold battles without a well)
+        // Priority 1: Sacred Well pity (triggers after threshold combats without a well)
         if (this.sacredWellCounter >= GAME_CONFIG.PITY_SACRED_WELL_THRESHOLD) {
             encounterType = 'well';
         }
-        // Priority 2: Battle pity (triggers after threshold explores without combat)
-        else if (this.battleCounter >= GAME_CONFIG.PITY_BATTLE_THRESHOLD) {
+        // Priority 2: Combat pity (triggers after threshold explores without combat)
+        else if (this.combatCounter >= GAME_CONFIG.PITY_COMBAT_THRESHOLD) {
             encounterType = 'vasen';
         }
         // Priority 3: Item pity (triggers after threshold explores without an item)
@@ -676,7 +676,7 @@ class GameState {
             }
         }
         
-        // Prevent consecutive Sacred Wells - re-roll as a battle encounter
+        // Prevent consecutive Sacred Wells - re-roll as a combat encounter
         if (encounterType === 'well' && this.lastEncounterType === 'well') {
             encounterType = 'vasen';
         }
@@ -687,28 +687,28 @@ class GameState {
         // Update pity counters based on encounter type
         switch (encounterType) {
             case 'vasen':
-                this.battleCounter = 0;       // Reset: got combat
+                this.combatCounter = 0;       // Reset: got combat
                 this.itemCounter++;           // Increment: not an item
                 this.runeCounter++;           // Increment: not a rune
-                this.sacredWellCounter++;     // Increment: battle occurred
+                this.sacredWellCounter++;     // Increment: combat occurred
                 break;
             case 'item':
-                this.battleCounter++;         // Increment: not combat
+                this.combatCounter++;         // Increment: not combat
                 this.itemCounter = 0;         // Reset: got item
                 this.runeCounter++;           // Increment: not a rune
-                // sacredWellCounter unchanged: only increments on battles
+                // sacredWellCounter unchanged: only increments on combats
                 break;
             case 'well':
-                this.battleCounter++;         // Increment: not combat
+                this.combatCounter++;         // Increment: not combat
                 this.itemCounter++;           // Increment: not an item
                 this.runeCounter++;           // Increment: not a rune
                 this.sacredWellCounter = 0;   // Reset: got Sacred Well
                 break;
             case 'rune':
-                this.battleCounter++;         // Increment: not combat
+                this.combatCounter++;         // Increment: not combat
                 this.itemCounter++;           // Increment: not an item
                 this.runeCounter = 0;         // Reset: got rune
-                // sacredWellCounter unchanged: only increments on battles
+                // sacredWellCounter unchanged: only increments on combats
                 break;
         }
         
@@ -785,11 +785,11 @@ class GameState {
         return this.party.filter(v => v !== null && v.currentHealth > 0);
     }
     
-    // Apply post-battle healing
-    applyPostBattleHealing() {
+    // Apply post-combat healing
+    applyPostCombatHealing() {
         this.party.forEach(vasen => {
             if (vasen) {
-                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
+                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
                 vasen.currentHealth = Math.max(vasen.currentHealth, healAmount);
                 vasen.currentMegin = vasen.maxMegin; // Full megin restore
             }
@@ -930,7 +930,7 @@ class GameState {
             settings: this.settings,
             endlessTowerRecord: this.endlessTowerRecord,
             // Pity counters for exploration anti-grief system
-            battleCounter: this.battleCounter,
+            combatCounter: this.combatCounter,
             itemCounter: this.itemCounter,
             runeCounter: this.runeCounter,
             sacredWellCounter: this.sacredWellCounter,
@@ -998,7 +998,7 @@ class GameState {
             };
             
             // Restore pity counters (default to 0 for backwards compatibility)
-            this.battleCounter = data.battleCounter || 0;
+            this.combatCounter = data.combatCounter || 0;
             this.itemCounter = data.itemCounter || 0;
             this.runeCounter = data.runeCounter || 0;
             this.sacredWellCounter = data.sacredWellCounter || 0;
@@ -1013,8 +1013,8 @@ class GameState {
     
     // Save game to localStorage
     saveGame() {
-        // Never save mid-combat - party health is in a transient battle state.
-        // All end-of-battle paths set inCombat = false before saving.
+        // Never save mid-combat - party health is in a transient combat state.
+        // All end-of-combat paths set inCombat = false before saving.
         if (this.inCombat) return true;
         try {
             const saveData = JSON.stringify(this.serialize());
@@ -1093,7 +1093,7 @@ class GameState {
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
         this.firstTameMessageShown = false;
-        this.currentBattle = null;
+        this.currentCombat = null;
         this.currentEncounter = null;
         this.inCombat = false;
         
@@ -1105,7 +1105,7 @@ class GameState {
         };
         
         // Reset pity counters
-        this.battleCounter = 0;
+        this.combatCounter = 0;
         this.itemCounter = 0;
         this.runeCounter = 0;
         this.sacredWellCounter = 0;

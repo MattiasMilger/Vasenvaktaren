@@ -249,7 +249,7 @@ const ABILITIES = {
     },
     'Tidal Wave': {
         name: 'Tidal Wave',
-        flavorDescription: 'Evokes a massive, surging wall of ocean water to engulf the battlefield.',
+        flavorDescription: 'Evokes a massive, surging wall of ocean water to engulf the combatfield.',
         mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.WATER,
         type: ATTACK_TYPES.WISDOM,

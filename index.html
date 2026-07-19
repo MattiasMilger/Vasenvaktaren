@@ -346,17 +346,17 @@
                         <button id="btn-interrogate" class="btn btn-action">Interrogate</button>
                         <button id="btn-pass" class="btn btn-action">Pass</button>
                         <button id="btn-surrender" class="btn btn-danger">Surrender</button>
-                        <button id="btn-auto-battle" class="btn btn-action btn-auto-battle">Auto Battle</button>
+                        <button id="btn-auto-combat" class="btn btn-action btn-auto-combat">Auto Combat</button>
                     </div>
 
-                    <!-- Battle Log Toggle Button -->
-                    <button id="battle-log-toggle-btn" class="battle-log-toggle-btn">
-                        <span class="toggle-text">Hide Battle Log</span>
+                    <!-- Combat Log Toggle Button -->
+                    <button id="combat-log-toggle-btn" class="combat-log-toggle-btn">
+                        <span class="toggle-text">Hide Combat Log</span>
                         <span class="toggle-icon">«</span>
                     </button>
 
-                    <!-- Collapsible Battle Log Container -->
-                    <div id="battle-log-collapsible" class="battle-log-collapsible">
+                    <!-- Collapsible Combat Log Container -->
+                    <div id="combat-log-collapsible" class="combat-log-collapsible">
                         <div id="combat-log" class="combat-log"></div>
                     </div>
                 </div>
@@ -490,14 +490,14 @@
             </label>
             <p class="settings-note">Adds a subtle shine to skill buttons that are potent or weak against the enemy's element.</p>
 
-            <label class="toggle-switch-row" for="verbose-battle-log-toggle">
+            <label class="toggle-switch-row" for="verbose-combat-log-toggle">
                 <span class="toggle-switch">
-                    <input type="checkbox" id="verbose-battle-log-toggle">
+                    <input type="checkbox" id="verbose-combat-log-toggle">
                     <span class="toggle-switch-slider"></span>
                 </span>
-                <span class="toggle-switch-label-text">Verbose battle log</span>
+                <span class="toggle-switch-label-text">Verbose combat log</span>
             </label>
-            <p class="settings-note">Shows more info in the battle log.</p>
+            <p class="settings-note">Shows more info in the combat log.</p>
         </div>
 
         <!-- Save Management -->
@@ -568,7 +568,7 @@
                     <strong>Durability (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
                 
                 <h4>Resources</h4>
-                <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between battles.<br>
+                <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between combat encounters.<br>
                 <strong>Megin (MP)</strong> - Used to perform skills. Megin fully restores after each combat.</p>
 
                 <!-- Dynamic Element Matchups Section -->
@@ -589,7 +589,7 @@
                 <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin<br>
 
                 <h4>Healing</h4>
-                <p><strong>Post-Battle:</strong> Active party heals <span id="guide-post-battle-heal"></span> of max HP (even from 0 HP)<br>
+                <p><strong>Post-Combat:</strong> Active party heals <span id="guide-post-combat-heal"></span> of max HP (even from 0 HP)<br>
                 <strong>Sacred Well:</strong> All Väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> of max HP<br>
                 <strong>Items (Correct):</strong> Giving a Väsen its desired item heals <span id="guide-correct-item-heal"></span> of max HP<br>
                 <strong>Items (Wrong):</strong> Giving a Väsen any other item heals <span id="guide-wrong-item-heal"></span> of max HP<br>
@@ -603,13 +603,13 @@
                 <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
                 
                 <h4>Initial Bonus</h4>
-                <p>Certain utility skills have an "Initial Bonus" that grants extra attribute stages on their first use in a battle. This bonus is tracked per skill, per side, and only applies once per combat.</p>
+                <p>Certain utility skills have an "Initial Bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
 
                 <h4>Experience & Leveling</h4>
                 <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
                 <strong>Distribution:</strong><br>
                 - Killing Blow: <span id="guide-exp-killing"></span> of base experience<br>
-                - Participated in Battle: <span id="guide-exp-participated"></span> of base experience<br>
+                - Participated in Combat: <span id="guide-exp-participated"></span> of base experience<br>
                 - In Party (not fielded): <span id="guide-exp-party"></span> of base experience<br>
                 - Knocked Out: 0% (no experience)<br>
                 <em>Experience is only awarded after combat ends.</em></p>
@@ -634,8 +634,8 @@
     <script src="js/core/5-vasen-instance.js"></script>
     
     <!-- Game Systems -->
-    <script src="js/systems/6a-battle-core.js"></script>
-    <script src="js/systems/6b-battle-ai.js"></script>
+    <script src="js/systems/6a-combat-core.js"></script>
+    <script src="js/systems/6b-combat-ai.js"></script>
     <script src="js/systems/7-game-state.js"></script>
     
     <!-- UI Controller (modular) -->

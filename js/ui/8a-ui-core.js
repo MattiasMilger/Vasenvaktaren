@@ -16,8 +16,8 @@ class UIController {
         this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : true;
         const savedCards = localStorage.getItem('combatCardsMinimized');
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
-        const savedVerboseBattleLog = localStorage.getItem('verboseBattleLog');
-        this.verboseBattleLog = savedVerboseBattleLog !== null ? savedVerboseBattleLog === 'true' : false;
+        const savedVerboseCombatLog = localStorage.getItem('verboseCombatLog');
+        this.verboseCombatLog = savedVerboseCombatLog !== null ? savedVerboseCombatLog === 'true' : false;
         const savedPotencyIndicator = localStorage.getItem('potencyIndicator');
         this.potencyIndicatorEnabled = savedPotencyIndicator !== null ? savedPotencyIndicator === 'true' : true;
         this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
@@ -27,7 +27,7 @@ class UIController {
     init() {
         this.cacheElements();
         this.setupEventListeners();
-        this.restoreBattleLogState();
+        this.restoreCombatLogState();
         this.restoreCombatCardsState();
     }
 
@@ -113,12 +113,12 @@ if (potencyIndicatorToggle) {
     });
 }
 
-// Verbose battle log toggle
-const verboseBattleLogToggle = document.getElementById('verbose-battle-log-toggle');
-if (verboseBattleLogToggle) {
-    verboseBattleLogToggle.checked = this.verboseBattleLog;
-    verboseBattleLogToggle.addEventListener('change', () => {
-        this.toggleVerboseBattleLog(verboseBattleLogToggle.checked);
+// Verbose combat log toggle
+const verboseCombatLogToggle = document.getElementById('verbose-combat-log-toggle');
+if (verboseCombatLogToggle) {
+    verboseCombatLogToggle.checked = this.verboseCombatLog;
+    verboseCombatLogToggle.addEventListener('change', () => {
+        this.toggleVerboseCombatLog(verboseCombatLogToggle.checked);
     });
 }
 
@@ -192,10 +192,10 @@ if (this.modalOverlay) {
     });
 }
 
-// Battle log toggle for mobile
-const battleLogToggleBtn = document.getElementById('battle-log-toggle-btn');
-if (battleLogToggleBtn) {
-    battleLogToggleBtn.addEventListener('click', () => this.toggleBattleLog());
+// Combat log toggle for mobile
+const combatLogToggleBtn = document.getElementById('combat-log-toggle-btn');
+if (combatLogToggleBtn) {
+    combatLogToggleBtn.addEventListener('click', () => this.toggleCombatLog());
 }
 
 // Close element and family collapsibles when clicking anywhere outside them

@@ -4,7 +4,7 @@
 
 class Game {
     constructor() {
-        this.currentBattle = null;
+        this.currentCombat = null;
         this.pendingFirstTameMessage = false;
     }
 
@@ -218,28 +218,28 @@ startingItems.forEach(item => {
         ui.refreshAll();
     }
 
-    // End battle and return to exploration
-    endBattle() {
+    // End combat and return to exploration
+    endCombat() {
 
         gameState.inCombat = false;
 
-        // Stop showing tutorial when battle ends, but only if player has tamed at least one Vasen
-        // This allows the first tutorial to persist across battles until first successful tame
+        // Stop showing tutorial when combat ends, but only if player has tamed at least one Vasen
+        // This allows the first tutorial to persist across combats until first successful tame
         if (!gameState.firstCombatTutorialShown && gameState.vasenCollection.length > 1) {
             // Length > 1 because starter counts as 1
             gameState.firstCombatTutorialShown = true;
             gameState.saveGame();
         }
 
-        // Apply post-battle healing (includes megin restore)
-        gameState.applyPostBattleHealing();
+        // Apply post-combat healing (includes megin restore)
+        gameState.applyPostCombatHealing();
 
-        // Reset battle states
+        // Reset combat states
         gameState.party.forEach(v => {
-            if (v) v.resetBattleState();
+            if (v) v.resetCombatState();
         });
 
-        this.currentBattle = null;
+        this.currentCombat = null;
         ui.hideCombatUI();
         this.refreshUI();
         gameState.saveGame();

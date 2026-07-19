@@ -1,5 +1,5 @@
 // =============================================================================
-// 9c-game-guardian.js - Guardian Battles
+// 9c-game-guardian.js - Guardian Combat
 // =============================================================================
 
 // Challenge guardian
@@ -25,7 +25,7 @@ Game.prototype.challengeGuardian = function() {
     [
         {
             text: 'Fight!',
-            callback: () => this.startGuardianBattle(guardian)
+            callback: () => this.startGuardianCombat(guardian)
         },
         {
             text: 'Not yet',
@@ -38,8 +38,8 @@ Game.prototype.challengeGuardian = function() {
 
 };
 
-// Start guardian battle
-Game.prototype.startGuardianBattle = function(guardian) {
+// Start guardian combat
+Game.prototype.startGuardianCombat = function(guardian) {
     // Stop showing explore tutorial when first combat starts
     if (!gameState.firstExploreTutorialShown) {
         gameState.firstExploreTutorialShown = true;
@@ -56,50 +56,50 @@ Game.prototype.startGuardianBattle = function(guardian) {
     // Create guardian team
     const enemyTeam = createGuardianTeam(guardian);
 
-    // Reset battle state
-    playerTeam.forEach(v => v.resetBattleState());
-    enemyTeam.forEach(v => v.resetBattleState());
+    // Reset combat state
+    playerTeam.forEach(v => v.resetCombatState());
+    enemyTeam.forEach(v => v.resetCombatState());
 
-    this.currentBattle = new Battle(playerTeam, enemyTeam, BATTLE_TYPES.GUARDIAN);
-    this.currentBattle.guardianName = guardian.name;
-    this.currentBattle.guardianDialogue = guardian.dialogue;
-    this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
-    this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
-    this.currentBattle.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-    this.currentBattle.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
-    this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
-    this.currentBattle.onEnd = (result) => this.handleGuardianBattleEnd(result, guardian);
+    this.currentCombat = new Combat(playerTeam, enemyTeam, COMBAT_TYPES.GUARDIAN);
+    this.currentCombat.guardianName = guardian.name;
+    this.currentCombat.guardianDialogue = guardian.dialogue;
+    this.currentCombat.onLog = (msg, type) => ui.addCombatLog(msg, type);
+    this.currentCombat.onUpdate = () => ui.renderCombat(this.currentCombat);
+    this.currentCombat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
+    this.currentCombat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
+    this.currentCombat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
+    this.currentCombat.onEnd = (result) => this.handleGuardianCombatEnd(result, guardian);
 
     ui.showCombatUI();
-    ui.renderCombat(this.currentBattle);
+    ui.renderCombat(this.currentCombat);
     ui.addCombatLog(`${guardian.name} challenges you!`, 'encounter');
     ui.addCombatLog(`${guardian.name} sends out ${enemyTeam[0].getDisplayName()}!`, 'swap');
 };
 
-// Handle guardian battle end
-Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
+// Handle guardian combat end
+Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
     if (result.surrendered) {
         gameState.party.forEach(v => {
             if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT));
+                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
             }
         });
         ui.addCombatLog('You call retreat. Your party withdraws.', 'system');
-        this.endBattle();
+        this.endCombat();
         return;
     }
 
     if (!result.victory) {
         gameState.party.forEach(v => {
             if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT));
+                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
             }
         });
 
         ui.showDialogue(
             'Defeat',
             `<p>${guardian.dialogue.lose}</p>`,
-            [{ text: 'Continue', callback: () => this.endBattle() }],
+            [{ text: 'Continue', callback: () => this.endCombat() }],
             false
         );
         return;
@@ -119,19 +119,19 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
     }
 
     // Calculate experience
-    const battleResult = {
+    const combatResult = {
         victory: true,
         expGained: []
     };
 
-    this.currentBattle.enemyTeam.forEach(enemy => {
+    this.currentCombat.enemyTeam.forEach(enemy => {
         const expYield = getExpYield(enemy.level, enemy.species.rarity);
 
-        this.currentBattle.playerTeam.forEach((vasen, index) => {
+        this.currentCombat.playerTeam.forEach((vasen, index) => {
             if (vasen.isKnockedOut()) return;
 
             let expMultiplier = 0.6; // Base party exp (updated from 0.3)
-            if (vasen.battleFlags.turnsOnField > 0) expMultiplier = 0.8; // Participated (updated from 0.6)
+            if (vasen.combatFlags.turnsOnField > 0) expMultiplier = 0.8; // Participated (updated from 0.6)
 
             const expAmount = Math.floor(expYield * expMultiplier);
             // Check if väsen is at max level
@@ -141,10 +141,10 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
                 const levelResult = vasen.addExperience(expAmount);
 
                 // Find existing entry or create new
-                let entry = battleResult.expGained.find(e => e.name === vasen.getDisplayName());
+                let entry = combatResult.expGained.find(e => e.name === vasen.getDisplayName());
                 if (!entry) {
                     entry = { name: vasen.getDisplayName(), amount: 0, leveledUp: false, newLevel: vasen.level };
-                    battleResult.expGained.push(entry);
+                    combatResult.expGained.push(entry);
                 }
                 // Only add to display amount if not at max level
                 if (!isMaxLevel) {
@@ -159,14 +159,14 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
     });
 
     // Log exp gains
-    battleResult.expGained.forEach(exp => {
+    combatResult.expGained.forEach(exp => {
         ui.addCombatLog(`${exp.name} gained ${exp.amount} experience!`, 'exp');
         if (exp.leveledUp) {
             ui.addCombatLog(`${exp.name} reached level ${exp.newLevel}!`, 'levelup');
         }
     });
 
-    // Apply post-battle heal (full heal for first-time guardian clear)
+    // Apply post-combat heal (full heal for first-time guardian clear)
     if (wasFirstClear) {
         gameState.party.forEach(v => {
             if (v) {
@@ -178,7 +178,7 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
     } else {
         gameState.party.forEach(v => {
             if (v) {
-                v.healPercent(GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
+                v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
                 v.currentMegin = v.maxMegin;
             }
         });
@@ -213,7 +213,7 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
 
     // Show result
     let message = `<p>${guardian.dialogue.win}</p>`;
-    let callback = () => this.endBattle(); // Default callback to just return to game screen
+    let callback = () => this.endCombat(); // Default callback to just return to game screen
 
     if (wasFirstClear && currentIndex < ZONE_ORDER.length - 1) {
         const nextZoneId = ZONE_ORDER[currentIndex + 1];
@@ -238,7 +238,7 @@ Game.prototype.handleGuardianBattleEnd = function(result, guardian) {
         // Custom callback to switch zone instantly
         callback = () => {
             gameState.currentZone = nextZoneId; // <--- MODIFICATION: Set current zone to the new zone
-            this.endBattle();
+            this.endCombat();
         };
     }
 

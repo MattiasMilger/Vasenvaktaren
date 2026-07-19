@@ -3,19 +3,19 @@
    ============================================================================= */
 
 /* =============================================================================
-   COLLAPSIBLE BATTLE LOG (All Sizes)
+   COLLAPSIBLE COMBAT LOG (All Sizes)
    ============================================================================= */
 
-/* .battle-log-toggle-btn base styles are in 10-combat.css */
+/* .combat-log-toggle-btn base styles are in 10-combat.css */
 
 /* Collapsible container */
-.battle-log-collapsible {
+.combat-log-collapsible {
     max-height: 2000px;
     overflow: hidden;
     transition: max-height 0.3s ease;
 }
 
-.battle-log-collapsible.collapsed {
+.combat-log-collapsible.collapsed {
     max-height: 0;
 }
 

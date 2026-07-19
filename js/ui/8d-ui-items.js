@@ -137,11 +137,11 @@ UIController.prototype.showItemOptions = function(itemId) {
 
     // Check if we can offer during combat
     const canGift = gameState.inCombat &&
-                    game.currentBattle &&
-                    game.currentBattle.isWildEncounter &&
-                    game.currentBattle.waitingForPlayerAction &&
-                    game.currentBattle.offersGiven <= GAME_CONFIG.MAX_OFFERS_PER_COMBAT &&
-                    !game.currentBattle.correctItemGiven;
+                    game.currentCombat &&
+                    game.currentCombat.isWildEncounter &&
+                    game.currentCombat.waitingForPlayerAction &&
+                    game.currentCombat.offersGiven <= GAME_CONFIG.MAX_OFFERS_PER_COMBAT &&
+                    !game.currentCombat.correctItemGiven;
 
     const buttons = [
         {

@@ -9,7 +9,7 @@ const GAME_CONFIG = {
     MAX_TEAM_SIZE: 3,
     MAX_INVENTORY_SIZE: 99,
     MAX_ITEM_STACK: 99,
-    MAX_BATTLE_LOG: 99,
+    MAX_COMBAT_LOG: 99,
     SAVE_KEY: 'vasenvaktaren_save',
     
     // =============================================================================
@@ -33,8 +33,8 @@ const GAME_CONFIG = {
     
     // Experience percentages awarded based on participation level
     EXP_KILLING_BLOW: 1.0,              // Full exp share - dealt the final blow that knocked out the enemy
-    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the battlefield
-    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the battlefield
+    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the combatfield
+    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the combatfield
     
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
@@ -90,7 +90,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // HEALING
     // =============================================================================
-    POST_BATTLE_HEAL_PERCENT: 0.05,     // % health restored after winning battle
+    POST_COMBAT_HEAL_PERCENT: 0.05,     // % health restored after winning combat
     ENDLESS_TOWER_HEAL_PERCENT: 0.1,   // % health and Megin restored after winning a floor in Endless Tower
     SACRED_WELL_HEAL_PERCENT: 0.75,     // % health restored at Sacred Well
     CORRECT_ITEM_HEAL_PERCENT: 1,    // % health restored when giving correct taming item
@@ -99,24 +99,24 @@ const GAME_CONFIG = {
     // =============================================================================
     // TAMING SYSTEM
     // =============================================================================
-    MAX_OFFERS_PER_COMBAT: 3,           // Maximum items that can be offered per battle
+    MAX_OFFERS_PER_COMBAT: 3,           // Maximum items that can be offered per combat
     
     // =============================================================================
     // EXPLORATION & PITY SYSTEM
     // =============================================================================
     // Pity thresholds for exploration anti-grief system
-    PITY_BATTLE_THRESHOLD: 5,           // Force battle after X non-battle encounters
+    PITY_COMBAT_THRESHOLD: 5,           // Force combat after X non-combat encounters
     PITY_ITEM_THRESHOLD: 4,             // Force item after X non-item encounters
     PITY_RUNE_THRESHOLD: 20,            // Force rune after X non-rune encounters
-    PITY_SACRED_WELL_THRESHOLD: 3,      // Force Sacred Well after X battles
+    PITY_SACRED_WELL_THRESHOLD: 3,      // Force Sacred Well after X combats
     
     // =============================================================================
-    // BATTLE UI
+    // COMBAT UI
     // =============================================================================
-    // Input delay after each battle action to prevent spamming through turns (in milliseconds)
-    BATTLE_INPUT_DELAY: 800,
-    // Delay before showing battle end modal to allow death animations to complete (in milliseconds)
-    BATTLE_END_ANIMATION_DELAY: 500,
+    // Input delay after each combat action to prevent spamming through turns (in milliseconds)
+    COMBAT_INPUT_DELAY: 800,
+    // Delay before showing combat end modal to allow death animations to complete (in milliseconds)
+    COMBAT_END_ANIMATION_DELAY: 500,
     
     // =============================================================================
     // ENDLESS TOWER
@@ -143,7 +143,7 @@ const GAME_CONFIG = {
     RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
     
     // Dagaz: First round damage boost
-    RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +% damage on first round in battle
+    RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +% damage on first round in combat
     
     // Fehu: Potent hit damage reduction
     RUNE_FEHU_DAMAGE_REDUCTION: 0.85,   // Multiplier applied to reduce incoming potent hit damage
@@ -179,19 +179,19 @@ const GAME_CONFIG = {
     RUNE_THURS_RETURN_DAMAGE: 0.20,
 
     // Bind Runes
-    // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per battle)
+    // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per combat)
     // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
-    // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the battlefield
+    // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the combatfield
     RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES: 1,           // Stages the random enemy attribute is lowered by
     // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
     RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
     RUNE_BIND_JERA_ODAL_BUFF_STAGES: 1,               // Stages the random attribute is raised by
-    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or less (once per battle)
+    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or less (once per combat)
     RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD: 0.50,      // Health fraction at or below which the bind rune triggers
     RUNE_BIND_FEHU_WYNJA_BUFF_STAGES: 1,              // Stages each attribute is raised by
     // Uruz + Thurs: gain megin equal to a percentage of Thurs damage dealt
     RUNE_BIND_URUZ_THURS_MEGIN_PERCENT: 0.30,         // % of Thurs damage gained as megin
-    // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per battle)
+    // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per combat)
     RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD: 0.50,    // Enemy health fraction at or below which the bind rune triggers
     RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES: 1,          // Stages each of the enemy's attributes is lowered by
     
@@ -235,8 +235,8 @@ const GAME_CONFIG = {
     AI_THREAT_ELEMENT_BONUS: 0.2,        // Threat increase if facing potent matchup
     
     // Random variance for decision variety
-    AI_GUARDIAN_VARIANCE: 5,             // Low variance for guardian battles (more predictable)
-    AI_WILD_VARIANCE: 20,                // High variance for wild battles (more random)
+    AI_GUARDIAN_VARIANCE: 5,             // Low variance for guardian combats (more predictable)
+    AI_WILD_VARIANCE: 20,                // High variance for wild combats (more random)
     
     // --- Swap Scoring ---
     AI_SWAP_BASE_SCORE: 5,               // Base score for swapping
@@ -248,7 +248,7 @@ const GAME_CONFIG = {
 
 // Family Passive Configuration
 const FAMILY_PASSIVE_CONFIG = {
-    // Ande: Ethereal Surge - raises x random attributes by y stages when entering battlefield
+    // Ande: Ethereal Surge - raises x random attributes by y stages when entering combatfield
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
@@ -445,37 +445,37 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
         get description() {
-            return `When this väsen enters the battlefield, it raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per battle).`; 
+            return `When this väsen enters the combatfield, it raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per combat).`; 
         }
     },
     [FAMILIES.DRAKE]: {
         name: 'Draconic Resilience',
         get description() {
-            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per battle).`;
+            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per combat).`;
         }
     },
     [FAMILIES.JATTE]: {
         name: 'Jotun\'s Fury',
         get description() {
-            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent) (once per battle).`;
+            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent) (once per combat).`;
         }
     },
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
         get description() {
-            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the battlefield, its strength is raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and wisdom lowered by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per battle).`;
+            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the combatfield, its strength is raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and wisdom lowered by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per combat).`;
         }
     },
     [FAMILIES.RA]: {
         name: 'Malicious Retaliation',
         get description() {
-            return `When this väsen is hit by an enemy attack, it lowers ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT} random enemy attributes by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} stage each (once per battle).`;
+            return `When this väsen is hit by an enemy attack, it lowers ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT} random enemy attributes by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} stage each (once per combat).`;
         }
     },
     [FAMILIES.TROLL]: {
         name: 'Troll Theft',
         get description() {
-            return `When this väsen uses a skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per battle).`;
+            return `When this väsen uses a skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per combat).`;
         }
     },
     [FAMILIES.OKNYTT]: {
@@ -487,7 +487,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.VALNAD]: {
         name: 'Deathless ᛣ',
         get description() {
-            return `When this väsen is knocked out, it revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per battle).`;
+            return `When this väsen is knocked out, it revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per combat).`;
         }
     }
 };
@@ -624,7 +624,7 @@ const ZONES = {
     URBERGEN: {
         id: 'urbergen',
         name: 'Urbergen',
-        description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants battle the very elements that forged them.',
+        description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants combat the very elements that forged them.',
         image: 'assets/zones/urbergen.png',
         levelRange: [20, 24],
         spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Gryningstroll', 'Vitorm', 'Stormturs'],
@@ -646,7 +646,7 @@ const ZONES = {
     VARLDENS_ANDE: {
         id: 'varldens_ande',
         name: 'Världens Ände',
-        description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
+        description: 'The desolate, foreboding threshold of reality. This land is a cursed combatfield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
         image: 'assets/zones/varldensande.png',
         levelRange: [25, 29],
         spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg', 'Draug', 'Fylgja'],

@@ -11,17 +11,17 @@
         this.settingsModal.classList.remove('active');
     };
 
-    // Toggle the Verbose Battle Log setting (persisted via localStorage, like
+    // Toggle the Verbose Combat Log setting (persisted via localStorage, like
     // the other combat display toggles: combatRunesVisible, combatDescriptionVisible,
     // combatCardsMinimized).
-    UIController.prototype.toggleVerboseBattleLog = function(enabled) {
-        this.verboseBattleLog = enabled;
-        localStorage.setItem('verboseBattleLog', this.verboseBattleLog ? 'true' : 'false');
+    UIController.prototype.toggleVerboseCombatLog = function(enabled) {
+        this.verboseCombatLog = enabled;
+        localStorage.setItem('verboseCombatLog', this.verboseCombatLog ? 'true' : 'false');
     };
 
     // Toggle the Potency Indicator setting (persisted via localStorage, like
     // the other combat display toggles: combatRunesVisible, combatDescriptionVisible,
-    // combatCardsMinimized, verboseBattleLog).
+    // combatCardsMinimized, verboseCombatLog).
     UIController.prototype.togglePotencyIndicator = function(enabled) {
         this.potencyIndicatorEnabled = enabled;
         localStorage.setItem('potencyIndicator', this.potencyIndicatorEnabled ? 'true' : 'false');
@@ -53,7 +53,7 @@
         this.hideSettings();
 
         // Clear combat state
-        game.currentBattle = null;
+        game.currentCombat = null;
         this.hideCombatUI();
 
         // Reinitialize UI exactly like Game.init()
@@ -76,7 +76,7 @@
                     callback: () => {
                         gameState.resetGame();
                         // Clear game controller combat state
-                        game.currentBattle = null;
+                        game.currentCombat = null;
                         this.hideCombatUI();
                         location.reload();
                     }
@@ -315,7 +315,7 @@ achievementsHtml += '</div></div>';
         setText('guide-megin-per-level', GAME_CONFIG.MEGIN_PER_LEVEL);
 
         // Healing
-        setText('guide-post-battle-heal', `${Math.round(GAME_CONFIG.POST_BATTLE_HEAL_PERCENT * 100)}%`);
+        setText('guide-post-combat-heal', `${Math.round(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT * 100)}%`);
         setText('guide-sacred-well-heal', `${Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100)}%`);
         setText('guide-correct-item-heal', `${Math.round(GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT * 100)}%`);
         setText('guide-wrong-item-heal', `${Math.round(GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT * 100)}%`);

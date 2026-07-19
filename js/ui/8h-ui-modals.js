@@ -61,7 +61,7 @@ modal.classList.add('active');
 };
 
     // Show offer item modal
-    UIController.prototype.showOfferModal = function(battle) {
+    UIController.prototype.showOfferModal = function(combat) {
         const modal = document.getElementById('offer-modal');
         const itemList = document.getElementById('offer-item-list');
         const closeBtn = document.getElementById('close-offer-modal');
@@ -79,9 +79,9 @@ modal.classList.add('active');
             itemList.innerHTML = '<p class="empty-message">You have no items to offer.</p>';
         } else {
             // Check which item is correct for tutorial highlighting
-            const enemySpecies = battle.enemyActive.speciesName;
+            const enemySpecies = combat.enemyActive.speciesName;
             const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
-            const shouldShowTutorial = !gameState.firstCombatTutorialShown && battle.isWildEncounter;
+            const shouldShowTutorial = !gameState.firstCombatTutorialShown && combat.isWildEncounter;
 
             let correctItemBtn = null;
 
@@ -103,7 +103,7 @@ modal.classList.add('active');
                     <span class="offer-item-count">x${count}</span>
                 `;
                 itemBtn.onclick = () => {
-                    this.showOfferConfirmation(battle, itemId);
+                    this.showOfferConfirmation(combat, itemId);
                 };
                 itemList.appendChild(itemBtn);
             });
@@ -127,7 +127,7 @@ modal.classList.add('active');
     };
 
     // Show offer confirmation
-    UIController.prototype.showOfferConfirmation = function(battle, itemId) {
+    UIController.prototype.showOfferConfirmation = function(combat, itemId) {
         const modal = document.getElementById('offer-modal');
         const itemList = document.getElementById('offer-item-list');
         const closeBtn = document.getElementById('close-offer-modal');
@@ -141,10 +141,10 @@ modal.classList.add('active');
         offerDesc = offerDesc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
 
         // Highlight Confirm button only if this is the correct taming item during the first combat tutorial
-        const enemySpecies = battle.enemyActive.speciesName;
+        const enemySpecies = combat.enemyActive.speciesName;
         const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
         const isCorrectItem = itemId === correctItem;
-        const confirmClass = !gameState.firstCombatTutorialShown && battle.isWildEncounter && isCorrectItem
+        const confirmClass = !gameState.firstCombatTutorialShown && combat.isWildEncounter && isCorrectItem
             ? 'btn btn-primary tutorial-blink'
             : 'btn btn-primary';
 
@@ -152,7 +152,7 @@ modal.classList.add('active');
             <div class="offer-confirmation">
                 <p class="offer-item-description">${offerDesc}</p>
                 <div class="offer-confirmation-buttons">
-                    <button class="btn btn-secondary" onclick="ui.showOfferModal(game.currentBattle)">Cancel</button>
+                    <button class="btn btn-secondary" onclick="ui.showOfferModal(game.currentCombat)">Cancel</button>
                     <button class="${confirmClass}" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
                 </div>
             </div>
@@ -168,7 +168,7 @@ modal.classList.add('active');
     };
 
     // Show ally select modal (for target selection)
-    UIController.prototype.showAllySelectionModal = function(battle, skillName, callback) {
+    UIController.prototype.showAllySelectionModal = function(combat, skillName, callback) {
         const modal = document.getElementById('ally-select-modal');
         const skill = ABILITIES[skillName];
         document.getElementById('ally-select-skill-name').textContent = skill ? skill.name : skillName;
@@ -176,9 +176,9 @@ modal.classList.add('active');
         const list = document.getElementById('ally-select-list');
         list.innerHTML = '';
 
-        if (!battle) return;
+        if (!combat) return;
 
-        battle.playerTeam.forEach((vasen, index) => {
+        combat.playerTeam.forEach((vasen, index) => {
             if (vasen.isKnockedOut()) return;
 
             const btn = document.createElement('button');
@@ -202,7 +202,7 @@ modal.classList.add('active');
     };
 
     // Show knockout swap modal
-UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
+UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     GameState.uiLocked = true;
 
     const modal = document.getElementById('knockout-swap-modal');
@@ -211,11 +211,11 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
     const vasenList = document.getElementById('knockout-swap-list');
     vasenList.innerHTML = '';
 
-    const availableVasen = battle.playerTeam.filter((v, i) =>
-        i !== battle.playerActiveIndex && !v.isKnockedOut()
+    const availableVasen = combat.playerTeam.filter((v, i) =>
+        i !== combat.playerActiveIndex && !v.isKnockedOut()
     );
 
-    // No available allies -> battle ends or whatever your logic is
+    // No available allies -> combat ends or whatever your logic is
     if (availableVasen.length === 0) {
         modal.classList.remove('active');
         GameState.uiLocked = false;
@@ -226,7 +226,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
 
     // If only one ally is alive -> auto swap (your existing logic)
     if (availableVasen.length === 1) {
-        const actualIndex = battle.playerTeam.indexOf(availableVasen[0]);
+        const actualIndex = combat.playerTeam.indexOf(availableVasen[0]);
         modal.classList.remove('active');
         GameState.uiLocked = false;
         ui.checkAndHideOverlay();
@@ -236,7 +236,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
 
     // Build buttons for each available Vasen
     availableVasen.forEach(vasen => {
-        const actualIndex = battle.playerTeam.indexOf(vasen);
+        const actualIndex = combat.playerTeam.indexOf(vasen);
 
         const vasenBtn = document.createElement('button');
         vasenBtn.className = 'knockout-swap-btn';
@@ -267,7 +267,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
                 this.showDialogue(
     'Wild Encounter!',
     `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
-    [{ text: 'Battle!', callback: () => game.startBattle(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
+    [{ text: 'Combat!', callback: () => game.startCombat(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
     false // <-- non-dismissible
 );
                 break;
@@ -318,12 +318,12 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
         }
     };
 
-    // Show battle result
-    UIController.prototype.showBattleResult = function(result) {
+    // Show combat result
+    UIController.prototype.showCombatResult = function(result) {
         let message = '';
         let buttons = [{
             text: 'Continue (2)',
-            callback: () => game.endBattle(),
+            callback: () => game.endCombat(),
             disabled: true // Initially disabled to prevent spam clicking
         }];
 
@@ -352,7 +352,7 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
         this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false);
 
         // Countdown timer for the button
-        let remainingSeconds = Math.ceil(GAME_CONFIG.BATTLE_RESULT_BUTTON_DELAY / 1000);
+        let remainingSeconds = Math.ceil(GAME_CONFIG.COMBAT_RESULT_BUTTON_DELAY / 1000);
         const countdownInterval = setInterval(() => {
             remainingSeconds--;
             const dialogueButtons = document.querySelectorAll('#dialogue-buttons button');
@@ -376,5 +376,5 @@ UIController.prototype.showKnockoutSwapModal = function(battle, callback) {
                     btn.textContent = 'Continue';
                 }
             });
-        }, GAME_CONFIG.BATTLE_RESULT_BUTTON_DELAY);
+        }, GAME_CONFIG.COMBAT_RESULT_BUTTON_DELAY);
     };

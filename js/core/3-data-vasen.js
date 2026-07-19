@@ -64,7 +64,7 @@ const VASEN_SPECIES = {
     'Einharje': {
         name: 'Einhärje',
         internalName: 'Einharje',
-        description: 'A deceased valiant warrior dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the final battle of Ragnarök.',
+        description: 'A deceased valiant warrior dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the final combat of Ragnarök.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.RARE,
@@ -75,7 +75,7 @@ const VASEN_SPECIES = {
     'Fylgja': {
         name: 'Fylgja',
         internalName: 'Fylgja',
-        description: 'An avatar of fate bound to a person\'s soul and destiny, appearing during battle to warn of danger and approaching death.',
+        description: 'An avatar of fate bound to a person\'s soul and destiny, appearing during combat to warn of danger and approaching death.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -108,7 +108,7 @@ const VASEN_SPECIES = {
     'Valkyria': {
         name: 'Valkyria',
         internalName: 'Valkyria',
-        description: 'A formidable winged battle judge who rides above the battlefield, choosing the bravest fallen warriors and guiding them to Valhalla.',
+        description: 'A formidable winged combat judge who rides above the combatfield, choosing the bravest fallen warriors and guiding them to Valhalla.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -154,7 +154,7 @@ const VASEN_SPECIES = {
     'Jormungandr': {
         name: 'Jörmungandr',
         internalName: 'Jormungandr',
-        description: 'The boundless serpent whose endless coils encircle Midgard, resting within the primordial ocean while awaiting the final battle.',
+        description: 'The boundless serpent whose endless coils encircle Midgard, resting within the primordial ocean while awaiting the final combat.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,

@@ -1,5 +1,5 @@
 // =============================================================================
-// 8g-ui-combat.js - Combat Rendering, Action Buttons, and Battle Animations
+// 8g-ui-combat.js - Combat Rendering, Action Buttons, and Combat Animations
 // =============================================================================
 
 UIController.prototype._sizeCombatLog = function() {
@@ -45,20 +45,20 @@ UIController.prototype.hideCombatUI = function() {
         this.combatLog.style.height = '';
 };
 
-UIController.prototype.renderCombat = function(battle) {
-        if (!battle) return;
+UIController.prototype.renderCombat = function(combat) {
+        if (!combat) return;
 
         // Render player side
-        this.renderCombatantPanel('player', battle.playerTeam[battle.playerActiveIndex], battle);
+        this.renderCombatantPanel('player', combat.playerTeam[combat.playerActiveIndex], combat);
 
         // Render enemy side
-        this.renderCombatantPanel('enemy', battle.enemyTeam[battle.enemyActiveIndex], battle);
+        this.renderCombatantPanel('enemy', combat.enemyTeam[combat.enemyActiveIndex], combat);
 
         // Render Endless Tower floor display if applicable
         const versusDiv = this.combatVersus;
-        if (battle.isEndlessTower && battle.currentFloor) {
+        if (combat.isEndlessTower && combat.currentFloor) {
             versusDiv.innerHTML = `
-                <div class="endless-tower-floor">Floor ${battle.currentFloor}</div>
+                <div class="endless-tower-floor">Floor ${combat.currentFloor}</div>
                 <div>VS</div>
             `;
         } else {
@@ -66,13 +66,13 @@ UIController.prototype.renderCombat = function(battle) {
         }
 
         // Render action buttons
-        this.renderActionButtons(battle);
+        this.renderActionButtons(combat);
 
         // Update party display
         this.renderParty();
 };
 
-UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
+UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
     const panel = document.getElementById(`${side}-panel`);
     if (!vasen) return;
 
@@ -80,8 +80,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
     const meginPercent = (vasen.currentMegin / vasen.maxMegin) * 100;
 
     // Get party members (excluding active)
-    const team = side === 'player' ? battle.playerTeam : battle.enemyTeam;
-    const activeIndex = side === 'player' ? battle.playerActiveIndex : battle.enemyActiveIndex;
+    const team = side === 'player' ? combat.playerTeam : combat.enemyTeam;
+    const activeIndex = side === 'player' ? combat.playerActiveIndex : combat.enemyActiveIndex;
 
     // Get party member portraits (member 2 on left, member 3 on right)
     const partyPortraits = {
@@ -166,7 +166,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
 
      // Compute untamed indicator for enemy side in wild encounters
     const showUntamed = side === 'enemy' &&
-        battle.isWildEncounter &&
+        combat.isWildEncounter &&
         !gameState.vasenCollection.some(v => v.speciesName === vasen.speciesName);
     const untamedHtml = showUntamed
         ? '<span class="combatant-untamed">Untamed</span>'
@@ -188,8 +188,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
             <div class="combatant-image-container ${vasen.isKnockedOut() ? '' : 'holo-' + vasen.species.rarity.toLowerCase()}">
                 <img src="${vasen.species.image}" alt="${vasen.species.name}"
                      class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
-                ${vasen.battleFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
-                ${vasen.battleFlags.valnadPassiveTriggered ? '<span class="deathless-rune">ᛣ</span>' : ''}
+                ${vasen.combatFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
+                ${vasen.combatFlags.valnadPassiveTriggered ? '<span class="deathless-rune">ᛣ</span>' : ''}
             </div>
 
             ${createPartyPortraitHTML(partyPortraits.right, 'right')}
@@ -281,8 +281,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, battle) {
 
     // Apply Freya's Tears glow if active on this combatant.
     // Suppressed on the enemy side when taming-ready is active (taming glow takes priority).
-    const tamingReady = side === 'enemy' && battle.correctItemGiven && battle.isWildEncounter && !vasen.isKnockedOut();
-    const freyasTearsGlow = (side === 'player' ? battle.playerTeamFreyasTears > 0 : battle.enemyTeamFreyasTears > 0) && !tamingReady;
+    const tamingReady = side === 'enemy' && combat.correctItemGiven && combat.isWildEncounter && !vasen.isKnockedOut();
+    const freyasTearsGlow = (side === 'player' ? combat.playerTeamFreyasTears > 0 : combat.enemyTeamFreyasTears > 0) && !tamingReady;
     panel.classList.toggle('freyas-tears-active', freyasTearsGlow);
 
     // Apply taming-ready glow when the correct item has been given to the active enemy
@@ -379,14 +379,14 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
         `;
 };
 
-UIController.prototype.renderSwapOptions = function(battle) {
+UIController.prototype.renderSwapOptions = function(combat) {
     const modal = document.getElementById('swap-modal');
     const list = document.getElementById('swap-modal-list');
 
     list.innerHTML = '';
 
-    battle.playerTeam.forEach((vasen, index) => {
-        if (index === battle.playerActiveIndex || vasen.isKnockedOut()) return;
+    combat.playerTeam.forEach((vasen, index) => {
+        if (index === combat.playerActiveIndex || vasen.isKnockedOut()) return;
 
         const btn = document.createElement('button');
         btn.className = 'swap-modal-btn';
@@ -426,7 +426,7 @@ UIController.prototype.renderSwapOptions = function(battle) {
 // Determine the potency shine class for an attack skill button - 'potency-potent',
 // 'potency-weak', or '' for neutral/utility skills. Accounts for active elemental
 // conversion bind runes (e.g. Eihwaz+Kaunan) by converting the skill's element
-// before checking the matchup, mirroring the same conversion Battle.calculateDamage
+// before checking the matchup, mirroring the same conversion Combat.calculateDamage
 // applies when actually resolving damage.
 UIController.prototype.getSkillPotencyClass = function(skill, skillElement, attacker, defender) {
     if (!skill || skill.type === ATTACK_TYPES.UTILITY) return '';
@@ -444,11 +444,11 @@ UIController.prototype.getSkillPotencyClass = function(skill, skillElement, atta
     return '';
 };
 
-UIController.prototype.renderActionButtons = function(battle) {
+UIController.prototype.renderActionButtons = function(combat) {
     const actionsContainer = document.getElementById('skill-buttons');
     actionsContainer.innerHTML = '';
 
-    const activeVasen = battle.playerTeam[battle.playerActiveIndex];
+    const activeVasen = combat.playerTeam[combat.playerActiveIndex];
     if (!activeVasen || activeVasen.isKnockedOut()) return;
 
     const skills = activeVasen.getAvailableSkills();
@@ -458,17 +458,17 @@ UIController.prototype.renderActionButtons = function(battle) {
         if (!skill) return;
 
         const meginCost = activeVasen.getSkillMeginCost(skillName);
-        const canUse = activeVasen.canUseSkill(skillName) && !activeVasen.battleFlags.hasSwapSickness;
+        const canUse = activeVasen.canUseSkill(skillName) && !activeVasen.combatFlags.hasSwapSickness;
 
         const skillElement = skill.element || activeVasen.species.element;
 
-        const potencyClass = (this.potencyIndicatorEnabled !== false && battle.enemyActive)
-            ? this.getSkillPotencyClass(skill, skillElement, activeVasen, battle.enemyActive)
+        const potencyClass = (this.potencyIndicatorEnabled !== false && combat.enemyActive)
+            ? this.getSkillPotencyClass(skill, skillElement, activeVasen, combat.enemyActive)
             : '';
 
         const btn = document.createElement('button');
         btn.className = `skill-btn element-${skillElement.toLowerCase()} ${canUse ? '' : 'disabled'} ${potencyClass}`;
-        btn.disabled = !canUse || !battle.waitingForPlayerAction || battle.isAutoBattle;
+        btn.disabled = !canUse || !combat.waitingForPlayerAction || combat.isAutoCombat;
         btn.innerHTML = `
             <span class="skill-btn-name">${skill.name}</span>
             <span class="skill-btn-type">${skill.type}</span>
@@ -487,17 +487,17 @@ UIController.prototype.renderActionButtons = function(battle) {
 
     // Update other action buttons
     document.getElementById('btn-swap').disabled =
-        !battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle;
+        !combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoCombat;
 
     const offerBtn = document.getElementById('btn-offer');
     offerBtn.disabled =
-        !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.isEndlessTower ||
-        battle.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || battle.correctItemGiven || battle.isAutoBattle;
+        !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
+        combat.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || combat.correctItemGiven || combat.isAutoCombat;
 
     // First combat tutorial - blink Offer Item button if player has matching item
-    if (!gameState.firstCombatTutorialShown && battle.isWildEncounter && !offerBtn.disabled) {
+    if (!gameState.firstCombatTutorialShown && combat.isWildEncounter && !offerBtn.disabled) {
         // Check if player has the correct taming item for this enemy
-        const enemySpecies = battle.enemyActive.speciesName;
+        const enemySpecies = combat.enemyActive.speciesName;
         const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
 
         if (correctItem && gameState.itemInventory[correctItem] && gameState.itemInventory[correctItem] > 0) {
@@ -510,27 +510,27 @@ UIController.prototype.renderActionButtons = function(battle) {
     }
 
     document.getElementById('btn-interrogate').disabled =
-        !battle.waitingForPlayerAction || !battle.isWildEncounter || battle.isEndlessTower ||
-        activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle;
-    document.getElementById('btn-pass').disabled = !battle.waitingForPlayerAction || battle.isAutoBattle;
-    document.getElementById('btn-surrender').disabled = battle.isAutoBattle;
+        !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
+        activeVasen.combatFlags.hasSwapSickness || combat.isAutoCombat;
+    document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoCombat;
+    document.getElementById('btn-surrender').disabled = combat.isAutoCombat;
 
-    // Auto Battle button
-    const autoBattleBtn = document.getElementById('btn-auto-battle');
-    if (battle.isAutoBattle) {
-        autoBattleBtn.textContent = 'Cancel Auto Battle';
-        autoBattleBtn.disabled = false;
-        autoBattleBtn.classList.add('auto-battle-active');
+    // Auto Combat button
+    const autoCombatBtn = document.getElementById('btn-auto-combat');
+    if (combat.isAutoCombat) {
+        autoCombatBtn.textContent = 'Cancel Auto Combat';
+        autoCombatBtn.disabled = false;
+        autoCombatBtn.classList.add('auto-combat-active');
     } else {
-        autoBattleBtn.textContent = 'Auto Battle';
-        autoBattleBtn.disabled = false;
-        autoBattleBtn.classList.remove('auto-battle-active');
+        autoCombatBtn.textContent = 'Auto Combat';
+        autoCombatBtn.disabled = false;
+        autoCombatBtn.classList.remove('auto-combat-active');
     }
 
     // Swap button opens the modal
     document.getElementById('btn-swap').onclick = () => {
-        if (!battle.waitingForPlayerAction || activeVasen.battleFlags.hasSwapSickness || battle.isAutoBattle) return;
-        this.renderSwapOptions(battle);
+        if (!combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoCombat) return;
+        this.renderSwapOptions(combat);
     };
 };
 
@@ -546,7 +546,7 @@ UIController.prototype.addCombatLog = function(message, type = 'normal') {
         this.combatLogMessages.push({ message: coloredMessage, type });
 
         // Cap at max messages
-        while (this.combatLogMessages.length > GAME_CONFIG.MAX_BATTLE_LOG) {
+        while (this.combatLogMessages.length > GAME_CONFIG.MAX_COMBAT_LOG) {
             this.combatLogMessages.shift();
             this.combatLog.removeChild(this.combatLog.firstChild);
         }
@@ -772,9 +772,9 @@ UIController.prototype.reapplyAnimations = function(side) {
     }
 };
 
-UIController.prototype.toggleBattleLog = function() {
-        const toggleBtn = document.getElementById('battle-log-toggle-btn');
-        const collapsible = document.getElementById('battle-log-collapsible');
+UIController.prototype.toggleCombatLog = function() {
+        const toggleBtn = document.getElementById('combat-log-toggle-btn');
+        const collapsible = document.getElementById('combat-log-collapsible');
         const toggleText = toggleBtn.querySelector('.toggle-text');
         const toggleIcon = toggleBtn.querySelector('.toggle-icon');
 
@@ -782,42 +782,42 @@ UIController.prototype.toggleBattleLog = function() {
             // Expand
             collapsible.classList.remove('collapsed');
             toggleBtn.classList.remove('collapsed');
-            toggleText.textContent = 'Hide Battle Log';
+            toggleText.textContent = 'Hide Combat Log';
             toggleIcon.textContent = '«';
-            localStorage.setItem('battleLogCollapsed', 'false');
+            localStorage.setItem('combatLogCollapsed', 'false');
             // Re-size after expand transition
             setTimeout(() => this._sizeCombatLog(), 350);
         } else {
             // Collapse
             collapsible.classList.add('collapsed');
             toggleBtn.classList.add('collapsed');
-            toggleText.textContent = 'Show Battle Log';
+            toggleText.textContent = 'Show Combat Log';
             toggleIcon.textContent = '»';
-            localStorage.setItem('battleLogCollapsed', 'true');
+            localStorage.setItem('combatLogCollapsed', 'true');
         }
 };
 
-UIController.prototype.restoreBattleLogState = function() {
-        const toggleBtn = document.getElementById('battle-log-toggle-btn');
-        const collapsible = document.getElementById('battle-log-collapsible');
+UIController.prototype.restoreCombatLogState = function() {
+        const toggleBtn = document.getElementById('combat-log-toggle-btn');
+        const collapsible = document.getElementById('combat-log-collapsible');
         const toggleText = toggleBtn ? toggleBtn.querySelector('.toggle-text') : null;
         const toggleIcon = toggleBtn ? toggleBtn.querySelector('.toggle-icon') : null;
 
         if (!toggleBtn || !collapsible || !toggleText || !toggleIcon) return;
 
         // Check if user has saved state, otherwise default to expanded
-        const savedState = localStorage.getItem('battleLogCollapsed');
+        const savedState = localStorage.getItem('combatLogCollapsed');
         const isCollapsed = savedState !== null ? savedState === 'true' : false;
 
         if (isCollapsed) {
             collapsible.classList.add('collapsed');
             toggleBtn.classList.add('collapsed');
-            toggleText.textContent = 'Show Battle Log';
+            toggleText.textContent = 'Show Combat Log';
             toggleIcon.textContent = '»';
         } else {
             collapsible.classList.remove('collapsed');
             toggleBtn.classList.remove('collapsed');
-            toggleText.textContent = 'Hide Battle Log';
+            toggleText.textContent = 'Hide Combat Log';
             toggleIcon.textContent = '«';
         }
 };

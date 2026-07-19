@@ -416,8 +416,8 @@
     text-shadow: 0 0 1px var(--black-overlay-text-shadow);
 }
 
-/* Battle Log Toggle - ensure visible on all screen sizes */
-.battle-log-toggle-btn {
+/* Combat Log Toggle - ensure visible on all screen sizes */
+.combat-log-toggle-btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -438,11 +438,11 @@
     touch-action: manipulation;
 }
 
-.battle-log-toggle-btn:hover {
+.combat-log-toggle-btn:hover {
     background: var(--bg-hover);
 }
 
-.battle-log-toggle-btn:active {
+.combat-log-toggle-btn:active {
     background: var(--bg-tertiary);
 }
 
@@ -1063,7 +1063,7 @@
 }
 
 /* =============================================================================
-   TOGGLE SWITCH - used for the Verbose Battle Log setting
+   TOGGLE SWITCH - used for the Verbose Combat Log setting
    ============================================================================= */
 .toggle-switch-row {
     display: flex;
@@ -1941,30 +1941,30 @@ button.tutorial-blink {
 }
 
 /* =============================================================================
-   AUTO BATTLE BUTTON
+   AUTO COMBAT BUTTON
    ============================================================================= */
-.btn-auto-battle {
+.btn-auto-combat {
     border-color: var(--text-accent);
     color: var(--text-accent);
 }
 
-.btn-auto-battle:hover:not(:disabled) {
+.btn-auto-combat:hover:not(:disabled) {
     background: var(--accent-gold-tint);
     border-color: var(--text-accent);
 }
 
-.btn-auto-battle.auto-battle-active {
+.btn-auto-combat.auto-combat-active {
     opacity: 1;
     cursor: pointer;
-    animation: auto-battle-pulse 1.5s ease-in-out infinite;
+    animation: auto-combat-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes auto-battle-pulse {
+@keyframes auto-combat-pulse {
     0%, 100% {
-        box-shadow: 0 0 0 0 var(--auto-battle-color-transparent);
+        box-shadow: 0 0 0 0 var(--auto-combat-color-transparent);
     }
     50% {
-        box-shadow: 0 0 10px 2px var(--auto-battle-color);
+        box-shadow: 0 0 10px 2px var(--auto-combat-color);
     }
 }
 

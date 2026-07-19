@@ -2,7 +2,7 @@
 
 **Catch creatures of Swedish folklore**
 
-A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and battle your way through the guardians of each realm.
+A turn-based creature collection game inspired by Swedish mythology and folklore. Explore mystical zones, tame mythical Väsen, and combat your way through the guardians of each realm.
 
 **If you enjoyed Väsenväktaren, please consider starring the repository!**
 
@@ -45,7 +45,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 ### Combat System & Taming
 
-- Turn-based battles
+- Turn-based combat
 - Element matchups
 - Resource management
 - Attribute buffs and debuffs
@@ -59,7 +59,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Interrogate** | Learn what item the Väsen wants |
 | **Pass** | Skip your turn |
 | **Surrender** | Exit combat (reduces party to 5% health) |
-| **Auto Battle** | Let AI take control |
+| **Auto Combat** | Let AI take control |
 
 ### Party Management
 
@@ -129,8 +129,8 @@ Vasenvaktaren/
 │   │   └── 10-data-lore.js         (lore entries, categories, and unlock keys)
 │   │
 │   ├── systems/
-│   │   ├── 6a-battle-core.js       (Battle class)
-│   │   ├── 6b-battle-ai.js         (EnemyAI class)
+│   │   ├── 6a-combat-core.js       (Combat class)
+│   │   ├── 6b-combat-ai.js         (EnemyAI class)
 │   │   └── 7-game-state.js         (GameState class)
 │   │
 │   ├── ui/
@@ -141,15 +141,15 @@ Vasenvaktaren/
 │   │   ├── 8d-ui-runes.js          (rune inventory management)
 │   │   ├── 8e-ui-party.js          (party slot management, väsen release, and Auto Equip Runes)
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
-│   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and battle animations)
+│   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and combat animations)
 │   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
 │   │   ├── 8i-ui-settings.js       (settings, profile, and game guide)
 │   │   └── 8j-ui-lore.js           (lore book rendering, search, and language toggle)
 │   │
 │   └── game/
 │       ├── 9a-game-core.js         (Game class, menu flow, and core lifecycle)
-│       ├── 9b-game-exploration.js  (wild encounters and battle handling)
-│       ├── 9c-game-guardian.js     (guardian battles)
+│       ├── 9b-game-exploration.js  (wild encounters and combat handling)
+│       ├── 9c-game-guardian.js     (guardian combats)
 │       ├── 9d-game-endless.js      (endless tower mode)
 │       ├── 9e-game-actions.js      (combat action handlers)
 │       └── 9f-game-init.js         (bootstrap and event bindings)

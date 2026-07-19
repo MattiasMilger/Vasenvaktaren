@@ -184,10 +184,10 @@
     --flash-debuff-color: rgba(147, 51, 234, 0.6);   /* Purple flash for debuff hits */
     --combat-flash-bg: rgba(255, 100, 100, 0.15);    /* Red tint background flash */
 
-    /* Auto Battle Button */
-    --auto-battle-color: rgba(100, 160, 220, 0.4);       /* Auto battle pulse glow */
-    --auto-battle-color-transparent: rgba(100, 160, 220, 0); /* Transparent for animation from */
-    --auto-battle-bg: rgba(100, 160, 220, 0.15);           /* Auto battle button hover bg */
+    /* Auto Combat Button */
+    --auto-combat-color: rgba(100, 160, 220, 0.4);       /* Auto combat pulse glow */
+    --auto-combat-color-transparent: rgba(100, 160, 220, 0); /* Transparent for animation from */
+    --auto-combat-bg: rgba(100, 160, 220, 0.15);           /* Auto combat button hover bg */
 
     /* Transitions */
     --transition-fast: 0.15s ease;

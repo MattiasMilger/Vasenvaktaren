@@ -29,7 +29,7 @@ class VasenInstance {
         this.currentHealth = this.maxHealth;
         this.currentMegin = this.maxMegin;
         
-        // Battle state (reset after each battle)
+        // Combat state (reset after each combat)
         this.attributeStages = {
             strength: 0,
             wisdom: 0,
@@ -37,7 +37,7 @@ class VasenInstance {
             durability: 0
         };
         
-        this.battleFlags = {
+        this.combatFlags = {
             hasSwapSickness: false,
             turnsOnField: 0,
             isFirstRound: true,
@@ -102,7 +102,7 @@ class VasenInstance {
         return Math.floor(base);
     }
     
-    // Get current attribute with stage modifier (used in battle)
+    // Get current attribute with stage modifier (used in combat)
     getAttribute(attrName) {
         const baseValue = this.calculateAttribute(attrName);
         const stage = this.attributeStages[attrName] || 0;
@@ -266,15 +266,15 @@ class VasenInstance {
         };
     }
     
-    // Reset battle state
-    resetBattleState() {
+    // Reset combat state
+    resetCombatState() {
         this.attributeStages = {
             strength: 0,
             wisdom: 0,
             defense: 0,
             durability: 0
         };
-        this.battleFlags = {
+        this.combatFlags = {
             hasSwapSickness: false,
             turnsOnField: 0,
             isFirstRound: true,
@@ -294,27 +294,27 @@ class VasenInstance {
         };
     }
 
-    // Reset only the once-per-battle passive and rune flags, without touching
+    // Reset only the once-per-combat passive and rune flags, without touching
     // attribute stages, health, megin, or turn counters.
     // Used by Idunn's Apples between Endless Tower floors.
-    resetOncePerBattleFlags() {
-        this.battleFlags.gifuTriggered = false;
-        this.battleFlags.wynjaTriggered = false;
-        this.battleFlags.mannazTeamHealTriggered = false;
-        this.battleFlags.fehuWynjaPassiveTriggered = false;
-        this.battleFlags.andePassiveTriggered = false;
-        this.battleFlags.drakePassiveTriggered = false;
-        this.battleFlags.odjurPassiveTriggered = false;
-        this.battleFlags.raPassiveTriggered = false;
-        this.battleFlags.trollPassiveTriggered = false;
-        this.battleFlags.valnadPassiveTriggered = false;
+    resetOncePerCombatFlags() {
+        this.combatFlags.gifuTriggered = false;
+        this.combatFlags.wynjaTriggered = false;
+        this.combatFlags.mannazTeamHealTriggered = false;
+        this.combatFlags.fehuWynjaPassiveTriggered = false;
+        this.combatFlags.andePassiveTriggered = false;
+        this.combatFlags.drakePassiveTriggered = false;
+        this.combatFlags.odjurPassiveTriggered = false;
+        this.combatFlags.raPassiveTriggered = false;
+        this.combatFlags.trollPassiveTriggered = false;
+        this.combatFlags.valnadPassiveTriggered = false;
     }
     
     // Restore full resources
     restoreFully() {
         this.currentHealth = this.maxHealth;
         this.currentMegin = this.maxMegin;
-        this.resetBattleState();
+        this.resetCombatState();
     }
     
     // Add experience and handle leveling
@@ -405,7 +405,7 @@ class VasenInstance {
         }
         instance.experience = data.experience || 0;
         instance.currentHealth = data.currentHealth !== undefined ? data.currentHealth : instance.maxHealth;
-        // Megin is always fully restored outside of an active battle session.
+        // Megin is always fully restored outside of an active combat session.
         // Always recalculate from current maxMegin so constant changes take effect immediately.
         instance.currentMegin = instance.maxMegin;
         return instance;

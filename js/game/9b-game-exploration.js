@@ -1,5 +1,5 @@
 // =============================================================================
-// 9b-game-exploration.js - Wild Encounters and Battle Handling
+// 9b-game-exploration.js - Wild Encounters and Combat Handling
 // =============================================================================
 
 // Handle exploration
@@ -25,8 +25,8 @@ Game.prototype.explore = function() {
     }
 };
 
-// Start battle with wild Vasen
-Game.prototype.startBattle = function(enemyVasen) {
+// Start combat with wild Vasen
+Game.prototype.startCombat = function(enemyVasen) {
     // Stop showing explore tutorial when first combat starts
     if (!gameState.firstExploreTutorialShown) {
         gameState.firstExploreTutorialShown = true;
@@ -40,20 +40,20 @@ Game.prototype.startBattle = function(enemyVasen) {
     // Get player team (non-null party members)
     const playerTeam = gameState.party.filter(p => p !== null);
 
-    // Reset battle state for all
-    playerTeam.forEach(v => v.resetBattleState());
-    enemyVasen.resetBattleState();
+    // Reset combat state for all
+    playerTeam.forEach(v => v.resetCombatState());
+    enemyVasen.resetCombatState();
 
-    this.currentBattle = new Battle(playerTeam, [enemyVasen], BATTLE_TYPES.WILD);
-    this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
-    this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
-    this.currentBattle.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-    this.currentBattle.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
-    this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
-    this.currentBattle.onEnd = (result) => this.handleBattleEnd(result);
+    this.currentCombat = new Combat(playerTeam, [enemyVasen], COMBAT_TYPES.WILD);
+    this.currentCombat.onLog = (msg, type) => ui.addCombatLog(msg, type);
+    this.currentCombat.onUpdate = () => ui.renderCombat(this.currentCombat);
+    this.currentCombat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
+    this.currentCombat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
+    this.currentCombat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
+    this.currentCombat.onEnd = (result) => this.handleCombatEnd(result);
 
     ui.showCombatUI();
-    ui.renderCombat(this.currentBattle);
+    ui.renderCombat(this.currentCombat);
     ui.addCombatLog(`A wild ${enemyVasen.getDisplayName()} appears!`, 'encounter');
 };
 
@@ -121,18 +121,18 @@ Game.prototype.unlockTamingLoreEntries = function(newVasen) {
     }
 };
 
-// Handle battle end
-Game.prototype.handleBattleEnd = function(result) {
+// Handle combat end
+Game.prototype.handleCombatEnd = function(result) {
     if (result.surrendered) {
         // Apply surrender penalty
         gameState.party.forEach(v => {
             if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT));
+                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
             }
         });
 
         ui.addCombatLog('You call retreat. Your party withdraws.', 'system');
-        this.endBattle();
+        this.endCombat();
         return;
     }
 
@@ -140,21 +140,21 @@ Game.prototype.handleBattleEnd = function(result) {
         // Player lost
         gameState.party.forEach(v => {
             if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_BATTLE_HEAL_PERCENT));
+                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
             }
         });
 
         ui.showDialogue(
             'Defeat',
             `<p>${result.message || 'Your party was overwhelmed!'}</p>`,
-            [{ text: 'Continue', callback: () => this.endBattle() }],
+            [{ text: 'Continue', callback: () => this.endCombat() }],
             false
         );
         return;
     }
 
     // Victory!
-    const battleResult = {
+    const combatResult = {
         victory: true,
         tamed: result.tamed,
         tamedVasen: result.tamedVasen,
@@ -163,18 +163,18 @@ Game.prototype.handleBattleEnd = function(result) {
 
     // Calculate and apply experience
     const expYield = getExpYield(
-        this.currentBattle.enemyTeam[0].level,
-        this.currentBattle.enemyTeam[0].species.rarity
+        this.currentCombat.enemyTeam[0].level,
+        this.currentCombat.enemyTeam[0].species.rarity
     );
 
-    this.currentBattle.playerTeam.forEach((vasen, index) => {
+    this.currentCombat.playerTeam.forEach((vasen, index) => {
         if (vasen.isKnockedOut()) return;
 
         let expMultiplier = 0.6; // Base party exp (updated from 0.3)
-        if (vasen.battleFlags.turnsOnField > 0) {
+        if (vasen.combatFlags.turnsOnField > 0) {
             expMultiplier = 0.8; // Participated (updated from 0.6)
         }
-        if (index === this.currentBattle.playerActiveIndex) {
+        if (index === this.currentCombat.playerActiveIndex) {
             expMultiplier = 1.0; // Dealt killing blow
         }
 
@@ -185,7 +185,7 @@ Game.prototype.handleBattleEnd = function(result) {
 
         if (expAmount > 0) {
             const levelResult = vasen.addExperience(expAmount);
-            battleResult.expGained.push({
+            combatResult.expGained.push({
                 name: vasen.getDisplayName(),
                 amount: displayExpAmount, // Show 0 if at max level
                 leveledUp: levelResult.leveledUp,
@@ -225,7 +225,7 @@ if (result.tamed && result.tamedVasen) {
     newVasen.currentMegin = newVasen.maxMegin;
 
     // Reset attribute changes
-    newVasen.resetBattleState();
+    newVasen.resetCombatState();
 
     // Add to total collection
     gameState.vasenCollection.push(newVasen);
@@ -247,8 +247,8 @@ if (result.tamed && result.tamedVasen) {
     this.unlockTamingLoreEntries(newVasen);
 
     // Show a one-time guidance popup the first time the player successfully
-    // tames a väsen, once the battle result dialogue has been dismissed.
-    // Flagged here and shown in endBattle() so it appears after the normal
+    // tames a väsen, once the combat result dialogue has been dismissed.
+    // Flagged here and shown in endCombat() so it appears after the normal
     // Victory dialogue's "Continue" flow, mirroring the explore popups.
     if (!gameState.firstTameMessageShown) {
         gameState.firstTameMessageShown = true;
@@ -257,13 +257,13 @@ if (result.tamed && result.tamedVasen) {
     }
 }
 
-    // Apply post-battle heal
+    // Apply post-combat heal
     gameState.party.forEach(v => {
         if (v) {
-            v.healPercent(GAME_CONFIG.POST_BATTLE_HEAL_PERCENT);
+            v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
             v.currentMegin = v.maxMegin;
         }
     });
 
-    ui.showBattleResult(battleResult);
+    ui.showCombatResult(combatResult);
 };

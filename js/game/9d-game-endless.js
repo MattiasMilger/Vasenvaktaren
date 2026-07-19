@@ -39,11 +39,11 @@ Game.prototype.challengeEndlessTower = function() {
 // Start Endless Tower run
 Game.prototype.startEndlessTowerRun = function() {
     this.endlessTowerCurrentFloor = 1;
-    this.startEndlessTowerBattle();
+    this.startEndlessTowerCombat();
 };
 
-// Start an Endless Tower battle
-Game.prototype.startEndlessTowerBattle = function() {
+// Start an Endless Tower combat
+Game.prototype.startEndlessTowerCombat = function() {
     gameState.inCombat = true;
 
     const floor = this.endlessTowerCurrentFloor;
@@ -74,66 +74,66 @@ Game.prototype.startEndlessTowerBattle = function() {
     const playerTeam = gameState.party.filter(p => p !== null);
 
     if (floor === 1) {
-        // First floor - reset battle state and create new battle
-        playerTeam.forEach(v => v.resetBattleState());
-        enemyTeam.forEach(v => v.resetBattleState());
+        // First floor - reset combat state and create new combat
+        playerTeam.forEach(v => v.resetCombatState());
+        enemyTeam.forEach(v => v.resetCombatState());
 
-        this.currentBattle = new Battle(playerTeam, enemyTeam, BATTLE_TYPES.ENDLESS_TOWER);
-        this.currentBattle.currentFloor = floor;
-        this.currentBattle.isWildEncounter = false;
-        this.currentBattle.canTame = false;
-        this.currentBattle.isEndlessTower = true;
-        this.currentBattle.onLog = (msg, type) => ui.addCombatLog(msg, type);
-        this.currentBattle.onUpdate = () => ui.renderCombat(this.currentBattle);
-        this.currentBattle.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-        this.currentBattle.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
-        this.currentBattle.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentBattle, callback);
-        this.currentBattle.onEnd = (result) => this.handleEndlessTowerBattleEnd(result);
+        this.currentCombat = new Combat(playerTeam, enemyTeam, COMBAT_TYPES.ENDLESS_TOWER);
+        this.currentCombat.currentFloor = floor;
+        this.currentCombat.isWildEncounter = false;
+        this.currentCombat.canTame = false;
+        this.currentCombat.isEndlessTower = true;
+        this.currentCombat.onLog = (msg, type) => ui.addCombatLog(msg, type);
+        this.currentCombat.onUpdate = () => ui.renderCombat(this.currentCombat);
+        this.currentCombat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
+        this.currentCombat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
+        this.currentCombat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
+        this.currentCombat.onEnd = (result) => this.handleEndlessTowerCombatEnd(result);
 
         ui.showCombatUI();
-        ui.renderCombat(this.currentBattle);
+        ui.renderCombat(this.currentCombat);
 
-        // Add initial input delay at battle start
-        this.currentBattle.waitingForPlayerAction = false;
+        // Add initial input delay at combat start
+        this.currentCombat.waitingForPlayerAction = false;
         setTimeout(() => {
-            if (this.currentBattle && !this.currentBattle.isOver) {
-                this.currentBattle.waitingForPlayerAction = true;
-                ui.renderCombat(this.currentBattle);
+            if (this.currentCombat && !this.currentCombat.isOver) {
+                this.currentCombat.waitingForPlayerAction = true;
+                ui.renderCombat(this.currentCombat);
             }
-        }, GAME_CONFIG.BATTLE_INPUT_DELAY);
+        }, GAME_CONFIG.COMBAT_INPUT_DELAY);
     } else {
         // Subsequent floors - preserve player state, only reset enemy team
-        enemyTeam.forEach(v => v.resetBattleState());
+        enemyTeam.forEach(v => v.resetCombatState());
 
-        // Update the battle with the new enemy team
-        this.currentBattle.enemyTeam = enemyTeam;
-        this.currentBattle.setEnemyActive(0);
-        this.currentBattle.currentFloor = floor;
-        this.currentBattle.isOver = false;
-        this.currentBattle.winner = null;
-        this.currentBattle.waitingForPlayerAction = true;
+        // Update the combat with the new enemy team
+        this.currentCombat.enemyTeam = enemyTeam;
+        this.currentCombat.setEnemyActive(0);
+        this.currentCombat.currentFloor = floor;
+        this.currentCombat.isOver = false;
+        this.currentCombat.winner = null;
+        this.currentCombat.waitingForPlayerAction = true;
 
         // If the previously active player Väsen was knocked out in the last floor
         // (simultaneous KO scenario), auto-swap to the first alive team member.
-        if (this.currentBattle.playerActive && this.currentBattle.playerActive.isKnockedOut()) {
-            const firstAliveIndex = this.currentBattle.playerTeam.findIndex(v => !v.isKnockedOut());
+        if (this.currentCombat.playerActive && this.currentCombat.playerActive.isKnockedOut()) {
+            const firstAliveIndex = this.currentCombat.playerTeam.findIndex(v => !v.isKnockedOut());
             if (firstAliveIndex !== -1) {
-                this.currentBattle.setPlayerActive(firstAliveIndex, false);
+                this.currentCombat.setPlayerActive(firstAliveIndex, false);
             }
         }
 
-        // Reset per-floor battle state
-        this.currentBattle.giftsGiven = 0;
-        this.currentBattle.correctItemGiven = false;
-        this.currentBattle.enemyTeamFreyasTears = 0;
-        this.currentBattle.enemyInitialBonusUsed = new Set();
-        this.currentBattle.enemyUtilityUsage = new Map();
+        // Reset per-floor combat state
+        this.currentCombat.giftsGiven = 0;
+        this.currentCombat.correctItemGiven = false;
+        this.currentCombat.enemyTeamFreyasTears = 0;
+        this.currentCombat.enemyInitialBonusUsed = new Set();
+        this.currentCombat.enemyUtilityUsage = new Map();
 
-        ui.renderCombat(this.currentBattle);
+        ui.renderCombat(this.currentCombat);
 
-        // Resume auto battle if it was active
-        if (this.currentBattle.isAutoBattle) {
-            this.autoBattleTick();
+        // Resume auto combat if it was active
+        if (this.currentCombat.isAutoCombat) {
+            this.autoCombatTick();
         }
     }
 
@@ -147,7 +147,7 @@ Game.prototype.startEndlessTowerBattle = function() {
 
 // Apply Idunn's Apples effect to all alive party members.
 // Heals by a percentage of max health, cleanses up to N negative attribute stages
-// per attribute, and resets all once-per-battle passive and rune flags.
+// per attribute, and resets all once-per-combat passive and rune flags.
 Game.prototype.applyIdunnApples = function() {
     const healPercent  = GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT;
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
@@ -183,21 +183,21 @@ Game.prototype.applyIdunnApples = function() {
             );
         }
 
-        // Reset once-per-battle passive and rune flags
-        v.resetOncePerBattleFlags();
+        // Reset once-per-combat passive and rune flags
+        v.resetOncePerCombatFlags();
     });
 
-    // Also reset the battle-level initial bonus tracking so utility skills
+    // Also reset the combat-level initial bonus tracking so utility skills
     // can trigger their initial bonus again in the next floor.
-    if (this.currentBattle) {
-        this.currentBattle.playerInitialBonusUsed = new Set();
+    if (this.currentCombat) {
+        this.currentCombat.playerInitialBonusUsed = new Set();
     }
 
     ui.addCombatLog(`<span style="color: var(--color-positive-soft); font-weight: 700;">Passives and runes have been renewed.</span>`, 'heal');
 };
 
-// Handle Endless Tower battle end
-Game.prototype.handleEndlessTowerBattleEnd = function(result) {
+// Handle Endless Tower combat end
+Game.prototype.handleEndlessTowerCombatEnd = function(result) {
     const floor = this.endlessTowerCurrentFloor;
 
     // Handle surrender
@@ -312,7 +312,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
                 v.currentHealth = Math.min(v.maxHealth, v.currentHealth + healthHeal);
                 v.currentMegin  = Math.min(v.maxMegin,  v.currentMegin  + meginHeal);
 
-                if (ui.verboseBattleLog) {
+                if (ui.verboseCombatLog) {
                     const actualHealthGained = v.currentHealth - beforeHealth;
                     const actualMeginGained  = v.currentMegin - beforeMegin;
                     const displayName = v.getDisplayName();
@@ -332,7 +332,7 @@ Game.prototype.handleEndlessTowerBattleEnd = function(result) {
 
         // Small delay before next floor for readskill
         setTimeout(() => {
-            this.startEndlessTowerBattle();
+            this.startEndlessTowerCombat();
         }, 1500);
     } else {
         // Player lost - entire team was defeated

@@ -4,13 +4,13 @@
 
 // Handle skill use
 Game.prototype.handleSkillUse = function(skillName) {
-    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
+    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
 
     // Check if skill requires ally targeting
     if (skillRequiresAllyTarget(skillName)) {
-        ui.showAllySelectionModal(this.currentBattle, skillName, (allyIndex) => {
+        ui.showAllySelectionModal(this.currentCombat, skillName, (allyIndex) => {
             // Execute the skill on the selected ally
-            this.currentBattle.executePlayerAction({
+            this.currentCombat.executePlayerAction({
                 type: 'skill',
                 skillName: skillName,
                 targetAllyIndex: allyIndex
@@ -19,19 +19,19 @@ Game.prototype.handleSkillUse = function(skillName) {
         return;
     }
 
-    this.currentBattle.executePlayerAction({ type: 'skill', skillName });
+    this.currentCombat.executePlayerAction({ type: 'skill', skillName });
 };
 
 // Handle swap
 Game.prototype.handleSwap = function(targetIndex) {
-    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-    this.currentBattle.executePlayerAction({ type: 'swap', targetIndex });
+    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
+    this.currentCombat.executePlayerAction({ type: 'swap', targetIndex });
 };
 
 // Handle offer item
 Game.prototype.handleOfferItem = function(itemId) {
-    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-    if (!this.currentBattle.isWildEncounter) return;
+    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
+    if (!this.currentCombat.isWildEncounter) return;
 
     // Use item from inventory
     if (!gameState.removeItem(itemId, 1)) {
@@ -40,7 +40,7 @@ Game.prototype.handleOfferItem = function(itemId) {
     }
 
     // Mark tutorial as shown when player offers an item; also unlock offering-type lore entries
-    if (!gameState.firstCombatTutorialShown && this.currentBattle.isWildEncounter) {
+    if (!gameState.firstCombatTutorialShown && this.currentCombat.isWildEncounter) {
         gameState.firstCombatTutorialShown = true;
         LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'offering').forEach(k => {
             if (!gameState.unlockedLoreEntries.has(k)) {
@@ -51,13 +51,13 @@ Game.prototype.handleOfferItem = function(itemId) {
         gameState.saveGame();
     }
 
-    this.currentBattle.executePlayerAction({ type: 'offer', itemId });
+    this.currentCombat.executePlayerAction({ type: 'offer', itemId });
 };
 
 // Handle Interrogate confirmation
 Game.prototype.handleInterrogate = function() {
-    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-    if (!this.currentBattle.isWildEncounter) return;
+    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
+    if (!this.currentCombat.isWildEncounter) return;
 
     // Show the confirmation dialog
     ui.showDialogue(
@@ -70,18 +70,18 @@ Game.prototype.handleInterrogate = function() {
                 callback: () => {
                     // Capture current names for the dialogue
                     const player = gameState.playerName || "Väktare";
-                    const enemy = this.currentBattle.enemyActive;
+                    const enemy = this.currentCombat.enemyActive;
                     const enemyName = enemy.getDisplayName();
                     const itemName = enemy.species.tamingItem;
 
                     // Trigger tutorial by resetting the flag when asking about item
-                    if (this.currentBattle.isWildEncounter) {
+                    if (this.currentCombat.isWildEncounter) {
                         gameState.firstCombatTutorialShown = false;
                         gameState.saveGame();
                     }
 
                     // Execute the action with pre-formatted names so the UI can bold them
-                    this.currentBattle.executePlayerAction({ 
+                    this.currentCombat.executePlayerAction({ 
                         type: 'interrogate',
                         playerLine: `${player}: Tell me ${enemyName}, what is it that you desire the most?`,
                         enemyLine: `${enemyName}: If you must know, ${itemName} is what I desire most.`
@@ -99,13 +99,13 @@ Game.prototype.handleInterrogate = function() {
 
 // Handle pass
 Game.prototype.handlePass = function() {
-    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-    this.currentBattle.executePlayerAction({ type: 'pass' });
+    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
+    this.currentCombat.executePlayerAction({ type: 'pass' });
 };
 
 // Handle surrender
 Game.prototype.handleSurrender = function() {
-    if (!this.currentBattle) return;
+    if (!this.currentCombat) return;
 
     ui.showDialogue(
         'Surrender?',
@@ -115,7 +115,7 @@ Game.prototype.handleSurrender = function() {
                 text: 'Surrender',
                 class: 'btn-danger',
                 callback: () => {
-                    this.currentBattle.executePlayerAction({ type: 'surrender' });
+                    this.currentCombat.executePlayerAction({ type: 'surrender' });
                 }
             },
             {
@@ -129,31 +129,31 @@ Game.prototype.handleSurrender = function() {
 
 // Show offer modal
 Game.prototype.showOfferModal = function() {
-    if (!this.currentBattle || !this.currentBattle.waitingForPlayerAction) return;
-    if (!this.currentBattle.isWildEncounter) return;
-    ui.showOfferModal(this.currentBattle);
+    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
+    if (!this.currentCombat.isWildEncounter) return;
+    ui.showOfferModal(this.currentCombat);
 };
 
-// Handle auto battle
-Game.prototype.handleAutoBattle = function() {
-    if (!this.currentBattle) return;
+// Handle auto combat
+Game.prototype.handleAutoCombat = function() {
+    if (!this.currentCombat) return;
 
     // If already auto battling, cancel it
-    if (this.currentBattle.isAutoBattle) {
-        this.currentBattle.isAutoBattle = false;
-        if (this.currentBattle.onUpdate) this.currentBattle.onUpdate();
+    if (this.currentCombat.isAutoCombat) {
+        this.currentCombat.isAutoCombat = false;
+        if (this.currentCombat.onUpdate) this.currentCombat.onUpdate();
         return;
     }
 
     ui.showDialogue(
-        'Auto Battle',
-        '<p>Let the AI fight for you? The battle will play out automatically using the same AI as the enemy.</p>',
+        'Auto Combat',
+        '<p>Let the AI fight for you? The combat will play out automatically using the same AI as the enemy.</p>',
         [
             {
-                text: 'Start Auto Battle',
+                text: 'Start Auto Combat',
                 class: 'btn-primary',
                 callback: () => {
-                    this.startAutoBattle();
+                    this.startAutoCombat();
                 }
             },
             {
@@ -165,25 +165,25 @@ Game.prototype.handleAutoBattle = function() {
     );
 };
 
-// Start auto battle loop
-Game.prototype.startAutoBattle = function() {
-    const battle = this.currentBattle;
-    if (!battle || battle.isOver) return;
+// Start auto combat loop
+Game.prototype.startAutoCombat = function() {
+    const combat = this.currentCombat;
+    if (!combat || combat.isOver) return;
 
-    battle.isAutoBattle = true;
-    battle.playerAutoUtilityUsage = new Map();
+    combat.isAutoCombat = true;
+    combat.playerAutoUtilityUsage = new Map();
 
-    // Override knockout swap to auto-select during auto battle
-    const originalOnKnockoutSwap = battle.onKnockoutSwap;
-    battle.onKnockoutSwap = (callback) => {
-        if (!battle.isAutoBattle) {
+    // Override knockout swap to auto-select during auto combat
+    const originalOnKnockoutSwap = combat.onKnockoutSwap;
+    combat.onKnockoutSwap = (callback) => {
+        if (!combat.isAutoCombat) {
             originalOnKnockoutSwap(callback);
             return;
         }
         // Auto-select best swap target using AI logic
-        const aliveTeam = battle.playerTeam
+        const aliveTeam = combat.playerTeam
             .map((v, i) => ({ vasen: v, index: i }))
-            .filter(({ vasen, index }) => !vasen.isKnockedOut() && index !== battle.playerActiveIndex);
+            .filter(({ vasen, index }) => !vasen.isKnockedOut() && index !== combat.playerActiveIndex);
 
         if (aliveTeam.length > 0) {
             // Pick the team member with best element matchup against enemy
@@ -192,7 +192,7 @@ Game.prototype.startAutoBattle = function() {
 
             aliveTeam.forEach(({ vasen, index }) => {
                 let score = vasen.currentHealth / vasen.maxHealth * 50;
-                const matchup = getMatchupType(vasen.species.element, battle.enemyActive.species.element);
+                const matchup = getMatchupType(vasen.species.element, combat.enemyActive.species.element);
                 if (matchup === 'POTENT') score += 30;
                 else if (matchup === 'WEAK') score -= 20;
                 if (score > bestScore) {
@@ -205,76 +205,76 @@ Game.prototype.startAutoBattle = function() {
         }
     };
 
-    // Update UI to show auto battle is active
-    if (battle.onUpdate) battle.onUpdate();
+    // Update UI to show auto combat is active
+    if (combat.onUpdate) combat.onUpdate();
 
-    this.autoBattleTick();
+    this.autoCombatTick();
 };
 
-// Single auto battle tick
-Game.prototype.autoBattleTick = function() {
-    const battle = this.currentBattle;
-    if (!battle || battle.isOver || !battle.isAutoBattle) return;
+// Single auto combat tick
+Game.prototype.autoCombatTick = function() {
+    const combat = this.currentCombat;
+    if (!combat || combat.isOver || !combat.isAutoCombat) return;
 
     // Wait for player action to be enabled
-    if (!battle.waitingForPlayerAction) {
-        setTimeout(() => this.autoBattleTick(), 200);
+    if (!combat.waitingForPlayerAction) {
+        setTimeout(() => this.autoCombatTick(), 200);
         return;
     }
 
     // Use AI to choose player's action
-    const action = this.getAutoBattleAction();
+    const action = this.getAutoCombatAction();
     if (!action) return;
 
     // Track utility usage for the player auto AI
     if (action.type === 'skill') {
         const skill = ABILITIES[action.skillName];
-        if (skill && skill.type === ATTACK_TYPES.UTILITY && battle.playerAutoUtilityUsage) {
-            const key = `auto-${battle.playerActive.id}-${action.skillName}`;
-            const count = battle.playerAutoUtilityUsage.get(key) || 0;
-            battle.playerAutoUtilityUsage.set(key, count + 1);
+        if (skill && skill.type === ATTACK_TYPES.UTILITY && combat.playerAutoUtilityUsage) {
+            const key = `auto-${combat.playerActive.id}-${action.skillName}`;
+            const count = combat.playerAutoUtilityUsage.get(key) || 0;
+            combat.playerAutoUtilityUsage.set(key, count + 1);
         }
     }
 
-    battle.executePlayerAction(action);
+    combat.executePlayerAction(action);
 
-    // Schedule next tick after the battle input delay
+    // Schedule next tick after the combat input delay
     setTimeout(() => {
-        if (battle.isOver || !battle.isAutoBattle) return;
-        this.autoBattleTick();
-    }, GAME_CONFIG.BATTLE_INPUT_DELAY + 200);
+        if (combat.isOver || !combat.isAutoCombat) return;
+        this.autoCombatTick();
+    }, GAME_CONFIG.COMBAT_INPUT_DELAY + 200);
 };
 
 // Get AI-chosen action for the player
-Game.prototype.getAutoBattleAction = function() {
-    const battle = this.currentBattle;
-    if (!battle) return null;
+Game.prototype.getAutoCombatAction = function() {
+    const combat = this.currentCombat;
+    if (!combat) return null;
 
-    // Create a mirrored battle view so the AI thinks it's playing from the player's side
-    const mirroredBattle = {
-        enemyActive: battle.playerActive,
-        playerActive: battle.enemyActive,
-        enemyTeam: battle.playerTeam,
-        playerTeam: battle.enemyTeam,
-        enemyActiveIndex: battle.playerActiveIndex,
-        playerActiveIndex: battle.enemyActiveIndex,
-        isWildEncounter: battle.isWildEncounter,
+    // Create a mirrored combat view so the AI thinks it's playing from the player's side
+    const mirroredCombat = {
+        enemyActive: combat.playerActive,
+        playerActive: combat.enemyActive,
+        enemyTeam: combat.playerTeam,
+        playerTeam: combat.enemyTeam,
+        enemyActiveIndex: combat.playerActiveIndex,
+        playerActiveIndex: combat.enemyActiveIndex,
+        isWildEncounter: combat.isWildEncounter,
         getEnemyUtilityUsageCount: (vasen, skillName) => {
             // Track player-side utility usage with a separate key prefix
             const key = `auto-${vasen.id}-${skillName}`;
-            return battle.playerAutoUtilityUsage ? (battle.playerAutoUtilityUsage.get(key) || 0) : 0;
+            return combat.playerAutoUtilityUsage ? (combat.playerAutoUtilityUsage.get(key) || 0) : 0;
         }
     };
 
     // Use guardian-level AI (smarter) for the player
-    const ai = new EnemyAI(mirroredBattle, true);
+    const ai = new EnemyAI(mirroredCombat, true);
     const aiAction = ai.chooseAction();
 
     // Map AI action back to a player action
     if (aiAction.type === 'skill') {
         return { type: 'skill', skillName: aiAction.skill };
     } else if (aiAction.type === 'swap') {
-        const targetIndex = battle.playerTeam.indexOf(aiAction.target);
+        const targetIndex = combat.playerTeam.indexOf(aiAction.target);
         if (targetIndex !== -1) {
             return { type: 'swap', targetIndex: targetIndex };
         }
