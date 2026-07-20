@@ -118,17 +118,17 @@ const TAMING_ITEMS = {
     // Rå (Warden)
     'Mine Lantern': {
         name: 'Mine Lantern',
-        description: 'A sturdy mine lantern. The light might please the beautiful mine warden.',
+        description: 'A sturdy mine lantern. The light might please a veiled mine warden.',
         tamingTarget: 'Gruvra'
     },
     'Shed Antlers': {
         name: 'Shed Antlers',
-        description: 'A set of shed antlers. They whisper of the deep woods and the alluring forest warden.',
+        description: 'A set of shed antlers. They whisper of the deep woods and an alluring forest warden.',
         tamingTarget: 'Skogsra'
     },
     'Waterlogged Violin': {
         name: 'Waterlogged Violin',
-        description: 'A waterlogged violin. Its silent strings recall the melancholic, luring music of the river warden.',
+        description: 'A waterlogged violin. Its silent strings recall the melancholic, luring music of a river warden.',
         tamingTarget: 'Nacken'
     },
     'Heavy Pillow': {
@@ -150,12 +150,12 @@ const TAMING_ITEMS = {
     },
     'Morning Dew': {
         name: 'Morning Dew',
-        description: 'A jar containing shimmering morning dew. This ethereal substance attracts the tiny mist elf that haunts the water\'s edge.',
+        description: 'A jar containing shimmering morning dew. This ethereal substance attracts a tiny mist elf that haunts the water\'s edge.',
         tamingTarget: 'Dimalva'
     },
     'Shiny Trinket': {
         name: 'Shiny Trinket',
-        description: 'A small, intricately carved shiny trinket. Its metallic sheen hints that it was crafted by masterful underground elf.',
+        description: 'A small, intricately carved shiny trinket. Its metallic sheen hints that it was crafted by an underground elf.',
         tamingTarget: 'Svartalv'
     },
     'Anvil Shard': {
@@ -172,7 +172,7 @@ const TAMING_ITEMS = {
     // Ande (Spirit)
     'Elderflower Sprig': {
         name: 'Elderflower Sprig',
-        description: 'A fragrant elderflower sprig. Its scent is protective, a necessary offering for the fierce elder tree spirit.',
+        description: 'A fragrant elderflower sprig. Its scent is protective, a necessary offering for a fierce elder tree spirit.',
         tamingTarget: 'Hyllemor'
     },
     'Valhallan Pork': {

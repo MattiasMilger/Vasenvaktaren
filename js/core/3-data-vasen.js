@@ -7,7 +7,7 @@ const VASEN_SPECIES = {
     'Svartalv': {
         name: 'Svartalv',
         internalName: 'Svartalv',
-        description: 'A masterful subterranean elven artisan from Nidavellir who seeks rare materials and crafts magical reality-bending artifacts.',
+        description: 'A subterranean elven artisan from Nidavellir who seeks rare materials and crafts magical reality-bending artifacts.',
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
@@ -108,7 +108,7 @@ const VASEN_SPECIES = {
     'Valkyria': {
         name: 'Valkyria',
         internalName: 'Valkyria',
-        description: 'A formidable winged battle spirit who rides above the battlefield, choosing the bravest fallen warriors and guiding them to Valhalla.',
+        description: 'A winged battle spirit who rides above the battlefield, choosing the bravest fallen warriors and guiding them to Valhalla.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -200,7 +200,7 @@ const VASEN_SPECIES = {
     'Jarnvidja': {
         name: 'Järnvidja',
         internalName: 'Jarnvidja',
-        description: 'A grim iron wood giantess who breeds the wolves of chaos, guarding ancient thickets with relentless strength and fierce determination.',
+        description: 'An iron wood giantess who breeds the wolves of chaos, guarding ancient thickets with relentless strength and fierce determination.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -211,7 +211,7 @@ const VASEN_SPECIES = {
     'Rimturs': {
         name: 'Rimturs',
         internalName: 'Rimturs',
-        description: 'A legendary frost giant born from the bitter ice of Niflheim, dwelling among cold and mist while remaining hostile to life and warmth.',
+        description: 'A primeval frost giant born from the bitter ice of Niflheim, dwelling among cold and mist while remaining hostile to life and warmth.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
@@ -257,7 +257,7 @@ const VASEN_SPECIES = {
     'Bjara': {
         name: 'Bjära',
         internalName: 'Bjara',
-        description: 'A supernatural beast-like hare familiar, stealing milk from nearby farms and carrying every drop back to a chosen master.',
+        description: 'A supernatural beast-like hare, stealing milk from nearby farms and carrying every drop back to a chosen master.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -292,7 +292,7 @@ const VASEN_SPECIES = {
     'Landvatte': {
         name: 'Landvätte',
         internalName: 'Landvatte',
-        description: 'A hidden prankish protector of the land bound to the soil itself, ensuring prosperity but answering neglect with irritating tricks.',
+        description: 'A prank-loving protector of the land bound to the soil itself, ensuring prosperity but answering neglect with irritating tricks.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Hustomte': {
         name: 'Hustomte',
         internalName: 'Hustomte',
-        description: 'A watchful prankish steward who keeps the home safe and warm, despising laziness and carelessness, and answering with wicked mischief.',
+        description: 'A watchful prank-loving steward who keeps the home safe and warm, despising laziness and carelessness, and answering with wicked mischief.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
@@ -314,7 +314,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A prankish custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
+        description: 'A prank-loving custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -325,7 +325,7 @@ const VASEN_SPECIES = {
     'Brunnsgubbe': {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
-        description: 'A prankish well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
+        description: 'A prank-loving well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
@@ -336,7 +336,7 @@ const VASEN_SPECIES = {
     'Pyssling': {
         name: 'Pyssling',
         internalName: 'Pyssling',
-        description: 'A prankish lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
+        description: 'A prank-loving lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
@@ -349,7 +349,7 @@ const VASEN_SPECIES = {
     'Gruvra': {
         name: 'Gruvrå',
         internalName: 'Gruvra',
-        description: 'A beautiful, veiled mine warden who guards rich veins of ore within the mountain, where tunnels collapse if sacred passages are defiled.',
+        description: 'A veiled mine warden who guards rich veins of ore within the mountain, where tunnels collapse if sacred passages are defiled.',
         family: FAMILIES.RA,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
