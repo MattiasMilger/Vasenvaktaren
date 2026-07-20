@@ -468,7 +468,7 @@ UIController.prototype.renderActionButtons = function(combat) {
 
         const btn = document.createElement('button');
         btn.className = `skill-btn element-${skillElement.toLowerCase()} ${canUse ? '' : 'disabled'} ${potencyClass}`;
-        btn.disabled = !canUse || !combat.waitingForPlayerAction || combat.isAutoCombat;
+        btn.disabled = !canUse || !combat.waitingForPlayerAction || combat.isAutoBattle;
         btn.innerHTML = `
             <span class="skill-btn-name">${skill.name}</span>
             <span class="skill-btn-type">${skill.type}</span>
@@ -487,12 +487,12 @@ UIController.prototype.renderActionButtons = function(combat) {
 
     // Update other action buttons
     document.getElementById('btn-swap').disabled =
-        !combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoCombat;
+        !combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoBattle;
 
     const offerBtn = document.getElementById('btn-offer');
     offerBtn.disabled =
         !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
-        combat.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || combat.correctItemGiven || combat.isAutoCombat;
+        combat.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || combat.correctItemGiven || combat.isAutoBattle;
 
     // First combat tutorial - blink Offer Item button if player has matching item
     if (!gameState.firstCombatTutorialShown && combat.isWildEncounter && !offerBtn.disabled) {
@@ -511,25 +511,25 @@ UIController.prototype.renderActionButtons = function(combat) {
 
     document.getElementById('btn-interrogate').disabled =
         !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
-        activeVasen.combatFlags.hasSwapSickness || combat.isAutoCombat;
-    document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoCombat;
-    document.getElementById('btn-surrender').disabled = combat.isAutoCombat;
+        activeVasen.combatFlags.hasSwapSickness || combat.isAutoBattle;
+    document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoBattle;
+    document.getElementById('btn-surrender').disabled = combat.isAutoBattle;
 
-    // Auto Combat button
-    const autoCombatBtn = document.getElementById('btn-auto-combat');
-    if (combat.isAutoCombat) {
-        autoCombatBtn.textContent = 'Cancel Auto Combat';
-        autoCombatBtn.disabled = false;
-        autoCombatBtn.classList.add('auto-combat-active');
+    // Auto Battle button
+    const autoBattleBtn = document.getElementById('btn-auto-combat');
+    if (combat.isAutoBattle) {
+        autoBattleBtn.textContent = 'Cancel Auto Battle';
+        autoBattleBtn.disabled = false;
+        autoBattleBtn.classList.add('auto-combat-active');
     } else {
-        autoCombatBtn.textContent = 'Auto Combat';
-        autoCombatBtn.disabled = false;
-        autoCombatBtn.classList.remove('auto-combat-active');
+        autoBattleBtn.textContent = 'Auto Battle';
+        autoBattleBtn.disabled = false;
+        autoBattleBtn.classList.remove('auto-combat-active');
     }
 
     // Swap button opens the modal
     document.getElementById('btn-swap').onclick = () => {
-        if (!combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoCombat) return;
+        if (!combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoBattle) return;
         this.renderSwapOptions(combat);
     };
 };

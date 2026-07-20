@@ -131,9 +131,9 @@ Game.prototype.startEndlessTowerCombat = function() {
 
         ui.renderCombat(this.currentCombat);
 
-        // Resume auto combat if it was active
-        if (this.currentCombat.isAutoCombat) {
-            this.autoCombatTick();
+        // Resume auto battle if it was active
+        if (this.currentCombat.isAutoBattle) {
+            this.autoBattleTick();
         }
     }
 

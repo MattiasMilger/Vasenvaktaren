@@ -134,26 +134,26 @@ Game.prototype.showOfferModal = function() {
     ui.showOfferModal(this.currentCombat);
 };
 
-// Handle auto combat
-Game.prototype.handleAutoCombat = function() {
+// Handle auto battle
+Game.prototype.handleAutoBattle = function() {
     if (!this.currentCombat) return;
 
     // If already auto battling, cancel it
-    if (this.currentCombat.isAutoCombat) {
-        this.currentCombat.isAutoCombat = false;
+    if (this.currentCombat.isAutoBattle) {
+        this.currentCombat.isAutoBattle = false;
         if (this.currentCombat.onUpdate) this.currentCombat.onUpdate();
         return;
     }
 
     ui.showDialogue(
-        'Auto Combat',
+        'Auto Battle',
         '<p>Let the AI fight for you? The combat will play out automatically using the same AI as the enemy.</p>',
         [
             {
-                text: 'Start Auto Combat',
+                text: 'Start Auto Battle',
                 class: 'btn-primary',
                 callback: () => {
-                    this.startAutoCombat();
+                    this.startAutoBattle();
                 }
             },
             {
@@ -165,18 +165,18 @@ Game.prototype.handleAutoCombat = function() {
     );
 };
 
-// Start auto combat loop
-Game.prototype.startAutoCombat = function() {
+// Start auto battle loop
+Game.prototype.startAutoBattle = function() {
     const combat = this.currentCombat;
     if (!combat || combat.isOver) return;
 
-    combat.isAutoCombat = true;
+    combat.isAutoBattle = true;
     combat.playerAutoUtilityUsage = new Map();
 
-    // Override knockout swap to auto-select during auto combat
+    // Override knockout swap to auto-select during auto battle
     const originalOnKnockoutSwap = combat.onKnockoutSwap;
     combat.onKnockoutSwap = (callback) => {
-        if (!combat.isAutoCombat) {
+        if (!combat.isAutoBattle) {
             originalOnKnockoutSwap(callback);
             return;
         }
@@ -205,25 +205,25 @@ Game.prototype.startAutoCombat = function() {
         }
     };
 
-    // Update UI to show auto combat is active
+    // Update UI to show auto battle is active
     if (combat.onUpdate) combat.onUpdate();
 
-    this.autoCombatTick();
+    this.autoBattleTick();
 };
 
-// Single auto combat tick
-Game.prototype.autoCombatTick = function() {
+// Single auto battle tick
+Game.prototype.autoBattleTick = function() {
     const combat = this.currentCombat;
-    if (!combat || combat.isOver || !combat.isAutoCombat) return;
+    if (!combat || combat.isOver || !combat.isAutoBattle) return;
 
     // Wait for player action to be enabled
     if (!combat.waitingForPlayerAction) {
-        setTimeout(() => this.autoCombatTick(), 200);
+        setTimeout(() => this.autoBattleTick(), 200);
         return;
     }
 
     // Use AI to choose player's action
-    const action = this.getAutoCombatAction();
+    const action = this.getAutoBattleAction();
     if (!action) return;
 
     // Track utility usage for the player auto AI
@@ -240,13 +240,13 @@ Game.prototype.autoCombatTick = function() {
 
     // Schedule next tick after the combat input delay
     setTimeout(() => {
-        if (combat.isOver || !combat.isAutoCombat) return;
-        this.autoCombatTick();
+        if (combat.isOver || !combat.isAutoBattle) return;
+        this.autoBattleTick();
     }, GAME_CONFIG.COMBAT_INPUT_DELAY + 200);
 };
 
 // Get AI-chosen action for the player
-Game.prototype.getAutoCombatAction = function() {
+Game.prototype.getAutoBattleAction = function() {
     const combat = this.currentCombat;
     if (!combat) return null;
 

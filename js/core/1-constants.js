@@ -33,8 +33,8 @@ const GAME_CONFIG = {
     
     // Experience percentages awarded based on participation level
     EXP_KILLING_BLOW: 1.0,              // Full exp share - dealt the final blow that knocked out the enemy
-    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the combatfield
-    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the combatfield
+    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the battlefield
+    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the battlefield
     
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
@@ -181,7 +181,7 @@ const GAME_CONFIG = {
     // Bind Runes
     // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per combat)
     // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
-    // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the combatfield
+    // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the battlefield
     RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES: 1,           // Stages the random enemy attribute is lowered by
     // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
     RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
@@ -248,7 +248,7 @@ const GAME_CONFIG = {
 
 // Family Passive Configuration
 const FAMILY_PASSIVE_CONFIG = {
-    // Ande: Ethereal Surge - raises x random attributes by y stages when entering combatfield
+    // Ande: Ethereal Surge - raises x random attributes by y stages when entering battlefield
     ANDE_ATTRIBUTE_STAGES: 1,
     ANDE_ATTRIBUTE_TIMES: 2,
     
@@ -445,7 +445,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ANDE]: {
         name: 'Ethereal Surge',
         get description() {
-            return `When this väsen enters the combatfield, it raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per combat).`; 
+            return `When this väsen enters the battlefield, it raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per combat).`; 
         }
     },
     [FAMILIES.DRAKE]: {
@@ -463,7 +463,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.ODJUR]: {
         name: 'Bestial Rage',
         get description() {
-            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the combatfield, its strength is raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and wisdom lowered by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per combat).`;
+            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the battlefield, its strength is raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and wisdom lowered by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per combat).`;
         }
     },
     [FAMILIES.RA]: {
@@ -646,7 +646,7 @@ const ZONES = {
     VARLDENS_ANDE: {
         id: 'varldens_ande',
         name: 'Världens Ände',
-        description: 'The desolate, foreboding threshold of reality. This land is a cursed combatfield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
+        description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
         image: 'assets/zones/varldensande.png',
         levelRange: [25, 29],
         spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg', 'Draug', 'Fylgja'],

@@ -108,7 +108,7 @@ const VASEN_SPECIES = {
     'Valkyria': {
         name: 'Valkyria',
         internalName: 'Valkyria',
-        description: 'A formidable winged combat judge who rides above the combatfield, choosing the bravest fallen warriors and guiding them to Valhalla.',
+        description: 'A formidable winged combat judge who rides above the battlefield, choosing the bravest fallen warriors and guiding them to Valhalla.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,

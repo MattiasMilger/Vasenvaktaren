@@ -59,7 +59,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Interrogate** | Learn what item the Väsen wants |
 | **Pass** | Skip your turn |
 | **Surrender** | Exit combat (reduces party to 5% health) |
-| **Auto Combat** | Let AI take control |
+| **Auto Battle** | Let AI take control |
 
 ### Party Management
 

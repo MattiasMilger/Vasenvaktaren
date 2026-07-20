@@ -245,7 +245,7 @@ const RUNES = {
         fullName: 'Dagaz',
         flavor: 'The clarifying, explosive power of the new dawn. The wielder\'s entry into combat marks a potent transition, granting a momentary burst of supreme destructive potential.',
         get effect() {
-            return `This väsen deals ${Math.round(GAME_CONFIG.RUNE_DAGAZ_DAMAGE_BOOST * 100)}% more damage for the first round after entering the combatfield`;
+            return `This väsen deals ${Math.round(GAME_CONFIG.RUNE_DAGAZ_DAMAGE_BOOST * 100)}% more damage for the first round after entering the battlefield`;
         },
         mechanic: { type: 'first_round_damage_bonus', value: 0.20 }
     },
@@ -497,15 +497,15 @@ const BIND_RUNES = [
 
     // ── INGUZ + DAGAZ ─────────────────────────────────────────────────────────
     // Lowers a random enemy attribute by a stage whenever this väsen enters
-    // the combatfield - both at combat start and on every swap-in, matching
-    // the same "entering the combatfield" trigger Dagaz's own first-round
+    // the battlefield - both at combat start and on every swap-in, matching
+    // the same "entering the battlefield" trigger Dagaz's own first-round
     // damage bonus uses. Can be blocked by the enemy's Wynja rune, same as
     // Inguz's own hit-based debuff.
     {
         runes: ['INGUZ', 'DAGAZ'],
-        type: 'enter_combatfield_debuff',
+        type: 'enter_battlefield_debuff',
         get effectText() {
-            return `This väsen lowers a random enemy attribute by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} stage when entering the combatfield`;
+            return `This väsen lowers a random enemy attribute by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} stage when entering the battlefield`;
         },
         symbols: `${RUNES.INGUZ.symbol}${RUNES.DAGAZ.symbol}`,
         names: `${RUNES.INGUZ.name} ${RUNES.DAGAZ.name}`
@@ -607,9 +607,9 @@ function hasMannazTeamHealBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'mannaz_team_heal');
 }
 
-// Returns true if the väsen has the INGUZ + DAGAZ enter_combatfield_debuff bind rune active.
-function hasEnterCombatfieldDebuffBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'enter_combatfield_debuff');
+// Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bind rune active.
+function hasEnterBattlefieldDebuffBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'enter_battlefield_debuff');
 }
 
 // Returns true if the väsen has the JERA + ODAL low_cost_random_buff bind rune active.
@@ -705,7 +705,7 @@ function getBindRuneEligibleRunes(vasen) {
             case 'mannaz_team_heal': // GIFU + MANNAZ
                 viable = hasUtilitySkill;
                 break;
-            case 'enter_combatfield_debuff': // INGUZ + DAGAZ
+            case 'enter_battlefield_debuff': // INGUZ + DAGAZ
                 viable = true;
                 break;
             case 'low_cost_random_buff': // JERA + ODAL

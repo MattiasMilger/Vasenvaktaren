@@ -70,8 +70,8 @@ class Combat {
 
         // Defer initial passives to allow UI to set up loggers
         setTimeout(() => {
-            this.applyFamilyPassive('onEnterCombatfield', { vasen: this.playerActive, isPlayer: true });
-            this.applyFamilyPassive('onEnterCombatfield', { vasen: this.enemyActive, isPlayer: false });
+            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.playerActive, isPlayer: true });
+            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.enemyActive, isPlayer: false });
             if (this.onUpdate) this.onUpdate();
         }, 50);
     }
@@ -165,9 +165,9 @@ class Combat {
             this.expTracker.get(vasen.id).participated = true;
         }
         
-        // Trigger Ande passive when entering combatfield (via swap)
+        // Trigger Ande passive when entering battlefield (via swap)
         if (isSwap) {
-            this.applyFamilyPassive('onEnterCombatfield', { vasen, isPlayer: true });
+            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: true });
         }
         
         return true;
@@ -199,9 +199,9 @@ class Combat {
         vasen.combatFlags.isFirstRound = true;
         vasen.combatFlags.turnsOnField = 0;
         
-        // Trigger Ande passive when entering combatfield (via swap)
+        // Trigger Ande passive when entering battlefield (via swap)
         if (isSwap) {
-            this.applyFamilyPassive('onEnterCombatfield', { vasen, isPlayer: false });
+            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: false });
         }
         
         return true;
@@ -330,7 +330,7 @@ class Combat {
         }
         
         // turnsOnField is incremented now that this turn has fully completed,
-        // so it represents turns fully completed on the combatfield. The
+        // so it represents turns fully completed on the battlefield. The
         // Odjur passive check runs immediately after, using the updated
         // count, so the buff is already active by the time the UI re-renders
         // for the next turn's planning phase (before any action is taken).
@@ -1598,7 +1598,7 @@ class Combat {
         const { vasen, isPlayer } = context;
         
         // --- ANDE: ETHEREAL SURGE ---
-        if (trigger === 'onEnterCombatfield' && vasen.species.family === FAMILIES.ANDE) {
+        if (trigger === 'onEnterBattlefield' && vasen.species.family === FAMILIES.ANDE) {
             if (!vasen.combatFlags.andePassiveTriggered) {
                 vasen.combatFlags.andePassiveTriggered = true;
                 
@@ -1860,15 +1860,15 @@ class Combat {
             }
         }
 
-        // --- BIND RUNE: INGUZ + DAGAZ (enter combatfield debuff) ---
+        // --- BIND RUNE: INGUZ + DAGAZ (enter battlefield debuff) ---
         // Lowers a random enemy attribute whenever this väsen enters the
-        // combatfield (combat start or any swap-in), re-triggering on every
+        // battlefield (combat start or any swap-in), re-triggering on every
         // entry just like Dagaz's own first-round damage bonus. Can be
         // blocked by the enemy's Wynja rune, same as Inguz's hit-based debuff.
-        if (trigger === 'onEnterCombatfield' && hasEnterCombatfieldDebuffBindRune(vasen)) {
+        if (trigger === 'onEnterBattlefield' && hasEnterBattlefieldDebuffBindRune(vasen)) {
             const opponent = isPlayer ? this.enemyActive : this.playerActive;
             if (opponent && !opponent.isKnockedOut()) {
-                const inguzDagazBR = getActiveBindRunes(vasen).find(b => b.type === 'enter_combatfield_debuff');
+                const inguzDagazBR = getActiveBindRunes(vasen).find(b => b.type === 'enter_battlefield_debuff');
 
                 if (!opponent.combatFlags.wynjaTriggered && opponent.hasRune('WYNJA')) {
                     opponent.combatFlags.wynjaTriggered = true;
