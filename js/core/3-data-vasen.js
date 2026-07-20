@@ -64,7 +64,7 @@ const VASEN_SPECIES = {
     'Einharje': {
         name: 'Einhärje',
         internalName: 'Einharje',
-        description: 'A deceased valiant warrior dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the great clash.',
+        description: 'A deceased valiant warrior dwelling in the great hall, feasting upon Särimner while preparing endlessly for the great clash.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.RARE,
@@ -189,7 +189,7 @@ const VASEN_SPECIES = {
     'Eldturs': {
         name: 'Eldturs',
         internalName: 'Eldturs',
-        description: 'A destructive fire giant from the burning realm of Muspelheim, destined to engulf everything in flame at the end of the world.',
+        description: 'A destructive fire giant from the burning realm of Muspelheim, destined to engulf everything in flames at the end of the world.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
