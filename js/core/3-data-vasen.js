@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Hustomte': {
         name: 'Hustomte',
         internalName: 'Hustomte',
-        description: 'A watchful prank-loving steward who keeps the home safe and warm, despising laziness and carelessness, and answering with wicked mischief.',
+        description: 'A watchful prank-loving steward who keeps the home safe and warm, despising laziness, and answering it with mischief.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
@@ -314,7 +314,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A prank-loving custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
+        description: 'A prank-loving custodian of gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -325,7 +325,7 @@ const VASEN_SPECIES = {
     'Brunnsgubbe': {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
-        description: 'A prank-loving well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
+        description: 'A prank-loving well keeper who keeps water pure and clear, demanding cleanliness but resorting to petty malice when displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
@@ -336,7 +336,7 @@ const VASEN_SPECIES = {
     'Pyssling': {
         name: 'Pyssling',
         internalName: 'Pyssling',
-        description: 'A prank-loving lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
+        description: 'A prank-loving lurker bound to high beams and dusty lofts, offering help when respected but causing trouble when neglected.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
