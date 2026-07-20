@@ -12,7 +12,8 @@ UIController.prototype.renderRuneInventory = function() {
     }
 
     if (!this.runeSortOrder) {
-        this.runeSortOrder = 'futhark';
+        const savedRuneSortOrder = localStorage.getItem('runeSortOrder');
+        this.runeSortOrder = savedRuneSortOrder !== null ? savedRuneSortOrder : 'futhark';
     }
 
     const sortMenu = document.createElement('div');
@@ -28,6 +29,7 @@ UIController.prototype.renderRuneInventory = function() {
 
     sortMenu.querySelector('#rune-sort-select').onchange = (e) => {
         this.runeSortOrder = e.target.value;
+        localStorage.setItem('runeSortOrder', this.runeSortOrder);
         this.renderRuneInventory();
     };
 

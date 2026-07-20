@@ -20,7 +20,8 @@ class UIController {
         this.verboseCombatLog = savedVerboseCombatLog !== null ? savedVerboseCombatLog === 'true' : false;
         const savedPotencyIndicator = localStorage.getItem('potencyIndicator');
         this.potencyIndicatorEnabled = savedPotencyIndicator !== null ? savedPotencyIndicator === 'true' : true;
-        this.vasenSortBy = 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
+        const savedVasenSortBy = localStorage.getItem('vasenSortBy');
+        this.vasenSortBy = savedVasenSortBy !== null ? savedVasenSortBy : 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
     }
 
     // Initialize UI elements
