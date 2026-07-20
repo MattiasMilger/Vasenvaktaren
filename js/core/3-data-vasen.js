@@ -165,7 +165,7 @@ const VASEN_SPECIES = {
     'Vitorm': {
         name: 'Vitorm',
         internalName: 'Vitorm',
-        description: 'A snow-white serpent sovereign whose legendary flesh reveals hidden secrets and the ability to understand all tongues when consumed.',
+        description: 'A snow-white serpent whose legendary flesh reveals hidden secrets and the ability to understand all tongues when consumed.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -268,7 +268,7 @@ const VASEN_SPECIES = {
     'Backahast': {
         name: 'Bäckahäst',
         internalName: 'Backahast',
-        description: 'A white beast-like horse that offers a tempting ride, carrying riders into deep water where escape becomes impossible.',
+        description: 'A pale beast-like horse that offers a tempting ride, carrying riders into deep water where escape becomes impossible.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
@@ -485,7 +485,7 @@ const VASEN_SPECIES = {
     'Draug': {
         name: 'Draug',
         internalName: 'Draug',
-        description: 'A pale, bloated phantom that refuses to rest in the grave, possessing unnatural strength and radiating a cold, unsettling presence.',
+        description: 'A bloated phantom that refuses to rest in the grave, possessing unnatural strength and radiating a cold, unsettling presence.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,

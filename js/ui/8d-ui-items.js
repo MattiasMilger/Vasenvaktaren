@@ -112,7 +112,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         // Drake (Serpent)
         'slithering serpent',
         'hoard serpent',
-        'pale serpent',
+        'white serpent',
         'world serpent',
         'gnawing serpent'
     ];
