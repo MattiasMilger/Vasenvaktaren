@@ -755,6 +755,27 @@ class Combat {
         if (!defender.combatFlags.raPassiveTriggered) {
             this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
         }
+
+        // Bind Rune - Hagal + Naudiz: when the enemy's (defender's) health falls to the
+        // configured threshold or less, lower all of their attribute stages by the
+        // configured amount. Triggered from the attacker's side (the rune belongs to
+        // the attacker), tracked once per combat via a flag on the attacker.
+        if (hasEnemyHealthThresholdDebuffAllBindRune(attacker) && !attacker.combatFlags.hagalNaudizPassiveTriggered) {
+            const defenderHealthPercent = defender.currentHealth / defender.maxHealth;
+            if (defenderHealthPercent <= GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD) {
+                attacker.combatFlags.hagalNaudizPassiveTriggered = true;
+                const hagalNaudizBR = getActiveBindRunes(attacker).find(b => b.type === 'enemy_health_threshold_debuff_all');
+                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${hagalNaudizBR.symbols} ${hagalNaudizBR.names} was activated!`, 'rune');
+
+                ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
+                    const result = defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES);
+                    if (result.changed !== 0) {
+                        const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                        this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
+                    }
+                });
+            }
+        }
         
         // Check if this hit will cause a knockout BEFORE flashing
         const willKnockout = defender.isKnockedOut();

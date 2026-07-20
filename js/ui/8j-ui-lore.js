@@ -38,7 +38,7 @@ UIController.prototype.renderLore = function() {
         <div class="lore-header-top">
             <div class="lore-counter">${count} / ${total} entries collected</div>
             <div class="lore-header-buttons">
-                <button class="btn btn-small lore-collapse-btn">Collapse All</button>
+                <button class="btn btn-small lore-collapse-btn">Collapse Categories</button>
             </div>
         </div>
         <input class="lore-search-input" type="text" placeholder="Search…" autocomplete="off">
@@ -97,18 +97,16 @@ UIController.prototype.renderLore = function() {
         if (expandedEntries.has(el.dataset.key)) el.classList.add('lore-entry-expanded');
     });
 
-    // Collapse / Expand All - covers both category sections and individual entry descriptions
+    // Collapse / Expand Categories - only toggles category sections (Families, Väsen,
+    // Items, Skills, Locations, Concepts), leaving individual entry cards untouched
     const collapseBtn = container.querySelector('.lore-collapse-btn');
     if (collapseBtn) {
         collapseBtn.addEventListener('click', () => {
-            const cats  = container.querySelectorAll('.lore-category');
-            const cards = container.querySelectorAll('.lore-entry-card.lore-entry-unlocked');
-            const anyCatExpanded  = [...cats].some(c => !c.classList.contains('lore-category-collapsed'));
-            const anyCardExpanded = [...cards].some(c => c.classList.contains('lore-entry-expanded'));
-            const shouldCollapse  = anyCatExpanded || anyCardExpanded;
-            cats.forEach(c  => c.classList.toggle('lore-category-collapsed', shouldCollapse));
-            cards.forEach(c => c.classList.toggle('lore-entry-expanded', !shouldCollapse));
-            collapseBtn.textContent = shouldCollapse ? 'Expand All' : 'Collapse All';
+            const cats = container.querySelectorAll('.lore-category');
+            const anyCatExpanded = [...cats].some(c => !c.classList.contains('lore-category-collapsed'));
+            const shouldCollapse = anyCatExpanded;
+            cats.forEach(c => c.classList.toggle('lore-category-collapsed', shouldCollapse));
+            collapseBtn.textContent = shouldCollapse ? 'Expand Categories' : 'Collapse Categories';
             if (this._loreSearchQuery) this._applyLoreSearch(container, this._loreSearchQuery);
         });
     }

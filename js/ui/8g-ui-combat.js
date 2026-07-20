@@ -438,7 +438,23 @@ UIController.prototype.getSkillPotencyClass = function(skill, skillElement, atta
         effectiveElement = eleConversionBR.convertedElement;
     }
 
-    const matchup = getMatchupType(effectiveElement, defender.species.element);
+    let matchup = getMatchupType(effectiveElement, defender.species.element);
+
+    // Jätte passive: Jotun's Fury - if it has already triggered this combat, or
+    // would trigger right now given the attacker's current health, upgrade the
+    // matchup the same way Combat.calculateDamage does (weak -> neutral, neutral -> potent).
+    const jattePassiveActive = attacker.species.family === FAMILIES.JATTE &&
+        (attacker.combatFlags.jattePassiveTriggered ||
+         (attacker.currentHealth / attacker.maxHealth) <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD);
+
+    if (jattePassiveActive) {
+        if (matchup === 'WEAK') {
+            matchup = 'NEUTRAL';
+        } else if (matchup === 'NEUTRAL') {
+            matchup = 'POTENT';
+        }
+    }
+
     if (matchup === 'POTENT') return 'potency-potent';
     if (matchup === 'WEAK') return 'potency-weak';
     return '';

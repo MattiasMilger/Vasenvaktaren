@@ -2,10 +2,30 @@
 // 8c-ui-vasen.js - Väsen Inventory, Details Panel, and Matchup Display
 // =============================================================================
 
+// Element sort order used as a tiebreaker across all sort modes: Earth > Fire > Nature > Water > Wind
+const VASEN_ELEMENT_SORT_ORDER = {
+    [ELEMENTS.EARTH]: 0,
+    [ELEMENTS.FIRE]: 1,
+    [ELEMENTS.NATURE]: 2,
+    [ELEMENTS.WATER]: 3,
+    [ELEMENTS.WIND]: 4
+};
+
+// Compare two väsen instances by element, using the fixed Earth > Fire > Nature > Water > Wind order
+function compareVasenByElement(a, b) {
+    return VASEN_ELEMENT_SORT_ORDER[a.species.element] - VASEN_ELEMENT_SORT_ORDER[b.species.element];
+}
+
+// Compare two väsen instances alphabetically by species name (Swedish locale), then by temperament name
+function compareVasenByNameThenTemperament(a, b) {
+    const nameDiff = a.species.name.localeCompare(b.species.name, 'sv');
+    if (nameDiff !== 0) return nameDiff;
+    return a.temperament.name.localeCompare(b.temperament.name, 'sv');
+}
+
 // Handle väsen sort change
 UIController.prototype.handleVasenSortChange = function(sortBy) {
     this.vasenSortBy = sortBy;
-    localStorage.setItem('vasenSortBy', sortBy);
     this.renderVasenInventory();
 };
 
@@ -28,51 +48,66 @@ UIController.prototype.getSortedVasenCollection = function() {
         return bFav - aFav; // Favorites first
     };
 
-    // Alphabetical tiebreaker used across all sort modes
-    const alphabetical = (a, b) => a.getDisplayName().localeCompare(b.getDisplayName());
-
     switch (this.vasenSortBy) {
         case 'level':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
                 const diff = b.level - a.level;
-                return diff !== 0 ? diff : alphabetical(a, b);
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'health':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
                 const diff = b.maxHealth - a.maxHealth;
-                return diff !== 0 ? diff : alphabetical(a, b);
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'defense':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
                 const diff = b.calculateAttribute('defense') - a.calculateAttribute('defense');
-                return diff !== 0 ? diff : alphabetical(a, b);
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'durability':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
                 const diff = b.calculateAttribute('durability') - a.calculateAttribute('durability');
-                return diff !== 0 ? diff : alphabetical(a, b);
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'strength':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
                 const diff = b.calculateAttribute('strength') - a.calculateAttribute('strength');
-                return diff !== 0 ? diff : alphabetical(a, b);
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'wisdom':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
                 if (favDiff !== 0) return favDiff;
                 const diff = b.calculateAttribute('wisdom') - a.calculateAttribute('wisdom');
-                return diff !== 0 ? diff : alphabetical(a, b);
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'rarity':
             return collection.sort((a, b) => {
@@ -80,9 +115,12 @@ UIController.prototype.getSortedVasenCollection = function() {
                 if (favDiff !== 0) return favDiff;
                 const rarityDiff = rarityOrder[b.species.rarity] - rarityOrder[a.species.rarity];
                 if (rarityDiff !== 0) return rarityDiff;
-                // Secondary sort by level, then alphabetical
+                // Secondary sort by level (existing behavior for rarity mode)
                 const levelDiff = b.level - a.level;
-                return levelDiff !== 0 ? levelDiff : alphabetical(a, b);
+                if (levelDiff !== 0) return levelDiff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
             });
         case 'element':
             return null; // Return null to indicate element grouping should be used
@@ -160,18 +198,19 @@ UIController.prototype.renderVasenByFamily = function(container) {
         familyHeader.textContent = family;
         familySection.appendChild(familyHeader);
 
-        // Sort vasen in family: favorites first, then alphabetically by species, then by temperament
+        // Sort vasen in family: favorites first, then by element, then by species name, then by temperament
         const sortedVasen = byFamily[family].sort((a, b) => {
             // Favorites first
             const aFav = gameState.isFavorite(a.id) ? 1 : 0;
             const bFav = gameState.isFavorite(b.id) ? 1 : 0;
             if (aFav !== bFav) return bFav - aFav;
 
-            // Then by species name
-            if (a.speciesName !== b.speciesName) {
-                return a.speciesName.localeCompare(b.speciesName);
-            }
-            return a.temperamentKey.localeCompare(b.temperamentKey);
+            // Then by element (Earth > Fire > Nature > Water > Wind)
+            const elementDiff = compareVasenByElement(a, b);
+            if (elementDiff !== 0) return elementDiff;
+
+            // Then by species name, then temperament
+            return compareVasenByNameThenTemperament(a, b);
         });
 
         sortedVasen.forEach(vasen => {
@@ -197,8 +236,10 @@ UIController.prototype.renderVasenByElement = function(container) {
         byElement[element].push(vasen);
     });
 
-    // Use alphabetical element order (Earth > Fire > Nature > Water > Wind)
-    const elementOrder = Object.values(ELEMENTS).sort();
+    // Fixed element order: Earth > Fire > Nature > Water > Wind
+    const elementOrder = Object.keys(VASEN_ELEMENT_SORT_ORDER).sort(
+        (a, b) => VASEN_ELEMENT_SORT_ORDER[a] - VASEN_ELEMENT_SORT_ORDER[b]
+    );
 
     elementOrder.forEach(element => {
         if (!byElement[element] || byElement[element].length === 0) return;
@@ -210,16 +251,14 @@ UIController.prototype.renderVasenByElement = function(container) {
         elementHeader.textContent = element;
         elementSection.appendChild(elementHeader);
 
-        // Sort väsen within element: favorites first, then alphabetically by species, then by temperament
+        // Sort väsen within element: favorites first, then by species name, then by temperament
+        // (element itself is already fixed by the section, so it is not compared again here)
         const sortedVasen = byElement[element].sort((a, b) => {
             const aFav = gameState.isFavorite(a.id) ? 1 : 0;
             const bFav = gameState.isFavorite(b.id) ? 1 : 0;
             if (aFav !== bFav) return bFav - aFav;
 
-            if (a.speciesName !== b.speciesName) {
-                return a.speciesName.localeCompare(b.speciesName);
-            }
-            return a.temperamentKey.localeCompare(b.temperamentKey);
+            return compareVasenByNameThenTemperament(a, b);
         });
 
         sortedVasen.forEach(vasen => {
