@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Hustomte': {
         name: 'Hustomte',
         internalName: 'Hustomte',
-        description: 'A watchful tricksterish steward who keeps the home safe and warm, despising laziness and carelessness, and answering both with wicked mischief.',
+        description: 'A watchful tricksterish steward who keeps the home safe and warm, despising laziness and carelessness, and answering with wicked mischief.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
@@ -349,7 +349,7 @@ const VASEN_SPECIES = {
     'Gruvra': {
         name: 'Gruvrå',
         internalName: 'Gruvra',
-        description: 'A beautiful, veiled mine warden who guards rich veins of ore deep within the mountain, where tunnels collapse if sacred passages are defiled.',
+        description: 'A beautiful, veiled mine warden who guards rich veins of ore within the mountain, where tunnels collapse if sacred passages are defiled.',
         family: FAMILIES.RA,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
@@ -360,7 +360,7 @@ const VASEN_SPECIES = {
     'Huldra': {
         name: 'Huldra',
         internalName: 'Huldra',
-        description: 'A soot-streaked warden dwelling among charred groves and burned clearings, her glowing eyes shining like fading embers among blackened trees.',
+        description: 'A soot-streaked warden dwelling among charred groves, her glowing eyes shining like fading embers among blackened trees.',
         family: FAMILIES.RA,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
@@ -382,7 +382,7 @@ const VASEN_SPECIES = {
     'Nacken': {
         name: 'Näcken',
         internalName: 'Nacken',
-        description: 'A river warden who plays enchanting, sorrowful melodies upon a fiddle, luring listeners toward watery graves through irresistible music.',
+        description: 'A river warden who plays enchanting, sorrowful melodies upon a fiddle, luring listeners toward watery graves.',
         family: FAMILIES.RA,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
@@ -496,7 +496,7 @@ const VASEN_SPECIES = {
     'Strandvaskare': {
         name: 'Strandvaskare',
         internalName: 'Strandvaskare',
-        description: 'A tormented phantom of a drowned sailor, forever haunting the coast and luring ships onto reefs with mournful cries and deceptive lights.',
+        description: 'A tormented phantom of a drowned sailor, haunting the coast and luring ships onto reefs with mournful cries and deceptive lights.',
         family: FAMILIES.VALNAD,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
