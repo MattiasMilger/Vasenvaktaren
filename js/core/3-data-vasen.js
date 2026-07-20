@@ -292,7 +292,7 @@ const VASEN_SPECIES = {
     'Landvatte': {
         name: 'Landvätte',
         internalName: 'Landvatte',
-        description: 'A hidden tricksterish protector of the land bound to the soil itself, ensuring prosperity but answering neglect with irritating tricks.',
+        description: 'A hidden prankish protector of the land bound to the soil itself, ensuring prosperity but answering neglect with irritating tricks.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Hustomte': {
         name: 'Hustomte',
         internalName: 'Hustomte',
-        description: 'A watchful tricksterish steward who keeps the home safe and warm, despising laziness and carelessness, and answering with wicked mischief.',
+        description: 'A watchful prankish steward who keeps the home safe and warm, despising laziness and carelessness, and answering with wicked mischief.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
@@ -314,7 +314,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A tricksterish custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
+        description: 'A prankish custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -325,7 +325,7 @@ const VASEN_SPECIES = {
     'Brunnsgubbe': {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
-        description: 'A tricksterish well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
+        description: 'A prankish well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
@@ -336,7 +336,7 @@ const VASEN_SPECIES = {
     'Pyssling': {
         name: 'Pyssling',
         internalName: 'Pyssling',
-        description: 'A tricksterish lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
+        description: 'A prankish lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
