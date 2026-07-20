@@ -123,9 +123,6 @@
     image-rendering: pixelated;
     transition: transform 0.1s ease, filter 0.1s ease;
     display: block;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    box-shadow: inset 0 0 8px var(--black-overlay-medium);
 }
 
 .combatant-image.knocked-out {
@@ -1945,7 +1942,7 @@ button.tutorial-blink {
 }
 
 /* =============================================================================
-   AUTO BATTLE BUTTON
+   AUTO COMBAT BUTTON
    ============================================================================= */
 .btn-auto-combat {
     border-color: var(--text-accent);
