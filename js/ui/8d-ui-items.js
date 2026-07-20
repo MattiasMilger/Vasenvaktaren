@@ -94,7 +94,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         // Alv (elf)
         'twilight elf',
         'mist elf',
-        'cavern elf',
+        'underground elf',
         'forge elf',
         'light elf',
         // Ande (Spirit)
@@ -102,7 +102,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'warrior spirit',
         'winged spirit',
         'flame spirit',
-        'weaving spirit',
+        'fate-weaving spirit',
         // Jätte (Giant)
         'primordial giant',
         'fire giant',

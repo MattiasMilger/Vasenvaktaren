@@ -7,7 +7,7 @@ const VASEN_SPECIES = {
     'Svartalv': {
         name: 'Svartalv',
         internalName: 'Svartalv',
-        description: 'A masterful subterranean artisan from Nidavellir who seeks rare materials and crafts magical artifacts that bend the rules of reality.',
+        description: 'A masterful subterranean elven artisan from Nidavellir who seeks rare materials and crafts magical reality-bending artifacts.',
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,
@@ -18,7 +18,7 @@ const VASEN_SPECIES = {
     'Dvarg': {
         name: 'Dvärg',
         internalName: 'Dvarg',
-        description: 'A renowned smith from the fiery heart of the mountain, forging legendary weapons from stone and ore with unmatched skill.',
+        description: 'A renowned elven smith from the fiery heart of the mountain, forging legendary weapons from stone and ore with unmatched skill.',
         family: FAMILIES.ALV,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -64,7 +64,7 @@ const VASEN_SPECIES = {
     'Einharje': {
         name: 'Einhärje',
         internalName: 'Einharje',
-        description: 'A deceased valiant warrior dwelling in the great hall, feasting upon Särimner while preparing endlessly for the great clash.',
+        description: 'A deceased valiant warrior spirit dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the final battle of Ragnarök.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.RARE,
@@ -75,7 +75,7 @@ const VASEN_SPECIES = {
     'Fylgja': {
         name: 'Fylgja',
         internalName: 'Fylgja',
-        description: 'An avatar of fate bound to a person\'s soul and destiny, appearing during battle to warn of danger and approaching death.',
+        description: 'A spirit of fate bound to a person\'s soul and destiny, appearing during battle to warn of danger and approaching death.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -97,7 +97,7 @@ const VASEN_SPECIES = {
     'Norna': {
         name: 'Norna',
         internalName: 'Norna',
-        description: 'A mystical fate weaver among those who guard the sacred Wellspring of Urd, charting the threads of destiny for all mortals.',
+        description: 'A mystical fate-weaving spirit among those who guard the sacred Wellspring of Urd, charting the threads of destiny for all mortals.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
@@ -108,7 +108,7 @@ const VASEN_SPECIES = {
     'Valkyria': {
         name: 'Valkyria',
         internalName: 'Valkyria',
-        description: 'A formidable winged battle judge who rides above the battlefield, choosing the bravest fallen warriors and guiding them to Valhalla.',
+        description: 'A formidable winged battle spirit who rides above the battlefield, choosing the bravest fallen warriors and guiding them to Valhalla.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -154,7 +154,7 @@ const VASEN_SPECIES = {
     'Jormungandr': {
         name: 'Jörmungandr',
         internalName: 'Jormungandr',
-        description: 'The boundless serpent whose endless coils encircle Midgård, resting within the primordial ocean while awaiting the final battle.',
+        description: 'The boundless serpent whose endless coils encircle Midgard, resting within the primordial ocean while awaiting the final battle.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
@@ -189,7 +189,7 @@ const VASEN_SPECIES = {
     'Eldturs': {
         name: 'Eldturs',
         internalName: 'Eldturs',
-        description: 'A destructive fire giant from the burning realm of Muspelheim, destined to engulf everything in flames at the end of the world.',
+        description: 'A destructive fire giant from the burning realm of Muspelheim, destined to engulf the world in flame during Ragnarök.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -222,7 +222,7 @@ const VASEN_SPECIES = {
     'Stormturs': {
         name: 'Stormturs',
         internalName: 'Stormturs',
-        description: 'A towering storm giant with eyes resembling thunderheads, shattering stone pillars and announcing a destructive arrival through piercing winds.',
+        description: 'A towering storm giant with eyes resembling thunderheads, shattering stone pillars and announcing arrival through piercing winds.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -235,7 +235,7 @@ const VASEN_SPECIES = {
     'Fenrir': {
         name: 'Fenrir',
         internalName: 'Fenrir',
-        description: 'The monstrous wolf bound by the gods, destined to break free and devour the sun and moon during ragnarök.',
+        description: 'The monstrous beast-like wolf bound by the gods, destined to break free and devour the sun and moon at the end of the world.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
@@ -246,7 +246,7 @@ const VASEN_SPECIES = {
     'Gloson': {
         name: 'Gloson',
         internalName: 'Gloson',
-        description: 'A gigantic nocturnal sow with eyes glowing like embers, moving through the deepest night with astonishing silence despite an immense size.',
+        description: 'A nocturnal beast-like sow with eyes glowing like embers, moving through the deepest night with astonishing silence.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
@@ -257,7 +257,7 @@ const VASEN_SPECIES = {
     'Bjara': {
         name: 'Bjära',
         internalName: 'Bjara',
-        description: 'A supernatural familiar resembling a hare, stealing milk from nearby farms and carrying every drop back to a chosen master.',
+        description: 'A supernatural beast-like hare familiar, stealing milk from nearby farms and carrying every drop back to a chosen master.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
@@ -268,7 +268,7 @@ const VASEN_SPECIES = {
     'Backahast': {
         name: 'Bäckahäst',
         internalName: 'Backahast',
-        description: 'A deceptive white horse that offers a tempting ride, carrying riders into deep water where escape becomes impossible.',
+        description: 'A white beast-like horse that offers a tempting ride, carrying riders into deep water where escape becomes impossible.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WATER,
         rarity: RARITIES.UNCOMMON,
@@ -279,7 +279,7 @@ const VASEN_SPECIES = {
     'Rasvelg': {
         name: 'Räsvelg',
         internalName: 'Rasvelg',
-        description: 'The massive eagle perched at the edge of the world, whose colossal wings drive violent winds across mountains, plains, and seas.',
+        description: 'The massive beast-like eagle perched at the edge of the world, whose colossal wings drive violent winds across mountains, plains, and seas.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.WIND,
         rarity: RARITIES.MYTHICAL,
@@ -292,7 +292,7 @@ const VASEN_SPECIES = {
     'Landvatte': {
         name: 'Landvätte',
         internalName: 'Landvatte',
-        description: 'A hidden protector of the land bound to the soil itself, ensuring prosperity but answering neglect with irritating tricks.',
+        description: 'A hidden tricksterish protector of the land bound to the soil itself, ensuring prosperity but answering neglect with irritating tricks.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.COMMON,
@@ -303,7 +303,7 @@ const VASEN_SPECIES = {
     'Hustomte': {
         name: 'Hustomte',
         internalName: 'Hustomte',
-        description: 'A watchful steward who keeps the home safe and warm, despising laziness and carelessness, and answering both with wicked mischief.',
+        description: 'A watchful tricksterish steward who keeps the home safe and warm, despising laziness and carelessness, and answering both with wicked mischief.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.COMMON,
@@ -314,7 +314,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A sharp-eyed custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
+        description: 'A tricksterish custodian of barns and gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,
@@ -325,7 +325,7 @@ const VASEN_SPECIES = {
     'Brunnsgubbe': {
         name: 'Brunnsgubbe',
         internalName: 'Brunnsgubbe',
-        description: 'A reclusive well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
+        description: 'A tricksterish well keeper who keeps water pure and clear, demanding clean surroundings but resorting to petty malice when displeased.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,
@@ -336,7 +336,7 @@ const VASEN_SPECIES = {
     'Pyssling': {
         name: 'Pyssling',
         internalName: 'Pyssling',
-        description: 'A pocket-sized lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
+        description: 'A tricksterish lurker bound to high beams and dusty lofts, offering help when respected but causing subtle trouble when neglected.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
@@ -393,7 +393,7 @@ const VASEN_SPECIES = {
     'Mara': {
         name: 'Mara',
         internalName: 'Mara',
-        description: 'A shifting dream warden capable of slipping through narrow cracks, settling upon sleeping victims and burdening every breath with a crushing weight.',
+        description: 'A shifting dream warden capable of slipping through narrow cracks, settling upon sleeping victims with a crushing weight.',
         family: FAMILIES.RA,
         element: ELEMENTS.WIND,
         rarity: RARITIES.RARE,
@@ -417,7 +417,7 @@ const VASEN_SPECIES = {
     'Gryningstroll': {
         name: 'Gryningstroll',
         internalName: 'Gryningstroll',
-        description: 'A hulking troll caught by the first rays of dawn and turned to stone, the intense internal fire merging blood with surrounding rock.',
+        description: 'A hulking troll caught by the first rays of dawn and turned to stone, the intense internal fire merging blood with rock.',
         family: FAMILIES.TROLL,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.UNCOMMON,
@@ -439,7 +439,7 @@ const VASEN_SPECIES = {
     'Backatroll': {
         name: 'Bäckatroll',
         internalName: 'Backatroll',
-        description: 'A moss-covered troll dwelling beneath old bridges in rushing streams, guarding waterways with stubborn determination while demanding passage tolls.',
+        description: 'A moss-covered troll dwelling beneath old bridges in rushing streams, guarding waterways while demanding passage tolls.',
         family: FAMILIES.TROLL,
         element: ELEMENTS.WATER,
         rarity: RARITIES.COMMON,

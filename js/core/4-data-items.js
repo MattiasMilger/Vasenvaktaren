@@ -155,7 +155,7 @@ const TAMING_ITEMS = {
     },
     'Shiny Trinket': {
         name: 'Shiny Trinket',
-        description: 'A small, intricately carved shiny trinket. Its metallic sheen hints that it was crafted by masterful cavern elf.',
+        description: 'A small, intricately carved shiny trinket. Its metallic sheen hints that it was crafted by masterful underground elf.',
         tamingTarget: 'Svartalv'
     },
     'Anvil Shard': {
@@ -192,7 +192,7 @@ const TAMING_ITEMS = {
     },
     'Fate Thread': {
         name: 'Fate Thread',
-        description: 'A shimmering silver-blue fate thread humming with ancient power drawn from the well beneath Yggdrasil. A fitting offering for a fate weaving spirit.',
+        description: 'A shimmering silver-blue fate thread humming with ancient power drawn from the well beneath Yggdrasil. A fitting offering for a fate-weaving spirit.',
         tamingTarget: 'Norna'
     },
 
