@@ -64,7 +64,7 @@ const VASEN_SPECIES = {
     'Einharje': {
         name: 'Einhärje',
         internalName: 'Einharje',
-        description: 'A deceased valiant warrior dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the final battle.',
+        description: 'A deceased valiant warrior dwelling in Valhalla, feasting upon Särimner while preparing endlessly for the great clash.',
         family: FAMILIES.ANDE,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.RARE,
@@ -154,7 +154,7 @@ const VASEN_SPECIES = {
     'Jormungandr': {
         name: 'Jörmungandr',
         internalName: 'Jormungandr',
-        description: 'The boundless serpent whose endless coils encircle Midgård, resting within the primordial ocean while awaiting Ragnarök.',
+        description: 'The boundless serpent whose endless coils encircle Midgård, resting within the primordial ocean while awaiting the final battle.',
         family: FAMILIES.DRAKE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.MYTHICAL,
@@ -189,7 +189,7 @@ const VASEN_SPECIES = {
     'Eldturs': {
         name: 'Eldturs',
         internalName: 'Eldturs',
-        description: 'A destructive fire giant from the burning realm of Muspelheim, destined to engulf the world in flame during Ragnarök.',
+        description: 'A destructive fire giant from the burning realm of Muspelheim, destined to engulf everything in flame at the end of the world.',
         family: FAMILIES.JATTE,
         element: ELEMENTS.FIRE,
         rarity: RARITIES.RARE,
@@ -235,7 +235,7 @@ const VASEN_SPECIES = {
     'Fenrir': {
         name: 'Fenrir',
         internalName: 'Fenrir',
-        description: 'The monstrous wolf bound by the gods, destined to break free and devour the sun and moon at the end of the world.',
+        description: 'The monstrous wolf bound by the gods, destined to break free and devour the sun and moon during ragnarök.',
         family: FAMILIES.ODJUR,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.MYTHICAL,
