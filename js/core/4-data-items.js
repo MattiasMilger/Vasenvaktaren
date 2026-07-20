@@ -25,12 +25,12 @@ const TAMING_ITEMS = {
     },
     'Water Bucket': {
         name: 'Water Bucket',
-        description: 'A heavy water bucket reinforced with iron. Its familiar weight and clean build might coax the well prankster to emerge from the dark.',
+        description: 'A heavy water bucket reinforced with iron. It might coax a well prankster to emerge from the dark.',
         tamingTarget: 'Brunnsgubbe'
     },
     'Attic Key': {
         name: 'Attic Key',
-        description: 'A rusted attic key. It feels unusually cold to the touch; a perfect token to entice the loft prankster out from the high beams.',
+        description: 'A rusted attic key. It feels unusually cold to the touch; a perfect token to entice a loft prankster from the high beams.',
         tamingTarget: 'Pyssling'
     },
 
@@ -57,7 +57,7 @@ const TAMING_ITEMS = {
     },
     'Mound Root': {
         name: 'Mound Root',
-        description: 'A gnarled mound root. It smells of ancient earth and decay, a grim souvenir from a grave that might appease a mound phantom who refuses to rest.',
+        description: 'A gnarled mound root. It smells of ancient earth and decay, a grim souvenir that might appease a mound phantom who refuses to rest.',
         tamingTarget: 'Draug'
     },
 
@@ -74,7 +74,7 @@ const TAMING_ITEMS = {
     },
     'Cursed Yarn': {
         name: 'Cursed Yarn',
-        description: 'A spool of blood-stained cursed yarn. This tangled mess of wool and wood might entice the thieving beast that stalks the farmsteads.',
+        description: 'A spool of blood-stained cursed yarn. This tangled mess of wool and wood might entice a thieving beast that stalks the farmsteads.',
         tamingTarget: 'Bjara'
     },
     'Broken Chain': {
@@ -160,12 +160,12 @@ const TAMING_ITEMS = {
     },
     'Anvil Shard': {
         name: 'Anvil Shard',
-        description: 'A jagged anvil shard of glittering, dark metal that hums with latent power. An ideal offering for a forge elf who can craft legendary weapons.',
+        description: 'A jagged anvil shard of glittering metal that hums with power. An ideal offering for a forge elf who crafts legendary weapons.',
         tamingTarget: 'Dvarg'
     },
     'Festive Midsommarkrans': {
         name: 'Festive Midsommarkrans',
-        description: 'A festive midsommarkrans. Its radiance attracts the beautiful, radiant light elf.',
+        description: 'A festive midsommarkrans. Its radiance attracts a beautiful, radiant light elf.',
         tamingTarget: 'Ljusalv'
     },
 
@@ -177,7 +177,7 @@ const TAMING_ITEMS = {
     },
     'Valhallan Pork': {
         name: 'Valhallan Pork',
-        description: 'A tempting piece of valhallan pork. The scent of victory and feasting lingers, attracting a warrior spirit from Valhalla.',
+        description: 'A tempting piece of valhallan pork. The scent of victory and feasting lingers, attracting a warrior spirit from the great hall.',
         tamingTarget: 'Einharje'
     },
     'Shield Fragment': {
@@ -192,7 +192,7 @@ const TAMING_ITEMS = {
     },
     'Fate Thread': {
         name: 'Fate Thread',
-        description: 'A shimmering silver-blue fate thread humming with ancient power drawn from the well beneath Yggdrasil. A fitting offering for a fate-weaving spirit.',
+        description: 'A shimmering fate thread humming with power drawn from the well beneath Yggdrasil. A fitting offering for a fate-weaving spirit.',
         tamingTarget: 'Norna'
     },
 
@@ -231,7 +231,7 @@ const TAMING_ITEMS = {
     },
     'Gold Coin': {
         name: 'Gold Coin',
-        description: 'A flawless gold coin, often found in the colossal hoards of a greedy hoard serpent.',
+        description: 'A flawless gold coin, often found in the colossal hoards of the greedy hoard serpent.',
         tamingTarget: 'Fafner'
     },
     'White Scales': {
@@ -246,7 +246,7 @@ const TAMING_ITEMS = {
     },
     'Yggdrasil Root': {
         name: 'Yggdrasil Root',
-        description: 'A fragment of Yggdrasil root. It is gnawed and ancient, a piece of the world tree itself, sought by a gnawing serpent.',
+        description: 'A fragment of Yggdrasil root. It is gnawed and ancient, a piece of the world tree itself, sought by the gnawing serpent.',
         tamingTarget: 'Nidhogg'
     }
 };
