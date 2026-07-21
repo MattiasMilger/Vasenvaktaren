@@ -423,7 +423,7 @@ achievementsHtml += '</div></div>';
     UIController.prototype.generateTemperamentsHTML = function() {
         let html = `
             <h4>Temperaments</h4>
-            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one attribute for another. Modifiers apply before other bonuses.</p>
+            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Modifiers apply before other bonuses.</p>
             <div class="temperament-list">
         `;
 
