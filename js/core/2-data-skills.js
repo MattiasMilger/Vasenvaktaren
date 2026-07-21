@@ -390,16 +390,11 @@ function getSkillMeginCost(skillName, vasenElement) {
     return basesCost;
 }
 
-// Helper function to get skill power (handles Jätte family passive for Basic Strike)
+// Helper function to get skill power
 function getSkillPower(skillName, vasenFamily) {
     const skill = ABILITIES[skillName];
     if (!skill) return 0;
-    
-    // Jätte family passive: Basic Strike always has 35 power
-    if (skillName === 'Basic Strike' && vasenFamily === FAMILIES.JATTE) {
-        return FAMILY_PASSIVE_CONFIG.JATTE_BASIC_STRIKE_POWER;
-    }
-    
+
     return skill.power;
 }
 

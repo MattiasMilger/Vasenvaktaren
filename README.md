@@ -21,7 +21,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | Feature | Details |
 | :--- | :--- |
 | **Unique Creatures** | 45 unique creatures based on Swedish folklore |
-| **Families** | 9 families: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake |
+| **Families** | 9 families with unique traits: Oknytt, Vålnad, Odjur, Troll, Rå, Alv, Ande, Jätte, Drake |
 | **Elements** | 5 elements: Earth, Nature, Water, Fire, Wind |
 | **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durability |
 | **Rarities** | 4 rarities: Common, Uncommon, Rare, Mythical |
@@ -143,7 +143,7 @@ Vasenvaktaren/
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
 │   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and combat animations)
 │   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
-│   │   ├── 8i-ui-settings.js       (settings, profile, and game guide)
+│   │   ├── 8i-ui-menus.js          (settings, profile, and game guide)
 │   │   └── 8j-ui-lore.js           (lore book rendering, search, and language toggle)
 │   │
 │   └── game/

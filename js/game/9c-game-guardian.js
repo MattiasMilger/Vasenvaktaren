@@ -114,10 +114,6 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
     // Get current zone index for messages
     const currentIndex = ZONE_ORDER.indexOf(gameState.currentZone);
 
-    // Check if this was the final guardian (Gylfe)
-    if (gameState.currentZone === 'varldens-ande' && wasFirstClear) {
-    }
-
     // Calculate experience
     const combatResult = {
         victory: true,

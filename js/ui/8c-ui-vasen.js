@@ -529,7 +529,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                             
                             ${FAMILY_PASSIVES[vasen.species.family] ? `
                                 <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
-                                <p><strong>Passive: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
+                                <p><strong>Trait: ${FAMILY_PASSIVES[vasen.species.family].name}</strong><br>
                                 ${FAMILY_PASSIVES[vasen.species.family].description}</p>
                             ` : ''}
                         </div>
