@@ -26,6 +26,7 @@ function compareVasenByNameThenTemperament(a, b) {
 // Handle väsen sort change
 UIController.prototype.handleVasenSortChange = function(sortBy) {
     this.vasenSortBy = sortBy;
+    localStorage.setItem('vasenSortBy', sortBy);
     this.renderVasenInventory();
 };
 

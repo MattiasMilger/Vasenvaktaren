@@ -440,12 +440,15 @@ UIController.prototype.getSkillPotencyClass = function(skill, skillElement, atta
 
     let matchup = getMatchupType(effectiveElement, defender.species.element);
 
-    // Jätte passive: Jotun's Fury - if it has already triggered this combat, or
-    // would trigger right now given the attacker's current health, upgrade the
-    // matchup the same way Combat.calculateDamage does (weak -> neutral, neutral -> potent).
+    // Jätte passive: Jotun's Fury - a ONE-TIME upgrade that fires on the single attack
+    // that first brings the väsen to/below the health threshold this combat. Once
+    // combatFlags.jattePassiveTriggered is true, Combat.calculateDamage no longer
+    // upgrades any further hits, so the indicator must only show when the passive
+    // has NOT yet triggered and the attacker's current health is at/below the
+    // threshold - i.e. exactly the condition that will cause the next attack to upgrade.
     const jattePassiveActive = attacker.species.family === FAMILIES.JATTE &&
-        (attacker.combatFlags.jattePassiveTriggered ||
-         (attacker.currentHealth / attacker.maxHealth) <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD);
+        !attacker.combatFlags.jattePassiveTriggered &&
+        (attacker.currentHealth / attacker.maxHealth) <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD;
 
     if (jattePassiveActive) {
         if (matchup === 'WEAK') {
