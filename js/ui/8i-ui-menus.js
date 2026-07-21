@@ -348,7 +348,7 @@ achievementsHtml += '</div></div>';
 
         let html = `
             <h4>Element Matchups</h4>
-            <p>Each element has weaknesses and vulnerabilities. Pay attention to maximize your damage.</p>
+            <p>Each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
             <div class="element-guide-list">
         `;
 
@@ -378,7 +378,7 @@ achievementsHtml += '</div></div>';
     UIController.prototype.generateFamiliesHTML = function() {
         let html = `
             <h4>Families</h4>
-            <p>Each family has a unique combat-altering trait. Read their descriptions to plan your strategy.</p>
+            <p>Each family possesses a unique trait. Take note to gain a strategic advantage.</p>
             <div class="family-guide-list">
         `;
 
@@ -421,13 +421,17 @@ achievementsHtml += '</div></div>';
 
     // Generate Temperaments HTML from TEMPERAMENTS constant
     UIController.prototype.generateTemperamentsHTML = function() {
-        let html = `<div class="temperament-list"><h4>Temperaments</h4>`;
+        let html = `
+            <h4>Temperaments</h4>
+            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one attribute for another. Modifiers apply before other bonuses.</p>
+            <div class="temperament-list">
+        `;
 
         Object.values(TEMPERAMENTS).forEach(temperament => {
             html += `<p><strong>${temperament.name}</strong> +${temperament.modifier} ${capitalize(temperament.positive)}, -${temperament.modifier} ${capitalize(temperament.negative)}</p>`;
         });
 
-        html += `<p class="temperament-note">Modifiers apply before other bonuses.</p></div>`;
+        html += `</div>`;
 
         return html;
     };
