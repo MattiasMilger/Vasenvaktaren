@@ -450,7 +450,7 @@ const VASEN_SPECIES = {
     'Bortbyting': {
         name: 'Bortbyting',
         internalName: 'Bortbyting',
-        description: 'A sickly, irritable troll secretly placed in a human cradle, bearing a malevolent gaze and a demanding temperament.',
+        description: 'A sickly, irritable troll secretly placed in a human cradle, bearing a malevolent gaze and a demanding disposition.',
         family: FAMILIES.TROLL,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
