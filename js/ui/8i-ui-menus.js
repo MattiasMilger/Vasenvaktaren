@@ -458,7 +458,7 @@ achievementsHtml += '</div></div>';
 
         let html = `
             <h4>Temperaments</h4>
-            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier} that is unaffected by rarity or level - only attribute stages applied during combat affect it further. Some temperaments raise and lower the same attribute, cancelling out for no net change.</p>
+            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
             <p class="matchup-instruction">Rows show the attribute raised; columns show the attribute lowered.</p>
             <table style="${tableStyle}">
                 <thead>
