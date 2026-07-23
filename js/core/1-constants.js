@@ -7,7 +7,7 @@ const GAME_CONFIG = {
     // GENERAL GAME SETTINGS
     // =============================================================================
     MAX_TEAM_SIZE: 3,
-    MAX_INVENTORY_SIZE: 99,
+    MAX_INVENTORY_SIZE: 199,
     MAX_ITEM_STACK: 99,
     MAX_COMBAT_LOG: 99,
     SAVE_KEY: 'vasenvaktaren_save',
