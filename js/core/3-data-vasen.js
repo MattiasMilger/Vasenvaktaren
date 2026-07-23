@@ -314,7 +314,7 @@ const VASEN_SPECIES = {
     'Gardstomte': {
         name: 'Gårdstomte',
         internalName: 'Gardstomte',
-        description: 'A prank-loving custodian of gardens, rewarding tidy grounds with good fortune but unleashing spiteful pranks when offended.',
+        description: 'A prank-loving custodian of gardens, rewarding tidy grounds with good fortune but unleashing spiteful antics when offended.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.COMMON,

@@ -25,7 +25,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 | **Elements** | 5 elements: Earth, Nature, Water, Fire, Wind |
 | **Attributes** | 4 attributes: Strength, Wisdom, Defense, Durability |
 | **Rarities** | 4 rarities: Common, Uncommon, Rare, Mythical |
-| **Temperaments** | 12 altering temperaments |
+| **Temperaments** | 36 altering temperaments |
 | **Skills** | 30 unique skills |
 
 ### Runes

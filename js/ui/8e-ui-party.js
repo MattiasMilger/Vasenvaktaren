@@ -29,8 +29,13 @@ UIController.prototype.renderParty = function() {
                 }).join('');
             }
 
+            const isFavorite = gameState.isFavorite(vasen.id);
+
             slotContent.innerHTML = `
                 <div class="party-vasen">
+                    <button class="vasen-favorite-btn ${isFavorite ? 'active' : ''}" style="position: absolute; top: var(--spacing-xs); right: var(--spacing-xs); z-index: 2;" onclick="event.stopPropagation(); ui.toggleFavorite('${vasen.id}')">
+                        ${isFavorite ? '★' : '☆'}
+                    </button>
                     <div class="party-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
                         <img src="${vasen.species.image}" alt="${vasen.species.name}" class="party-vasen-img">
                     </div>

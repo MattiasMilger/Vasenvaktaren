@@ -70,6 +70,16 @@ UIController.prototype.getSortedVasenCollection = function() {
                 if (elementDiff !== 0) return elementDiff;
                 return compareVasenByNameThenTemperament(a, b);
             });
+        case 'megin':
+            return collection.sort((a, b) => {
+                const favDiff = compareFavorites(a, b);
+                if (favDiff !== 0) return favDiff;
+                const diff = b.maxMegin - a.maxMegin;
+                if (diff !== 0) return diff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return compareVasenByNameThenTemperament(a, b);
+            });
         case 'defense':
             return collection.sort((a, b) => {
                 const favDiff = compareFavorites(a, b);
@@ -123,6 +133,16 @@ UIController.prototype.getSortedVasenCollection = function() {
                 if (elementDiff !== 0) return elementDiff;
                 return compareVasenByNameThenTemperament(a, b);
             });
+        case 'temperament':
+            return collection.sort((a, b) => {
+                const favDiff = compareFavorites(a, b);
+                if (favDiff !== 0) return favDiff;
+                const temperamentDiff = a.temperament.name.localeCompare(b.temperament.name, 'sv');
+                if (temperamentDiff !== 0) return temperamentDiff;
+                const elementDiff = compareVasenByElement(a, b);
+                if (elementDiff !== 0) return elementDiff;
+                return a.species.name.localeCompare(b.species.name, 'sv');
+            });
         case 'element':
             return null; // Return null to indicate element grouping should be used
         case 'family':
@@ -151,10 +171,12 @@ UIController.prototype.renderVasenInventory = function() {
             <option value="rarity" ${this.vasenSortBy === 'rarity' ? 'selected' : ''}>Rarity</option>
             <option value="element" ${this.vasenSortBy === 'element' ? 'selected' : ''}>Element</option>
             <option value="health" ${this.vasenSortBy === 'health' ? 'selected' : ''}>Health</option>
+            <option value="megin" ${this.vasenSortBy === 'megin' ? 'selected' : ''}>Megin</option>
             <option value="defense" ${this.vasenSortBy === 'defense' ? 'selected' : ''}>Defense</option>
             <option value="durability" ${this.vasenSortBy === 'durability' ? 'selected' : ''}>Durability</option>
             <option value="strength" ${this.vasenSortBy === 'strength' ? 'selected' : ''}>Strength</option>
             <option value="wisdom" ${this.vasenSortBy === 'wisdom' ? 'selected' : ''}>Wisdom</option>
+            <option value="temperament" ${this.vasenSortBy === 'temperament' ? 'selected' : ''}>Temperament</option>
             <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
         </select>
     `;
@@ -388,6 +410,7 @@ UIController.prototype.toggleFavorite = function(vasenId) {
     }
 
     this.renderVasenInventory();
+    this.renderParty();
     if (this.selectedVasen && this.selectedVasen.id === vasenId) {
         this.renderVasenDetails(this.selectedVasen);
     }

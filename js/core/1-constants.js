@@ -18,7 +18,7 @@ const GAME_CONFIG = {
     MAX_LEVEL: 30,
     TWO_RUNE_LEVEL: 25,             // Level at which a Väsen unlocks a second rune slot
     ENEMY_MAX_LEVEL: 999,
-    STARTER_LEVEL: 9,
+    STARTER_LEVEL: 10,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
     LEVEL_UP_ACCELERATION: 6,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
@@ -51,6 +51,15 @@ const GAME_CONFIG = {
     MAX_ATTRIBUTE_STAGE: 5,
     MIN_ATTRIBUTE_STAGE: -5,
     ATTRIBUTE_STAGE_MODIFIER: 0.12,      // Per-stage modifier added/subtracted per attribute stage
+    
+    // =============================================================================
+    // TEMPERAMENTS
+    // =============================================================================
+    // Flat amount every temperament raises one attribute (or Megin) by and lowers
+    // another attribute (or Megin) by. This is a flat addition/subtraction applied
+    // after rarity and level scaling - it is NOT affected by rarity multipliers or
+    // level scaling, only by attribute stages applied during combat.
+    TEMPERAMENT_MODIFIER: 9,
     
     // =============================================================================
     // DAMAGE CALCULATION
@@ -515,19 +524,61 @@ const ELEMENT_BONUSES = {
 
 const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
 
+// =============================================================================
+// TEMPERAMENTS
+// Keys are named after the attribute pair they affect (POSITIVE_NEGATIVE),
+// not the flavor `name` field, so the flavor name can be freely renamed later
+// without breaking anything that references a temperament by key (guardian
+// rosters below, saved games via VasenInstance.temperamentKey, etc).
+// =============================================================================
 const TEMPERAMENTS = {
-    FEROCIOUS:  { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: 5 },
-    BRUTAL:     { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: 5 },
-    SAVAGE:     { name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: 5 },
-    ALERT:      { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: 5 },
-    THOUGHTFUL: { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: 5 },
-    FOCUSED:    { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: 5 },
-    RESILIENT:  { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: 5 },
-    HEALTHY:    { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: 5 },
-    WARY:       { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: 5 },
-    STALWART:   { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: 5 },
-    ENDURING:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: 5 },
-    VIGILANT:   { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: 5 }
+    STRENGTH_HEALTH:    { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_DEFENSE:   { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_DURABILITY:{ name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_HEALTH:       { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_DEFENSE:      { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_DURABILITY:   { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_DEFENSE:      { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_DURABILITY:   { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_HEALTH:      { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_DURABILITY:  { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_HEALTH:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_DEFENSE:  { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+
+    // Megin-based temperaments
+    MEGIN_HEALTH:        { name: 'Spirited',   positive: 'megin',      negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_DEFENSE:       { name: 'Feral',      positive: 'megin',      negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_DURABILITY:    { name: 'Attuned',    positive: 'megin',      negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_MEGIN:      { name: 'Mighty',     positive: 'strength',   negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_MEGIN:        { name: 'Keen',       positive: 'wisdom',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_MEGIN:        { name: 'Stoic',      positive: 'health',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_MEGIN:       { name: 'Steady',     positive: 'defense',    negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_MEGIN:    { name: 'Unyielding', positive: 'durability', negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+
+    // Strength/Wisdom cross temperaments - complete the matrix by allowing
+    // Strength and Wisdom to also be the lowered attribute (previously only
+    // ever the raised attribute).
+    WISDOM_STRENGTH:      { name: 'Cunning',    positive: 'wisdom',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_STRENGTH:      { name: 'Vital',      positive: 'health',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_STRENGTH:     { name: 'Shielded',   positive: 'defense',     negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_STRENGTH:  { name: 'Tenacious',  positive: 'durability',  negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_STRENGTH:       { name: 'Ethereal',   positive: 'megin',       negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_WISDOM:      { name: 'Reckless',   positive: 'strength',    negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_WISDOM:        { name: 'Hearty',     positive: 'health',      negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_WISDOM:       { name: 'Stubborn',   positive: 'defense',     negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_WISDOM:    { name: 'Sturdy',     positive: 'durability',  negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_WISDOM:         { name: 'Frenzied',   positive: 'megin',       negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+
+    // Neutral temperaments - raise and lower the SAME attribute, so the two
+    // modifiers cancel out and the attribute is unaffected overall. Purely
+    // flavor variants with no net stat change (avoid the word "Neutral" -
+    // that term is reserved for elemental matchup type in this game).
+    STRENGTH_STRENGTH:     { name: 'Composed',   positive: 'strength',    negative: 'strength',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_WISDOM:         { name: 'Grounded',   positive: 'wisdom',      negative: 'wisdom',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_HEALTH:         { name: 'Balanced',   positive: 'health',      negative: 'health',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_DEFENSE:       { name: 'Poised',     positive: 'defense',     negative: 'defense',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_DURABILITY: { name: 'Weathered',  positive: 'durability',  negative: 'durability',  modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_MEGIN:            { name: 'Serene',     positive: 'megin',       negative: 'megin',       modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);
@@ -543,9 +594,9 @@ const ZONES = {
         guardian: {
             name: 'Åsa',
             team: [
-                { species: 'Alva', level: 5, temperament: 'HEALTHY', runes: ['NAUDIZ'] },
-                { species: 'Skogsra', level: 5, temperament: 'ENDURING', runes: ['URUZ'] },
-                { species: 'Lindorm', level: 5, temperament: 'STALWART', runes: ['WYNJA'] }
+                { species: 'Alva', level: 5, temperament: 'HEALTH_DURABILITY', runes: ['NAUDIZ'] },
+                { species: 'Skogsra', level: 5, temperament: 'DURABILITY_HEALTH', runes: ['URUZ'] },
+                { species: 'Lindorm', level: 5, temperament: 'DEFENSE_DURABILITY', runes: ['WYNJA'] }
             ],
             dialogue: {
                 challenge: 'The forest tests all who enter. Show me your strength, little one.',
@@ -565,9 +616,9 @@ const ZONES = {
         guardian: {
             name: 'Ragnar',
             team: [
-            { species: 'Nattramn', level: 10, temperament: 'RESILIENT', runes: ['HAGAL'] },
-            { species: 'Bjara', level: 10, temperament: 'BRUTAL', runes: ['BJARKA'] },
-            { species: 'Gloson', level: 10, temperament: 'VIGILANT', runes: ['PERTHO'] }
+            { species: 'Nattramn', level: 10, temperament: 'HEALTH_DEFENSE', runes: ['HAGAL'] },
+            { species: 'Bjara', level: 10, temperament: 'STRENGTH_DEFENSE', runes: ['BJARKA'] },
+            { species: 'Gloson', level: 10, temperament: 'DURABILITY_DEFENSE', runes: ['PERTHO'] }
             ],
             dialogue: {
                 challenge: 'I am the defender of the quiet folk. Disturbance is not tolerated. Prepare to leave this village.',
@@ -587,9 +638,9 @@ const ZONES = {
         guardian: {
             name: 'Hjördis',
             team: [
-                { species: 'Svartalv', level: 15, temperament: 'STALWART', runes: ['GIFU'] },
-                { species: 'Mara', level: 15, temperament: 'THOUGHTFUL', runes: ['URUZ'] },
-                { species: 'Fafner', level: 15, temperament: 'WARY', runes: ['ANSUZ'] }
+                { species: 'Svartalv', level: 15, temperament: 'DEFENSE_DURABILITY', runes: ['GIFU'] },
+                { species: 'Mara', level: 15, temperament: 'WISDOM_DEFENSE', runes: ['URUZ'] },
+                { species: 'Fafner', level: 15, temperament: 'DEFENSE_HEALTH', runes: ['ANSUZ'] }
             ],
             dialogue: {
                 challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
@@ -609,9 +660,9 @@ const ZONES = {
         guardian: {
             name: 'Sigurd',
             team: [
-                { species: 'Norna', level: 20, temperament: 'THOUGHTFUL', runes: ['GIFU'] },
-                { species: 'Irrbloss', level: 20, temperament: 'VIGILANT', runes: ['ODAL'] },
-                { species: 'Nacken', level: 20, temperament: 'RESILIENT', runes: ['INGUZ'] }
+                { species: 'Norna', level: 20, temperament: 'WISDOM_DEFENSE', runes: ['GIFU'] },
+                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_DEFENSE', runes: ['ODAL'] },
+                { species: 'Nacken', level: 20, temperament: 'HEALTH_DEFENSE', runes: ['INGUZ'] }
             ],
             dialogue: {
                 challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
@@ -631,9 +682,9 @@ const ZONES = {
         guardian: {
             name: 'Brynhild',
             team: [
-                { species: 'Vitorm', level: 25, temperament: 'HEALTHY', runes: ['GIFU', 'TYR'] },
-                { species: 'Bergatroll', level: 25, temperament: 'VIGILANT', runes: ['PERTHO', 'EIHWAZ']},
-                { species: 'Eldturs', level: 25, temperament: 'RESILIENT', runes: ['MANNAZ', 'KAUNAN'] }
+                { species: 'Vitorm', level: 25, temperament: 'HEALTH_DURABILITY', runes: ['GIFU', 'TYR'] },
+                { species: 'Bergatroll', level: 25, temperament: 'DURABILITY_DEFENSE', runes: ['PERTHO', 'EIHWAZ']},
+                { species: 'Eldturs', level: 25, temperament: 'HEALTH_DEFENSE', runes: ['MANNAZ', 'KAUNAN'] }
             ],
             dialogue: {
                 challenge: 'We are the forces of chaos, the ancient strength of the raw elements. Face your doom!',
@@ -653,9 +704,9 @@ const ZONES = {
         guardian: {
             name: 'Gylfe',
             team: [
-                { species: 'Draug', level: 30, temperament: 'FEROCIOUS', runes: ['GIFU', 'HAGAL'] },
-                { species: 'Valkyria', level: 30, temperament: 'BRUTAL', runes: ['FEHU', 'URUZ'] },
-                { species: 'Fenrir', level: 30, temperament: 'VIGILANT', runes: ['ODAL', 'MANNAZ'] }
+                { species: 'Draug', level: 30, temperament: 'STRENGTH_HEALTH', runes: ['GIFU', 'HAGAL'] },
+                { species: 'Valkyria', level: 30, temperament: 'STRENGTH_DEFENSE', runes: ['FEHU', 'URUZ'] },
+                { species: 'Fenrir', level: 30, temperament: 'DURABILITY_DEFENSE', runes: ['ODAL', 'MANNAZ'] }
             ],
             dialogue: {
                 challenge: 'This is where destiny is decided. The heroes of Valhalla and their enemies await the end. Prove your fate.',

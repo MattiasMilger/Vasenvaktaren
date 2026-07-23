@@ -15,7 +15,7 @@ class VasenInstance {
         // Use higher level cap for enemies
         const maxLevel = isEnemy ? GAME_CONFIG.ENEMY_MAX_LEVEL : GAME_CONFIG.MAX_LEVEL;
         this.level = Math.min(Math.max(1, level), maxLevel);
-        this.temperamentKey = temperamentKey || getRandomTemperament();
+        this.temperamentKey = (temperamentKey && TEMPERAMENTS[temperamentKey]) ? temperamentKey : getRandomTemperament();
         this.temperament = TEMPERAMENTS[this.temperamentKey];
         this.runes = runes.slice(0, this.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1);
         
@@ -88,17 +88,19 @@ class VasenInstance {
         const rarityMult = RARITY_MULTIPLIERS[this.species.rarity];
         base = base * rarityMult;
         
-        // Apply temperament modifier
+        // Apply level scaling
+        const levelScaling = 1 + GAME_CONFIG.ATTRIBUTE_LEVEL_SCALING_RATE * (this.level - 1);
+        base = base * levelScaling;
+        
+        // Apply temperament modifier as a flat, unscaled amount - added/subtracted
+        // after rarity and level scaling so it is never affected by either. Only
+        // attribute stages (applied in getAttribute()) affect it further.
         if (this.temperament.positive === attrName) {
             base += this.temperament.modifier;
         }
         if (this.temperament.negative === attrName) {
             base -= this.temperament.modifier;
         }
-        
-        // Apply level scaling
-        const levelScaling = 1 + GAME_CONFIG.ATTRIBUTE_LEVEL_SCALING_RATE * (this.level - 1);
-        base = base * levelScaling;
         
         return Math.floor(base);
     }
@@ -114,6 +116,20 @@ class VasenInstance {
     // Calculate max Megin
     calculateMaxMegin() {
         let megin = GAME_CONFIG.BASE_MEGIN + ((this.level - 1) * GAME_CONFIG.MEGIN_PER_LEVEL);
+        
+        // Apply temperament modifier for Megin (Spirited, Feral, Attuned grant it;
+        // Mighty, Keen, Stoic, Steady, Unyielding trade it away). Unlike the other
+        // four attributes (where the temperament modifier is applied as a flat,
+        // unscaled amount after everything else - see calculateAttribute()), the
+        // Megin modifier is applied here BEFORE the Uruz rune's +20% multiplier on
+        // purpose: Uruz should scale off the väsen's true (temperament-adjusted)
+        // Megin total, not just its unmodified base.
+        if (this.temperament.positive === 'megin') {
+            megin += this.temperament.modifier;
+        }
+        if (this.temperament.negative === 'megin') {
+            megin -= this.temperament.modifier;
+        }
         
         // Cap base megin (before rune bonuses) at MAX_MEGIN_CAP. This is mainly
         // relevant for enemies in Endless Tower, whose level has no cap.

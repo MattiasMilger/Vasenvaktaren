@@ -420,18 +420,73 @@ achievementsHtml += '</div></div>';
     };
 
     // Generate Temperaments HTML from TEMPERAMENTS constant
+    // Rendered as a matrix: rows are the attribute raised, columns are the
+    // attribute lowered. Every attribute (including Strength and Wisdom) can
+    // appear on both axes, and the diagonal (same attribute raised and
+    // lowered) is filled by the neutral temperaments, so this is a full
+    // square grid with no gaps.
     UIController.prototype.generateTemperamentsHTML = function() {
-        let html = `
-            <h4>Temperaments</h4>
-            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Modifiers apply before other bonuses.</p>
-            <div class="temperament-list">
-        `;
-
-        Object.values(TEMPERAMENTS).forEach(temperament => {
-            html += `<p><strong>${temperament.name}</strong> +${temperament.modifier} ${capitalize(temperament.positive)}, -${temperament.modifier} ${capitalize(temperament.negative)}</p>`;
+        // Build a lookup from "positive|negative" -> temperament
+        const byPair = {};
+        Object.values(TEMPERAMENTS).forEach(t => {
+            byPair[`${t.positive}|${t.negative}`] = t;
         });
 
-        html += `</div>`;
+        const rowAttrs = ['strength', 'wisdom', 'defense', 'durability', 'health', 'megin'];
+        const colAttrs = ['strength', 'wisdom', 'defense', 'durability', 'health', 'megin'];
+
+        // Short labels keep the 7-column matrix (row header + 6 attributes)
+        // narrow enough to fit the modal width without horizontal scrolling.
+        const attrShortLabels = {
+            strength: 'STR',
+            wisdom: 'WIS',
+            defense: 'DEF',
+            durability: 'DUR',
+            health: 'HP',
+            megin: 'MP'
+        };
+        const attrLabel = (attr) => attrShortLabels[attr] || capitalize(attr);
+        const modifier = GAME_CONFIG.TEMPERAMENT_MODIFIER;
+
+        const tableStyle = 'width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: var(--spacing-sm); font-size: var(--font-size-xs);';
+        const headerCellStyle = 'padding: 3px 2px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-muted); text-align: center;';
+        const cornerCellStyle = 'padding: 3px 2px; border: 1px solid var(--border-color); background: var(--bg-tertiary);';
+        const rowHeaderStyle = 'padding: 3px 2px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-muted); text-align: left;';
+        const cellStyle = 'padding: 3px 2px; border: 1px solid var(--border-color); text-align: center; color: var(--text-primary); overflow-wrap: break-word; word-break: break-word;';
+        const emptyCellStyle = 'padding: 3px 2px; border: 1px solid var(--border-color); text-align: center; color: var(--text-muted);';
+        const cellModifierStyle = 'display: block; font-size: var(--font-size-xxs); color: var(--text-muted);';
+
+        let html = `
+            <h4>Temperaments</h4>
+            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier} that is unaffected by rarity or level - only attribute stages applied during combat affect it further. Some temperaments raise and lower the same attribute, cancelling out for no net change.</p>
+            <p class="matchup-instruction">Rows show the attribute raised; columns show the attribute lowered.</p>
+            <table style="${tableStyle}">
+                <thead>
+                    <tr>
+                        <th style="${cornerCellStyle}"></th>
+                        ${colAttrs.map(col => `<th style="${headerCellStyle}">&minus;${attrLabel(col)}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        rowAttrs.forEach(row => {
+            html += `<tr><th style="${rowHeaderStyle}">+${attrLabel(row)}</th>`;
+            colAttrs.forEach(col => {
+                const t = byPair[`${row}|${col}`];
+                if (t) {
+                    html += `<td style="${cellStyle}">${t.name}<span style="${cellModifierStyle}">+${t.modifier}/-${t.modifier}</span></td>`;
+                } else {
+                    html += `<td style="${emptyCellStyle}">&mdash;</td>`;
+                }
+            });
+            html += `</tr>`;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
 
         return html;
     };
