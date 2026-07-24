@@ -594,9 +594,9 @@ const ZONES = {
         guardian: {
             name: 'Åsa',
             team: [
-                { species: 'Alva', level: 5, temperament: 'HEALTH_DURABILITY', runes: ['NAUDIZ'] },
-                { species: 'Skogsra', level: 5, temperament: 'DURABILITY_HEALTH', runes: ['URUZ'] },
-                { species: 'Lindorm', level: 5, temperament: 'DEFENSE_DURABILITY', runes: ['WYNJA'] }
+                { species: 'Alva', level: 5, temperament: 'DEFENSE_STRENGTH', runes: ['NAUDIZ'] },
+                { species: 'Skogsra', level: 5, temperament: 'WISDOM_MEGIN', runes: ['URUZ'] },
+                { species: 'Lindorm', level: 5, temperament: 'DURABILITY_DEFENSE', runes: ['WYNJA'] }
             ],
             dialogue: {
                 challenge: 'The forest tests all who enter. Show me your strength, little one.',
@@ -616,9 +616,9 @@ const ZONES = {
         guardian: {
             name: 'Ragnar',
             team: [
-            { species: 'Nattramn', level: 10, temperament: 'HEALTH_DEFENSE', runes: ['HAGAL'] },
-            { species: 'Bjara', level: 10, temperament: 'STRENGTH_DEFENSE', runes: ['BJARKA'] },
-            { species: 'Gloson', level: 10, temperament: 'DURABILITY_DEFENSE', runes: ['PERTHO'] }
+            { species: 'Nattramn', level: 10, temperament: 'STRENGTH_HEALTH', runes: ['HAGAL'] },
+            { species: 'Bjara', level: 10, temperament: 'DURABILITY_MEGIN', runes: ['BJARKA'] },
+            { species: 'Gloson', level: 10, temperament: 'HEALTH_WISDOM', runes: ['PERTHO'] }
             ],
             dialogue: {
                 challenge: 'I am the defender of the quiet folk. Disturbance is not tolerated. Prepare to leave this village.',
@@ -660,8 +660,8 @@ const ZONES = {
         guardian: {
             name: 'Sigurd',
             team: [
-                { species: 'Norna', level: 20, temperament: 'WISDOM_DEFENSE', runes: ['GIFU'] },
-                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_DEFENSE', runes: ['ODAL'] },
+                { species: 'Norna', level: 20, temperament: 'WISDOM_STRENGTH', runes: ['GIFU'] },
+                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_STRENGTH', runes: ['ODAL'] },
                 { species: 'Nacken', level: 20, temperament: 'HEALTH_DEFENSE', runes: ['INGUZ'] }
             ],
             dialogue: {
@@ -683,8 +683,8 @@ const ZONES = {
             name: 'Brynhild',
             team: [
                 { species: 'Vitorm', level: 25, temperament: 'HEALTH_DURABILITY', runes: ['GIFU', 'TYR'] },
-                { species: 'Bergatroll', level: 25, temperament: 'DURABILITY_DEFENSE', runes: ['PERTHO', 'EIHWAZ']},
-                { species: 'Eldturs', level: 25, temperament: 'HEALTH_DEFENSE', runes: ['MANNAZ', 'KAUNAN'] }
+                { species: 'Bergatroll', level: 25, temperament: 'STRENGTH_DEFENSE', runes: ['PERTHO', 'EIHWAZ']},
+                { species: 'Eldturs', level: 25, temperament: 'STRENGTH_MEGIN', runes: ['MANNAZ', 'KAUNAN'] }
             ],
             dialogue: {
                 challenge: 'We are the forces of chaos, the ancient strength of the raw elements. Face your doom!',
@@ -704,9 +704,9 @@ const ZONES = {
         guardian: {
             name: 'Gylfe',
             team: [
-                { species: 'Draug', level: 30, temperament: 'STRENGTH_HEALTH', runes: ['GIFU', 'HAGAL'] },
-                { species: 'Valkyria', level: 30, temperament: 'STRENGTH_DEFENSE', runes: ['FEHU', 'URUZ'] },
-                { species: 'Fenrir', level: 30, temperament: 'DURABILITY_DEFENSE', runes: ['ODAL', 'MANNAZ'] }
+                { species: 'Draug', level: 30, temperament: 'DURABILITY_MEGIN', runes: ['GIFU', 'HAGAL'] },
+                { species: 'Valkyria', level: 30, temperament: 'HEALTH_WISDOM', runes: ['FEHU', 'WYNJA'] },
+                { species: 'Fenrir', level: 30, temperament: 'STRENGTH_WISDOM', runes: ['ODAL', 'JERA'] }
             ],
             dialogue: {
                 challenge: 'This is where destiny is decided. The heroes of Valhalla and their enemies await the end. Prove your fate.',

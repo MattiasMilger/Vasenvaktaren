@@ -353,6 +353,24 @@ achievementsHtml += '</div></div>';
         }
     };
 
+    // Scroll an Element Matchups / Families popup fully into view when it is
+    // opened inside the Game Guide. These popups (.element-guide-details,
+    // .family-description-popup) are positioned absolutely from their trigger
+    // badge, so a badge near the right edge of the modal (e.g. Wind, Rå) can
+    // open a popup that overflows past the visible area, requiring the
+    // player to manually scroll .tips-content sideways to read it. Called
+    // right after the badge's own toggle function runs, so the 'open' class
+    // is already applied by the time this checks it.
+    UIController.prototype.scrollGuidePopupIntoView = function(trigger) {
+        const parent = trigger.parentElement;
+        if (!parent || !parent.classList.contains('open')) return;
+
+        const popup = parent.querySelector('.element-guide-details, .family-description-popup');
+        if (!popup) return;
+
+        popup.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    };
+
     // Populate game guide values from GAME_CONFIG
     UIController.prototype.populateGameGuideValues = function() {
         // Helper function to set text content safely
@@ -414,7 +432,7 @@ achievementsHtml += '</div></div>';
         elements.forEach(element => {
             html += `
                 <div class="element-guide-collapsible">
-                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${element}</span>
+                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${element}</span>
                     <div class="element-guide-details">
                         <div class="guide-matchup-section">
                             ${this.generateAttackingMatchupsHTML(element)}
@@ -455,7 +473,7 @@ achievementsHtml += '</div></div>';
             
             html += `
                 <div class="family-guide-collapsible">
-                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${family}</span>
+                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${family}</span>
                     <div class="family-description-popup">
                         <p><strong>${family}</strong><br>
                         ${description}</p>
