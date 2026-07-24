@@ -2,6 +2,17 @@
 // 8g-ui-combat.js - Combat Rendering, Action Buttons, and Combat Animations
 // =============================================================================
 
+// Short attribute labels used to compactly display a combatant's temperament
+// modifiers (+9/-9) in the combat panel without taking up much space.
+const COMBAT_TEMPERAMENT_ATTR_LABELS = {
+    strength: 'STR',
+    wisdom: 'WIS',
+    defense: 'DEF',
+    durability: 'DUR',
+    health: 'HP',
+    megin: 'MP'
+};
+
 UIController.prototype._sizeCombatLog = function() {
         if (!this.combatLog || this.combatLog.offsetParent === null) return;
         // Only auto-size on desktop (>768px width)
@@ -179,7 +190,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         <div class="combatant-header">
             ${untamedHtml}
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
-            <span class="combatant-level">Lvl ${vasen.level}</span>
+            <span class="combatant-level"><span class="combatant-level-main">Lvl ${vasen.level}</span> <span class="combatant-level-temp">(+${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.positive]} / -${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.negative]})</span></span>
         </div>
 
         <div class="combatant-image-wrapper">

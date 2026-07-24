@@ -112,6 +112,42 @@ class Game {
 
         // Store the selected starter temporarily (don't create anything yet)
         const selectedStarterName = this.selectedStarter;
+        const selectedStarterSpecies = VASEN_SPECIES[selectedStarterName];
+
+        // Roll the starter's temperament now so the same temperament shown in
+        // the welcome dialogue is the one actually applied to the created väsen.
+        const starterTemperamentKey = getRandomTemperament();
+        const starterTemperament = TEMPERAMENTS[starterTemperamentKey];
+
+        // Determine the starting items now so the same items shown in the
+        // welcome dialogue are the ones actually granted when the player
+        // clicks "Begin Journey" (mirrors the guardian defeat flow, which
+        // rolls new-zone items before displaying them in the victory message).
+        const zone1Items = [
+            'Mossy Bark',
+            'Shed Antlers',
+            'Elderflower Sprig',
+            'Morning Dew',
+            'Shedded Scale',
+            'Festive Midsommarkrans'
+        ];
+
+        // Copy + shuffle
+        const shuffledZone1Items = [...zone1Items].sort(() => Math.random() - 0.5);
+
+        // Take the first N unique items based on config
+        const startingItems = shuffledZone1Items.slice(0, GAME_CONFIG.STARTING_ITEMS_AMOUNT);
+
+        let startingItemsMessage = '';
+        startingItems.forEach(itemId => {
+            const itemName = TAMING_ITEMS[itemId]?.name || itemId;
+            startingItemsMessage += `<p>You received: <strong>${itemName}</strong>!</p>`;
+        });
+
+        const temperamentMessage = selectedStarterSpecies
+            ? `<p>Your <strong>${selectedStarterSpecies.name}</strong> has a <strong>${starterTemperament.name}</strong> temperament
+               (+${starterTemperament.modifier} ${capitalize(starterTemperament.positive)} / -${starterTemperament.modifier} ${capitalize(starterTemperament.negative)}).</p>`
+            : '';
 
         // Show intro dialogue FIRST, before creating anything
         ui.showDialogue(
@@ -121,6 +157,8 @@ class Game {
             <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}
         </p>
         <p class="rune-hint">${RUNES.URUZ.effect}</p>
+        ${temperamentMessage}
+        ${startingItemsMessage}
     `,
     [
         {
@@ -130,8 +168,8 @@ class Game {
                 // initialize new game and create everything
                 gameState.resetGame();
 
-                // Create starter Vasen at starter level
-                const starter = new VasenInstance(selectedStarterName, GAME_CONFIG.STARTER_LEVEL);
+                // Create starter Vasen at starter level with the pre-rolled temperament
+                const starter = new VasenInstance(selectedStarterName, GAME_CONFIG.STARTER_LEVEL, starterTemperamentKey);
 
                 // Give starting rune (Uruz)
                 starter.equipRune('URUZ');
@@ -145,26 +183,11 @@ class Game {
                 // Add starting rune to collected
                 gameState.collectedRunes.add('URUZ');
 
-                // Give starting taming items from zone 1
-const zone1Items = [
-  'Mossy Bark',
-  'Shed Antlers',
-  'Elderflower Sprig',
-  'Morning Dew',
-  'Shedded Scale',
-  'Festive Midsommarkrans'
-];
-
-// Copy + shuffle
-const shuffled = [...zone1Items].sort(() => Math.random() - 0.5);
-
-// Take the first N unique items based on config
-const startingItems = shuffled.slice(0, GAME_CONFIG.STARTING_ITEMS_AMOUNT);
-
-// Add one of each
-startingItems.forEach(item => {
-  gameState.addItem(item, 1);
-});
+                // Give the starting taming items selected above (matches what
+                // was shown in the welcome dialogue)
+                startingItems.forEach(item => {
+                    gameState.addItem(item, 1);
+                });
 
 
                 // Start the game for real

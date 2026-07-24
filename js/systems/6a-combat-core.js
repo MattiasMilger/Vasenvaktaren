@@ -551,10 +551,13 @@ class Combat {
         
         setTimeout(() => {
             this.addLog(`${enemyName}: If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
-        }, 600);
 
-        this.handlePostTurn(results);
-        this.endTurn();
+            // Deferred until after both dialogue lines so the megin regen log
+            // (shown when verbose combat log is enabled) doesn't land between
+            // the player's question and the enemy's reply.
+            this.handlePostTurn(results);
+            this.endTurn();
+        }, 600);
         
         return results;
     }

@@ -171,9 +171,19 @@
 }
 
 .combatant-level {
+    margin-bottom: var(--spacing-sm);
+}
+
+.combatant-level-main {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-muted);
+}
+
+.combatant-level-temp {
     font-size: var(--font-size-xs);
     color: var(--text-muted);
-    margin-bottom: var(--spacing-sm);
+    margin-left: 4px;
 }
 
 .combatant-bars {
