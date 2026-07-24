@@ -557,19 +557,34 @@
         <div class="modal-content modal-tips">
             <h3 class="modal-title">Game Guide</h3> <br>
             <div class="tips-content">
-                <h4>Taming</h4>
-                <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
+                <div class="tips-header-controls">
+                    <button class="btn btn-small guide-collapse-btn">Collapse Categories</button>
+                </div>
 
-                <!-- Attributes Section -->
-                <h4>Attributes</h4>
-                <p><strong>Strength (STR)</strong> - increases damage with Strength attacks.<br>
-                    <strong>Wisdom (WIS)</strong> - increases damage with Wisdom attacks.<br>
-                    <strong>Defense (DEF)</strong> - Reduces damage taken from Strength attacks.<br>
-                    <strong>Durability (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
-                
-                <h4>Resources</h4>
-                <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between combat encounters.<br>
-                <strong>Megin (MP)</strong> - Used to perform skills. Megin fully restores after each combat.</p>
+                <div class="guide-category guide-category-first" data-cat="taming">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Taming</h4>
+                    <div class="guide-category-body">
+                        <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="attributes">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attributes</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Strength (STR)</strong> - increases damage with Strength attacks.<br>
+                            <strong>Wisdom (WIS)</strong> - increases damage with Wisdom attacks.<br>
+                            <strong>Defense (DEF)</strong> - Reduces damage taken from Strength attacks.<br>
+                            <strong>Durability (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="resources">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Resources</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between combat encounters.<br>
+                        <strong>Megin (MP)</strong> - Used to perform skills. Megin fully restores after each combat.</p>
+                    </div>
+                </div>
 
                 <!-- Dynamic Element Matchups Section -->
                 <div id="dynamic-element-matchups"></div>
@@ -580,43 +595,74 @@
                 <!-- Dynamic Temperaments Section -->
                 <div id="dynamic-temperaments"></div>
 
-                <h4>Runes</h4>
-                <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.<br>
-                <strong>Bind Runes:</strong> Certain pairs of runes, when equipped together, awaken a hidden combined effect of their own. Experiment with different combinations to discover them.</p>
+                <div class="guide-category" data-cat="runes">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Runes</h4>
+                    <div class="guide-category-body">
+                        <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.<br>
+                        <strong>Bind Runes:</strong> Certain pairs of runes, when equipped together, awaken a hidden combined effect of their own. Experiment with different combinations to discover them.</p>
+                    </div>
+                </div>
 
-                <h4>Megin System</h4>
-                <p><strong>Regeneration:</strong> <span id="guide-megin-regen"></span> of max Megin restored per turn<br>
-                <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin<br>
+                <div class="guide-category" data-cat="megin-system">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Megin System</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Regeneration:</strong> <span id="guide-megin-regen"></span> of max Megin restored per turn<br>
+                        <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less Megin</p>
+                    </div>
+                </div>
 
-                <h4>Healing</h4>
-                <p><strong>Post-combat:</strong> Active party heals <span id="guide-post-combat-heal"></span> of max HP (even from 0 HP)<br>
-                <strong>Sacred Well:</strong> All Väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> of max HP<br>
-                <strong>Items (Correct):</strong> Giving a Väsen its desired item heals <span id="guide-correct-item-heal"></span> of max HP<br>
-                <strong>Items (Wrong):</strong> Giving a Väsen any other item heals <span id="guide-wrong-item-heal"></span> of max HP<br>
-                <em>Note: All healing is based on max health, not current health.</em></p>
+                <div class="guide-category" data-cat="healing">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Healing</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Post-combat:</strong> Active party heals <span id="guide-post-combat-heal"></span> of max HP (even from 0 HP)<br>
+                        <strong>Sacred Well:</strong> All Väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> of max HP<br>
+                        <strong>Items (Correct):</strong> Giving a Väsen its desired item heals <span id="guide-correct-item-heal"></span> of max HP<br>
+                        <strong>Items (Wrong):</strong> Giving a Väsen any other item heals <span id="guide-wrong-item-heal"></span> of max HP<br>
+                        <em>Note: All healing is based on max health, not current health.</em></p>
+                    </div>
+                </div>
 
-                <h4>Power</h4>
-                <p>Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (Strength/Wisdom).</p>
+                <div class="guide-category" data-cat="power">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Power</h4>
+                    <div class="guide-category-body">
+                        <p>Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (Strength/Wisdom).</p>
+                    </div>
+                </div>
 
-                <h4>Attribute Stages</h4>
-                <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
-                <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
-                
-                <h4>Initial Bonus</h4>
-                <p>Certain utility skills have an "Initial Bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
+                <div class="guide-category" data-cat="attribute-stages">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attribute Stages</h4>
+                    <div class="guide-category-body">
+                        <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
+                        <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
+                    </div>
+                </div>
 
-                <h4>Experience & Leveling</h4>
-                <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
-                <strong>Distribution:</strong><br>
-                - Killing Blow: <span id="guide-exp-killing"></span> of base experience<br>
-                - Participated in combat: <span id="guide-exp-participated"></span> of base experience<br>
-                - In Party (not fielded): <span id="guide-exp-party"></span> of base experience<br>
-                - Knocked Out: 0% (no experience)<br>
-                <em>Experience is only awarded after combat ends.</em></p>
-                
-                                <h4>Move Priority</h4>
-                <p>Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
-                <br>
+                <div class="guide-category" data-cat="initial-bonus">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Initial Bonus</h4>
+                    <div class="guide-category-body">
+                        <p>Certain utility skills have an "Initial Bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="experience">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Experience & Leveling</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
+                        <strong>Distribution:</strong><br>
+                        - Killing Blow: <span id="guide-exp-killing"></span> of base experience<br>
+                        - Participated in combat: <span id="guide-exp-participated"></span> of base experience<br>
+                        - In Party (not fielded): <span id="guide-exp-party"></span> of base experience<br>
+                        - Knocked Out: 0% (no experience)<br>
+                        <em>Experience is only awarded after combat ends.</em></p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="move-priority">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Move Priority</h4>
+                    <div class="guide-category-body">
+                        <p>Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
+                    </div>
+                </div>
             </div>
             <button id="close-combat-tips" class="btn btn-secondary">Close</button>
         </div>

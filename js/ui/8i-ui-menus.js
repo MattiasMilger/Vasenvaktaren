@@ -275,6 +275,18 @@ achievementsHtml += '</div></div>';
 
     // Render dynamic Game Guide content (Element Matchups and Temperaments)
     UIController.prototype.renderGameGuideContent = function() {
+        const container = document.querySelector('.tips-content');
+
+        // Capture currently collapsed categories before the dynamic sections
+        // below get regenerated, so re-opening/refreshing the guide doesn't
+        // reset categories the player already collapsed.
+        const collapsedCats = new Set();
+        if (container) {
+            container.querySelectorAll('.guide-category[data-cat]').forEach(el => {
+                if (el.classList.contains('guide-category-collapsed')) collapsedCats.add(el.dataset.cat);
+            });
+        }
+
         // Populate dynamic values from GAME_CONFIG
         this.populateGameGuideValues();
 
@@ -294,6 +306,50 @@ achievementsHtml += '</div></div>';
         const temperamentsContainer = document.getElementById('dynamic-temperaments');
         if (temperamentsContainer) {
             temperamentsContainer.innerHTML = this.generateTemperamentsHTML();
+        }
+
+        // Restore collapsed state on both the static and freshly re-rendered
+        // dynamic categories
+        if (container) {
+            container.querySelectorAll('.guide-category[data-cat]').forEach(el => {
+                el.classList.toggle('guide-category-collapsed', collapsedCats.has(el.dataset.cat));
+            });
+        }
+
+        this._setupGuideCategoryHandlers(container);
+    };
+
+    // Wire up click handlers for the Game Guide's collapsible categories and
+    // the Collapse/Expand Categories button. Safe to call on every render:
+    // the category click handler is delegated (removed and re-added each
+    // time), and the button handler is bound only once via a dataset flag
+    // since the button itself is static markup that never gets replaced.
+    UIController.prototype._setupGuideCategoryHandlers = function(container) {
+        if (!container) return;
+
+        if (this._guideClickHandler) {
+            container.removeEventListener('click', this._guideClickHandler);
+        }
+        this._guideClickHandler = (e) => {
+            const title = e.target.closest('.guide-category-title');
+            if (!title) return;
+            const category = title.closest('.guide-category');
+            if (category) {
+                category.classList.toggle('guide-category-collapsed');
+            }
+        };
+        container.addEventListener('click', this._guideClickHandler);
+
+        const collapseBtn = container.querySelector('.guide-collapse-btn');
+        if (collapseBtn && !collapseBtn.dataset.bound) {
+            collapseBtn.dataset.bound = 'true';
+            collapseBtn.addEventListener('click', () => {
+                const cats = container.querySelectorAll('.guide-category');
+                const anyExpanded = [...cats].some(c => !c.classList.contains('guide-category-collapsed'));
+                const shouldCollapse = anyExpanded;
+                cats.forEach(c => c.classList.toggle('guide-category-collapsed', shouldCollapse));
+                collapseBtn.textContent = shouldCollapse ? 'Expand Categories' : 'Collapse Categories';
+            });
         }
     };
 
@@ -347,9 +403,11 @@ achievementsHtml += '</div></div>';
         const elements = Object.keys(ELEMENT_MATCHUPS);
 
         let html = `
-            <h4>Element Matchups</h4>
-            <p>Each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
-            <div class="element-guide-list">
+            <div class="guide-category" data-cat="element-matchups">
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Element Matchups</h4>
+                <div class="guide-category-body">
+                    <p>Each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
+                    <div class="element-guide-list">
         `;
 
         // Create a collapsible for each element
@@ -369,7 +427,11 @@ achievementsHtml += '</div></div>';
             `;
         });
 
-        html += `</div>`;
+        html += `
+                    </div>
+                </div>
+            </div>
+        `;
 
         return html;
     };
@@ -377,9 +439,11 @@ achievementsHtml += '</div></div>';
     // Generate Families HTML from FAMILIES and FAMILY_DESCRIPTIONS constants
     UIController.prototype.generateFamiliesHTML = function() {
         let html = `
-            <h4>Families</h4>
-            <p>Each family possesses a unique trait. Take note to gain a strategic advantage.</p>
-            <div class="family-guide-list">
+            <div class="guide-category" data-cat="families">
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Families</h4>
+                <div class="guide-category-body">
+                    <p>Each family possesses a unique trait. Take note to gain a strategic advantage.</p>
+                    <div class="family-guide-list">
         `;
 
         const families = Object.values(FAMILIES);
@@ -414,7 +478,11 @@ achievementsHtml += '</div></div>';
             }
         });
 
-        html += `</div>`;
+        html += `
+                    </div>
+                </div>
+            </div>
+        `;
 
         return html;
     };
@@ -457,17 +525,19 @@ achievementsHtml += '</div></div>';
         const cellModifierStyle = 'display: block; font-size: var(--font-size-xxs); color: var(--text-muted);';
 
         let html = `
-            <h4>Temperaments</h4>
-            <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
-            <p class="matchup-instruction">Rows show the attribute raised; columns show the attribute lowered.</p>
-            <table style="${tableStyle}">
-                <thead>
-                    <tr>
-                        <th style="${cornerCellStyle}"></th>
-                        ${colAttrs.map(col => `<th style="${headerCellStyle}">&minus;${attrLabel(col)}</th>`).join('')}
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="guide-category" data-cat="temperaments">
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments</h4>
+                <div class="guide-category-body">
+                    <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
+                    <p class="matchup-instruction">Rows show the attribute raised; columns show the attribute lowered.</p>
+                    <table style="${tableStyle}">
+                        <thead>
+                            <tr>
+                                <th style="${cornerCellStyle}"></th>
+                                ${colAttrs.map(col => `<th style="${headerCellStyle}">&minus;${attrLabel(col)}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
         `;
 
         rowAttrs.forEach(row => {
@@ -484,8 +554,10 @@ achievementsHtml += '</div></div>';
         });
 
         html += `
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         `;
 
         return html;

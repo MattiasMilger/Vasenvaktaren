@@ -1343,14 +1343,59 @@
     margin-bottom: var(--spacing-xs);
 }
 
-.tips-content h4:first-child {
-    margin-top: 0;
-}
-
 .tips-content p {
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     margin-bottom: var(--spacing-sm);
+}
+
+/* =============================================================================
+   GAME GUIDE - COLLAPSIBLE CATEGORIES
+   ============================================================================= */
+
+.tips-header-controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-secondary);
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.guide-category-title {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.guide-category-first .guide-category-title {
+    margin-top: 0;
+}
+
+.guide-cat-chevron {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: inline-block;
+    line-height: 1;
+}
+
+.guide-cat-chevron::before {
+    content: '»';
+}
+
+.guide-category.guide-category-collapsed .guide-cat-chevron::before {
+    content: '«';
+}
+
+.guide-category.guide-category-collapsed .guide-category-body {
+    display: none;
 }
 
 /* Swap Modal */
