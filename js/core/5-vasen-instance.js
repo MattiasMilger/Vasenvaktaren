@@ -143,9 +143,9 @@ class VasenInstance {
         return megin;
     }
     
-    // Get megin regeneration per turn
-    getMeginRegen() {
-        return Math.floor(this.maxMegin * GAME_CONFIG.MEGIN_REGEN_RATE);
+    // Get megin refill per turn
+    getMeginRefill() {
+        return Math.floor(this.maxMegin * GAME_CONFIG.MEGIN_REFILL_RATE);
     }
     
     // Get available skills based on level
@@ -228,11 +228,11 @@ class VasenInstance {
         this.currentMegin = Math.max(0, this.currentMegin - amount);
     }
     
-    // Regenerate megin
-    regenerateMegin() {
-        const regen = this.getMeginRegen();
-        this.currentMegin = Math.min(this.maxMegin, this.currentMegin + regen);
-        return regen;
+    // Refill megin
+    refillMegin() {
+        const refill = this.getMeginRefill();
+        this.currentMegin = Math.min(this.maxMegin, this.currentMegin + refill);
+        return refill;
     }
 
     // Gain a flat amount of megin, capped at maxMegin. Returns the actual amount gained.

@@ -549,7 +549,7 @@ const BIND_RUNES = [
         runes: ['URUZ', 'THURS'],
         type: 'thurs_megin_gain',
         get effectText() {
-            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of thurs damage as megin`;
+            return `This väsen refills ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT * 100)}% of thurs damage as megin`;
         },
         symbols: `${RUNES.URUZ.symbol}${RUNES.THURS.symbol}`,
         names: `${RUNES.URUZ.name} ${RUNES.THURS.name}`

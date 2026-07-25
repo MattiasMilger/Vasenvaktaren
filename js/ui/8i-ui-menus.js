@@ -382,13 +382,13 @@ achievementsHtml += '</div></div>';
         // Taming
         setText('guide-max-offers', GAME_CONFIG.MAX_OFFERS_PER_COMBAT);
 
-        // Megin System
-        setText('guide-megin-regen', `${Math.round(GAME_CONFIG.MEGIN_REGEN_RATE * 100)}%`);
+        // Resource Management: megin refill/discount
+        setText('guide-megin-refill', `${Math.round(GAME_CONFIG.MEGIN_REFILL_RATE * 100)}%`);
         setText('guide-element-discount', `${Math.round(GAME_CONFIG.SAME_ELEMENT_MEGIN_DISCOUNT * 100)}%`);
         setText('guide-base-megin', GAME_CONFIG.BASE_MEGIN);
         setText('guide-megin-per-level', GAME_CONFIG.MEGIN_PER_LEVEL);
 
-        // Healing
+        // Resource Management: healing
         setText('guide-post-combat-heal', `${Math.round(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT * 100)}%`);
         setText('guide-sacred-well-heal', `${Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100)}%`);
         setText('guide-correct-item-heal', `${Math.round(GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT * 100)}%`);

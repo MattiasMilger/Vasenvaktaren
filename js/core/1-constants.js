@@ -41,7 +41,7 @@ const GAME_CONFIG = {
     // =============================================================================
     BASE_MEGIN: 73,
     MEGIN_PER_LEVEL: 2,
-    MEGIN_REGEN_RATE: 0.12,             // Fraction of max Megin restored per turn
+    MEGIN_REFILL_RATE: 0.12,             // Fraction of max Megin restored per turn
     SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element skills
     MAX_MEGIN_CAP: 180,                 // Hard cap on base max Megin before rune bonuses (e.g. Uruz) are applied. Mainly relevant for enemies in Endless Tower, who have no level cap.
     
@@ -90,9 +90,9 @@ const GAME_CONFIG = {
 
     TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all attributes when using Tyr's Sacrifice
 
-    FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears regen lasts
-    FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin regeneration while Freya's Tears is active
-    FREYASTEARS_HEALTH_REGEN_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
+    FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears refill lasts
+    FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin refill while Freya's Tears is active
+    FREYASTEARS_HEALTH_REFILL_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
     INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff skill per side (Smithing, Skald's Mead, Thick Coat)
 

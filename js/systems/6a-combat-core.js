@@ -231,32 +231,32 @@ class Combat {
         }
     }
     
-    // End turn (regenerate megin, clear flags)
+    // End turn (refill megin, clear flags)
     endTurn() {
         const verboseCombatLog = typeof ui !== 'undefined' && ui.verboseCombatLog;
 
-        // Snapshot pre-regen megin values so verbose logging can report the
-        // TOTAL megin gained this turn (base regen + any Freya's Tears bonus
-        // regen applied further below), rather than just the base amount.
-        const meginBeforeRegen = new Map();
+        // Snapshot pre-refill megin values so verbose logging can report the
+        // TOTAL megin gained this turn (base refill + any Freya's Tears bonus
+        // refill applied further below), rather than just the base amount.
+        const meginBeforeRefill = new Map();
         if (verboseCombatLog) {
-            this.playerTeam.forEach(v => meginBeforeRegen.set(v.id, v.currentMegin));
-            this.enemyTeam.forEach(v => meginBeforeRegen.set(v.id, v.currentMegin));
+            this.playerTeam.forEach(v => meginBeforeRefill.set(v.id, v.currentMegin));
+            this.enemyTeam.forEach(v => meginBeforeRefill.set(v.id, v.currentMegin));
         }
 
-        // Regenerate megin for all team members (base regen only)
+        // Refill megin for all team members (base refill only)
         this.playerTeam.forEach(v => {
             if (!v.isKnockedOut()) {
-                v.regenerateMegin();
+                v.refillMegin();
             }
         });
         this.enemyTeam.forEach(v => {
             if (!v.isKnockedOut()) {
-                v.regenerateMegin();
+                v.refillMegin();
             }
         });
 
-        // Freya's Tears: apply health regen + extra megin regen to active combatants
+        // Freya's Tears: apply heal + extra megin refill to active combatants
         const teams = [
             { vasen: this.playerActive, teamFlag: 'playerTeamFreyasTears', teamName: 'your team' },
             { vasen: this.enemyActive, teamFlag: 'enemyTeamFreyasTears', teamName: 'the opposing team' }
@@ -269,27 +269,27 @@ class Combat {
                 // 1. Log Freya's Tears effect first
                 this.addLog(`Freya's Tears rain on ${vasen.getDisplayName()}`, 'status');
 
-                // Health regen
-                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REGEN_PERCENT);
+                // Health refill
+                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.FREYASTEARS_HEALTH_REFILL_PERCENT);
                 if (healAmount > 0) {
                     vasen.heal(healAmount);
                     // 2. Log gained health right after
                     this.addLog(`${vasen.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health!`, 'heal');
                 }
 
-                // Megin regen
+                // Megin refill
                 for (let i = 1; i < GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER; i++) {
-                    vasen.regenerateMegin();
+                    vasen.refillMegin();
                 }
             }
         });
 
         // Verbose combat log: report TOTAL megin gained this turn per väsen
-        // (base regen plus any Freya's Tears bonus regen applied above).
+        // (base refill plus any Freya's Tears bonus refill applied above).
         if (verboseCombatLog) {
             this.playerTeam.forEach(v => {
                 if (!v.isKnockedOut()) {
-                    const gained = v.currentMegin - (meginBeforeRegen.get(v.id) || 0);
+                    const gained = v.currentMegin - (meginBeforeRefill.get(v.id) || 0);
                     if (gained > 0) {
                         this.addLog(`${v.getDisplayName()} gained ${gained} Megin!`, 'megin');
                     }
@@ -297,7 +297,7 @@ class Combat {
             });
             this.enemyTeam.forEach(v => {
                 if (!v.isKnockedOut()) {
-                    const gained = v.currentMegin - (meginBeforeRegen.get(v.id) || 0);
+                    const gained = v.currentMegin - (meginBeforeRefill.get(v.id) || 0);
                     if (gained > 0) {
                         this.addLog(`${v.getDisplayName()} gained ${gained} Megin!`, 'megin');
                     }
@@ -552,7 +552,7 @@ class Combat {
         setTimeout(() => {
             this.addLog(`${enemyName}: If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
 
-            // Deferred until after both dialogue lines so the megin regen log
+            // Deferred until after both dialogue lines so the megin refill log
             // (shown when verbose combat log is enabled) doesn't land between
             // the player's question and the enemy's reply.
             this.handlePostTurn(results);

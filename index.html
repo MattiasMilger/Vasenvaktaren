@@ -568,29 +568,53 @@
                     </div>
                 </div>
 
-                <div class="guide-category" data-cat="attributes">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attributes</h4>
-                    <div class="guide-category-body">
-                        <p><strong>Strength (STR)</strong> - increases damage with Strength attacks.<br>
-                            <strong>Wisdom (WIS)</strong> - increases damage with Wisdom attacks.<br>
-                            <strong>Defense (DEF)</strong> - Reduces damage taken from Strength attacks.<br>
-                            <strong>Durability (DUR)</strong> - Reduces damage taken from Wisdom attacks.</p>
-                    </div>
-                </div>
-
-                <div class="guide-category" data-cat="resources">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Resources</h4>
-                    <div class="guide-category-body">
-                        <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out. Health persists between combat encounters.<br>
-                        <strong>Megin (MP)</strong> - Used to perform skills. Megin fully restores after each combat.</p>
-                    </div>
-                </div>
-
                 <!-- Dynamic Element Matchups Section -->
                 <div id="dynamic-element-matchups"></div>
 
                 <!-- Dynamic Families Section -->
                 <div id="dynamic-families"></div>
+
+                <div class="guide-category" data-cat="resources">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Resources</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out.<br>
+                        <strong>Megin (MP)</strong> - Used to perform skills.</p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="resource-management">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Resource Management</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Health Management</strong><br>
+                        <p><strong>Post-combat:</strong> Health persists between combat encounters. Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health) after combat.<br>
+                        <strong>Sacred Well:</strong> Encountered from exploring. All väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
+                        <strong>Items:</strong> Items can be used to heal <span id="guide-correct-item-heal"></span> or <span id="guide-wrong-item-heal"></span> health to the väsen depending on if it's the correct taming item.<br>
+                        
+                        <p><strong>Megin Management</strong><br>
+                         <p><strong>Post-combat:</strong> Megin fully refills after each combat.<br>   
+                        <p><strong>Combat refill:</strong> <span id="guide-megin-refill"></span> megin refilled per turn.<br>
+                        <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less megin.</p>
+                        <p><em>Note: All healing and refill is based on the max resource, not current.</em></p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="attributes">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attributes</h4>
+                    <div class="guide-category-body">
+                        <p><strong>Strength (STR)</strong> - Increases damage with strength attacks.<br>
+                            <strong>Wisdom (WIS)</strong> - Increases damage with wisdom attacks.<br>
+                            <strong>Defense (DEF)</strong> - Reduces damage taken from strength attacks.<br>
+                            <strong>Durability (DUR)</strong> - Reduces damage taken from wisdom attacks.</p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="attribute-stages">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attribute Stages</h4>
+                    <div class="guide-category-body">
+                        <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
+                        <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
+                    </div>
+                </div>
 
                 <!-- Dynamic Temperaments Section -->
                 <div id="dynamic-temperaments"></div>
@@ -603,45 +627,17 @@
                     </div>
                 </div>
 
-                <div class="guide-category" data-cat="megin-system">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Megin System</h4>
-                    <div class="guide-category-body">
-                        <p><strong>Regeneration:</strong> <span id="guide-megin-regen"></span> megin restored per turn<br>
-                        <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less megin.<br>
-                        <em>Note: All restoration is based on the max number, not current.</em></p>
-                    </div>
-                </div>
-
-                <div class="guide-category" data-cat="healing">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Healing</h4>
-                    <div class="guide-category-body">
-                        <p><strong>Post-combat:</strong> Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health)<br>
-                        <strong>Sacred Well:</strong> All Väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health<br>
-                        <strong>Items (Correct):</strong> Giving a Väsen its desired item heals <span id="guide-correct-item-heal"></span> health<br>
-                        <strong>Items (Wrong):</strong> Giving a Väsen any other item heals <span id="guide-wrong-item-heal"></span> health<br>
-                        <em>Note: All healing is based on the max number, not current.</em></p>
-                    </div>
-                </div>
-
                 <div class="guide-category" data-cat="power">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Power</h4>
                     <div class="guide-category-body">
-                        <p>Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (Strength/Wisdom).</p>
-                    </div>
-                </div>
-
-                <div class="guide-category" data-cat="attribute-stages">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attribute Stages</h4>
-                    <div class="guide-category-body">
-                        <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
-                        <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
+                        <p>Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (strength/wisdom).</p>
                     </div>
                 </div>
 
                 <div class="guide-category" data-cat="initial-bonus">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Initial Bonus</h4>
                     <div class="guide-category-body">
-                        <p>Certain utility skills have an "Initial Bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
+                        <p>Certain utility skills have an "initial bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
                     </div>
                 </div>
 
