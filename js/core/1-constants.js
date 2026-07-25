@@ -466,7 +466,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.JATTE]: {
         name: 'Jotun\'s Fury',
         get description() {
-            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent) (once per combat).`;
+            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent, once per combat).`;
         }
     },
     [FAMILIES.ODJUR]: {
@@ -496,7 +496,7 @@ const FAMILY_PASSIVES = {
     [FAMILIES.VALNAD]: {
         name: 'Deathless ᛣ',
         get description() {
-            return `When this väsen is knocked out, it revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% of max health (once per combat).`;
+            return `When this väsen is knocked out, it revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% health (once per combat).`;
         }
     }
 };
