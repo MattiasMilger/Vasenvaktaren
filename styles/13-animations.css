@@ -19,6 +19,14 @@
     animation: combatantIdle 3.5s ease-in-out infinite;
 }
 
+/* Disable the idle animation on hover so the hover scale (defined in
+   10-combat.css) can apply cleanly. Without this, the idle animation keeps
+   overriding the hover transform every frame, which made the pixel art
+   portrait blur instead of smoothly scaling up like the party portraits. */
+.combatant-image-container:hover {
+    animation: none;
+}
+
 @keyframes combatantIdle {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-3px) scale(1.01); }
