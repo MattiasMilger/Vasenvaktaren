@@ -252,10 +252,10 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         </div>
 
         <div class="combatant-attributes">
-            <div class="combat-attr"><span class="combat-attr-name">Str</span><span class="combat-attr-value">${vasen.getAttribute('strength')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">Wis</span><span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">Def</span><span class="combat-attr-value">${vasen.getAttribute('defense')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">Dur</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
+            <div class="combat-attr"><span class="combat-attr-name">STR</span><span class="combat-attr-value">${vasen.getAttribute('strength')}</span></div>
+            <div class="combat-attr"><span class="combat-attr-name">WIS</span><span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span></div>
+            <div class="combat-attr"><span class="combat-attr-name">DEF</span><span class="combat-attr-value">${vasen.getAttribute('defense')}</span></div>
+            <div class="combat-attr"><span class="combat-attr-name">DUR</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
         </div>
 
         <div class="combatant-description">

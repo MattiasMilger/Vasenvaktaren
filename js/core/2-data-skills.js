@@ -269,17 +269,12 @@ const ABILITIES = {
     },
     'Freya\'s Tears': {
     name: 'Freya\'s Tears',
-    flavorDescription: 'Calls upon Freya to rain down replenishing tears surging health and megin.',
+    flavorDescription: 'Calls upon Freya to rain down replenishing tears.',
     get mechanicsDescription() {
-        const totalHealthPercent = (GAME_CONFIG.FREYASTEARS_HEALTH_REFILL_PERCENT * 100) * GAME_CONFIG.FREYASTEARS_TURNS;
-        
-        // Bonus rate per turn = 0.12 * (2 - 1) = 0.12 (12% extra per turn)
-        // Total extra = 0.12 * 5 turns * 100 = 60% extra total
-        const extraMeginPercent = (GAME_CONFIG.MEGIN_REFILL_RATE * (GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER - 1) * GAME_CONFIG.FREYASTEARS_TURNS) * 100;
         
         const turns = GAME_CONFIG.FREYASTEARS_TURNS;
 
-        return `Your side heals ${totalHealthPercent}% and refills ${extraMeginPercent}% over ${turns} turns.`;
+        return `Your side heals ${GAME_CONFIG.FREYASTEARS_HEALTH_REFILL_PERCENT * 100}% and refills ${GAME_CONFIG.FREYASTEARS_MEGIN_MULTIPLIER}x megin for ${turns} turns.`;
     },
     element: ELEMENTS.WATER,
     type: ATTACK_TYPES.UTILITY,

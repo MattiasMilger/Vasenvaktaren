@@ -653,7 +653,6 @@ achievementsHtml += '</div></div>';
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
                     <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
-                    <p class="matchup-instruction">Rows show the attribute raised; columns show the attribute lowered.</p>
                     <table style="${tableStyle}">
                         <thead>
                             <tr>

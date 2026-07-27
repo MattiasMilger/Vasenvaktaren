@@ -502,7 +502,7 @@ UIController.prototype.generateDefensiveMatchupsHTML = function(element, showFla
 UIController.prototype.renderVasenDetails = function(vasen) {
     const panel = this.vasenDetailsPanel;
     if (!vasen) {
-        panel.innerHTML = '<p class="empty-message">Select a Väsen to view details</p>';
+        panel.innerHTML = '<p class="empty-message">Select a väsen to view details</p>';
         return;
     }
 

@@ -579,10 +579,11 @@
                 <div class="guide-category" data-cat="health">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Health<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out.</p>
-                        <p><strong>Post-combat:</strong> Health persists between combat encounters. Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health) after combat.<br>
-                        <strong>Sacred Well:</strong> Encountered from exploring. All väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
-                        <strong>Items:</strong> Items can be used to heal <span id="guide-correct-item-heal"></span> or <span id="guide-wrong-item-heal"></span> health to the väsen depending on if it's the correct taming item.</p>
+                        <p><strong>Health (HP)</strong><br>At 0 the väsen is knocked out.</p>
+                        <p><strong>Post-combat heal</strong><br> Health persists between combat encounters. Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health) after combat.<br>
+                        <strong>Sacred well heal</strong><br> Encountered from exploring. All väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
+                        <strong>Item heal</strong><br>Items can be used to heal <span id="guide-correct-item-heal"></span> or <span id="guide-wrong-item-heal"></span> health to the väsen depending on if it's the correct taming item.<br>
+                        <strong>Auto Heal</strong><br>Use this button to use items to automatically heal active party, although it's not recommended for managing scarce items.</p>
                         <p><em>Note: All healing is based on max health, not current.</em></p>
                     </div>
                 </div>
@@ -590,29 +591,29 @@
                 <div class="guide-category" data-cat="megin">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Megin<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Megin (MP)</strong> - Used to perform skills.</p>
-                        <p><strong>Post-combat:</strong> Megin fully refills after each combat.<br>
-                        <strong>Combat refill:</strong> <span id="guide-megin-refill"></span> megin refilled per turn.<br>
-                        <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less megin.</p>
-                        <p><em>Note: All refill is based on max megin, not current.</em></p>
+                        <p><strong>Megin (MP)</strong><br> Used to perform skills.</p>
+                        <p><strong>Post-combat megin refill</strong><br> Megin fully refills after each combat.<br>
+                        <strong>Combat megin refill</strong><br> <span id="guide-megin-refill"></span> megin refilled per turn.<br>
+                        <strong>Same-Element Discount</strong><br> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less megin.</p>
+                        <p><em>Note: All megin refill is based on max megin, not current.</em></p>
                     </div>
                 </div>
 
                 <div class="guide-category" data-cat="attributes">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attributes<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Strength (STR)</strong> - Increases damage with strength attacks.<br>
-                            <strong>Wisdom (WIS)</strong> - Increases damage with wisdom attacks.<br>
-                            <strong>Defense (DEF)</strong> - Reduces damage taken from strength attacks.<br>
-                            <strong>Durability (DUR)</strong> - Reduces damage taken from wisdom attacks.</p>
+                        <p><strong>Strength (STR)</strong><br> Increases damage with strength attacks.<br>
+                            <strong>Wisdom (WIS)</strong><br> Increases damage with wisdom attacks.<br>
+                            <strong>Defense (DEF)</strong><br> Reduces damage taken from strength attacks.<br>
+                            <strong>Durability (DUR)</strong><br> Reduces damage taken from wisdom attacks.</p>
                     </div>
                 </div>
 
                 <div class="guide-category" data-cat="attribute-stages">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attribute Stages<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
-                        <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
+                        <p><strong>Attribute Manipulation</strong><br>Some skills, runes and traits raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
+                        <br><strong>Debuffed</strong><br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
                     </div>
                 </div>
 
@@ -634,21 +635,22 @@
                 <div class="guide-category" data-cat="runes">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Runes<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.<br>
-                        <strong>Bind Runes:</strong> Certain pairs of runes, when equipped together, awaken a hidden combined effect of their own. Experiment with different combinations to discover them.</p>
+                        <p><strong>Equip Runes</strong><br>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.<br>
+                        <strong>Auto Equip Runes</strong><br>Use this button to instantly equip a random selection of viable runes for active party.<br>
+                        <strong>Bind Runes</strong><br> Certain pairs of runes, when equipped together, awaken a hidden combined effect of their own. Experiment with different combinations to discover them</p>
                     </div>
                 </div>
 
                 <div class="guide-category" data-cat="experience">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Experience & Leveling<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
-                        <strong>Distribution:</strong><br>
+                        <p><strong>Max Level</strong><br> <span id="guide-max-level"></span><br>
+                        <strong>Distribution</strong><br>
                         - Killing Blow: <span id="guide-exp-killing"></span> of base experience<br>
                         - Participated in combat: <span id="guide-exp-participated"></span> of base experience<br>
                         - In Party (not fielded): <span id="guide-exp-party"></span> of base experience<br>
                         - Knocked Out: 0% (no experience)<br>
-                        <em>Experience is only awarded after combat ends.</em></p>
+                        <em>Note: Experience is only awarded after combat ends.</em></p>
                     </div>
                 </div>
 

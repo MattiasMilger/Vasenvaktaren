@@ -42,8 +42,8 @@ UIController.prototype.renderZones = function() {
             zoneBtn.innerHTML = `
                 <span class="zone-name">${zone.name}</span>
                 <span class="zone-level">Lvl ${zone.levelRange[0]}-${zone.levelRange[1]}</span>
-                <span class="zone-caught ${allCaught ? 'zone-caught-complete' : ''}">${caught}/${total} väsen</span>
-                ${isCleared ? '<span class="zone-status cleared">Cleared</span>' : '<span class="zone-status"></span>'}
+                <span class="zone-caught ${allCaught ? 'zone-caught-complete' : ''}">${caught}/${total} Väsen Tamed</span>
+                ${isCleared ? '<span class="zone-status cleared">Guardian Defeated</span>' : '<span class="zone-status"></span>'}
             `;
             zoneBtn.onclick = () => this.selectZone(zoneId);
         } else {
