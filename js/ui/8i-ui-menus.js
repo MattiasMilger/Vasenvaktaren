@@ -316,7 +316,111 @@ achievementsHtml += '</div></div>';
             });
         }
 
+        // Reorder categories so favorited ones appear first (preserving the
+        // regular order otherwise), then sync each category's favorite star
+        // to reflect the current favorite state.
+        this._reorderGuideCategories(container);
+        this._syncGuideFavoriteStars(container);
+
         this._setupGuideCategoryHandlers(container);
+        this._setupGuideFavoriteHandlers(container);
+    };
+
+    // Move category "units" so favorited categories appear first, followed
+    // by the rest in their regular order. A unit is a direct child of
+    // #guide-categories-container: either a .guide-category itself (static
+    // categories), or the placeholder wrapper div that contains one
+    // (dynamic categories, e.g. #dynamic-element-matchups). Crucially, this
+    // only ever moves the WRAPPER for dynamic categories, never the
+    // .guide-category node nested inside it - reaching inside and moving
+    // the nested node out would leave the wrapper empty, causing the next
+    // innerHTML-based re-render to create a brand new duplicate category
+    // while the moved-out original lingers as an orphan.
+    UIController.prototype._reorderGuideCategories = function(container) {
+        if (!container) return;
+        const catContainer = document.getElementById('guide-categories-container') || container;
+        if (!gameState.favoriteGuideCategories) gameState.favoriteGuideCategories = new Set();
+
+        const getCatKey = (unit) => {
+            if (unit.classList && unit.classList.contains('guide-category')) return unit.dataset.cat;
+            const inner = unit.querySelector(':scope > .guide-category');
+            return inner ? inner.dataset.cat : null;
+        };
+
+        const units = Array.from(catContainer.children);
+
+        // Assign a stable "original order" index to each unit the first
+        // time it's seen. Units (both static .guide-category elements and
+        // the dynamic placeholder wrappers) persist across re-renders even
+        // though their inner content may be regenerated, so this index is
+        // only ever set once - without it, "rest" would be derived from
+        // whatever the current (already-reordered) DOM order happens to be,
+        // meaning un-favoriting a category wouldn't restore its natural
+        // position until the page was reloaded.
+        units.forEach((unit, index) => {
+            if (unit.dataset.originalOrder === undefined) {
+                unit.dataset.originalOrder = index;
+            }
+        });
+
+        const byOriginalOrder = (a, b) => Number(a.dataset.originalOrder) - Number(b.dataset.originalOrder);
+
+        const favorited = units.filter(u => gameState.favoriteGuideCategories.has(getCatKey(u))).sort(byOriginalOrder);
+        const rest = units.filter(u => !gameState.favoriteGuideCategories.has(getCatKey(u))).sort(byOriginalOrder);
+        const ordered = [...favorited, ...rest];
+
+        ordered.forEach(el => catContainer.appendChild(el));
+
+        // Keep the "first category" top-margin fix in sync with whichever
+        // category now ends up first after reordering.
+        catContainer.querySelectorAll('.guide-category').forEach(el => el.classList.remove('guide-category-first'));
+        if (ordered.length > 0) {
+            const firstUnit = ordered[0];
+            const firstCat = firstUnit.classList.contains('guide-category')
+                ? firstUnit
+                : firstUnit.querySelector(':scope > .guide-category');
+            if (firstCat) firstCat.classList.add('guide-category-first');
+        }
+    };
+
+    // Sync each category's favorite star icon/active state to match
+    // gameState.favoriteGuideCategories.
+    UIController.prototype._syncGuideFavoriteStars = function(container) {
+        if (!container) return;
+        if (!gameState.favoriteGuideCategories) gameState.favoriteGuideCategories = new Set();
+        container.querySelectorAll('.guide-category').forEach(cat => {
+            const btn = cat.querySelector('.guide-favorite-btn');
+            if (!btn) return;
+            const isFav = gameState.favoriteGuideCategories.has(cat.dataset.cat);
+            btn.classList.toggle('active', isFav);
+            btn.textContent = isFav ? '★' : '☆';
+        });
+    };
+
+    // Wire up the click handler for Game Guide category favorite stars.
+    // Toggles the category's favorite state and fully re-renders the guide
+    // so the reordering takes effect immediately.
+    UIController.prototype._setupGuideFavoriteHandlers = function(container) {
+        if (!container) return;
+        if (this._guideFavoriteClickHandler) {
+            container.removeEventListener('click', this._guideFavoriteClickHandler);
+        }
+        this._guideFavoriteClickHandler = (e) => {
+            const btn = e.target.closest('.guide-favorite-btn');
+            if (!btn) return;
+            const cat = btn.closest('.guide-category');
+            if (!cat) return;
+            const catKey = cat.dataset.cat;
+            if (!gameState.favoriteGuideCategories) gameState.favoriteGuideCategories = new Set();
+            if (gameState.favoriteGuideCategories.has(catKey)) {
+                gameState.favoriteGuideCategories.delete(catKey);
+            } else {
+                gameState.favoriteGuideCategories.add(catKey);
+            }
+            gameState.saveGame();
+            this.renderGameGuideContent();
+        };
+        container.addEventListener('click', this._guideFavoriteClickHandler);
     };
 
     // Wire up click handlers for the Game Guide's collapsible categories and
@@ -331,6 +435,8 @@ achievementsHtml += '</div></div>';
             container.removeEventListener('click', this._guideClickHandler);
         }
         this._guideClickHandler = (e) => {
+            // Clicking the favorite star should never toggle collapse state.
+            if (e.target.closest('.guide-favorite-btn')) return;
             const title = e.target.closest('.guide-category-title');
             if (!title) return;
             const category = title.closest('.guide-category');
@@ -422,7 +528,7 @@ achievementsHtml += '</div></div>';
 
         let html = `
             <div class="guide-category" data-cat="element-matchups">
-                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Element Matchups</h4>
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Element Matchups<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
                     <p>Each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
                     <div class="element-guide-list">
@@ -458,7 +564,7 @@ achievementsHtml += '</div></div>';
     UIController.prototype.generateFamiliesHTML = function() {
         let html = `
             <div class="guide-category" data-cat="families">
-                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Families</h4>
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Families<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
                     <p>Each family possesses a unique trait. Take note to gain a strategic advantage.</p>
                     <div class="family-guide-list">
@@ -544,7 +650,7 @@ achievementsHtml += '</div></div>';
 
         let html = `
             <div class="guide-category" data-cat="temperaments">
-                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments</h4>
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
                     <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
                     <p class="matchup-instruction">Rows show the attribute raised; columns show the attribute lowered.</p>

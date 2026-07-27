@@ -1398,6 +1398,35 @@
     display: none;
 }
 
+/* Favorite star button - category favorites are shown first (see
+   UIController._reorderGuideCategories). Boxed style matching the
+   favorite-toggle buttons used elsewhere (väsen/rune/item cards),
+   pushed to the far right of the title row. */
+.guide-favorite-btn {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin-left: auto;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    line-height: 1;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.guide-favorite-btn:hover,
+.guide-favorite-btn.active {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
 /* Swap Modal */
 .modal-swap {
     max-width: 400px;

@@ -33,6 +33,9 @@ UIController.prototype.renderLore = function() {
     const total     = LORE_TOTAL;
     const count     = unlocked.size;
 
+    if (!gameState.favoriteLoreCategories) gameState.favoriteLoreCategories = new Set();
+    if (!gameState.favoriteLoreEntries) gameState.favoriteLoreEntries = new Set();
+
     // Header controls
     let html = `<div class="lore-header-controls">
         <div class="lore-header-top">
@@ -53,24 +56,34 @@ UIController.prototype.renderLore = function() {
         grouped[displayCat].push(entry);
     });
 
-    // Sort each category's entries alphabetically
+    // Sort each category's entries alphabetically, then bring favorited
+    // entries to the front (preserving the regular alphabetical order
+    // within each of the two groups).
     Object.keys(grouped).forEach(cat => {
         grouped[cat].sort((a, b) => a.name.localeCompare(b.name, 'sv'));
+        const favEntries  = grouped[cat].filter(e => gameState.favoriteLoreEntries.has(e.key));
+        const restEntries = grouped[cat].filter(e => !gameState.favoriteLoreEntries.has(e.key));
+        grouped[cat] = [...favEntries, ...restEntries];
     });
 
-    // Render categories in defined order
-    const sortedCategories = Object.keys(LORE_CATEGORIES).sort(
+    // Render categories in defined order, with favorited categories brought
+    // to the front (preserving the regular order otherwise).
+    let sortedCategories = Object.keys(LORE_CATEGORIES).sort(
         (a, b) => LORE_CATEGORIES[a].order - LORE_CATEGORIES[b].order
     );
+    const favCategories  = sortedCategories.filter(c => gameState.favoriteLoreCategories.has(c));
+    const restCategories = sortedCategories.filter(c => !gameState.favoriteLoreCategories.has(c));
+    sortedCategories = [...favCategories, ...restCategories];
 
     sortedCategories.forEach(cat => {
         if (!grouped[cat] || grouped[cat].length === 0) return;
 
         const catLabel = LORE_CATEGORIES[cat].label;
+        const isCatFavorite = gameState.favoriteLoreCategories.has(cat);
 
         // data-cat used to restore collapsed state after re-render
         html += `<div class="lore-category" data-cat="${cat}">`;
-        html += `<h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${catLabel}</h4>`;
+        html += `<h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${catLabel}<button class="lore-favorite-btn ${isCatFavorite ? 'active' : ''}" type="button" data-cat-favorite="${cat}">${isCatFavorite ? '★' : '☆'}</button></h4>`;
         html += `<div class="lore-entry-list">`;
 
         grouped[cat].forEach(entry => {
@@ -111,12 +124,42 @@ UIController.prototype.renderLore = function() {
         });
     }
 
-    // Delegated click handler for category collapse and entry expand
+    // Delegated click handler for category collapse, entry expand, and
+    // favorite star toggles (category and entry)
     if (this._loreClickHandler) {
         container.removeEventListener('click', this._loreClickHandler);
     }
     this._loreClickHandler = (e) => {
         if (e.target.closest('.lore-collapse-btn')) return;
+
+        // Category favorite star
+        const catFavoriteBtn = e.target.closest('.lore-favorite-btn[data-cat-favorite]');
+        if (catFavoriteBtn) {
+            const catKey = catFavoriteBtn.dataset.catFavorite;
+            if (gameState.favoriteLoreCategories.has(catKey)) {
+                gameState.favoriteLoreCategories.delete(catKey);
+            } else {
+                gameState.favoriteLoreCategories.add(catKey);
+            }
+            gameState.saveGame();
+            this.renderLore();
+            return;
+        }
+
+        // Entry favorite star
+        const entryFavoriteBtn = e.target.closest('.lore-favorite-btn[data-entry-favorite]');
+        if (entryFavoriteBtn) {
+            const entryKey = entryFavoriteBtn.dataset.entryFavorite;
+            if (gameState.favoriteLoreEntries.has(entryKey)) {
+                gameState.favoriteLoreEntries.delete(entryKey);
+            } else {
+                gameState.favoriteLoreEntries.add(entryKey);
+            }
+            gameState.saveGame();
+            this.renderLore();
+            return;
+        }
+
         // Category title - collapse/expand entire category
         const catTitle = e.target.closest('.lore-category-title');
         if (catTitle) {
@@ -237,11 +280,15 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
         extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${entry.family}</span>`;
     }
 
+    if (!gameState.favoriteLoreEntries) gameState.favoriteLoreEntries = new Set();
+    const isFavorite = gameState.favoriteLoreEntries.has(entry.key);
+
     return `
         <div class="lore-entry-card lore-entry-unlocked" data-key="${entry.key}">
             <div class="lore-entry-header">
                 <span class="lore-entry-chevron"></span>
                 <span class="lore-entry-name">${name}</span>
+                <button class="lore-favorite-btn ${isFavorite ? 'active' : ''}" type="button" data-entry-favorite="${entry.key}">${isFavorite ? '★' : '☆'}</button>
             </div>
             <div class="lore-entry-body">
                 <p class="lore-desc">${desc}</p>

@@ -561,8 +561,10 @@
                     <button class="btn btn-small guide-collapse-btn">Collapse Categories</button>
                 </div>
 
+                <div id="guide-categories-container">
+
                 <div class="guide-category guide-category-first" data-cat="taming">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Taming</h4>
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Taming<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p>Tame a Väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
                     </div>
@@ -574,32 +576,30 @@
                 <!-- Dynamic Families Section -->
                 <div id="dynamic-families"></div>
 
-                <div class="guide-category" data-cat="resources">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Resources</h4>
+                <div class="guide-category" data-cat="health">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Health<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out.<br>
-                        <strong>Megin (MP)</strong> - Used to perform skills.</p>
+                        <p><strong>Health (HP)</strong> - At 0 the väsen is knocked out.</p>
+                        <p><strong>Post-combat:</strong> Health persists between combat encounters. Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health) after combat.<br>
+                        <strong>Sacred Well:</strong> Encountered from exploring. All väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
+                        <strong>Items:</strong> Items can be used to heal <span id="guide-correct-item-heal"></span> or <span id="guide-wrong-item-heal"></span> health to the väsen depending on if it's the correct taming item.</p>
+                        <p><em>Note: All healing is based on max health, not current.</em></p>
                     </div>
                 </div>
 
-                <div class="guide-category" data-cat="resource-management">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Resource Management</h4>
+                <div class="guide-category" data-cat="megin">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Megin<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Health Management</strong><br>
-                        <p><strong>Post-combat:</strong> Health persists between combat encounters. Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health) after combat.<br>
-                        <strong>Sacred Well:</strong> Encountered from exploring. All väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
-                        <strong>Items:</strong> Items can be used to heal <span id="guide-correct-item-heal"></span> or <span id="guide-wrong-item-heal"></span> health to the väsen depending on if it's the correct taming item.<br>
-                        
-                        <p><strong>Megin Management</strong><br>
-                         <p><strong>Post-combat:</strong> Megin fully refills after each combat.<br>   
-                        <p><strong>Combat refill:</strong> <span id="guide-megin-refill"></span> megin refilled per turn.<br>
+                        <p><strong>Megin (MP)</strong> - Used to perform skills.</p>
+                        <p><strong>Post-combat:</strong> Megin fully refills after each combat.<br>
+                        <strong>Combat refill:</strong> <span id="guide-megin-refill"></span> megin refilled per turn.<br>
                         <strong>Same-Element Discount:</strong> Skills aligned with the väsen's own element cost <span id="guide-element-discount"></span> less megin.</p>
-                        <p><em>Note: All healing and refill is based on the max resource, not current.</em></p>
+                        <p><em>Note: All refill is based on max megin, not current.</em></p>
                     </div>
                 </div>
 
                 <div class="guide-category" data-cat="attributes">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attributes</h4>
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attributes<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p><strong>Strength (STR)</strong> - Increases damage with strength attacks.<br>
                             <strong>Wisdom (WIS)</strong> - Increases damage with wisdom attacks.<br>
@@ -609,7 +609,7 @@
                 </div>
 
                 <div class="guide-category" data-cat="attribute-stages">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attribute Stages</h4>
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Attribute Stages<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p>Some skills and runes raise or lower attribute stages. Each stage increases or decreases the affected attribute by <span id="guide-stage-modifier"></span>. Stages range from <span id="guide-min-stage"></span> to <span id="guide-max-stage"></span>.
                         <br>Väsen with one or more negative attribute stages are refered to as "debuffed".</p>
@@ -619,30 +619,28 @@
                 <!-- Dynamic Temperaments Section -->
                 <div id="dynamic-temperaments"></div>
 
+                <div class="guide-category" data-cat="skills">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Skills<button class="guide-favorite-btn" type="button">☆</button></h4>
+                    <div class="guide-category-body">
+                        <p><strong>Power</strong><br>
+                        Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (strength/wisdom).</p>
+                        <p><strong>Initial Bonus</strong><br>
+                        Certain utility skills have an "initial bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
+                        <p><strong>Skill Priority</strong><br>
+                        Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
+                    </div>
+                </div>
+
                 <div class="guide-category" data-cat="runes">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Runes</h4>
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Runes<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.<br>
                         <strong>Bind Runes:</strong> Certain pairs of runes, when equipped together, awaken a hidden combined effect of their own. Experiment with different combinations to discover them.</p>
                     </div>
                 </div>
 
-                <div class="guide-category" data-cat="power">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Power</h4>
-                    <div class="guide-category-body">
-                        <p>Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (strength/wisdom).</p>
-                    </div>
-                </div>
-
-                <div class="guide-category" data-cat="initial-bonus">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Initial Bonus</h4>
-                    <div class="guide-category-body">
-                        <p>Certain utility skills have an "initial bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
-                    </div>
-                </div>
-
                 <div class="guide-category" data-cat="experience">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Experience & Leveling</h4>
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Experience & Leveling<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p><strong>Max Level:</strong> <span id="guide-max-level"></span><br>
                         <strong>Distribution:</strong><br>
@@ -654,11 +652,6 @@
                     </div>
                 </div>
 
-                <div class="guide-category" data-cat="move-priority">
-                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Move Priority</h4>
-                    <div class="guide-category-body">
-                        <p>Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
-                    </div>
                 </div>
             </div>
             <button id="close-combat-tips" class="btn btn-secondary">Close</button>

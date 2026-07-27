@@ -26,6 +26,21 @@ class GameState {
         // Set of favorite väsen IDs (shown first in inventory)
         this.favoriteVasen = new Set();
 
+        // Set of favorite item IDs (shown first in item inventory)
+        this.favoriteItems = new Set();
+
+        // Set of favorite rune IDs (shown first in rune inventory)
+        this.favoriteRunes = new Set();
+
+        // Set of favorite Game Guide category keys (shown first in the Game Guide)
+        this.favoriteGuideCategories = new Set();
+
+        // Set of favorite Lore Book category keys (shown first in the Lore Book)
+        this.favoriteLoreCategories = new Set();
+
+        // Set of favorite lore entry keys (shown first within their category)
+        this.favoriteLoreEntries = new Set();
+
         // Set of unlocked lore entry keys
         this.unlockedLoreEntries = new Set();
 
@@ -918,6 +933,11 @@ class GameState {
             itemInventory: this.itemInventory,
             collectedRunes: Array.from(this.collectedRunes),
             favoriteVasen: Array.from(this.favoriteVasen),
+            favoriteItems: Array.from(this.favoriteItems),
+            favoriteRunes: Array.from(this.favoriteRunes),
+            favoriteGuideCategories: Array.from(this.favoriteGuideCategories),
+            favoriteLoreCategories: Array.from(this.favoriteLoreCategories),
+            favoriteLoreEntries: Array.from(this.favoriteLoreEntries),
             unlockedLoreEntries: Array.from(this.unlockedLoreEntries),
             currentZone: this.currentZone,
             defeatedGuardians: Array.from(this.defeatedGuardians),
@@ -976,6 +996,11 @@ class GameState {
             this.itemInventory = data.itemInventory || {};
             this.collectedRunes = new Set(data.collectedRunes || []);
             this.favoriteVasen = new Set(data.favoriteVasen || []);
+            this.favoriteItems = new Set(data.favoriteItems || []);
+            this.favoriteRunes = new Set(data.favoriteRunes || []);
+            this.favoriteGuideCategories = new Set(data.favoriteGuideCategories || []);
+            this.favoriteLoreCategories = new Set(data.favoriteLoreCategories || []);
+            this.favoriteLoreEntries = new Set(data.favoriteLoreEntries || []);
             this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
             this.currentZone = data.currentZone || 'TROLLSKOGEN';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
@@ -1079,6 +1104,11 @@ class GameState {
         this.itemInventory = {};
         this.collectedRunes = new Set();
         this.favoriteVasen = new Set();
+        this.favoriteItems = new Set();
+        this.favoriteRunes = new Set();
+        this.favoriteGuideCategories = new Set();
+        this.favoriteLoreCategories = new Set();
+        this.favoriteLoreEntries = new Set();
         this.unlockedLoreEntries = new Set();
         this.currentZone = 'TROLLSKOGEN';
         this.defeatedGuardians = new Set();
