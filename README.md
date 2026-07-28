@@ -131,7 +131,7 @@ Vasenvaktaren/
 │   ├── systems/
 │   │   ├── 6a-combat-core.js       (Combat class)
 │   │   ├── 6b-combat-ai.js         (EnemyAI class)
-│   │   └── 7-game-state.js         (GameState class)
+│   │   └── 7-state-manager.js      (GameState class)
 │   │
 │   ├── ui/
 │   │   ├── 8a-ui-core.js           (UIController class, initialization, and overlay management)

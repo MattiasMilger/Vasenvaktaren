@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('explore-btn').addEventListener('click', () => game.explore());
     document.getElementById('challenge-btn').addEventListener('click', () => {
         // Check if we're in Ginnungagap for Endless Tower, otherwise challenge guardian
-        if (gameState.currentZone === 'GINNUNGAGAP') {
+        if (gameState.currentZone === 'ZONE7') {
             game.challengeEndlessTower();
         } else {
             game.challengeGuardian();

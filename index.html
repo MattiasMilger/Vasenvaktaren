@@ -581,7 +581,7 @@
                     <div class="guide-category-body">
                         <p><strong>Health (HP)</strong><br>At 0 the väsen is knocked out.</p>
                         <p><strong>Post-combat heal</strong><br> Health persists between combat encounters. Active party heals <span id="guide-post-combat-heal"></span> health (even from 0 health) after combat.<br>
-                        <strong>Sacred well heal</strong><br> Encountered from exploring. All väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
+                        <strong>Sacred well heal</strong><br> The sacred well is encountered by exploring. Once encountered, all väsen (including those not in party) heal <span id="guide-sacred-well-heal"></span> health.<br>
                         <strong>Item heal</strong><br>Items can be used to heal <span id="guide-correct-item-heal"></span> or <span id="guide-wrong-item-heal"></span> health to the väsen depending on if it's the correct taming item.<br>
                         <strong>Auto Heal</strong><br>Use this button to use items to automatically heal active party, although it's not recommended for managing scarce items.</p>
                         <p><em>Note: All healing is based on max health, not current.</em></p>
@@ -626,7 +626,7 @@
                         <p><strong>Power</strong><br>
                         Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (strength/wisdom).</p>
                         <p><strong>Initial Bonus</strong><br>
-                        Certain utility skills have an "initial bonus" that grants extra attribute stages on their first use in a combat. This bonus is tracked per skill, per side, and only applies once per combat.</p>
+                        Certain utility skills have an "initial bonus" that grants extra attribute stages on their first use per combat.</p>
                         <p><strong>Skill Priority</strong><br>
                         Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
                     </div>
@@ -636,7 +636,7 @@
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Runes<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p><strong>Equip Runes</strong><br>Equip runes to your Väsen for powerful effects. At level <span id="guide-max-level-runes"></span>, they gain the skill to equip two runes.<br>
-                        <strong>Auto Equip Runes</strong><br>Use this button to instantly equip a random selection of viable runes for active party.<br>
+                        <strong>Auto Equip Runes</strong><br>Use this button to instantly equip a random selection of viable runes for the active party.<br>
                         <strong>Bind Runes</strong><br> Certain pairs of runes, when equipped together, awaken a hidden combined effect of their own. Experiment with different combinations to discover them</p>
                     </div>
                 </div>
@@ -674,7 +674,7 @@
     <!-- Game Systems -->
     <script src="js/systems/6a-combat-core.js"></script>
     <script src="js/systems/6b-combat-ai.js"></script>
-    <script src="js/systems/7-game-state.js"></script>
+    <script src="js/systems/7-state-manager.js"></script>
     
     <!-- UI Controller (modular) -->
     <script src="js/ui/8a-ui-core.js"></script>

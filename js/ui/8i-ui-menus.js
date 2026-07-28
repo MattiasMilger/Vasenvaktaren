@@ -56,6 +56,10 @@
         game.currentCombat = null;
         this.hideCombatUI();
 
+        // Retroactively unlock any lore entries added since this save was
+        // created (mirrors the same call in Game.init() on a normal page load)
+        gameState.retroactivelyUnlockLoreEntries();
+
         // Reinitialize UI exactly like Game.init()
         ui.init();
         game.showGameScreen();   // <-- THIS is the correct call

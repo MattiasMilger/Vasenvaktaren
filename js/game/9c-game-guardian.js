@@ -218,7 +218,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         message += `<p><strong>${nextZone.name}</strong> unlocked!</p>`;
 
         // Award taming items from the next zone (except when unlocking Ginnungagap)
-        if (wasFirstClear && nextZoneId !== 'GINNUNGAGAP') {
+        if (wasFirstClear && nextZoneId !== 'ZONE7') {
             const nextZoneItems = getItemsForZone(nextZoneId);
             if (nextZoneItems.length > 0) {
                 const shuffled = [...nextZoneItems].sort(() => Math.random() - 0.5);

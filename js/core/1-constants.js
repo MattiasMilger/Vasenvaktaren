@@ -584,8 +584,8 @@ const TEMPERAMENTS = {
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);
 
 const ZONES = {
-    TROLLSKOGEN: {
-        id: 'trollskogen',
+    ZONE1: {
+        id: 'zone1',
         name: 'Trollskogen',
         description: 'An enchanted forest where the ancient canopy chokes out the sun. The air is thick with the scent of damp moss, and the unseen inhabitants constantly watch you from the gloom.',
         image: 'assets/zones/trollskogen.png',
@@ -601,16 +601,16 @@ const ZONES = {
             dialogue: {
                 challenge: 'The forest tests all who enter. Show me your strength, little one.',
                 lose: 'You lack the true spirit of the woods. Train more, and perhaps this enchanted realm will accept you.',
-                win: 'Impressive. You have earned passage through this realm. The way to Folkets By is now open.'
+                win: 'Impressive. You have earned passage through this realm. The way to Fäboden is now open.'
             }
         },
         order: 0
     },
-    FOLKETS_BY: {
-        id: 'folkets_by',
-        name: 'Folkets By',
+    ZONE2: {
+        id: 'zone2',
+        name: 'Fäboden',
         description: 'A cluster of quiet, humble settlements where ancient house spirits live side-by-side with humans. Tread carefully, for the peace is fragile, and the benevolent guardians turn fiercely protective when their homes are threatened.',
-        image: 'assets/zones/folketsby.png',
+        image: 'assets/zones/faboden.png',
         levelRange: [5, 9],
         spawns: ['Gardstomte', 'Hustomte', 'Brunnsgubbe', 'Nattramn', 'Bortbyting', 'Gloson', 'Bjara', 'Pyssling'],
         guardian: {
@@ -628,8 +628,8 @@ const ZONES = {
         },
         order: 1
     },
-    DJUPA_GRUVAN: {
-        id: 'djupa_gruvan',
+    ZONE3: {
+        id: 'zone3',
         name: 'Djupa Gruvan',
         description: 'An endless labyrinth of cold, black tunnels carved by greed. Only the muffled echo of a pickaxe and the hungry glow of rare ore disturb the crushing silence, guarded by unforgiving spirits who despise light and trespassers.',
         image: 'assets/zones/djupagruvan.png',
@@ -650,8 +650,8 @@ const ZONES = {
         },
         order: 2
     },
-    GLIMRANDE_KALLAN: {
-        id: 'glimrande_kallan',
+    ZONE4: {
+        id: 'zone4',
         name: 'Glimrande Källan',
         description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
         image: 'assets/zones/glimrandekallan.png',
@@ -672,8 +672,8 @@ const ZONES = {
         },
         order: 3
     },
-    URBERGEN: {
-        id: 'urbergen',
+    ZONE5: {
+        id: 'zone5',
         name: 'Urbergen',
         description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants combat the very elements that forged them.',
         image: 'assets/zones/urbergen.png',
@@ -694,8 +694,8 @@ const ZONES = {
         },
         order: 4
     },
-    VARLDENS_ANDE: {
-        id: 'varldens_ande',
+    ZONE6: {
+        id: 'zone6',
         name: 'Världens Ände',
         description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
         image: 'assets/zones/varldensande.png',
@@ -716,8 +716,8 @@ const ZONES = {
         },
         order: 5
     },
-    GINNUNGAGAP: {
-        id: 'ginnungagap',
+    ZONE7: {
+        id: 'zone7',
         name: 'Ginnungagap',
         description: 'The vast, primordial void that preceded all creation. It is an unending, echoing expanse of pure potential and ultimate challenge, containing every creature from the realms for those who seek the peak of mastery.',
         image: 'assets/zones/ginnungagap.png',
@@ -728,7 +728,7 @@ const ZONES = {
     }
 };
 
-const ZONE_ORDER = ['TROLLSKOGEN', 'FOLKETS_BY', 'DJUPA_GRUVAN', 'GLIMRANDE_KALLAN', 'URBERGEN', 'VARLDENS_ANDE', 'GINNUNGAGAP'];
+const ZONE_ORDER = ['ZONE1', 'ZONE2', 'ZONE3', 'ZONE4', 'ZONE5', 'ZONE6', 'ZONE7'];
 
 const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },

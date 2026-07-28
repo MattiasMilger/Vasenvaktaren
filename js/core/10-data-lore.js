@@ -662,7 +662,17 @@ const LORE_ENTRIES = {
         source: 'Swedish Folklore',
         heritage: 'Swedish',
         unlockType: 'zone',
-        unlockKey: 'TROLLSKOGEN'
+        unlockKey: 'ZONE1'
+    },
+    'location_faboden': {
+        key: 'location_faboden',
+        name: 'Fäboden',
+        category: 'locations',
+        desc: 'A fäbod is a traditional seasonal settlement of the Scandinavian uplands, used since medieval times as a summer home for cattle, sheep, and the herders who tended them. Each summer, families would drive their livestock away from the home farm to these remote mountain pastures to take advantage of the fresh grazing, leaving the fäbod empty and silent once autumn came. Life at the fäbod was steeped in folk belief - the isolation and closeness to the wild forest made it a place where house spirits, wardens, and other väsen were thought to linger close by, watching over the herds and the humble cabins alike.',
+        source: 'Swedish Folk Tradition',
+        heritage: 'Swedish',
+        unlockType: 'zone',
+        unlockKey: 'ZONE2'
     },
     'location_ginnungagap': {
         key: 'location_ginnungagap',
@@ -672,7 +682,7 @@ const LORE_ENTRIES = {
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'zone',
-        unlockKey: 'GINNUNGAGAP'
+        unlockKey: 'ZONE7'
     },
     'location_sacred_well': {
         key: 'location_sacred_well',
@@ -682,7 +692,7 @@ const LORE_ENTRIES = {
         source: 'Swedish Folk Belief / Scandinavian Archaeology',
         heritage: 'Swedish',
         unlockType: 'zone',
-        unlockKey: 'GLIMRANDE_KALLAN'
+        unlockKey: 'ZONE4'
     },
     'location_world_end': {
         key: 'location_world_end',
@@ -692,7 +702,7 @@ const LORE_ENTRIES = {
         source: 'Poetic Edda / Norse Mythology',
         heritage: 'Scandinavian',
         unlockType: 'zone',
-        unlockKey: 'VARLDENS_ANDE'
+        unlockKey: 'ZONE6'
     },
     // =========================================================================
     // CATEGORY: ABILITIES
@@ -868,7 +878,7 @@ const LORE_ENTRIES = {
         source: 'Prose Edda (Skáldskaparmál) / Poetic Edda (Haustlöng)',
         heritage: 'Norse',
         unlockType: 'zone',
-        unlockKey: 'GINNUNGAGAP'
+        unlockKey: 'ZONE7'
     },
 };
 
