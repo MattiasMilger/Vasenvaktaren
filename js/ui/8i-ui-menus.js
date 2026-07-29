@@ -312,6 +312,12 @@ achievementsHtml += '</div></div>';
             temperamentsContainer.innerHTML = this.generateTemperamentsHTML();
         }
 
+        // Render Level Milestones
+        const levelMilestonesContainer = document.getElementById('guide-level-milestones');
+        if (levelMilestonesContainer) {
+            levelMilestonesContainer.innerHTML = this.generateLevelMilestonesHTML();
+        }
+
         // Restore collapsed state on both the static and freshly re-rendered
         // dynamic categories
         if (container) {
@@ -524,6 +530,23 @@ achievementsHtml += '</div></div>';
         // Endless Tower
         setText('guide-endless-start', GAME_CONFIG.ENDLESS_TOWER_START_LEVEL);
         setText('guide-endless-heal', `${Math.round(GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT * 100)}%`);
+    };
+
+    // Generate Level Milestones HTML from SKILL_LEARN_LEVELS and GAME_CONFIG.TWO_RUNE_LEVEL.
+    // Lists which skill slot is learned at each level in SKILL_LEARN_LEVELS, plus the level
+    // at which a second rune slot is unlocked, sorted ascending by level.
+    UIController.prototype.generateLevelMilestonesHTML = function() {
+        const milestones = [];
+
+        SKILL_LEARN_LEVELS.forEach((level, index) => {
+            milestones.push({ level, text: `Skill ${index + 1} learned` });
+        });
+
+        milestones.push({ level: GAME_CONFIG.TWO_RUNE_LEVEL, text: 'Second Rune Slot unlocked' });
+
+        milestones.sort((a, b) => a.level - b.level);
+
+        return milestones.map(m => `- Level ${m.level}: ${m.text}`).join('<br>');
     };
 
     // Generate Element Matchups HTML from ELEMENT_MATCHUPS constant
