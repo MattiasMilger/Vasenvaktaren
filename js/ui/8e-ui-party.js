@@ -29,6 +29,14 @@ UIController.prototype.renderParty = function() {
                 }).join('');
             }
 
+            // Bind Rune: add a compact indicator badge for any active bind rune pair
+            const activeBindRunes = getActiveBindRunes(vasen);
+            if (activeBindRunes.length > 0) {
+                runesHtml += activeBindRunes.map(br =>
+                    `<span class="mini-rune mini-bind-rune">${br.symbols} Bindrune</span>`
+                ).join('');
+            }
+
             const isFavorite = gameState.isFavorite(vasen.id);
 
             slotContent.innerHTML = `
