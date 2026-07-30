@@ -134,7 +134,12 @@
 
     #game-screen {
         height: 100vh;
-        overflow: hidden;
+        /* Fallback scroll: if OS-level display scaling (e.g. Windows set to
+           125%/150%) shrinks the effective viewport below what the fixed-height
+           layout needs, allow the whole screen to scroll instead of hard-clipping
+           content (like the Explore button) with no way to reach it. */
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .game-main {
@@ -156,6 +161,11 @@
 
     .panel-middle {
         grid-column: 2;
+        /* Allow this column (party section + zone list + zone actions) to
+           scroll internally if its content doesn't fit the available height,
+           rather than relying on .panel's overflow:hidden and losing access
+           to the Explore/Challenge buttons at higher OS display scaling. */
+        overflow-y: auto;
     }
 
     .panel-right {
