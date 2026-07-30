@@ -112,6 +112,22 @@
     text-align: center;
     box-shadow: var(--shadow-md);
     user-select: none;
+    /* Establish a stacking context so this card's own popups (element/rarity/
+       family badges) can be raised above sibling cards below it. Without this,
+       a popup's high z-index only wins within the shared .starter-options
+       stacking context, where later-DOM sibling cards (and their portrait
+       images) still paint on top of it regardless of the popup's z-index. */
+    position: relative;
+    z-index: 1;
+}
+
+/* Raise the whole card (and therefore any open popup inside it) above its
+   sibling starter cards, so the popup is never painted behind the next
+   card's portrait image. */
+.starter-card:has(.element-matchup-collapsible.open),
+.starter-card:has(.rarity-matchup-collapsible.open),
+.starter-card:has(.family-matchup-collapsible.open) {
+    z-index: 10;
 }
 
 .starter-card:hover {
