@@ -145,7 +145,7 @@ class Game {
         });
 
         const temperamentMessage = selectedStarterSpecies
-            ? `<p>Your <strong>${selectedStarterSpecies.name}</strong> has a <strong>${starterTemperament.name}</strong> temperament
+            ? `<p>Your <strong>${selectedStarterSpecies.name}</strong>'s temperament is <strong>${starterTemperament.name}</strong>
                (+${starterTemperament.modifier} ${capitalize(starterTemperament.positive)} / -${starterTemperament.modifier} ${capitalize(starterTemperament.negative)}).</p>`
             : '';
 
@@ -275,7 +275,8 @@ class Game {
             ui.showDialogue(
                 'First Tame!',
                 `<p>Well done! You've tamed your first väsen.</p>
-                 <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read their item descriptions carefully to figure out what they desire.</p>
+                 <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read their item descriptions carefully to figure out what they desire.
+                 <br>Then use the <strong>Offer Item</strong> button and defeat them.</p>
                  <p>You can find more tips in the <strong>Game Guide</strong>.</p>`,
                 [{ text: 'Confirm', callback: null }],
                 false
