@@ -679,28 +679,35 @@ UIController.prototype.autoHealParty = function() {
     let vasenHealedCount = 0;
 
     partyVasenToHeal.forEach(vasen => {
-        let itemToUse = null;
+        // Keep using items on this väsen until it's fully healed or no
+        // taming items remain (e.g. the wrong item only heals WRONG_ITEM_HEAL_PERCENT,
+        // so a second item may be needed to reach full health).
+        while (vasen.currentHealth < vasen.maxHealth) {
+            let itemToUse = null;
 
-        // 1. Prefer associated item
-        const associatedItem = vasen.species.tamingItem;
-        if (associatedItem && gameState.getItemCount(associatedItem) > 0) {
-            itemToUse = associatedItem;
-        } else {
-            // 2. Otherwise, use most plentiful taming item
-            const availableTamingItems = Object.keys(gameState.itemInventory)
-                .filter(itemName => gameState.getItemCount(itemName) > 0 && TAMING_ITEMS[itemName])
-                .sort((a, b) => gameState.getItemCount(b) - gameState.getItemCount(a));
+            // 1. Prefer associated item
+            const associatedItem = vasen.species.tamingItem;
+            if (associatedItem && gameState.getItemCount(associatedItem) > 0) {
+                itemToUse = associatedItem;
+            } else {
+                // 2. Otherwise, use most plentiful taming item
+                const availableTamingItems = Object.keys(gameState.itemInventory)
+                    .filter(itemName => gameState.getItemCount(itemName) > 0 && TAMING_ITEMS[itemName])
+                    .sort((a, b) => gameState.getItemCount(b) - gameState.getItemCount(a));
 
-            if (availableTamingItems.length > 0) {
-                itemToUse = availableTamingItems[0];
+                if (availableTamingItems.length > 0) {
+                    itemToUse = availableTamingItems[0];
+                }
             }
-        }
 
-        if (itemToUse) {
+            if (!itemToUse) break; // No items left to use on this väsen
+
             const result = gameState.useItemOnVasen(itemToUse, vasen);
             if (result.success) {
                 vasenHealedCount++;
                 this.showMessage(result.message, 'success');
+            } else {
+                break; // Avoid an infinite loop if the item couldn't be used
             }
         }
     });

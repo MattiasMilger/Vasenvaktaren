@@ -440,7 +440,7 @@ function getRandomTemperament() {
     return TEMPERAMENT_LIST[Math.floor(Math.random() * TEMPERAMENT_LIST.length)];
 }
 
-// Create a wild Väsen for encounters
+// Create a wild väsen for encounters
 function createWildVasen(speciesName, level) {
     const vasen = new VasenInstance(speciesName, level, null, [], true); // Mark as enemy
 
