@@ -469,19 +469,21 @@ achievementsHtml += '</div></div>';
         }
     };
 
-    // Scroll an Element Matchups / Families popup fully into view when it is
-    // opened inside the Game Guide. These popups (.element-guide-details,
-    // .family-description-popup) are positioned absolutely from their trigger
-    // badge, so a badge near the right edge of the modal (e.g. Wind, Rå) can
-    // open a popup that overflows past the visible area, requiring the
-    // player to manually scroll .tips-content sideways to read it. Called
-    // right after the badge's own toggle function runs, so the 'open' class
-    // is already applied by the time this checks it.
+    // Scroll an Element Matchups / Families / Rarity popup fully into view when
+    // it is opened. These popups (.element-guide-details, .family-description-popup,
+    // .matchup-details, .rarity-description-popup) are positioned absolutely
+    // from their trigger badge, so a badge near the edge of its scroll container
+    // (Game Guide's .tips-content, or the starter selection screen on narrow/short
+    // viewports) can open a popup that overflows past the visible area, requiring
+    // the player to manually scroll to read it. Called right after the badge's
+    // own toggle function runs, so the 'open' class is already applied by the
+    // time this checks it. Used by both the Game Guide (Element Matchups,
+    // Families) and the starter selection screen (element/rarity/family badges).
     UIController.prototype.scrollGuidePopupIntoView = function(trigger) {
         const parent = trigger.parentElement;
         if (!parent || !parent.classList.contains('open')) return;
 
-        const popup = parent.querySelector('.element-guide-details, .family-description-popup');
+        const popup = parent.querySelector('.element-guide-details, .family-description-popup, .matchup-details, .rarity-description-popup');
         if (!popup) return;
 
         popup.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });

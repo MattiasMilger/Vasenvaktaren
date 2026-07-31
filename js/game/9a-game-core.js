@@ -63,18 +63,18 @@ class Game {
                 <h3 class="starter-name">${species.name}</h3>
                 <div class="starter-badges">
                     <div class="element-matchup-collapsible">
-                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${species.element}</span>
+                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${species.element}</span>
                         ${ui.generateDefensiveMatchupsHTML(species.element)}
                     </div>
                     <div class="rarity-matchup-collapsible family-matchup-collapsible">
-                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${species.rarity}</span>
+                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.rarity}</span>
                         <div class="rarity-description-popup">
                             <p><strong>${species.rarity}</strong><br>
                             ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
                         </div>
                     </div>
                     <div class="family-matchup-collapsible">
-                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${species.family}</span>
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.family}</span>
                         <div class="family-description-popup">
                             <p><strong>${species.family}</strong><br>
                             ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
