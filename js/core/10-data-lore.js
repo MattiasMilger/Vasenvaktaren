@@ -694,16 +694,6 @@ const LORE_ENTRIES = {
         unlockType: 'zone',
         unlockKey: 'ZONE4'
     },
-    'location_world_end': {
-        key: 'location_world_end',
-        name: "Världens Ände",
-        category: 'locations',
-        desc: 'Världens Ände (World\'s end) marks the desolate threshold where reality begins to fray. This cursed landscape serves as the final battlefield for the prophesied Ragnarök, the doom of the gods. Here, the forces of chaos and order are destined to collide in an event that brings about the ultimate destruction of the cosmos. It is a place of absolute finality where stars fall from the sky and the earth sinks into the sea, yet it remains the necessary site for the world to eventually be reborn from the ashes of the old.',
-        source: 'Poetic Edda / Norse Mythology',
-        heritage: 'Scandinavian',
-        unlockType: 'zone',
-        unlockKey: 'ZONE6'
-    },
     // =========================================================================
     // CATEGORY: ABILITIES
     // =========================================================================
