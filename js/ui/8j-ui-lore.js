@@ -81,9 +81,17 @@ UIController.prototype.renderLore = function() {
         const catLabel = LORE_CATEGORIES[cat].label;
         const isCatFavorite = gameState.favoriteLoreCategories.has(cat);
 
+        // Category-level Additional Info button - only for Skills and Items,
+        // since not every skill/item necessarily has its own lore entry to
+        // attach a per-entry info button to. Opens a full reference list.
+        const showCatInfo = this.additionalInfoEnabled && (cat === 'skills' || cat === 'items');
+        const catInfoBtnHtml = showCatInfo
+            ? `<button class="lore-info-btn" type="button" data-cat-info="${cat}">i</button>`
+            : '';
+
         // data-cat used to restore collapsed state after re-render
         html += `<div class="lore-category" data-cat="${cat}">`;
-        html += `<h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${catLabel}<button class="lore-favorite-btn ${isCatFavorite ? 'active' : ''}" type="button" data-cat-favorite="${cat}">${isCatFavorite ? '★' : '☆'}</button></h4>`;
+        html += `<h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${catLabel}<button class="lore-favorite-btn ${isCatFavorite ? 'active' : ''}" type="button" data-cat-favorite="${cat}">${isCatFavorite ? '★' : '☆'}</button>${catInfoBtnHtml}</h4>`;
         html += `<div class="lore-entry-list">`;
 
         grouped[cat].forEach(entry => {
@@ -157,6 +165,26 @@ UIController.prototype.renderLore = function() {
             }
             gameState.saveGame();
             this.renderLore();
+            return;
+        }
+
+        // Category-level Additional Info button (Skills / Items)
+        const catInfoBtn = e.target.closest('.lore-info-btn[data-cat-info]');
+        if (catInfoBtn) {
+            const catKey = catInfoBtn.dataset.catInfo;
+            if (catKey === 'skills') {
+                this.showSkillsInfoModal();
+            } else if (catKey === 'items') {
+                this.showItemsInfoModal();
+            }
+            return;
+        }
+
+        // Entry-level Additional Info button (väsen / family / runes concept)
+        const entryInfoBtn = e.target.closest('.lore-info-btn[data-entry-info]');
+        if (entryInfoBtn) {
+            const entryKey = entryInfoBtn.dataset.entryInfo;
+            this.showLoreEntryInfoModal(entryKey);
             return;
         }
 
@@ -283,12 +311,21 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     if (!gameState.favoriteLoreEntries) gameState.favoriteLoreEntries = new Set();
     const isFavorite = gameState.favoriteLoreEntries.has(entry.key);
 
+    // Additional Info button - only for väsen entries, family entries, and
+    // the Runes concept entry (which opens the bind rune list instead of
+    // per-rune entries, since individual runes have no lore entries of their own).
+    const hasInfo = entry.unlockType === 'vasen' || entry.unlockType === 'family' || entry.key === 'concept_futhark';
+    const infoBtnHtml = (this.additionalInfoEnabled && hasInfo)
+        ? `<button class="lore-info-btn" type="button" data-entry-info="${entry.key}">i</button>`
+        : '';
+
     return `
         <div class="lore-entry-card lore-entry-unlocked" data-key="${entry.key}">
             <div class="lore-entry-header">
                 <span class="lore-entry-chevron"></span>
                 <span class="lore-entry-name">${name}</span>
                 <button class="lore-favorite-btn ${isFavorite ? 'active' : ''}" type="button" data-entry-favorite="${entry.key}">${isFavorite ? '★' : '☆'}</button>
+                ${infoBtnHtml}
             </div>
             <div class="lore-entry-body">
                 <p class="lore-desc">${desc}</p>
@@ -309,4 +346,229 @@ UIController.prototype.showLoreUnlockMessage = function(entryKey) {
     const entry = LORE_ENTRIES[entryKey];
     if (!entry) return;
     this.showMessage(`Lore Entry unlocked: ${entry.name}`, 'success');
+};
+
+// =============================================================================
+// ADDITIONAL INFO - Lore Book technical info popups (Väsen, Families, Runes,
+// Skills, Items). Only reachable via the "i" buttons rendered above when the
+// Additional Info setting is enabled.
+// =============================================================================
+
+// Generic show/hide for the Lore Info modal
+UIController.prototype.showLoreInfoModal = function(title, bodyHtml) {
+    const modal = document.getElementById('lore-info-modal');
+    if (!modal) return;
+    document.getElementById('lore-info-title').textContent = title;
+    document.getElementById('lore-info-content').innerHTML = bodyHtml;
+    this.showModalOverlay();
+    modal.classList.add('active');
+};
+
+UIController.prototype.hideLoreInfoModal = function() {
+    const modal = document.getElementById('lore-info-modal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    this.checkAndHideOverlay();
+};
+
+// Dispatch an entry-level Additional Info click to the correct info modal,
+// based on the lore entry's unlockType (or its key, for the Runes concept entry).
+UIController.prototype.showLoreEntryInfoModal = function(entryKey) {
+    const entry = LORE_ENTRIES[entryKey];
+    if (!entry) return;
+
+    if (entry.key === 'concept_futhark') {
+        this.showBindRunesInfoModal();
+        return;
+    }
+
+    if (entry.unlockType === 'vasen' && entry.unlockKey) {
+        this.showVasenInfoModal(entry.unlockKey);
+        return;
+    }
+
+    if (entry.unlockType === 'family' && entry.unlockKey) {
+        this.showFamilyInfoModal(entry.unlockKey);
+        return;
+    }
+};
+
+// Calculate a species' attribute at a given level, excluding temperament -
+// mirrors VasenInstance.calculateAttribute() minus the temperament block,
+// since these technical values are shown without any specific temperament applied.
+function calculateSpeciesBaseAttribute(species, attrName, level) {
+    const baseAttrs = BASE_ATTRIBUTES[species.family];
+    let base = baseAttrs[attrName] || 0;
+
+    const elementBonus = ELEMENT_BONUSES[species.element];
+    if (elementBonus && elementBonus[attrName]) {
+        base += elementBonus[attrName];
+    }
+
+    const rarityMult = RARITY_MULTIPLIERS[species.rarity];
+    base = base * rarityMult;
+
+    const levelScaling = 1 + GAME_CONFIG.ATTRIBUTE_LEVEL_SCALING_RATE * (level - 1);
+    base = base * levelScaling;
+
+    return Math.floor(base);
+}
+
+// Väsen technical info: base/maxed attributes (no temperament), family,
+// element, taming item, description, skills, image, rarity, and every zone
+// this species can spawn in (including Ginnungagap).
+UIController.prototype.showVasenInfoModal = function(speciesName) {
+    const species = VASEN_SPECIES[speciesName];
+    if (!species) return;
+
+    const attrOrder  = ['strength', 'wisdom', 'defense', 'durability', 'health'];
+    const attrLabels = { strength: 'Strength', wisdom: 'Wisdom', defense: 'Defense', durability: 'Durability', health: 'Health' };
+
+    const buildAttrGridHtml = (level) => attrOrder.map(attr => `
+        <div class="attribute-item">
+            <span class="attr-name">${attrLabels[attr]}</span>
+            <span class="attr-value">${calculateSpeciesBaseAttribute(species, attr, level)}</span>
+        </div>
+    `).join('');
+
+    // Every zone whose spawn list includes this species (zones with
+    // spawns === 'ALL', i.e. Ginnungagap, always match).
+    const zoneNames = ZONE_ORDER
+        .filter(zoneId => {
+            const zone = ZONES[zoneId];
+            return zone && (zone.spawns === 'ALL' || zone.spawns.includes(speciesName));
+        })
+        .map(zoneId => ZONES[zoneId].name);
+
+    // Temporary max-level instance used only to reuse the existing skills-list
+    // renderer. Its temperament has no bearing on anything shown here (the
+    // skills list only displays element, type, megin cost, power, and
+    // initial bonus - none of which are temperament-affected).
+    const tempVasen = new VasenInstance(speciesName, GAME_CONFIG.MAX_LEVEL, null, [], false);
+    const skillsHtml = this.renderSkillsList(tempVasen);
+
+    const bodyHtml = `
+        <div class="lore-info-vasen">
+            <div class="lore-info-header">
+                <div class="lore-info-image-container holo-${species.rarity.toLowerCase()}">
+                    <img src="${species.image}" alt="${species.name}" class="lore-info-image">
+                </div>
+                <div class="lore-info-badges">
+                    <span class="element-badge element-${species.element.toLowerCase()}">${species.element}</span>
+                    <span class="rarity-badge rarity-${species.rarity.toLowerCase()}">${species.rarity}</span>
+                    <span class="family-badge">${species.family}</span>
+                </div>
+            </div>
+            <p class="lore-info-description">${species.description}</p>
+            <div class="lore-info-row"><span class="lore-info-label">Taming Item:</span> <span class="lore-info-value">${species.tamingItem}</span></div>
+            <div class="lore-info-row"><span class="lore-info-label">Zones:</span> <span class="lore-info-value">${zoneNames.join(', ')}</span></div>
+            <h4 class="lore-info-subheading">Base Attributes (Level 1)</h4>
+            <div class="attribute-grid">${buildAttrGridHtml(1)}</div>
+            <h4 class="lore-info-subheading">Maxed Attributes (Level ${GAME_CONFIG.MAX_LEVEL})</h4>
+            <div class="attribute-grid">${buildAttrGridHtml(GAME_CONFIG.MAX_LEVEL)}</div>
+            <h4 class="lore-info-subheading">Skills</h4>
+            <div class="skills-list">${skillsHtml}</div>
+        </div>
+    `;
+
+    this.showLoreInfoModal(species.name, bodyHtml);
+};
+
+// Family technical info: the same description and trait text shown by the
+// standard family badge popup elsewhere in the game.
+UIController.prototype.showFamilyInfoModal = function(familyName) {
+    const description = FAMILY_DESCRIPTIONS[familyName] || 'No description available.';
+    const passive = FAMILY_PASSIVES[familyName];
+
+    let bodyHtml = `<p><strong>${familyName}</strong><br>${description}</p>`;
+    if (passive) {
+        bodyHtml += `<hr class="lore-info-divider"><p><strong>Trait: ${passive.name}</strong><br>${passive.description}</p>`;
+    }
+
+    this.showLoreInfoModal(familyName, bodyHtml);
+};
+
+// Bind Runes technical info: every bind rune pair that exists and its effect.
+UIController.prototype.showBindRunesInfoModal = function() {
+    const itemsHtml = BIND_RUNES.map(br => `
+        <div class="lore-info-bindrune-item">
+            <div class="lore-info-bindrune-header">${br.symbols} ${br.names}</div>
+            <div class="lore-info-bindrune-desc">${br.effectText}</div>
+        </div>
+    `).join('');
+
+    const bodyHtml = `<div class="lore-info-bindrune-list">${itemsHtml}</div>`;
+    this.showLoreInfoModal('Bind Runes', bodyHtml);
+};
+
+// Skills technical info: every skill in the game and its standard info,
+// since not every skill has its own lore entry to attach a per-entry button to.
+UIController.prototype.showSkillsInfoModal = function() {
+    const skillNames = Object.keys(ABILITIES);
+
+    const itemsHtml = skillNames.map(skillName => {
+        const skill = ABILITIES[skillName];
+        const elementClass = skill.element ? skill.element.toLowerCase() : '';
+        const elementLabel = skill.element ? skill.element : 'Own Element';
+
+        return `
+            <div class="skill-item ${elementClass ? 'element-' + elementClass : ''}">
+                <div class="skill-header">
+                    <span class="skill-name">${skill.name}</span>
+                    <span class="skill-type-tag">${skill.type}</span>
+                </div>
+                <div class="skill-attributes">
+                    <span class="skill-element ${elementClass ? 'element-' + elementClass : ''}">${elementLabel}</span>
+                    <span class="skill-cost">Megin: ${skill.meginCost}</span>
+                    ${skill.healthCost ? `<span class="skill-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
+                    ${skill.power ? `<span class="skill-power">Power: ${skill.power}</span>` : ''}
+                    ${skill.initialBonus ? `<span class="skill-initial-bonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
+                </div>
+                <p class="skill-description">${skill.flavorDescription}<br>${skill.mechanicsDescription}</p>
+            </div>
+        `;
+    }).join('');
+
+    const bodyHtml = `<div class="lore-info-skills-list">${itemsHtml}</div>`;
+    this.showLoreInfoModal('Skills', bodyHtml);
+};
+
+// Items technical info: every taming item, its associated väsen, and every
+// zone that väsen can spawn in, since not every item necessarily has its
+// own lore entry to attach a per-entry button to.
+UIController.prototype.showItemsInfoModal = function() {
+    const itemIds = Object.keys(TAMING_ITEMS);
+
+    const rowsHtml = itemIds.map(itemId => {
+        const item = TAMING_ITEMS[itemId];
+        const species = VASEN_SPECIES[item.tamingTarget];
+        const speciesName = species ? species.name : item.tamingTarget;
+
+        let zoneNames = [];
+        if (species) {
+            zoneNames = ZONE_ORDER
+                .filter(zoneId => {
+                    const zone = ZONES[zoneId];
+                    return zone && (zone.spawns === 'ALL' || zone.spawns.includes(item.tamingTarget));
+                })
+                .map(zoneId => ZONES[zoneId].name);
+        }
+
+        return `
+            <div class="lore-info-item-row">
+                <div class="lore-info-item-header">
+                    <span class="lore-info-item-name">${item.name}</span>
+                </div>
+                <p class="lore-info-item-desc">${item.description}</p>
+                <div class="lore-info-item-meta">
+                    <span class="lore-meta-label">Väsen:</span> <span class="lore-meta-value">${speciesName}</span>
+                    <span class="lore-meta-sep">|</span>
+                    <span class="lore-meta-label">Zones:</span> <span class="lore-meta-value">${zoneNames.join(', ')}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const bodyHtml = `<div class="lore-info-items-list">${rowsHtml}</div>`;
+    this.showLoreInfoModal('Items', bodyHtml);
 };

@@ -310,11 +310,201 @@ mark.lore-highlight {
 }
 
 /* =============================================================================
+   ADDITIONAL INFO - "i" BUTTON (entry-level and category-level)
+   Boxed style matching .lore-favorite-btn, placed immediately after the
+   favorite star wherever it appears. Only rendered when the Additional Info
+   setting is enabled.
+   ============================================================================= */
+
+.lore-info-btn {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.lore-info-btn:hover {
+    color: var(--text-accent);
+    border-color: var(--text-accent);
+}
+
+/* =============================================================================
+   LORE INFO MODAL SIZING
+   Wider technical-info popup opened by the "i" buttons above.
+   ============================================================================= */
+
+.modal-lore-info {
+    max-width: 700px;
+    width: 95vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-lore-info .modal-title {
+    flex-shrink: 0;
+}
+
+#lore-info-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.modal-lore-info .btn-secondary {
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+/* =============================================================================
+   LORE INFO CONTENT - shared building blocks used across väsen, family,
+   bindrune, skills, and items info bodies.
+   ============================================================================= */
+
+.lore-info-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.lore-info-image {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+    display: block;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 10px var(--black-overlay-medium);
+}
+
+.lore-info-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
+.lore-info-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-md);
+}
+
+.lore-info-row {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.lore-info-label {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-medium);
+}
+
+.lore-info-value {
+    color: var(--text-primary);
+}
+
+.lore-info-subheading {
+    font-size: var(--font-size-sm);
+    color: var(--text-accent);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+}
+
+.lore-info-divider {
+    margin: var(--spacing-sm) 0;
+    border: none;
+    border-top: 1px solid var(--border-color);
+}
+
+.lore-info-bindrune-list,
+.lore-info-skills-list,
+.lore-info-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.lore-info-bindrune-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.lore-info-bindrune-header {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-accent);
+    margin-bottom: var(--spacing-xs);
+}
+
+.lore-info-bindrune-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.lore-info-item-row {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.lore-info-item-header {
+    margin-bottom: var(--spacing-xs);
+}
+
+.lore-info-item-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-accent);
+}
+
+.lore-info-item-desc {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.lore-info-item-meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+/* =============================================================================
    RESPONSIVE - MOBILE
    ============================================================================= */
 
 @media (max-width: 768px) {
     .modal-lore {
+        max-height: 90vh;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .modal-lore-info {
         max-height: 90vh;
         width: 100%;
         max-width: 100%;

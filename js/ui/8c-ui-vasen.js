@@ -633,12 +633,6 @@ UIController.prototype.renderVasenDetails = function(vasen) {
             </span>
         </div>
 
-        <div class="details-taming-item">
-            <h4>Taming Item</h4>
-            <span class="taming-item-name">${vasen.species.tamingItem}</span>
-        </div>
-        <br>
-
         <div class="details-skills">
             <h4>Skills</h4>
             <div class="skills-list">

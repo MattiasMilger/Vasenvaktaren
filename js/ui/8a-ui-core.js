@@ -22,6 +22,8 @@ class UIController {
         this.potencyIndicatorEnabled = savedPotencyIndicator !== null ? savedPotencyIndicator === 'true' : true;
         const savedVasenSortBy = localStorage.getItem('vasenSortBy');
         this.vasenSortBy = savedVasenSortBy !== null ? savedVasenSortBy : 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
+        const savedAdditionalInfo = localStorage.getItem('additionalInfoEnabled');
+        this.additionalInfoEnabled = savedAdditionalInfo !== null ? savedAdditionalInfo === 'true' : false;
     }
 
     // Initialize UI elements
@@ -123,6 +125,15 @@ if (verboseCombatLogToggle) {
     });
 }
 
+// Additional Info toggle (Lore Book)
+const additionalInfoToggle = document.getElementById('additional-info-toggle');
+if (additionalInfoToggle) {
+    additionalInfoToggle.checked = this.additionalInfoEnabled;
+    additionalInfoToggle.addEventListener('change', () => {
+        this.toggleAdditionalInfo(additionalInfoToggle.checked);
+    });
+}
+
 // IMPORT SAVE
 const importTextarea = document.getElementById('import-save-data');
 const confirmImportBtn = document.getElementById('confirm-import-btn');
@@ -155,6 +166,10 @@ document.getElementById('reset-game-btn').addEventListener('click', () => this.c
 // Lore book
 document.getElementById('lore-btn').addEventListener('click', () => this.showLore());
 document.getElementById('close-lore').addEventListener('click', () => this.hideLore());
+
+// Lore info modal (Additional Info)
+document.getElementById('close-lore-info').addEventListener('click', () => this.hideLoreInfoModal());
+document.getElementById('close-lore-info-btn').addEventListener('click', () => this.hideLoreInfoModal());
 
 // Combat tips
 document.getElementById('combat-tips-btn').addEventListener('click', () => this.showCombatTips());

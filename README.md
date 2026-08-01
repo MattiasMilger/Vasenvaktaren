@@ -167,7 +167,6 @@ Vasenvaktaren/
 - [X] Introduce all 45 Väsen
 - [X] Introduce all 30 Skills
 - [ ] Balance overhaul
-- [ ] Wiki pages
 
 ## Credits
 

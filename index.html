@@ -473,6 +473,18 @@
     </div>
 </div>
 
+<!-- Lore Info Modal (Additional Info) -->
+<div id="lore-info-modal" class="modal">
+    <div class="modal-content modal-lore-info">
+        <div class="modal-header">
+            <h3 id="lore-info-title" class="modal-title"></h3>
+            <button id="close-lore-info" class="modal-close">×</button>
+        </div>
+        <div id="lore-info-content"></div>
+        <button id="close-lore-info-btn" class="btn btn-secondary">Close</button>
+    </div>
+</div>
+
 <!-- Settings Modal -->
 <div id="settings-modal" class="modal">
     <div class="modal-content modal-settings">
@@ -498,6 +510,19 @@
                 <span class="toggle-switch-label-text">Verbose combat log</span>
             </label>
             <p class="settings-note">Shows more info in the combat log.</p>
+        </div>
+
+        <!-- Lore Book Settings -->
+        <div class="settings-section">
+            <h4>Lore Book</h4>
+            <label class="toggle-switch-row" for="additional-info-toggle">
+                <span class="toggle-switch">
+                    <input type="checkbox" id="additional-info-toggle">
+                    <span class="toggle-switch-slider"></span>
+                </span>
+                <span class="toggle-switch-label-text">Additional Info</span>
+            </label>
+            <p class="settings-note">Shows extra "i" info buttons in the Lore Book with technical details about entries.</p>
         </div>
 
         <!-- Save Management -->
@@ -566,7 +591,8 @@
                 <div class="guide-category guide-category-first" data-cat="exploration">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Exploration<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p>Exploration is your default way to traverse the realms. Select a zone and click "Explore" to search it, uncovering wild väsen to tame, useful items, sacred wells that heal your collection, or hidden runes.</p>
+                        <p>Exploration is your default way to traverse the realms. Select a zone and click "Explore" to search it, uncovering wild väsen to tame, items for taming, sacred wells that heal your collection, or hidden runes.</p>
+                        <p><em>Note: All items dropped in a zone belong to its naturally occuring väsen.</em></p>
                     </div>
                 </div>
 
