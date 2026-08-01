@@ -40,14 +40,6 @@ Game.prototype.challengeGuardian = function() {
 
 // Start guardian combat
 Game.prototype.startGuardianCombat = function(guardian) {
-    // Stop showing explore tutorial when first combat starts
-    if (!gameState.firstExploreTutorialShown) {
-        gameState.firstExploreTutorialShown = true;
-        gameState.saveGame();
-        // Immediately update the explore button to remove tutorial class
-        ui.updateExploreButton();
-    }
-
     gameState.inCombat = true;
 
     // Get player team

@@ -27,14 +27,6 @@ Game.prototype.explore = function() {
 
 // Start combat with wild Vasen
 Game.prototype.startCombat = function(enemyVasen) {
-    // Stop showing explore tutorial when first combat starts
-    if (!gameState.firstExploreTutorialShown) {
-        gameState.firstExploreTutorialShown = true;
-        gameState.saveGame();
-        // Immediately update the explore button to remove tutorial class
-        ui.updateExploreButton();
-    }
-
     gameState.inCombat = true;
 
     // Get player team (non-null party members)

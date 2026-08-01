@@ -22,6 +22,14 @@ class Game {
                 gameState.saveGame();
             }
 
+            // Same catch-up for the explore button tutorial glow: only stop
+            // showing it once the player has actually tamed a väsen
+            // (vasenCollection.length > 1, since the starter counts as 1).
+            if (!gameState.firstExploreTutorialShown && gameState.vasenCollection.length > 1) {
+                gameState.firstExploreTutorialShown = true;
+                gameState.saveGame();
+            }
+
             // Retroactively unlock all lore entries earned by existing progress
             gameState.retroactivelyUnlockLoreEntries();
 
@@ -252,6 +260,18 @@ class Game {
             // Length > 1 because starter counts as 1
             gameState.firstCombatTutorialShown = true;
             gameState.saveGame();
+        }
+
+        // Stop showing the explore button tutorial glow once the player has
+        // actually tamed a väsen (vasenCollection.length > 1, since the starter
+        // counts as 1). Checked at combat end (like firstCombatTutorialShown
+        // above) rather than at combat start, so it persists through wild
+        // encounters and guardian battles that don't result in a tame, and
+        // only turns off after a successful tame.
+        if (!gameState.firstExploreTutorialShown && gameState.vasenCollection.length > 1) {
+            gameState.firstExploreTutorialShown = true;
+            gameState.saveGame();
+            ui.updateExploreButton();
         }
 
         // Apply post-combat healing (includes megin restore)
