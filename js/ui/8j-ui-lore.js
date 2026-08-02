@@ -312,8 +312,8 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     const isFavorite = gameState.favoriteLoreEntries.has(entry.key);
 
     // Additional Info button - only for väsen entries, family entries, and
-    // the Runes concept entry (which opens the bind rune list instead of
-    // per-rune entries, since individual runes have no lore entries of their own).
+    // the Runes concept entry (which opens the full runes and bind runes list
+    // instead of per-rune entries, since individual runes have no lore entries of their own).
     const hasInfo = entry.unlockType === 'vasen' || entry.unlockType === 'family' || entry.key === 'concept_futhark';
     const infoBtnHtml = (this.additionalInfoEnabled && hasInfo)
         ? `<button class="lore-info-btn" type="button" data-entry-info="${entry.key}">i</button>`
@@ -378,7 +378,7 @@ UIController.prototype.showLoreEntryInfoModal = function(entryKey) {
     if (!entry) return;
 
     if (entry.key === 'concept_futhark') {
-        this.showBindRunesInfoModal();
+        this.showRunesInfoModal();
         return;
     }
 
@@ -488,17 +488,33 @@ UIController.prototype.showFamilyInfoModal = function(familyName) {
     this.showLoreInfoModal(familyName, bodyHtml);
 };
 
-// Bind Runes technical info: every bind rune pair that exists and its effect.
-UIController.prototype.showBindRunesInfoModal = function() {
-    const itemsHtml = BIND_RUNES.map(br => `
+// Runes technical info: every regular rune (symbol, name, effect) plus every
+// bind rune pair that exists and its effect.
+UIController.prototype.showRunesInfoModal = function() {
+    const runesHtml = RUNE_LIST.map(runeId => {
+        const rune = RUNES[runeId];
+        return `
+            <div class="lore-info-bindrune-item">
+                <div class="lore-info-bindrune-header">${rune.symbol} ${rune.name}</div>
+                <div class="lore-info-bindrune-desc">${rune.effect}</div>
+            </div>
+        `;
+    }).join('');
+
+    const bindRunesHtml = BIND_RUNES.map(br => `
         <div class="lore-info-bindrune-item">
             <div class="lore-info-bindrune-header">${br.symbols} ${br.names}</div>
             <div class="lore-info-bindrune-desc">${br.effectText}</div>
         </div>
     `).join('');
 
-    const bodyHtml = `<div class="lore-info-bindrune-list">${itemsHtml}</div>`;
-    this.showLoreInfoModal('Bind Runes', bodyHtml);
+    const bodyHtml = `
+        <h4 class="lore-info-subheading">Runes</h4>
+        <div class="lore-info-bindrune-list">${runesHtml}</div>
+        <h4 class="lore-info-subheading">Bind Runes</h4>
+        <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
+    `;
+    this.showLoreInfoModal('Runes', bodyHtml);
 };
 
 // Skills technical info: every skill in the game and its standard info,
