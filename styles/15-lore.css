@@ -393,6 +393,12 @@ mark.lore-highlight {
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     box-shadow: inset 0 0 10px var(--black-overlay-medium);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.lore-info-image:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
 }
 
 .lore-info-badges {
@@ -491,6 +497,18 @@ mark.lore-highlight {
 .lore-info-item-meta {
     font-size: var(--font-size-xs);
     color: var(--text-muted);
+}
+
+.lore-info-list {
+    margin: var(--spacing-sm) 0 0 0;
+    padding-left: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.lore-info-list li {
+    margin-bottom: var(--spacing-xs);
 }
 
 /* =============================================================================

@@ -81,10 +81,10 @@ UIController.prototype.renderLore = function() {
         const catLabel = LORE_CATEGORIES[cat].label;
         const isCatFavorite = gameState.favoriteLoreCategories.has(cat);
 
-        // Category-level Additional Info button - only for Skills and Items,
-        // since not every skill/item necessarily has its own lore entry to
-        // attach a per-entry info button to. Opens a full reference list.
-        const showCatInfo = this.additionalInfoEnabled && (cat === 'skills' || cat === 'items');
+        // Category-level Additional Info button - only for Skills, Items, and
+        // Locations, since not every skill/item/zone necessarily has its own
+        // lore entry to attach a per-entry info button to. Opens a full reference list.
+        const showCatInfo = this.additionalInfoEnabled && (cat === 'skills' || cat === 'items' || cat === 'locations');
         const catInfoBtnHtml = showCatInfo
             ? `<button class="lore-info-btn" type="button" data-cat-info="${cat}">i</button>`
             : '';
@@ -168,7 +168,7 @@ UIController.prototype.renderLore = function() {
             return;
         }
 
-        // Category-level Additional Info button (Skills / Items)
+        // Category-level Additional Info button (Skills / Items / Locations)
         const catInfoBtn = e.target.closest('.lore-info-btn[data-cat-info]');
         if (catInfoBtn) {
             const catKey = catInfoBtn.dataset.catInfo;
@@ -176,6 +176,8 @@ UIController.prototype.renderLore = function() {
                 this.showSkillsInfoModal();
             } else if (catKey === 'items') {
                 this.showItemsInfoModal();
+            } else if (catKey === 'locations') {
+                this.showLocationsInfoModal();
             }
             return;
         }
@@ -311,10 +313,12 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     if (!gameState.favoriteLoreEntries) gameState.favoriteLoreEntries = new Set();
     const isFavorite = gameState.favoriteLoreEntries.has(entry.key);
 
-    // Additional Info button - only for väsen entries, family entries, and
-    // the Runes concept entry (which opens the full runes and bind runes list
-    // instead of per-rune entries, since individual runes have no lore entries of their own).
-    const hasInfo = entry.unlockType === 'vasen' || entry.unlockType === 'family' || entry.key === 'concept_futhark';
+    // Additional Info button - only for väsen entries, family entries, the
+    // Runes concept entry (which opens the full runes and bind runes list
+    // instead of per-rune entries, since individual runes have no lore
+    // entries of their own), Idunn's Apples, and Sacred Wells.
+    const hasInfo = entry.unlockType === 'vasen' || entry.unlockType === 'family' ||
+        entry.key === 'concept_futhark' || entry.key === 'concept_idunn_apples' || entry.key === 'location_sacred_well';
     const infoBtnHtml = (this.additionalInfoEnabled && hasInfo)
         ? `<button class="lore-info-btn" type="button" data-entry-info="${entry.key}">i</button>`
         : '';
@@ -382,6 +386,16 @@ UIController.prototype.showLoreEntryInfoModal = function(entryKey) {
         return;
     }
 
+    if (entry.key === 'concept_idunn_apples') {
+        this.showIdunnApplesInfoModal();
+        return;
+    }
+
+    if (entry.key === 'location_sacred_well') {
+        this.showSacredWellInfoModal();
+        return;
+    }
+
     if (entry.unlockType === 'vasen' && entry.unlockKey) {
         this.showVasenInfoModal(entry.unlockKey);
         return;
@@ -414,6 +428,16 @@ function calculateSpeciesBaseAttribute(species, attrName, level) {
     return Math.floor(base);
 }
 
+// Calculate base max Megin at a given level, excluding temperament and runes -
+// mirrors VasenInstance.calculateMaxMegin() minus its temperament and Uruz
+// blocks. Megin scales purely with level (not family/rarity/element), so
+// this is the same for every species at a given level.
+function calculateBaseMeginAtLevel(level) {
+    let megin = GAME_CONFIG.BASE_MEGIN + ((level - 1) * GAME_CONFIG.MEGIN_PER_LEVEL);
+    megin = Math.min(megin, GAME_CONFIG.MAX_MEGIN_CAP);
+    return megin;
+}
+
 // Väsen technical info: base/maxed attributes (no temperament), family,
 // element, taming item, description, skills, image, rarity, and every zone
 // this species can spawn in (including Ginnungagap).
@@ -421,15 +445,20 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
     const species = VASEN_SPECIES[speciesName];
     if (!species) return;
 
-    const attrOrder  = ['strength', 'wisdom', 'defense', 'durability', 'health'];
-    const attrLabels = { strength: 'Strength', wisdom: 'Wisdom', defense: 'Defense', durability: 'Durability', health: 'Health' };
+    const attrOrder  = ['strength', 'wisdom', 'defense', 'durability', 'health', 'megin'];
+    const attrLabels = { strength: 'Strength', wisdom: 'Wisdom', defense: 'Defense', durability: 'Durability', health: 'Health', megin: 'Megin' };
 
-    const buildAttrGridHtml = (level) => attrOrder.map(attr => `
-        <div class="attribute-item">
-            <span class="attr-name">${attrLabels[attr]}</span>
-            <span class="attr-value">${calculateSpeciesBaseAttribute(species, attr, level)}</span>
-        </div>
-    `).join('');
+    const buildAttrGridHtml = (level) => attrOrder.map(attr => {
+        const value = attr === 'megin'
+            ? calculateBaseMeginAtLevel(level)
+            : calculateSpeciesBaseAttribute(species, attr, level);
+        return `
+            <div class="attribute-item">
+                <span class="attr-name">${attrLabels[attr]}</span>
+                <span class="attr-value">${value}</span>
+            </div>
+        `;
+    }).join('');
 
     // Every zone whose spawn list includes this species (zones with
     // spawns === 'ALL', i.e. Ginnungagap, always match).
@@ -454,9 +483,30 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
                     <img src="${species.image}" alt="${species.name}" class="lore-info-image">
                 </div>
                 <div class="lore-info-badges">
-                    <span class="element-badge element-${species.element.toLowerCase()}">${species.element}</span>
-                    <span class="rarity-badge rarity-${species.rarity.toLowerCase()}">${species.rarity}</span>
-                    <span class="family-badge">${species.family}</span>
+                    <div class="element-matchup-collapsible">
+                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${species.element}</span>
+                        ${this.generateDefensiveMatchupsHTML(species.element)}
+                    </div>
+                    <div class="rarity-matchup-collapsible family-matchup-collapsible">
+                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.rarity}</span>
+                        <div class="rarity-description-popup">
+                            <p><strong>${species.rarity}</strong><br>
+                            ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
+                        </div>
+                    </div>
+                    <div class="family-matchup-collapsible">
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.family}</span>
+                        <div class="family-description-popup">
+                            <p><strong>${species.family}</strong><br>
+                            ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
+
+                            ${FAMILY_PASSIVES[species.family] ? `
+                                <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                                <p><strong>Trait: ${FAMILY_PASSIVES[species.family].name}</strong><br>
+                                ${FAMILY_PASSIVES[species.family].description}</p>
+                            ` : ''}
+                        </div>
+                    </div>
                 </div>
             </div>
             <p class="lore-info-description">${species.description}</p>
@@ -475,7 +525,8 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
 };
 
 // Family technical info: the same description and trait text shown by the
-// standard family badge popup elsewhere in the game.
+// standard family badge popup elsewhere in the game, plus a plain-text list
+// of every väsen that belongs to this family.
 UIController.prototype.showFamilyInfoModal = function(familyName) {
     const description = FAMILY_DESCRIPTIONS[familyName] || 'No description available.';
     const passive = FAMILY_PASSIVES[familyName];
@@ -485,7 +536,88 @@ UIController.prototype.showFamilyInfoModal = function(familyName) {
         bodyHtml += `<hr class="lore-info-divider"><p><strong>Trait: ${passive.name}</strong><br>${passive.description}</p>`;
     }
 
+    const familyMembers = VASEN_LIST
+        .filter(name => VASEN_SPECIES[name].family === familyName)
+        .map(name => VASEN_SPECIES[name].name);
+
+    bodyHtml += `<h4 class="lore-info-subheading">Väsen</h4><p class="lore-info-description">${familyMembers.join(', ')}</p>`;
+
     this.showLoreInfoModal(familyName, bodyHtml);
+};
+
+// Idunn's Apples technical info: the exact heal/cleanse/renewal mechanics
+// applied every milestone floor of the Endless Tower.
+UIController.prototype.showIdunnApplesInfoModal = function() {
+    const interval = GAME_CONFIG.ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL;
+    const healPercent = Math.round(GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT * 100);
+    const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
+    const stageWord = cleanseStages === 1 ? 'stage' : 'stages';
+
+    const bodyHtml = `
+        <p>Every <strong>${interval}</strong> floors in the Endless Tower, Idunn's Apples replenish your team:</p>
+        <ul class="lore-info-list">
+            <li>Heals each alive väsen by <strong>${healPercent}%</strong> of its max health.</li>
+            <li>Cleanses up to <strong>${cleanseStages}</strong> negative attribute ${stageWord} per attribute.</li>
+            <li>Renews all once-per-combat passives and rune effects.</li>
+        </ul>
+    `;
+
+    this.showLoreInfoModal("Idunn's Apples", bodyHtml);
+};
+
+// Sacred Well technical info: the healing effect applied when one is found while exploring.
+UIController.prototype.showSacredWellInfoModal = function() {
+    const healPercent = Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100);
+
+    const bodyHtml = `
+        <p>Encountered while exploring a zone.</p>
+        <ul class="lore-info-list">
+            <li>Every väsen in your entire collection (not just your active party) is healed by <strong>${healPercent}%</strong> of its max health.</li>
+        </ul>
+    `;
+
+    this.showLoreInfoModal('Sacred Wells', bodyHtml);
+};
+
+// Locations technical info: every zone, its väsen spawns, and its guardian
+// (or lack thereof), since not every zone necessarily has its own lore entry
+// to attach a per-entry info button to.
+UIController.prototype.showLocationsInfoModal = function() {
+    const rowsHtml = ZONE_ORDER.map(zoneId => {
+        const zone = ZONES[zoneId];
+        if (!zone) return '';
+
+        const spawnsList = zone.spawns === 'ALL'
+            ? 'All Väsen'
+            : zone.spawns.map(name => VASEN_SPECIES[name] ? VASEN_SPECIES[name].name : name).join(', ');
+
+        let guardianValue;
+        if (zone.guardian) {
+            const teamList = zone.guardian.team.map(member => {
+                const memberSpecies = VASEN_SPECIES[member.species];
+                const memberName = memberSpecies ? memberSpecies.name : member.species;
+                return `${memberName} (Lvl ${member.level})`;
+            }).join(', ');
+            guardianValue = `${zone.guardian.name} - ${teamList}`;
+        } else if (zoneId === 'ZONE7') {
+            guardianValue = 'None - hosts the Endless Tower';
+        } else {
+            guardianValue = 'None';
+        }
+
+        return `
+            <div class="lore-info-item-row">
+                <div class="lore-info-item-header"><span class="lore-info-item-name">${zone.name}</span></div>
+                <p class="lore-info-item-desc">${zone.description}</p>
+                <div class="lore-info-row"><span class="lore-info-label">Level Range:</span> <span class="lore-info-value">${zone.levelRange[0]} - ${zone.levelRange[1]}</span></div>
+                <div class="lore-info-row"><span class="lore-info-label">Väsen:</span> <span class="lore-info-value">${spawnsList}</span></div>
+                <div class="lore-info-row"><span class="lore-info-label">Guardian:</span> <span class="lore-info-value">${guardianValue}</span></div>
+            </div>
+        `;
+    }).join('');
+
+    const bodyHtml = `<div class="lore-info-items-list">${rowsHtml}</div>`;
+    this.showLoreInfoModal('Locations', bodyHtml);
 };
 
 // Runes technical info: every regular rune (symbol, name, effect) plus every
