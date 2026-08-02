@@ -1,0 +1,163 @@
+/* =============================================================================
+   13-style-animations.css - Combat Animations (The "Middle Ground" Edit)
+   ============================================================================= */
+
+/* Base container optimization */
+.combatant-image-container {
+    will-change: transform, filter;
+    transform: translateZ(0); 
+    backface-visibility: hidden;
+    position: relative;
+}
+
+/* =============================================================================
+   IDLE ANIMATIONS
+   ============================================================================= */
+
+/* Idle breathing - Set to 3.5s: enough to be seen, not enough to distract */
+.combatant-image-container:not(.knocked-out) {
+    animation: combatantIdle 3.5s ease-in-out infinite;
+}
+
+/* Disable the idle animation on hover so the hover scale (defined in
+   10-style-combat.css) can apply cleanly. Without this, the idle animation keeps
+   overriding the hover transform every frame, which made the pixel art
+   portrait blur instead of smoothly scaling up like the party portraits. */
+.combatant-image-container:hover {
+    animation: none;
+}
+
+@keyframes combatantIdle {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-3px) scale(1.01); }
+}
+
+/* =============================================================================
+   ZONE IMAGE WAVE EFFECT - SVG filter-based ripple for zone description images
+   ============================================================================= */
+
+.zone-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    filter: url(#zone-wave-filter);
+    /* Ensure the image remains static in layout */
+    position: relative;
+    margin: 0 auto var(--spacing-md) auto;
+}
+
+/* =============================================================================
+   COMBAT ATTACK ANIMATIONS - Snappy 0.5s duration
+   ============================================================================= */
+
+/* Player attacking - Quick lunge, slight pause at apex, smooth return */
+.combatant-image-container.attacking-player {
+    animation: combatAttack 0.5s ease-in-out !important;
+}
+
+@keyframes combatAttack {
+    0% { transform: translateX(0); }
+    35% { transform: translateX(20px) scale(1.06); } 
+    100% { transform: translateX(0) scale(1); }
+}
+
+/* Enemy attacking */
+.combatant-image-container.attacking-enemy {
+    animation: combatAttackEnemy 0.5s ease-in-out !important;
+}
+
+@keyframes combatAttackEnemy {
+    0% { transform: translateX(0); }
+    35% { transform: translateX(-20px) scale(1.06); }
+    100% { transform: translateX(0) scale(1); }
+}
+
+/* Utility skill - Faster "hop" */
+.combatant-image-container.using-utility {
+    animation: combatUtility 0.6s ease-in-out !important;
+}
+
+@keyframes combatUtility {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-12px); }
+    70% { transform: translateY(-4px); }
+}
+
+/* =============================================================================
+   HIT FLASH ANIMATIONS - Sharp 0.4s duration
+   ============================================================================= */
+
+/* Potent hit - Green */
+.combatant-image-container.hit-potent {
+    animation: flashPotent 0.4s ease-out !important;
+}
+
+@keyframes flashPotent {
+    0% { filter: brightness(1); }
+    25% { filter: brightness(1.7) saturate(1.5) drop-shadow(0 0 15px var(--flash-potent-color)); }
+    100% { filter: brightness(1); }
+}
+
+/* Neutral hit - White */
+.combatant-image-container.hit-neutral {
+    animation: flashNeutral 0.38s ease-out !important;
+}
+
+@keyframes flashNeutral {
+    0% { filter: brightness(1); }
+    25% { filter: brightness(2.2) drop-shadow(0 0 20px var(--flash-neutral-color)); }
+    100% { filter: brightness(1); }
+}
+
+/* Weak hit - Red */
+.combatant-image-container.hit-weak {
+    animation: flashWeak 0.4s ease-out !important;
+}
+
+@keyframes flashWeak {
+    0% { filter: brightness(1); }
+    25% { filter: brightness(1.6) saturate(1.7) drop-shadow(0 0 15px var(--flash-weak-color)); }
+    100% { filter: brightness(1); }
+}
+
+/* Knockout hit - High contrast, slightly more lingering than the "fast" version */
+.combatant-image-container.hit-knockout {
+    animation: flashKnockout 0.35s ease-out !important;
+}
+
+@keyframes flashKnockout {
+    0% { filter: brightness(1); transform: scale(1); }
+    30% { 
+        filter: brightness(2.5) hue-rotate(270deg);
+        transform: scale(1.12);
+    }
+    100% { filter: brightness(1); transform: scale(1); }
+}
+
+/* Debuff hit - Purple */
+.combatant-image-container.hit-debuff {
+    animation: flashDebuff 0.45s ease-out !important;
+}
+
+@keyframes flashDebuff {
+    0% { filter: brightness(1); }
+    30% { filter: brightness(1.6) saturate(1.4) drop-shadow(0 0 15px var(--flash-debuff-color)); }
+    100% { filter: brightness(1); }
+}
+
+/* =============================================================================
+   SHAKE ANIMATIONS - Tightened 0.35s duration
+   ============================================================================= */
+
+.hit-shake {
+    animation: shake 0.35s ease-in-out both;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    20% { transform: translateX(-7px) rotate(-1deg); }
+    40% { transform: translateX(7px) rotate(1deg); }
+    60% { transform: translateX(-4px) rotate(-0.5deg); }
+    80% { transform: translateX(4px) rotate(0.5deg); }
+}

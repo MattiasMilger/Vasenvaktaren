@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Väsenväktaren</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/16-loot.css">
+    <link rel="stylesheet" href="styles/style-main.css">
+    <link rel="stylesheet" href="styles/16-style-loot.css">
     <style>
         /* Prevent flash on page load - hide all screens until JS initializes */
         body.loading .screen {
@@ -706,18 +706,18 @@
     <!-- Scripts loaded in dependency order -->
     
     <!-- Core Data & Logic -->
-    <script src="js/core/1-constants.js"></script>
-    <script src="js/core/2-data-skills.js"></script>
-    <script src="js/core/3-data-vasen.js"></script>
-    <script src="js/core/4-data-items.js"></script>
-    <script src="js/core/4-data-runes.js"></script>
-    <script src="js/core/10-data-lore.js"></script>
-    <script src="js/core/5-vasen-instance.js"></script>
+    <script src="js/core/1-core-constants.js"></script>
+    <script src="js/core/2-core-skills.js"></script>
+    <script src="js/core/3-core-vasen.js"></script>
+    <script src="js/core/4-core-items.js"></script>
+    <script src="js/core/4-core-runes.js"></script>
+    <script src="js/core/10-core-lore.js"></script>
+    <script src="js/core/5-core-instance.js"></script>
     
     <!-- Game Systems -->
-    <script src="js/systems/6a-combat-core.js"></script>
-    <script src="js/systems/6b-combat-ai.js"></script>
-    <script src="js/systems/7-state-manager.js"></script>
+    <script src="js/systems/6a-system-combat.js"></script>
+    <script src="js/systems/6b-system-ai.js"></script>
+    <script src="js/systems/7-system-state.js"></script>
     
     <!-- UI Controller (modular) -->
     <script src="js/ui/8a-ui-core.js"></script>

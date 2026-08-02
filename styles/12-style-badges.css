@@ -1,0 +1,518 @@
+/* =============================================================================
+   12-style-badges.css - Extracted Section
+   ============================================================================= */
+
+/* =============================================================================
+   14. BADGES - Progressive rarity shimmer effects
+   ============================================================================= */
+
+.element-badge,
+.rarity-badge,
+.party-badge,
+.family-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border: 2px solid transparent; /* all badges reserve border space - rarity/family override color */
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;              /* consistent weight across all badge types */
+    line-height: 1.4;              /* explicit - prevents height variation from parent inheritance */
+    vertical-align: middle;        /* align consistently with surrounding text */
+    white-space: nowrap;           /* never wrap badge text */
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.element-badge {
+    color: var(--color-white);
+}
+
+.element-badge.element-earth { background: var(--element-earth); }
+.element-badge.element-nature { background: var(--element-nature); }
+.element-badge.element-water { background: var(--element-water); }
+.element-badge.element-fire { background: var(--element-fire); }
+.element-badge.element-wind { background: var(--element-wind); }
+
+.rarity-badge {
+    background: var(--bg-tertiary);
+    border-style: solid; /* color set per rarity class below */
+}
+
+/* ── COMMON ── ultra-subtle slow horizontal pass */
+.rarity-common {
+    border-color: var(--rarity-common);
+    color: var(--rarity-common);
+}
+
+.rarity-common::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--rarity-common-shimmer-light) 48%,
+        var(--rarity-common-shimmer) 52%,
+        transparent 100%
+    );
+    animation: badgeCommonShimmer 14s linear infinite;
+    pointer-events: none;
+}
+
+/* ── UNCOMMON ── gentle slow horizontal shine */
+.rarity-uncommon {
+    border-color: var(--rarity-uncommon);
+    color: var(--rarity-uncommon);
+}
+
+.rarity-uncommon::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--rarity-uncommon-shimmer-light) 45%,
+        var(--rarity-uncommon-shimmer) 55%,
+        transparent 100%
+    );
+    animation: badgeUncommonShimmer 7s cubic-bezier(0.45,0,0.55,1) infinite;
+    pointer-events: none;
+}
+
+/* ── RARE ── noticeable breathing diagonal micro-shimmer */
+.rarity-rare {
+    border-color: var(--rarity-rare);
+    color: var(--rarity-rare);
+}
+
+.rarity-rare::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        135deg,
+        transparent 40%,
+        var(--rarity-rare-shimmer) 50%,
+        transparent 60%
+    );
+    animation: badgeRareMicroShine 5.2s ease-in-out infinite;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+/* ── MYTHICAL ── intense magical sweep + strong pulsing glow */
+.rarity-mythical {
+    border-color: var(--rarity-mythical);
+    color: var(--rarity-mythical);
+    background: linear-gradient(135deg,
+        var(--bg-tertiary) 0%,
+        var(--rarity-mythical-overlay) 50%,
+        var(--bg-tertiary) 100%
+    );
+}
+
+.rarity-mythical::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--rarity-mythical-shimmer-light) 30%,
+        var(--rarity-mythical-shimmer) 50%,
+        var(--rarity-mythical-shimmer-light) 70%,
+        transparent 100%
+    );
+    animation: badgeMythicalShine 2.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    pointer-events: none;
+}
+
+.rarity-mythical::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--border-radius-sm);
+    box-shadow:
+        inset 0 0 8px var(--rarity-mythical-glow),
+        0 0 14px var(--rarity-mythical-shadow);
+    animation: badgeMythicalGlow 1.6s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* ── FAMILY ── subtle textured noble feel, fits the theme ───────────────────── */
+.family-badge {
+    background: var(--bg-card);
+    color: var(--color-white);
+    border-color: var(--badge-border);
+    box-shadow:
+        inset 0 1px 2px var(--white-overlay-light),
+        inset 0 -1px 2px var(--black-overlay);
+    text-shadow: 0 1px 1.5px var(--black-overlay-strong);
+}
+
+/* Very subtle static texture (faint crafted feel) */
+.family-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 30% 40%, var(--white-overlay-light) 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, var(--white-overlay-faint) 0%, transparent 50%);
+    opacity: 0.8;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* ── PARTY ── */
+.party-badge {
+    background: var(--accent-primary);
+    color: var(--color-white);
+    border-color: var(--accent-primary); /* solid border matching bg, keeps visual weight consistent */
+}
+
+/* ── Clickable family enhancement ── */
+.clickable-family {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clickable-family:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    color: var(--color-white);
+}
+
+/* ── ACHIEVEMENT (UPDATED: shimmer removed) ── */
+.achievement.earned {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, 
+        var(--bg-card) 0%, 
+        var(--accent-gold-overlay) 50%, 
+        var(--bg-card) 100%
+    );
+    border: 2px solid var(--accent-gold-border);
+    box-shadow: 
+        0 0 12px var(--accent-gold-glow),
+        inset 0 0 8px var(--accent-gold-shimmer-faint);
+}
+
+/* shimmer layer removed */
+
+/* keep pulsing glow */
+.achievement.earned::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        inset 0 0 6px var(--accent-gold-glow),
+        0 0 16px var(--accent-gold-shadow);
+    animation: goldPulse 3s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.achievement.locked {
+    opacity: 0.5;
+    border: 2px solid var(--border-color);
+}
+
+/* === Endless Tower Styles === */
+.endless-tower-floor {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px var(--endless-tower-glow);
+}
+
+.endless-tower-record {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.endless-tower-record.locked {
+    opacity: 0.5;
+    border: 2px solid var(--border-color);
+}
+
+.endless-tower-record h4 {
+    display: block;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.record-floor {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin: 0.25rem 0;
+}
+
+.record-floor strong {
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.record-date {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+.record-team {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.record-vasen {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    font-size: var(--font-size-xs);
+}
+
+.record-vasen-name {
+    font-weight: 500;
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.record-vasen-level {
+    color: var(--text-muted);
+}
+
+.record-vasen-runes {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-secondary);
+}
+
+.record-new {
+    color: var(--color-positive);
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.record-reminder {
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+.record-placeholder {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+/* === ENDLESS TOWER ACHIEVED (UPDATED: shimmer removed) === */
+.endless-tower-record.achieved {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, 
+        var(--bg-card) 0%, 
+        var(--accent-gold-overlay) 50%, 
+        var(--bg-card) 100%
+    );
+    border: 2px solid var(--accent-gold-border);
+    box-shadow: 
+        0 0 12px var(--accent-gold-glow),
+        inset 0 0 8px var(--accent-gold-shimmer-faint);
+}
+
+/* shimmer removed */
+
+/* keep pulsing glow */
+.endless-tower-record.achieved::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--border-radius);
+    box-shadow: 
+        inset 0 0 6px var(--accent-gold-glow),
+        0 0 16px var(--accent-gold-shadow);
+    animation: goldPulse 3s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* Combat Animations - MOVED TO 13-style-animations.css */
+
+/* === BADGE RARITY ANIMATIONS === */
+@keyframes badgeCommonShimmer {
+    0%   { transform: translateX(-140%); }
+    100% { transform: translateX(140%);  }
+}
+
+@keyframes badgeUncommonShimmer {
+    0%   { transform: translateX(-120%); }
+    100% { transform: translateX(120%);  }
+}
+
+@keyframes badgeRareMicroShine {
+    0%   { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
+    50%  { transform: translateX(35%)  translateY(35%)  rotate(20deg); }
+    100% { transform: translateX(-35%) translateY(-35%) rotate(20deg); }
+}
+
+@keyframes badgeMythicalShine {
+    0%   { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%)  rotate(45deg); }
+}
+
+@keyframes badgeMythicalGlow {
+    0% {
+        box-shadow:
+            inset 0 0 8px  var(--rarity-mythical-glow),
+            0 0 14px var(--rarity-mythical-shadow);
+    }
+    100% {
+        box-shadow:
+            inset 0 0 14px var(--rarity-mythical-glow-strong),
+            0 0 22px var(--rarity-mythical-shadow-mid);
+    }
+}
+
+/* === GOLD PULSE ANIMATION (shared by achievements and endless tower) === */
+@keyframes goldPulse {
+    0% {
+        box-shadow:
+            inset 0 0 6px var(--accent-gold-glow),
+            0 0 16px var(--accent-gold-shadow);
+    }
+    100% {
+        box-shadow:
+            inset 0 0 12px var(--accent-gold-glow-strong),
+            0 0 24px var(--accent-gold-shimmer-strong);
+    }
+}
+
+/* Subtle entrance animations for cards */
+.vasen-card {
+    animation: fadeInUp 0.3s ease;
+}
+
+.zone-item {
+    animation: fadeInRight 0.3s ease;
+}
+
+.party-slot {
+    animation: fadeInScale 0.3s ease;
+}
+
+.skill-btn {
+    animation: fadeInUp 0.2s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Smooth transitions for interactive elements */
+.rune-slot,
+.attribute-item,
+.skill-item {
+    transition: all var(--transition-base);
+}
+
+.rune-slot:hover,
+.attribute-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Pulse animation for important notifications */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.combat-log-entry.levelup,
+.combat-log-entry.tame {
+    animation: fadeInUp 0.3s ease, pulse 2s ease infinite;
+}
+
+/* Subtle hover glow for badges */
+.element-badge:hover,
+.rarity-badge:hover,
+.family-badge:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+/* Smooth starter card selection */
+.starter-card {
+    transition: all var(--transition-slow);
+}
+
+.starter-card.selected {
+    animation: cardSelect 0.3s ease;
+}
+
+@keyframes cardSelect {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes combatFlash {
+    0%, 100% {
+        background: var(--bg-card);
+    }
+    50% {
+        background: var(--combat-flash-bg);
+    }
+}

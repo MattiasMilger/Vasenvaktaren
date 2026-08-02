@@ -1,0 +1,770 @@
+// =============================================================================
+// 1-core-constants.js - Game Constants and Configuration
+// =============================================================================
+
+const GAME_CONFIG = {
+    // =============================================================================
+    // GENERAL GAME SETTINGS
+    // =============================================================================
+    MAX_TEAM_SIZE: 3,
+    MAX_INVENTORY_SIZE: 199,
+    MAX_ITEM_STACK: 99,
+    MAX_COMBAT_LOG: 99,
+    SAVE_KEY: 'vasenvaktaren_save',
+    
+    // =============================================================================
+    // LEVEL & PROGRESSION
+    // =============================================================================
+    MAX_LEVEL: 30,
+    TWO_RUNE_LEVEL: 25,             // Level at which a Väsen unlocks a second rune slot
+    ENEMY_MAX_LEVEL: 999,
+    STARTER_LEVEL: 10,
+    BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
+    LEVEL_UP_ACCELERATION: 6,       // Quadratic coefficient in the same formula, making exp requirements grow faster at higher levels
+    ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
+    STARTING_ITEMS_AMOUNT: 3,
+    NEW_ZONE_ITEMS_AMOUNT: 2,
+    
+    // =============================================================================
+    // EXPERIENCE DISTRIBUTION
+    // =============================================================================
+    // Base experience yield per enemy level (modified by rarity)
+    BASE_EXP_YIELD: 50,
+    
+    // Experience percentages awarded based on participation level
+    EXP_KILLING_BLOW: 1.0,              // Full exp share - dealt the final blow that knocked out the enemy
+    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the battlefield
+    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the battlefield
+    
+    // =============================================================================
+    // MEGIN (ENERGY SYSTEM)
+    // =============================================================================
+    BASE_MEGIN: 73,
+    MEGIN_PER_LEVEL: 2,
+    MEGIN_REFILL_RATE: 0.12,             // Fraction of max Megin restored per turn
+    SAME_ELEMENT_MEGIN_DISCOUNT: 0.12,  // Cost discount when using same-element skills
+    MAX_MEGIN_CAP: 180,                 // Hard cap on base max Megin before rune bonuses (e.g. Uruz) are applied. Mainly relevant for enemies in Endless Tower, who have no level cap.
+    
+    // =============================================================================
+    // ATTRIBUTE STAGES (BUFFS/DEBUFFS)
+    // =============================================================================
+    MAX_ATTRIBUTE_STAGE: 5,
+    MIN_ATTRIBUTE_STAGE: -5,
+    ATTRIBUTE_STAGE_MODIFIER: 0.12,      // Per-stage modifier added/subtracted per attribute stage
+    
+    // =============================================================================
+    // TEMPERAMENTS
+    // =============================================================================
+    // Flat amount every temperament raises one attribute (or Megin) by and lowers
+    // another attribute (or Megin) by. This is a flat addition/subtraction applied
+    // after rarity and level scaling - it is NOT affected by rarity multipliers or
+    // level scaling, only by attribute stages applied during combat.
+    TEMPERAMENT_MODIFIER: 9,
+    
+    // =============================================================================
+    // DAMAGE CALCULATION
+    // =============================================================================
+    POWER_CONSTANT: 250,            // Divisor that converts a skill's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. A skill with power 250 produces a 1× multiplier against the attacker's stat.
+    DEFENSE_CONSTANT: 190,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
+    DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
+    
+    // Mixed-type attacks split damage calculation 50/50 between strength and wisdom
+    MIXED_ATTACK_STRENGTH_PORTION: 0.5,
+    MIXED_ATTACK_WISDOM_PORTION: 0.5,
+    
+    // =============================================================================
+    // SKILL CONSTANTS
+    // =============================================================================
+    TIER1_ATTACK_SKILL_POWER: 50,
+    TIER1_ATTACK_SKILL_MEGIN: 30,
+    TIER1_ATTACK_SKILL_EMPOWERMENT: 0.12, // Damage boost on next attack
+
+    TIER2_ATTACK_SKILL_POWER: 68,
+    TIER2_ATTACK_SKILL_MEGIN: 50,
+
+    TIER1_UTILITY_SKILL_MEGIN: 30,
+
+    GIANTSBANE_BONUS: 0.80, // % of target's current HP as bonus power
+    LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
+    ROTVALTA_BONUS: 38, // Extra power if opponent attacks
+
+    TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all attributes when using Tyr's Sacrifice
+
+    FREYASTEARS_TURNS: 5,               // Number of turns Freya's Tears refill lasts
+    FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin refill while Freya's Tears is active
+    FREYASTEARS_HEALTH_REFILL_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
+
+    INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff skill per side (Smithing, Skald's Mead, Thick Coat)
+
+    // =============================================================================
+    // HEALING
+    // =============================================================================
+    POST_COMBAT_HEAL_PERCENT: 0.05,     // % health restored after winning combat
+    ENDLESS_TOWER_HEAL_PERCENT: 0.1,   // % health and Megin restored after winning a floor in Endless Tower
+    SACRED_WELL_HEAL_PERCENT: 0.75,     // % health restored at Sacred Well
+    CORRECT_ITEM_HEAL_PERCENT: 1,    // % health restored when giving correct taming item
+    WRONG_ITEM_HEAL_PERCENT: 0.50,      // % health restored when giving wrong item
+    
+    // =============================================================================
+    // TAMING SYSTEM
+    // =============================================================================
+    MAX_OFFERS_PER_COMBAT: 3,           // Maximum items that can be offered per combat
+    
+    // =============================================================================
+    // EXPLORATION & PITY SYSTEM
+    // =============================================================================
+    // Pity thresholds for exploration anti-grief system
+    PITY_COMBAT_THRESHOLD: 5,           // Force combat after X non-combat encounters
+    PITY_ITEM_THRESHOLD: 4,             // Force item after X non-item encounters
+    PITY_RUNE_THRESHOLD: 20,            // Force rune after X non-rune encounters
+    PITY_SACRED_WELL_THRESHOLD: 3,      // Force Sacred Well after X combats
+    
+    // =============================================================================
+    // COMBAT UI
+    // =============================================================================
+    // Input delay after each combat action to prevent spamming through turns (in milliseconds)
+    COMBAT_INPUT_DELAY: 800,
+    // Delay before showing combat end modal to allow death animations to complete (in milliseconds)
+    COMBAT_END_ANIMATION_DELAY: 500,
+    
+    // =============================================================================
+    // ENDLESS TOWER
+    // =============================================================================
+    ENDLESS_TOWER_START_LEVEL: 30,
+    ENDLESS_TOWER_MAX_FLOOR: 999,
+
+    // Idunn's Apples - milestone healing and cleansing every N floors
+    ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL: 3,   // Every X floors, Idunn's Apples trigger
+    ENDLESS_TOWER_IDUNN_HEAL_PERCENT: 0.30,  // % of max health restored to each alive väsen
+    ENDLESS_TOWER_IDUNN_CLEANSE_STAGES: 1,   // Number of negative attribute stages removed per attribute (per väsen)
+    
+    // =============================================================================
+    // RUNE EFFECTS
+    // =============================================================================
+    // Uruz: Megin bonus
+    RUNE_URUZ_MEGIN_BONUS: 0.20,        // +% max Megin
+
+    // Elemental damage boost runes (Kaunan/Fire, Pertho/Earth, Tyr/Wind, Bjarka/Nature, Laguz/Water)
+    RUNE_ELEMENT_DAMAGE_BOOST: 0.14,    // +% damage when using matching element
+    
+    // Odal: Low-cost skill damage boost
+    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for skills costing ≤threshold Megin
+    RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
+    
+    // Dagaz: First round damage boost
+    RUNE_DAGAZ_DAMAGE_BOOST: 0.20,      // +% damage on first round in combat
+    
+    // Fehu: Potent hit damage reduction
+    RUNE_FEHU_DAMAGE_REDUCTION: 0.85,   // Multiplier applied to reduce incoming potent hit damage
+
+    // Hagal: attribute stage debuff on death
+    RUNE_HAGAL_DEBUFF_STAGES: 2,        // Stages all opponent attributes are lowered by on knockout
+
+    // Wynja: block first debuff and counter-raise
+    RUNE_WYNJA_COUNTER_STAGE: 1,        // Attribute stages raised on the random stat when blocking a debuff
+
+    // Naudiz: debuff on weak hit
+    RUNE_NAUDIZ_DEBUFF_COUNT: 2,        // Number of random enemy attributes lowered on a weak hit
+    RUNE_NAUDIZ_DEBUFF_STAGES: 1,       // Stages each attribute is lowered by
+
+    // Element-specific buff runes (Eihwaz/Earth, Sol/Fire, Ehwaz/Wind, Isaz/Water)
+    RUNE_ELEMENT_BUFF_PROC_CHANCE: 0.30, // % chance to trigger attribute buff on matching-element skill use
+    RUNE_ELEMENT_BUFF_STAGES: 1,         // Attribute stages raised when the buff triggers
+    
+    // Nature healing runes (Algiz, Jera)
+    RUNE_NATURE_HEAL_PROC_CHANCE: 0.30,  // % chance for Algiz to heal on Nature skill use
+    RUNE_ALGIZ_HEAL_PERCENT: 0.08,       // Heal % of max health when triggered
+    RUNE_LOW_COST_HEAL_PROC_CHANCE: 0.30, // % chance for Jera to heal on low-cost skill use
+    RUNE_JERA_HEAL_PERCENT: 0.08,        // Fraction of max health healed when triggered
+    
+    // Inguz: Chance to debuff opponent attributes on any hit
+    RUNE_INGUZ_DEBUFF_PROC_CHANCE: 0.50, // % chance to lower a random attribute by the debuff amount
+    RUNE_INGUZ_DEBUFF_STAGES: 1,         // Stages the random attribute is lowered by
+    
+    // Mannaz: Heal on utility skill use
+    RUNE_MANNAZ_HEAL_PERCENT: 0.08,      // Heal % of max health when using utility skill
+
+    // Thurs: returns percentage of damage back to attacker
+    RUNE_THURS_RETURN_DAMAGE: 0.20,
+
+    // Bind Runes
+    // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per combat)
+    // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
+    // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the battlefield
+    RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES: 1,           // Stages the random enemy attribute is lowered by
+    // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
+    RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
+    RUNE_BIND_JERA_ODAL_BUFF_STAGES: 1,               // Stages the random attribute is raised by
+    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or less (once per combat)
+    RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD: 0.50,      // Health fraction at or below which the bind rune triggers
+    RUNE_BIND_FEHU_WYNJA_BUFF_STAGES: 1,              // Stages each attribute is raised by
+    // Uruz + Thurs: gain megin equal to a percentage of Thurs damage dealt
+    RUNE_BIND_URUZ_THURS_MEGIN_PERCENT: 0.30,         // % of Thurs damage gained as megin
+    // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per combat)
+    RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD: 0.50,    // Enemy health fraction at or below which the bind rune triggers
+    RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES: 1,          // Stages each of the enemy's attributes is lowered by
+    
+    // =============================================================================
+    // ENEMY AI CONFIGURATION
+    // =============================================================================
+    
+    // --- Skill Scoring Weights ---
+    // Base scores for different skill types
+    AI_UTILITY_FIRST_USE_SCORE: 30,      // First use of utility skill
+    AI_UTILITY_SECOND_USE_SCORE: 10,     // Second use of utility skill (diminishing value)
+    AI_UTILITY_THIRD_USE_PENALTY: -80,   // Third+ use penalty (avoid spam)
+    AI_NON_UTILITY_BASE_SCORE: 20,       // Base score for damaging skills
+    
+    // Damage-based bonuses
+    AI_KNOCKOUT_BONUS: 100,              // Bonus if predicted damage will KO the target
+    AI_HIGH_DAMAGE_BONUS: 50,            // Bonus if damage is significant
+    AI_HIGH_DAMAGE_THRESHOLD: 0.5,       // Fraction of target's max health considered high damage
+    
+    // Empowerment strategy bonuses
+    AI_EMPOWERMENT_SETUP_BONUS: 15,      // Bonus for using low-tier attack to gain empowerment
+    AI_EMPOWERED_HIGH_POWER_BONUS: 35,   // Bonus for using high-power attack while empowered
+    AI_HIGH_POWER_THRESHOLD: 65,         // Power threshold to be considered "high-power"
+    
+    // Element matchup bonuses/penalties
+    AI_ELEMENT_POTENT_BONUS: 20,         // Bonus for potent element matchup
+    AI_ELEMENT_WEAK_WITH_RUNE_PENALTY: -5,    // Small penalty for weak hit if has Naudiz/Inguz
+    AI_ELEMENT_WEAK_WITHOUT_RUNE_PENALTY: -30, // Large penalty for weak hit without runes
+    
+    // Utility skill bonuses
+    AI_BUFF_BONUS: 40,                   // Bonus for buff utility skills
+    AI_DEBUFF_BONUS: 30,                 // Bonus for debuff utility skills
+    
+    // Resource management penalties
+    AI_MEGIN_PENALTY_THRESHOLD: 0.5,     // Penalize if skill costs more than this fraction of current Megin
+    AI_MEGIN_PENALTY: -15,               // Penalty applied when above threshold
+    
+    // Risk assessment penalties
+    AI_RISK_PENALTY_THRESHOLD: 0.6,      // Threat level above which the risk penalty is applied
+    AI_RISK_PENALTY: -20,                // Penalty for risky situations
+    AI_THREAT_ELEMENT_BONUS: 0.2,        // Threat increase if facing potent matchup
+    
+    // Random variance for decision variety
+    AI_GUARDIAN_VARIANCE: 5,             // Low variance for guardian combats (more predictable)
+    AI_WILD_VARIANCE: 20,                // High variance for wild combats (more random)
+    
+    // --- Swap Scoring ---
+    AI_SWAP_BASE_SCORE: 5,               // Base score for swapping
+    AI_SWAP_LOW_HEALTH_THRESHOLD: 0.3,   // Health fraction below which the low-health swap bonus is applied
+    AI_SWAP_LOW_HEALTH_BONUS: 30,        // Bonus for swapping when low on health
+    AI_SWAP_ELEMENT_ADVANTAGE_BONUS: 20, // Bonus for swapping to better matchup
+    AI_SWAP_VARIANCE: 10                 // Random variance for swap decisions
+};
+
+// Family Passive Configuration
+const FAMILY_PASSIVE_CONFIG = {
+    // Ande: Ethereal Surge - raises x random attributes by y stages when entering battlefield
+    ANDE_ATTRIBUTE_STAGES: 1,
+    ANDE_ATTRIBUTE_TIMES: 2,
+    
+    // Drake: Draconic Resilience - gain Defense and Durability when health drops to 50% or lower
+    DRAKE_HEALTH_THRESHOLD: 0.50,
+    DRAKE_DEFENSE_DURABILITY_STAGES: 2,
+    
+    // Jätte: Jotun's Fury - Upgrades an attack when health is low
+    JATTE_HEALTH_THRESHOLD: 0.50,
+    
+    // Odjur: Bestial Rage - gain strength and lose wisdom after completing one turn.
+    ODJUR_TURNS_REQUIRED: 1,
+    ODJUR_STRENGTH_STAGES: 1,
+    ODJUR_WISDOM_STAGES: -2,
+    
+    // Rå: Malicious Retaliation - lowers several random enemy attributes by stages when hit
+    RA_DEBUFF_COUNT: 2,
+    RA_DEBUFF_STAGES: 1,
+    
+    // Oknytt: Tag Team - raises random attributes of the incoming ally when swapping out
+    OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT: 2,
+    OKNYTT_TAG_TEAM_STAGES: 1,
+
+    // Troll: Troll Theft - steals positive attribute stages from the enemy when using a skill
+    TROLL_STAGE_STEAL: 1,
+    
+    // Vålnad: Deathless - revives with a fraction of max health upon knockout
+    VALNAD_REVIVE_HEALTH_PERCENT: 0.10
+};
+
+// =============================================================================
+// FAMILY KEYWORDS
+// Each family has a descriptive word used in item descriptions, väsen descriptions,
+// and lore entries. Change these here to update them everywhere.
+// =============================================================================
+const FAMILY_KEYWORDS = {
+    OKNYTT: 'prankster',
+    VALNAD: 'phantom',
+    ODJUR:  'beast',
+    TROLL:  'troll',
+    RA:     'warden',
+    ALV:    'elf',
+    ANDE:   'spirit',
+    JATTE:  'giant',
+    DRAKE:  'serpent'
+};
+
+// Starter Väsen options (species keys from VASEN_SPECIES)
+const STARTER_VASEN = ['Landvatte', 'Hustomte', 'Gardstomte'];
+
+const ELEMENTS = {
+    EARTH: 'Earth',
+    NATURE: 'Nature',
+    WATER: 'Water',
+    FIRE: 'Fire',
+    WIND: 'Wind'
+};
+
+const ELEMENT_LIST = Object.values(ELEMENTS);
+
+const ELEMENT_COLORS = {
+    [ELEMENTS.EARTH]: '#a67c3a',
+    [ELEMENTS.NATURE]: '#3d9e52',
+    [ELEMENTS.WATER]: '#3d8ed4',
+    [ELEMENTS.FIRE]: '#e0622a',
+    [ELEMENTS.WIND]: '#9b8fc4'
+};
+
+const ELEMENT_FLAVOR = {
+    [ELEMENTS.EARTH]:  'The element of stone, soil, and might.',
+    [ELEMENTS.NATURE]: 'The element of seed, sprout, and light.',
+    [ELEMENTS.WATER]:  'The element of river, rain, and insight.',
+    [ELEMENTS.FIRE]:   'The element of flame, fury, and spite.',
+    [ELEMENTS.WIND]:   'The element of storm, sky, and flight.'
+};
+
+const DAMAGE_MULTIPLIERS = {
+    POTENT: 1.4,
+    NEUTRAL: 1.0,
+    WEAK: 0.7
+};
+
+// Element matchups: attacker -> defender -> multiplier type
+const ELEMENT_MATCHUPS = {
+    [ELEMENTS.EARTH]: {
+        [ELEMENTS.EARTH]: 'NEUTRAL',
+        [ELEMENTS.NATURE]: 'WEAK',
+        [ELEMENTS.WATER]: 'WEAK',
+        [ELEMENTS.FIRE]: 'POTENT',
+        [ELEMENTS.WIND]: 'POTENT'
+    },
+    [ELEMENTS.NATURE]: {
+        [ELEMENTS.EARTH]: 'POTENT',
+        [ELEMENTS.NATURE]: 'NEUTRAL',
+        [ELEMENTS.WATER]: 'POTENT',
+        [ELEMENTS.FIRE]: 'WEAK',
+        [ELEMENTS.WIND]: 'WEAK'
+    },
+    [ELEMENTS.WATER]: {
+        [ELEMENTS.EARTH]: 'POTENT',
+        [ELEMENTS.NATURE]: 'WEAK',
+        [ELEMENTS.WATER]: 'NEUTRAL',
+        [ELEMENTS.FIRE]: 'POTENT',
+        [ELEMENTS.WIND]: 'WEAK'
+    },
+    [ELEMENTS.FIRE]: {
+        [ELEMENTS.EARTH]: 'NEUTRAL',
+        [ELEMENTS.NATURE]: 'POTENT',
+        [ELEMENTS.WATER]: 'WEAK',
+        [ELEMENTS.FIRE]: 'NEUTRAL',
+        [ELEMENTS.WIND]: 'NEUTRAL'
+    },
+    [ELEMENTS.WIND]: {
+        [ELEMENTS.EARTH]: 'WEAK',
+        [ELEMENTS.NATURE]: 'POTENT',
+        [ELEMENTS.WATER]: 'NEUTRAL',
+        [ELEMENTS.FIRE]: 'NEUTRAL',
+        [ELEMENTS.WIND]: 'NEUTRAL'
+    }
+};
+
+const RARITIES = {
+    COMMON: 'Common',
+    UNCOMMON: 'Uncommon',
+    RARE: 'Rare',
+    MYTHICAL: 'Mythical'
+};
+
+const RARITY_MULTIPLIERS = {
+    [RARITIES.COMMON]: 1.0,
+    [RARITIES.UNCOMMON]: 1.06,
+    [RARITIES.RARE]: 1.12,
+    [RARITIES.MYTHICAL]: 1.22
+};
+
+const RARITY_EXP_BONUS = {
+    [RARITIES.COMMON]: 1.0,
+    [RARITIES.UNCOMMON]: 1.1,
+    [RARITIES.RARE]: 1.15,
+    [RARITIES.MYTHICAL]: 1.3
+};
+
+const RARITY_DESCRIPTIONS = {
+    [RARITIES.COMMON]: 'Widespread väsen found throughout the land. Though frequently encountered, they are no less a part of the ancient fabric of the world.',
+    [RARITIES.UNCOMMON]: 'Less frequently seen than common väsen, with a notable edge in power or skill. Worth seeking out for the advantages they bring.',
+    [RARITIES.RARE]: 'Seldom encountered väsen of considerable might. Finding and taming one requires both patience and skill.',
+    [RARITIES.MYTHICAL]: 'Legendary väsen of immense power, tied to the gods, the cosmos, or the deepest roots of Norse mythology. Taming one is a feat that will be remembered.'
+};
+
+const ENCOUNTER_RATES = {
+    [RARITIES.COMMON]: 0.45,
+    [RARITIES.UNCOMMON]: 0.30,
+    [RARITIES.RARE]: 0.175,
+    [RARITIES.MYTHICAL]: 0.075
+};
+
+const EXPLORATION_RATES = {
+    WILD_VASEN: 0.46,
+    ITEM: 0.32,
+    SACRED_WELL: 0.12,
+    RUNE: 0.1
+};
+
+const FAMILIES = {
+    OKNYTT: 'Oknytt',
+    VALNAD: 'Vålnad',
+    ODJUR: 'Odjur',
+    TROLL: 'Troll',
+    RA: 'Rå',
+    ALV: 'Alv',
+    ANDE: 'Ande',
+    JATTE: 'Jätte',
+    DRAKE: 'Drake'
+};
+
+const FAMILY_DESCRIPTIONS = {
+    [FAMILIES.OKNYTT]: 'Tiny and elusive pranksters of narrow domains. They delight in small pranks but can be surprisingly helpful when treated with care.',
+    [FAMILIES.VALNAD]: 'The tormented, animated remains or phantoms of the dead. Bound to a place or an action, they often seek revenge upon the living.',
+    [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the gods or giants. They embody raw natural forces and the terrifying elements of the wild.',
+    [FAMILIES.TROLL]: 'Ragged wildkin of the mountains and deep woods, possessing great strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
+    [FAMILIES.RA]: 'Seductive, wilderness-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
+    [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
+    [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
+    [FAMILIES.JATTE]: 'Ancient giants of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir gods.',
+    [FAMILIES.DRAKE]: 'Terrifying serpents of immense magical power, often linked to cosmic forces and primordial greed.'
+};
+
+// Family Passive Descriptions (mechanical, player-facing)
+const FAMILY_PASSIVES = {
+    [FAMILIES.ALV]: {
+        name: 'Elven Craftsmanship',
+        description: 'When this väsen uses a skill that buffs only strength, also buffs its wisdom by the same amount, and vice versa.'
+    },
+    [FAMILIES.ANDE]: {
+        name: 'Ethereal Surge',
+        get description() {
+            return `When this väsen enters the battlefield, it raises ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES} random attributes by ${FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES} stage (once per combat).`; 
+        }
+    },
+    [FAMILIES.DRAKE]: {
+        name: 'Draconic Resilience',
+        get description() {
+            return `When this väsen's health falls to ${Math.round(FAMILY_PASSIVE_CONFIG.DRAKE_HEALTH_THRESHOLD * 100)}% or lower, its defense and durability is raised by ${FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES} stages (once per combat).`;
+        }
+    },
+    [FAMILIES.JATTE]: {
+        name: 'Jotun\'s Fury',
+        get description() {
+            return `When this väsen's health is ${Math.round(FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD * 100)}% or lower, its attack hit will be upgraded (weak to normal, and normal to potent, once per combat).`;
+        }
+    },
+    [FAMILIES.ODJUR]: {
+        name: 'Bestial Rage',
+        get description() {
+            return `When this väsen has spent ${FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED} turn on the battlefield, its strength is raised by ${FAMILY_PASSIVE_CONFIG.ODJUR_STRENGTH_STAGES} stage and wisdom lowered by ${Math.abs(FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES)} stages (once per combat).`;
+        }
+    },
+    [FAMILIES.RA]: {
+        name: 'Malicious Retaliation',
+        get description() {
+            return `When this väsen is hit by an enemy attack, it lowers ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT} random enemy attributes by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} stage each (once per combat).`;
+        }
+    },
+    [FAMILIES.TROLL]: {
+        name: 'Troll Theft',
+        get description() {
+            return `When this väsen uses a skill, steals ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} positive attribute stage from the enemy (once per combat).`;
+        }
+    },
+    [FAMILIES.OKNYTT]: {
+        name: 'Tag Team',
+        get description() {
+            return `When this väsen swaps out, ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT} random attributes of the incoming ally are raised by ${FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES} stage each.`;
+        }
+    },
+    [FAMILIES.VALNAD]: {
+        name: 'Deathless ᛣ',
+        get description() {
+            return `When this väsen is knocked out, it revives with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% health (once per combat).`;
+        }
+    }
+};
+
+// Base attributes for each family
+const BASE_ATTRIBUTES = {
+    [FAMILIES.OKNYTT]: { strength: 68, wisdom: 67, health: 59, defense: 55, durability: 78 },
+    [FAMILIES.VALNAD]: { strength: 70, wisdom: 69, health: 58, defense: 75, durability: 58 },
+    [FAMILIES.ODJUR]: { strength: 83, wisdom: 55, health: 65, defense: 61, durability: 48 },
+    [FAMILIES.TROLL]: { strength: 71, wisdom: 68, health: 70, defense: 70, durability: 60 },
+    [FAMILIES.RA]: { strength: 55, wisdom: 80, health: 60, defense: 65, durability: 60 },
+    [FAMILIES.ALV]: { strength: 66, wisdom: 82, health: 61, defense: 55, durability: 59 },
+    [FAMILIES.ANDE]: { strength: 70, wisdom: 68, health: 60, defense: 80, durability: 50 },
+    [FAMILIES.JATTE]: { strength: 75, wisdom: 65, health: 80, defense: 54, durability: 51 },
+    [FAMILIES.DRAKE]: { strength: 65, wisdom: 75, health: 60, defense: 60, durability: 85 }
+};
+
+const ELEMENT_BONUSES = {
+    [ELEMENTS.EARTH]: { defense: 5 },
+    [ELEMENTS.NATURE]: { health: 5 },
+    [ELEMENTS.WATER]: { wisdom: 5 },
+    [ELEMENTS.FIRE]: { strength: 5 },
+    [ELEMENTS.WIND]: { durability: 5 }
+};
+
+const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
+
+// =============================================================================
+// TEMPERAMENTS
+// Keys are named after the attribute pair they affect (POSITIVE_NEGATIVE),
+// not the flavor `name` field, so the flavor name can be freely renamed later
+// without breaking anything that references a temperament by key (guardian
+// rosters below, saved games via VasenInstance.temperamentKey, etc).
+// =============================================================================
+const TEMPERAMENTS = {
+    STRENGTH_HEALTH:    { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_DEFENSE:   { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_DURABILITY:{ name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_HEALTH:       { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_DEFENSE:      { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_DURABILITY:   { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_DEFENSE:      { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_DURABILITY:   { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_HEALTH:      { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_DURABILITY:  { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_HEALTH:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_DEFENSE:  { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+
+    // Megin-based temperaments
+    MEGIN_HEALTH:        { name: 'Spirited',   positive: 'megin',      negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_DEFENSE:       { name: 'Feral',      positive: 'megin',      negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_DURABILITY:    { name: 'Attuned',    positive: 'megin',      negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_MEGIN:      { name: 'Mighty',     positive: 'strength',   negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_MEGIN:        { name: 'Keen',       positive: 'wisdom',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_MEGIN:        { name: 'Stoic',      positive: 'health',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_MEGIN:       { name: 'Steady',     positive: 'defense',    negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_MEGIN:    { name: 'Unyielding', positive: 'durability', negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+
+    // Strength/Wisdom cross temperaments - complete the matrix by allowing
+    // Strength and Wisdom to also be the lowered attribute (previously only
+    // ever the raised attribute).
+    WISDOM_STRENGTH:      { name: 'Cunning',    positive: 'wisdom',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_STRENGTH:      { name: 'Vital',      positive: 'health',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_STRENGTH:     { name: 'Shielded',   positive: 'defense',     negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_STRENGTH:  { name: 'Tenacious',  positive: 'durability',  negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_STRENGTH:       { name: 'Ethereal',   positive: 'megin',       negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_WISDOM:      { name: 'Reckless',   positive: 'strength',    negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_WISDOM:        { name: 'Hearty',     positive: 'health',      negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_WISDOM:       { name: 'Stubborn',   positive: 'defense',     negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_WISDOM:    { name: 'Sturdy',     positive: 'durability',  negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_WISDOM:         { name: 'Frenzied',   positive: 'megin',       negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+
+    // Neutral temperaments - raise and lower the SAME attribute, so the two
+    // modifiers cancel out and the attribute is unaffected overall. Purely
+    // flavor variants with no net stat change (avoid the word "Neutral" -
+    // that term is reserved for elemental matchup type in this game).
+    STRENGTH_STRENGTH:     { name: 'Composed',   positive: 'strength',    negative: 'strength',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_WISDOM:         { name: 'Grounded',   positive: 'wisdom',      negative: 'wisdom',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    HEALTH_HEALTH:         { name: 'Balanced',   positive: 'health',      negative: 'health',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DEFENSE_DEFENSE:       { name: 'Poised',     positive: 'defense',     negative: 'defense',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    DURABILITY_DURABILITY: { name: 'Weathered',  positive: 'durability',  negative: 'durability',  modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_MEGIN:            { name: 'Serene',     positive: 'megin',       negative: 'megin',       modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER }
+};
+
+const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);
+
+const ZONES = {
+    ZONE1: {
+        id: 'zone1',
+        name: 'Trollskogen',
+        description: 'An enchanted forest where the ancient canopy chokes out the sun. The air is thick with the scent of damp moss, and the unseen inhabitants constantly watch you from the gloom.',
+        image: 'assets/zones/trollskogen.png',
+        levelRange: [1, 4],
+        spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv', 'Jarnvidja', 'Huldra'],
+        guardian: {
+            name: 'Åsa',
+            team: [
+                { species: 'Alva', level: 5, temperament: 'DEFENSE_STRENGTH', runes: ['NAUDIZ'] },
+                { species: 'Skogsra', level: 5, temperament: 'WISDOM_MEGIN', runes: ['URUZ'] },
+                { species: 'Lindorm', level: 5, temperament: 'DURABILITY_DEFENSE', runes: ['WYNJA'] }
+            ],
+            dialogue: {
+                challenge: 'The forest tests all who enter. Show me your strength, little one.',
+                lose: 'You lack the true spirit of the woods. Train more, and perhaps this enchanted realm will accept you.',
+                win: 'Impressive. You have earned passage through this realm. The way to Fäboden is now open.'
+            }
+        },
+        order: 0
+    },
+    ZONE2: {
+        id: 'zone2',
+        name: 'Fäboden',
+        description: 'A cluster of quiet, humble settlements where ancient house spirits live side-by-side with humans. Tread carefully, for the peace is fragile, and the benevolent guardians turn fiercely protective when their homes are threatened.',
+        image: 'assets/zones/faboden.png',
+        levelRange: [5, 9],
+        spawns: ['Gardstomte', 'Hustomte', 'Brunnsgubbe', 'Nattramn', 'Bortbyting', 'Gloson', 'Bjara', 'Pyssling'],
+        guardian: {
+            name: 'Ragnar',
+            team: [
+            { species: 'Nattramn', level: 10, temperament: 'STRENGTH_HEALTH', runes: ['HAGAL'] },
+            { species: 'Bjara', level: 10, temperament: 'DURABILITY_MEGIN', runes: ['BJARKA'] },
+            { species: 'Gloson', level: 10, temperament: 'HEALTH_WISDOM', runes: ['PERTHO'] }
+            ],
+            dialogue: {
+                challenge: 'I am the defender of the quiet folk. Disturbance is not tolerated. Prepare to leave this village.',
+                lose: 'Go home, trespasser. The spirits of the hearth demand respect, not defeat. Do not return until you are ready.',
+                win: 'A true protector is hard to find. You have proven worthy. Enter the darkness of Djupa Gruvan, if you dare.'
+            }
+        },
+        order: 1
+    },
+    ZONE3: {
+        id: 'zone3',
+        name: 'Djupa Gruvan',
+        description: 'An endless labyrinth of cold, black tunnels carved by greed. Only the muffled echo of a pickaxe and the hungry glow of rare ore disturb the crushing silence, guarded by unforgiving spirits who despise light and trespassers.',
+        image: 'assets/zones/djupagruvan.png',
+        levelRange: [10, 14],
+        spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner', 'Mara', 'Dvarg'],
+        guardian: {
+            name: 'Hjördis',
+            team: [
+                { species: 'Svartalv', level: 15, temperament: 'DEFENSE_DURABILITY', runes: ['GIFU'] },
+                { species: 'Mara', level: 15, temperament: 'WISDOM_DEFENSE', runes: ['URUZ'] },
+                { species: 'Fafner', level: 15, temperament: 'DEFENSE_HEALTH', runes: ['ANSUZ'] }
+            ],
+            dialogue: {
+                challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
+                lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more wisdom.',
+                win: 'Your effort is sharper than my ore. The path is clear. The flowing waters of Glimrande Källan await.'
+            }
+        },
+        order: 2
+    },
+    ZONE4: {
+        id: 'zone4',
+        name: 'Glimrande Källan',
+        description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
+        image: 'assets/zones/glimrandekallan.png',
+        levelRange: [15, 19],
+        spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna', 'Dimalva', 'Backatroll'],
+        guardian: {
+            name: 'Sigurd',
+            team: [
+                { species: 'Norna', level: 20, temperament: 'WISDOM_STRENGTH', runes: ['GIFU'] },
+                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_STRENGTH', runes: ['ODAL'] },
+                { species: 'Nacken', level: 20, temperament: 'HEALTH_DEFENSE', runes: ['INGUZ'] }
+            ],
+            dialogue: {
+                challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
+                lose: 'The depths claimed you. Your spirit is not yet strong enough to master the water\'s fury.',
+                win: 'You defied the call of the water. Your journey continues to the ancient, colossal lands of Urbergen.'
+            }
+        },
+        order: 3
+    },
+    ZONE5: {
+        id: 'zone5',
+        name: 'Urbergen',
+        description: 'The raw, frozen, and towering bedrock that predates humankind. It is a world of eternal, howling wind and untamed, colossal forces, where the children of the giants combat the very elements that forged them.',
+        image: 'assets/zones/urbergen.png',
+        levelRange: [20, 24],
+        spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Gryningstroll', 'Vitorm', 'Stormturs'],
+        guardian: {
+            name: 'Brynhild',
+            team: [
+                { species: 'Vitorm', level: 25, temperament: 'HEALTH_DURABILITY', runes: ['GIFU', 'TYR'] },
+                { species: 'Bergatroll', level: 25, temperament: 'STRENGTH_DEFENSE', runes: ['PERTHO', 'EIHWAZ']},
+                { species: 'Eldturs', level: 25, temperament: 'STRENGTH_MEGIN', runes: ['MANNAZ', 'KAUNAN'] }
+            ],
+            dialogue: {
+                challenge: 'We are the forces of chaos, the ancient strength of the raw elements. Face your doom!',
+                lose: 'You are just dust beneath the mountains. The giants will not be bested by such weakness.',
+                win: 'A colossal effort! Your power is vast. Behold, the final frontier: Världens Ände.'
+            }
+        },
+        order: 4
+    },
+    ZONE6: {
+        id: 'zone6',
+        name: 'Världens Ände',
+        description: 'The desolate, foreboding threshold of reality. This land is a cursed battlefield where the forces of fate collide, and only the chosen warriors prepare for the ultimate destruction and rebirth of the cosmos - Ragnarök, the prophesied end of the gods.',
+        image: 'assets/zones/varldensande.png',
+        levelRange: [25, 29],
+        spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg', 'Draug', 'Fylgja'],
+        guardian: {
+            name: 'Gylfe',
+            team: [
+                { species: 'Draug', level: 30, temperament: 'DURABILITY_MEGIN', runes: ['GIFU', 'HAGAL'] },
+                { species: 'Valkyria', level: 30, temperament: 'HEALTH_WISDOM', runes: ['FEHU', 'WYNJA'] },
+                { species: 'Fenrir', level: 30, temperament: 'STRENGTH_WISDOM', runes: ['ODAL', 'JERA'] }
+            ],
+            dialogue: {
+                challenge: 'This is where destiny is decided. The heroes of Valhalla and their enemies await the end. Prove your fate.',
+                lose: 'Ragnarök is not for the weak. You must return, prepared to face the true end of all things.',
+                win: 'The gods themselves have witnessed your victory. You have mastered fate. The primordial void of Ginnungagap is open to you.'
+            }
+        },
+        order: 5
+    },
+    ZONE7: {
+        id: 'zone7',
+        name: 'Ginnungagap',
+        description: 'The vast, primordial void that preceded all creation. It is an unending, echoing expanse of pure potential and ultimate challenge, containing every creature from the realms for those who seek the peak of mastery.',
+        image: 'assets/zones/ginnungagap.png',
+        levelRange: [30, 30],
+        spawns: 'ALL',
+        guardian: null,
+        order: 6
+    }
+};
+
+const ZONE_ORDER = ['ZONE1', 'ZONE2', 'ZONE3', 'ZONE4', 'ZONE5', 'ZONE6', 'ZONE7'];
+
+const ACHIEVEMENTS = {
+    CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },
+    HOARDER: { id: 'hoarder', name: 'Hoarder', description: 'Tame every Väsen type' },
+    LORE_MASTER: { id: 'lore_master', name: 'Lore Master', description: 'Collect all Lore Entries' },
+    RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
+};
+
+// Helper functions for constants
+function getElementMatchup(attackerElement, defenderElement) {
+    const matchupType = ELEMENT_MATCHUPS[attackerElement][defenderElement];
+    return DAMAGE_MULTIPLIERS[matchupType];
+}
+
+function getMatchupType(attackerElement, defenderElement) {
+    return ELEMENT_MATCHUPS[attackerElement][defenderElement];
+}
+
+function getAttributeStageModifier(stage) {
+    return 1 + (GAME_CONFIG.ATTRIBUTE_STAGE_MODIFIER * stage);
+}
+
+function getRequiredExpForLevel(level) {
+    return Math.floor(
+        (GAME_CONFIG.BASE_LEVEL_UP_EXP * level) + 
+        (GAME_CONFIG.LEVEL_UP_ACCELERATION * level * level)
+    );
+}
+
+function getExpYield(enemyLevel, rarity) {
+    const rarityBonus = RARITY_EXP_BONUS[rarity] || 1.0;
+    return Math.floor(GAME_CONFIG.BASE_EXP_YIELD * enemyLevel * rarityBonus);
+}
+
+// Convenience constants for frequently used values
+const SAVE_KEY = GAME_CONFIG.SAVE_KEY;
+const SAVE_VERSION = 1;
+const MAX_PARTY_SIZE = GAME_CONFIG.MAX_TEAM_SIZE;
+const MAX_VASEN_COLLECTION = GAME_CONFIG.MAX_INVENTORY_SIZE;
