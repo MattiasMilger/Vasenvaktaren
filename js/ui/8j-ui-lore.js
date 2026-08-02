@@ -358,13 +358,14 @@ UIController.prototype.showLoreUnlockMessage = function(entryKey) {
 // Additional Info setting is enabled.
 // =============================================================================
 
-// Generic show/hide for the Lore Info modal
+// Generic show/hide for the Lore Info modal. Mirrors showLore()/hideLore()
+// (no overlay backdrop) so opening it doesn't darken the background, matching
+// the Lore Book modal it's nested inside.
 UIController.prototype.showLoreInfoModal = function(title, bodyHtml) {
     const modal = document.getElementById('lore-info-modal');
     if (!modal) return;
     document.getElementById('lore-info-title').textContent = title;
     document.getElementById('lore-info-content').innerHTML = bodyHtml;
-    this.showModalOverlay();
     modal.classList.add('active');
 };
 
@@ -372,7 +373,6 @@ UIController.prototype.hideLoreInfoModal = function() {
     const modal = document.getElementById('lore-info-modal');
     if (!modal) return;
     modal.classList.remove('active');
-    this.checkAndHideOverlay();
 };
 
 // Dispatch an entry-level Additional Info click to the correct info modal,
@@ -540,7 +540,7 @@ UIController.prototype.showFamilyInfoModal = function(familyName) {
         .filter(name => VASEN_SPECIES[name].family === familyName)
         .map(name => VASEN_SPECIES[name].name);
 
-    bodyHtml += `<h4 class="lore-info-subheading">Väsen</h4><p class="lore-info-description">${familyMembers.join(', ')}</p>`;
+    bodyHtml += `<hr class="lore-info-divider"><p><strong>Väsen</strong><br>${familyMembers.join(', ')}</p>`;
 
     this.showLoreInfoModal(familyName, bodyHtml);
 };
@@ -616,7 +616,7 @@ UIController.prototype.showLocationsInfoModal = function() {
         `;
     }).join('');
 
-    const bodyHtml = `<div class="lore-info-items-list">${rowsHtml}</div>`;
+    const bodyHtml = `<h4 class="lore-info-subheading">Zones</h4><div class="lore-info-items-list">${rowsHtml}</div>`;
     this.showLoreInfoModal('Locations', bodyHtml);
 };
 
