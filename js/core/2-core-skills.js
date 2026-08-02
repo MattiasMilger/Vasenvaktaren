@@ -237,7 +237,7 @@ const ABILITIES = {
     },
     'Hail Storm': {
         name: 'Hail Storm',
-        flavorDescription: 'A sudden, freezing downpour of stinging ice and freezing wind.',
+        flavorDescription: 'Rains down a freezing downpour of stinging ice and freezing wind.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
@@ -286,7 +286,7 @@ const ABILITIES = {
     // Wind Skills
     'Storm Claw': {
         name: 'Storm Claw',
-        flavorDescription: 'A quick, brutal strike delivered with claws riding the speed of a gale.',
+        flavorDescription: 'Strikes with sharp claws riding the blinding speed of a gale.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
@@ -307,7 +307,7 @@ const ABILITIES = {
     },
     'Wailing Cry': {
         name: 'Wailing Cry',
-        flavorDescription: 'Unleashes an agonizing, ghostly shriek that assails the enemy\'s senses.',
+        flavorDescription: 'emits an agonizing, ghostly shriek that assails the enemy\'s senses.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
