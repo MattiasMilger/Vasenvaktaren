@@ -216,7 +216,7 @@ const ABILITIES = {
     // Water Skills
     'Drown': {
         name: 'Drown',
-        flavorDescription: 'Violently drags the enemy down and suffocates them.',
+        flavorDescription: 'Violently drags the enemy under water.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
