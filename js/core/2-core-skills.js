@@ -25,7 +25,7 @@ const ABILITIES = {
     },
     'Boulder Toss': {
         name: 'Boulder Toss',
-        flavorDescription: 'Hurls a colossal, jagged rock, delivering the crushing weight of a mountain.',
+        flavorDescription: 'Hurls a colossal, jagged rock, smashing with the crushing weight of a mountain.',
         mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.STRENGTH,
@@ -55,7 +55,7 @@ const ABILITIES = {
     },
     'Smithing': {
         name: 'Smithing',
-        flavorDescription: 'Channels ancient forging magic to an ally, awakening their might.',
+        flavorDescription: 'Tempers an ally with ancient forging magic, awakening their might.',
         mechanicsDescription: `Raises an ally\'s Strength by 1 stage.`,
         element: ELEMENTS.EARTH,
         type: ATTACK_TYPES.UTILITY,
@@ -81,7 +81,7 @@ const ABILITIES = {
     // Fire Skills
     'Torch Strike': {
         name: 'Torch Strike',
-        flavorDescription: 'Delivers a searing blow with a burning torch, releasing raw heat.',
+        flavorDescription: 'Lashes out with a burning torch, releasing raw heat.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
@@ -134,7 +134,7 @@ const ABILITIES = {
     },
     'Loki\'s Betrayal': {
         name: 'Loki\'s Betrayal',
-        flavorDescription: 'A deep cut from the dark, causing more damage to the weak and frail.',
+        flavorDescription: 'Inflicts a deep cut from the dark, dealing more damage to the weak and frail.',
         get mechanicsDescription() {
             return `Hits enemy. +${GAME_CONFIG.LOKISBETRAYAL_BONUS} power if they are debuffed.`;
         },
@@ -354,7 +354,7 @@ const ABILITIES = {
     // Basic Strike (available to all)
     'Basic Strike': {
         name: 'Basic Strike',
-        flavorDescription: 'Delivers a reflexive and adaptable strike empowered by native elemental energy.',
+        flavorDescription: 'Executes a reflexive and adaptable strike empowered by native elemental energy.',
         mechanicsDescription: 'Hits enemy.',
         element: null, // Uses the Väsen's own element
         type: ATTACK_TYPES.MIXED,
