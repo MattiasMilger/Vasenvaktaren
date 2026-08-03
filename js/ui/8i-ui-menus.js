@@ -310,7 +310,7 @@ achievementsHtml += '</div></div>';
         this.populateGameGuideValues();
 
         // Render Element Matchups
-        const elementMatchupsContainer = document.getElementById('dynamic-element-matchups');
+        const elementMatchupsContainer = document.getElementById('dynamic-elements');
         if (elementMatchupsContainer) {
             elementMatchupsContainer.innerHTML = this.generateElementMatchupsHTML();
         }
@@ -355,7 +355,7 @@ achievementsHtml += '</div></div>';
     // by the rest in their regular order. A unit is a direct child of
     // #guide-categories-container: either a .guide-category itself (static
     // categories), or the placeholder wrapper div that contains one
-    // (dynamic categories, e.g. #dynamic-element-matchups). Crucially, this
+    // (dynamic categories, e.g. #dynamic-elements). Crucially, this
     // only ever moves the WRAPPER for dynamic categories, never the
     // .guide-category node nested inside it - reaching inside and moving
     // the nested node out would leave the wrapper empty, causing the next
@@ -572,9 +572,10 @@ achievementsHtml += '</div></div>';
 
         let html = `
             <div class="guide-category" data-cat="element-matchups">
-                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Element Matchups<button class="guide-favorite-btn" type="button">☆</button></h4>
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Elements<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
-                    <p>Each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
+                    <p><strong>Element Matchups</strong><br>
+                    <p>Each väsen and skill has an element, and each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
                     <div class="element-guide-list">
         `;
 
@@ -610,6 +611,7 @@ achievementsHtml += '</div></div>';
             <div class="guide-category" data-cat="families">
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Families<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
+                    <p><strong>Families</strong><br>
                     <p>Each family possesses a unique trait. Take note to gain a strategic advantage.</p>
                     <div class="family-guide-list">
         `;
@@ -696,6 +698,7 @@ achievementsHtml += '</div></div>';
             <div class="guide-category" data-cat="temperaments">
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
+                    <p><strong>Temperaments</strong><br>
                     <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
                     <table style="${tableStyle}">
                         <thead>

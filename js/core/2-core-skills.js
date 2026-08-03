@@ -123,7 +123,7 @@ const ABILITIES = {
     },
     'Burning Insult': {
         name: 'Burning Insult',
-        flavorDescription: 'Hurls a vicious, withering curse that crushes the enemy\'s resolve.',
+        flavorDescription: 'Spits a vicious, withering curse that crushes the enemy\'s resolve.',
         mechanicsDescription: `Lowers enemy\'s defense and durability by 1 stage.`,
         element: ELEMENTS.FIRE,
         type: ATTACK_TYPES.UTILITY,
@@ -307,7 +307,7 @@ const ABILITIES = {
     },
     'Wailing Cry': {
         name: 'Wailing Cry',
-        flavorDescription: 'emits an agonizing, ghostly shriek that assails the enemy\'s senses.',
+        flavorDescription: 'Emits an agonizing, ghostly shriek that assails the enemy\'s senses.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
