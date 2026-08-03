@@ -741,7 +741,7 @@ UIController.prototype.renderSkillsList = function(vasen) {
                 </div>
                 <div class="skill-attributes">
                     <div class="element-matchup-collapsible">
-                        <span class="skill-element element-${skillElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event)">${skillElement}</span>
+                        <span class="skill-element element-${skillElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${skillElement}</span>
                         ${this.generateAttackingMatchupsHTML(skillElement)}
                     </div>
                     <span class="skill-cost">Megin: ${meginCost}</span>
@@ -784,7 +784,7 @@ function toggleRarityDescription(element, event) {
 
     if (isOpening) {
         parent.classList.add('open');
-        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
+        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel') || parent.closest('.modal-lore-info')) {
             const popup = parent.querySelector('.rarity-description-popup');
             if (popup) positionPopupForCombatCard(popup, element);
         }
