@@ -531,16 +531,19 @@ UIController.prototype.showFamilyInfoModal = function(familyName) {
     const description = FAMILY_DESCRIPTIONS[familyName] || 'No description available.';
     const passive = FAMILY_PASSIVES[familyName];
 
-    let bodyHtml = `<p><strong>${familyName}</strong><br>${description}</p>`;
+    let bodyHtml = `<p class="lore-info-description">${description}</p>`;
+
     if (passive) {
-        bodyHtml += `<hr class="lore-info-divider"><p><strong>Trait: ${passive.name}</strong><br>${passive.description}</p>`;
+        bodyHtml += `<h4 class="lore-info-subheading">Trait: ${passive.name}</h4>`;
+        bodyHtml += `<p class="lore-info-description">${passive.description}</p>`;
     }
 
     const familyMembers = VASEN_LIST
         .filter(name => VASEN_SPECIES[name].family === familyName)
         .map(name => VASEN_SPECIES[name].name);
 
-    bodyHtml += `<hr class="lore-info-divider"><p><strong>Väsen</strong><br>${familyMembers.join(', ')}</p>`;
+    bodyHtml += `<h4 class="lore-info-subheading">Väsen</h4>`;
+    bodyHtml += `<p class="lore-info-description">${familyMembers.join(', ')}</p>`;
 
     this.showLoreInfoModal(familyName, bodyHtml);
 };
@@ -596,8 +599,14 @@ UIController.prototype.showLocationsInfoModal = function() {
             const teamList = zone.guardian.team.map(member => {
                 const memberSpecies = VASEN_SPECIES[member.species];
                 const memberName = memberSpecies ? memberSpecies.name : member.species;
-                return `${memberName} (Lvl ${member.level})`;
-            }).join(', ');
+                const memberRunes = (member.runes || [])
+                    .map(runeId => RUNES[runeId] ? `${RUNES[runeId].symbol} ${RUNES[runeId].name}` : null)
+                    .filter(Boolean)
+                    .join(', ');
+                return memberRunes
+                    ? `${memberName} (Lvl ${member.level}) - ${memberRunes}`
+                    : `${memberName} (Lvl ${member.level})`;
+            }).join('; ');
             guardianValue = `${zone.guardian.name} - ${teamList}`;
         } else if (zoneId === 'ZONE7') {
             guardianValue = 'None - hosts the Endless Tower';
