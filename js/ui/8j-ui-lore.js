@@ -438,6 +438,67 @@ function calculateBaseMeginAtLevel(level) {
     return megin;
 }
 
+// =============================================================================
+// LORE BOOK ATTRIBUTE COLOR SCALE
+// Colors each base/maxed attribute value in the Väsen info modal on a sliding
+// red (low) -> yellow (average) -> green (high) scale, relative to every
+// other species at the same level. Megin is excluded (identical for all
+// species at a given level) and is always rendered in the mid (yellow) color.
+// =============================================================================
+
+const LORE_STAT_COLOR_LOW = '#c46c6c';  // matches --accent-danger
+const LORE_STAT_COLOR_MID = '#d4a933';  // matches --accent-warning
+const LORE_STAT_COLOR_HIGH = '#5fa13a'; // matches --color-positive
+
+// Compute min/max/mean for strength, wisdom, defense, durability, and health
+// across every species in the game at a given level (base attributes, no
+// temperament) - used as the population the color scale is measured against.
+function computeAttributeStatsAtLevel(level) {
+    const attrs = ['strength', 'wisdom', 'defense', 'durability', 'health'];
+    const stats = {};
+    attrs.forEach(attr => {
+        const values = VASEN_LIST.map(name => calculateSpeciesBaseAttribute(VASEN_SPECIES[name], attr, level));
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
+        stats[attr] = { min, max, mean };
+    });
+    return stats;
+}
+
+function hexToRgbComponents(hex) {
+    const clean = hex.replace('#', '');
+    const bigint = parseInt(clean, 16);
+    return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+}
+
+// Linearly interpolate between two hex colors at t (0-1, clamped)
+function lerpHexColor(hexA, hexB, t) {
+    const a = hexToRgbComponents(hexA);
+    const b = hexToRgbComponents(hexB);
+    const clampedT = Math.max(0, Math.min(1, t));
+    const r = Math.round(a.r + (b.r - a.r) * clampedT);
+    const g = Math.round(a.g + (b.g - a.g) * clampedT);
+    const bl = Math.round(a.b + (b.b - a.b) * clampedT);
+    return `rgb(${r}, ${g}, ${bl})`;
+}
+
+// Map a value to a color on the red -> yellow -> green scale, using the
+// population mean as the yellow midpoint and the population min/max as the
+// red/green endpoints respectively.
+function getAttributeStatColor(value, stats) {
+    if (!stats || stats.max === stats.min) return LORE_STAT_COLOR_MID;
+    if (value <= stats.mean) {
+        const range = stats.mean - stats.min;
+        const t = range === 0 ? 1 : (value - stats.min) / range;
+        return lerpHexColor(LORE_STAT_COLOR_LOW, LORE_STAT_COLOR_MID, t);
+    } else {
+        const range = stats.max - stats.mean;
+        const t = range === 0 ? 1 : (value - stats.mean) / range;
+        return lerpHexColor(LORE_STAT_COLOR_MID, LORE_STAT_COLOR_HIGH, t);
+    }
+}
+
 // Väsen technical info: base/maxed attributes (no temperament), family,
 // element, taming item, description, skills, image, rarity, and every zone
 // this species can spawn in (including Ginnungagap).
@@ -448,17 +509,23 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
     const attrOrder  = ['strength', 'wisdom', 'defense', 'durability', 'health', 'megin'];
     const attrLabels = { strength: 'Strength', wisdom: 'Wisdom', defense: 'Defense', durability: 'Durability', health: 'Health', megin: 'Megin' };
 
-    const buildAttrGridHtml = (level) => attrOrder.map(attr => {
-        const value = attr === 'megin'
-            ? calculateBaseMeginAtLevel(level)
-            : calculateSpeciesBaseAttribute(species, attr, level);
-        return `
-            <div class="attribute-item">
-                <span class="attr-name">${attrLabels[attr]}</span>
-                <span class="attr-value">${value}</span>
-            </div>
-        `;
-    }).join('');
+    const buildAttrGridHtml = (level) => {
+        const levelStats = computeAttributeStatsAtLevel(level);
+        return attrOrder.map(attr => {
+            const value = attr === 'megin'
+                ? calculateBaseMeginAtLevel(level)
+                : calculateSpeciesBaseAttribute(species, attr, level);
+            const color = attr === 'megin'
+                ? LORE_STAT_COLOR_MID
+                : getAttributeStatColor(value, levelStats[attr]);
+            return `
+                <div class="attribute-item">
+                    <span class="attr-name">${attrLabels[attr]}</span>
+                    <span class="attr-value" style="color: ${color};">${value}</span>
+                </div>
+            `;
+        }).join('');
+    };
 
     // Every zone whose spawn list includes this species (zones with
     // spawns === 'ALL', i.e. Ginnungagap, always match).
