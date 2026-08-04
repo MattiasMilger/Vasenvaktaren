@@ -784,7 +784,7 @@ function toggleRarityDescription(element, event) {
 
     if (isOpening) {
         parent.classList.add('open');
-        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel') || parent.closest('.modal-lore-info')) {
+        if (parent.closest('.combatant-panel') || parent.closest('.vasen-details-panel')) {
             const popup = parent.querySelector('.rarity-description-popup');
             if (popup) positionPopupForCombatCard(popup, element);
         }

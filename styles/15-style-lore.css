@@ -373,6 +373,26 @@ mark.lore-highlight {
 }
 
 /* =============================================================================
+   LORE INFO POPUP POSITIONING - element/rarity/family matchup popups opened
+   from badges inside this modal (header badges and the Skills list) are
+   anchored to the left edge of their trigger instead of centered. A centered
+   popup (left: 50%; transform: translateX(-50%)) can extend into negative
+   horizontal space when the trigger sits near the modal's left edge, and a
+   browser cannot scroll left of the content's natural origin in a
+   left-to-right page - so scrollIntoView() has nothing to scroll to and the
+   popup stays cut off. Left-anchoring only ever extends the popup rightward,
+   which scrollIntoView (called alongside these badges) can always reach.
+   This mirrors how the Game Guide's element matchup popups are positioned.
+   ============================================================================= */
+
+.modal-lore-info .element-matchup-collapsible .matchup-details,
+.modal-lore-info .rarity-matchup-collapsible .rarity-description-popup,
+.modal-lore-info .family-matchup-collapsible .family-description-popup {
+    left: 0;
+    transform: none;
+}
+
+/* =============================================================================
    LORE INFO CONTENT - shared building blocks used across väsen, family,
    bindrune, skills, and items info bodies.
    ============================================================================= */
