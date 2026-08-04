@@ -84,6 +84,13 @@ class GameState {
         this.runeCounter = 0;        // Increments on non-rune, resets on rune
         this.sacredWellCounter = 0;  // Increments on combats only, resets on Sacred Well
         this.lastEncounterType = null; // Tracks last encounter to prevent consecutive Sacred Wells
+
+        // Same-väsen pity counter: tracks consecutive wild encounters of the
+        // same species. Once the same species has appeared twice in a row,
+        // the next wild väsen encounter is guaranteed to be a different
+        // species, and the counter resets.
+        this.lastVasenSpecies = null;
+        this.sameVasenCounter = 0;
     }
     
     // count väsen types tamed
@@ -732,7 +739,32 @@ class GameState {
         
         switch (encounterType) {
             case 'vasen': {
-                const speciesName = getRandomSpawnFromZone(this.currentZone);
+                // Same-väsen pity: if the same species has appeared twice in a
+                // row, guarantee a different species this time and reset the streak.
+                let speciesName;
+                const forceDifferentSpecies = this.sameVasenCounter >= 2 && this.lastVasenSpecies;
+
+                if (forceDifferentSpecies) {
+                    // Retry a bounded number of times in case of bad luck; falls
+                    // back to the normal roll if the zone genuinely only has one
+                    // possible väsen (avoids an infinite loop in that edge case).
+                    let attempts = 0;
+                    do {
+                        speciesName = getRandomSpawnFromZone(this.currentZone);
+                        attempts++;
+                    } while (speciesName === this.lastVasenSpecies && attempts < 20);
+                } else {
+                    speciesName = getRandomSpawnFromZone(this.currentZone);
+                }
+
+                // Track the consecutive same-väsen streak
+                if (speciesName === this.lastVasenSpecies) {
+                    this.sameVasenCounter++;
+                } else {
+                    this.lastVasenSpecies = speciesName;
+                    this.sameVasenCounter = 1;
+                }
+
                 const level = getRandomLevelForZone(this.currentZone);
                 const vasen = createWildVasen(speciesName, level);
                 result = { type: 'vasen', vasen };
@@ -954,7 +986,10 @@ class GameState {
             itemCounter: this.itemCounter,
             runeCounter: this.runeCounter,
             sacredWellCounter: this.sacredWellCounter,
-            lastEncounterType: this.lastEncounterType
+            lastEncounterType: this.lastEncounterType,
+            // Same-väsen pity counter
+            lastVasenSpecies: this.lastVasenSpecies,
+            sameVasenCounter: this.sameVasenCounter
         };
     }
     
@@ -1083,6 +1118,10 @@ class GameState {
             this.runeCounter = data.runeCounter || 0;
             this.sacredWellCounter = data.sacredWellCounter || 0;
             this.lastEncounterType = data.lastEncounterType || null;
+
+            // Restore same-väsen pity counter (default for backwards compatibility)
+            this.lastVasenSpecies = data.lastVasenSpecies || null;
+            this.sameVasenCounter = data.sameVasenCounter || 0;
             
             return true;
         } catch (e) {
@@ -1194,6 +1233,10 @@ class GameState {
         this.itemCounter = 0;
         this.runeCounter = 0;
         this.sacredWellCounter = 0;
+
+        // Reset same-väsen pity counter
+        this.lastVasenSpecies = null;
+        this.sameVasenCounter = 0;
     }
 }
 

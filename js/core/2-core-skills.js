@@ -170,7 +170,7 @@ const ABILITIES = {
     },
     'Elven Light': {
         name: 'Elven Light',
-        flavorDescription: 'Focuses a faint, mesmerizing beam drawn from the twilight mist.',
+        flavorDescription: 'Focuses a faint, mesmerizing light drawn from the twilight mist.',
         get mechanicsDescription() {
             return `Hits enemy. Empowers next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         },
@@ -180,9 +180,9 @@ const ABILITIES = {
         meginCost: GAME_CONFIG.TIER1_ATTACK_SKILL_MEGIN,
         grantsEmpowerment: true
     },
-    'Moon Beam': {
-        name: 'Moon Beam',
-        flavorDescription: 'Gathers the potent, chilling energy of the moon into a destructive ray.',
+    'Moon Ray': {
+        name: 'Moon Ray',
+        flavorDescription: 'Gathers the potent energy of the moon into a destructive lunar ray.',
         mechanicsDescription: 'Hits enemy.',
         element: ELEMENTS.NATURE,
         type: ATTACK_TYPES.WISDOM,

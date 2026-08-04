@@ -33,7 +33,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.RARE,
-        skills: ['Elven Light', 'Moon Beam', 'Skald\'s Mead', 'Freya\'s Tears'],
+        skills: ['Elven Light', 'Moon Ray', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Festive Midsommarkrans',
         image: 'assets/vasen/ljusalv.png'
     },
@@ -55,7 +55,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ALV,
         element: ELEMENTS.WIND,
         rarity: RARITIES.UNCOMMON,
-        skills: ['Elven Light', 'Wind Gust', 'Skald\'s Mead', 'Moon Beam'],
+        skills: ['Elven Light', 'Wind Gust', 'Skald\'s Mead', 'Moon Ray'],
         tamingItem: 'Flicker Dust',
         image: 'assets/vasen/alva.png'
     },
@@ -101,7 +101,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.ANDE,
         element: ELEMENTS.WATER,
         rarity: RARITIES.RARE,
-        skills: ['Tidal Wave', 'Moon Beam', 'Skald\'s Mead', 'Freya\'s Tears'],
+        skills: ['Tidal Wave', 'Moon Ray', 'Skald\'s Mead', 'Freya\'s Tears'],
         tamingItem: 'Fate Thread',
         image: 'assets/vasen/norna.png'
     },
@@ -375,7 +375,7 @@ const VASEN_SPECIES = {
         family: FAMILIES.RA,
         element: ELEMENTS.NATURE,
         rarity: RARITIES.UNCOMMON,
-        skills: ['Elven Light', 'Moon Beam', 'Thick Coat', 'Enchanting Song'],
+        skills: ['Elven Light', 'Moon Ray', 'Thick Coat', 'Enchanting Song'],
         tamingItem: 'Shed Antlers',
         image: 'assets/vasen/skogsra.png'
     },

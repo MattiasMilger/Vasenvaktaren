@@ -609,7 +609,8 @@ UIController.prototype.showFamilyInfoModal = function(familyName) {
     const description = FAMILY_DESCRIPTIONS[familyName] || 'No description available.';
     const passive = FAMILY_PASSIVES[familyName];
 
-    let bodyHtml = `<p class="lore-info-description">${description}</p>`;
+    let bodyHtml = `<h4 class="lore-info-subheading">Description</h4>`;
+    bodyHtml += `<p class="lore-info-description">${description}</p>`;
 
     if (passive) {
         bodyHtml += `<h4 class="lore-info-subheading">Trait: ${passive.name}</h4>`;
