@@ -168,6 +168,10 @@ Vasenvaktaren/
 - [X] Introduce all 30 Skills
 - [ ] Balance overhaul
 
+## Technical Reference
+
+A full technical reference spreadsheet (attributes and their formulas, families, elements, runes, skills, and zones) is available here: [Väsenväktaren Technical Reference](https://docs.google.com/spreadsheets/d/1xPBtH-oINvYFImW95-dZMRhbHYV1C6O8/edit?usp=sharing&ouid=112888560596239271570&rtpof=true&sd=true)
+
 ## Credits
 
 **Developer**: Mattias Milger  
