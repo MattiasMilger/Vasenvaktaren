@@ -223,7 +223,7 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
             vasenBtn.innerHTML = `
                 ${this.createStandardVasenCardHTML(vasen, false)}
                 <div class="rune-status-overlay">
-                    <span class="rune-status">${equippedCount}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}${isInParty ? ' ★' : ''}</span>
+                    <span class="rune-status">${equippedCount}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}${isInParty ? '' : ''}</span>
                 </div>
             `;
             if (!hasThisRune) {
