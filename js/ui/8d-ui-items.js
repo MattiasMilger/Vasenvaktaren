@@ -93,7 +93,7 @@ UIController.prototype.highlightItemKeywords = function(description) {
         'charred warden',
         // Alv (elf)
         'twilight elf',
-        'mist elf',
+        'water elf',
         'underground elf',
         'forge elf',
         'light elf',

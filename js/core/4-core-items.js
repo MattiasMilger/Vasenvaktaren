@@ -150,7 +150,7 @@ const TAMING_ITEMS = {
     },
     'Morning Dew': {
         name: 'Morning Dew',
-        description: 'A jar containing shimmering morning dew. This ethereal substance attracts a tiny mist elf that haunts the water\'s edge.',
+        description: 'A jar containing shimmering morning dew. This ethereal substance attracts a tiny water elf.',
         tamingTarget: 'Dimalva'
     },
     'Shiny Trinket': {

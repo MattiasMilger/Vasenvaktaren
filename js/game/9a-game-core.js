@@ -131,14 +131,11 @@ class Game {
         // welcome dialogue are the ones actually granted when the player
         // clicks "Begin Journey" (mirrors the guardian defeat flow, which
         // rolls new-zone items before displaying them in the victory message).
-        const zone1Items = [
-            'Mossy Bark',
-            'Shed Antlers',
-            'Elderflower Sprig',
-            'Morning Dew',
-            'Shedded Scale',
-            'Festive Midsommarkrans'
-        ];
+        // Derived dynamically from Zone 1's (Trollskogen) actual spawn list via
+        // getItemsForZone(), so every väsen that spawns there can have its
+        // taming item show up as a starting item, and this stays correct
+        // automatically if the zone's spawns or taming items ever change.
+        const zone1Items = getItemsForZone('ZONE1');
 
         // Copy + shuffle
         const shuffledZone1Items = [...zone1Items].sort(() => Math.random() - 0.5);
