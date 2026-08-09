@@ -108,16 +108,13 @@ UIController.prototype.updateExploreButton = function() {
             this.exploreBtn.innerHTML = `Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
             this.exploreBtn.disabled = !hasParty || gameState.inCombat;
 
-            // Explore tutorial - blink Explore button until first combat
-            if (!gameState.firstExploreTutorialShown && hasParty && !gameState.inCombat) {
-                if (!this.exploreTutorialActive) {
-                    this.exploreBtn.classList.add('tutorial-blink');
-                    this.exploreTutorialActive = true;
-                }
-            } else {
-                this.exploreBtn.classList.remove('tutorial-blink');
-                this.exploreTutorialActive = false;
-            }
+            // Explore tutorial - blink Explore button until the player has tamed
+            // their first väsen. Derived purely from state on every call (no cached
+            // this.exploreTutorialActive flag), so a render triggered while
+            // gameState.inCombat is still true (e.g. during victory processing in
+            // handleCombatEnd(), before endCombat() runs) can't strip the blink
+            // prematurely regardless of whether the väsen was tamed.
+            this.exploreBtn.classList.toggle('tutorial-blink', !gameState.firstExploreTutorialShown && hasParty);
 
             // Show/hide challenge button
             if (zone.guardian) {
