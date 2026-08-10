@@ -135,6 +135,13 @@ UIController.prototype._ensureAutoRunesButton = function() {
 // met) is treated as a single candidate in the same random pool as individual
 // runes - giving it roughly the same odds as landing any one solo rune, rather
 // than requiring two lucky solo picks in a row to land a matching pair.
+//
+// Solo candidates are drawn strictly from getSoloValidRunesForVasen(), NOT from
+// getValidRunesForVasen(). The latter also includes runes that are only useful
+// as half of a bindrune pair (e.g. KAUNAN for a väsen with no Fire attacks, which
+// is only worthwhile alongside ALGIZ's Nature->Fire conversion) - equipping one
+// of those runes alone does nothing for the väsen, so they must only ever be
+// picked together with their bindrune partner, never as a standalone pick.
 UIController.prototype.autoEquipRunes = function() {
     if (gameState.inCombat) {
         this.showMessage('Cannot change runes during combat.', 'error');
@@ -180,8 +187,17 @@ UIController.prototype.autoEquipRunes = function() {
         // Determine slot count for this väsen
         const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 
-        // Get valid runes for this väsen that are collected and still available in the pool
+        // Get valid runes for this väsen that are collected and still available in the pool.
+        // This broader (solo OR bind-eligible) set is used ONLY to check whether both
+        // members of a bindrune pair are usable in some capacity for this väsen - it is
+        // never used to pick a rune to equip alone.
         const validForThis = getValidRunesForVasen(vasen).filter(
+            runeId => gameState.collectedRunes.has(runeId) && !assigned.has(runeId)
+        );
+
+        // Strictly solo-usable runes for this väsen - the only pool solo candidates
+        // may ever be drawn from (see function doc comment above).
+        const soloValidForThis = getSoloValidRunesForVasen(vasen).filter(
             runeId => gameState.collectedRunes.has(runeId) && !assigned.has(runeId)
         );
 
@@ -194,15 +210,16 @@ UIController.prototype.autoEquipRunes = function() {
 
             // A pair candidate requires: the pair is bindrune-viable for this väsen,
             // AND both runes in the pair are currently in validForThis (collected,
-            // still unassigned this round, and individually valid for this väsen).
+            // still unassigned this round, and individually valid for this väsen -
+            // solo or bind-only).
             const viablePairs = BIND_RUNES.filter(br =>
                 br.runes.every(r => bindRuneEligible.has(r) && validForThis.includes(r))
             );
 
-            // Build a combined candidate pool: each solo rune is one candidate,
+            // Build a combined candidate pool: each SOLO-VALID rune is one candidate,
             // each viable pair is one candidate (equal weighting between the two kinds).
             const candidates = [
-                ...validForThis.map(runeId => ({ type: 'solo', runes: [runeId] })),
+                ...soloValidForThis.map(runeId => ({ type: 'solo', runes: [runeId] })),
                 ...viablePairs.map(br => ({ type: 'pair', runes: br.runes.slice() }))
             ];
 
@@ -226,9 +243,10 @@ UIController.prototype.autoEquipRunes = function() {
                 }
             }
         } else {
-            // Single-slot väsen: shuffle the valid pool and take the first one
-            // (bindrunes are impossible with only one slot)
-            const shuffled = validForThis.slice();
+            // Single-slot väsen: shuffle the strictly solo-valid pool and take the first one
+            // (bindrunes are impossible with only one slot, so bind-only-eligible runes
+            // must never be picked here)
+            const shuffled = soloValidForThis.slice();
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];

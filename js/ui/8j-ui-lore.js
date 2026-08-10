@@ -732,6 +732,7 @@ UIController.prototype.showRunesInfoModal = function() {
         <h4 class="lore-info-subheading">Runes</h4>
         <div class="lore-info-bindrune-list">${runesHtml}</div>
         <h4 class="lore-info-subheading">Bind Runes</h4>
+        <p class="lore-info-description">Order does not matter.</p>
         <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
     `;
     this.showLoreInfoModal('Runes', bodyHtml);

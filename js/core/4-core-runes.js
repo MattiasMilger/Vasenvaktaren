@@ -733,12 +733,15 @@ function getBindRuneEligibleRunes(vasen) {
 }
 
 // =============================================================================
-// Returns the subset of RUNE_LIST that are useful for a given VasenInstance.
-// A rune is included if it passes its own solo filter rule, OR if it is part
-// of a bindrune pair whose viability condition is met for this väsen (see
-// getBindRuneEligibleRunes above). All other runes are always considered valid.
+// Returns true if a rune passes its own standalone usefulness check for this
+// väsen, independent of any bindrune pairing consideration. This is the
+// "solo" filter - a rune that only makes sense as half of a bindrune pair
+// (e.g. KAUNAN for a väsen with no Fire attacks, valid only alongside ALGIZ's
+// Nature->Fire conversion) will return false here even though it may still
+// be considered "valid" overall via getValidRunesForVasen for display/manual
+// equip purposes.
 // =============================================================================
-function getValidRunesForVasen(vasen) {
+function isRuneSoloValidForVasen(vasen, runeId) {
     const availableSkills = vasen.getAvailableSkills();
 
     // Collect all elements the väsen can attack with
@@ -765,64 +768,82 @@ function getValidRunesForVasen(vasen) {
         }
     });
 
-    const bindRuneEligible = getBindRuneEligibleRunes(vasen);
+    switch (runeId) {
+        // Element damage boost runes - only useful if the väsen has attacks of that element
+        case 'KAUNAN': return attackElements.has(ELEMENTS.FIRE);
+        case 'PERTHO': return attackElements.has(ELEMENTS.EARTH);
+        case 'TYR':    return attackElements.has(ELEMENTS.WIND);
+        case 'BJARKA': return attackElements.has(ELEMENTS.NATURE);
+        case 'LAGUZ':  return attackElements.has(ELEMENTS.WATER);
 
-    return RUNE_LIST.filter(runeId => {
-        if (bindRuneEligible.has(runeId)) return true;
+        // Element proc buff runes - same requirement
+        case 'EIHWAZ': return attackElements.has(ELEMENTS.EARTH);
+        case 'SOL':    return attackElements.has(ELEMENTS.FIRE);
+        case 'EHWAZ':  return attackElements.has(ELEMENTS.WIND);
+        case 'ISAZ':   return attackElements.has(ELEMENTS.WATER);
+        case 'ALGIZ':  return attackElements.has(ELEMENTS.NATURE);
 
-        switch (runeId) {
-            // Element damage boost runes - only useful if the väsen has attacks of that element
-            case 'KAUNAN': return attackElements.has(ELEMENTS.FIRE);
-            case 'PERTHO': return attackElements.has(ELEMENTS.EARTH);
-            case 'TYR':    return attackElements.has(ELEMENTS.WIND);
-            case 'BJARKA': return attackElements.has(ELEMENTS.NATURE);
-            case 'LAGUZ':  return attackElements.has(ELEMENTS.WATER);
+        // Utility heal rune - only useful if the väsen has at least one utility skill
+        case 'MANNAZ': return hasUtilitySkill;
 
-            // Element proc buff runes - same requirement
-            case 'EIHWAZ': return attackElements.has(ELEMENTS.EARTH);
-            case 'SOL':    return attackElements.has(ELEMENTS.FIRE);
-            case 'EHWAZ':  return attackElements.has(ELEMENTS.WIND);
-            case 'ISAZ':   return attackElements.has(ELEMENTS.WATER);
-            case 'ALGIZ':  return attackElements.has(ELEMENTS.NATURE);
+        // Attack-type conversion runes - only useful if the väsen has attacks of the source
+        // type AND the target stat is strictly higher than the source stat (converting to
+        // a weaker or equal stat is never beneficial).
+        case 'ANSUZ':  // Converts Strength attacks → uses Wisdom instead
+            return hasStrengthAttack && vasen.calculateAttribute('wisdom') > vasen.calculateAttribute('strength');
+        case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
+            return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
 
-            // Utility heal rune - only useful if the väsen has at least one utility skill
-            case 'MANNAZ': return hasUtilitySkill;
-
-            // Attack-type conversion runes - only useful if the väsen has attacks of the source
-            // type AND the target stat is strictly higher than the source stat (converting to
-            // a weaker or equal stat is never beneficial).
-            case 'ANSUZ':  // Converts Strength attacks → uses Wisdom instead
-                return hasStrengthAttack && vasen.calculateAttribute('wisdom') > vasen.calculateAttribute('strength');
-            case 'RAIDO':  // Converts Wisdom attacks → uses Strength instead
-                return hasWisdomAttack && vasen.calculateAttribute('strength') > vasen.calculateAttribute('wisdom');
-
-            // Low-cost damage boost rune - only useful if at least one *damaging* skill
-            // costs at or below the threshold after the same-element megin discount.
-            // Utility skills deal no damage, so they don't qualify.
-            case 'ODAL': {
-                return availableSkills.some(skillName => {
-                    const skill = ABILITIES[skillName];
-                    if (!skill || skill.type === ATTACK_TYPES.UTILITY) return false;
-                    return vasen.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
-                });
-            }
-
-            // Buff-sharing rune - only useful if the väsen has at least one skill that
-            // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
-            // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
-            // Resilience, Troll: Troll Theft).
-            case 'GIFU': {
-                const familiesWithBuffPassive = [FAMILIES.ANDE, FAMILIES.ODJUR, FAMILIES.DRAKE, FAMILIES.TROLL];
-                if (familiesWithBuffPassive.includes(vasen.species.family)) return true;
-                return availableSkills.some(skillName => {
-                    const skill = ABILITIES[skillName];
-                    if (!skill || !skill.effect) return false;
-                    return skill.effect.type === 'buff' || skill.effect.type === 'tyrs_sacrifice';
-                });
-            }
-
-            // All other runes are universally applicable
-            default: return true;
+        // Low-cost damage boost rune - only useful if at least one *damaging* skill
+        // costs at or below the threshold after the same-element megin discount.
+        // Utility skills deal no damage, so they don't qualify.
+        case 'ODAL': {
+            return availableSkills.some(skillName => {
+                const skill = ABILITIES[skillName];
+                if (!skill || skill.type === ATTACK_TYPES.UTILITY) return false;
+                return vasen.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD;
+            });
         }
-    });
+
+        // Buff-sharing rune - only useful if the väsen has at least one skill that
+        // raises attributes (buff or Tyr's Sacrifice), or if its family passive raises
+        // attributes (Ande: Ethereal Surge, Odjur: Bestial Rage, Drake: Draconic
+        // Resilience, Troll: Troll Theft).
+        case 'GIFU': {
+            const familiesWithBuffPassive = [FAMILIES.ANDE, FAMILIES.ODJUR, FAMILIES.DRAKE, FAMILIES.TROLL];
+            if (familiesWithBuffPassive.includes(vasen.species.family)) return true;
+            return availableSkills.some(skillName => {
+                const skill = ABILITIES[skillName];
+                if (!skill || !skill.effect) return false;
+                return skill.effect.type === 'buff' || skill.effect.type === 'tyrs_sacrifice';
+            });
+        }
+
+        // All other runes are universally applicable
+        default: return true;
+    }
+}
+
+// =============================================================================
+// Returns the subset of RUNE_LIST that pass isRuneSoloValidForVasen for this
+// väsen - i.e. runes that are genuinely useful equipped alone, with no
+// bindrune partner required. Use this pool anywhere a rune might be equipped
+// by itself (e.g. Auto Equip Runes' solo candidates, single-rune-slot väsen).
+// =============================================================================
+function getSoloValidRunesForVasen(vasen) {
+    return RUNE_LIST.filter(runeId => isRuneSoloValidForVasen(vasen, runeId));
+}
+
+// =============================================================================
+// Returns the subset of RUNE_LIST that are useful for a given VasenInstance.
+// A rune is included if it passes its own solo filter rule (isRuneSoloValidForVasen),
+// OR if it is part of a bindrune pair whose viability condition is met for this
+// väsen (see getBindRuneEligibleRunes above). This broader set is intended for
+// display/manual-equip contexts (e.g. the rune equip modal), where showing a
+// bind-rune-only-eligible rune makes sense even before its partner is equipped.
+// It should NOT be used to pick a rune to equip alone (see getSoloValidRunesForVasen).
+// =============================================================================
+function getValidRunesForVasen(vasen) {
+    const bindRuneEligible = getBindRuneEligibleRunes(vasen);
+    return RUNE_LIST.filter(runeId => bindRuneEligible.has(runeId) || isRuneSoloValidForVasen(vasen, runeId));
 }
