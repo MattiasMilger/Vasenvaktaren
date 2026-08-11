@@ -68,6 +68,11 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
 
+### Player Profile
+
+- Portrait shown in the header, next to the player's name, and again inside the Player Profile screen next to the name field
+- Click the header portrait/name to open the Player Profile screen, view collection stats, achievements, and the Endless Tower record
+
 ### Lore Book
 
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
@@ -157,8 +162,10 @@ Vasenvaktaren/
 └── assets/
     ├── vasen/
     │   └── [30 Väsen images]
-    └── zones/
-        └── [7 zone images]
+    ├── zones/
+    │   └── [7 zone images]
+    └── other/
+        └── vaktare.png              (player profile portrait)
 ```
 ## Feature roadmap
 

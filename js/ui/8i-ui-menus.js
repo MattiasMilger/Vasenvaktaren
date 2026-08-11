@@ -150,10 +150,15 @@ achievementsHtml += '</div></div>';
 
         content.innerHTML = `
             <div class="profile-name-section">
-                <label for="profile-name-input">Player Name:</label>
-                <div class="profile-name-input-wrapper">
-                    <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off">
-                    <span id="profile-name-saved" class="profile-name-saved">Saved</span>
+                <div class="profile-identity-row">
+                    <img src="assets/other/vaktare.png" alt="Väktare" class="profile-portrait" width="64" height="64">
+                    <div class="profile-name-fields">
+                        <label for="profile-name-input">Player Name:</label>
+                        <div class="profile-name-input-wrapper">
+                            <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off">
+                            <span id="profile-name-saved" class="profile-name-saved">Saved</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
