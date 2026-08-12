@@ -365,8 +365,27 @@ UIController.prototype.showLoreInfoModal = function(title, bodyHtml) {
     const modal = document.getElementById('lore-info-modal');
     if (!modal) return;
     document.getElementById('lore-info-title').textContent = title;
-    document.getElementById('lore-info-content').innerHTML = bodyHtml;
+    const content = document.getElementById('lore-info-content');
+    content.innerHTML = bodyHtml;
     modal.classList.add('active');
+
+    // Delegated click handler for collapsible category titles within this
+    // modal (e.g. Runes / Bind Runes). Reuses the same lore-category /
+    // lore-category-title / lore-cat-chevron pattern as the main Lore Book
+    // (see renderLore()) - no "Collapse Categories" button here, each title
+    // toggles independently.
+    if (this._loreInfoClickHandler) {
+        content.removeEventListener('click', this._loreInfoClickHandler);
+    }
+    this._loreInfoClickHandler = (e) => {
+        const catTitle = e.target.closest('.lore-category-title');
+        if (!catTitle) return;
+        const category = catTitle.closest('.lore-category');
+        if (category) {
+            category.classList.toggle('lore-category-collapsed');
+        }
+    };
+    content.addEventListener('click', this._loreInfoClickHandler);
 };
 
 UIController.prototype.hideLoreInfoModal = function() {
@@ -729,11 +748,19 @@ UIController.prototype.showRunesInfoModal = function() {
     `).join('');
 
     const bodyHtml = `
-        <h4 class="lore-info-subheading">Runes</h4>
-        <div class="lore-info-bindrune-list">${runesHtml}</div>
-        <h4 class="lore-info-subheading">Bind Runes</h4>
-        <p class="lore-info-description">Order does not matter.</p>
-        <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
+        <div class="lore-category">
+            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Runes</h4>
+            <div class="lore-entry-list">
+                <div class="lore-info-bindrune-list">${runesHtml}</div>
+            </div>
+        </div>
+        <div class="lore-category">
+            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bind Runes</h4>
+            <div class="lore-entry-list">
+                <p class="lore-info-description">Order does not matter.</p>
+                <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
+            </div>
+        </div>
     `;
     this.showLoreInfoModal('Runes', bodyHtml);
 };
