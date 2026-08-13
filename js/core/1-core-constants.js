@@ -306,7 +306,7 @@ const FAMILY_KEYWORDS = {
 };
 
 // Starter Väsen options (species keys from VASEN_SPECIES)
-const STARTER_VASEN = ['Landvatte', 'Hustomte', 'Gardstomte'];
+const STARTER_VASEN = ['Hustomte', 'Gardstomte', 'Pyssling'];
 
 const ELEMENTS = {
     EARTH: 'Earth',
