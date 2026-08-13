@@ -339,7 +339,7 @@ const VASEN_SPECIES = {
         description: 'A prank-loving lurker bound to high beams and dusty lofts, offering help when respected but causing trouble when neglected.',
         family: FAMILIES.OKNYTT,
         element: ELEMENTS.WIND,
-        rarity: RARITIES.UNCOMMON,
+        rarity: RARITIES.COMMON,
         skills: ['Wailing Cry', 'Wind Gust', 'Burning Insult', 'Tyr\'s Sacrifice'],
         tamingItem: 'Attic Key',
         image: 'assets/vasen/pyssling.png'
