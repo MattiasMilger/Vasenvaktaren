@@ -91,6 +91,12 @@ class GameState {
         // species, and the counter resets.
         this.lastVasenSpecies = null;
         this.sameVasenCounter = 0;
+
+        // Number of remaining wild väsen encounters guaranteed to be Nature
+        // element, counting down from GAME_CONFIG.STARTER_GUARANTEED_NATURE_BATTLES
+        // at the start of a new game. Set by resetGame(); 0 means no guarantee
+        // is currently active.
+        this.starterNatureBattlesRemaining = 0;
     }
     
     // count väsen types tamed
@@ -739,6 +745,12 @@ class GameState {
         
         switch (encounterType) {
             case 'vasen': {
+                // Starter guarantee: the first few wild väsen encounters of a
+                // new game are restricted to Nature element, so early combat
+                // isn't decided by a bad elemental matchup roll.
+                const useStarterNatureFilter = this.starterNatureBattlesRemaining > 0;
+                const elementFilter = useStarterNatureFilter ? ELEMENTS.NATURE : null;
+
                 // Same-väsen pity: if the same species has appeared twice in a
                 // row, guarantee a different species this time and reset the streak.
                 let speciesName;
@@ -750,11 +762,15 @@ class GameState {
                     // possible väsen (avoids an infinite loop in that edge case).
                     let attempts = 0;
                     do {
-                        speciesName = getRandomSpawnFromZone(this.currentZone);
+                        speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter);
                         attempts++;
                     } while (speciesName === this.lastVasenSpecies && attempts < 20);
                 } else {
-                    speciesName = getRandomSpawnFromZone(this.currentZone);
+                    speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter);
+                }
+
+                if (useStarterNatureFilter) {
+                    this.starterNatureBattlesRemaining--;
                 }
 
                 // Track the consecutive same-väsen streak
@@ -989,7 +1005,9 @@ class GameState {
             lastEncounterType: this.lastEncounterType,
             // Same-väsen pity counter
             lastVasenSpecies: this.lastVasenSpecies,
-            sameVasenCounter: this.sameVasenCounter
+            sameVasenCounter: this.sameVasenCounter,
+            // Starter guaranteed-Nature-battle counter
+            starterNatureBattlesRemaining: this.starterNatureBattlesRemaining
         };
     }
     
@@ -1122,6 +1140,11 @@ class GameState {
             // Restore same-väsen pity counter (default for backwards compatibility)
             this.lastVasenSpecies = data.lastVasenSpecies || null;
             this.sameVasenCounter = data.sameVasenCounter || 0;
+
+            // Restore starter guaranteed-Nature-battle counter (default 0 for
+            // backwards compatibility - the guarantee only ever matters at the
+            // very start of a new game, so old saves simply have none left)
+            this.starterNatureBattlesRemaining = data.starterNatureBattlesRemaining || 0;
             
             return true;
         } catch (e) {
@@ -1237,6 +1260,9 @@ class GameState {
         // Reset same-väsen pity counter
         this.lastVasenSpecies = null;
         this.sameVasenCounter = 0;
+
+        // Arm the starter guaranteed-Nature-battle counter for the new game
+        this.starterNatureBattlesRemaining = GAME_CONFIG.STARTER_GUARANTEED_NATURE_BATTLES;
     }
 }
 

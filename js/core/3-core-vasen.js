@@ -546,8 +546,11 @@ function isMythical(speciesName) {
     return species && species.rarity === RARITIES.MYTHICAL;
 }
 
-// Get a random Väsen from a zone's spawn list
-function getRandomSpawnFromZone(zoneKey) {
+// Get a random Väsen from a zone's spawn list. If elementFilter is provided,
+// the spawn pool is first narrowed to species of that element; if the zone
+// has no spawns of that element, the filter is ignored and the full spawn
+// pool is used instead (so this can never dead-end with an empty pool).
+function getRandomSpawnFromZone(zoneKey, elementFilter = null) {
     const zone = ZONES[zoneKey];
     if (!zone) return null;
     
@@ -556,6 +559,16 @@ function getRandomSpawnFromZone(zoneKey) {
         spawns = VASEN_LIST;
     } else {
         spawns = zone.spawns;
+    }
+
+    if (elementFilter) {
+        const filteredSpawns = spawns.filter(name => {
+            const species = VASEN_SPECIES[name];
+            return species && species.element === elementFilter;
+        });
+        if (filteredSpawns.length > 0) {
+            spawns = filteredSpawns;
+        }
     }
     
     // Group by rarity

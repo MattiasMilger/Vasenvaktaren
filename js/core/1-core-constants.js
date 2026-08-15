@@ -24,6 +24,7 @@ const GAME_CONFIG = {
     ATTRIBUTE_LEVEL_SCALING_RATE: 0.035,
     STARTING_ITEMS_AMOUNT: 3,
     NEW_ZONE_ITEMS_AMOUNT: 2,
+    STARTER_GUARANTEED_NATURE_BATTLES: 3, // Number of wild väsen encounters at the start of a new game guaranteed to be Nature element
     
     // =============================================================================
     // EXPERIENCE DISTRIBUTION
