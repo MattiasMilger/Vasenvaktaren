@@ -733,8 +733,8 @@ const ZONE_ORDER = ['ZONE1', 'ZONE2', 'ZONE3', 'ZONE4', 'ZONE5', 'ZONE6', 'ZONE7
 
 const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },
-    HOARDER: { id: 'hoarder', name: 'Hoarder', description: 'Tame every Väsen type' },
-    LORE_MASTER: { id: 'lore_master', name: 'Lore Master', description: 'Collect all Lore Entries' },
+    HOARDER: { id: 'hoarder', name: 'Hoarder', description: 'Tame every väsen type' },
+    LORE_MASTER: { id: 'lore_master', name: 'Lore Master', description: 'Collect all lore entries' },
     RUNE_MASTER: { id: 'rune_master', name: 'Rune Master', description: 'Collect all the runes' },
 };
 

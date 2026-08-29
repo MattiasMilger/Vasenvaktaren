@@ -943,7 +943,7 @@ class GameState {
             this.achievements.rune_master = true;
         }
 
-        // Hoarder - Tame every Väsen type
+        // Hoarder - Tame every väsen type
         const totalSpecies = Object.keys(VASEN_SPECIES).length;
         if (this.getUniqueSpeciesTamed() === totalSpecies) {
             this.achievements.hoarder = true;
