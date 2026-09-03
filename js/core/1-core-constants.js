@@ -149,7 +149,7 @@ const GAME_CONFIG = {
     RUNE_ELEMENT_DAMAGE_BOOST: 0.14,    // +% damage when using matching element
     
     // Odal: Low-cost skill damage boost
-    RUNE_ODAL_DAMAGE_BOOST: 0.14,       // +% damage for skills costing ≤threshold Megin
+    RUNE_ODAL_DAMAGE_BOOST: 0.18,       // +% damage for skills costing ≤threshold Megin
     RUNE_ODAL_COST_THRESHOLD: 30,       // Megin cost threshold for Odal bonus
     
     // Dagaz: First round damage boost

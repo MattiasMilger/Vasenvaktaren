@@ -511,7 +511,7 @@ class Combat {
         }
         
         this.giftsGiven++;
-        this.addLog(`<span class="taming-item">${itemName}</span> was gifted to ${this.enemyActive.getDisplayName()}.`, 'gift');
+        this.addLog(`<span class="taming-item">${itemName}</span> was offered to ${this.enemyActive.getDisplayName()}.`, 'gift');
         
         const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
         const enemyName = this.enemyActive.getDisplayName(); // Get the name for the dialogue
