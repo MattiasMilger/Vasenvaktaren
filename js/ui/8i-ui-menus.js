@@ -580,7 +580,7 @@ achievementsHtml += '</div></div>';
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Elements<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
                     <p><strong>Element Matchups</strong><br>
-                    <p>Each väsen and skill has an element, and each element has potencies and weaknesses. Exploit them to maximize efficiency.</p>
+                    <p>Each väsen and skill belongs to an element, and each element has different potencies and weaknesses. Exploit them to maximize efficiency.</p>
                     <div class="element-guide-list">
         `;
 
@@ -617,7 +617,7 @@ achievementsHtml += '</div></div>';
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Families<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
                     <p><strong>Families</strong><br>
-                    <p>Each family possesses a unique trait. Take note to gain a strategic advantage.</p>
+                    <p>Each väsen belongs to a family, and each family possesses a unique trait. Take note to gain a strategic advantage.</p>
                     <div class="family-guide-list">
         `;
 
