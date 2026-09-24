@@ -556,6 +556,65 @@ const LORE_ENTRIES = {
     },
 
     // =========================================================================
+    // CATEGORY: VÄSEN - INACCESSIBLE
+    // Creatures of folklore and legend that are not tamable in the game. All
+    // entries are unlocked from the start (unlockType 'standard'). They have
+    // no species data, so they get no "i" info button. The optional `family`
+    // field only feeds the Family label in the entry's meta row.
+    // =========================================================================
+
+    'inaccessible_grendel': {
+        key: 'inaccessible_grendel',
+        name: 'Grendel',
+        category: 'vasen_inaccessible',
+        family: 'Troll',
+        desc: 'Grendel is the man-eating monster of the Old English epic Beowulf, a poem set among the Danes and the Geats of Scandinavia. For twelve years he raided Heorot, the great mead hall of King Hrothgar, drawn by the joy and song within, and carried off the king\'s warriors in the night. The poem names him a descendant of Cain, cursed and cast out from mankind, and scholars still debate whether he is best understood as a monster, a giant, or something else entirely. The hero Beowulf met him bare-handed and tore off his arm, and Grendel fled to his lair in the marsh to die. His mother then took revenge on Heorot, but Beowulf followed her into her home beneath a mere and killed her with an ancient sword found there.',
+        source: 'Beowulf (Nowell Codex)',
+        heritage: 'Old English / Scandinavian',
+        unlockType: 'standard'
+    },
+    'inaccessible_julbock': {
+        key: 'inaccessible_julbock',
+        name: 'Julbock',
+        category: 'vasen_inaccessible',
+        family: 'Odjur',
+        desc: 'The julbock (Yule goat) is one of the oldest figures of the Scandinavian Christmas season. The goat as a symbol in the North is often traced back to Thor, whose chariot was drawn by the two goats Tanngnjóstr and Tanngrisnir, though it is uncertain whether the Yule goat truly descends from them. Other theories point to the old custom of slaughtering a goat at Yule, or to the last sheaf of the harvest being bound into the shape of a goat to embody the spirit of the harvest. The earliest records of a Yule goat tradition in the North date from the early 1700s, when young people went from farm to farm, one of them dressed as a goat and sometimes wearing a straw mask, and performed small plays and songs in return for food and drink. Children were sometimes frightened by the costumed goat. In the 1800s the goat also handed out Christmas gifts, a role later taken over by the Jultomte, and today it lives on as the straw Yule goat, most famously the Gävle Goat.',
+        source: 'Swedish Folk Tradition / Prose Edda (Gylfaginning)',
+        heritage: 'Scandinavian',
+        unlockType: 'standard'
+    },
+    'inaccessible_kraken': {
+        key: 'inaccessible_kraken',
+        name: 'Kraken',
+        category: 'vasen_inaccessible',
+        family: 'Odjur',
+        desc: 'The kraken is the colossal sea monster of Norwegian and wider Scandinavian sailors\' lore, imagined as a giant squid or octopus-like beast large enough to drag ships beneath the waves. It was said to lie so deep and surface so rarely that its back could be mistaken for an island, and its presence was signaled by boiling water and shoals of fish fleeing to the surface. The whirlpool it caused as it sank could pull a vessel down with it. The name appears in a Norwegian glossary from 1646, and the most famous account comes from the Danish-Norwegian bishop Erik Pontoppidan, who in his Natural History of Norway (1752) described a flat, round creature with many arms. The legend most likely grew from real encounters with giant squid.',
+        source: 'Scandinavian Folklore / Pontoppidan (Natural History of Norway)',
+        heritage: 'Scandinavian',
+        unlockType: 'standard'
+    },
+    'inaccessible_morksugga': {
+        key: 'inaccessible_morksugga',
+        name: 'Mörksugga',
+        category: 'vasen_inaccessible',
+        family: 'Oknytt',
+        desc: 'The mörksugga (dark sow) is a mythological being from Dalarna, remembered in local tradition at least as far back as records taken down in the 1920s in the parishes south of Lake Siljan: Rättvik, Leksand, Djura, Gagnef and Ål. It was used as a figure to frighten children who stayed out too late, since it was better to be indoors than to meet it once darkness fell over the great forests. It was said to be always present and listening, perceiving everything without ever being heard or seen itself, sometimes as a black shape in the night or a log that refused to catch fire. From the 1940s the Rättvik artist Verner Molin painted it as a friendlier, dark, Moomin-like creature, and with the wooden figures made by Birger Eriksson in the 1950s it became a local symbol of southern Dalarna. In this later form it is also seen as a protector against the powers of darkness.',
+        source: 'Swedish Folklore (Dalarna) / Landsmålsarkivet i Uppsala',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
+    'inaccessible_vittra': {
+        key: 'inaccessible_vittra',
+        name: 'Vittra',
+        category: 'vasen_inaccessible',
+        family: 'Oknytt',
+        desc: 'The vittra (plural: vittror) are the underground folk of northern Swedish folk belief, closely related to the landvätte and the vättar of the south, and generally regarded as a later development of the same tradition. They were believed to live beneath the ground, under great stones and old trees, in a mirror image of human life, keeping their own cattle and tending their own farms. The fäbod tradition is especially rich in vittra lore: they were said to remain at the summer pastures when the herders left for the winter, and their enchanted cows gave far more milk than any human herd. Mostly invisible, they might be glimpsed at dusk, or betrayed by a light seen on a hillside at night. They were harmless to those who treated them with respect, but a barn built on their dwelling or paths could leave cows dry and the owner ill.',
+        source: 'Swedish Folklore (Norrland)',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
+
+    // =========================================================================
     // CATEGORY: ITEMS
     // =========================================================================
 
@@ -883,6 +942,10 @@ const LORE_CATEGORIES = {
     vasen: {
         label: 'Väsen',
         order: 1
+    },
+    vasen_inaccessible: {
+        label: 'Väsen - Inaccessible',
+        order: 1.5
     },
     items: {
         label: 'Items',
