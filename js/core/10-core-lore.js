@@ -563,16 +563,6 @@ const LORE_ENTRIES = {
     // field only feeds the Family label in the entry's meta row.
     // =========================================================================
 
-    'inaccessible_grendel': {
-        key: 'inaccessible_grendel',
-        name: 'Grendel',
-        category: 'vasen_inaccessible',
-        family: 'Troll',
-        desc: 'Grendel is the man-eating monster of the Old English epic Beowulf, a poem set among the Danes and the Geats of Scandinavia. For twelve years he raided Heorot, the great mead hall of King Hrothgar, drawn by the joy and song within, and carried off the king\'s warriors in the night. The poem names him a descendant of Cain, cursed and cast out from mankind, and scholars still debate whether he is best understood as a monster, a giant, or something else entirely. The hero Beowulf met him bare-handed and tore off his arm, and Grendel fled to his lair in the marsh to die. His mother then took revenge on Heorot, but Beowulf followed her into her home beneath a mere and killed her with an ancient sword found there.',
-        source: 'Beowulf (Nowell Codex)',
-        heritage: 'Old English / Scandinavian',
-        unlockType: 'standard'
-    },
     'inaccessible_julbock': {
         key: 'inaccessible_julbock',
         name: 'Julbock',
@@ -580,16 +570,6 @@ const LORE_ENTRIES = {
         family: 'Odjur',
         desc: 'The julbock (Yule goat) is one of the oldest figures of the Scandinavian Christmas season. The goat as a symbol in the North is often traced back to Thor, whose chariot was drawn by the two goats Tanngnjóstr and Tanngrisnir, though it is uncertain whether the Yule goat truly descends from them. Other theories point to the old custom of slaughtering a goat at Yule, or to the last sheaf of the harvest being bound into the shape of a goat to embody the spirit of the harvest. The earliest records of a Yule goat tradition in the North date from the early 1700s, when young people went from farm to farm, one of them dressed as a goat and sometimes wearing a straw mask, and performed small plays and songs in return for food and drink. Children were sometimes frightened by the costumed goat. In the 1800s the goat also handed out Christmas gifts, a role later taken over by the Jultomte, and today it lives on as the straw Yule goat, most famously the Gävle Goat.',
         source: 'Swedish Folk Tradition / Prose Edda (Gylfaginning)',
-        heritage: 'Scandinavian',
-        unlockType: 'standard'
-    },
-    'inaccessible_kraken': {
-        key: 'inaccessible_kraken',
-        name: 'Kraken',
-        category: 'vasen_inaccessible',
-        family: 'Odjur',
-        desc: 'The kraken is the colossal sea monster of Norwegian and wider Scandinavian sailors\' lore, imagined as a giant squid or octopus-like beast large enough to drag ships beneath the waves. It was said to lie so deep and surface so rarely that its back could be mistaken for an island, and its presence was signaled by boiling water and shoals of fish fleeing to the surface. The whirlpool it caused as it sank could pull a vessel down with it. The name appears in a Norwegian glossary from 1646, and the most famous account comes from the Danish-Norwegian bishop Erik Pontoppidan, who in his Natural History of Norway (1752) described a flat, round creature with many arms. The legend most likely grew from real encounters with giant squid.',
-        source: 'Scandinavian Folklore / Pontoppidan (Natural History of Norway)',
         heritage: 'Scandinavian',
         unlockType: 'standard'
     },
@@ -610,6 +590,66 @@ const LORE_ENTRIES = {
         family: 'Oknytt',
         desc: 'The vittra (plural: vittror) are the underground folk of northern Swedish folk belief, closely related to the landvätte and the vättar of the south, and generally regarded as a later development of the same tradition. They were believed to live beneath the ground, under great stones and old trees, in a mirror image of human life, keeping their own cattle and tending their own farms. The fäbod tradition is especially rich in vittra lore: they were said to remain at the summer pastures when the herders left for the winter, and their enchanted cows gave far more milk than any human herd. Mostly invisible, they might be glimpsed at dusk, or betrayed by a light seen on a hillside at night. They were harmless to those who treated them with respect, but a barn built on their dwelling or paths could leave cows dry and the owner ill.',
         source: 'Swedish Folklore (Norrland)',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
+    'inaccessible_varulv': {
+        key: 'inaccessible_varulv',
+        name: 'Varulv',
+        category: 'vasen_inaccessible',
+        family: 'Odjur',
+        desc: 'The varulv (werewolf) is a human who transforms into a wolf, bear, or dog - not a hybrid monster, but a full animal shape. The belief is widespread across Europe, with deep roots in classical antiquity and medieval Germanic, Baltic, and Slavic traditions. In Swedish folklore the varulv often runs on three legs: one arm becomes a leg, the other a tail, and the head reshapes into a wolf\'s. Transformation could result from a curse, self-inflicted magic (wearing a wolf-skin or troll-belt), or being born under certain conditions. It was feared for its bloodlust, especially toward livestock and, in some tales, pregnant women. Signs of a human varulv included joined eyebrows, low-set ears, or a distinctive gait. The belief was strongest in central and western Sweden, with northern variants favoring bear-shape.',
+        source: 'European Folklore / Ella Odstedt (Varulven i svensk folktradition) / Isof',
+        heritage: 'European',
+        unlockType: 'standard'
+    },
+    'inaccessible_bysen': {
+        key: 'inaccessible_bysen',
+        name: 'Bysen',
+        category: 'vasen_inaccessible',
+        family: 'Oknytt',
+        desc: 'Bysen is a small forest prankster of Gotland folklore, appearing as a grey, insignificant little man - sometimes with a red knitted cap - or as a mossy stump. He carries an axe and is said to be slowly felling Gotland\'s forests, one tree per century. Bysen leads travelers astray by distorting their sight; turning a garment inside-out breaks the spell. He delays timber transports and tips loads of logs. In some accounts he is a human who cheated land boundaries by moving markers and is condemned to wander the false border forever, muttering "here is right, here is wrong." Those who restore the markers grant him peace.',
+        source: 'Swedish Folklore (Gotland)',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
+    'inaccessible_sjora': {
+        key: 'inaccessible_sjora',
+        name: 'Sjörå / Sjöjungfru / Skeppsrå',
+        category: 'vasen_inaccessible',
+        family: 'Rå',
+        desc: 'The sjörå (lake warden), sjöjungfru (mermaid), and skeppsrå (ship warden) form the water branch of the Scandinavian rå tradition. The sjörå rules lakes and inland waters; she appears as a beautiful woman combing long hair, sometimes with a hollow back or scales, rewarding respectful fishermen with good catches and storm warnings while drowning the disrespectful. The sjöjungfru is the more maritime, fish-tailed figure of sailors\' lore who lures seafarers. The skeppsrå lives aboard ships, keeping order, protecting the hull from worms, and scolding careless crew - a desirable presence that stays with the vessel from launch until it sinks. All demand respect for their watery domains.',
+        source: 'Swedish Folklore / Olaus Magnus / Hyltén-Cavallius',
+        heritage: 'Swedish / Scandinavian',
+        unlockType: 'standard'
+    },
+    'inaccessible_askafroa': {
+        key: 'inaccessible_askafroa',
+        name: 'Askafroa',
+        category: 'vasen_inaccessible',
+        family: 'Ande',
+        desc: 'Askafroa (also Askfrun, "ash-wife") is the tutelary spirit of the ash tree in southern Swedish folklore, especially recorded in Värend and Skåne. She is the living soul of a particular ash; harm to the tree brings sickness or worse upon the offender. On Ash Wednesday morning before sunrise, people poured water over the roots while saying "Nu offrar jag, så gör du oss ingen skada" ("Now I sacrifice, so that you do us no harm"). Breaking branches or fouling the roots risked joint-pain or disease. The ash was one of the most powerful trees in Nordic belief - Yggdrasil itself was an ash - and Askafroa embodies that ancient reverence and the danger of disrespecting it.',
+        source: 'Swedish Folklore (Värend / Skåne) / Hyltén-Cavallius (Wärend och Wirdarne)',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
+    'inaccessible_gast': {
+        key: 'inaccessible_gast',
+        name: 'Gast',
+        category: 'vasen_inaccessible',
+        family: 'Vålnad',
+        desc: 'The gast is a terrifying phantom of the violently dead in Swedish folklore - those who died by murder, drowning, suicide, or battle and were not given proper burial in consecrated ground. Unlike a gengångare, the gast has lost all recognizable human features and personality, becoming a faceless, malevolent force. It announces itself with dreadful shrieks at night, may cling to a traveler\'s back or a wagon until carried to hallowed earth, and causes the illness known as being "gastkramad" (ghost-squeezed): chills, fever, body-aches, nosebleeds, or coughing blood. Strandgastar are the drowned sailors whose bodies washed ashore and were left under beach cairns rather than churchyard soil.',
+        source: 'Swedish Folklore / Isof / Carl von Linné (Öländska och Gothländska Resa)',
+        heritage: 'Swedish',
+        unlockType: 'standard'
+    },
+    'inaccessible_kvarngubbe': {
+        key: 'inaccessible_kvarngubbe',
+        name: 'Kvarngubbe',
+        category: 'vasen_inaccessible',
+        family: 'Oknytt',
+        desc: 'The kvarngubbe is the mill spirit of later Swedish folklore, dwelling in water-mills - often in the wheel-house beneath the mill. Described as a small old man with a notably large nose, he is extraordinarily strong and can stop the mill-wheel with one grip if grinding continues into the night or on forbidden days. He shares traits with both the tomte (helping or hindering the miller according to mood) and the näcken (skilled fiddle-player). Offerings of coins or snuff kept him content; hot tar was sometimes used to drive an especially stubborn kvarngubbe away. He enforces the quiet hours of the mill and scares off intruders.',
+        source: 'Swedish Folklore / Johan Egerkrans (Nordiska väsen)',
         heritage: 'Swedish',
         unlockType: 'standard'
     },
