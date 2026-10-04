@@ -167,13 +167,6 @@ Vasenvaktaren/
     └── other/
         └── vaktare.png             (player profile portrait)
 ```
-## Feature roadmap
-
-- [x] Finish main Functionality 
-- [x] Introduce endgame system
-- [X] Introduce all 45 Väsen
-- [X] Introduce all 30 Skills
-- [ ] Balance overhaul
 
 ## Technical Reference
 

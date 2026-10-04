@@ -1010,56 +1010,6 @@ class GameState {
             starterNatureBattlesRemaining: this.starterNatureBattlesRemaining
         };
     }
-    
-    // =========================================================================
-    // TEMPORARY MIGRATION LAYER - ZONE KEY RENAME (safe to delete later)
-    // -------------------------------------------------------------------------
-    // Zone keys used to be descriptive names (TROLLSKOGEN, FOLKETS_BY, ...).
-    // They have been renamed once, permanently, to plain numbered keys
-    // (ZONE1..ZONE7) so that future zone name/theme changes never require
-    // touching save data again - only ZONES[key].name/description/image
-    // need to change from now on, never the key itself.
-    //
-    // This block only exists to repair save data created before that rename.
-    // Once we're confident no players still have a save containing the old
-    // descriptive keys below, this entire block (and its call in
-    // deserialize()) can be deleted.
-    // =========================================================================
-    migrateZoneKeys() {
-        const OLD_ZONE_KEY_MAP = {
-            'TROLLSKOGEN': 'ZONE1',
-            'FOLKETS_BY': 'ZONE2',
-            'DJUPA_GRUVAN': 'ZONE3',
-            'GLIMRANDE_KALLAN': 'ZONE4',
-            'URBERGEN': 'ZONE5',
-            'VARLDENS_ANDE': 'ZONE6',
-            'GINNUNGAGAP': 'ZONE7'
-        };
-
-        // Rename currentZone if it points to an old key
-        if (OLD_ZONE_KEY_MAP[this.currentZone]) {
-            this.currentZone = OLD_ZONE_KEY_MAP[this.currentZone];
-        }
-
-        // Rename any old keys found in defeatedGuardians
-        Object.keys(OLD_ZONE_KEY_MAP).forEach(oldKey => {
-            if (this.defeatedGuardians.has(oldKey)) {
-                this.defeatedGuardians.delete(oldKey);
-                this.defeatedGuardians.add(OLD_ZONE_KEY_MAP[oldKey]);
-            }
-        });
-
-        // Purge any zone key that still doesn't exist (corrupted/unsafe names)
-        Array.from(this.defeatedGuardians).forEach(key => {
-            if (!ZONES[key]) {
-                this.defeatedGuardians.delete(key);
-            }
-        });
-        if (this.currentZone && !ZONES[this.currentZone]) {
-            this.currentZone = 'ZONE1';
-        }
-    }
-    // ========================= END TEMPORARY MIGRATION LAYER =========================
 
     // Deserialize game state from save data
     deserialize(data) {
@@ -1107,10 +1057,6 @@ class GameState {
             this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
             this.currentZone = data.currentZone || 'ZONE1';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
-
-            // TEMPORARY: repair old descriptive zone keys into the new
-            // numbered ones. See migrateZoneKeys() above for removal notes.
-            this.migrateZoneKeys();
 
             this.achievements = data.achievements || {
                 champion: false,
