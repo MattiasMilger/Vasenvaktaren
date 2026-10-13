@@ -362,7 +362,7 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
 
         ui.showDialogue(
             'Tower Run Ended',
-            `<p>You were defeated on Floor ${floor}.</p>
+            `<p>${result.tie ? `Both sides fell on Floor ${floor}. The battle ended in a tie.` : `You were defeated on Floor ${floor}.`}</p>
              ${reachedFloor > 0 ? `<p>You reached Floor ${reachedFloor}.</p>` : ''}
              ${recordMessage}`,
             [{

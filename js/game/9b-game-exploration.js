@@ -137,7 +137,7 @@ Game.prototype.handleCombatEnd = function(result) {
         });
 
         ui.showDialogue(
-            'Defeat',
+            result.tie ? 'Tie' : 'Defeat',
             `<p>${result.message || 'Your party was overwhelmed!'}</p>`,
             [{ text: 'Continue', callback: () => this.endCombat() }],
             false

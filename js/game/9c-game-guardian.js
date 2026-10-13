@@ -89,8 +89,8 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         });
 
         ui.showDialogue(
-            'Defeat',
-            `<p>${guardian.dialogue.lose}</p>`,
+            result.tie ? 'Tie' : 'Defeat',
+            `<p>${result.tie ? result.message : guardian.dialogue.lose}</p>`,
             [{ text: 'Continue', callback: () => this.endCombat() }],
             false
         );

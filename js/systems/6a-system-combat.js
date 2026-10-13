@@ -363,13 +363,17 @@ class Combat {
     // Get combat result
     getCombatResult() {
         const isVictory = this.winner === 'player';
+        // A tie is a double knockout: the enemy is declared the winner by checkCombatEnd(),
+        // but the enemy team has also been fully knocked out. Display-only flag, no other behavior changes.
+        const isTie = this.winner === 'enemy' && !this.enemyTeam.some(v => !v.isKnockedOut());
         return {
             victory: isVictory,
+            tie: isTie,
             tamed: isVictory && this.correctItemGiven && this.canTame,
             surrendered: false,
             tamedVasen: this.correctItemGiven && this.canTame ? this.enemyTeam[0] : null,
             expGained: isVictory ? this.calculateExperience() : [],
-            message: isVictory ? 'Victory!' : 'Your party has been defeated!'
+            message: isVictory ? 'Victory!' : (isTie ? 'Both sides fell at the same moment. The battle ends in a tie.' : 'Your party has been defeated!')
         };
     }
     
