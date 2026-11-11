@@ -579,8 +579,7 @@ achievementsHtml += '</div></div>';
             <div class="guide-category" data-cat="element-matchups">
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Elements<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
-                    <p><strong>Element Matchups</strong><br>
-                    <p>Each väsen and skill belongs to an element, and each element has different potencies and weaknesses. Exploit them to maximize efficiency.</p>
+                    <p><strong>Element Matchups</strong><br>Each väsen and skill belongs to an element, and each element has different potencies and weaknesses. Exploit them to maximize efficiency.</p>
                     <div class="element-guide-list">
         `;
 
@@ -616,8 +615,7 @@ achievementsHtml += '</div></div>';
             <div class="guide-category" data-cat="families">
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Families<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
-                    <p><strong>Families</strong><br>
-                    <p>Each väsen belongs to a family, and each family possesses a unique trait. Take note to gain a strategic advantage.</p>
+                    <p><strong>Families</strong><br>Each väsen belongs to a family, and each family possesses a unique trait. Take note to gain a strategic advantage.</p>
                     <div class="family-guide-list">
         `;
 
@@ -703,8 +701,7 @@ achievementsHtml += '</div></div>';
             <div class="guide-category" data-cat="temperaments">
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
-                    <p><strong>Temperaments</strong><br>
-                    <p>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
+                    <p><strong>Temperaments</strong><br>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
                     <table style="${tableStyle}">
                         <thead>
                             <tr>
