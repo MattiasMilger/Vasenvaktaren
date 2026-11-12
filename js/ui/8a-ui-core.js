@@ -16,10 +16,6 @@ class UIController {
         this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : true;
         const savedCards = localStorage.getItem('combatCardsMinimized');
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
-        const savedVerboseCombatLog = localStorage.getItem('verboseCombatLog');
-        this.verboseCombatLog = savedVerboseCombatLog !== null ? savedVerboseCombatLog === 'true' : false;
-        const savedPotencyIndicator = localStorage.getItem('potencyIndicator');
-        this.potencyIndicatorEnabled = savedPotencyIndicator !== null ? savedPotencyIndicator === 'true' : true;
         const savedVasenSortBy = localStorage.getItem('vasenSortBy');
         this.vasenSortBy = savedVasenSortBy !== null ? savedVasenSortBy : 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
         const savedUnlockAllInfo = localStorage.getItem('unlockAllInfo');
@@ -106,24 +102,6 @@ class UIController {
 document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
 document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
 document.getElementById('export-save-btn').addEventListener('click', () => this.exportSave());
-
-// Potency indicator toggle
-const potencyIndicatorToggle = document.getElementById('potency-indicator-toggle');
-if (potencyIndicatorToggle) {
-    potencyIndicatorToggle.checked = this.potencyIndicatorEnabled;
-    potencyIndicatorToggle.addEventListener('change', () => {
-        this.togglePotencyIndicator(potencyIndicatorToggle.checked);
-    });
-}
-
-// Verbose combat log toggle
-const verboseCombatLogToggle = document.getElementById('verbose-combat-log-toggle');
-if (verboseCombatLogToggle) {
-    verboseCombatLogToggle.checked = this.verboseCombatLog;
-    verboseCombatLogToggle.addEventListener('change', () => {
-        this.toggleVerboseCombatLog(verboseCombatLogToggle.checked);
-    });
-}
 
 // Unlock All Info toggle (Lore Book)
 const unlockAllInfoToggle = document.getElementById('unlock-all-info-toggle');

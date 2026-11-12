@@ -312,20 +312,18 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
                 v.currentHealth = Math.min(v.maxHealth, v.currentHealth + healthHeal);
                 v.currentMegin  = Math.min(v.maxMegin,  v.currentMegin  + meginHeal);
 
-                if (ui.verboseCombatLog) {
-                    const actualHealthGained = v.currentHealth - beforeHealth;
-                    const actualMeginGained  = v.currentMegin - beforeMegin;
-                    const displayName = v.getDisplayName();
+                const actualHealthGained = v.currentHealth - beforeHealth;
+                const actualMeginGained  = v.currentMegin - beforeMegin;
+                const displayName = v.getDisplayName();
 
-                    if (actualHealthGained > 0) {
-                        ui.addCombatLog(
-                            `${displayName} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${actualHealthGained} health</span>!`,
-                            'heal'
-                        );
-                    }
-                    if (actualMeginGained > 0) {
-                        ui.addCombatLog(`${displayName} gained ${actualMeginGained} Megin!`, 'megin');
-                    }
+                if (actualHealthGained > 0) {
+                    ui.addCombatLog(
+                        `${displayName} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${actualHealthGained} health</span>!`,
+                        'heal'
+                    );
+                }
+                if (actualMeginGained > 0) {
+                    ui.addCombatLog(`${displayName} gained ${actualMeginGained} Megin!`, 'megin');
                 }
             });
         }

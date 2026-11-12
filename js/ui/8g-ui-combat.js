@@ -492,7 +492,7 @@ UIController.prototype.renderActionButtons = function(combat) {
 
         const skillElement = skill.element || activeVasen.species.element;
 
-        const potencyClass = (this.potencyIndicatorEnabled !== false && combat.enemyActive)
+        const potencyClass = combat.enemyActive
             ? this.getSkillPotencyClass(skill, skillElement, activeVasen, combat.enemyActive)
             : '';
 

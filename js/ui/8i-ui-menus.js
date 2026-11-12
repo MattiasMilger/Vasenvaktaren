@@ -11,22 +11,6 @@
         this.settingsModal.classList.remove('active');
     };
 
-    // Toggle the Verbose Combat Log setting (persisted via localStorage, like
-    // the other combat display toggles: combatRunesVisible, combatDescriptionVisible,
-    // combatCardsMinimized).
-    UIController.prototype.toggleVerboseCombatLog = function(enabled) {
-        this.verboseCombatLog = enabled;
-        localStorage.setItem('verboseCombatLog', this.verboseCombatLog ? 'true' : 'false');
-    };
-
-    // Toggle the Potency Indicator setting (persisted via localStorage, like
-    // the other combat display toggles: combatRunesVisible, combatDescriptionVisible,
-    // combatCardsMinimized, verboseCombatLog).
-    UIController.prototype.togglePotencyIndicator = function(enabled) {
-        this.potencyIndicatorEnabled = enabled;
-        localStorage.setItem('potencyIndicator', this.potencyIndicatorEnabled ? 'true' : 'false');
-    };
-
     // Toggle the Lore Book Unlock All Info setting (persisted via localStorage,
     // like the other UI display toggles). When on, every "i" info popup in the
     // Lore Book shows its full details without having to be discovered in-game
