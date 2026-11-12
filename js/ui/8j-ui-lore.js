@@ -84,7 +84,7 @@ UIController.prototype.renderLore = function() {
         // Category-level Additional Info button - only for Skills, Items, and
         // Locations, since not every skill/item/zone necessarily has its own
         // lore entry to attach a per-entry info button to. Opens a full reference list.
-        const showCatInfo = this.additionalInfoEnabled && (cat === 'skills' || cat === 'items' || cat === 'locations');
+        const showCatInfo = (cat === 'skills' || cat === 'items' || cat === 'locations');
         const catInfoBtnHtml = showCatInfo
             ? `<button class="lore-info-btn" type="button" data-cat-info="${cat}">i</button>`
             : '';
@@ -99,8 +99,14 @@ UIController.prototype.renderLore = function() {
             if (isUnlocked) {
                 html += this.renderLoreEntryCard(entry);
             } else {
+                // With Unlock All Info on, locked entries still get their "i" button
+                // (the lore text itself stays locked)
+                const lockedInfoBtnHtml = (this.unlockAllInfoEnabled && this.loreEntryHasInfo(entry))
+                    ? `<button class="lore-info-btn" type="button" style="margin-left: auto;" data-entry-info="${entry.key}">i</button>`
+                    : '';
                 html += `<div class="lore-entry-card lore-entry-locked">
                     <span class="lore-entry-name-locked">${entry.name}</span>
+                    ${lockedInfoBtnHtml}
                 </div>`;
             }
         });
@@ -280,6 +286,15 @@ UIController.prototype._applyLoreSearch = function(container, query) {
     });
 };
 
+// Whether a lore entry has an Additional Info popup ("i" button) - only for
+// väsen entries, family entries, the Runes concept entry (which opens the full
+// runes and bind runes list instead of per-rune entries, since individual runes
+// have no lore entries of their own), Idunn's Apples, and Sacred Wells.
+UIController.prototype.loreEntryHasInfo = function(entry) {
+    return entry.unlockType === 'vasen' || entry.unlockType === 'family' ||
+        entry.key === 'concept_futhark' || entry.key === 'concept_idunn_apples' || entry.key === 'location_sacred_well';
+};
+
 // Build the HTML for one unlocked lore entry card
 UIController.prototype.renderLoreEntryCard = function(entry) {
     const desc      = entry.desc || '';
@@ -313,13 +328,8 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     if (!gameState.favoriteLoreEntries) gameState.favoriteLoreEntries = new Set();
     const isFavorite = gameState.favoriteLoreEntries.has(entry.key);
 
-    // Additional Info button - only for väsen entries, family entries, the
-    // Runes concept entry (which opens the full runes and bind runes list
-    // instead of per-rune entries, since individual runes have no lore
-    // entries of their own), Idunn's Apples, and Sacred Wells.
-    const hasInfo = entry.unlockType === 'vasen' || entry.unlockType === 'family' ||
-        entry.key === 'concept_futhark' || entry.key === 'concept_idunn_apples' || entry.key === 'location_sacred_well';
-    const infoBtnHtml = (this.additionalInfoEnabled && hasInfo)
+    // Additional Info button (see loreEntryHasInfo for which entries have one)
+    const infoBtnHtml = this.loreEntryHasInfo(entry)
         ? `<button class="lore-info-btn" type="button" data-entry-info="${entry.key}">i</button>`
         : '';
 
@@ -354,9 +364,25 @@ UIController.prototype.showLoreUnlockMessage = function(entryKey) {
 
 // =============================================================================
 // ADDITIONAL INFO - Lore Book technical info popups (Väsen, Families, Runes,
-// Skills, Items). Only reachable via the "i" buttons rendered above when the
-// Additional Info setting is enabled.
+// Skills, Items, Locations). Only reachable via the "i" buttons rendered above.
+// What each popup shows is gated by discovery (väsen and family by their lore
+// entry, runes by collected runes, skills and items by gameState discoveries,
+// locations by unlocked zones), unless the Unlock All Info setting is enabled.
 // =============================================================================
+
+// Whether a piece of Additional Info is visible: either it has been discovered
+// in-game, or the Unlock All Info setting is on (wiki-style view).
+UIController.prototype.isInfoUnlocked = function(isDiscovered) {
+    return this.unlockAllInfoEnabled || isDiscovered;
+};
+
+// Greyed-out name row for undiscovered Additional Info, using the same locked
+// style as locked Lore Book entries.
+UIController.prototype.renderLockedInfoRow = function(label) {
+    return `<div class="lore-entry-card lore-entry-locked">
+        <span class="lore-entry-name-locked">${label}</span>
+    </div>`;
+};
 
 // Generic show/hide for the Lore Info modal. Mirrors showLore()/hideLore()
 // (no overlay backdrop) so opening it doesn't darken the background, matching
@@ -688,6 +714,11 @@ UIController.prototype.showLocationsInfoModal = function() {
         const zone = ZONES[zoneId];
         if (!zone) return '';
 
+        // A zone's entry (including its guardian) is shown once the zone is unlocked
+        if (!this.isInfoUnlocked(gameState.isZoneUnlocked(zoneId))) {
+            return this.renderLockedInfoRow(zone.name);
+        }
+
         const spawnsList = zone.spawns === 'ALL'
             ? 'All Väsen'
             : zone.spawns.map(name => VASEN_SPECIES[name] ? VASEN_SPECIES[name].name : name).join(', ');
@@ -728,10 +759,15 @@ UIController.prototype.showLocationsInfoModal = function() {
 };
 
 // Runes technical info: every regular rune (symbol, name, effect) plus every
-// bind rune pair that exists and its effect.
+// bind rune pair that exists and its effect. Runes not collected yet are shown
+// as greyed-out names; a bind rune is only listed once both of its runes are
+// collected (the Bind Runes category is left out until at least one is).
 UIController.prototype.showRunesInfoModal = function() {
     const runesHtml = RUNE_LIST.map(runeId => {
         const rune = RUNES[runeId];
+        if (!this.isInfoUnlocked(gameState.isRuneDiscovered(runeId))) {
+            return this.renderLockedInfoRow(`${rune.symbol} ${rune.name}`);
+        }
         return `
             <div class="lore-info-bindrune-item">
                 <div class="lore-info-bindrune-header">${rune.symbol} ${rune.name}</div>
@@ -740,12 +776,24 @@ UIController.prototype.showRunesInfoModal = function() {
         `;
     }).join('');
 
-    const bindRunesHtml = BIND_RUNES.map(br => `
+    const discoveredBindRunes = BIND_RUNES.filter(br => this.isInfoUnlocked(gameState.isBindRuneDiscovered(br)));
+
+    const bindRunesHtml = discoveredBindRunes.map(br => `
         <div class="lore-info-bindrune-item">
             <div class="lore-info-bindrune-header">${br.symbols} ${br.names}</div>
             <div class="lore-info-bindrune-desc">${br.effectText}</div>
         </div>
     `).join('');
+
+    const bindRunesCategoryHtml = discoveredBindRunes.length > 0 ? `
+        <div class="lore-category">
+            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bind Runes</h4>
+            <div class="lore-entry-list">
+                <p class="lore-info-description">Order does not matter.</p>
+                <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
+            </div>
+        </div>
+    ` : '';
 
     const bodyHtml = `
         <div class="lore-category">
@@ -754,13 +802,7 @@ UIController.prototype.showRunesInfoModal = function() {
                 <div class="lore-info-bindrune-list">${runesHtml}</div>
             </div>
         </div>
-        <div class="lore-category">
-            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bind Runes</h4>
-            <div class="lore-entry-list">
-                <p class="lore-info-description">Order does not matter.</p>
-                <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
-            </div>
-        </div>
+        ${bindRunesCategoryHtml}
     `;
     this.showLoreInfoModal('Runes', bodyHtml);
 };
@@ -772,6 +814,12 @@ UIController.prototype.showSkillsInfoModal = function() {
 
     const itemsHtml = skillNames.map(skillName => {
         const skill = ABILITIES[skillName];
+
+        // A skill is shown once it has been unlocked on a väsen
+        if (!this.isInfoUnlocked(gameState.isSkillDiscovered(skillName))) {
+            return this.renderLockedInfoRow(skill.name);
+        }
+
         const elementClass = skill.element ? skill.element.toLowerCase() : '';
         const elementLabel = skill.element ? skill.element : 'Own Element';
 
@@ -805,6 +853,12 @@ UIController.prototype.showItemsInfoModal = function() {
 
     const rowsHtml = itemIds.map(itemId => {
         const item = TAMING_ITEMS[itemId];
+
+        // An item is shown once the väsen it belongs to has been tamed
+        if (!this.isInfoUnlocked(gameState.isItemDiscovered(itemId))) {
+            return this.renderLockedInfoRow(item.name);
+        }
+
         const species = VASEN_SPECIES[item.tamingTarget];
         const speciesName = species ? species.name : item.tamingTarget;
 

@@ -27,16 +27,16 @@
         localStorage.setItem('potencyIndicator', this.potencyIndicatorEnabled ? 'true' : 'false');
     };
 
-    // Toggle the Lore Book Additional Info setting (persisted via localStorage,
-    // like the other UI display toggles). Controls whether the "i" info
-    // buttons appear next to väsen, family, and rune entries, and on the
-    // Skills/Items category titles, in the Lore Book.
-    UIController.prototype.toggleAdditionalInfo = function(enabled) {
-        this.additionalInfoEnabled = enabled;
-        localStorage.setItem('additionalInfoEnabled', this.additionalInfoEnabled ? 'true' : 'false');
+    // Toggle the Lore Book Unlock All Info setting (persisted via localStorage,
+    // like the other UI display toggles). When on, every "i" info popup in the
+    // Lore Book shows its full details without having to be discovered in-game
+    // first (a wiki-style view). Off by default.
+    UIController.prototype.toggleUnlockAllInfo = function(enabled) {
+        this.unlockAllInfoEnabled = enabled;
+        localStorage.setItem('unlockAllInfo', this.unlockAllInfoEnabled ? 'true' : 'false');
 
         // If the Lore Book is currently open, re-render immediately so the
-        // info buttons appear/disappear without requiring the modal to be closed.
+        // info buttons update without requiring the modal to be closed.
         if (this.loreModal && this.loreModal.classList.contains('active')) {
             this.renderLore();
         }

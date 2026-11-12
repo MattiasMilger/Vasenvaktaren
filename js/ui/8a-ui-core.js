@@ -22,8 +22,8 @@ class UIController {
         this.potencyIndicatorEnabled = savedPotencyIndicator !== null ? savedPotencyIndicator === 'true' : true;
         const savedVasenSortBy = localStorage.getItem('vasenSortBy');
         this.vasenSortBy = savedVasenSortBy !== null ? savedVasenSortBy : 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
-        const savedAdditionalInfo = localStorage.getItem('additionalInfoEnabled');
-        this.additionalInfoEnabled = savedAdditionalInfo !== null ? savedAdditionalInfo === 'true' : false;
+        const savedUnlockAllInfo = localStorage.getItem('unlockAllInfo');
+        this.unlockAllInfoEnabled = savedUnlockAllInfo !== null ? savedUnlockAllInfo === 'true' : false;
     }
 
     // Initialize UI elements
@@ -125,12 +125,12 @@ if (verboseCombatLogToggle) {
     });
 }
 
-// Additional Info toggle (Lore Book)
-const additionalInfoToggle = document.getElementById('additional-info-toggle');
-if (additionalInfoToggle) {
-    additionalInfoToggle.checked = this.additionalInfoEnabled;
-    additionalInfoToggle.addEventListener('change', () => {
-        this.toggleAdditionalInfo(additionalInfoToggle.checked);
+// Unlock All Info toggle (Lore Book)
+const unlockAllInfoToggle = document.getElementById('unlock-all-info-toggle');
+if (unlockAllInfoToggle) {
+    unlockAllInfoToggle.checked = this.unlockAllInfoEnabled;
+    unlockAllInfoToggle.addEventListener('change', () => {
+        this.toggleUnlockAllInfo(unlockAllInfoToggle.checked);
     });
 }
 

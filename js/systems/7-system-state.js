@@ -44,6 +44,14 @@ class GameState {
         // Set of unlocked lore entry keys
         this.unlockedLoreEntries = new Set();
 
+        // Set of discovered skill names (ABILITIES keys), found by having the
+        // skill unlocked on a väsen. Gates the Lore Book "i" info for skills.
+        this.discoveredSkills = new Set();
+
+        // Set of discovered taming item ids, found by taming the väsen the item
+        // belongs to. Gates the Lore Book "i" info for items.
+        this.discoveredItems = new Set();
+
         // Zone progression
         this.currentZone = 'ZONE1';
         this.defeatedGuardians = new Set();
@@ -622,6 +630,50 @@ class GameState {
     hasAllLoreEntries() {
         return this.unlockedLoreEntries.size >= LORE_TOTAL;
     }
+
+    // Record every skill and taming item discovered so far. A skill is discovered
+    // once it is unlocked on a väsen in the collection, an item once the väsen it
+    // belongs to is in the collection. Already unlocked lore entries count too, so
+    // discoveries from released väsen are kept. Only ever adds, so discoveries
+    // persist after a väsen is released. Does not save by itself (saveGame() calls it).
+    syncDiscoveries() {
+        this.vasenCollection.forEach(vasen => {
+            vasen.getAvailableSkills().forEach(skillName => this.discoveredSkills.add(skillName));
+            if (vasen.species.tamingItem) this.discoveredItems.add(vasen.species.tamingItem);
+        });
+
+        this.unlockedLoreEntries.forEach(key => {
+            const entry = LORE_ENTRIES[key];
+            if (!entry) return;
+
+            if (entry.unlockType === 'skill' && ABILITIES[entry.unlockKey]) {
+                this.discoveredSkills.add(entry.unlockKey);
+            } else if (entry.unlockType === 'item' && TAMING_ITEMS[entry.unlockKey]) {
+                this.discoveredItems.add(entry.unlockKey);
+            } else if (entry.unlockType === 'vasen' && VASEN_SPECIES[entry.unlockKey] && VASEN_SPECIES[entry.unlockKey].tamingItem) {
+                this.discoveredItems.add(VASEN_SPECIES[entry.unlockKey].tamingItem);
+            }
+        });
+    }
+
+    // Discovery checks used to gate the Lore Book "i" info. Kept here so the
+    // rules for what counts as discovered live in one place.
+    isSkillDiscovered(skillName) {
+        return this.discoveredSkills.has(skillName);
+    }
+
+    isItemDiscovered(itemId) {
+        return this.discoveredItems.has(itemId);
+    }
+
+    isRuneDiscovered(runeId) {
+        return this.collectedRunes.has(runeId);
+    }
+
+    // A bind rune is discovered once both runes of its pair are collected
+    isBindRuneDiscovered(bindRune) {
+        return bindRune.runes.every(runeId => this.collectedRunes.has(runeId));
+    }
     
     // Defeat guardian and unlock next zone
     defeatGuardian(zoneId) {
@@ -987,6 +1039,8 @@ class GameState {
             favoriteLoreCategories: Array.from(this.favoriteLoreCategories),
             favoriteLoreEntries: Array.from(this.favoriteLoreEntries),
             unlockedLoreEntries: Array.from(this.unlockedLoreEntries),
+            discoveredSkills: Array.from(this.discoveredSkills),
+            discoveredItems: Array.from(this.discoveredItems),
             currentZone: this.currentZone,
             defeatedGuardians: Array.from(this.defeatedGuardians),
             achievements: this.achievements,
@@ -1055,6 +1109,11 @@ class GameState {
             this.favoriteLoreCategories = new Set(data.favoriteLoreCategories || []);
             this.favoriteLoreEntries = new Set(data.favoriteLoreEntries || []);
             this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
+            // Default to empty for saves made before discoveries were tracked;
+            // saveGame() fills them in from the collection and unlocked lore entries.
+            // Ids that no longer exist are dropped so renamed or removed skills/items don't linger.
+            this.discoveredSkills = new Set((data.discoveredSkills || []).filter(id => ABILITIES[id]));
+            this.discoveredItems = new Set((data.discoveredItems || []).filter(id => TAMING_ITEMS[id]));
             this.currentZone = data.currentZone || 'ZONE1';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
 
@@ -1104,6 +1163,9 @@ class GameState {
         // Never save mid-combat - party health is in a transient combat state.
         // All end-of-combat paths set inCombat = false before saving.
         if (this.inCombat) return true;
+        // Capture any newly discovered skills/items before persisting, so they
+        // are never lost if a väsen is released afterwards.
+        this.syncDiscoveries();
         try {
             const saveData = JSON.stringify(this.serialize());
             localStorage.setItem(SAVE_KEY, saveData);
@@ -1173,6 +1235,8 @@ class GameState {
         this.favoriteLoreCategories = new Set();
         this.favoriteLoreEntries = new Set();
         this.unlockedLoreEntries = new Set();
+        this.discoveredSkills = new Set();
+        this.discoveredItems = new Set();
         this.currentZone = 'ZONE1';
         this.defeatedGuardians = new Set();
         this.achievements = {
