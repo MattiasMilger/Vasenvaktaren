@@ -87,7 +87,7 @@ const GAME_CONFIG = {
 
     GIANTSBANE_BONUS: 0.80, // % of target's current HP as bonus power
     LOKISBETRAYAL_BONUS: 35, // Extra power if target is debuffed
-    ROTVALTA_BONUS: 38, // Extra power if opponent attacks
+    ROTVALTA_BONUS: 36, // Extra power if opponent attacks
 
     TYRS_SACRIFICE_STAGES: 2,           // Attribute stages gained to all attributes when using Tyr's Sacrifice
 
