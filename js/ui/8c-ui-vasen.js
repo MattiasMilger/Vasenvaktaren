@@ -431,10 +431,13 @@ UIController.prototype.toggleDescription = function() {
     }
 };
 
-// Helper: Format a level for display, appending "(Max)" at the level cap.
+// Helper: Format a level for display, appending "(Max)" at the level cap and
+// "(Max+)" above it (enemies in the Endless Tower can exceed the cap).
 // Derived from GAME_CONFIG.MAX_LEVEL so it follows any future change to the cap.
 UIController.prototype.getLevelText = function(level) {
-    return level >= GAME_CONFIG.MAX_LEVEL ? `${level} (Max)` : `${level}`;
+    if (level > GAME_CONFIG.MAX_LEVEL) return `${level} (Max+)`;
+    if (level === GAME_CONFIG.MAX_LEVEL) return `${level} (Max)`;
+    return `${level}`;
 };
 
 // Helper: Generate attacking matchups HTML for an element
