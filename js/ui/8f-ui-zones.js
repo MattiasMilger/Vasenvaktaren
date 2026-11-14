@@ -105,7 +105,8 @@ UIController.prototype.updateExploreButton = function() {
         const hasParty = gameState.party.some(p => p !== null);
 
         if (zone) {
-            this.exploreBtn.innerHTML = `Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
+            const compassIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/></svg>`;
+            this.exploreBtn.innerHTML = `${compassIcon}Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
             this.exploreBtn.disabled = !hasParty || gameState.inCombat;
 
             // Explore tutorial - blink Explore button until the player has tamed
@@ -116,15 +117,18 @@ UIController.prototype.updateExploreButton = function() {
             // prematurely regardless of whether the väsen was tamed.
             this.exploreBtn.classList.toggle('tutorial-blink', !gameState.firstExploreTutorialShown && hasParty);
 
+            // Sword icon shared by both challenge button variants
+            const swordIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/></svg>`;
+
             // Show/hide challenge button
             if (zone.guardian) {
-                this.challengeBtn.style.display = 'block';
-                this.challengeBtn.innerHTML = `Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
+                this.challengeBtn.style.display = 'flex';
+                this.challengeBtn.innerHTML = `${swordIcon}Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
             } else if (gameState.currentZone === 'ZONE7') {
                 // Show Endless Tower button in Ginnungagap
-                this.challengeBtn.style.display = 'block';
-                this.challengeBtn.innerHTML = `Challenge Endless Tower <span class="btn-hint">(Starts at Lvl 30)</span>`;
+                this.challengeBtn.style.display = 'flex';
+                this.challengeBtn.innerHTML = `${swordIcon}Challenge Endless Tower <span class="btn-hint">(Starts at Lvl 30)</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
             } else {
                 this.challengeBtn.style.display = 'none';

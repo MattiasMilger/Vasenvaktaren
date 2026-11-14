@@ -680,7 +680,7 @@ UIController.prototype._ensureAutoHealButton = function() {
     btn.title = 'Auto Heal';
     btn.setAttribute('aria-label', 'Auto Heal');
     btn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
         <span>Auto Heal</span>
     `;
     btn.onclick = () => this.confirmAutoHeal();
