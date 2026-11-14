@@ -190,7 +190,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         <div class="combatant-header">
             ${untamedHtml}
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
-            <span class="combatant-level"><span class="combatant-level-main">Lvl ${vasen.level}</span> <span class="combatant-level-temp">(+${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.positive]} / -${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.negative]})</span></span>
+            <span class="combatant-level"><span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span> <span class="combatant-level-temp">(+${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.positive]} / -${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.negative]})</span></span>
         </div>
 
         <div class="combatant-image-wrapper">
@@ -361,7 +361,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
             <div class="standard-vasen-info">
                 <div class="standard-vasen-header">
                     <span class="standard-vasen-name">${vasen.getDisplayName()}</span>
-                    <span class="standard-vasen-level">Lvl ${vasen.level}</span>
+                    <span class="standard-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
                 </div>
                 <div class="standard-vasen-badges">
                     <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>

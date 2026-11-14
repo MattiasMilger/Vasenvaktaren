@@ -249,7 +249,7 @@ achievementsHtml += '</div></div>';
                     teamHtml += `
                         <div class="record-vasen">
                             <span class="record-vasen-name">${temperament.name} ${species.name}</span>
-                            <span class="record-vasen-level">Lvl ${member.level}</span>
+                            <span class="record-vasen-level">Lvl ${this.getLevelText(member.level)}</span>
                             ${runesHtml ? `<span class="record-vasen-runes">${runesHtml}</span>` : ''}
                         </div>
                     `;

@@ -50,7 +50,7 @@ UIController.prototype.renderParty = function() {
 
                     <div class="party-vasen-info">
                         <span class="party-vasen-name">${vasen.getDisplayName()}</span>
-                        <span class="party-vasen-level">Lvl ${vasen.level}</span>
+                        <span class="party-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
 
                         <div class="party-vasen-tags">
                             <span
@@ -104,25 +104,46 @@ UIController.prototype.renderParty = function() {
         slot.onclick = () => this.handlePartySlotClick(index);
     });
 
-    // Inject the Auto Equip Runes button into the party section (once)
+    // Inject the auto action buttons (Auto Equip Runes, Auto Heal, Auto Team) into the party section (once)
     this._ensureAutoRunesButton();
     this._ensureAutoHealButton();
+    this._ensureAutoTeamButton();
 };
 
-// Inject the Auto Equip Runes button after the party slots if it doesn't exist yet
+// Get (or create) the shared row that holds the auto action buttons below the party slots
+UIController.prototype._getAutoActionsContainer = function() {
+    let container = document.getElementById('party-auto-actions');
+    if (container) return container;
+
+    const partySection = document.querySelector('.party-section');
+    if (!partySection) return null;
+
+    container = document.createElement('div');
+    container.id = 'party-auto-actions';
+    container.className = 'party-auto-actions';
+    partySection.appendChild(container);
+    return container;
+};
+
+// Inject the Auto Equip Runes button into the auto actions row if it doesn't exist yet
 UIController.prototype._ensureAutoRunesButton = function() {
     if (document.getElementById('auto-equip-runes-btn')) return;
 
-    const partySection = document.querySelector('.party-section');
-    if (!partySection) return;
+    const container = this._getAutoActionsContainer();
+    if (!container) return;
 
     const btn = document.createElement('button');
     btn.id = 'auto-equip-runes-btn';
     btn.className = 'btn btn-auto-runes';
-    btn.textContent = 'Auto Equip Runes';
+    btn.title = 'Auto Equip Runes';
+    btn.setAttribute('aria-label', 'Auto Equip Runes');
+    btn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v18M8 8l8-5M8 14l8-5"/></svg>
+        <span>Auto Runes</span>
+    `;
     btn.onclick = () => this.autoEquipRunes();
 
-    partySection.appendChild(btn);
+    container.appendChild(btn);
 };
 
 // Auto-equip valid runes to all party members.
@@ -650,16 +671,90 @@ UIController.prototype.confirmReleaseVasen = function(vasenId) {
 UIController.prototype._ensureAutoHealButton = function() {
     if (document.getElementById('auto-heal-btn')) return;
 
-    const partySection = document.querySelector('.party-section');
-    if (!partySection) return;
+    const container = this._getAutoActionsContainer();
+    if (!container) return;
 
     const btn = document.createElement('button');
     btn.id = 'auto-heal-btn';
     btn.className = 'btn btn-auto-runes';
-    btn.textContent = 'Auto Heal';
+    btn.title = 'Auto Heal';
+    btn.setAttribute('aria-label', 'Auto Heal');
+    btn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Auto Heal</span>
+    `;
     btn.onclick = () => this.confirmAutoHeal();
 
-    partySection.appendChild(btn);
+    container.appendChild(btn);
+};
+
+UIController.prototype._ensureAutoTeamButton = function() {
+    if (document.getElementById('auto-team-btn')) return;
+
+    const container = this._getAutoActionsContainer();
+    if (!container) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'auto-team-btn';
+    btn.className = 'btn btn-auto-runes';
+    btn.title = 'Auto Team';
+    btn.setAttribute('aria-label', 'Auto Team');
+    btn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        <span>Auto Team</span>
+    `;
+    btn.onclick = () => this.autoTeam();
+
+    container.appendChild(btn);
+};
+
+// Randomize the active party from the whole collection, following the same
+// party rules enforced by gameState.addToParty(): no duplicate species and
+// at most one mythical väsen. Fills as many slots as the rules allow.
+UIController.prototype.autoTeam = function() {
+    if (gameState.inCombat) {
+        this.showMessage('Cannot change party during combat.', 'error');
+        return;
+    }
+
+    // Fisher-Yates shuffle of a copy of the whole collection
+    const pool = [...gameState.vasenCollection];
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    const newParty = [];
+    const usedSpecies = new Set();
+    let hasMythical = false;
+
+    for (const vasen of pool) {
+        if (newParty.length >= GAME_CONFIG.MAX_TEAM_SIZE) break;
+        if (usedSpecies.has(vasen.speciesName)) continue;
+
+        const isMythical = vasen.species.rarity === RARITIES.MYTHICAL;
+        if (isMythical && hasMythical) continue;
+
+        newParty.push(vasen);
+        usedSpecies.add(vasen.speciesName);
+        if (isMythical) hasMythical = true;
+    }
+
+    // Write into the existing party array slot by slot (unfilled slots become null)
+    for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
+        gameState.party[i] = newParty[i] || null;
+    }
+
+    gameState.saveGame();
+    this.renderParty();
+    this.refreshCurrentTab();
+
+    // Details panel shows party-dependent buttons (add/remove/swap), so refresh it
+    if (this.selectedVasen) {
+        this.renderVasenDetails(this.selectedVasen);
+    }
+
+    this.showMessage('Party randomized.');
 };
 
 UIController.prototype.confirmAutoHeal = function() {

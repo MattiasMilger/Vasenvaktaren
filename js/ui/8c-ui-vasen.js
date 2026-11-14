@@ -335,7 +335,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             </div>
             <div class="vasen-card-info">
                 <span class="vasen-name">${vasen.getDisplayName()}</span>
-                <span class="vasen-level">Lvl ${vasen.level}</span>
+                <span class="vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
             </div>
             ${canAdd ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.addToParty('${vasen.id}')">+</button>` : ''}
             ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')">+</button>` : ''}
@@ -429,6 +429,12 @@ UIController.prototype.toggleDescription = function() {
     if (this.selectedVasen) {
         this.renderVasenDetails(this.selectedVasen);
     }
+};
+
+// Helper: Format a level for display, appending "(Max)" at the level cap.
+// Derived from GAME_CONFIG.MAX_LEVEL so it follows any future change to the cap.
+UIController.prototype.getLevelText = function(level) {
+    return level >= GAME_CONFIG.MAX_LEVEL ? `${level} (Max)` : `${level}`;
 };
 
 // Helper: Generate attacking matchups HTML for an element
@@ -580,7 +586,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         </div>
 
         <div class="details-level">
-            <span>Level ${vasen.level}</span>
+            <span>Level ${this.getLevelText(vasen.level)}</span>
             ${vasen.level < GAME_CONFIG.MAX_LEVEL ? `
                 <div class="exp-bar">
                     <div class="exp-fill" style="width: ${expProgress.percent}%"></div>

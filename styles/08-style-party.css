@@ -260,18 +260,33 @@
 }
 
 /* =============================================================================
-   AUTO EQUIP RUNES BUTTON
+   AUTO ACTION BUTTONS (Auto Equip Runes, Auto Heal, Auto Team)
+   Shown as one row of equal-width icon buttons below the party slots.
    Mirrors the Auto Battle button style from 10-style-combat.css and #challenge-btn:
    gold text/border (--text-accent), gold-tinted hover (--accent-gold-tint).
    ============================================================================= */
 
-.btn-auto-runes {
-    width: 100%;
+.party-auto-actions {
+    display: flex;
+    gap: var(--spacing-sm);
     margin-top: var(--spacing-sm);
+}
+
+.btn-auto-runes {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
     border-color: var(--text-accent);
     color: var(--text-accent);
     font-size: var(--font-size-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: var(--spacing-xs);
+}
+
+.btn-auto-runes svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
 }
 
 .btn-auto-runes:hover:not(:disabled) {

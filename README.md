@@ -67,6 +67,9 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 - Click party slots to assign/remove Väsen
 - Maximum 3 Väsen in party
 - Only one Mythical Väsen allowed per party
+- Auto Runes: randomly equip viable runes to the active party
+- Auto Heal: use taming items to heal the active party
+- Auto Team: randomize the active party from your whole collection, following the party rules (no duplicate species, one Mythical)
 
 ### Player Profile
 
@@ -144,7 +147,7 @@ Vasenvaktaren/
 │   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, and matchup display)
 │   │   ├── 8d-ui-items.js          (item inventory management)
 │   │   ├── 8d-ui-runes.js          (rune inventory management)
-│   │   ├── 8e-ui-party.js          (party slot management, väsen release, and Auto Equip Runes)
+│   │   ├── 8e-ui-party.js          (party slot management, väsen release, and the Auto Runes / Auto Heal / Auto Team buttons)
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
 │   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and combat animations)
 │   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
