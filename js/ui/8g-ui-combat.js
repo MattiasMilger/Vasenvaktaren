@@ -545,9 +545,9 @@ UIController.prototype.renderActionButtons = function(combat) {
     document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoBattle;
     document.getElementById('btn-surrender').disabled = combat.isAutoBattle;
 
-        // Auto Battle button
+    // Auto Battle button
     const autoBattleBtn = document.getElementById('btn-auto-combat');
-    const autoBattleIcon = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v8H3z"/><path d="M8 3v8M16 3v8"/><path d="M12 11v8"/><circle cx="12" cy="21" r="1"/></svg>`;
+    const autoBattleIcon = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
     if (combat.isAutoBattle) {
         autoBattleBtn.innerHTML = `${autoBattleIcon}Cancel Auto Battle`;
         autoBattleBtn.disabled = false;
@@ -558,6 +558,11 @@ UIController.prototype.renderActionButtons = function(combat) {
         autoBattleBtn.classList.remove('auto-combat-active');
     }
 
+    // Swap button opens the modal
+    document.getElementById('btn-swap').onclick = () => {
+        if (!combat.waitingForPlayerAction || activeVasen.combatFlags.hasSwapSickness || combat.isAutoBattle) return;
+        this.renderSwapOptions(combat);
+    };
 };
 
 UIController.prototype.addCombatLog = function(message, type = 'normal') {
