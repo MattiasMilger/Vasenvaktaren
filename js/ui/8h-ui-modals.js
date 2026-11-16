@@ -3,9 +3,11 @@
 // =============================================================================
 
     // Show dialogue modal
-UIController.prototype.showDialogue = function(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true, extraClass = null) {
+UIController.prototype.showDialogue = function(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true, extraClass = null, icon = null) {
     const modal = document.getElementById('dialogue-modal');
-    document.getElementById('dialogue-title').textContent = title;
+    const titleEl = document.getElementById('dialogue-title');
+    titleEl.textContent = title;
+    if (icon) titleEl.insertAdjacentHTML('afterbegin', uiIcon(icon, 20));
     document.getElementById('dialogue-message').innerHTML = message;
 
     gameState.uiLocked = true;
@@ -268,7 +270,9 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     'Wild Encounter!',
     `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
     [{ text: 'Combat!', callback: () => game.startCombat(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
-    false // <-- non-dismissible
+    false, // <-- non-dismissible
+    null,
+    'vasen'
 );
                 break;
 
@@ -286,7 +290,9 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         { text: 'Confirm', callback: null, class: 'btn-primary' },
         { text: 'Next', callback: () => game.explore(), class: nextClass }
     ],
-    false
+    false,
+    null,
+    'items'
 );
             }
                 break;
@@ -299,7 +305,9 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         { text: 'Confirm', callback: null, class: 'btn-primary' },
         { text: 'Next', callback: () => game.explore(), class: nextClass }
     ],
-    false
+    false,
+    null,
+    'well'
 );
 
                 break;
@@ -312,7 +320,9 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         { text: 'Confirm', callback: null, class: 'btn-primary' },
         { text: 'Next', callback: () => game.explore(), class: nextClass }
     ],
-    false
+    false,
+    null,
+    'runes'
 );
 
         }

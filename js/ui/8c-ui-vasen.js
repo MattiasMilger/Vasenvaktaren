@@ -165,7 +165,7 @@ UIController.prototype.renderVasenInventory = function() {
     const sortControls = document.createElement('div');
     sortControls.className = 'vasen-sort-controls';
     sortControls.innerHTML = `
-        <label for="vasen-sort-select">Sort:</label>
+        <label for="vasen-sort-select">${uiIcon('sort', 14)}Sort:</label>
         <select id="vasen-sort-select" class="vasen-sort-select">
             <option value="level" ${this.vasenSortBy === 'level' ? 'selected' : ''}>Level</option>
             <option value="rarity" ${this.vasenSortBy === 'rarity' ? 'selected' : ''}>Rarity</option>
@@ -571,7 +571,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         </div>
 
         <div class="details-runes">
-            <h4>Runes (${equippedRuneCount}/${runeSlots})</h4>
+            <h4>${uiIcon('runes', 14)}Runes (${equippedRuneCount}/${runeSlots})</h4>
             <div class="rune-slots">
                 ${this.renderRuneSlots(vasen)}
             </div>

@@ -106,6 +106,22 @@
             flex: 1;
             min-width: 0;
         }
+        /* Shared inline icons (uiIcon helper / static markup) */
+        .ui-icon {
+            display: inline-block;
+            flex-shrink: 0;
+            vertical-align: -0.15em;
+            margin-right: 6px;
+        }
+        .tab-btn { white-space: nowrap; }
+        .zone-status .ui-icon,
+        .zone-caught .ui-icon,
+        .vasen-sort-controls .ui-icon,
+        .details-runes h4 .ui-icon { margin-right: 4px; }
+        .vasen-sort-controls label { display: inline-flex; align-items: center; }
+        #challenge-btn .ui-icon { margin-right: 0; } /* button already spaces its icon */
+        .collection-label .ui-icon, .achievement-name .ui-icon,
+        .profile-content h4 .ui-icon { margin-right: 6px; }
     </style>
 </head>
 <body class="loading">
@@ -281,9 +297,9 @@
             <!-- Left Panel - Inventory -->
             <aside class="panel panel-left">
                 <div class="panel-tabs">
-                    <button id="tab-vasen" class="tab-btn active" data-tab="vasen">Väsen</button>
-                    <button id="tab-runes" class="tab-btn" data-tab="runes">Runes</button>
-                    <button id="tab-items" class="tab-btn" data-tab="items">Items</button>
+                    <button id="tab-vasen" class="tab-btn active" data-tab="vasen"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3c0 4 1 6 3 7"/><path d="M19 3c0 4-1 6-3 7"/><path d="M8 10h8l1 5-5 6-5-6z"/><path d="M10 14h.01"/><path d="M14 14h.01"/></svg>Väsen</button>
+                    <button id="tab-runes" class="tab-btn" data-tab="runes"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v18M8 8l8-5M8 14l8-5"/></svg>Runes</button>
+                    <button id="tab-items" class="tab-btn" data-tab="items"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7 7 3h10l-1 4"/><path d="M8 7c-3 3-4 6-4 9a5 5 0 0 0 5 5h6a5 5 0 0 0 5-5c0-3-1-6-4-9"/><path d="M8 7h8"/></svg>Items</button>
                 </div>
                 <div class="panel-content">
                     <!-- Väsen Tab -->
@@ -390,7 +406,7 @@
                         <button id="btn-swap" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>Swap</button>
                         <button id="btn-offer" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5c0 9 7 15 18 14C14 18 11 13 11 4"/><path d="M3 5c3-2 6-2 8-1"/></svg>Offer Item</button>
                         <button id="btn-interrogate" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>Interrogate</button>
-                        <button id="btn-pass" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg>Pass</button>
+                        <button id="btn-pass" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>Pass</button>
                         <button id="btn-surrender" class="btn btn-danger"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>Surrender</button>
                         <button id="btn-auto-combat" class="btn btn-action btn-auto-combat"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v8H3z"/><path d="M8 3v8M16 3v8"/><path d="M12 11v8"/><circle cx="12" cy="21" r="1"/></svg>Auto Battle</button>
                     </div>
@@ -555,8 +571,8 @@
             <p class="settings-note">Game auto-saves.</p>
 
             <div class="save-buttons">
-                <button id="export-save-btn" class="btn btn-secondary">Export Save</button>
-                <button id="import-save-btn" class="btn btn-secondary">Import Save</button>
+                <button id="export-save-btn" class="btn btn-secondary"><svg class="ui-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Export Save</button>
+                <button id="import-save-btn" class="btn btn-secondary"><svg class="ui-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Import Save</button>
             </div>
 
             <textarea id="import-save-data" class="import-textarea" 
@@ -567,7 +583,7 @@
                 Import Now
             </button>
 
-            <button id="reset-game-btn" class="btn btn-danger">Reset Game</button>
+            <button id="reset-game-btn" class="btn btn-danger"><svg class="ui-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>Reset Game</button>
         </div>
 
         <!-- Credits Section -->

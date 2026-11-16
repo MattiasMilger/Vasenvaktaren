@@ -32,7 +32,9 @@ Game.prototype.challengeEndlessTower = function() {
                 callback: null
             }
         ],
-        true
+        true,
+        null,
+        'tower'
     );
 };
 

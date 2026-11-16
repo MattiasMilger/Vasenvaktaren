@@ -145,7 +145,7 @@ UIController.prototype.showItemOptions = function(itemId) {
 
     const buttons = [
         {
-            text: 'Heal a Väsen',
+            text: `${uiIcon('heal')}Heal a Väsen`,
             callback: () => this.showHealVasenModal(itemId)
         }
     ];
@@ -153,7 +153,7 @@ UIController.prototype.showItemOptions = function(itemId) {
     // Add Offer Item button if in combat with wild encounter
     if (canGift) {
         buttons.push({
-            text: 'Offer Item',
+            text: `${uiIcon('offer')}Offer Item`,
             class: 'btn-primary',
             callback: () => game.handleOfferItem(itemId)
         });

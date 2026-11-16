@@ -19,7 +19,7 @@ UIController.prototype.renderRuneInventory = function() {
     const sortMenu = document.createElement('div');
     sortMenu.className = 'vasen-sort-controls'; // Re-use vasen style
     sortMenu.innerHTML = `
-        <label for="rune-sort-select">Sort:</label>
+        <label for="rune-sort-select">${uiIcon('sort', 14)}Sort:</label>
         <select id="rune-sort-select" class="vasen-sort-select">
             <option value="futhark" ${this.runeSortOrder === 'futhark' ? 'selected' : ''}>Futhark</option>
             <option value="equipped" ${this.runeSortOrder === 'equipped' ? 'selected' : ''}>Equipped</option>
@@ -109,7 +109,7 @@ UIController.prototype.showRuneOptions = function(runeId) {
         message,
         [
             {
-                text: 'Equip to Väsen',
+                text: `${uiIcon('equip')}Equip to Väsen`,
                 callback: () => this.showRuneEquipToVasenModal(runeId)
             },
             {

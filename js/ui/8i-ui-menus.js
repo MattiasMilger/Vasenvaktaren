@@ -117,14 +117,14 @@
         const content = document.getElementById('profile-content');
 
         // Achievements
-let achievementsHtml = '<div class="achievements-section"><h4>Achievements:</h4><div class="achievements-grid">';
+let achievementsHtml = '<div class="achievements-section"><h4>' + uiIcon('trophy', 14) + 'Achievements:</h4><div class="achievements-grid">';
 
 Object.values(ACHIEVEMENTS).forEach(achievement => {
     const earned = gameState.achievements[achievement.id] === true;
     achievementsHtml += `
         <div class="achievement ${earned ? 'earned' : 'locked'}">
             <div class="achievement-content">
-                <span class="achievement-name">${achievement.name}</span>
+                <span class="achievement-name">${uiIcon(earned ? 'trophy' : 'lock', 14)}${achievement.name}</span>
                 <span class="achievement-desc">${achievement.description}</span>
             </div>
         </div>
@@ -147,23 +147,23 @@ achievementsHtml += '</div></div>';
             </div>
 
             <div class="profile-collection-section">
-                <h4>Collection:</h4>
+                <h4>${uiIcon('vasen', 14)}Collection:</h4>
                 <div class="achievement">
                     <div class="collection-attributes">
                         <div class="collection-stat">
-                            <span class="collection-label">Runes Collected</span>
+                            <span class="collection-label">${uiIcon('runes', 14)}Runes Collected</span>
                             <span class="collection-value">${gameState.collectedRunes.size} / ${RUNE_LIST.length}</span>
                         </div>
                         <div class="collection-stat">
-                            <span class="collection-label">Lore Entries Collected</span>
+                            <span class="collection-label">${uiIcon('book', 14)}Lore Entries Collected</span>
                             <span class="collection-value">${gameState.unlockedLoreEntries.size} / ${LORE_TOTAL}</span>
                         </div>
                         <div class="collection-stat">
-                            <span class="collection-label">Zones Cleared</span>
+                            <span class="collection-label">${uiIcon('guardian', 14)}Zones Cleared</span>
                             <span class="collection-value">${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</span>
                         </div>
                         <div class="collection-stat">
-                            <span class="collection-label">Väsen Types Tamed</span>
+                            <span class="collection-label">${uiIcon('vasen', 14)}Väsen Types Tamed</span>
                             <span class="collection-value">${gameState.getUniqueSpeciesTamed()} / ${Object.keys(VASEN_SPECIES).length}</span>
                         </div>
                     </div>
@@ -228,7 +228,7 @@ achievementsHtml += '</div></div>';
         if (!hasRecord) {
             return `
                 <div class="endless-tower-record locked">
-                    <h4>Endless Tower Record</h4>
+                    <h4>${uiIcon('tower', 14)}Endless Tower Record</h4>
                     <p class="record-placeholder">Challenge the Endless Tower in Ginnungagap to set a record</p>
                 </div>
             `;
@@ -264,7 +264,7 @@ achievementsHtml += '</div></div>';
 
         return `
             <div class="endless-tower-record achieved">
-                <h4>Endless Tower Record</h4>
+                <h4>${uiIcon('tower', 14)}Endless Tower Record</h4>
                 <p class="record-floor">Highest Floor: <strong>${record.highestFloor}</strong></p>
                 <p class="record-date">Achieved: ${dateStr}</p>
                 ${teamHtml}
