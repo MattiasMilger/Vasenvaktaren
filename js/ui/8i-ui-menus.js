@@ -159,7 +159,7 @@ achievementsHtml += '</div></div>';
                             <span class="collection-value">${gameState.unlockedLoreEntries.size} / ${LORE_TOTAL}</span>
                         </div>
                         <div class="collection-stat">
-                            <span class="collection-label">${uiIcon('guardian', 14)}Zones Cleared</span>
+                            <span class="collection-label">${uiIcon('swords', 14)}Zones Cleared</span>
                             <span class="collection-value">${gameState.defeatedGuardians.size} / ${ZONE_ORDER.filter(zoneId => ZONES[zoneId].guardian !== null).length}</span>
                         </div>
                         <div class="collection-stat">

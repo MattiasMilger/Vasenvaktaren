@@ -135,7 +135,6 @@ UIController.prototype._ensureAutoRunesButton = function() {
     const btn = document.createElement('button');
     btn.id = 'auto-equip-runes-btn';
     btn.className = 'btn btn-auto-runes';
-    btn.title = 'Auto Equip Runes';
     btn.setAttribute('aria-label', 'Auto Equip Runes');
     btn.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v18"/><path d="M9 7l7 4-7 4"/></svg>
@@ -677,10 +676,9 @@ UIController.prototype._ensureAutoHealButton = function() {
     const btn = document.createElement('button');
     btn.id = 'auto-heal-btn';
     btn.className = 'btn btn-auto-runes';
-    btn.title = 'Auto Heal';
     btn.setAttribute('aria-label', 'Auto Heal');
     btn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
         <span>Auto Heal</span>
     `;
     btn.onclick = () => this.confirmAutoHeal();
@@ -697,7 +695,6 @@ UIController.prototype._ensureAutoTeamButton = function() {
     const btn = document.createElement('button');
     btn.id = 'auto-team-btn';
     btn.className = 'btn btn-auto-runes';
-    btn.title = 'Auto Team';
     btn.setAttribute('aria-label', 'Auto Team');
     btn.innerHTML = `
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
@@ -763,7 +760,7 @@ UIController.prototype.confirmAutoHeal = function() {
         '<p>WARNING: This will consume taming items that could otherwise be used for taming väsen.</p>',
         [
             {
-                text: 'Heal',
+                text: `${uiIcon('heal')}Heal`,
                 class: 'btn-primary',
                 callback: () => this.autoHealParty()
             },

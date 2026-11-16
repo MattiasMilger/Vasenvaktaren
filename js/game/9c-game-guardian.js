@@ -35,7 +35,7 @@ Game.prototype.challengeGuardian = function() {
     ],
     true,
     null,
-    'sword'
+    'swords'
 );
 
 };

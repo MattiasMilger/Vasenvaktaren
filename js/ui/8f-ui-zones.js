@@ -42,8 +42,8 @@ UIController.prototype.renderZones = function() {
             zoneBtn.innerHTML = `
                 <span class="zone-name">${zone.name}</span>
                 <span class="zone-level">Lvl ${zone.levelRange[0]}-${zone.levelRange[1]}</span>
-                <span class="zone-caught ${allCaught ? 'zone-caught-complete' : ''}">${uiIcon('tamed', 14)}${caught}/${total} Väsen Tamed</span>
-                ${isCleared ? `<span class="zone-status cleared">${uiIcon('guardian', 14)}Guardian Defeated</span>` : '<span class="zone-status"></span>'}
+                <span class="zone-caught ${allCaught ? 'zone-caught-complete' : ''}">${uiIcon('vasen', 14)}${caught}/${total} Väsen Tamed</span>
+                ${isCleared ? `<span class="zone-status cleared">${uiIcon('swords', 14)}Guardian Defeated</span>` : '<span class="zone-status"></span>'}
             `;
             zoneBtn.onclick = () => this.selectZone(zoneId);
         } else {
@@ -120,7 +120,7 @@ UIController.prototype.updateExploreButton = function() {
             // Show/hide challenge button
             if (zone.guardian) {
                 this.challengeBtn.style.display = 'flex';
-                this.challengeBtn.innerHTML = `${uiIcon('sword', 18)}Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
+                this.challengeBtn.innerHTML = `${uiIcon('swords', 18)}Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
             } else if (gameState.currentZone === 'ZONE7') {
                 // Show Endless Tower button in Ginnungagap
