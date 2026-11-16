@@ -13,6 +13,14 @@ const COMBAT_TEMPERAMENT_ATTR_LABELS = {
     megin: 'MP'
 };
 
+// Compact temperament text, e.g. "(+9 DEF / -9 DEF)". Shown next to the level
+// everywhere a väsen is listed so the temperament is visible at a glance.
+UIController.prototype.getTemperamentShortHTML = function(vasen) {
+    const t = vasen && vasen.temperament;
+    if (!t) return '';
+    return `<span class="temperament-short">(+${t.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[t.positive]} / -${t.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[t.negative]})</span>`;
+};
+
 UIController.prototype._sizeCombatLog = function() {
         if (!this.combatLog || this.combatLog.offsetParent === null) return;
         // Only auto-size on desktop (>768px width)
@@ -190,7 +198,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         <div class="combatant-header">
             ${untamedHtml}
             <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
-            <span class="combatant-level"><span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span> <span class="combatant-level-temp">(+${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.positive]} / -${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.negative]})</span></span>
+            <span class="combatant-level"><span class="combatant-level-temp">(+${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.positive]} / -${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.negative]})</span> <span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span></span>
         </div>
 
         <div class="combatant-image-wrapper">
@@ -361,7 +369,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
             <div class="standard-vasen-info">
                 <div class="standard-vasen-header">
                     <span class="standard-vasen-name">${vasen.getDisplayName()}</span>
-                    <span class="standard-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
+                    <span class="standard-vasen-level">${this.getTemperamentShortHTML(vasen)} Lvl ${this.getLevelText(vasen.level)}</span>
                 </div>
                 <div class="standard-vasen-badges">
                     <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>

@@ -570,8 +570,19 @@ UIController.prototype.renderVasenDetails = function(vasen) {
             </div>
         </div>
 
+        <div class="details-temperament">
+            <h4>Temperament</h4>
+            <span class="temperament-info">
+                ${vasen.temperament.name}
+            </span>
+            <span class="temperament-details">
+                +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} /
+                -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}
+            </span>
+        </div>
+
         <div class="details-runes">
-            <h4>${uiIcon('runes', 14)}Runes (${equippedRuneCount}/${runeSlots})</h4>
+            <h4>Runes (${equippedRuneCount}/${runeSlots})</h4>
             <div class="rune-slots">
                 ${this.renderRuneSlots(vasen)}
             </div>
@@ -629,17 +640,6 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                     <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
                 </div>
             </div>
-        </div>
-
-        <div class="details-temperament">
-            <h4>Temperament</h4>
-            <span class="temperament-info">
-                ${vasen.temperament.name}
-            </span>
-            <span class="temperament-details">
-                +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} /
-                -${vasen.temperament.modifier} ${capitalize(vasen.temperament.negative)}
-            </span>
         </div>
 
         <div class="details-skills">
