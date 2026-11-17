@@ -1,5 +1,5 @@
 // =============================================================================
-// 8b-ui-screens.js - Screen Switching and Tab Navigation
+// 8b-ui-screens.js - Screen Switching, Tab Navigation, and Starter Selection Screen
 // =============================================================================
 
 // Screen management
@@ -68,4 +68,67 @@ UIController.prototype.refreshAll = function() {
         if (this.vasenDetailsPanel) {
             this.vasenDetailsPanel.style.display = this.currentTab === 'vasen' ? '' : 'none';
         }
+    };
+
+    // Render the starter selection screen: one card per starter väsen plus the
+    // Confirm button. Pure UI - the caller decides what selecting or confirming
+    // actually does.
+    //   starters:  array of VASEN_SPECIES keys (unknown keys are skipped)
+    //   onSelect:  called with the species key when a card is clicked
+    //   onConfirm: called when the Confirm button is clicked
+UIController.prototype.renderStarterSelection = function(starters, onSelect, onConfirm) {
+        const starterOptions = document.getElementById('starter-options');
+        starterOptions.innerHTML = '';
+
+        starters.forEach(speciesName => {
+            const species = VASEN_SPECIES[speciesName];
+            if (!species) return;
+
+            const card = document.createElement('div');
+            card.className = 'starter-card';
+            card.innerHTML = `
+                <div class="starter-image-container holo-${species.rarity.toLowerCase()}">
+                    <img src="${species.image}" alt="${species.name}" class="starter-image">
+                </div>
+                <h3 class="starter-name">${species.name}</h3>
+                <div class="starter-badges">
+                    <div class="element-matchup-collapsible">
+                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${species.element}</span>
+                        ${ui.generateDefensiveMatchupsHTML(species.element)}
+                    </div>
+                    <div class="rarity-matchup-collapsible family-matchup-collapsible">
+                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.rarity}</span>
+                        <div class="rarity-description-popup">
+                            <p><strong>${species.rarity}</strong><br>
+                            ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
+                        </div>
+                    </div>
+                    <div class="family-matchup-collapsible">
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.family}</span>
+                        <div class="family-description-popup">
+                            <p><strong>${species.family}</strong><br>
+                            ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
+                            ${FAMILY_PASSIVES[species.family] ? `
+                                <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+                                <p><strong>Passive: ${FAMILY_PASSIVES[species.family].name}</strong><br>
+                                ${FAMILY_PASSIVES[species.family].description}</p>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+                <p class="starter-description">${species.description}</p>
+            `;
+            card.onclick = () => {
+                // Remove selection from all cards, add it to the clicked card
+                document.querySelectorAll('.starter-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                onSelect(speciesName);
+                document.getElementById('confirm-starter-btn').disabled = false;
+            };
+            starterOptions.appendChild(card);
+        });
+
+        const confirmBtn = document.getElementById('confirm-starter-btn');
+        confirmBtn.disabled = true;
+        confirmBtn.onclick = () => onConfirm();
     };

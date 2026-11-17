@@ -1,5 +1,5 @@
 // =============================================================================
-// 8h-ui-modals.js - Dialogue System, Offer Flow, and Encounter Results
+// 8h-ui-modals.js - Dialogue System, Welcome Dialogue, Offer Flow, and Encounter Results
 // =============================================================================
 
     // Show dialogue modal
@@ -61,6 +61,57 @@ modal.classList.add('active');
 
 
 };
+
+    // Show the "Welcome, Väktare" dialogue shown when a new game is confirmed.
+    // Pure UI: Game rolls the temperament and starting items before calling this,
+    // so what is displayed here is exactly what the caller goes on to apply.
+    //   species:       the chosen starter's species data (VASEN_SPECIES entry)
+    //   temperament:   the rolled temperament data (TEMPERAMENTS entry)
+    //   startingItems: array of taming item ids the player will receive
+    //   rune:          the starting rune data (e.g. RUNES.URUZ)
+    //   onBegin:       called when "Begin Journey" is clicked
+    // The dialogue is non-dismissible; "Cancel" closes it and returns to the
+    // starter selection screen, which was never left.
+    UIController.prototype.showWelcomeDialogue = function(species, temperament, startingItems, rune, onBegin) {
+        let startingItemsMessage = '';
+        startingItems.forEach(itemId => {
+            const itemName = TAMING_ITEMS[itemId]?.name || itemId;
+            startingItemsMessage += `<p>You received: <strong>${itemName}</strong>!</p>`;
+        });
+
+        const temperamentMessage = species
+            ? `<p>Your <strong>${species.name}</strong>'s temperament is <strong>${temperament.name}</strong>
+               (+${temperament.modifier} ${capitalize(temperament.positive)} / -${temperament.modifier} ${capitalize(temperament.negative)}).</p>`
+            : '';
+
+        this.showDialogue(
+    'Welcome, Väktare',
+    `
+        <p>The first rune has revealed itself to you:
+            <span class="rune-symbol">${rune.symbol}</span> ${rune.name}
+        </p>
+        <p class="rune-hint">${rune.effect}</p>
+        ${temperamentMessage}
+        ${startingItemsMessage}
+    `,
+    [
+        {
+            text: `${uiIcon('compass')}Begin Journey`,
+            class: 'btn-primary',
+            callback: onBegin
+        },
+        {
+            text: 'Cancel',
+            class: 'btn-secondary',
+            callback: () => {
+                // Close popup and return to starter selection
+                this.hideModalOverlay();
+            }
+        }
+    ],
+    false // non-dismissible
+);
+    };
 
     // Show offer item modal
     UIController.prototype.showOfferModal = function(combat) {

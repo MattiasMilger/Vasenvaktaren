@@ -55,63 +55,18 @@ class Game {
     showStarterSelection() {
         ui.showScreen('starterSelect');
 
-        const starterOptions = document.getElementById('starter-options');
-        starterOptions.innerHTML = '';
-
-        STARTER_VASEN.forEach(speciesName => {
-            const species = VASEN_SPECIES[speciesName];
-            if (!species) return;
-
-            const card = document.createElement('div');
-            card.className = 'starter-card';
-            card.innerHTML = `
-                <div class="starter-image-container holo-${species.rarity.toLowerCase()}">
-                    <img src="${species.image}" alt="${species.name}" class="starter-image">
-                </div>
-                <h3 class="starter-name">${species.name}</h3>
-                <div class="starter-badges">
-                    <div class="element-matchup-collapsible">
-                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${species.element}</span>
-                        ${ui.generateDefensiveMatchupsHTML(species.element)}
-                    </div>
-                    <div class="rarity-matchup-collapsible family-matchup-collapsible">
-                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.rarity}</span>
-                        <div class="rarity-description-popup">
-                            <p><strong>${species.rarity}</strong><br>
-                            ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
-                        </div>
-                    </div>
-                    <div class="family-matchup-collapsible">
-                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.family}</span>
-                        <div class="family-description-popup">
-                            <p><strong>${species.family}</strong><br>
-                            ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
-                            ${FAMILY_PASSIVES[species.family] ? `
-                                <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
-                                <p><strong>Passive: ${FAMILY_PASSIVES[species.family].name}</strong><br>
-                                ${FAMILY_PASSIVES[species.family].description}</p>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-                <p class="starter-description">${species.description}</p>
-            `;
-            card.onclick = () => this.selectStarter(speciesName, card);
-            starterOptions.appendChild(card);
-        });
-
-        document.getElementById('confirm-starter-btn').disabled = true;
-        document.getElementById('confirm-starter-btn').onclick = () => this.confirmStarter();
+        // Card rendering, card highlighting and the Confirm button live in the UI
+        // layer; Game only decides what selecting and confirming mean.
+        ui.renderStarterSelection(
+            STARTER_VASEN,
+            speciesName => this.selectStarter(speciesName),
+            () => this.confirmStarter()
+        );
     }
 
-    // Select starter
-    selectStarter(speciesName, card) {
-        // Remove selection from all cards
-        document.querySelectorAll('.starter-card').forEach(c => c.classList.remove('selected'));
-        // Add selection to clicked card
-        card.classList.add('selected');
+    // Select starter (the UI layer handles the card highlight and enables Confirm)
+    selectStarter(speciesName) {
         this.selectedStarter = speciesName;
-        document.getElementById('confirm-starter-btn').disabled = false;
     }
 
     // Confirm starter selection
@@ -143,33 +98,15 @@ class Game {
         // Take the first N unique items based on config
         const startingItems = shuffledZone1Items.slice(0, GAME_CONFIG.STARTING_ITEMS_AMOUNT);
 
-        let startingItemsMessage = '';
-        startingItems.forEach(itemId => {
-            const itemName = TAMING_ITEMS[itemId]?.name || itemId;
-            startingItemsMessage += `<p>You received: <strong>${itemName}</strong>!</p>`;
-        });
-
-        const temperamentMessage = selectedStarterSpecies
-            ? `<p>Your <strong>${selectedStarterSpecies.name}</strong>'s temperament is <strong>${starterTemperament.name}</strong>
-               (+${starterTemperament.modifier} ${capitalize(starterTemperament.positive)} / -${starterTemperament.modifier} ${capitalize(starterTemperament.negative)}).</p>`
-            : '';
-
-        // Show intro dialogue FIRST, before creating anything
-        ui.showDialogue(
-    'Welcome, Väktare',
-    `
-        <p>The first rune has revealed itself to you:
-            <span class="rune-symbol">${RUNES.URUZ.symbol}</span> ${RUNES.URUZ.name}
-        </p>
-        <p class="rune-hint">${RUNES.URUZ.effect}</p>
-        ${temperamentMessage}
-        ${startingItemsMessage}
-    `,
-    [
-        {
-            text: `${uiIcon('compass')}Begin Journey`,
-            class: 'btn-primary',
-            callback: () => {
+        // Show intro dialogue FIRST, before creating anything. The UI layer builds
+        // the popup from exactly the values rolled above, so what the player sees
+        // is what the callback below applies.
+        ui.showWelcomeDialogue(
+            selectedStarterSpecies,
+            starterTemperament,
+            startingItems,
+            RUNES.URUZ,
+            () => {
                 // initialize new game and create everything
                 gameState.resetGame();
 
@@ -220,19 +157,7 @@ class Game {
 
                 game.showGameScreen();
             }
-        },
-        {
-            text: 'Cancel',
-            class: 'btn-secondary',
-            callback: () => {
-                // Close popup and return to starter selection
-                ui.hideModalOverlay();
-            }
-        }
-    ],
-    false // non‑dismissible
-);
-
+        );
     }
 
     // Show main game screen

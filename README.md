@@ -143,14 +143,14 @@ Vasenvaktaren/
 │   │
 │   ├── ui/
 │   │   ├── 8a-ui-core.js           (UIController class, initialization, and overlay management)
-│   │   ├── 8b-ui-screens.js        (screen switching and tab navigation)
+│   │   ├── 8b-ui-screens.js        (screen switching, tab navigation, and starter selection screen)
 │   │   ├── 8c-ui-vasen.js          (väsen inventory, details panel, and matchup display)
 │   │   ├── 8d-ui-items.js          (item inventory management)
 │   │   ├── 8d-ui-runes.js          (rune inventory management)
 │   │   ├── 8e-ui-party.js          (party slot management, väsen release, and the Auto Runes / Auto Heal / Auto Team buttons)
 │   │   ├── 8f-ui-zones.js          (zone selection, descriptions, and exploration UI)
 │   │   ├── 8g-ui-combat.js         (combat rendering, action buttons, and combat animations)
-│   │   ├── 8h-ui-modals.js         (dialogue system, offer flow, and encounter results)
+│   │   ├── 8h-ui-modals.js         (dialogue system, welcome dialogue, offer flow, and encounter results)
 │   │   ├── 8i-ui-menus.js          (settings, profile, and game guide)
 │   │   └── 8j-ui-lore.js           (lore book rendering, search, and language toggle)
 │   │
