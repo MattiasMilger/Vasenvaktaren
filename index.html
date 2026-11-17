@@ -121,6 +121,24 @@
         .vasen-sort-controls label { display: inline-flex; align-items: center; }
         #challenge-btn .ui-icon { margin-right: 0; } /* button already spaces its icon */
         .temperament-short { white-space: nowrap; margin-right: 2px; }
+        /* Title screen emblem (the väsen symbol) */
+        .game-emblem {
+            display: block;
+            width: 84px;
+            height: 84px;
+            margin: 0 auto var(--spacing-md);
+            color: var(--accent-gold);
+            filter: drop-shadow(0 0 14px var(--accent-gold-glow-soft));
+            opacity: 0;
+            animation: emblem-in 1.2s ease-out 0.15s forwards;
+        }
+        @keyframes emblem-in {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 0.95; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .game-emblem { animation: none; opacity: 0.95; }
+        }
         .collection-label .ui-icon, .achievement-name .ui-icon,
         .profile-content h4 .ui-icon { margin-right: 6px; }
     </style>
@@ -211,6 +229,7 @@
             <span>ᛇ</span><span>ᛈ</span><span>ᛉ</span><span>ᛊ</span><span>ᛏ</span><span>ᛒ</span><span>ᛖ</span><span>ᛗ</span><span>ᛚ</span><span>ᛜ</span><span>ᛞ</span><span>ᛟ</span>
         </div>
         <div class="main-menu-content">
+            <svg class="game-emblem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3c0 4 1 6 3 7"/><path d="M19 3c0 4-1 6-3 7"/><path d="M8 10h8l1 5-5 6-5-6z"/><path d="M10 14h.01"/><path d="M14 14h.01"/></svg>
             <h1 class="game-title">Väsenväktaren</h1>
             <p class="game-subtitle">Catch creatures of Swedish folklore</p>
             <div class="menu-buttons">
