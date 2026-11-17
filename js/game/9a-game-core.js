@@ -167,7 +167,7 @@ class Game {
     `,
     [
         {
-            text: 'Begin Journey',
+            text: `${uiIcon('compass')}Begin Journey`,
             class: 'btn-primary',
             callback: () => {
                 // initialize new game and create everything

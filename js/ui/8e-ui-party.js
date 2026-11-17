@@ -137,7 +137,7 @@ UIController.prototype._ensureAutoRunesButton = function() {
     btn.className = 'btn btn-auto-runes';
     btn.setAttribute('aria-label', 'Auto Equip Runes');
     btn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v18"/><path d="M9 7l7 4-7 4"/></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v18M8 8l8-5M8 14l8-5"/></svg>
         <span>Auto Runes</span>
     `;
     btn.onclick = () => this.autoEquipRunes();

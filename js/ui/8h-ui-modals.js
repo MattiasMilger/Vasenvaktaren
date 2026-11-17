@@ -307,7 +307,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     ],
     false,
     null,
-    'well'
+    'heal'
 );
 
                 break;
