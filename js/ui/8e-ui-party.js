@@ -49,8 +49,8 @@ UIController.prototype.renderParty = function() {
                     </div>
 
                     <div class="party-vasen-info">
-                        <span class="party-vasen-name">${vasen.getDisplayName()}</span>
-                        <span class="party-vasen-level">${this.getTemperamentShortHTML(vasen)} Lvl ${this.getLevelText(vasen.level)}</span>
+                        <span class="party-vasen-name">${this.getDisplayNameHTML(vasen)}</span>
+                        <span class="party-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
 
                         <div class="party-vasen-tags">
                             <span

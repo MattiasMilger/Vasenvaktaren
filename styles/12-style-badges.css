@@ -171,6 +171,35 @@
     mix-blend-mode: overlay;
 }
 
+/* ── TEMPERAMENT ── clickable word inside a väsen name; opens .temperament-popup (toggleTemperamentDescription) */
+.clickable-temperament {
+    cursor: pointer;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    text-shadow: 0 0 6px color-mix(in srgb, var(--color-white) 45%, transparent);
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.clickable-temperament:hover {
+    color: var(--color-white);
+    text-shadow: 0 0 8px color-mix(in srgb, var(--color-white) 90%, transparent);
+}
+
+/* Temperament popup - lives on document.body so no panel can clip it */
+.temperament-popup {
+    position: fixed;
+    z-index: 99999;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-popup);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.4;
+    text-align: left;
+}
+
 /* ── PARTY ── */
 .party-badge {
     background: var(--accent-primary);

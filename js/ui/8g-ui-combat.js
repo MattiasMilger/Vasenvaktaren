@@ -2,23 +2,16 @@
 // 8g-ui-combat.js - Combat Rendering, Action Buttons, and Combat Animations
 // =============================================================================
 
-// Short attribute labels used to compactly display a combatant's temperament
-// modifiers (+9/-9) in the combat panel without taking up much space.
-const COMBAT_TEMPERAMENT_ATTR_LABELS = {
-    strength: 'STR',
-    wisdom: 'WIS',
-    defense: 'DEF',
-    durability: 'DUR',
-    health: 'HP',
-    megin: 'MP'
+// Clickable temperament word. Clicking it opens a popup explaining what the
+// temperament does (see toggleTemperamentDescription in 8a-ui-core.js).
+UIController.prototype.getTemperamentTextHTML = function(temperament) {
+    if (!temperament) return '';
+    return `<span class="clickable-temperament" onclick="toggleTemperamentDescription(this, event)">${temperament.name}</span>`;
 };
 
-// Compact temperament text, e.g. "(+9 DEF / -9 DEF)". Shown next to the level
-// everywhere a väsen is listed so the temperament is visible at a glance.
-UIController.prototype.getTemperamentShortHTML = function(vasen) {
-    const t = vasen && vasen.temperament;
-    if (!t) return '';
-    return `<span class="temperament-short">(+${t.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[t.positive]} / -${t.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[t.negative]})</span>`;
+// Same as vasen.getDisplayName() ("Stoic Bäckahäst"), with the temperament word clickable.
+UIController.prototype.getDisplayNameHTML = function(vasen) {
+    return `${this.getTemperamentTextHTML(vasen.temperament)} ${vasen.species.name}`;
 };
 
 UIController.prototype._sizeCombatLog = function() {
@@ -197,8 +190,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         <span class="combat-card-toggle" onclick="ui.toggleCombatCards()">${this.combatCardsMinimized ? '»' : '«'}</span>
         <div class="combatant-header">
             ${untamedHtml}
-            <h4 class="combatant-name">${vasen.getDisplayName()}</h4>
-            <span class="combatant-level"><span class="combatant-level-temp">(+${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.positive]} / -${vasen.temperament.modifier} ${COMBAT_TEMPERAMENT_ATTR_LABELS[vasen.temperament.negative]})</span> <span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span></span>
+            <h4 class="combatant-name">${this.getDisplayNameHTML(vasen)}</h4>
+            <span class="combatant-level"><span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span></span>
         </div>
 
         <div class="combatant-image-wrapper">
@@ -368,8 +361,8 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
             </div>
             <div class="standard-vasen-info">
                 <div class="standard-vasen-header">
-                    <span class="standard-vasen-name">${vasen.getDisplayName()}</span>
-                    <span class="standard-vasen-level">${this.getTemperamentShortHTML(vasen)} Lvl ${this.getLevelText(vasen.level)}</span>
+                    <span class="standard-vasen-name">${this.getDisplayNameHTML(vasen)}</span>
+                    <span class="standard-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
                 </div>
                 <div class="standard-vasen-badges">
                     <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>

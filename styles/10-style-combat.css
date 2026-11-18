@@ -180,12 +180,6 @@
     color: var(--text-muted);
 }
 
-.combatant-level-temp {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin-left: 4px;
-}
-
 .combatant-bars {
     display: flex;
     flex-direction: column;

@@ -334,7 +334,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
                 <img src="${vasen.species.image}" alt="${vasen.species.name}" class="vasen-thumb">
             </div>
             <div class="vasen-card-info">
-                <span class="vasen-name">${vasen.getDisplayName()}</span>
+                <span class="vasen-name">${this.getDisplayNameHTML(vasen)}</span>
                 <span class="vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
             </div>
             ${canAdd ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.addToParty('${vasen.id}')">+</button>` : ''}
@@ -536,7 +536,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
             </div>
             <div class="details-identity">
                 <div class="details-name-row">
-                    <h3 class="details-name">${vasen.getDisplayName()}</h3>
+                    <h3 class="details-name">${this.getDisplayNameHTML(vasen)}</h3>
                     <button class="details-favorite-btn ${isFavorite ? 'active' : ''}" onclick="ui.toggleFavorite('${vasen.id}')">
                         ${isFavorite ? '★' : '☆'}
                     </button>

@@ -531,55 +531,57 @@ const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
 // not the flavor `name` field, so the flavor name can be freely renamed later
 // without breaking anything that references a temperament by key (guardian
 // rosters below, saved games via VasenInstance.temperamentKey, etc).
+// `flavor` is the short line shown in the temperament popup (click a temperament
+// name anywhere in the game).
 // =============================================================================
 const TEMPERAMENTS = {
-    STRENGTH_HEALTH:    { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    STRENGTH_DEFENSE:   { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    STRENGTH_DURABILITY:{ name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    WISDOM_HEALTH:       { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    WISDOM_DEFENSE:      { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    WISDOM_DURABILITY:   { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    HEALTH_DEFENSE:      { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    HEALTH_DURABILITY:   { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DEFENSE_HEALTH:      { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DEFENSE_DURABILITY:  { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DURABILITY_HEALTH:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DURABILITY_DEFENSE:  { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    STRENGTH_HEALTH:    { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Fights with wild abandon, heedless of its own wounds.' },
+    STRENGTH_DEFENSE:   { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Strikes first and never thinks of guarding.' },
+    STRENGTH_DURABILITY:{ name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'All raw might, with no ward against sorcery.' },
+    WISDOM_HEALTH:       { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Ever watchful, sharp of mind but frail of body.' },
+    WISDOM_DEFENSE:      { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Lost in thought, and often caught off guard.' },
+    WISDOM_DURABILITY:   { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Single-minded in its craft, with little guard against spells.' },
+    HEALTH_DEFENSE:      { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Bounces back from anything, but never learned to dodge.' },
+    HEALTH_DURABILITY:   { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Hale and hearty, yet easily swayed by magic.' },
+    DEFENSE_HEALTH:      { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Trusts nothing and guards well, but worry wears it thin.' },
+    DEFENSE_DURABILITY:  { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'A steady shield against blows, bare against spells.' },
+    DURABILITY_HEALTH:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Outlasts every curse, though its body tires early.' },
+    DURABILITY_DEFENSE:  { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Sees through every spell, yet leaves the door open for a blade.' },
 
     // Megin-based temperaments
-    MEGIN_HEALTH:        { name: 'Spirited',   positive: 'megin',      negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    MEGIN_DEFENSE:       { name: 'Feral',      positive: 'megin',      negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    MEGIN_DURABILITY:    { name: 'Attuned',    positive: 'megin',      negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    STRENGTH_MEGIN:      { name: 'Mighty',     positive: 'strength',   negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    WISDOM_MEGIN:        { name: 'Keen',       positive: 'wisdom',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    HEALTH_MEGIN:        { name: 'Stoic',      positive: 'health',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DEFENSE_MEGIN:       { name: 'Steady',     positive: 'defense',    negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DURABILITY_MEGIN:    { name: 'Unyielding', positive: 'durability', negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    MEGIN_HEALTH:        { name: 'Spirited',   positive: 'megin',      negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Brimming with spirit, burning the candle at both ends.' },
+    MEGIN_DEFENSE:       { name: 'Feral',      positive: 'megin',      negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Wild power flows freely, with no thought for defense.' },
+    MEGIN_DURABILITY:    { name: 'Attuned',    positive: 'megin',      negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Tuned to the unseen, and raw to its touch.' },
+    STRENGTH_MEGIN:      { name: 'Mighty',     positive: 'strength',   negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Strong as an ox, but quickly spent.' },
+    WISDOM_MEGIN:        { name: 'Keen',       positive: 'wisdom',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'A sharp mind that burns through its power.' },
+    HEALTH_MEGIN:        { name: 'Stoic',      positive: 'health',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Bears all in silence, with little magic to spare.' },
+    DEFENSE_MEGIN:       { name: 'Steady',     positive: 'defense',    negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Firm and unmoved, yet slow to stir its power.' },
+    DURABILITY_MEGIN:    { name: 'Unyielding', positive: 'durability', negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Will not bend to spells, but has little magic of its own.' },
 
     // Strength/Wisdom cross temperaments - complete the matrix by allowing
     // Strength and Wisdom to also be the lowered attribute (previously only
     // ever the raised attribute).
-    WISDOM_STRENGTH:      { name: 'Cunning',    positive: 'wisdom',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    HEALTH_STRENGTH:      { name: 'Vital',      positive: 'health',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DEFENSE_STRENGTH:     { name: 'Shielded',   positive: 'defense',     negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DURABILITY_STRENGTH:  { name: 'Tenacious',  positive: 'durability',  negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    MEGIN_STRENGTH:       { name: 'Ethereal',   positive: 'megin',       negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    STRENGTH_WISDOM:      { name: 'Reckless',   positive: 'strength',    negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    HEALTH_WISDOM:        { name: 'Hearty',     positive: 'health',      negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DEFENSE_WISDOM:       { name: 'Stubborn',   positive: 'defense',     negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DURABILITY_WISDOM:    { name: 'Sturdy',     positive: 'durability',  negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    MEGIN_WISDOM:         { name: 'Frenzied',   positive: 'megin',       negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
+    WISDOM_STRENGTH:      { name: 'Cunning',    positive: 'wisdom',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Wins by wit rather than by brawn.' },
+    HEALTH_STRENGTH:      { name: 'Vital',      positive: 'health',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Brimming with life, light of hand.' },
+    DEFENSE_STRENGTH:     { name: 'Shielded',   positive: 'defense',     negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Content to guard, rarely willing to strike.' },
+    DURABILITY_STRENGTH:  { name: 'Tenacious',  positive: 'durability',  negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Holds on through any hex, but hits without force.' },
+    MEGIN_STRENGTH:       { name: 'Ethereal',   positive: 'megin',       negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'More spirit than substance.' },
+    STRENGTH_WISDOM:      { name: 'Reckless',   positive: 'strength',    negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Charges in without a thought.' },
+    HEALTH_WISDOM:        { name: 'Hearty',     positive: 'health',      negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Robust and cheerful, not much for riddles.' },
+    DEFENSE_WISDOM:       { name: 'Stubborn',   positive: 'defense',     negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Digs in its heels and will not be reasoned with.' },
+    DURABILITY_WISDOM:    { name: 'Sturdy',     positive: 'durability',  negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Hard to sway, harder to teach.' },
+    MEGIN_WISDOM:         { name: 'Frenzied',   positive: 'megin',       negative: 'wisdom',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Power surges wild, unchecked by thought.' },
 
     // Neutral temperaments - raise and lower the SAME attribute, so the two
     // modifiers cancel out and the attribute is unaffected overall. Purely
     // flavor variants with no net stat change (avoid the word "Neutral" -
     // that term is reserved for elemental matchup type in this game).
-    STRENGTH_STRENGTH:     { name: 'Composed',   positive: 'strength',    negative: 'strength',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    WISDOM_WISDOM:         { name: 'Grounded',   positive: 'wisdom',      negative: 'wisdom',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    HEALTH_HEALTH:         { name: 'Balanced',   positive: 'health',      negative: 'health',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DEFENSE_DEFENSE:       { name: 'Poised',     positive: 'defense',     negative: 'defense',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    DURABILITY_DURABILITY: { name: 'Weathered',  positive: 'durability',  negative: 'durability',  modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER },
-    MEGIN_MEGIN:            { name: 'Serene',     positive: 'megin',       negative: 'megin',       modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER }
+    STRENGTH_STRENGTH:     { name: 'Composed',   positive: 'strength',    negative: 'strength',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Poised and measured, its might never swings either way.' },
+    WISDOM_WISDOM:         { name: 'Grounded',   positive: 'wisdom',      negative: 'wisdom',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Level-headed, its wits unswayed by mood.' },
+    HEALTH_HEALTH:         { name: 'Balanced',   positive: 'health',      negative: 'health',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Neither robust nor frail, perfectly even.' },
+    DEFENSE_DEFENSE:       { name: 'Poised',     positive: 'defense',     negative: 'defense',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Holds its guard on an even keel.' },
+    DURABILITY_DURABILITY: { name: 'Weathered',  positive: 'durability',  negative: 'durability',  modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Worn by many storms, changed by none.' },
+    MEGIN_MEGIN:            { name: 'Serene',     positive: 'megin',       negative: 'megin',       modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Quiet of spirit, its power flowing steady and unchanged.' }
 };
 
 const TEMPERAMENT_LIST = Object.keys(TEMPERAMENTS);

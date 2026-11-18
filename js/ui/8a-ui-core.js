@@ -410,6 +410,68 @@ function toggleFamilyDescription(element, event) {
     }
 }
 
+// Temperament popup. Unlike the other badge popups it is rendered on document.body
+// instead of inside the clicked word's parent: party slots sit in an overflow-clipped,
+// hover-transformed container, and combat panels are re-rendered constantly.
+let temperamentPopupEl = null;
+let temperamentPopupAnchor = null;
+
+function closeTemperamentPopup() {
+    if (temperamentPopupEl) temperamentPopupEl.remove();
+    temperamentPopupEl = null;
+    temperamentPopupAnchor = null;
+}
+
+function toggleTemperamentDescription(element, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+
+    const wasOpenHere = temperamentPopupAnchor === element;
+    closeTemperamentPopup();
+    if (wasOpenHere) return;
+
+    // Mutually exclusive with the element / rarity / family popups
+    document.querySelectorAll('.element-matchup-collapsible.open, .element-guide-collapsible.open, .family-matchup-collapsible.open, .family-guide-collapsible.open').forEach(el => {
+        el.classList.remove('open');
+    });
+    clearCombatCardPopupStyles();
+
+    const temperament = Object.values(TEMPERAMENTS).find(t => t.name === element.textContent);
+    if (!temperament) return;
+    const { positive, negative, modifier, flavor } = temperament;
+    const effect = positive === negative
+        ? `Raises and lowers ${capitalize(positive)} by ${modifier} - no net change.`
+        : `<span class="combat-buff">+${modifier} ${capitalize(positive)}</span><br><span class="combat-debuff">-${modifier} ${capitalize(negative)}</span>`;
+
+    const popup = document.createElement('div');
+    popup.className = 'temperament-popup';
+    popup.innerHTML = `<p class="element-flavor-text"><strong>${temperament.name}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">${effect}`;
+    document.body.appendChild(popup);
+    temperamentPopupEl = popup;
+    temperamentPopupAnchor = element;
+
+    // Centered under the badge (above it if there is no room), kept inside the viewport
+    const rect = element.getBoundingClientRect();
+    const width = Math.min(240, window.innerWidth - 16);
+    popup.style.width = width + 'px';
+    popup.style.left = Math.max(8, Math.min(rect.left + rect.width / 2 - width / 2, window.innerWidth - width - 8)) + 'px';
+    const fitsBelow = window.innerHeight - rect.bottom >= popup.offsetHeight + 8;
+    popup.style.top = Math.max(8, fitsBelow ? rect.bottom + 4 : rect.top - popup.offsetHeight - 4) + 'px';
+}
+
+// Close on any click outside a temperament word/popup (capture phase, so it also
+// runs for clicks whose own handlers stop propagation), and on scroll/resize since
+// the popup is positioned in viewport coordinates.
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.clickable-temperament') || e.target.closest('.temperament-popup')) return;
+    closeTemperamentPopup();
+}, true);
+window.addEventListener('scroll', (e) => {
+    if (temperamentPopupEl && !temperamentPopupEl.contains(e.target)) closeTemperamentPopup();
+}, true);
+window.addEventListener('resize', closeTemperamentPopup);
+
 // Toggle rune descriptions globally for both combatant panels
 function toggleRuneDescriptions() {
     ui.runeDescriptionsVisible = !ui.runeDescriptionsVisible;

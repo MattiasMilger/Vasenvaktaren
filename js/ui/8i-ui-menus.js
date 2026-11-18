@@ -649,7 +649,8 @@ achievementsHtml += '</div></div>';
     // attribute lowered. Every attribute (including Strength and Wisdom) can
     // appear on both axes, and the diagonal (same attribute raised and
     // lowered) is filled by the neutral temperaments, so this is a full
-    // square grid with no gaps.
+    // square grid with no gaps. Each temperament name is clickable and opens
+    // the same popup (flavor + effect) used everywhere else in the game.
     UIController.prototype.generateTemperamentsHTML = function() {
         // Build a lookup from "positive|negative" -> temperament
         const byPair = {};
@@ -685,7 +686,7 @@ achievementsHtml += '</div></div>';
             <div class="guide-category" data-cat="temperaments">
                 <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Temperaments<button class="guide-favorite-btn" type="button">☆</button></h4>
                 <div class="guide-category-body">
-                    <p><strong>Temperaments</strong><br>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}.</p>
+                    <p><strong>Temperaments</strong><br>Väsen you encounter and tame will all have different temperaments. Temperaments trade one property for another. Each modifier is a flat +${modifier}/-${modifier}. Click a temperament to see what it does.</p>
                     <table style="${tableStyle}">
                         <thead>
                             <tr>
@@ -701,7 +702,7 @@ achievementsHtml += '</div></div>';
             colAttrs.forEach(col => {
                 const t = byPair[`${row}|${col}`];
                 if (t) {
-                    html += `<td style="${cellStyle}">${t.name}<span style="${cellModifierStyle}">+${t.modifier}/-${t.modifier}</span></td>`;
+                    html += `<td style="${cellStyle}">${this.getTemperamentTextHTML(t)}<span style="${cellModifierStyle}">+${t.modifier}/-${t.modifier}</span></td>`;
                 } else {
                     html += `<td style="${emptyCellStyle}">&mdash;</td>`;
                 }

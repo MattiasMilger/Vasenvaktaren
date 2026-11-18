@@ -80,8 +80,7 @@ modal.classList.add('active');
         });
 
         const temperamentMessage = species
-            ? `<p>Your <strong>${species.name}</strong>'s temperament is <strong>${temperament.name}</strong>
-               (+${temperament.modifier} ${capitalize(temperament.positive)} / -${temperament.modifier} ${capitalize(temperament.negative)}).</p>`
+            ? `<p>Your <strong>${species.name}</strong>'s temperament is ${this.getTemperamentTextHTML(temperament)}.</p>`
             : '';
 
         this.showDialogue(
