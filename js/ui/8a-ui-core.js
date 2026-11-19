@@ -440,9 +440,7 @@ function toggleTemperamentDescription(element, event) {
     const temperament = Object.values(TEMPERAMENTS).find(t => t.name === element.textContent);
     if (!temperament) return;
     const { positive, negative, modifier, flavor } = temperament;
-    const effect = positive === negative
-        ? `Raises and lowers ${capitalize(positive)} by ${modifier} - no net change.`
-        : `<span class="combat-buff">+${modifier} ${capitalize(positive)}</span><br><span class="combat-debuff">-${modifier} ${capitalize(negative)}</span>`;
+    const effect = `<span class="combat-buff">+${modifier} ${capitalize(positive)}</span><br><span class="combat-debuff">-${modifier} ${capitalize(negative)}</span>`;
 
     const popup = document.createElement('div');
     popup.className = 'temperament-popup';
