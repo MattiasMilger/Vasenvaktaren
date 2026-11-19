@@ -494,7 +494,7 @@ UIController.prototype.renderActionButtons = function(combat) {
 
     document.getElementById('btn-interrogate').disabled =
         !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
-        activeVasen.combatFlags.hasSwapSickness || combat.isAutoBattle;
+        activeVasen.combatFlags.hasSwapSickness || combat.correctItemGiven || combat.isAutoBattle;
     document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoBattle;
     document.getElementById('btn-surrender').disabled = combat.isAutoBattle;
 

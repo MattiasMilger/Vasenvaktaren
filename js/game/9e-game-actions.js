@@ -58,6 +58,8 @@ Game.prototype.handleOfferItem = function(itemId) {
 Game.prototype.handleInterrogate = function() {
     if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
     if (!this.currentCombat.isWildEncounter) return;
+    // Already offered the desired item - nothing left to learn
+    if (this.currentCombat.correctItemGiven) return;
 
     // Show the confirmation dialog
     ui.showDialogue(
