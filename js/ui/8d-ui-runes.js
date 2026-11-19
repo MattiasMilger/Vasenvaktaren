@@ -69,7 +69,7 @@ UIController.prototype.renderRuneInventory = function() {
             <div class="rune-card-info">
                 <span class="rune-card-name">${rune.name}</span>
                 <span class="rune-card-effect">${rune.effect}</span>
-                ${equippedTo ? `<span class="rune-card-equipped">Equipped to ${equippedTo.getDisplayName()}</span>` : ''}
+                ${equippedTo ? `<span class="rune-card-equipped">${inlineIcon('equip')}Equipped to ${equippedTo.getDisplayName()}</span>` : ''}
             </div>
         `;
 

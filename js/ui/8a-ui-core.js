@@ -10,27 +10,95 @@ const UI_ICONS = {
     vasen:    '<path d="M5 3c0 4 1 6 3 7"/><path d="M19 3c0 4-1 6-3 7"/><path d="M8 10h8l1 5-5 6-5-6z"/><path d="M10 14h.01"/><path d="M14 14h.01"/>',
     runes:    '<path d="M8 3v18M8 8l8-5M8 14l8-5"/>',
     items:    '<path d="M8 7 7 3h10l-1 4"/><path d="M8 7c-3 3-4 6-4 9a5 5 0 0 0 5 5h6a5 5 0 0 0 5-5c0-3-1-6-4-9"/><path d="M8 7h8"/>',
-    offer:    '<path d="M3 5c0 9 7 15 18 14C14 18 11 13 11 4"/><path d="M3 5c3-2 6-2 8-1"/>',
     sort:     '<path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>',
     heal:     '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
-    equip:    '<path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"/><path d="m18 15-4-4"/><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/>',
+    equip:    '<path d="M12 5v14M5 12h14"/>', // plus: add (a rune)
     trophy:   '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
     book:     '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
     gem:      '<path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>',
-    tower:    '<path d="M7 22V9L6 7V3h3v2h2V3h2v2h2V3h3v4l-1 2v13"/><path d="M4 22h16"/><path d="M10 22v-4a2 2 0 0 1 4 0v4"/>',
     swords:   '<polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/>',
     compass:  '<circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/>',
     lock:     '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
     upload:   '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>',
-    trash:    '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'
+    trash:    '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>',
+    // Skill types:
+    // strength - Mjölnir, Thor's hammer: the god of might (pairs with Odin's eye for wisdom)
+    // wisdom   - Odin's eye: the eye he gave at Mímir's well in exchange for wisdom
+    // mixed    - Gungnir, Odin's spear: a physical weapon wielded by the god of wisdom (Völuspá 24, the first war begins with his spear-cast)
+    // utility  - sparks of galdr/seiðr: magic that blesses, curses and buffs rather than strikes
+    strength: '<path d="M3 2.5h18l-1.5 3.75L21 10H3l1.5-3.75z"/><path d="M10 10v10a2 2 0 0 0 4 0V10"/><path d="M10 14.5h4M10 17.5h4"/>',
+    wisdom:   '<path d="M2 12c3-5 6.5-7 10-7s7 2 10 7c-3 5-6.5 7-10 7s-7-2-10-7z"/><circle cx="12" cy="12" r="3"/>',
+    mixed:    '<path d="M21 3l-1.6 4.8-4.1.9.9-4.1z"/><path d="M19.6 4.4 3 21"/><path d="m12.7 9.1 2.2 2.2"/>',
+    utility:  '<path d="M10 3c.5 4 2 5.5 6 6.5-4 1-5.5 2.5-6 6.5-.5-4-2-5.5-6-6.5 4-1 5.5-2.5 6-6.5z"/><path d="M18 14c.3 2 1 2.7 3 3-2 .3-2.7 1-3 3-.3-2-1-2.7-3-3 2-.3 2.7-1 3-3z"/>',
+
+    // Elements: stone/mountain, seed/sprout, river/droplet, flame, storm/wind
+    earth:  '<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>',
+    nature: '<path d="M12 22V11"/><path d="M12 13c-5 0-8-3-8-8 5 0 8 3 8 8z"/><path d="M12 11c0-4.5 3-7.5 8-7.5 0 4.5-3 7.5-8 7.5z"/>',
+    water:  '<path d="M12 21.5a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 10.6 5 12.5 5 14.5a7 7 0 0 0 7 7z"/><path d="M8.5 14.5a3.5 3.5 0 0 0 3.5 3.5"/>',
+    fire:   '<path d="M12 22c4.5 0 7.5-3 7.5-7 0-3.5-2-6-4-8 0 2.5-1 4-2.5 4.5C13.5 7 12 4 9 2c.5 3-1 5.5-2.5 7.5S4.5 13 4.5 15c0 4 3 7 7.5 7z"/><path d="M12 22c-2 0-3.2-1.4-3.2-3.2 0-1.6 1.2-3 2.2-4 .3 1 .8 1.5 1.5 1.7.2-1.2.8-2.2 1.7-3 .9 1.3 1.3 2.6 1.3 4.2 0 2.5-1.5 4.3-3.5 4.3z"/>',
+    wind:   '<path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/>',
+
+    // Statuses
+    preparing: '<path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/>',
+
+    // Actions and header/menu buttons (previously duplicated inline in index.html and JS)
+    swap:        '<path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/>',
+    interrogate: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+    pass:        '<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>',
+    surrender:   '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>',
+    shuffle:     '<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
+    profile:     '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    guide:       '<path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-2 2v1"/>',
+    settings:    '<g transform="translate(4.1 1.8) scale(0.66)" stroke-width="3"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></g><path d="M4 22l16-5"/><path d="M20 22L4 17"/>'
 };
 
-function uiIcon(name, size = 16) {
+// size: a number (px) or any CSS length such as '1em'. extraClass is appended to "ui-icon".
+function uiIcon(name, size = 16, extraClass = '') {
     const paths = UI_ICONS[name];
     if (!paths) return '';
-    return `<svg class="ui-icon" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+    return `<svg class="ui-icon${extraClass ? ' ' + extraClass : ''}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
 }
+
+// Icon placed in front of a text label; sized to the surrounding font.
+function inlineIcon(name) {
+    return uiIcon(name, '1em', 'inline-icon');
+}
+
+// Skill type icon: Mjölnir = Strength, Odin's eye = Wisdom, Gungnir = Mixed, sparkles = Utility
+const SKILL_TYPE_ICONS = {
+    [ATTACK_TYPES.STRENGTH]: 'strength',
+    [ATTACK_TYPES.WISDOM]:   'wisdom',
+    [ATTACK_TYPES.MIXED]:    'mixed',
+    [ATTACK_TYPES.UTILITY]:  'utility'
+};
+
+function skillTypeIcon(skill) {
+    return skill ? inlineIcon(SKILL_TYPE_ICONS[skill.type]) : '';
+}
+
+// Lore Book categories that match an iconed concept (keys of LORE_CATEGORIES)
+const LORE_CATEGORY_ICONS = {
+    vasen: 'vasen',
+    vasen_inaccessible: 'vasen',
+    items: 'items'
+};
+
+// element: an ELEMENTS value ('Earth', 'Fire', ...)
+function elementIcon(element) {
+    return element ? inlineIcon(String(element).toLowerCase()) : '';
+}
+
+// Static markup in index.html uses <i data-ui-icon="name" data-size="16"></i>
+// placeholders so every icon comes from UI_ICONS. Replace them with the SVG.
+function hydrateStaticIcons(root = document) {
+    root.querySelectorAll('[data-ui-icon]').forEach(el => {
+        const size = el.dataset.size || '1em';
+        const extra = el.dataset.size ? '' : 'inline-icon';
+        el.outerHTML = uiIcon(el.dataset.uiIcon, size, extra);
+    });
+}
+hydrateStaticIcons();
 
 class UIController {
     constructor() {

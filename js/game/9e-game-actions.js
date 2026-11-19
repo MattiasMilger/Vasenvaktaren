@@ -93,7 +93,10 @@ Game.prototype.handleInterrogate = function() {
                 class: 'btn-secondary',
                 // callback: null will close the modal without executing the action
             }
-        ]
+        ],
+        true,
+        null,
+        'interrogate'
     );
 };
 
@@ -112,7 +115,7 @@ Game.prototype.handleSurrender = function() {
         '<p>Are you sure you want to surrender? Your party will be left at very low health.</p>',
         [
             {
-                text: 'Surrender',
+                text: `${uiIcon('surrender')}Surrender`,
                 class: 'btn-danger',
                 callback: () => {
                     this.currentCombat.executePlayerAction({ type: 'surrender' });
@@ -123,7 +126,10 @@ Game.prototype.handleSurrender = function() {
                 class: 'btn-secondary',
                 callback: null
             }
-        ]
+        ],
+        true,
+        null,
+        'surrender'
     );
 };
 
@@ -150,7 +156,7 @@ Game.prototype.handleAutoBattle = function() {
         '<p>Let the AI fight for you? The combat will play out automatically using the same AI as the enemy.</p>',
         [
             {
-                text: 'Start Auto Battle',
+                text: `${uiIcon('swords')}Start Auto Battle`,
                 class: 'btn-primary',
                 callback: () => {
                     this.startAutoBattle();
@@ -161,7 +167,10 @@ Game.prototype.handleAutoBattle = function() {
                 class: 'btn-secondary',
                 callback: null
             }
-        ]
+        ],
+        true,
+        null,
+        'swords'
     );
 };
 

@@ -35,7 +35,7 @@ UIController.prototype.renderItemInventory = function() {
         card.innerHTML = `
             <button class="favorite-toggle ${isFavorite ? 'active' : ''}">${isFavorite ? '★' : '☆'}</button>
             <div class="item-info">
-                <span class="item-name">${item.name}</span>
+                <span class="item-name">${inlineIcon('items')}${item.name}</span>
             </div>
             <span class="item-count">x${count}</span>
         `;
@@ -153,7 +153,7 @@ UIController.prototype.showItemOptions = function(itemId) {
     // Add Offer Item button if in combat with wild encounter
     if (canGift) {
         buttons.push({
-            text: `${uiIcon('offer')}Offer Item`,
+            text: `${uiIcon('items')}Offer Item`,
             class: 'btn-primary',
             callback: () => game.handleOfferItem(itemId)
         });
@@ -172,7 +172,10 @@ UIController.prototype.showItemOptions = function(itemId) {
     this.showDialogue(
         'Item',
         `<p>${desc}</p>`,
-        buttons
+        buttons,
+        true,
+        null,
+        'items'
     );
 };
 

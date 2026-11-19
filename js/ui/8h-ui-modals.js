@@ -76,7 +76,7 @@ modal.classList.add('active');
         let startingItemsMessage = '';
         startingItems.forEach(itemId => {
             const itemName = TAMING_ITEMS[itemId]?.name || itemId;
-            startingItemsMessage += `<p>You received: <strong>${itemName}</strong>!</p>`;
+            startingItemsMessage += `<p>You received: <strong>${inlineIcon('items')}${itemName}</strong>!</p>`;
         });
 
         const temperamentMessage = species
@@ -151,7 +151,7 @@ modal.classList.add('active');
                 }
 
                 itemBtn.innerHTML = `
-                    <span class="offer-item-name">${item.name}</span>
+                    <span class="offer-item-name">${inlineIcon('items')}${item.name}</span>
                     <span class="offer-item-count">x${count}</span>
                 `;
                 itemBtn.onclick = () => {
@@ -319,7 +319,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
                 this.showDialogue(
     'Wild Encounter!',
     `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
-    [{ text: 'Combat!', callback: () => game.startCombat(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
+    [{ text: `${uiIcon('swords')}Combat!`, callback: () => game.startCombat(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
     false, // <-- non-dismissible
     null,
     'vasen'
@@ -338,7 +338,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     `<p>${itemDialogue}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: 'Next', callback: () => game.explore(), class: nextClass }
+        { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
     ],
     false,
     null,
@@ -353,7 +353,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     `<p>${result.dialogue}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: 'Next', callback: () => game.explore(), class: nextClass }
+        { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
     ],
     false,
     null,
@@ -368,7 +368,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p><p class="rune-effect">${RUNES[result.runeId].effect}</p>`,
     [
         { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: 'Next', callback: () => game.explore(), class: nextClass }
+        { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
     ],
     false,
     null,
@@ -409,7 +409,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
             message = `<p>${result.message}</p>`;
         }
 
-        this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false);
+        this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false, null, 'swords');
 
         // Countdown timer for the button
         let remainingSeconds = Math.ceil(GAME_CONFIG.COMBAT_RESULT_BUTTON_DELAY / 1000);

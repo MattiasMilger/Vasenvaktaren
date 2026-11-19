@@ -19,12 +19,24 @@ Game.prototype.challengeGuardian = function() {
         ? (guardian.dialogue.rematch || guardian.dialogue.challenge)
         : guardian.dialogue.challenge;
 
+    // First-guardian tutorial: shown until any guardian has been defeated.
+    // Derived from defeatedGuardians, so it disappears on its own after the
+    // first win and needs no separate save flag.
+    let tutorialHtml = '';
+    if (gameState.defeatedGuardians.size === 0) {
+        tutorialHtml = `
+            <div class="guardian-tutorial">
+                <div class="guardian-tutorial-title">Recommended</div>
+                <p>A full party of ${MAX_PARTY_SIZE} healthy Väsen of matching level (Lvl ${guardian.team[0].level}).</p>
+            </div>`;
+    }
+
     ui.showDialogue(
     guardian.name,
-    `<p>${dialogueText}</p>`,
+    `<p>${dialogueText}</p>${tutorialHtml}`,
     [
         {
-            text: 'Fight!',
+            text: `${uiIcon('swords')}Fight!`,
             callback: () => this.startGuardianCombat(guardian)
         },
         {
@@ -94,7 +106,9 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
             result.tie ? 'Tie' : 'Defeat',
             `<p>${result.tie ? result.message : guardian.dialogue.lose}</p>`,
             [{ text: 'Continue', callback: () => this.endCombat() }],
-            false
+            false,
+            null,
+            'swords'
         );
         return;
     }
@@ -220,7 +234,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
                 itemsToGive.forEach(itemId => {
                     gameState.addItem(itemId, 1);
                     const itemName = TAMING_ITEMS[itemId]?.name || itemId;
-                    message += `<p>You received: <strong>${itemName}</strong>!</p>`;
+                    message += `<p>You received: <strong>${inlineIcon('items')}${itemName}</strong>!</p>`;
                 });
             }
         }
@@ -232,7 +246,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         };
     }
 
-    ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: callback }], false);
+    ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: callback }], false, null, 'swords');
 
     gameState.saveGame();
 };

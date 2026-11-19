@@ -232,6 +232,13 @@
         font-size: var(--font-size-lg);
     }
 
+    /* Stacked layout: the "VS" row only costs space. Hide it; in the
+       Endless Tower keep the floor number and hide just the VS text. */
+    .combat-versus:not(.has-floor),
+    .combat-versus-text {
+        display: none;
+    }
+
     /* --- prevent combat log from covering combatants --- */
     .panel-right {
         display: flex;

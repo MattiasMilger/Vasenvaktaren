@@ -94,7 +94,7 @@ UIController.prototype.updateZoneDescription = function() {
             <p>${zone.description}</p>
             <div class="zone-meta">
                 <span>Level Range: ${zone.levelRange[0]} - ${zone.levelRange[1]}</span>
-                ${zone.guardian ? `<span>Guardian: ${zone.guardian.name} (Lvl ${zone.guardian.team[0].level})</span>` : ''}
+                ${zone.guardian ? `<span>${inlineIcon('swords')}Guardian: ${zone.guardian.name} (Lvl ${zone.guardian.team[0].level})</span>` : ''}
             </div>
         `;
     };
@@ -105,7 +105,7 @@ UIController.prototype.updateExploreButton = function() {
         const hasParty = gameState.party.some(p => p !== null);
 
         if (zone) {
-            const compassIcon = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/></svg>`;
+            const compassIcon = uiIcon('compass', 18);
             this.exploreBtn.innerHTML = `${compassIcon}Explore <span class="btn-hint">(Lvl ${zone.levelRange[0]}-${zone.levelRange[1]})</span>`;
             this.exploreBtn.disabled = !hasParty || gameState.inCombat;
 

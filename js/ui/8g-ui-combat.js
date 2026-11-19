@@ -68,13 +68,16 @@ UIController.prototype.renderCombat = function(combat) {
 
         // Render Endless Tower floor display if applicable
         const versusDiv = this.combatVersus;
+        // "has-floor" keeps the element visible on stacked layouts (only the VS text is hidden there)
         if (combat.isEndlessTower && combat.currentFloor) {
+            versusDiv.classList.add('has-floor');
             versusDiv.innerHTML = `
                 <div class="endless-tower-floor">Floor ${combat.currentFloor}</div>
-                <div>VS</div>
+                <div class="combat-versus-text">VS</div>
             `;
         } else {
-            versusDiv.innerHTML = 'VS';
+            versusDiv.classList.remove('has-floor');
+            versusDiv.innerHTML = '<span class="combat-versus-text">VS</span>';
         }
 
         // Render action buttons
@@ -152,7 +155,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
                     </div>
                 `;
            }).join('')}`
-        : '<span class="runes-label">Rune:</span> <span class="no-rune">None</span>';
+        : '<span class="runes-label">' + inlineIcon('runes') + 'Rune:</span> <span class="no-rune">None</span>';
 
     // Bind rune effect text - shown below the rune list (outside both rune
     // boxes), not inside either individual rune's collapsible body. The
@@ -170,7 +173,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
     const attackElementsHtml = attackElements.map(e => {
         return `
             <div class="element-matchup-collapsible inline-collapsible">
-                <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${e}</span>
+                <span class="element-mini element-${e.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${elementIcon(e)}${e}</span>
                 ${this.generateAttackingMatchupsHTML(e)}
             </div>
         `;
@@ -200,7 +203,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
             <div class="combatant-image-container ${vasen.isKnockedOut() ? '' : 'holo-' + vasen.species.rarity.toLowerCase()}">
                 <img src="${vasen.species.image}" alt="${vasen.species.name}"
                      class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
-                ${vasen.combatFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">Preparing</span>' : ''}
+                ${vasen.combatFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">' + inlineIcon('preparing') + 'Preparing</span>' : ''}
                 ${vasen.combatFlags.valnadPassiveTriggered ? '<span class="deathless-rune">ᛣ</span>' : ''}
             </div>
 
@@ -223,7 +226,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
 
                 <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element"
                       onclick="toggleElementMatchup(this, event)">
-                    ${vasen.species.element}
+                    ${elementIcon(vasen.species.element)}${vasen.species.element}
                 </span>
 
                 <div class="rarity-matchup-collapsible family-matchup-collapsible">
@@ -365,7 +368,7 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
                     <span class="standard-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
                 </div>
                 <div class="standard-vasen-badges">
-                    <span class="element-badge element-${vasen.species.element.toLowerCase()}">${vasen.species.element}</span>
+                    <span class="element-badge element-${vasen.species.element.toLowerCase()}">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
                     <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
                     <span class="family-badge">${vasen.species.family}</span>
                 </div>
@@ -502,9 +505,9 @@ UIController.prototype.renderActionButtons = function(combat) {
         btn.disabled = !canUse || !combat.waitingForPlayerAction || combat.isAutoBattle;
         btn.innerHTML = `
             <span class="skill-btn-name">${skill.name}</span>
-            <span class="skill-btn-type">${skill.type}</span>
+            <span class="skill-btn-type">${skillTypeIcon(skill)}${skill.type}</span>
             <span class="skill-btn-attributes">
-                <span class="skill-btn-element element-${skillElement.toLowerCase()}">${skillElement}</span>
+                <span class="skill-btn-element element-${skillElement.toLowerCase()}">${elementIcon(skillElement)}${skillElement}</span>
                 <span class="skill-btn-cost">Megin: ${meginCost}</span>
                 ${skill.healthCost ? `<span class="skill-btn-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                 ${skill.power ? `<span class="skill-btn-power">Power: ${getSkillPower(skillName, activeVasen.species.family)}</span>` : ''}
@@ -548,7 +551,7 @@ UIController.prototype.renderActionButtons = function(combat) {
 
     // Auto Battle button
     const autoBattleBtn = document.getElementById('btn-auto-combat');
-    const autoBattleIcon = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg>`;
+    const autoBattleIcon = uiIcon('swords');
     if (combat.isAutoBattle) {
         autoBattleBtn.innerHTML = `${autoBattleIcon}Cancel Auto Battle`;
         autoBattleBtn.disabled = false;

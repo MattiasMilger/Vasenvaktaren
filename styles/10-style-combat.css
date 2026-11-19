@@ -683,6 +683,11 @@
     color: var(--text-muted);
 }
 
+/* Each stat (icon + label + value) wraps as one unit */
+.skill-btn-attributes > span {
+    white-space: nowrap;
+}
+
 .skill-btn-desc {
     display: block;
     font-size: var(--font-size-xs);
@@ -1045,9 +1050,28 @@
     transform: none;
 }
 
-/* Settings Modal */
+/* Menu windows: centered title (matching the dialogues) with room below it */
+.modal-settings .modal-title,
+.modal-tips .modal-title,
+.modal-profile .modal-title,
+.modal-lore .modal-title {
+    text-align: center;
+}
+
+.modal-settings .modal-title,
+.modal-tips .modal-title {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Settings Modal - short controls, laid out centered like a dialogue */
 .modal-settings {
     max-width: 400px;
+    text-align: center;
+}
+
+.modal-settings .toggle-switch-row,
+.modal-settings .save-buttons {
+    justify-content: center;
 }
 
 .settings-section {
@@ -2057,6 +2081,22 @@ button.tutorial-blink {
     z-index: 1;
 }
 
+/* Swap sickness ("Preparing") status pill, overlaid on the portrait's bottom-right
+   corner (the deathless rune uses the bottom-left corner). */
+.status-icon.swap-sickness {
+    position: absolute;
+    bottom: -6px;
+    right: -18px;
+    padding: 1px 5px;
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    z-index: 1;
+}
+
 /* =============================================================================
    FREYA'S TEARS - Faint blue outline glow on the combatant panel.
    ============================================================================= */
@@ -2086,3 +2126,34 @@ button.tutorial-blink {
 }
 
 /* End of 10-style-combat.css */
+
+/* First guardian challenge tutorial note (shown until the first guardian is defeated) */
+.guardian-tutorial {
+    margin: var(--spacing-md) auto 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: fit-content;
+    max-width: 100%;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--accent-gold);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent-warning) 35%, transparent);
+    text-align: left;
+}
+
+.guardian-tutorial-title {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--accent-warning);
+    margin-bottom: var(--spacing-xs);
+}
+
+.guardian-tutorial p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}

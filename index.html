@@ -290,14 +290,14 @@
             </div>
             <div class="header-center">
                 <button id="player-profile" class="player-profile btn btn-small">
-                    <svg class="player-profile-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <i data-ui-icon="profile" data-size="14"></i>
                     <span id="player-name-display">Väktare</span>
                 </button>
             </div>
             <div class="header-right">
-                <button id="combat-tips-btn" class="btn btn-small"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-2 2v1"/></svg>Game Guide</button>
-                <button id="lore-btn" class="btn btn-small"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Lore Book</button>
-                <button id="settings-btn" class="btn btn-small"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="translate(4.1 1.8) scale(0.66)" stroke-width="3"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></g><path d="M4 22l16-5"/><path d="M20 22L4 17"/></svg>Settings</button>
+                <button id="combat-tips-btn" class="btn btn-small"><i data-ui-icon="guide" data-size="14"></i>Game Guide</button>
+                <button id="lore-btn" class="btn btn-small"><i data-ui-icon="book" data-size="14"></i>Lore Book</button>
+                <button id="settings-btn" class="btn btn-small"><i data-ui-icon="settings" data-size="14"></i>Settings</button>
             </div>
         </header>
 
@@ -306,9 +306,9 @@
             <!-- Left Panel - Inventory -->
             <aside class="panel panel-left">
                 <div class="panel-tabs">
-                    <button id="tab-vasen" class="tab-btn active" data-tab="vasen"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3c0 4 1 6 3 7"/><path d="M19 3c0 4-1 6-3 7"/><path d="M8 10h8l1 5-5 6-5-6z"/><path d="M10 14h.01"/><path d="M14 14h.01"/></svg>Väsen</button>
-                    <button id="tab-runes" class="tab-btn" data-tab="runes"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v18M8 8l8-5M8 14l8-5"/></svg>Runes</button>
-                    <button id="tab-items" class="tab-btn" data-tab="items"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7 7 3h10l-1 4"/><path d="M8 7c-3 3-4 6-4 9a5 5 0 0 0 5 5h6a5 5 0 0 0 5-5c0-3-1-6-4-9"/><path d="M8 7h8"/></svg>Items</button>
+                    <button id="tab-vasen" class="tab-btn active" data-tab="vasen"><i data-ui-icon="vasen" data-size="16"></i>Väsen</button>
+                    <button id="tab-runes" class="tab-btn" data-tab="runes"><i data-ui-icon="runes" data-size="16"></i>Runes</button>
+                    <button id="tab-items" class="tab-btn" data-tab="items"><i data-ui-icon="items" data-size="16"></i>Items</button>
                 </div>
                 <div class="panel-content">
                     <!-- Väsen Tab -->
@@ -405,19 +405,19 @@
                     <div id="combat-ui" class="combat-ui">
                         <div class="combat-arena">
                             <div id="player-panel" class="combatant-panel player-side"></div>
-                            <div class="combat-versus">VS</div>
+                            <div class="combat-versus"><span class="combat-versus-text">VS</span></div>
                             <div id="enemy-panel" class="combatant-panel enemy-side"></div>
                         </div>
                     </div>
 
                     <div id="skill-buttons" class="skill-buttons"></div>
                     <div class="action-buttons">
-                        <button id="btn-swap" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>Swap</button>
-                        <button id="btn-offer" class="btn btn-action"><svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7 7 3h10l-1 4"/><path d="M8 7c-3 3-4 6-4 9a5 5 0 0 0 5 5h6a5 5 0 0 0 5-5c0-3-1-6-4-9"/><path d="M8 7h8"/></svg></svg>Offer Item</button>
-                        <button id="btn-interrogate" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>Interrogate</button>
-                        <button id="btn-pass" class="btn btn-action"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>Pass</button>
-                        <button id="btn-surrender" class="btn btn-danger"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>Surrender</button>
-                        <button id="btn-auto-combat" class="btn btn-action btn-auto-combat"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v8H3z"/><path d="M8 3v8M16 3v8"/><path d="M12 11v8"/><circle cx="12" cy="21" r="1"/></svg>Auto Battle</button>
+                        <button id="btn-swap" class="btn btn-action"><i data-ui-icon="swap" data-size="16"></i>Swap</button>
+                        <button id="btn-offer" class="btn btn-action"><i data-ui-icon="items" data-size="16"></i>Offer Item</button>
+                        <button id="btn-interrogate" class="btn btn-action"><i data-ui-icon="interrogate" data-size="16"></i>Interrogate</button>
+                        <button id="btn-pass" class="btn btn-action"><i data-ui-icon="pass" data-size="16"></i>Pass</button>
+                        <button id="btn-surrender" class="btn btn-danger"><i data-ui-icon="surrender" data-size="16"></i>Surrender</button>
+                        <button id="btn-auto-combat" class="btn btn-action btn-auto-combat"><i data-ui-icon="swords" data-size="16"></i>Auto Battle</button>
                     </div>
 
                     <!-- Combat Log Toggle Button -->
@@ -455,7 +455,7 @@
 <div id="swap-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title">Choose a Väsen to Swap In</h3>
+            <h3 class="modal-title"><i data-ui-icon="swap" data-size="20"></i>Choose a Väsen to Swap In</h3>
             <button id="close-swap-modal" class="modal-close">×</button>
         </div>
         <div class="modal-body">
@@ -476,7 +476,7 @@
     <!-- Offer Item Modal -->
     <div id="offer-modal" class="modal">
         <div class="modal-content modal-offer">
-            <h3 class="modal-title">Offer Item</h3>
+            <h3 class="modal-title"><i data-ui-icon="items" data-size="20"></i>Offer Item</h3>
             <div id="offer-item-list" class="offer-item-list"></div>
             <button id="close-offer-modal" class="btn btn-secondary">Cancel</button>
         </div>
@@ -485,7 +485,7 @@
     <!-- Heal Väsen Modal -->
     <div id="heal-vasen-modal" class="modal">
         <div class="modal-content modal-heal">
-            <h3 class="modal-title">Use Item to Heal</h3>
+            <h3 class="modal-title"><i data-ui-icon="heal" data-size="20"></i>Use Item to Heal</h3>
             <div id="heal-vasen-list" class="heal-vasen-list"></div>
             <button id="close-heal-modal" class="btn btn-secondary">Cancel</button>
         </div>
@@ -494,7 +494,7 @@
     <!-- Rune Equip Modal -->
     <div id="rune-equip-modal" class="modal">
         <div class="modal-content modal-rune">
-            <h3 class="modal-title">Equip Rune</h3>
+            <h3 class="modal-title"><i data-ui-icon="equip" data-size="20"></i>Equip Rune</h3>
             <div id="rune-equip-list" class="rune-equip-list"></div>
             <button id="close-rune-modal" class="btn btn-secondary">Cancel</button>
         </div>
@@ -503,7 +503,7 @@
     <!-- Knockout Swap Modal -->
     <div id="knockout-swap-modal" class="modal">
         <div class="modal-content modal-swap">
-            <h3 class="modal-title">Choose Next Väsen</h3>
+            <h3 class="modal-title"><i data-ui-icon="swap" data-size="20"></i>Choose Next Väsen</h3>
             <p class="modal-subtitle">Your active Väsen was knocked out!</p>
             <div id="knockout-swap-list" class="swap-vasen-.list"></div>
         </div>
@@ -513,7 +513,7 @@
 <div id="rune-to-vasen-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title">Equip Rune to Väsen</h3>
+            <h3 class="modal-title"><i data-ui-icon="equip" data-size="20"></i>Equip Rune to Väsen</h3>
             <button id="close-rune-to-vasen-modal" class="modal-close">×</button>
         </div>
         <div class="modal-body">
@@ -538,7 +538,7 @@
 <!-- Lore Modal -->
 <div id="lore-modal" class="modal">
     <div class="modal-content modal-lore">
-        <h3 class="modal-title">Lore Book</h3>
+        <h3 class="modal-title"><i data-ui-icon="book" data-size="20"></i>Lore Book</h3>
         <div id="lore-content"></div>
         <button id="close-lore" class="btn btn-secondary">Close</button>
     </div>
@@ -559,7 +559,7 @@
 <!-- Settings Modal -->
 <div id="settings-modal" class="modal">
     <div class="modal-content modal-settings">
-        <h3 class="modal-title">Settings</h3>
+        <h3 class="modal-title"><i data-ui-icon="settings" data-size="20"></i>Settings</h3>
 
         <!-- Lore Book Settings -->
         <div class="settings-section">
@@ -580,8 +580,8 @@
             <p class="settings-note">Game auto-saves.</p>
 
             <div class="save-buttons">
-                <button id="export-save-btn" class="btn btn-secondary"><svg class="ui-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Export Save</button>
-                <button id="import-save-btn" class="btn btn-secondary"><svg class="ui-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Import Save</button>
+                <button id="export-save-btn" class="btn btn-secondary"><i data-ui-icon="download" data-size="14"></i>Export Save</button>
+                <button id="import-save-btn" class="btn btn-secondary"><i data-ui-icon="upload" data-size="14"></i>Import Save</button>
             </div>
 
             <textarea id="import-save-data" class="import-textarea" 
@@ -592,14 +592,13 @@
                 Import Now
             </button>
 
-            <button id="reset-game-btn" class="btn btn-danger"><svg class="ui-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>Reset Game</button>
+            <button id="reset-game-btn" class="btn btn-danger"><i data-ui-icon="trash" data-size="14"></i>Reset Game</button>
         </div>
 
         <!-- Credits Section -->
         <div class="settings-section">
             <h4>Credits</h4>
             <p>Developer: Mattias Milger</p>
-            </p>
             <p>
                 <a href="https://github.com/MattiasMilger/Vasenvaktaren"
                    target="_blank"
@@ -626,7 +625,7 @@
     <!-- Profile Modal -->
     <div id="profile-modal" class="modal">
         <div class="modal-content modal-profile">
-            <h3 class="modal-title">Player Profile</h3>
+            <h3 class="modal-title"><i data-ui-icon="profile" data-size="20"></i>Player Profile</h3>
             <div id="profile-content" class="profile-content">
                 <!-- Profile content rendered by JS -->
             </div>
@@ -638,7 +637,7 @@
     <!-- Game Guide Modal -->
     <div id="combat-tips-modal" class="modal">
         <div class="modal-content modal-tips">
-            <h3 class="modal-title">Game Guide</h3> <br>
+            <h3 class="modal-title"><i data-ui-icon="guide" data-size="20"></i>Game Guide</h3>
             <div class="tips-content">
                 <div class="tips-header-controls">
                     <button class="btn btn-small guide-collapse-btn">Collapse Categories</button>
@@ -714,7 +713,11 @@
                 <div class="guide-category" data-cat="skills">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Skills<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Use Skills</strong><br>Skills are the moves your väsen use in combat. Attack skills deal damage, while utility skills have other effects.</p>
+                        <p><strong>Use Skills</strong><br>Skills are the moves your väsen use in combat. Attack skills deal damage, while utility skills have other effects. Each skill is marked with its type:<br>
+                        <i data-ui-icon="strength"></i><strong>Strength Attack</strong>: scales with strength.<br>
+                        <i data-ui-icon="wisdom"></i><strong>Wisdom Attack</strong>: scales with wisdom.<br>
+                        <i data-ui-icon="mixed"></i><strong>Mixed Attack</strong>: scales with both strength and wisdom.<br>
+                        <i data-ui-icon="utility"></i><strong>Utility</strong>: buffs, debuffs and other effects.</p>
                         <p><strong>Power</strong><br>
                         Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (strength/wisdom).</p>
                         <p><strong>Initial Bonus</strong><br>

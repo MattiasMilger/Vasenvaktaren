@@ -140,7 +140,9 @@ Game.prototype.handleCombatEnd = function(result) {
             result.tie ? 'Tie' : 'Defeat',
             `<p>${result.message || 'Your party was overwhelmed!'}</p>`,
             [{ text: 'Continue', callback: () => this.endCombat() }],
-            false
+            false,
+            null,
+            'swords'
         );
         return;
     }

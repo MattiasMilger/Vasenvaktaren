@@ -23,7 +23,7 @@ Game.prototype.challengeEndlessTower = function() {
             : ''}`,
         [
             {
-                text: 'Begin Challenge',
+                text: `${uiIcon('swords')}Begin Challenge`,
                 callback: () => this.startEndlessTowerRun()
             },
             {
@@ -34,7 +34,7 @@ Game.prototype.challengeEndlessTower = function() {
         ],
         true,
         null,
-        'tower'
+        'swords'
     );
 };
 
@@ -241,7 +241,9 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
                     this.refreshUI();
                 }
             }],
-            false
+            false,
+            null,
+            'swords'
         );
         return;
     }
@@ -279,7 +281,9 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
                         this.refreshUI();
                     }
                 }],
-                false
+                false,
+                null,
+                'swords'
             );
             return;
         }
@@ -372,7 +376,9 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
                     this.refreshUI();
                 }
             }],
-            false
+            false,
+            null,
+            'swords'
         );
     }
 };

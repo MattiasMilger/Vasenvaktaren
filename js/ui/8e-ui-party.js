@@ -53,7 +53,7 @@ UIController.prototype.renderParty = function() {
                         <span class="party-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
 
                         <div class="party-vasen-tags">
-                            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${vasen.species.element}</span>
+                            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
                             <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'rarity')">${vasen.species.rarity}</span>
                             <span class="family-badge clickable-family card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'family')">${vasen.species.family}</span>
                         </div>
@@ -129,7 +129,7 @@ UIController.prototype._ensureAutoRunesButton = function() {
     btn.className = 'btn btn-auto-runes';
     btn.setAttribute('aria-label', 'Auto Equip Runes');
     btn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v18M8 8l8-5M8 14l8-5"/></svg>
+        ${uiIcon('runes')}
         <span>Auto Runes</span>
     `;
     btn.onclick = () => this.autoEquipRunes();
@@ -670,7 +670,7 @@ UIController.prototype._ensureAutoHealButton = function() {
     btn.className = 'btn btn-auto-runes';
     btn.setAttribute('aria-label', 'Auto Heal');
     btn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        ${uiIcon('heal')}
         <span>Auto Heal</span>
     `;
     btn.onclick = () => this.confirmAutoHeal();
@@ -689,7 +689,7 @@ UIController.prototype._ensureAutoTeamButton = function() {
     btn.className = 'btn btn-auto-runes';
     btn.setAttribute('aria-label', 'Auto Team');
     btn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        ${uiIcon('shuffle')}
         <span>Auto Team</span>
     `;
     btn.onclick = () => this.autoTeam();

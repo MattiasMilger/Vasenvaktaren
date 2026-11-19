@@ -689,9 +689,15 @@
 
 .skill-attributes {
     display: flex;
-    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    gap: 2px var(--spacing-sm);
     margin-bottom: var(--spacing-xs);
     font-size: var(--font-size-xs);
+}
+
+/* Each stat (icon + label + value) wraps as one unit */
+.skill-attributes > span {
+    white-space: nowrap;
 }
 
 .skill-element {

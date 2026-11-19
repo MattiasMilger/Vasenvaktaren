@@ -341,7 +341,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')">+</button>` : ''}
         </div>
         <div class="vasen-card-details">
-            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${vasen.species.element}</span>
+            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
             <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'rarity')">${vasen.species.rarity}</span>
             <span class="family-badge clickable-family card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'family')">${vasen.species.family}</span>
             ${isInParty ? '<span class="party-badge">In Party</span>' : ''}
@@ -458,13 +458,13 @@ UIController.prototype.generateAttackingMatchupsHTML = function(element, showFla
     }
     html += `<p class="matchup-section-label"><strong>Attacking:</strong></p>`;
     if (potent.length > 0) {
-        html += `<div class="matchup-row potent"><span class="matchup-label">Potent vs:</span> ${potent.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        html += `<div class="matchup-row potent"><span class="matchup-label">Potent vs:</span> ${potent.map(e => `<span class="element-mini element-${e.toLowerCase()}">${elementIcon(e)}${e}</span>`).join(' ')}</div>`;
     }
     if (neutral.length > 0) {
-        html += `<div class="matchup-row neutral"><span class="matchup-label">Neutral vs:</span> ${neutral.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        html += `<div class="matchup-row neutral"><span class="matchup-label">Neutral vs:</span> ${neutral.map(e => `<span class="element-mini element-${e.toLowerCase()}">${elementIcon(e)}${e}</span>`).join(' ')}</div>`;
     }
     if (weak.length > 0) {
-        html += `<div class="matchup-row weak"><span class="matchup-label">Weak vs:</span> ${weak.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        html += `<div class="matchup-row weak"><span class="matchup-label">Weak vs:</span> ${weak.map(e => `<span class="element-mini element-${e.toLowerCase()}">${elementIcon(e)}${e}</span>`).join(' ')}</div>`;
     }
     html += '</div>';
     return html;
@@ -490,13 +490,13 @@ UIController.prototype.generateDefensiveMatchupsHTML = function(element, showFla
     }
     html += `<p class="matchup-section-label"><strong>Defending:</strong></p>`;
     if (vulnerable.length > 0) {
-        html += `<div class="matchup-row vulnerable"><span class="matchup-label">Vulnerable to:</span> ${vulnerable.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        html += `<div class="matchup-row vulnerable"><span class="matchup-label">Vulnerable to:</span> ${vulnerable.map(e => `<span class="element-mini element-${e.toLowerCase()}">${elementIcon(e)}${e}</span>`).join(' ')}</div>`;
     }
     if (neutral.length > 0) {
-        html += `<div class="matchup-row neutral"><span class="matchup-label">Neutral against:</span> ${neutral.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        html += `<div class="matchup-row neutral"><span class="matchup-label">Neutral against:</span> ${neutral.map(e => `<span class="element-mini element-${e.toLowerCase()}">${elementIcon(e)}${e}</span>`).join(' ')}</div>`;
     }
     if (resists.length > 0) {
-        html += `<div class="matchup-row resists"><span class="matchup-label">Resists:</span> ${resists.map(e => `<span class="element-mini element-${e.toLowerCase()}">${e}</span>`).join(' ')}</div>`;
+        html += `<div class="matchup-row resists"><span class="matchup-label">Resists:</span> ${resists.map(e => `<span class="element-mini element-${e.toLowerCase()}">${elementIcon(e)}${e}</span>`).join(' ')}</div>`;
     }
     html += '</div>';
     return html;
@@ -539,7 +539,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                 </div>
                 <div class="details-meta">
                     <div class="element-matchup-collapsible">
-                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${vasen.species.element}</span>
+                        <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event)">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
                         ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
                     <div class="rarity-matchup-collapsible family-matchup-collapsible">
@@ -578,7 +578,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         </div>
 
         <div class="details-runes">
-            <h4>Runes (${equippedRuneCount}/${runeSlots})</h4>
+            <h4>${inlineIcon('runes')}Runes (${equippedRuneCount}/${runeSlots})</h4>
             <div class="rune-slots">
                 ${this.renderRuneSlots(vasen)}
             </div>
@@ -693,7 +693,7 @@ UIController.prototype.renderRuneSlots = function(vasen) {
         } else {
             html += `
                 <div class="rune-slot empty" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
-                    <span class="rune-placeholder">+ Equip Rune</span>
+                    <span class="rune-placeholder">${inlineIcon('equip')}Equip Rune</span>
                 </div>
             `;
         }
@@ -742,11 +742,11 @@ UIController.prototype.renderSkillsList = function(vasen) {
             <div class="skill-item element-${skillElement.toLowerCase()} ${isLearned ? 'learned' : 'locked'}">
                 <div class="skill-header">
                     <span class="skill-name">${skill.name}</span>
-                    <span class="skill-type-tag">${skill.type}</span>
+                    <span class="skill-type-tag">${skillTypeIcon(skill)}${skill.type}</span>
                 </div>
                 <div class="skill-attributes">
                     <div class="element-matchup-collapsible">
-                        <span class="skill-element element-${skillElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${skillElement}</span>
+                        <span class="skill-element element-${skillElement.toLowerCase()} clickable-element" onclick="event.stopPropagation(); toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${elementIcon(skillElement)}${skillElement}</span>
                         ${this.generateAttackingMatchupsHTML(skillElement)}
                     </div>
                     <span class="skill-cost">Megin: ${meginCost}</span>

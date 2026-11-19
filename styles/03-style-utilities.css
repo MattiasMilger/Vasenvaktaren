@@ -15,6 +15,22 @@
     color: var(--text-muted);
 }
 
+/* Icon in front of a window/dialog title or section heading */
+.modal-title > .ui-icon,
+h4 > .ui-icon {
+    vertical-align: -0.15em;
+    margin-right: 0.35em;
+    flex-shrink: 0;
+}
+
+/* Icon in front of a text label (elements, families, attributes, resources, skill stats, statuses).
+   Sized in em by inlineIcon(), so it follows the label's font size. */
+.inline-icon {
+    vertical-align: -0.125em;
+    margin-right: 0.25em;
+    flex-shrink: 0;
+}
+
 /* Message animations */
 @keyframes slideIn {
     from {

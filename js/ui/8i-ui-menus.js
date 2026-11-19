@@ -74,7 +74,7 @@
             'Reset all progress? All caught Väsen, runes, and zone progress will be lost permanently. Confirm to proceed.',
             [
                 {
-                    text: 'Reset',
+                    text: `${uiIcon('trash')}Reset`,
                     class: 'btn-danger',
                     callback: () => {
                         gameState.resetGame();
@@ -89,7 +89,10 @@
                     class: 'btn-secondary',
                     callback: null
                 }
-            ]
+            ],
+            true,
+            null,
+            'trash'
         );
     };
 
@@ -135,7 +138,7 @@ achievementsHtml += '</div></div>';
         content.innerHTML = `
             <div class="profile-name-section">
                 <div class="profile-identity-row">
-                    <div class="profile-portrait" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="profile-portrait" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${UI_ICONS.profile}</svg></div>
                     <div class="profile-name-fields">
                         <label for="profile-name-input">Player Name:</label>
                         <div class="profile-name-input-wrapper">
@@ -571,7 +574,7 @@ achievementsHtml += '</div></div>';
         elements.forEach(element => {
             html += `
                 <div class="element-guide-collapsible">
-                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${element}</span>
+                    <span class="element-badge element-${element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${elementIcon(element)}${element}</span>
                     <div class="element-guide-details">
                         <div class="guide-matchup-section">
                             ${this.generateAttackingMatchupsHTML(element)}

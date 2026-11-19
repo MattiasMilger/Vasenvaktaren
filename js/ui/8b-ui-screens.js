@@ -93,7 +93,7 @@ UIController.prototype.renderStarterSelection = function(starters, onSelect, onC
                 <h3 class="starter-name">${species.name}</h3>
                 <div class="starter-badges">
                     <div class="element-matchup-collapsible">
-                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${species.element}</span>
+                        <span class="element-badge element-${species.element.toLowerCase()} clickable-element" onclick="toggleElementMatchup(this, event); ui.scrollGuidePopupIntoView(this)">${elementIcon(species.element)}${species.element}</span>
                         ${ui.generateDefensiveMatchupsHTML(species.element)}
                     </div>
                     <div class="rarity-matchup-collapsible family-matchup-collapsible">
