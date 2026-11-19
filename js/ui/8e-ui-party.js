@@ -53,17 +53,9 @@ UIController.prototype.renderParty = function() {
                         <span class="party-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
 
                         <div class="party-vasen-tags">
-                            <span
-                                class="element-badge element-${vasen.species.element.toLowerCase()}"
-                            >
-                                ${vasen.species.element}
-                            </span>
-                            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">
-                                ${vasen.species.rarity}
-                            </span>
-                            <span class="family-badge">
-                                ${vasen.species.family}
-                            </span>
+                            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${vasen.species.element}</span>
+                            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'rarity')">${vasen.species.rarity}</span>
+                            <span class="family-badge clickable-family card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'family')">${vasen.species.family}</span>
                         </div>
                     </div>
 
