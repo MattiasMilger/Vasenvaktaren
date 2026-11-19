@@ -125,7 +125,7 @@ UIController.prototype.updateExploreButton = function() {
             } else if (gameState.currentZone === 'ZONE7') {
                 // Show Endless Tower button in Ginnungagap
                 this.challengeBtn.style.display = 'flex';
-                this.challengeBtn.innerHTML = `${uiIcon('tower', 18)}Challenge Endless Tower <span class="btn-hint">(Starts at Lvl 30)</span>`;
+                this.challengeBtn.innerHTML = `${uiIcon('swords', 18)}Challenge Endless Tower <span class="btn-hint">(Starts at Lvl 30)</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
             } else {
                 this.challengeBtn.style.display = 'none';

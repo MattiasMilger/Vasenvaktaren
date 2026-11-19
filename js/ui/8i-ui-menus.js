@@ -135,7 +135,7 @@ achievementsHtml += '</div></div>';
         content.innerHTML = `
             <div class="profile-name-section">
                 <div class="profile-identity-row">
-                    <img src="assets/other/vaktare.png" alt="Väktare" class="profile-portrait" width="64" height="64">
+                    <div class="profile-portrait" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
                     <div class="profile-name-fields">
                         <label for="profile-name-input">Player Name:</label>
                         <div class="profile-name-input-wrapper">
@@ -147,7 +147,7 @@ achievementsHtml += '</div></div>';
             </div>
 
             <div class="profile-collection-section">
-                <h4>${uiIcon('vasen', 14)}Collection:</h4>
+                <h4>${uiIcon('gem', 14)}Collection:</h4>
                 <div class="achievement">
                     <div class="collection-attributes">
                         <div class="collection-stat">
@@ -228,7 +228,7 @@ achievementsHtml += '</div></div>';
         if (!hasRecord) {
             return `
                 <div class="endless-tower-record locked">
-                    <h4>${uiIcon('tower', 14)}Endless Tower Record</h4>
+                    <h4>${uiIcon('lock', 14)}Endless Tower Record</h4>
                     <p class="record-placeholder">Challenge the Endless Tower in Ginnungagap to set a record</p>
                 </div>
             `;
@@ -264,7 +264,7 @@ achievementsHtml += '</div></div>';
 
         return `
             <div class="endless-tower-record achieved">
-                <h4>${uiIcon('tower', 14)}Endless Tower Record</h4>
+                <h4>${uiIcon('trophy', 14)}Endless Tower Record</h4>
                 <p class="record-floor">Highest Floor: <strong>${record.highestFloor}</strong></p>
                 <p class="record-date">Achieved: ${dateStr}</p>
                 ${teamHtml}

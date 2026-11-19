@@ -341,13 +341,9 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             ${canSwap ? `<button class="vasen-add-btn" onclick="event.stopPropagation(); ui.showSwapIntoPartyModal('${vasen.id}')">+</button>` : ''}
         </div>
         <div class="vasen-card-details">
-            <span
-                class="element-badge element-${vasen.species.element.toLowerCase()}"
-            >
-                ${vasen.species.element}
-            </span>
-            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
-            <span class="family-badge">${vasen.species.family}</span>
+            <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${vasen.species.element}</span>
+            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'rarity')">${vasen.species.rarity}</span>
+            <span class="family-badge clickable-family card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'family')">${vasen.species.family}</span>
             ${isInParty ? '<span class="party-badge">In Party</span>' : ''}
         </div>
         <div class="vasen-card-health">
@@ -573,7 +569,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         <div class="details-temperament">
             <h4>Temperament</h4>
             <span class="temperament-info">
-                ${vasen.temperament.name}
+                ${this.getTemperamentTextHTML(vasen.temperament)}
             </span>
             <span class="temperament-details">
                 +${vasen.temperament.modifier} ${capitalize(vasen.temperament.positive)} /

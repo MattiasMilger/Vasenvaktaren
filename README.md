@@ -165,10 +165,8 @@ Vasenvaktaren/
 └── assets/
     ├── vasen/
     │   └── [30 Väsen images]       (väsen portraits)
-    ├── zones/
-    │   └── [7 zone images]         (zone images)
-    └── other/
-        └── vaktare.png             (player profile portrait)
+    └── zones/
+        └── [7 zone images]         (zone images)
 ```
 
 ## Technical Reference

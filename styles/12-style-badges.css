@@ -185,7 +185,13 @@
     text-shadow: 0 0 8px color-mix(in srgb, var(--color-white) 90%, transparent);
 }
 
-/* Temperament popup - lives on document.body so no panel can clip it */
+/* Element / rarity / family badges on väsen inventory cards */
+.card-badge-clickable {
+    cursor: pointer;
+}
+
+/* Temperament popup - lives on document.body so no panel can clip it.
+   Also used for the badge popups on väsen inventory cards. */
 .temperament-popup {
     position: fixed;
     z-index: 99999;

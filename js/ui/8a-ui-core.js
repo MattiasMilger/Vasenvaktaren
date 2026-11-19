@@ -16,6 +16,7 @@ const UI_ICONS = {
     equip:    '<path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"/><path d="m18 15-4-4"/><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/>',
     trophy:   '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
     book:     '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+    gem:      '<path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>',
     tower:    '<path d="M7 22V9L6 7V3h3v2h2V3h2v2h2V3h3v4l-1 2v13"/><path d="M4 22h16"/><path d="M10 22v-4a2 2 0 0 1 4 0v4"/>',
     swords:   '<polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/>',
     compass:  '<circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/>',
@@ -422,7 +423,9 @@ function closeTemperamentPopup() {
     temperamentPopupAnchor = null;
 }
 
-function toggleTemperamentDescription(element, event) {
+// Toggle a body-level popup anchored to `element`. Returns without opening when the
+// same anchor is clicked again. `buildHtml` returns the popup content, or '' to skip.
+function toggleBodyPopup(element, event, buildHtml, maxWidth = 240) {
     if (event) {
         event.stopPropagation();
     }
@@ -437,32 +440,62 @@ function toggleTemperamentDescription(element, event) {
     });
     clearCombatCardPopupStyles();
 
-    const temperament = Object.values(TEMPERAMENTS).find(t => t.name === element.textContent);
-    if (!temperament) return;
-    const { positive, negative, modifier, flavor } = temperament;
-    const effect = `<span class="combat-buff">+${modifier} ${capitalize(positive)}</span><br><span class="combat-debuff">-${modifier} ${capitalize(negative)}</span>`;
+    const html = buildHtml();
+    if (!html) return;
 
     const popup = document.createElement('div');
     popup.className = 'temperament-popup';
-    popup.innerHTML = `<p class="element-flavor-text"><strong>${temperament.name}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">${effect}`;
+    popup.innerHTML = html;
     document.body.appendChild(popup);
     temperamentPopupEl = popup;
     temperamentPopupAnchor = element;
 
     // Centered under the badge (above it if there is no room), kept inside the viewport
     const rect = element.getBoundingClientRect();
-    const width = Math.min(240, window.innerWidth - 16);
+    const width = Math.min(maxWidth, window.innerWidth - 16);
     popup.style.width = width + 'px';
     popup.style.left = Math.max(8, Math.min(rect.left + rect.width / 2 - width / 2, window.innerWidth - width - 8)) + 'px';
     const fitsBelow = window.innerHeight - rect.bottom >= popup.offsetHeight + 8;
     popup.style.top = Math.max(8, fitsBelow ? rect.bottom + 4 : rect.top - popup.offsetHeight - 4) + 'px';
 }
 
+function toggleTemperamentDescription(element, event) {
+    toggleBodyPopup(element, event, () => {
+        const temperament = Object.values(TEMPERAMENTS).find(t => t.name === element.textContent);
+        if (!temperament) return '';
+        const { positive, negative, modifier, flavor } = temperament;
+        const effect = `<span class="combat-buff">+${modifier} ${capitalize(positive)}</span><br><span class="combat-debuff">-${modifier} ${capitalize(negative)}</span>`;
+        return `<p class="element-flavor-text"><strong>${temperament.name}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">${effect}`;
+    });
+}
+
+// Element / rarity / family badges on väsen inventory cards. The cards lift on hover
+// (CSS transform), which would trap a fixed-position popup inside them, so these
+// use the same body-level popup as temperaments.
+function toggleCardBadgePopup(element, event, kind) {
+    const value = element.textContent.trim();
+    toggleBodyPopup(element, event, () => {
+        const hr = '<hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">';
+        if (kind === 'element') {
+            return ui.generateDefensiveMatchupsHTML(value);
+        }
+        if (kind === 'rarity') {
+            return `<p><strong>${value}</strong><br>${RARITY_DESCRIPTIONS[value] || ''}</p>`;
+        }
+        if (kind === 'family') {
+            const passive = FAMILY_PASSIVES[value];
+            return `<p><strong>${value}</strong><br>${FAMILY_DESCRIPTIONS[value] || 'No description available.'}</p>`
+                + (passive ? `${hr}<p><strong>Trait: ${passive.name}</strong><br>${passive.description}</p>` : '');
+        }
+        return '';
+    }, 260);
+}
+
 // Close on any click outside a temperament word/popup (capture phase, so it also
 // runs for clicks whose own handlers stop propagation), and on scroll/resize since
 // the popup is positioned in viewport coordinates.
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.clickable-temperament') || e.target.closest('.temperament-popup')) return;
+    if (e.target.closest('.clickable-temperament, .card-badge-clickable, .temperament-popup')) return;
     closeTemperamentPopup();
 }, true);
 window.addEventListener('scroll', (e) => {
