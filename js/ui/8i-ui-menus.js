@@ -61,7 +61,7 @@
 
         // Reinitialize UI exactly like Game.init()
         ui.init();
-        game.showGameScreen();   // <-- THIS is the correct call
+        game.showGameScreen();
 
     } else {
         this.showMessage('Invalid or corrupted save data.', 'error');
@@ -135,10 +135,18 @@ Object.values(ACHIEVEMENTS).forEach(achievement => {
 });
 achievementsHtml += '</div></div>';
 
+        // Face picker options
+        const currentFace = getPlayerFaceId(gameState.playerFace);
+        const faceOptionsHtml = Object.entries(PLAYER_FACES).map(([id, face]) => `
+            <button type="button" class="profile-face-option${id === currentFace ? ' selected' : ''}" data-face="${id}" aria-label="${face.name}" aria-pressed="${id === currentFace}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${face.paths}</svg>
+            </button>
+        `).join('');
+
         content.innerHTML = `
             <div class="profile-name-section">
                 <div class="profile-identity-row">
-                    <div class="profile-portrait" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${UI_ICONS.profile}</svg></div>
+                    <button type="button" id="profile-portrait-btn" class="profile-portrait" aria-label="Choose face" aria-expanded="false" aria-controls="profile-face-picker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${PLAYER_FACES[currentFace].paths}</svg></button>
                     <div class="profile-name-fields">
                         <label for="profile-name-input">Player Name:</label>
                         <div class="profile-name-input-wrapper">
@@ -146,6 +154,9 @@ achievementsHtml += '</div></div>';
                             <span id="profile-name-saved" class="profile-name-saved">Saved</span>
                         </div>
                     </div>
+                </div>
+                <div id="profile-face-picker" class="profile-face-picker" hidden>
+                    ${faceOptionsHtml}
                 </div>
             </div>
 
@@ -196,6 +207,29 @@ achievementsHtml += '</div></div>';
             clearTimeout(savedTimeout);
             savedTimeout = setTimeout(() => savedIndicator.classList.remove('visible'), 1500);
         };
+
+        // Face picker: portrait toggles the grid, picking a face saves and closes it
+        const portraitBtn = document.getElementById('profile-portrait-btn');
+        const facePicker = document.getElementById('profile-face-picker');
+        portraitBtn.addEventListener('click', () => {
+            facePicker.hidden = !facePicker.hidden;
+            portraitBtn.setAttribute('aria-expanded', String(!facePicker.hidden));
+        });
+        facePicker.addEventListener('click', (e) => {
+            const option = e.target.closest('.profile-face-option');
+            if (!option) return;
+            const faceId = getPlayerFaceId(option.dataset.face);
+            gameState.playerFace = faceId;
+            gameState.saveGame();
+            portraitBtn.querySelector('svg').innerHTML = PLAYER_FACES[faceId].paths;
+            facePicker.querySelectorAll('.profile-face-option').forEach(btn => {
+                const isSelected = btn === option;
+                btn.classList.toggle('selected', isSelected);
+                btn.setAttribute('aria-pressed', String(isSelected));
+            });
+            facePicker.hidden = true;
+            portraitBtn.setAttribute('aria-expanded', 'false');
+        });
 
         nameInput.addEventListener('blur', saveName);
         nameInput.addEventListener('keydown', (e) => {
@@ -530,6 +564,9 @@ achievementsHtml += '</div></div>';
 
         // Power & Damage
         setText('guide-damage-variance', `${Math.round(GAME_CONFIG.DAMAGE_RANGE_VARIANCE * 100)}%`);
+
+        // Skills
+        setText('guide-empower-amount', `${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%`);
 
         // Attribute Stages
         setText('guide-stage-modifier', `${Math.round(GAME_CONFIG.ATTRIBUTE_STAGE_MODIFIER * 100)}%`);

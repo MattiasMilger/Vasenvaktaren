@@ -126,7 +126,7 @@ UIController.prototype.getSortedVasenCollection = function() {
                 if (favDiff !== 0) return favDiff;
                 const rarityDiff = rarityOrder[b.species.rarity] - rarityOrder[a.species.rarity];
                 if (rarityDiff !== 0) return rarityDiff;
-                // Secondary sort by level (existing behavior for rarity mode)
+                // Secondary sort by level
                 const levelDiff = b.level - a.level;
                 if (levelDiff !== 0) return levelDiff;
                 const elementDiff = compareVasenByElement(a, b);
@@ -192,7 +192,7 @@ UIController.prototype.renderVasenInventory = function() {
         // Element grouping
         this.renderVasenByElement(container);
     } else if (sortedCollection === null) {
-        // Family grouping (original behavior)
+        // Family grouping
         this.renderVasenByFamily(container);
     } else {
         // Flat list sorted by selected attribute
@@ -200,7 +200,7 @@ UIController.prototype.renderVasenInventory = function() {
     }
 };
 
-// Render väsen grouped by family (original behavior)
+// Render väsen grouped by family
 UIController.prototype.renderVasenByFamily = function(container) {
     // Group by family
     const byFamily = {};
@@ -365,12 +365,7 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
             <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.calculateAttribute('durability')}</span>
         </div>
         ${vasen.runes && vasen.runes.filter(r => r !== null).length > 0 ? `
-        <div class="vasen-card-runes">
-            ${vasen.runes.map(runeId => {
-                const rune = RUNES[runeId];
-                return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
-            }).join('')}
-        </div>
+        <div class="vasen-card-runes">${this.getRunesTextHTML(vasen)}</div>
         ` : ''}
     `;
 
@@ -429,7 +424,6 @@ UIController.prototype.toggleDescription = function() {
 
 // Helper: Format a level for display, appending "(Max)" at the level cap and
 // "(Max+)" above it (enemies in the Endless Tower can exceed the cap).
-// Derived from GAME_CONFIG.MAX_LEVEL so it follows any future change to the cap.
 UIController.prototype.getLevelText = function(level) {
     if (level > GAME_CONFIG.MAX_LEVEL) return `${level} (Max+)`;
     if (level === GAME_CONFIG.MAX_LEVEL) return `${level} (Max)`;
@@ -518,7 +512,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
     const canSwap = !isInParty && !hasEmptySlot && !gameState.inCombat;
     const isFavorite = gameState.isFavorite(vasen.id);
 
-    const runeSlots = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+    const runeSlots = vasen.getRuneSlotCount();
     // Count only actually-equipped runes (ignore null placeholders used internally
     // to preserve which exact slot a rune was equipped into).
     const equippedRuneCount = vasen.runes.filter(r => r !== null).length;
@@ -676,7 +670,7 @@ UIController.prototype.renderVasenDetails = function(vasen) {
 
 // Render rune slots for details panel
 UIController.prototype.renderRuneSlots = function(vasen) {
-    const maxSlots = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+    const maxSlots = vasen.getRuneSlotCount();
     let html = '';
 
     for (let i = 0; i < maxSlots; i++) {
@@ -752,9 +746,9 @@ UIController.prototype.renderSkillsList = function(vasen) {
                     <span class="skill-cost">Megin: ${meginCost}</span>
                     ${skill.healthCost ? `<span class="skill-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                     ${skill.power ? `<span class="skill-power">Power: ${getSkillPower(skillName, vasen.species.family)}</span>` : ''}
-                    ${skill.initialBonus ? `<span class="skill-initial-bonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
+                    ${ui.getInitialBonusHTML(skill, 'skill-initial-bonus')}
                 </div>
-                <p class="skill-description">${skill.flavorDescription}<br>${skill.mechanicsDescription}</p>
+                <p class="skill-description">${skill.flavorDescription}<br>${ui.linkifyKeywords(skill.mechanicsDescription)}</p>
                 ${!isLearned ? `<span class="learn-level">Learns at Lvl ${learnLevel}</span>` : ''}
             </div>
         `;

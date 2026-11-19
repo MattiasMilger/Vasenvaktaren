@@ -85,12 +85,7 @@ Game.prototype.startEndlessTowerCombat = function() {
         this.currentCombat.isWildEncounter = false;
         this.currentCombat.canTame = false;
         this.currentCombat.isEndlessTower = true;
-        this.currentCombat.onLog = (msg, type) => ui.addCombatLog(msg, type);
-        this.currentCombat.onUpdate = () => ui.renderCombat(this.currentCombat);
-        this.currentCombat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-        this.currentCombat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
-        this.currentCombat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
-        this.currentCombat.onEnd = (result) => this.handleEndlessTowerCombatEnd(result);
+        this.attachCombatCallbacks((result) => this.handleEndlessTowerCombatEnd(result));
 
         ui.showCombatUI();
         ui.renderCombat(this.currentCombat);
@@ -153,8 +148,6 @@ Game.prototype.startEndlessTowerCombat = function() {
 Game.prototype.applyIdunnApples = function() {
     const healPercent  = GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT;
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
-    const attrs = ['strength', 'wisdom', 'defense', 'durability'];
-
     ui.addCombatLog(`<span style="color: var(--color-positive-soft); font-weight: 700;">Idunn's Apples of youth replenish the team!</span>`, 'heal');
 
     gameState.party.forEach(v => {
@@ -163,11 +156,11 @@ Game.prototype.applyIdunnApples = function() {
         const displayName = v.getDisplayName();
 
         // Cleanse up to cleanseStages negative stages per attribute (raise toward 0, never above)
-        attrs.forEach(attr => {
+        STAGEABLE_ATTRIBUTES.forEach(attr => {
             if (v.attributeStages[attr] < 0) {
                 const cleanse = Math.min(cleanseStages, -v.attributeStages[attr]);
                 v.attributeStages[attr] += cleanse;
-                const stageWord = cleanse === 1 ? 'stage' : 'stages';
+                const stageWord = pluralizeStage(cleanse);
                 ui.addCombatLog(`${displayName}'s ${attr} was cleansed by ${cleanse} ${stageWord}!`, 'buff');
             }
         });
@@ -198,92 +191,76 @@ Game.prototype.applyIdunnApples = function() {
     ui.addCombatLog(`<span style="color: var(--color-positive-soft); font-weight: 700;">Passives and runes have been renewed.</span>`, 'heal');
 };
 
+// End a tower run: the party is always fully restored, then the record is updated
+// with the highest floor completed. Returns true if that set a new record.
+Game.prototype.finishEndlessTowerRun = function(floorsCompleted, restoreLogMessage) {
+    gameState.inCombat = false;
+
+    this.restorePartyFully();
+    gameState.saveGame();
+    ui.addCombatLog(restoreLogMessage, 'heal');
+    ui.showMessage('Your party was healed to full!', 'success');
+
+    const playerTeam = gameState.party.filter(p => p !== null);
+    return gameState.updateEndlessTowerRecord(floorsCompleted, playerTeam);
+};
+
+// Final run summary dialogue; "Return" leaves the combat screen
+Game.prototype.showEndlessTowerRunDialogue = function(title, bodyHtml) {
+    ui.showDialogue(
+        title,
+        bodyHtml,
+        [{
+            text: 'Return',
+            callback: () => {
+                ui.hideCombatUI();
+                this.refreshUI();
+            }
+        }],
+        false,
+        null,
+        'swords'
+    );
+};
+
+// Summary lines for a run that ended before the top floor
+function getEndlessTowerRecordHtml(reachedFloor, isNewRecord) {
+    const reachedHtml = reachedFloor > 0 ? `<p>You reached Floor ${reachedFloor}.</p>` : '';
+    const recordHtml = isNewRecord
+        ? `<p class="record-new">New Record: Floor ${reachedFloor}!</p>`
+        : gameState.endlessTowerRecord.highestFloor > 0
+            ? `<p>Your record remains Floor ${gameState.endlessTowerRecord.highestFloor}.</p>`
+            : '';
+    return `${reachedHtml}
+             ${recordHtml}`;
+}
+
 // Handle Endless Tower combat end
 Game.prototype.handleEndlessTowerCombatEnd = function(result) {
     const floor = this.endlessTowerCurrentFloor;
 
-    // Handle surrender
     if (result.surrendered) {
-        gameState.inCombat = false;
+        // The current floor was not completed
+        const reachedFloor = floor - 1;
+        const isNewRecord = this.finishEndlessTowerRun(reachedFloor, 'Your party has been fully restored after the tower challenge!');
 
-        // Calculate reached floor
-        const playerTeam = gameState.party.filter(p => p !== null);
-        const reachedFloor = floor - 1; // They were on this floor but didn't complete it
-
-        // Always apply full heal after tower run ends
-        gameState.party.forEach(v => {
-            if (v) {
-                v.restoreFully();
-            }
-        });
-        gameState.saveGame();
-        ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-        ui.showMessage('Your party was healed to full!', 'success');
-
-        // Update record - reached floor before surrendering
-        const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
-
-        const recordMessage = newRecord
-            ? `<p class="record-new">New Record: Floor ${reachedFloor}!</p>`
-            : gameState.endlessTowerRecord.highestFloor > 0
-                ? `<p>Your record remains Floor ${gameState.endlessTowerRecord.highestFloor}.</p>`
-                : '';
-
-        ui.showDialogue(
+        this.showEndlessTowerRunDialogue(
             'Tower Run Ended',
             `<p>You surrendered on Floor ${floor}.</p>
-             ${reachedFloor > 0 ? `<p>You reached Floor ${reachedFloor}.</p>` : ''}
-             ${recordMessage}`,
-            [{
-                text: 'Return',
-                callback: () => {
-                    ui.hideCombatUI();
-                    this.refreshUI();
-                }
-            }],
-            false,
-            null,
-            'swords'
+             ${getEndlessTowerRecordHtml(reachedFloor, isNewRecord)}`
         );
         return;
     }
 
     if (result.victory) {
-        // Player won this floor
-
-        // Check if reached max floor
+        // Reached the top floor
         if (floor >= GAME_CONFIG.ENDLESS_TOWER_MAX_FLOOR) {
-            // Reached the cap!
-            gameState.inCombat = false;
+            this.finishEndlessTowerRun(floor, 'Your party has been fully restored after conquering the tower!');
 
-            // Apply full heal for conquering the tower
-            gameState.party.forEach(v => {
-                if (v) {
-                    v.restoreFully();
-                }
-            });
-            gameState.saveGame();
-            ui.addCombatLog('Your party has been fully restored after conquering the tower!', 'heal');
-            ui.showMessage('Your party was healed to full!', 'success');
-
-            // Update record
-            const playerTeam = gameState.party.filter(p => p !== null);
-            gameState.updateEndlessTowerRecord(floor, playerTeam);
-
-            ui.showDialogue(
+            this.showEndlessTowerRunDialogue(
                 'Tower Conquered!',
                 `<p>Incredible! You have reached Floor ${GAME_CONFIG.ENDLESS_TOWER_MAX_FLOOR}, the pinnacle of the Endless Tower!</p>
-                 <p>This achievement will be recorded in legend.</p>`,
-                [{
-                    text: 'Return',
-                    callback: () => {
-                        ui.hideCombatUI();
-                        this.refreshUI();
-                    }
-                }],
-                false,
-                null,
-                'swords'
+                 <p>This achievement will be recorded in legend.</p>`
             );
             return;
         }
@@ -334,51 +311,19 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
             });
         }
 
-        // Small delay before next floor for readskill
+        // Short pause so the log can be read before the next floor
         setTimeout(() => {
             this.startEndlessTowerCombat();
         }, 1500);
     } else {
-        // Player lost - entire team was defeated
-        gameState.inCombat = false;
-
-        // Update record with floors completed (current floor was not completed)
-        const playerTeam = gameState.party.filter(p => p !== null);
+        // Entire team was defeated; the current floor was not completed
         const reachedFloor = floor - 1;
+        const isNewRecord = this.finishEndlessTowerRun(reachedFloor, 'Your party has been fully restored after the tower challenge!');
 
-        // Always apply full heal after tower run ends (whether they reached floor 1 or not)
-        gameState.party.forEach(v => {
-            if (v) {
-                v.restoreFully();
-            }
-        });
-        gameState.saveGame();
-        ui.addCombatLog('Your party has been fully restored after the tower challenge!', 'heal');
-        ui.showMessage('Your party was healed to full!', 'success');
-
-        const newRecord = gameState.updateEndlessTowerRecord(reachedFloor, playerTeam);
-
-        const recordMessage = newRecord
-            ? `<p class="record-new">New Record: Floor ${reachedFloor}!</p>`
-            : gameState.endlessTowerRecord.highestFloor > 0
-                ? `<p>Your record remains Floor ${gameState.endlessTowerRecord.highestFloor}.</p>`
-                : '';
-
-        ui.showDialogue(
+        this.showEndlessTowerRunDialogue(
             'Tower Run Ended',
             `<p>${result.tie ? `Both sides fell on Floor ${floor}. The battle ended in a tie.` : `You were defeated on Floor ${floor}.`}</p>
-             ${reachedFloor > 0 ? `<p>You reached Floor ${reachedFloor}.</p>` : ''}
-             ${recordMessage}`,
-            [{
-                text: 'Return',
-                callback: () => {
-                    ui.hideCombatUI();
-                    this.refreshUI();
-                }
-            }],
-            false,
-            null,
-            'swords'
+             ${getEndlessTowerRecordHtml(reachedFloor, isNewRecord)}`
         );
     }
 };

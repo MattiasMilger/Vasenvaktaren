@@ -2,6 +2,10 @@
 // 8a-ui-core.js - UIController Class, Initialization, and Overlay Management
 // =============================================================================
 
+// UI RULE: no tooltips. Don't add `title` attributes (or other hover tooltips)
+// to buttons, icons or other elements. Use aria-label for accessible names and
+// visible text or the game's click popups when something needs explaining.
+
 // =============================================================================
 // UI icons - shared inline SVG set (Lucide-style: 24x24, 2px stroke, currentColor)
 // Usage: uiIcon('runes') or uiIcon('heal', 14)  -> returns an SVG string
@@ -42,7 +46,7 @@ const UI_ICONS = {
     // Statuses
     preparing: '<path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/>',
 
-    // Actions and header/menu buttons (previously duplicated inline in index.html and JS)
+    // Actions and header/menu buttons
     swap:        '<path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/>',
     interrogate: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
     pass:        '<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>',
@@ -52,6 +56,27 @@ const UI_ICONS = {
     guide:       '<path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-2 2v1"/>',
     settings:    '<g transform="translate(4.1 1.8) scale(0.66)" stroke-width="3"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></g><path d="M4 22l16-5"/><path d="M20 22L4 17"/>'
 };
+
+// =============================================================================
+// Player faces - selectable profile portraits (same 24x24, 2px stroke style).
+// Every face shares the same round head; they differ by one facial feature.
+// All faces share the same mouth, so the feature is the only difference.
+// 'helmet' is the default. The header button keeps the person silhouette.
+// =============================================================================
+const FACE_HEAD = '<circle cx="12" cy="12" r="10"/>';
+const FACE_MOUTH = '<path d="M9.5 16.5q2.5 1.5 5 0"/>';
+const PLAYER_FACES = {
+    helmet:    { name: 'Helmet',    paths: FACE_HEAD + '<path d="M2.5 9h19"/><path d="M12 2v7"/><path d="M12 9v5"/><path d="M8.5 11.5h.01M15.5 11.5h.01"/>' + FACE_MOUTH },
+    glasses:   { name: 'Glasses',   paths: FACE_HEAD + '<circle cx="8.5" cy="10.5" r="2.2"/><circle cx="15.5" cy="10.5" r="2.2"/><path d="M10.7 10.5h2.6"/>' + FACE_MOUTH },
+    moustache: { name: 'Moustache', paths: FACE_HEAD + '<path d="M9 10h.01M15 10h.01"/><path d="M7.5 14.5c1.5 0 2.5-2 4.5-1.5 2-.5 3 1.5 4.5 1.5"/>' + FACE_MOUTH },
+    hair:      { name: 'Fringe',    paths: FACE_HEAD + '<path d="M3.3 8c2.2.6 4.4-.3 5.7-2.6 1.6 2.2 5.2 3.2 11.7 2.6"/><path d="M9 11.5h.01M15 11.5h.01"/>' + FACE_MOUTH },
+    eyepatch:  { name: 'Eyepatch',  paths: FACE_HEAD + '<path d="M3 7l18 3.5"/><circle cx="15.5" cy="10.5" r="1.8"/><path d="M8.5 10.5h.01"/>' + FACE_MOUTH },
+    hood:      { name: 'Hood',      paths: FACE_HEAD + '<path d="M5 19.5V11a7 7 0 0 1 14 0v8.5"/><path d="M9.5 12h.01M14.5 12h.01"/>' + FACE_MOUTH }
+};
+
+function getPlayerFaceId(faceId) {
+    return PLAYER_FACES[faceId] ? faceId : 'helmet';
+}
 
 // size: a number (px) or any CSS length such as '1em'. extraClass is appended to "ui-icon".
 function uiIcon(name, size = 16, extraClass = '') {
@@ -108,10 +133,6 @@ class UIController {
         this.selectedPartySlot = null;
         this.combatLogMessages = [];
         this.descriptionCollapsed = false; // Global state for väsen description fold
-        const savedRunes = localStorage.getItem('combatRunesVisible');
-        this.runeDescriptionsVisible = savedRunes !== null ? savedRunes === 'true' : false;
-        const savedDesc = localStorage.getItem('combatDescriptionVisible');
-        this.combatDescriptionVisible = savedDesc !== null ? savedDesc === 'true' : true;
         const savedCards = localStorage.getItem('combatCardsMinimized');
         this.combatCardsMinimized = savedCards !== null ? savedCards === 'true' : false;
         const savedVasenSortBy = localStorage.getItem('vasenSortBy');
@@ -537,6 +558,83 @@ function toggleTemperamentDescription(element, event) {
     });
 }
 
+// ── Clickable keywords ──────────────────────────────────────────────────────
+// Glowing words (same look as temperaments, class .clickable-keyword) that open
+// a body-level popup explaining a game term, rune or bindrune.
+
+const KEYWORD_DEFINITIONS = {
+    'initial-bonus': {
+        title: 'Initial Bonus',
+        get text() {
+            return 'The first time a side uses this skill in a combat, it changes attributes by this many extra stages.<br>Later uses only apply the normal effect.';
+        }
+    },
+    'empower': {
+        title: 'Empower',
+        get text() {
+            return `Increases the damage of this väsen's next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
+        }
+    },
+    'debuffed': {
+        title: 'Debuffed',
+        get text() {
+            return 'A väsen is debuffed while at least one of its attributes (strength, wisdom, defense or durability) is lowered below its normal stage.';
+        }
+    }
+};
+
+function toggleKeywordPopup(element, event, key) {
+    toggleBodyPopup(element, event, () => {
+        const def = KEYWORD_DEFINITIONS[key];
+        if (!def) return '';
+        return `<p><strong>${def.title}</strong><br>${def.text}</p>`;
+    });
+}
+
+function toggleRunePopup(element, event, runeId) {
+    toggleBodyPopup(element, event, () => {
+        const rune = RUNES[runeId];
+        if (!rune) return '';
+        return `<p><strong>${rune.symbol} ${rune.name}</strong><br>${rune.effect}</p>`;
+    }, 260);
+}
+
+function toggleBindRunePopup(element, event, runeA, runeB) {
+    toggleBodyPopup(element, event, () => {
+        const br = BIND_RUNES.find(b => b.runes.includes(runeA) && b.runes.includes(runeB));
+        if (!br || !RUNES[runeA] || !RUNES[runeB]) return '';
+        const symbols = RUNES[runeA].symbol + RUNES[runeB].symbol;
+        return `<p><strong>${symbols} Bindrune</strong> (${RUNES[runeA].name} + ${RUNES[runeB].name})<br>${br.effectText}</p>`;
+    }, 260);
+}
+
+// HTML for a väsen's equipped runes (+ active bindrune) as clickable words.
+UIController.prototype.getRunesTextHTML = function(vasen, separator = ' ') {
+    if (!vasen || !vasen.runes || vasen.runes.length === 0) return '';
+    const parts = vasen.runes.map(id => {
+        const rune = RUNES[id];
+        return rune ? `<span class="clickable-keyword rune-keyword" onclick="toggleRunePopup(this, event, '${id}')">${rune.symbol} ${rune.name}</span>` : '';
+    }).filter(Boolean);
+    getActiveBindRunes(vasen).forEach(br => {
+        const ids = vasen.runes.filter(r => br.runes.includes(r));
+        parts.push(`<span class="clickable-keyword rune-keyword" onclick="toggleBindRunePopup(this, event, '${ids[0]}', '${ids[1]}')">${br.symbols} Bindrune</span>`);
+    });
+    return parts.join(separator);
+};
+
+UIController.prototype.getInitialBonusHTML = function(skill, className) {
+    if (!skill.initialBonus) return '';
+    return `<span class="${className}"><span class="clickable-keyword" onclick="toggleKeywordPopup(this, event, 'initial-bonus')">Initial Bonus</span>: ${skill.initialBonus}</span>`;
+};
+
+// Makes game terms inside a skill's mechanics text clickable.
+UIController.prototype.linkifyKeywords = function(text) {
+    if (!text) return '';
+    return text
+        .replace(/\bdebuffed\b/g, `<span class="clickable-keyword" onclick="toggleKeywordPopup(this, event, 'debuffed')">debuffed</span>`)
+        .replace(/\bEmpowers\b/g, `<span class="clickable-keyword" onclick="toggleKeywordPopup(this, event, 'empower')">Empowers</span>`);
+};
+
 // Element / rarity / family badges on väsen inventory cards. The cards lift on hover
 // (CSS transform), which would trap a fixed-position popup inside them, so these
 // use the same body-level popup as temperaments.
@@ -563,34 +661,13 @@ function toggleCardBadgePopup(element, event, kind) {
 // runs for clicks whose own handlers stop propagation), and on scroll/resize since
 // the popup is positioned in viewport coordinates.
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.clickable-temperament, .card-badge-clickable, .temperament-popup')) return;
+    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .temperament-popup')) return;
     closeTemperamentPopup();
 }, true);
 window.addEventListener('scroll', (e) => {
     if (temperamentPopupEl && !temperamentPopupEl.contains(e.target)) closeTemperamentPopup();
 }, true);
 window.addEventListener('resize', closeTemperamentPopup);
-
-// Toggle rune descriptions globally for both combatant panels
-function toggleRuneDescriptions() {
-    ui.runeDescriptionsVisible = !ui.runeDescriptionsVisible;
-    localStorage.setItem('combatRunesVisible', ui.runeDescriptionsVisible ? 'true' : 'false');
-    document.querySelectorAll('.rune-collapsible').forEach(el => {
-        // Only toggle rune collapsibles inside combatant-runes, not description collapsibles
-        if (el.closest('.combatant-runes')) {
-            el.classList.toggle('open', ui.runeDescriptionsVisible);
-        }
-    });
-}
-
-// Toggle combat descriptions globally for both combatant panels
-function toggleCombatDescriptions() {
-    ui.combatDescriptionVisible = !ui.combatDescriptionVisible;
-    localStorage.setItem('combatDescriptionVisible', ui.combatDescriptionVisible ? 'true' : 'false');
-    document.querySelectorAll('.combatant-description .rune-collapsible').forEach(el => {
-        el.classList.toggle('open', ui.combatDescriptionVisible);
-    });
-}
 
 // Create global instance
 const ui = new UIController();

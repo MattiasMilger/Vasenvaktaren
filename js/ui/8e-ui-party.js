@@ -12,7 +12,7 @@ UIController.prototype.renderParty = function() {
             slotContent.classList.remove('empty');
 
             let stagesHtml = '';
-            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+            STAGEABLE_ATTRIBUTES.forEach(attr => {
                 const stage = vasen.attributeStages[attr];
                 if (stage !== 0) {
                     const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -21,21 +21,8 @@ UIController.prototype.renderParty = function() {
                 }
             });
 
-            let runesHtml = '';
-            if (vasen.runes.length > 0) {
-                runesHtml = vasen.runes.map(runeId => {
-                    const rune = RUNES[runeId];
-                    return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
-                }).join('');
-            }
-
-            // Bind Rune: add a compact indicator badge for any active bind rune pair
-            const activeBindRunes = getActiveBindRunes(vasen);
-            if (activeBindRunes.length > 0) {
-                runesHtml += activeBindRunes.map(br =>
-                    `<span class="mini-rune mini-bind-rune">${br.symbols} Bindrune</span>`
-                ).join('');
-            }
+            // Runes + active bindrune as clickable words (popup shows what they do)
+            const runesHtml = this.getRunesTextHTML(vasen);
 
             const isFavorite = gameState.isFavorite(vasen.id);
 
@@ -168,11 +155,8 @@ UIController.prototype.autoEquipRunes = function() {
     // Build the shared rune pool (all collected runes)
     const runePool = Array.from(gameState.collectedRunes);
 
-    // Fisher-Yates shuffle the pool so selection order is random
-    for (let i = runePool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [runePool[i], runePool[j]] = [runePool[j], runePool[i]];
-    }
+    // Shuffle the pool so selection order is random
+    shuffleInPlace(runePool);
 
     const partyVasen = gameState.party.filter(v => v !== null);
 
@@ -192,12 +176,10 @@ UIController.prototype.autoEquipRunes = function() {
 
         // Recalculate megin in case Uruz was removed
         if (oldRunes.includes('URUZ')) {
-            vasen.maxMegin = vasen.calculateMaxMegin();
-            vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
+            vasen.recalculateMaxMegin(false);
         }
 
-        // Determine slot count for this väsen
-        const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+        const maxRunes = vasen.getRuneSlotCount();
 
         // Get valid runes for this väsen that are collected and still available in the pool.
         // This broader (solo OR bind-eligible) set is used ONLY to check whether both
@@ -236,10 +218,7 @@ UIController.prototype.autoEquipRunes = function() {
             ];
 
             // Shuffle the combined candidate pool
-            for (let i = candidates.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
-            }
+            shuffleInPlace(candidates);
 
             // Walk the shuffled candidates, picking the first that still fits
             // (its runes must still be unselected and unassigned at the time it's reached).
@@ -259,10 +238,7 @@ UIController.prototype.autoEquipRunes = function() {
             // (bindrunes are impossible with only one slot, so bind-only-eligible runes
             // must never be picked here)
             const shuffled = soloValidForThis.slice();
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
+            shuffleInPlace(shuffled);
             if (shuffled.length > 0) {
                 selectedRunes.push(shuffled[0]);
             }
@@ -283,8 +259,7 @@ UIController.prototype.autoEquipRunes = function() {
 
         // Recalculate megin if Uruz was newly assigned
         if (vasen.hasRune('URUZ')) {
-            vasen.maxMegin = vasen.calculateMaxMegin();
-            vasen.currentMegin = vasen.maxMegin;
+            vasen.recalculateMaxMegin();
         }
     });
 
@@ -425,24 +400,23 @@ UIController.prototype.removeFromParty = function(vasenId) {
         }
 };
 
+// Party picker order: favorites first, then highest level, then alphabetical
+function comparePartyPickerVasen(a, b) {
+    const aFav = gameState.isFavorite(a.id) ? 1 : 0;
+    const bFav = gameState.isFavorite(b.id) ? 1 : 0;
+    if (aFav !== bFav) return bFav - aFav;
+
+    if (a.level !== b.level) return b.level - a.level;
+
+    return a.getDisplayName().localeCompare(b.getDisplayName());
+}
+
 UIController.prototype.showAddVasenMenu = function(slotIndex) {
     const modal = document.getElementById('add-vasen-modal');
     const list = document.getElementById('add-vasen-list');
     list.innerHTML = '';
 
-    // Sort: favorites first, then highest level, then alphabetical
-    const sorted = [...gameState.vasenCollection].sort((a, b) => {
-        // Favorites first
-        const aFav = gameState.isFavorite(a.id) ? 1 : 0;
-        const bFav = gameState.isFavorite(b.id) ? 1 : 0;
-        if (aFav !== bFav) return bFav - aFav;
-
-        // Highest level first
-        if (a.level !== b.level) return b.level - a.level;
-
-        // Alphabetical tiebreaker
-        return a.getDisplayName().localeCompare(b.getDisplayName());
-    });
+    const sorted = [...gameState.vasenCollection].sort(comparePartyPickerVasen);
 
     sorted.forEach(vasen => {
         const btn = document.createElement('button');
@@ -480,18 +454,7 @@ UIController.prototype.showReplaceMenu = function(fromSlot) {
     list.innerHTML = '';
 
     // Show ALL väsen in collection, just like Add to Party
-    // Sort: favorites first, then highest level, then alphabetical
-    const sorted = [...gameState.vasenCollection].sort((a, b) => {
-        const aFav = gameState.isFavorite(a.id) ? 1 : 0;
-        const bFav = gameState.isFavorite(b.id) ? 1 : 0;
-        if (aFav !== bFav) return bFav - aFav;
-
-        // Highest level first
-        if (a.level !== b.level) return b.level - a.level;
-
-        // Alphabetical tiebreaker
-        return a.getDisplayName().localeCompare(b.getDisplayName());
-    });
+    const sorted = [...gameState.vasenCollection].sort(comparePartyPickerVasen);
 
     sorted.forEach(vasen => {
         const btn = document.createElement('button');
@@ -706,12 +669,9 @@ UIController.prototype.autoTeam = function() {
         return;
     }
 
-    // Fisher-Yates shuffle of a copy of the whole collection
+    // Shuffle a copy of the whole collection
     const pool = [...gameState.vasenCollection];
-    for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-    }
+    shuffleInPlace(pool);
 
     const newParty = [];
     const usedSpecies = new Set();

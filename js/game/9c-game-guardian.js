@@ -32,24 +32,23 @@ Game.prototype.challengeGuardian = function() {
     }
 
     ui.showDialogue(
-    guardian.name,
-    `<p>${dialogueText}</p>${tutorialHtml}`,
-    [
-        {
-            text: `${uiIcon('swords')}Fight!`,
-            callback: () => this.startGuardianCombat(guardian)
-        },
-        {
-            text: 'Not yet',
-            class: 'btn-secondary',
-            callback: null
-        }
-    ],
-    true,
-    null,
-    'swords'
-);
-
+        guardian.name,
+        `<p>${dialogueText}</p>${tutorialHtml}`,
+        [
+            {
+                text: `${uiIcon('swords')}Fight!`,
+                callback: () => this.startGuardianCombat(guardian)
+            },
+            {
+                text: 'Not yet',
+                class: 'btn-secondary',
+                callback: null
+            }
+        ],
+        true,
+        null,
+        'swords'
+    );
 };
 
 // Start guardian combat
@@ -69,12 +68,7 @@ Game.prototype.startGuardianCombat = function(guardian) {
     this.currentCombat = new Combat(playerTeam, enemyTeam, COMBAT_TYPES.GUARDIAN);
     this.currentCombat.guardianName = guardian.name;
     this.currentCombat.guardianDialogue = guardian.dialogue;
-    this.currentCombat.onLog = (msg, type) => ui.addCombatLog(msg, type);
-    this.currentCombat.onUpdate = () => ui.renderCombat(this.currentCombat);
-    this.currentCombat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-    this.currentCombat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
-    this.currentCombat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
-    this.currentCombat.onEnd = (result) => this.handleGuardianCombatEnd(result, guardian);
+    this.attachCombatCallbacks((result) => this.handleGuardianCombatEnd(result, guardian));
 
     ui.showCombatUI();
     ui.renderCombat(this.currentCombat);
@@ -85,23 +79,14 @@ Game.prototype.startGuardianCombat = function(guardian) {
 // Handle guardian combat end
 Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
     if (result.surrendered) {
-        gameState.party.forEach(v => {
-            if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
-            }
-        });
+        this.leavePartyAtLowHealth();
         ui.addCombatLog('You call retreat. Your party withdraws.', 'system');
         this.endCombat();
         return;
     }
 
     if (!result.victory) {
-        gameState.party.forEach(v => {
-            if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
-            }
-        });
-
+        this.leavePartyAtLowHealth();
         ui.showDialogue(
             result.tie ? 'Tie' : 'Defeat',
             `<p>${result.tie ? result.message : guardian.dialogue.lose}</p>`,
@@ -134,8 +119,8 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         this.currentCombat.playerTeam.forEach((vasen, index) => {
             if (vasen.isKnockedOut()) return;
 
-            let expMultiplier = 0.6; // Base party exp (updated from 0.3)
-            if (vasen.combatFlags.turnsOnField > 0) expMultiplier = 0.8; // Participated (updated from 0.6)
+            let expMultiplier = 0.6; // In the party
+            if (vasen.combatFlags.turnsOnField > 0) expMultiplier = 0.8; // Spent at least one turn on the field
 
             const expAmount = Math.floor(expYield * expMultiplier);
             // Check if väsen is at max level
@@ -172,20 +157,11 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
 
     // Apply post-combat heal (full heal for first-time guardian clear)
     if (wasFirstClear) {
-        gameState.party.forEach(v => {
-            if (v) {
-                v.restoreFully();
-            }
-        });
+        this.restorePartyFully();
         ui.addCombatLog('Your party has been fully restored by the guardian\'s blessing!', 'heal');
         ui.showMessage('Your party was healed to full!');
     } else {
-        gameState.party.forEach(v => {
-            if (v) {
-                v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
-                v.currentMegin = v.maxMegin;
-            }
-        });
+        this.applyVictoryHeal();
     }
 
     // Check achievements
@@ -193,25 +169,10 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
 
     // Unlock lore entries on first guardian clear
     if (wasFirstClear) {
-        // Guardian's own lore entry
-        const guardianLoreKey = LORE_ENTRY_KEYS.find(k =>
-            LORE_ENTRIES[k].unlockType === 'guardian' &&
-            LORE_ENTRIES[k].unlockKey === gameState.currentZone
-        );
-        if (guardianLoreKey && gameState.unlockLoreEntry(guardianLoreKey)) {
-            ui.showLoreUnlockMessage(guardianLoreKey);
-        }
-
-        // Next zone's lore entry
+        // Guardian's own lore entry, then the next zone's
+        this.unlockLoreWithMessage(findLoreEntryKey('guardian', gameState.currentZone));
         if (currentIndex < ZONE_ORDER.length - 1) {
-            const nextZoneId = ZONE_ORDER[currentIndex + 1];
-            const zoneLoreKey = LORE_ENTRY_KEYS.find(k =>
-                LORE_ENTRIES[k].unlockType === 'zone' &&
-                LORE_ENTRIES[k].unlockKey === nextZoneId
-            );
-            if (zoneLoreKey && gameState.unlockLoreEntry(zoneLoreKey)) {
-                ui.showLoreUnlockMessage(zoneLoreKey);
-            }
+            this.unlockLoreWithMessage(findLoreEntryKey('zone', ZONE_ORDER[currentIndex + 1]));
         }
     }
 
@@ -226,7 +187,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         message += `<p><strong>${nextZone.name}</strong> unlocked!</p>`;
 
         // Award taming items from the next zone (except when unlocking Ginnungagap)
-        if (wasFirstClear && nextZoneId !== 'ZONE7') {
+        if (nextZoneId !== 'ZONE7') {
             const nextZoneItems = getItemsForZone(nextZoneId);
             if (nextZoneItems.length > 0) {
                 const shuffled = [...nextZoneItems].sort(() => Math.random() - 0.5);
@@ -239,9 +200,9 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
             }
         }
 
-        // Custom callback to switch zone instantly
+        // Move the player straight into the newly unlocked zone
         callback = () => {
-            gameState.currentZone = nextZoneId; // <--- MODIFICATION: Set current zone to the new zone
+            gameState.currentZone = nextZoneId;
             this.endCombat();
         };
     }

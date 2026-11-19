@@ -891,7 +891,7 @@ const LORE_ENTRIES = {
         key: 'skill_giantsbane',
         name: "Giantsbane",
         category: 'skills',
-        desc: 'In the iron grip of Norse mythology, the giants represent the chaotic and primordial forces of the wild. These are beings of such immense scale that they often dwarf the gods themselves. Yet, the thunder god Thor stands as the ultimate deterrent against this chaos. Wielding Mjölnir, he delivers strikes that do not merely bruise flesh but shatter the very foundations of giant kind, turning their own massive bulk into a liskill.',
+        desc: 'In the iron grip of Norse mythology, the giants represent the chaotic and primordial forces of the wild. These are beings of such immense scale that they often dwarf the gods themselves. Yet, the thunder god Thor stands as the ultimate deterrent against this chaos. Wielding Mjölnir, he delivers strikes that do not merely bruise flesh but shatter the very foundations of giant kind, turning their own massive bulk into a liability.',
         source: 'Prose Edda (Snorri Sturluson) / Völuspá',
         heritage: 'Norse',
         unlockType: 'skill',
@@ -1009,5 +1009,21 @@ const LORE_CATEGORIES = {
     }
 };
 
-// Keys that are automatically unlocked when the game starts (standard + starter zone)
-const LORE_STANDARD_KEYS = LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'standard');
+// All lore entry keys unlocked by the given trigger (several entries can share one,
+// e.g. god entries). Omit unlockKey to match on unlockType alone.
+function findLoreEntryKeys(unlockType, unlockKey) {
+    return LORE_ENTRY_KEYS.filter(k =>
+        LORE_ENTRIES[k].unlockType === unlockType &&
+        (unlockKey === undefined || LORE_ENTRIES[k].unlockKey === unlockKey)
+    );
+}
+
+// First lore entry key unlocked by the given trigger, or undefined if none
+function findLoreEntryKey(unlockType, unlockKey) {
+    return LORE_ENTRY_KEYS.find(k =>
+        LORE_ENTRIES[k].unlockType === unlockType && LORE_ENTRIES[k].unlockKey === unlockKey
+    );
+}
+
+// Keys that are automatically unlocked when the game starts
+const LORE_STANDARD_KEYS = findLoreEntryKeys('standard');

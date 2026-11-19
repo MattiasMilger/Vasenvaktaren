@@ -284,7 +284,7 @@
     margin-bottom: var(--spacing-xs);
 }
 
-/* Vasen Card Bars - now using combat-bar-small */
+/* Vasen Card Bars (built on combat-bar-small) */
 .vasen-card-health,
 .vasen-card-megin {
     margin-top: 4px;
@@ -531,7 +531,7 @@
 /* Bind rune effect text - shown under the second rune slot in inventory
    and inside the second rune's collapsible body in combat cards.
    White, same as a single rune's own effect text
-   (see .rune-slot .rune-effect / .rune-collapsible-body). */
+   (see .rune-slot .rune-effect). */
 .rune-bind-effect {
     display: block;
     font-size: var(--font-size-xs);
@@ -578,7 +578,7 @@
     color: var(--accent-warning);
 }
 
-/* Resource Bars (now using combat-bar styling) */
+/* Resource Bars (built on combat-bar styling) */
 .details-resources {
     display: flex;
     flex-direction: column;

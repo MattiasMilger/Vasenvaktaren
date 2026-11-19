@@ -137,36 +137,10 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         `;
     };
 
-    // Build runes HTML with collapsible descriptions
-    const runeOpen = this.runeDescriptionsVisible ? 'open' : '';
-    const runesHtml = vasen.runes.length > 0
-        ? `${vasen.runes.map(r => {
-                const rune = RUNES[r];
-                if (!rune) return '';
-                return `
-                    <div class="rune-collapsible ${runeOpen}">
-                        <div class="rune-collapsible-header" onclick="toggleRuneDescriptions()">
-                            <span class="toggle-icon"></span>
-                            ${rune.symbol} ${rune.name}
-                        </div>
-                        <div class="rune-collapsible-body">
-                            ${rune.effect}
-                        </div>
-                    </div>
-                `;
-           }).join('')}`
-        : '<span class="runes-label">' + inlineIcon('runes') + 'Rune:</span> <span class="no-rune">None</span>';
-
-    // Bind rune effect text - shown below the rune list (outside both rune
-    // boxes), not inside either individual rune's collapsible body. The
-    // label (symbols + "Bindrune:") and effect description are wrapped in
-    // separate spans so they can be colored independently (label white,
-    // description grey), matching the standard used for rune names/effects
-    // elsewhere in the UI.
-    const activeBindRunesForPanel = getActiveBindRunes(vasen);
-    const bindRuneTextHtml = activeBindRunesForPanel.length > 0
-        ? `<div class="rune-bind-effect"><span class="rune-bind-label">${activeBindRunesForPanel[0].symbols} Bindrune:</span> <span class="rune-bind-desc">${activeBindRunesForPanel[0].effectText}</span></div>`
-        : '';
+    // Runes + active bindrune as one compact row of clickable words under the
+    // stats. Clicking a rune opens a popup with its effect (toggleRunePopup).
+    const runesHtml = this.getRunesTextHTML(vasen, '<span class="combatant-rune-sep">·</span>')
+        || '<span class="no-rune">No runes</span>';
 
     // Build attacking matchups for attack elements
     const attackElements = vasen.getAttackElements();
@@ -262,23 +236,11 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
             <div class="combat-attr"><span class="combat-attr-name">DUR</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
         </div>
 
-        <div class="combatant-description">
-            <div class="rune-collapsible ${this.combatDescriptionVisible ? 'open' : ''}">
-                <div class="rune-collapsible-header" onclick="toggleCombatDescriptions()">
-                    <span class="toggle-icon"></span>
-                    <span class="label-full">Description</span>
-                    <span class="label-short">Desc</span>
-                </div>
-                <div class="rune-collapsible-body">
-                    ${vasen.species.description}
-                </div>
-            </div>
-        </div>
-
         <div class="combatant-runes">
             ${runesHtml}
-            ${bindRuneTextHtml}
         </div>
+
+        <div class="combatant-description">${vasen.species.description}</div>
 
         <div class="combatant-stages">
             ${this.renderAttributeStages(vasen)}
@@ -311,7 +273,7 @@ UIController.prototype.renderAttributeStages = function(vasen) {
         const stages = vasen.attributeStages;
         let html = '';
 
-        ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+        STAGEABLE_ATTRIBUTES.forEach(attr => {
             const stage = stages[attr];
             if (stage !== 0) {
                 const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -325,26 +287,13 @@ UIController.prototype.renderAttributeStages = function(vasen) {
 
 UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatInfo = false) {
         // Build runes HTML
-        let runesHtml = '';
-        if (vasen.runes && vasen.runes.length > 0) {
-            runesHtml = vasen.runes.map(runeId => {
-                const rune = RUNES[runeId];
-                return rune ? `<span class="mini-rune">${rune.symbol} ${rune.name}</span>` : '';
-            }).join('');
-        }
-
-        // Bind Rune: add a compact indicator badge for any active bind rune pair
-        const activeBindRunes = getActiveBindRunes(vasen);
-        if (activeBindRunes.length > 0) {
-            runesHtml += activeBindRunes.map(br =>
-                `<span class="mini-rune mini-bind-rune">${br.symbols} Bindrune</span>`
-            ).join('');
-        }
+        // Runes + active bindrune as clickable words (popup shows what they do)
+        const runesHtml = this.getRunesTextHTML(vasen);
 
         // Build attribute stages HTML (only for combat info)
         let stagesHtml = '';
         if (showCombatInfo) {
-            ['strength', 'wisdom', 'defense', 'durability'].forEach(attr => {
+            STAGEABLE_ATTRIBUTES.forEach(attr => {
                 const stage = vasen.attributeStages[attr];
                 if (stage !== 0) {
                     const stageClass = stage > 0 ? 'positive' : 'negative';
@@ -511,9 +460,9 @@ UIController.prototype.renderActionButtons = function(combat) {
                 <span class="skill-btn-cost">Megin: ${meginCost}</span>
                 ${skill.healthCost ? `<span class="skill-btn-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                 ${skill.power ? `<span class="skill-btn-power">Power: ${getSkillPower(skillName, activeVasen.species.family)}</span>` : ''}
-                ${skill.initialBonus ? `<span class="skill-btn-initialbonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
+                ${this.getInitialBonusHTML(skill, 'skill-btn-initialbonus')}
             </span>
-            <span class="skill-btn-desc">${skill.mechanicsDescription}</span>
+            <span class="skill-btn-desc">${this.linkifyKeywords(skill.mechanicsDescription)}</span>
         `;
         btn.onclick = () => game.handleSkillUse(skillName);
         actionsContainer.appendChild(btn);

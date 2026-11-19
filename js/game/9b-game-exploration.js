@@ -15,9 +15,7 @@ Game.prototype.explore = function() {
 
     // Unlock lore entries based on exploration encounter
     if (result.type === 'well') {
-        if (gameState.unlockLoreEntry('location_sacred_well')) {
-            ui.showLoreUnlockMessage('location_sacred_well');
-        }
+        this.unlockLoreWithMessage('location_sacred_well');
     }
 
     if (result.type !== 'vasen') {
@@ -37,12 +35,7 @@ Game.prototype.startCombat = function(enemyVasen) {
     enemyVasen.resetCombatState();
 
     this.currentCombat = new Combat(playerTeam, [enemyVasen], COMBAT_TYPES.WILD);
-    this.currentCombat.onLog = (msg, type) => ui.addCombatLog(msg, type);
-    this.currentCombat.onUpdate = () => ui.renderCombat(this.currentCombat);
-    this.currentCombat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
-    this.currentCombat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
-    this.currentCombat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
-    this.currentCombat.onEnd = (result) => this.handleCombatEnd(result);
+    this.attachCombatCallbacks((result) => this.handleCombatEnd(result));
 
     ui.showCombatUI();
     ui.renderCombat(this.currentCombat);
@@ -54,88 +47,40 @@ Game.prototype.unlockTamingLoreEntries = function(newVasen) {
     const species = newVasen.species;
     if (!species) return;
 
-    // Species entry
-    const speciesKey = LORE_ENTRY_KEYS.find(k =>
-        LORE_ENTRIES[k].unlockType === 'vasen' &&
-        LORE_ENTRIES[k].unlockKey === newVasen.speciesName
-    );
-    if (speciesKey && gameState.unlockLoreEntry(speciesKey)) {
-        ui.showLoreUnlockMessage(speciesKey);
-    }
-
-    // Family entry
-    const familyKey = LORE_ENTRY_KEYS.find(k =>
-        LORE_ENTRIES[k].unlockType === 'family' &&
-        LORE_ENTRIES[k].unlockKey === species.family
-    );
-    if (familyKey && gameState.unlockLoreEntry(familyKey)) {
-        ui.showLoreUnlockMessage(familyKey);
-    }
-
-    // Element concept entry
-    const elementKey = LORE_ENTRY_KEYS.find(k =>
-        LORE_ENTRIES[k].unlockType === 'element' &&
-        LORE_ENTRIES[k].unlockKey === species.element
-    );
-    if (elementKey && gameState.unlockLoreEntry(elementKey)) {
-        ui.showLoreUnlockMessage(elementKey);
-    }
-
-    // Skill entries - only skills the väsen has actually learned at its current level
-    newVasen.getAvailableSkills().forEach(skillName => {
-        const skillKey = LORE_ENTRY_KEYS.find(k =>
-            LORE_ENTRIES[k].unlockType === 'skill' &&
-            LORE_ENTRIES[k].unlockKey === skillName
-        );
-        if (skillKey && gameState.unlockLoreEntry(skillKey)) {
-            ui.showLoreUnlockMessage(skillKey);
-        }
-    });
+    this.unlockLoreWithMessage(findLoreEntryKey('vasen', newVasen.speciesName));
+    this.unlockLoreWithMessage(findLoreEntryKey('family', species.family));
+    this.unlockLoreWithMessage(findLoreEntryKey('element', species.element));
+    this.unlockSkillLoreEntries(newVasen);
 
     // Taming item entry (unlocked when correctly used to tame)
     if (species.tamingItem) {
-        const itemKey = LORE_ENTRY_KEYS.find(k =>
-            LORE_ENTRIES[k].unlockType === 'item' &&
-            LORE_ENTRIES[k].unlockKey === species.tamingItem
-        );
-        if (itemKey && gameState.unlockLoreEntry(itemKey)) {
-            ui.showLoreUnlockMessage(itemKey);
-        }
+        this.unlockLoreWithMessage(findLoreEntryKey('item', species.tamingItem));
     }
 
     // Valhalla entries (taming Einharje or Valkyria)
     if (newVasen.speciesName === 'Einharje' || newVasen.speciesName === 'Valkyria') {
-        LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'valhalla').forEach(k => {
-            if (gameState.unlockLoreEntry(k)) {
-                ui.showLoreUnlockMessage(k);
-            }
-        });
+        findLoreEntryKeys('valhalla').forEach(k => this.unlockLoreWithMessage(k));
     }
+};
+
+// Unlock lore entries for the skills a väsen has learned at its current level
+Game.prototype.unlockSkillLoreEntries = function(vasen) {
+    vasen.getAvailableSkills().forEach(skillName => {
+        this.unlockLoreWithMessage(findLoreEntryKey('skill', skillName));
+    });
 };
 
 // Handle combat end
 Game.prototype.handleCombatEnd = function(result) {
     if (result.surrendered) {
-        // Apply surrender penalty
-        gameState.party.forEach(v => {
-            if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
-            }
-        });
-
+        this.leavePartyAtLowHealth();
         ui.addCombatLog('You call retreat. Your party withdraws.', 'system');
         this.endCombat();
         return;
     }
 
     if (!result.victory) {
-        // Player lost
-        gameState.party.forEach(v => {
-            if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
-            }
-        });
-
+        this.leavePartyAtLowHealth();
         ui.showDialogue(
             result.tie ? 'Tie' : 'Defeat',
             `<p>${result.message || 'Your party was overwhelmed!'}</p>`,
@@ -164,9 +109,9 @@ Game.prototype.handleCombatEnd = function(result) {
     this.currentCombat.playerTeam.forEach((vasen, index) => {
         if (vasen.isKnockedOut()) return;
 
-        let expMultiplier = 0.6; // Base party exp (updated from 0.3)
+        let expMultiplier = 0.6; // In the party
         if (vasen.combatFlags.turnsOnField > 0) {
-            expMultiplier = 0.8; // Participated (updated from 0.6)
+            expMultiplier = 0.8; // Spent at least one turn on the field
         }
         if (index === this.currentCombat.playerActiveIndex) {
             expMultiplier = 1.0; // Dealt killing blow
@@ -190,74 +135,47 @@ Game.prototype.handleCombatEnd = function(result) {
             if (levelResult.leveledUp) {
                 ui.addCombatLog(`${vasen.getName()} reached level ${levelResult.newLevel}!`, 'levelup');
 
-                // Check if leveling up unlocked a new skill with a lore entry
-                vasen.getAvailableSkills().forEach(skillName => {
-                    const skillKey = LORE_ENTRY_KEYS.find(k =>
-                        LORE_ENTRIES[k].unlockType === 'skill' &&
-                        LORE_ENTRIES[k].unlockKey === skillName
-                    );
-                    if (skillKey && gameState.unlockLoreEntry(skillKey)) {
-                        ui.showLoreUnlockMessage(skillKey);
-                    }
-                });
+                // Leveling up may have unlocked a new skill with a lore entry
+                this.unlockSkillLoreEntries(vasen);
             }
         }
     });
 
     // Handle taming
-if (result.tamed && result.tamedVasen) {
-    const newVasen = result.tamedVasen;
+    if (result.tamed && result.tamedVasen) {
+        const newVasen = result.tamedVasen;
 
-    // Clear runes from tamed väsen - they join runeless
-    newVasen.runes = [];
+        // Tamed väsen join runeless, at full health and with no attribute changes
+        newVasen.runes = [];
+        newVasen.currentHealth = newVasen.maxHealth;
+        newVasen.recalculateMaxMegin(); // runes were cleared (in case it had Uruz)
+        newVasen.resetCombatState();
 
-    // Heal to full before adding to collection
-    newVasen.currentHealth = newVasen.maxHealth;
+        gameState.vasenCollection.push(newVasen);
 
-    // Recalculate megin since runes were cleared (in case it had Uruz)
-    newVasen.maxMegin = newVasen.calculateMaxMegin();
-    newVasen.currentMegin = newVasen.maxMegin;
-
-    // Reset attribute changes
-    newVasen.resetCombatState();
-
-    // Add to total collection
-    gameState.vasenCollection.push(newVasen);
-
-    // --- NEW LOGIC: Add to party if a slot is free ---
-    const freeSlotIndex = gameState.party.findIndex(slot => slot === null);
-    if (freeSlotIndex !== -1) {
-        gameState.party[freeSlotIndex] = newVasen;
-        ui.addCombatLog(`${newVasen.getDisplayName()} joined your party in slot ${freeSlotIndex + 1}!`, 'tame');
-    } else {
-        ui.addCombatLog(`${newVasen.getDisplayName()} has been sent to your collection!`, 'tame');
-    }
-    // ------------------------------------------------
-
-    // Check for achievements
-    gameState.checkAchievements();
-
-    // Unlock lore entries earned by taming this väsen
-    this.unlockTamingLoreEntries(newVasen);
-
-    // Show a one-time guidance popup the first time the player successfully
-    // tames a väsen, once the combat result dialogue has been dismissed.
-    // Flagged here and shown in endCombat() so it appears after the normal
-    // Victory dialogue's "Continue" flow, mirroring the explore popups.
-    if (!gameState.firstTameMessageShown) {
-        gameState.firstTameMessageShown = true;
-        this.pendingFirstTameMessage = true;
-        gameState.saveGame();
-    }
-}
-
-    // Apply post-combat heal
-    gameState.party.forEach(v => {
-        if (v) {
-            v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
-            v.currentMegin = v.maxMegin;
+        // Join the party directly if a slot is free
+        const freeSlotIndex = gameState.party.findIndex(slot => slot === null);
+        if (freeSlotIndex !== -1) {
+            gameState.party[freeSlotIndex] = newVasen;
+            ui.addCombatLog(`${newVasen.getDisplayName()} joined your party in slot ${freeSlotIndex + 1}!`, 'tame');
+        } else {
+            ui.addCombatLog(`${newVasen.getDisplayName()} has been sent to your collection!`, 'tame');
         }
-    });
 
+        gameState.checkAchievements();
+        this.unlockTamingLoreEntries(newVasen);
+
+        // Show a one-time guidance popup the first time the player successfully
+        // tames a väsen, once the combat result dialogue has been dismissed.
+        // Flagged here and shown in endCombat() so it appears after the normal
+        // Victory dialogue's "Continue" flow, mirroring the explore popups.
+        if (!gameState.firstTameMessageShown) {
+            gameState.firstTameMessageShown = true;
+            this.pendingFirstTameMessage = true;
+            gameState.saveGame();
+        }
+    }
+
+    this.applyVictoryHeal();
     ui.showCombatResult(combatResult);
 };

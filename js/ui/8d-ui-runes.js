@@ -213,7 +213,7 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
             // Count only actually-equipped runes (ignore null placeholders used
             // internally to preserve which exact slot a rune was equipped into).
             const equippedCount = currentRunes.filter(r => r !== null).length;
-            const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+            const maxRunes = vasen.getRuneSlotCount();
             const hasThisRune = currentRunes.includes(runeId);
             const isInParty = gameState.party.some(p => p && p.id === vasen.id);
 
@@ -280,6 +280,6 @@ UIController.prototype.unequipRune = function(vasenId, runeId) {
 };
 
 UIController.prototype.equipRuneToVasen = function(vasenId, runeId) {
-    // The new gameState.equipRune handles auto-unequipping from previous owner
+    // gameState.equipRune handles unequipping from the previous owner
     this.equipRune(vasenId, runeId);
 };

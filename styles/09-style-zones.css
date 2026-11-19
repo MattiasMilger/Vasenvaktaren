@@ -76,8 +76,9 @@
 
 .standard-vasen-runes {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: 2px 6px;
     flex-wrap: wrap;
+    font-size: var(--font-size-sm);
 }
 
 /* Button variants using standardized cards */
@@ -187,7 +188,8 @@
 /* Vasen card runes in inventory */
 .vasen-card-runes {
     display: flex;
-    gap: 4px;
+    gap: 2px 6px;
+    font-size: var(--font-size-sm);
     flex-wrap: wrap;
     margin-top: 4px;
 }

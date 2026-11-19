@@ -42,7 +42,7 @@ Game.prototype.handleOfferItem = function(itemId) {
     // Mark tutorial as shown when player offers an item; also unlock offering-type lore entries
     if (!gameState.firstCombatTutorialShown && this.currentCombat.isWildEncounter) {
         gameState.firstCombatTutorialShown = true;
-        LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'offering').forEach(k => {
+        findLoreEntryKeys('offering').forEach(k => {
             if (!gameState.unlockedLoreEntries.has(k)) {
                 gameState.unlockedLoreEntries.add(k);
                 ui.showLoreUnlockMessage(k);
@@ -90,8 +90,7 @@ Game.prototype.handleInterrogate = function() {
             },
             {
                 text: 'Close',
-                class: 'btn-secondary',
-                // callback: null will close the modal without executing the action
+                class: 'btn-secondary' // No callback: just closes the dialogue
             }
         ],
         true,

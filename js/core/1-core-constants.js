@@ -439,11 +439,11 @@ const FAMILY_DESCRIPTIONS = {
     [FAMILIES.VALNAD]: 'The tormented, animated remains or phantoms of the dead. Bound to a place or an action, they often seek revenge upon the living.',
     [FAMILIES.ODJUR]: 'Supernatural beasts and monstrous offspring of the gods or giants. They embody raw natural forces and the terrifying elements of the wild.',
     [FAMILIES.TROLL]: 'Ragged wildkin of the mountains and deep woods, possessing great strength and an ancient cunning. They turn to stone upon exposure to sunlight.',
-    [FAMILIES.RA]: 'Seductive, wilderness-bound wardens with the power to enchant and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
-    [FAMILIES.ALV]: 'Humanoid beings of potent magic, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
-    [FAMILIES.ANDE]: 'Spirits of a mystical or semi-divine nature, serving greater powers or guarding sacred places.',
+    [FAMILIES.RA]: 'Seductive, wilderness-bound wardens with the power to beguile and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
+    [FAMILIES.ALV]: 'Humanoid beings steeped in seiðr, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
+    [FAMILIES.ANDE]: 'Spirits of an otherworldly or semi-divine nature, serving greater powers or guarding sacred places.',
     [FAMILIES.JATTE]: 'Ancient giants of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir gods.',
-    [FAMILIES.DRAKE]: 'Terrifying serpents of immense magical power, often linked to cosmic forces and primordial greed.'
+    [FAMILIES.DRAKE]: 'Terrifying serpents of immense, ancient might, often linked to cosmic forces and primordial greed.'
 };
 
 // Family Passive Descriptions (mechanical, player-facing)
@@ -525,6 +525,10 @@ const ELEMENT_BONUSES = {
 
 const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
 
+// The four attributes that can be raised or lowered by stages in combat (health cannot).
+// Frozen because it is shared; copy it before mutating.
+const STAGEABLE_ATTRIBUTES = Object.freeze(['strength', 'wisdom', 'defense', 'durability']);
+
 // =============================================================================
 // TEMPERAMENTS
 // Keys are named after the attribute pair they affect (POSITIVE_NEGATIVE),
@@ -537,16 +541,16 @@ const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
 const TEMPERAMENTS = {
     STRENGTH_HEALTH:    { name: 'Ferocious',  positive: 'strength',   negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Fights with wild abandon, heedless of its own wounds.' },
     STRENGTH_DEFENSE:   { name: 'Brutal',     positive: 'strength',   negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Strikes first and never thinks of guarding.' },
-    STRENGTH_DURABILITY:{ name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'All raw might, with no ward against sorcery.' },
+    STRENGTH_DURABILITY:{ name: 'Savage',     positive: 'strength',   negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'All raw might, laid bare to galdr.' },
     WISDOM_HEALTH:       { name: 'Alert',      positive: 'wisdom',     negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Ever watchful, sharp of mind but frail of body.' },
     WISDOM_DEFENSE:      { name: 'Thoughtful', positive: 'wisdom',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Lost in thought, and often caught off guard.' },
-    WISDOM_DURABILITY:   { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Single-minded in its craft, with little guard against spells.' },
+    WISDOM_DURABILITY:   { name: 'Focused',    positive: 'wisdom',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Bent wholly on its own galdr, open to every other.' },
     HEALTH_DEFENSE:      { name: 'Resilient',  positive: 'health',     negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Bounces back from anything, but never learned to dodge.' },
-    HEALTH_DURABILITY:   { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Hale and hearty, yet easily swayed by magic.' },
+    HEALTH_DURABILITY:   { name: 'Healthy',    positive: 'health',     negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Hale and hearty, yet easily swayed by seiðr.' },
     DEFENSE_HEALTH:      { name: 'Wary',       positive: 'defense',    negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Trusts nothing and guards well, but worry wears it thin.' },
-    DEFENSE_DURABILITY:  { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'A steady shield against blows, bare against spells.' },
+    DEFENSE_DURABILITY:  { name: 'Stalwart',   positive: 'defense',    negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'A steady shield against blows, bare against galdr.' },
     DURABILITY_HEALTH:   { name: 'Enduring',   positive: 'durability', negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Outlasts every curse, though its body tires early.' },
-    DURABILITY_DEFENSE:  { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Sees through every spell, yet leaves the door open for a blade.' },
+    DURABILITY_DEFENSE:  { name: 'Vigilant',   positive: 'durability', negative: 'defense',    modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Sees through every galdr, yet leaves the door open for a blade.' },
 
     // Megin-based temperaments
     MEGIN_HEALTH:        { name: 'Spirited',   positive: 'megin',      negative: 'health',     modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Brimming with spirit, burning the candle at both ends.' },
@@ -554,13 +558,12 @@ const TEMPERAMENTS = {
     MEGIN_DURABILITY:    { name: 'Attuned',    positive: 'megin',      negative: 'durability', modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Tuned to the unseen, and raw to its touch.' },
     STRENGTH_MEGIN:      { name: 'Mighty',     positive: 'strength',   negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Strong as an ox, but quickly spent.' },
     WISDOM_MEGIN:        { name: 'Keen',       positive: 'wisdom',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'A sharp mind that burns through its power.' },
-    HEALTH_MEGIN:        { name: 'Stoic',      positive: 'health',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Bears all in silence, with little magic to spare.' },
+    HEALTH_MEGIN:        { name: 'Stoic',      positive: 'health',     negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Bears all in silence, but has little left to give.' },
     DEFENSE_MEGIN:       { name: 'Steady',     positive: 'defense',    negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Firm and unmoved, yet slow to stir its power.' },
     DURABILITY_MEGIN:    { name: 'Unyielding', positive: 'durability', negative: 'megin',      modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Will not bend to spells, but has little magic of its own.' },
 
-    // Strength/Wisdom cross temperaments - complete the matrix by allowing
-    // Strength and Wisdom to also be the lowered attribute (previously only
-    // ever the raised attribute).
+    // Strength/Wisdom cross temperaments - complete the matrix by letting
+    // Strength and Wisdom also be the lowered attribute.
     WISDOM_STRENGTH:      { name: 'Cunning',    positive: 'wisdom',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Wins by wit rather than by brawn.' },
     HEALTH_STRENGTH:      { name: 'Vital',      positive: 'health',      negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Brimming with life, light of hand.' },
     DEFENSE_STRENGTH:     { name: 'Shielded',   positive: 'defense',     negative: 'strength',   modifier: GAME_CONFIG.TEMPERAMENT_MODIFIER, flavor: 'Content to guard, rarely willing to strike.' },
@@ -656,7 +659,7 @@ const ZONES = {
     ZONE4: {
         id: 'zone4',
         name: 'Glimrande Källan',
-        description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose magic draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
+        description: 'A realm of crystal-clear rivers and deep, silent pools. The water reflects a deceptively serene beauty, hiding seductive, aquatic predators whose song draws the unwary down into their cold, watery graves. Pilgrims have long sought out the Sacred Well hidden within these waters, casting offerings in hopes of healing or divine favour.',
         image: 'assets/zones/glimrandekallan.png',
         levelRange: [15, 19],
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna', 'Dimalva', 'Backatroll'],
@@ -752,6 +755,29 @@ function getMatchupType(attackerElement, defenderElement) {
 
 function getAttributeStageModifier(stage) {
     return 1 + (GAME_CONFIG.ATTRIBUTE_STAGE_MODIFIER * stage);
+}
+
+function randomAttribute() {
+    return STAGEABLE_ATTRIBUTES[Math.floor(Math.random() * STAGEABLE_ATTRIBUTES.length)];
+}
+
+// "stage" or "stages" for a (possibly negative) stage count, for log messages
+function pluralizeStage(count) {
+    return Math.abs(count) === 1 ? 'stage' : 'stages';
+}
+
+// Fisher-Yates shuffle; mutates and returns the array
+function shuffleInPlace(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Number of rune slots a väsen of the given level has
+function getRuneSlotCount(level) {
+    return level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
 }
 
 function getRequiredExpForLevel(level) {

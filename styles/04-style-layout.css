@@ -205,6 +205,116 @@
     line-height: 1.4;
 }
 
+/* Starter skill preview: hidden until the card is clicked (.expanded),
+   then every skill shows with its details. Kept compact for mobile. */
+.starter-description {
+    margin-bottom: 0;
+}
+
+.starter-skills {
+    display: none;
+}
+
+.starter-card.expanded .starter-skills {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+    text-align: left;
+    animation: starter-reveal 0.2s ease-out;
+}
+
+.starter-skills-title {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+}
+
+.starter-skill {
+    padding: 5px var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-left-width: 3px;
+    border-radius: var(--border-radius-sm);
+}
+
+.starter-skill.element-earth { border-left-color: var(--element-earth); }
+.starter-skill.element-nature { border-left-color: var(--element-nature); }
+.starter-skill.element-water { border-left-color: var(--element-water); }
+.starter-skill.element-fire { border-left-color: var(--element-fire); }
+.starter-skill.element-wind { border-left-color: var(--element-wind); }
+
+.starter-skill.locked {
+    opacity: 0.6;
+}
+
+.starter-skill-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+.starter-skill-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-primary);
+}
+
+.starter-skill-name .ui-icon {
+    color: var(--text-secondary);
+}
+
+.starter-skill-meta {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+}
+
+.starter-skill-lvl {
+    color: var(--accent-warning);
+}
+
+.starter-skill-body .skill-attributes {
+    margin: 3px 0 2px;
+}
+
+.starter-skill-body .skill-description {
+    line-height: 1.35;
+}
+
+/* Once a card expands, don't stretch the other cards to its height */
+.starter-options:has(.starter-card.expanded) {
+    align-items: start;
+}
+
+@keyframes starter-reveal {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Phones: tighter rows so the expanded card stays short */
+@media (max-width: 480px) {
+    .starter-skill {
+        padding: 4px 6px;
+    }
+
+    .starter-skill-head {
+        font-size: var(--font-size-xs);
+    }
+
+    .starter-skill-body .skill-attributes {
+        gap: 2px var(--spacing-xs);
+    }
+}
+
 /* Ensure card popups render above the Confirm button */
 .starter-options {
     position: relative;

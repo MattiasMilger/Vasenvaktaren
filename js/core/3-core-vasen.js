@@ -7,7 +7,7 @@ const VASEN_SPECIES = {
     'Svartalv': {
         name: 'Svartalv',
         internalName: 'Svartalv',
-        description: 'A subterranean elven artisan from Nidavellir who seeks rare materials and crafts magical reality-bending artifacts.',
+        description: 'A subterranean elven artisan from Nidavellir who seeks rare materials and forges wondrous treasures for the gods.',
         family: FAMILIES.ALV,
         element: ELEMENTS.EARTH,
         rarity: RARITIES.UNCOMMON,

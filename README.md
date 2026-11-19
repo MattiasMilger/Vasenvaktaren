@@ -75,6 +75,7 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 
 - Portrait shown in the header, next to the player's name, and again inside the Player Profile screen next to the name field
 - Click the header portrait/name to open the Player Profile screen, view collection stats, achievements, and the Endless Tower record
+- Click the portrait inside the Player Profile screen to choose a face (6 round outline faces: Helmet, Glasses, Moustache, Fringe, Eyepatch, Hood; Helmet is the default); the choice is saved. The header button keeps the person silhouette
 
 ### Lore Book
 

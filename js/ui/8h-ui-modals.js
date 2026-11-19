@@ -276,7 +276,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         return;
     }
 
-    // If only one ally is alive -> auto swap (your existing logic)
+    // Only one ally left alive: swap it in automatically
     if (availableVasen.length === 1) {
         const actualIndex = combat.playerTeam.indexOf(availableVasen[0]);
         modal.classList.remove('active');
@@ -314,16 +314,22 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         const tutorialActive = !gameState.firstExploreTutorialShown;
         const nextClass = tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary';
 
+        // Non-combat finds: confirm, or explore again straight away
+        const confirmOrNextButtons = () => [
+            { text: 'Confirm', callback: null, class: 'btn-primary' },
+            { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
+        ];
+
         switch (result.type) {
             case 'vasen':
                 this.showDialogue(
-    'Wild Encounter!',
-    `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
-    [{ text: `${uiIcon('swords')}Combat!`, callback: () => game.startCombat(result.vasen), class: tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary' }],
-    false, // <-- non-dismissible
-    null,
-    'vasen'
-);
+                    'Wild Encounter!',
+                    `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
+                    [{ text: `${uiIcon('swords')}Combat!`, callback: () => game.startCombat(result.vasen), class: nextClass }],
+                    false, // Not dismissible: the encounter must be fought
+                    null,
+                    'vasen'
+                );
                 break;
 
             case 'item': {
@@ -333,48 +339,26 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
                     const escaped = itemName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                     itemDialogue = itemDialogue.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
                 }
-                this.showDialogue(
-    'Item Found!',
-    `<p>${itemDialogue}</p>`,
-    [
-        { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
-    ],
-    false,
-    null,
-    'items'
-);
-            }
+                this.showDialogue('Item Found!', `<p>${itemDialogue}</p>`, confirmOrNextButtons(), false, null, 'items');
                 break;
+            }
 
             case 'well':
-                this.showDialogue(
-    'Sacred Well',
-    `<p>${result.dialogue}</p>`,
-    [
-        { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
-    ],
-    false,
-    null,
-    'heal'
-);
-
+                this.showDialogue('Sacred Well', `<p>${result.dialogue}</p>`, confirmOrNextButtons(), false, null, 'heal');
                 break;
 
-            case 'rune':
+            case 'rune': {
+                const rune = RUNES[result.runeId];
                 this.showDialogue(
-    'Rune Discovered!',
-    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${RUNES[result.runeId].symbol}</span> ${RUNES[result.runeId].name}</p><p class="rune-effect">${RUNES[result.runeId].effect}</p>`,
-    [
-        { text: 'Confirm', callback: null, class: 'btn-primary' },
-        { text: `${uiIcon('compass')}Next`, callback: () => game.explore(), class: nextClass }
-    ],
-    false,
-    null,
-    'runes'
-);
-
+                    'Rune Discovered!',
+                    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${rune.symbol}</span> ${rune.name}</p><p class="rune-effect">${rune.effect}</p>`,
+                    confirmOrNextButtons(),
+                    false,
+                    null,
+                    'runes'
+                );
+                break;
+            }
         }
     };
 

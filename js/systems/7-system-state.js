@@ -2,19 +2,46 @@
 // 7-system-state.js - Game State Management and Save/Load System
 // =============================================================================
 
+// Fresh default records, shared by the constructor, resetGame() and old-save fallbacks
+function createDefaultAchievements() {
+    return { champion: false, rune_master: false, hoarder: false, lore_master: false };
+}
+
+function createDefaultEndlessTowerRecord() {
+    return {
+        highestFloor: 0,
+        team: [], // Array of { speciesName, level, temperamentKey, runes }
+        timestamp: null
+    };
+}
+
+// Remove trailing null placeholders (empty slots) from a väsen's rune array
+function trimTrailingEmptyRuneSlots(vasen) {
+    while (vasen.runes.length > 0 && vasen.runes[vasen.runes.length - 1] === null) {
+        vasen.runes.pop();
+    }
+}
+
+// Keep max Megin in sync when Uruz is equipped (refill) or removed (cap)
+function syncMeginForRuneChange(vasen, addedRune, removedRune) {
+    if (addedRune === 'URUZ' || removedRune === 'URUZ') {
+        vasen.recalculateMaxMegin(addedRune === 'URUZ');
+    }
+}
+
 // GameState manages all persistent game data including inventory, progression, and saves
 class GameState {
     constructor() {
         this.playerName = '';
+        this.playerFace = 'helmet';
         this.playerLevel = 1;
         
-        // Party: array of 3 slots, each can hold a VasenInstance or null
+        // Party: array of 3 slots, each can hold a VasenInstance or null.
+        // Runes belong to each väsen (vasen.runes), not to party slots, so they
+        // stay equipped when a väsen leaves the party.
         this.party = [null, null, null];
-        
-        // Note: Runes are now bound to individual Väsen (stored in vasen.runes),
-        // not to party slots. This allows väsen to keep their runes when removed from party.
-        
-        // Collection of all caught Vasen (max 99)
+
+        // Collection of all caught Vasen (capped at GAME_CONFIG.MAX_INVENTORY_SIZE)
         this.vasenCollection = [];
         
         // Inventory of taming items: { itemId: count }
@@ -56,13 +83,7 @@ class GameState {
         this.currentZone = 'ZONE1';
         this.defeatedGuardians = new Set();
         
-        // Achievements
-        this.achievements = {
-            champion: false,
-            rune_master: false,
-            hoarder: false,
-            lore_master: false,
-        };
+        this.achievements = createDefaultAchievements();
         
         // Game flags
         this.gameStarted = false;
@@ -71,13 +92,8 @@ class GameState {
         this.firstExploreTutorialShown = false;
         this.firstTameMessageShown = false;
         
-        // Endless Tower tracking
-        this.endlessTowerRecord = {
-            highestFloor: 0,
-            team: [], // Array of { speciesName, level, temperamentKey, runes }
-            timestamp: null
-        };
-        
+        this.endlessTowerRecord = createDefaultEndlessTowerRecord();
+
         // Current combat state (not saved)
         this.currentCombat = null;
         this.currentEncounter = null;
@@ -140,7 +156,7 @@ class GameState {
             return false;
         }
         
-        // Create starter Vasen at level 5 - pass species NAME (key) not data
+        // Create the starter Vasen (takes the species key, not the species data)
         const starter = new VasenInstance(starterSpeciesId, GAME_CONFIG.STARTER_LEVEL, starterTemperament);
         
         // Add to collection
@@ -232,7 +248,6 @@ class GameState {
             return { success: false, message: `You cannot have two ${vasenInstance.species.name} in your party.` };
         }
         
-        // Väsen keeps their equipped runes (no longer assigned from party slots)
         this.party[slotIndex] = vasenInstance;
         this.saveGame();
         
@@ -245,7 +260,6 @@ class GameState {
             return { success: false, message: 'Invalid party slot.' };
         }
         
-        // Väsen keeps their equipped runes when removed from party
         this.party[slotIndex] = null;
         this.saveGame();
         
@@ -292,8 +306,7 @@ class GameState {
             return { success: false, message: 'Väsen not found.' };
         }
 
-        // Determine rune slot limit
-        const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+        const maxRunes = vasen.getRuneSlotCount();
 
         // Already has this rune equipped somewhere on this same väsen?
         const currentIndexOnThisVasen = vasen.runes.indexOf(runeId);
@@ -316,11 +329,7 @@ class GameState {
 
                 // A swap never changes whether Uruz is equipped on this väsen,
                 // only which slot it occupies, so maxMegin is unaffected.
-
-                // Trim any trailing null placeholders left behind
-                while (vasen.runes.length > 0 && vasen.runes[vasen.runes.length - 1] === null) {
-                    vasen.runes.pop();
-                }
+                trimTrailingEmptyRuneSlots(vasen);
 
                 this.saveGame();
                 return { success: true, message: `Rune swapped on ${vasen.getDisplayName()}.` };
@@ -344,8 +353,7 @@ class GameState {
         // always honored exactly as clicked - whether that slot is currently
         // filled (replace), the next slot in sequence, or an empty slot reached
         // only by skipping over other empty slots (e.g. clicking the right slot
-        // while both slots are empty) - rather than always appending to the
-        // first available position regardless of which slot was clicked.
+        // while both slots are empty).
         // Empty slots that are skipped over are recorded as `null` placeholders
         // so the rune lands in the exact slot the player chose; these placeholders
         // render and behave as empty slots everywhere they're read.
@@ -357,18 +365,7 @@ class GameState {
             // currently holds a null placeholder) directly at that index
             const removedRune = vasen.runes[slotIndex];
             vasen.runes[slotIndex] = runeId;
-
-            // Recalculate megin if Uruz was added or removed
-            if (runeId === 'URUZ' || removedRune === 'URUZ') {
-                vasen.maxMegin = vasen.calculateMaxMegin();
-                if (runeId === 'URUZ') {
-                    // Uruz added: fill to new max
-                    vasen.currentMegin = vasen.maxMegin;
-                } else {
-                    // Uruz removed: cap to new (lower) max
-                    vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
-                }
-            }
+            syncMeginForRuneChange(vasen, runeId, removedRune);
         } else if (hasValidExplicitSlot && slotIndex >= vasen.runes.length) {
             // Targeted slot is beyond the current array - pad any skipped slots
             // with a null placeholder (rendered/treated as empty) so the rune
@@ -377,50 +374,28 @@ class GameState {
                 vasen.runes.push(null);
             }
             vasen.runes.push(runeId);
-            if (runeId === 'URUZ') {
-                vasen.maxMegin = vasen.calculateMaxMegin();
-                vasen.currentMegin = vasen.maxMegin;
-            }
+            syncMeginForRuneChange(vasen, runeId);
         } else {
             // No explicit (or invalid) slot specified.
             // Count actually-equipped runes (ignoring null placeholders), since
-            // array length alone is no longer a reliable measure of how many
-            // slots are truly filled once null placeholders can exist.
+            // array length alone doesn't reflect how many slots are filled.
             const equippedCount = vasen.runes.filter(r => r !== null).length;
             const nullIndex = vasen.runes.indexOf(null);
 
             if (nullIndex !== -1) {
                 // An empty (null) slot exists - fill it first
                 vasen.runes[nullIndex] = runeId;
-                if (runeId === 'URUZ') {
-                    vasen.maxMegin = vasen.calculateMaxMegin();
-                    vasen.currentMegin = vasen.maxMegin;
-                }
+                syncMeginForRuneChange(vasen, runeId);
             } else if (equippedCount < maxRunes) {
                 // Room remains and no null placeholder exists - just add the rune
                 vasen.runes.push(runeId);
-                if (runeId === 'URUZ') {
-                    vasen.maxMegin = vasen.calculateMaxMegin();
-                    vasen.currentMegin = vasen.maxMegin;
-                }
+                syncMeginForRuneChange(vasen, runeId);
             } else {
                 // Slots are genuinely full - replace the last slot
                 const indexToReplace = vasen.runes.length - 1;
                 const removedRune = vasen.runes[indexToReplace];
-
                 vasen.runes[indexToReplace] = runeId;
-
-                // Recalculate megin if Uruz was added or removed
-                if (runeId === 'URUZ' || removedRune === 'URUZ') {
-                    vasen.maxMegin = vasen.calculateMaxMegin();
-                    if (runeId === 'URUZ') {
-                        // Uruz added: fill to new max
-                        vasen.currentMegin = vasen.maxMegin;
-                    } else {
-                        // Uruz removed: cap to new (lower) max
-                        vasen.currentMegin = Math.min(vasen.currentMegin, vasen.maxMegin);
-                    }
-                }
+                syncMeginForRuneChange(vasen, runeId, removedRune);
             }
         }
 
@@ -446,12 +421,9 @@ class GameState {
         
         vasen.unequipRune(runeId);
 
-        // Trim any trailing null placeholders left behind (e.g. if the only
-        // remaining slot ahead of the removed rune was itself an empty
-        // placeholder), so the array doesn't accumulate unnecessary clutter.
-        while (vasen.runes.length > 0 && vasen.runes[vasen.runes.length - 1] === null) {
-            vasen.runes.pop();
-        }
+        // Trim trailing empty placeholders left behind (e.g. if the slot ahead of
+        // the removed rune was itself empty)
+        trimTrailingEmptyRuneSlots(vasen);
 
         this.saveGame();
         return { success: true, message: `Rune removed from ${vasen.getDisplayName()}.` };
@@ -510,8 +482,7 @@ class GameState {
         for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
             const vasen = this.party[i];
             if (vasen) {
-                const maxRunes = vasen.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
-                if (vasen.runes.length < maxRunes) {
+                if (vasen.runes.length < vasen.getRuneSlotCount()) {
                     vasen.equipRune(runeId);
                     break;
                 }
@@ -572,53 +543,33 @@ class GameState {
             const species = vasen.species;
             if (!species) return;
 
-            // Species entries (multiple entries can share the same unlock key, e.g. god entries)
-            LORE_ENTRY_KEYS.filter(k =>
-                LORE_ENTRIES[k].unlockType === 'vasen' && LORE_ENTRIES[k].unlockKey === vasen.speciesName
-            ).forEach(k => unlock(k));
-
-            // Family entries
-            LORE_ENTRY_KEYS.filter(k =>
-                LORE_ENTRIES[k].unlockType === 'family' && LORE_ENTRIES[k].unlockKey === species.family
-            ).forEach(k => unlock(k));
-
-            // Element entries
-            LORE_ENTRY_KEYS.filter(k =>
-                LORE_ENTRIES[k].unlockType === 'element' && LORE_ENTRIES[k].unlockKey === species.element
-            ).forEach(k => unlock(k));
+            findLoreEntryKeys('vasen', vasen.speciesName).forEach(unlock);
+            findLoreEntryKeys('family', species.family).forEach(unlock);
+            findLoreEntryKeys('element', species.element).forEach(unlock);
 
             // Skill entries - only skills the väsen has actually learned at its current level
             vasen.getAvailableSkills().forEach(skillName => {
-                LORE_ENTRY_KEYS.filter(k =>
-                    LORE_ENTRIES[k].unlockType === 'skill' && LORE_ENTRIES[k].unlockKey === skillName
-                ).forEach(k => unlock(k));
+                findLoreEntryKeys('skill', skillName).forEach(unlock);
             });
 
-            // Taming item entries
             if (species.tamingItem) {
-                LORE_ENTRY_KEYS.filter(k =>
-                    LORE_ENTRIES[k].unlockType === 'item' && LORE_ENTRIES[k].unlockKey === species.tamingItem
-                ).forEach(k => unlock(k));
+                findLoreEntryKeys('item', species.tamingItem).forEach(unlock);
             }
         });
 
         // Zone entries for all zones the player has unlocked
-        LORE_ENTRY_KEYS.forEach(k => {
-            if (LORE_ENTRIES[k].unlockType === 'zone') {
-                if (this.isZoneUnlocked(LORE_ENTRIES[k].unlockKey)) unlock(k);
-            }
+        findLoreEntryKeys('zone').forEach(k => {
+            if (this.isZoneUnlocked(LORE_ENTRIES[k].unlockKey)) unlock(k);
         });
 
         // Guardian entries for each defeated guardian
-        LORE_ENTRY_KEYS.forEach(k => {
-            if (LORE_ENTRIES[k].unlockType === 'guardian') {
-                if (this.defeatedGuardians.has(LORE_ENTRIES[k].unlockKey)) unlock(k);
-            }
+        findLoreEntryKeys('guardian').forEach(k => {
+            if (this.defeatedGuardians.has(LORE_ENTRIES[k].unlockKey)) unlock(k);
         });
 
         // Offering entries - unlocked once the player has made their first offer
         if (this.firstCombatTutorialShown) {
-            LORE_ENTRY_KEYS.filter(k => LORE_ENTRIES[k].unlockType === 'offering').forEach(k => unlock(k));
+            findLoreEntryKeys('offering').forEach(unlock);
         }
 
         // Single save at the end
@@ -675,19 +626,9 @@ class GameState {
         return bindRune.runes.every(runeId => this.collectedRunes.has(runeId));
     }
     
-    // Defeat guardian and unlock next zone
+    // Defeat guardian (the next zone unlocks implicitly, see isZoneUnlocked)
     defeatGuardian(zoneId) {
         this.defeatedGuardians.add(zoneId);
-        
-        const zoneKeys = Object.keys(ZONES);
-        const currentIndex = zoneKeys.indexOf(zoneId);
-        
-        // Unlock next zone
-        if (currentIndex < zoneKeys.length - 1) {
-            const nextZone = zoneKeys[currentIndex + 1];
-            // Zone is automatically available once guardian is defeated
-        }
-        
         this.checkAchievements();
         this.saveGame();
     }
@@ -870,7 +811,7 @@ class GameState {
                 // Get uncollected runes
                 const uncollectedRunes = RUNE_LIST.filter(r => !this.collectedRunes.has(r));
                 if (uncollectedRunes.length === 0) {
-                    // Fallback to vasen if somehow all runes collected (shouldn't happen due to check above)
+                    // Safety net: the rune roll is skipped once every rune is collected
                     return this.explore();
                 }
                 
@@ -879,7 +820,7 @@ class GameState {
                 this.saveGame();
                 
                 const runeData = RUNES[randomRune];
-                const dialogue = `The wind carries the scent of old magic. Another rune has chosen to reveal itself to you. You discovered ${runeData.symbol} ${runeData.name}.`;
+                const dialogue = `The wind carries a whisper of old galdr. Another rune has chosen to reveal itself to you. You discovered ${runeData.symbol} ${runeData.name}.`;
                 
                 result = { type: 'rune', runeId: randomRune, dialogue };
                 break;
@@ -1027,6 +968,7 @@ class GameState {
         return {
             version: SAVE_VERSION,
             playerName: this.playerName,
+            playerFace: this.playerFace,
             playerLevel: this.playerLevel,
             party: this.party.map(v => v ? v.serialize() : null),
             vasenCollection: this.vasenCollection.map(v => v.serialize()),
@@ -1074,6 +1016,7 @@ class GameState {
         
         try {
             this.playerName = data.playerName || '';
+            this.playerFace = data.playerFace || 'helmet';
             this.playerLevel = data.playerLevel || 1;
             
             // Restore Vasen collection first (runes are stored on each väsen)
@@ -1117,23 +1060,14 @@ class GameState {
             this.currentZone = data.currentZone || 'ZONE1';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
 
-            this.achievements = data.achievements || {
-                champion: false,
-                rune_master: false,
-                hoarder: false,
-            };
+            this.achievements = data.achievements || createDefaultAchievements();
             this.gameStarted = data.gameStarted || false;
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
             this.firstCombatTutorialShown = data.firstCombatTutorialShown || false;
             this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
             this.firstTameMessageShown = data.firstTameMessageShown || false;
             
-            // Restore Endless Tower record
-            this.endlessTowerRecord = data.endlessTowerRecord || {
-                highestFloor: 0,
-                team: [],
-                timestamp: null
-            };
+            this.endlessTowerRecord = data.endlessTowerRecord || createDefaultEndlessTowerRecord();
             
             // Restore pity counters (default to 0 for backwards compatibility)
             this.combatCounter = data.combatCounter || 0;
@@ -1221,8 +1155,9 @@ class GameState {
         localStorage.removeItem('combatRunesVisible');
         localStorage.removeItem('combatDescriptionVisible');
         localStorage.removeItem('combatCardsMinimized');
-        
+
         this.playerName = '';
+        this.playerFace = 'helmet';
         this.playerLevel = 1;
         this.party = [null, null, null];
         this.vasenCollection = [];
@@ -1239,12 +1174,7 @@ class GameState {
         this.discoveredItems = new Set();
         this.currentZone = 'ZONE1';
         this.defeatedGuardians = new Set();
-        this.achievements = {
-            champion: false,
-            rune_master: false,
-            hoarder: false,
-            lore_master: false,
-        };
+        this.achievements = createDefaultAchievements();
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;
         this.firstCombatTutorialShown = false;
@@ -1254,12 +1184,7 @@ class GameState {
         this.currentEncounter = null;
         this.inCombat = false;
         
-        // Reset Endless Tower record
-        this.endlessTowerRecord = {
-            highestFloor: 0,
-            team: [],
-            timestamp: null
-        };
+        this.endlessTowerRecord = createDefaultEndlessTowerRecord();
         
         // Reset pity counters
         this.combatCounter = 0;

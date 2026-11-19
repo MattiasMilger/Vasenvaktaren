@@ -2,6 +2,23 @@
 // 5-core-instance.js - Väsen Instance Class and Utilities
 // =============================================================================
 
+// Combat flags for rune and family passive effects that trigger at most once per combat
+const ONCE_PER_COMBAT_FLAGS = [
+    // Runes and bind runes
+    'gifuTriggered',
+    'wynjaTriggered',
+    'mannazTeamHealTriggered',
+    'fehuWynjaPassiveTriggered',
+    'hagalNaudizPassiveTriggered',
+    // Family passives
+    'andePassiveTriggered',
+    'drakePassiveTriggered',
+    'odjurPassiveTriggered',
+    'raPassiveTriggered',
+    'trollPassiveTriggered',
+    'valnadPassiveTriggered'
+];
+
 class VasenInstance {
     constructor(speciesName, level = 1, temperamentKey = null, runes = [], isEnemy = false) {
         const species = VASEN_SPECIES[speciesName];
@@ -17,45 +34,20 @@ class VasenInstance {
         this.level = Math.min(Math.max(1, level), maxLevel);
         this.temperamentKey = (temperamentKey && TEMPERAMENTS[temperamentKey]) ? temperamentKey : getRandomTemperament();
         this.temperament = TEMPERAMENTS[this.temperamentKey];
-        this.runes = runes.slice(0, this.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1);
-        
+        this.runes = runes.slice(0, getRuneSlotCount(this.level));
+
         this.experience = 0;
-        
+
         // Calculate max values
         this.maxHealth = this.calculateAttribute('health');
         this.maxMegin = this.calculateMaxMegin();
-        
+
         // Current values
         this.currentHealth = this.maxHealth;
         this.currentMegin = this.maxMegin;
-        
-        // Combat state (reset after each combat)
-        this.attributeStages = {
-            strength: 0,
-            wisdom: 0,
-            defense: 0,
-            durability: 0
-        };
-        
-        this.combatFlags = {
-            hasSwapSickness: false,
-            turnsOnField: 0,
-            isFirstRound: true,
-            gifuTriggered: false,
-            wynjaTriggered: false,
-            mannazTeamHealTriggered: false,
-            fehuWynjaPassiveTriggered: false,
-            hagalNaudizPassiveTriggered: false,
-            // Family passive flags
-            andePassiveTriggered: false,
-            drakePassiveTriggered: false,
-            odjurPassiveTriggered: false,
-            raPassiveTriggered: false,
-            trollPassiveTriggered: false,
-            valnadPassiveTriggered: false,
-            // Empowerment system
-            isEmpowered: false // Tracks if next attack deals bonus damage
-        };
+
+        // Combat state (attribute stages and combat flags, reset after each combat)
+        this.resetCombatState();
     }
     
     // Getter for display name (for convenience)
@@ -135,12 +127,23 @@ class VasenInstance {
         // relevant for enemies in Endless Tower, whose level has no cap.
         megin = Math.min(megin, GAME_CONFIG.MAX_MEGIN_CAP);
         
-        // Check for Uruz rune
         if (this.hasRune('URUZ')) {
-            megin = Math.floor(megin * 1.20);
+            megin = Math.floor(megin * (1 + GAME_CONFIG.RUNE_URUZ_MEGIN_BONUS));
         }
-        
+
         return megin;
+    }
+
+    // Recalculate max Megin (e.g. after Uruz is equipped or removed). Current Megin
+    // is either refilled to the new max or only capped to it.
+    recalculateMaxMegin(refill = true) {
+        this.maxMegin = this.calculateMaxMegin();
+        this.currentMegin = refill ? this.maxMegin : Math.min(this.currentMegin, this.maxMegin);
+    }
+
+    // Number of rune slots at the current level
+    getRuneSlotCount() {
+        return getRuneSlotCount(this.level);
     }
     
     // Get megin refill per turn
@@ -179,31 +182,26 @@ class VasenInstance {
     
     // Equip a rune
     equipRune(runeId) {
-        const maxRunes = this.level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
-        if (this.runes.length >= maxRunes) {
+        if (this.runes.length >= this.getRuneSlotCount()) {
             return false;
         }
         if (this.runes.includes(runeId)) {
             return false;
         }
         this.runes.push(runeId);
-        // Recalculate megin if Uruz
         if (runeId === 'URUZ') {
-            this.maxMegin = this.calculateMaxMegin();
-            this.currentMegin = this.maxMegin;
+            this.recalculateMaxMegin();
         }
         return true;
     }
-    
+
     // Unequip a rune
     unequipRune(runeId) {
         const index = this.runes.indexOf(runeId);
         if (index === -1) return false;
         this.runes.splice(index, 1);
-        // Recalculate megin if Uruz
         if (runeId === 'URUZ') {
-            this.maxMegin = this.calculateMaxMegin();
-            this.currentMegin = Math.min(this.currentMegin, this.maxMegin);
+            this.recalculateMaxMegin(false);
         }
         return true;
     }
@@ -295,38 +293,16 @@ class VasenInstance {
             hasSwapSickness: false,
             turnsOnField: 0,
             isFirstRound: true,
-            gifuTriggered: false,
-            wynjaTriggered: false,
-            mannazTeamHealTriggered: false,
-            fehuWynjaPassiveTriggered: false,
-            hagalNaudizPassiveTriggered: false,
-            // Family passive flags
-            andePassiveTriggered: false,
-            drakePassiveTriggered: false,
-            odjurPassiveTriggered: false,
-            raPassiveTriggered: false,
-            trollPassiveTriggered: false,
-            valnadPassiveTriggered: false,
-            // Empowerment system
-            isEmpowered: false
+            isEmpowered: false // Tracks if next attack deals bonus damage
         };
+        this.resetOncePerCombatFlags();
     }
 
     // Reset only the once-per-combat passive and rune flags, without touching
     // attribute stages, health, megin, or turn counters.
-    // Used by Idunn's Apples between Endless Tower floors.
+    // Also used by Idunn's Apples between Endless Tower floors.
     resetOncePerCombatFlags() {
-        this.combatFlags.gifuTriggered = false;
-        this.combatFlags.wynjaTriggered = false;
-        this.combatFlags.mannazTeamHealTriggered = false;
-        this.combatFlags.fehuWynjaPassiveTriggered = false;
-        this.combatFlags.hagalNaudizPassiveTriggered = false;
-        this.combatFlags.andePassiveTriggered = false;
-        this.combatFlags.drakePassiveTriggered = false;
-        this.combatFlags.odjurPassiveTriggered = false;
-        this.combatFlags.raPassiveTriggered = false;
-        this.combatFlags.trollPassiveTriggered = false;
-        this.combatFlags.valnadPassiveTriggered = false;
+        ONCE_PER_COMBAT_FLAGS.forEach(flag => { this.combatFlags[flag] = false; });
     }
     
     // Restore full resources
@@ -445,24 +421,19 @@ function createWildVasen(speciesName, level) {
     const vasen = new VasenInstance(speciesName, level, null, [], true); // Mark as enemy
 
     // Determine how many rune slots this väsen has
-    const numRunes = level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+    const numRunes = getRuneSlotCount(level);
 
     // Get the valid rune pool for this väsen and shuffle it
     const validRunes = getValidRunesForVasen(vasen).slice();
-    for (let i = validRunes.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [validRunes[i], validRunes[j]] = [validRunes[j], validRunes[i]];
-    }
+    shuffleInPlace(validRunes);
 
     // Assign up to numRunes unique runes from the valid pool
     for (let i = 0; i < numRunes && i < validRunes.length; i++) {
         vasen.runes.push(validRunes[i]);
     }
 
-    // Recalculate megin if Uruz was assigned
     if (vasen.hasRune('URUZ')) {
-        vasen.maxMegin = vasen.calculateMaxMegin();
-        vasen.currentMegin = vasen.maxMegin;
+        vasen.recalculateMaxMegin();
     }
 
     return vasen;
@@ -477,10 +448,8 @@ function createGuardianTeam(guardianData) {
             memberData.temperament,
             memberData.runes || []
         );
-        // Recalculate megin if has Uruz
         if (vasen.hasRune('URUZ')) {
-            vasen.maxMegin = vasen.calculateMaxMegin();
-            vasen.currentMegin = vasen.maxMegin;
+            vasen.recalculateMaxMegin();
         }
         return vasen;
     });

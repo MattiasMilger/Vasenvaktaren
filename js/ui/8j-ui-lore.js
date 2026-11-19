@@ -680,7 +680,7 @@ UIController.prototype.showIdunnApplesInfoModal = function() {
     const interval = GAME_CONFIG.ENDLESS_TOWER_IDUNN_FLOOR_INTERVAL;
     const healPercent = Math.round(GAME_CONFIG.ENDLESS_TOWER_IDUNN_HEAL_PERCENT * 100);
     const cleanseStages = GAME_CONFIG.ENDLESS_TOWER_IDUNN_CLEANSE_STAGES;
-    const stageWord = cleanseStages === 1 ? 'stage' : 'stages';
+    const stageWord = pluralizeStage(cleanseStages);
 
     const bodyHtml = `
         <p>Every <strong>${interval}</strong> floors in the Endless Tower, Idunn's Apples replenish your team:</p>
@@ -836,9 +836,9 @@ UIController.prototype.showSkillsInfoModal = function() {
                     <span class="skill-cost">Megin: ${skill.meginCost}</span>
                     ${skill.healthCost ? `<span class="skill-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                     ${skill.power ? `<span class="skill-power">Power: ${skill.power}</span>` : ''}
-                    ${skill.initialBonus ? `<span class="skill-initial-bonus">Initial Bonus: ${skill.initialBonus}</span>` : ''}
+                    ${ui.getInitialBonusHTML(skill, 'skill-initial-bonus')}
                 </div>
-                <p class="skill-description">${skill.flavorDescription}<br>${skill.mechanicsDescription}</p>
+                <p class="skill-description">${skill.flavorDescription}<br>${ui.linkifyKeywords(skill.mechanicsDescription)}</p>
             </div>
         `;
     }).join('');

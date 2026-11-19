@@ -840,7 +840,7 @@ button:focus-visible,
     display: inline-block;
 }
 
-/* Wrapper for fixed positioning - the popup will calculate its position via JS or we use a portal pattern */
+/* Family description popup (inside combatant cards and the details panel it is positioned via JS) */
 .family-matchup-collapsible .family-description-popup {
     display: none;
     position: absolute;
@@ -904,12 +904,9 @@ button:focus-visible,
     margin-right: 2px;
 }
 
-/* Remove the override - let attack element popups center under their badges on desktop */
-/* .combatant-attack-elements .matchup-details is now handled by default centering */
-
 /* Ensure matchup details stay static (not fixed) on mobile */
 @media (max-width: 768px) {
-    /* KEY FIX: Prevent matchup rows from wrapping so they can scroll horizontally */
+    /* Prevent matchup rows from wrapping so they can scroll horizontally */
     .element-matchup-collapsible .matchup-details .matchup-row,
     .element-guide-collapsible .element-guide-details .matchup-row,
     .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
@@ -954,7 +951,7 @@ button:focus-visible,
         flex-wrap: wrap;
     }
 
-    /* KEY FIX: Give family popup content a min-width so it extends beyond container */
+    /* Give family popup content a min-width so it extends beyond container */
     .family-matchup-collapsible .family-description-popup {
         position: absolute;
         left: 50%;
@@ -972,7 +969,7 @@ button:focus-visible,
         transform: none;
     }
 
-    /* KEY FIX: Inner content has min-width to force horizontal scroll (non-card contexts) */
+    /* Inner content has min-width to force horizontal scroll (non-card contexts) */
     .family-matchup-collapsible .family-description-popup > * {
         min-width: 300px;
     }

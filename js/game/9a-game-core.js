@@ -86,10 +86,7 @@ class Game {
         // welcome dialogue are the ones actually granted when the player
         // clicks "Begin Journey" (mirrors the guardian defeat flow, which
         // rolls new-zone items before displaying them in the victory message).
-        // Derived dynamically from Zone 1's (Trollskogen) actual spawn list via
-        // getItemsForZone(), so every väsen that spawns there can have its
-        // taming item show up as a starting item, and this stays correct
-        // automatically if the zone's spawns or taming items ever change.
+        // Drawn from the taming items of every väsen that spawns in Zone 1 (Trollskogen).
         const zone1Items = getItemsForZone('ZONE1');
 
         // Copy + shuffle
@@ -115,8 +112,7 @@ class Game {
 
                 // Give starting rune (Uruz)
                 starter.equipRune('URUZ');
-                starter.maxMegin = starter.calculateMaxMegin();
-                starter.currentMegin = starter.maxMegin;
+                starter.recalculateMaxMegin();
 
                 // Add to collection and party
                 gameState.vasenCollection.push(starter);
@@ -131,7 +127,6 @@ class Game {
                     gameState.addItem(item, 1);
                 });
 
-
                 // Start the game for real
                 gameState.gameStarted = true;
                 gameState.saveGame();
@@ -140,18 +135,10 @@ class Game {
                 gameState.unlockStandardLoreEntries();
                 const starterSpecies = VASEN_SPECIES[selectedStarterName];
                 if (starterSpecies) {
-                    // Starter väsen species entry
-                    const speciesKey = LORE_ENTRY_KEYS.find(k =>
-                        LORE_ENTRIES[k].unlockType === 'vasen' &&
-                        LORE_ENTRIES[k].unlockKey === selectedStarterName
-                    );
+                    const speciesKey = findLoreEntryKey('vasen', selectedStarterName);
                     if (speciesKey) gameState.unlockLoreEntry(speciesKey);
 
-                    // Starter family entry (always Vätte)
-                    const familyKey = LORE_ENTRY_KEYS.find(k =>
-                        LORE_ENTRIES[k].unlockType === 'family' &&
-                        LORE_ENTRIES[k].unlockKey === starterSpecies.family
-                    );
+                    const familyKey = findLoreEntryKey('family', starterSpecies.family);
                     if (familyKey) gameState.unlockLoreEntry(familyKey);
                 }
 
@@ -171,9 +158,51 @@ class Game {
         ui.refreshAll();
     }
 
+    // Wire the combat's UI callbacks; onEnd decides what happens when this combat type ends
+    attachCombatCallbacks(onEnd) {
+        const combat = this.currentCombat;
+        combat.onLog = (msg, type) => ui.addCombatLog(msg, type);
+        combat.onUpdate = () => ui.renderCombat(this.currentCombat);
+        combat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
+        combat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
+        combat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
+        combat.onEnd = onEnd;
+    }
+
+    // Unlock a lore entry and announce it; no-op for a missing or already unlocked key
+    unlockLoreWithMessage(key) {
+        if (key && gameState.unlockLoreEntry(key)) {
+            ui.showLoreUnlockMessage(key);
+        }
+    }
+
+    // After a loss or surrender, every party member is left at low health (at least 1 HP)
+    leavePartyAtLowHealth() {
+        gameState.party.forEach(v => {
+            if (v) {
+                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
+            }
+        });
+    }
+
+    restorePartyFully() {
+        gameState.party.forEach(v => {
+            if (v) v.restoreFully();
+        });
+    }
+
+    // Small post-victory heal plus a full Megin refill
+    applyVictoryHeal() {
+        gameState.party.forEach(v => {
+            if (v) {
+                v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
+                v.currentMegin = v.maxMegin;
+            }
+        });
+    }
+
     // End combat and return to exploration
     endCombat() {
-
         gameState.inCombat = false;
 
         // Stop showing tutorial when combat ends, but only if player has tamed at least one Vasen
@@ -184,12 +213,8 @@ class Game {
             gameState.saveGame();
         }
 
-        // Stop showing the explore button tutorial glow once the player has
-        // actually tamed a väsen (vasenCollection.length > 1, since the starter
-        // counts as 1). Checked at combat end (like firstCombatTutorialShown
-        // above) rather than at combat start, so it persists through wild
-        // encounters and guardian battles that don't result in a tame, and
-        // only turns off after a successful tame.
+        // Likewise stop the explore button tutorial glow, but only once a väsen
+        // has actually been tamed, so it persists through combats without a tame.
         if (!gameState.firstExploreTutorialShown && gameState.vasenCollection.length > 1) {
             gameState.firstExploreTutorialShown = true;
             gameState.saveGame();

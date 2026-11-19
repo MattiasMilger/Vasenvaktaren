@@ -1,5 +1,5 @@
 // =============================================================================
-// 6a-system-combat.js - Combat Mechanics and Combat Logic (FIXED)
+// 6a-system-combat.js - Combat Mechanics and Combat Logic
 // =============================================================================
 
 // Helper: Check if skill requires ally targeting
@@ -15,6 +15,14 @@ const COMBAT_TYPES = {
     ENDLESS_WILD: 'endless_wild',
     ENDLESS_GUARDIAN: 'endless_guardian',
     ENDLESS_TOWER: 'endless_tower'
+};
+
+// Element buff runes: skill element -> rune and the attributes it raises when it procs
+const ELEMENT_BUFF_RUNES = {
+    [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durability'] },
+    [ELEMENTS.FIRE]:  { rune: 'SOL',    attributes: ['strength', 'wisdom'] },
+    [ELEMENTS.WIND]:  { rune: 'EHWAZ',  attributes: ['defense', 'durability'] },
+    [ELEMENTS.WATER]: { rune: 'ISAZ',   attributes: ['wisdom', 'strength'] }
 };
 
 class Combat {
@@ -236,17 +244,12 @@ class Combat {
         // Snapshot pre-refill megin values so the combat log can report the
         // TOTAL megin gained this turn (base refill + any Freya's Tears bonus
         // refill applied further below), rather than just the base amount.
+        const allCombatants = [...this.playerTeam, ...this.enemyTeam];
         const meginBeforeRefill = new Map();
-        this.playerTeam.forEach(v => meginBeforeRefill.set(v.id, v.currentMegin));
-        this.enemyTeam.forEach(v => meginBeforeRefill.set(v.id, v.currentMegin));
+        allCombatants.forEach(v => meginBeforeRefill.set(v.id, v.currentMegin));
 
         // Refill megin for all team members (base refill only)
-        this.playerTeam.forEach(v => {
-            if (!v.isKnockedOut()) {
-                v.refillMegin();
-            }
-        });
-        this.enemyTeam.forEach(v => {
+        allCombatants.forEach(v => {
             if (!v.isKnockedOut()) {
                 v.refillMegin();
             }
@@ -282,15 +285,7 @@ class Combat {
 
         // Report TOTAL megin gained this turn per väsen
         // (base refill plus any Freya's Tears bonus refill applied above).
-        this.playerTeam.forEach(v => {
-            if (!v.isKnockedOut()) {
-                const gained = v.currentMegin - (meginBeforeRefill.get(v.id) || 0);
-                if (gained > 0) {
-                    this.addLog(`${v.getDisplayName()} gained ${gained} Megin!`, 'megin');
-                }
-            }
-        });
-        this.enemyTeam.forEach(v => {
+        allCombatants.forEach(v => {
             if (!v.isKnockedOut()) {
                 const gained = v.currentMegin - (meginBeforeRefill.get(v.id) || 0);
                 if (gained > 0) {
@@ -516,10 +511,9 @@ class Combat {
         
         if (isCorrect) {
             this.correctItemGiven = true;
-            // Updated line below to include Name and Colon
+            // "Name: line" format lets the UI bold the speaker's name
             this.addLog(`${enemyName}: Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.`, 'dialogue');
         } else {
-            // Updated line below to include Name and Colon
             this.addLog(`${enemyName}: What am I supposed to do with this?`, 'dialogue');
         }
         
@@ -544,18 +538,21 @@ class Combat {
         const results = { player: { action: 'interrogate' }, enemy: null };
         results.enemy = this.executeEnemyAction(enemyAction);
         
-        // 3. Add the dialogue with Colons so the UI can bold the names
-        this.addLog(`${playerName}: Tell me, ${enemyName}, what do you desire most?`, 'dialogue');
-        
-        setTimeout(() => {
-            this.addLog(`${enemyName}: If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
+        // 3. Resolve the rest of the turn first (knockouts, megin refill, Freya's
+        //    Tears...) so the dialogue is always the last thing logged this turn.
+        this.handlePostTurn(results);
+        this.endTurn();
+        if (this.isOver) return results;
 
-            // Deferred until after both dialogue lines so the megin refill log
-            // doesn't land between the player's question and the enemy's reply.
-            this.handlePostTurn(results);
-            this.endTurn();
+        // 4. Add the dialogue with Colons so the UI can bold the names.
+        //    The reply follows shortly after, but before player input is
+        //    re-enabled (COMBAT_INPUT_DELAY), so it can't slip into the next turn.
+        this.addLog(`${playerName}: Tell me, ${enemyName}, what do you desire most?`, 'dialogue');
+        setTimeout(() => {
+            if (this.isOver) return;
+            this.addLog(`${enemyName}: If you must know, <span class="taming-item">${tamingItem}</span> is what I desire most.`, 'dialogue');
         }, 600);
-        
+
         return results;
     }
     
@@ -576,7 +573,7 @@ class Combat {
         return { surrendered: true };
     }
     
-    // Execute an skill
+    // Execute a skill
     executeSkill(attacker, defender, skillName, isPlayer, selectedAllyTarget = null) {
         const skill = ABILITIES[skillName];
         if (!skill) return null;
@@ -614,8 +611,8 @@ class Combat {
                 const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT);
                 if (healAmount > 0) {
                     result.runeEffects.push({ rune: 'MANNAZ', effect: `healed ${healAmount}` });
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.MANNAZ.symbol} ${RUNES.MANNAZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
+                    this.logRuneActivated(attacker, 'MANNAZ');
+                    this.logHealthGained(attacker, healAmount);
                 }
 
                 // Bind Rune - GIFU + MANNAZ: the first time this väsen's Mannaz heal
@@ -627,81 +624,25 @@ class Combat {
                 if (!attacker.combatFlags.mannazTeamHealTriggered && hasMannazTeamHealBindRune(attacker)) {
                     attacker.combatFlags.mannazTeamHealTriggered = true;
                     const gifuMannazBR = getActiveBindRunes(attacker).find(b => b.type === 'mannaz_team_heal');
-                    this.addLog(`${attacker.getDisplayName()}'s Bindrune ${gifuMannazBR.symbols} ${gifuMannazBR.names} was activated!`, 'rune');
+                    this.logBindRuneActivated(attacker, gifuMannazBR);
 
                     const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                     allies.forEach(ally => {
                         if (ally !== attacker && !ally.isKnockedOut()) {
                             const allyHealAmount = ally.healPercent(GAME_CONFIG.RUNE_MANNAZ_HEAL_PERCENT);
                             if (allyHealAmount > 0) {
-                                this.addLog(`${ally.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${allyHealAmount} health</span>!`);
+                                this.logHealthGained(ally, allyHealAmount);
                             }
                         }
                     });
                 }
             }
             
-            // Jera: low cost heal (also applies to utility skills)
-            if (attacker.hasRune('JERA') && attacker.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
-                if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
-                    const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
-                    if (healAmount > 0) {
-                        this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
-                        this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
-                        result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
-                    }
-                }
-            }
-
-            // Bind Rune - Jera + Odal: low cost skills have a chance to raise a
-            // random attribute (also applies to utility skills, same scope as Jera's heal proc)
-            if (hasLowCostRandomBuffBindRune(attacker) && attacker.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
-                if (Math.random() < GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE) {
-                    const jeraOdalBR = getActiveBindRunes(attacker).find(b => b.type === 'low_cost_random_buff');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                    const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
-                    const buffResult = attacker.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_BIND_JERA_ODAL_BUFF_STAGES);
-                    this.addLog(`${attacker.getDisplayName()}'s Bindrune ${jeraOdalBR.symbols} ${jeraOdalBR.names} was activated!`, 'rune');
-                    if (buffResult.capped) {
-                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} cannot be raised any higher.`, 'status');
-                    } else if (buffResult.changed !== 0) {
-                        const stageWord = Math.abs(buffResult.changed) === 1 ? 'stage' : 'stages';
-                        this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was raised by ${Math.abs(buffResult.changed)} ${stageWord}!`, 'buff');
-                    }
-                }
-            }
-
-            // Algiz: Nature skill heal (also applies to utility skills)
-            if (skill.element === ELEMENTS.NATURE && attacker.hasRune('ALGIZ')) {
-                if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
-                    const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
-                    if (healAmount > 0) {
-                        this.addLog(`${attacker.getDisplayName()}'s ${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
-                        this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
-                        result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
-                    }
-                }
-            }
-
-            // Eihwaz, Sol, Ehwaz, Isaz: element skill buffs (also apply to utility skills)
-            const utilityElementBuffs = {
-                [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durability'] },
-                [ELEMENTS.FIRE]:  { rune: 'SOL',    attributes: ['strength', 'wisdom'] },
-                [ELEMENTS.WIND]:  { rune: 'EHWAZ',  attributes: ['defense', 'durability'] },
-                [ELEMENTS.WATER]: { rune: 'ISAZ',   attributes: ['wisdom', 'strength'] }
-            };
-            const utilityBuffData = utilityElementBuffs[skill.element];
-            if (utilityBuffData && attacker.hasRune(utilityBuffData.rune)) {
-                if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES[utilityBuffData.rune].symbol} ${RUNES[utilityBuffData.rune].name} was activated!`, 'rune');
-                    utilityBuffData.attributes.forEach(stat => {
-                        attacker.modifyAttributeStage(stat, GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES);
-                        const stageWord = GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES === 1 ? 'stage' : 'stages';
-                        this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} ${stageWord}!`, 'buff');
-                    });
-                    result.runeEffects.push({ rune: utilityBuffData.rune, effect: 'buffed' });
-                }
-            }
+            // These skill-use rune procs apply to utility skills too
+            this.tryJeraHeal(attacker, skillName, result);
+            this.tryJeraOdalBuff(attacker, skillName);
+            this.tryAlgizHeal(attacker, skill.element, result);
+            this.tryElementBuffRune(attacker, skill.element, result);
 
             // Trigger debuff flash animation if this is a debuff skill
             if (skill.effect && skill.effect.type === 'debuff' && this.onHit) {
@@ -728,7 +669,7 @@ class Combat {
         if (damageResult.bindRuneEleConverted) {
             const br = getElementConversionBindRune(attacker);
             if (br) {
-                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${br.symbols} ${br.names} was activated!`, 'rune');
+                this.logBindRuneActivated(attacker, br);
             }
         }
 
@@ -736,22 +677,17 @@ class Combat {
         if (damageResult.bindRuneUseBestStat) {
             const br = getActiveBindRunes(attacker).find(b => b.type === 'use_best_stat');
             if (br) {
-                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${br.symbols} ${br.names} was activated!`, 'rune');
+                this.logBindRuneActivated(attacker, br);
             }
         }
 
-        // Log matchup (always show effectiveness)
-        if (damageResult.matchup === 'POTENT') {
-            this.addLog('Potent hit!', 'potent');
-        } else if (damageResult.matchup === 'WEAK') {
-            this.addLog('Weak hit!', 'weak');
-        }
-        
+        this.logMatchup(damageResult.matchup);
+
         // Trigger family passives after taking damage
         // Drake: Check health threshold
         this.applyFamilyPassive('onHealthThreshold', { vasen: defender, isPlayer: !isPlayer });
-        
-        // Rå: Malicious Retaliation when hit (FIXED: only once per combat)
+
+        // Rå: Malicious Retaliation when hit (once per combat)
         if (!defender.combatFlags.raPassiveTriggered) {
             this.applyFamilyPassive('onTakeDamage', { vasen: defender, attacker: attacker, isPlayer: !isPlayer });
         }
@@ -765,12 +701,12 @@ class Combat {
             if (defenderHealthPercent <= GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD) {
                 attacker.combatFlags.hagalNaudizPassiveTriggered = true;
                 const hagalNaudizBR = getActiveBindRunes(attacker).find(b => b.type === 'enemy_health_threshold_debuff_all');
-                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${hagalNaudizBR.symbols} ${hagalNaudizBR.names} was activated!`, 'rune');
+                this.logBindRuneActivated(attacker, hagalNaudizBR);
 
-                ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
+                STAGEABLE_ATTRIBUTES.forEach(stat => {
                     const result = defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES);
                     if (result.changed !== 0) {
-                        const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(result.changed);
                         this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
                     }
                 });
@@ -799,11 +735,11 @@ class Combat {
         if (willKnockout) {
             // Hagal rune: Debuff enemy on knockout (triggers BEFORE revive check)
             if (defender.hasRune('HAGAL')) {
-                this.addLog(`${defender.getDisplayName()}'s ${RUNES.HAGAL.symbol} ${RUNES.HAGAL.name} was activated!`, 'rune');
-                ['strength', 'wisdom', 'defense', 'durability'].forEach(stat => {
+                this.logRuneActivated(defender, 'HAGAL');
+                STAGEABLE_ATTRIBUTES.forEach(stat => {
                     const result = attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES);
                     if (result.changed !== 0) {
-                        const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(result.changed);
                         this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
                     }
                 });
@@ -827,7 +763,7 @@ class Combat {
         
         // Thurs: damage reflect as Mixed hit (only if not knocked out)
         if (!attacker.isKnockedOut() && defender.hasRune('THURS') && result.damage > 0) {
-            this.addLog(`${defender.getDisplayName()}'s ${RUNES.THURS.symbol} ${RUNES.THURS.name} was activated!`, 'rune');
+            this.logRuneActivated(defender, 'THURS');
             
             // Calculate reflected damage as Mixed-type attack
             // The defender (Thurs user) becomes the "attacker" for the reflection
@@ -839,56 +775,30 @@ class Combat {
                 this.addLog(`${attacker.getDisplayName()} took ${reflectResult.damage} damage!`, 'damage');
                 result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectResult.damage}` });
 
-                // Log matchup for reflected damage
-                if (reflectResult.matchup === 'POTENT') {
-                    this.addLog('Potent hit!', 'potent');
-                } else if (reflectResult.matchup === 'WEAK') {
-                    this.addLog('Weak hit!', 'weak');
-                }
-                
+                this.logMatchup(reflectResult.matchup);
+
                 // Apply Naudiz effect if Thurs user has it and reflection was WEAK
                 if (reflectResult.matchup === 'WEAK' && defender.hasRune('NAUDIZ')) {
-                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                    this.logRuneActivated(defender, 'NAUDIZ');
                     for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
-                        const randomIndex = Math.floor(Math.random() * attributes.length);
-                        const stat = attributes[randomIndex];
-                        // Wynja: block first debuff on the original attacker
-                        if (!attacker.combatFlags.wynjaTriggered && attacker.hasRune('WYNJA')) {
-                            attacker.combatFlags.wynjaTriggered = true;
-                            this.addLog(`${attacker.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                            this.addLog(`${attacker.getDisplayName()} blocked the debuff!`, 'block');
-                            const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                            attacker.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                            const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                            this.addLog(`${attacker.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
-                            break; // Wynja blocks the entire Naudiz sequence
-                        }
+                        const stat = randomAttribute();
+                        // Wynja on the original attacker blocks the entire Naudiz sequence
+                        if (this.tryWynjaBlock(attacker)) break;
                         attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
-                        const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
                         this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                     }
                     result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
                 }
-                
+
                 // Apply Inguz effect if Thurs user has it on any reflection hit
                 if (defender.hasRune('INGUZ')) {
                     if (Math.random() < GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE) {
-                        // Wynja: block first debuff on the original attacker
-                        if (!attacker.combatFlags.wynjaTriggered && attacker.hasRune('WYNJA')) {
-                            attacker.combatFlags.wynjaTriggered = true;
-                            this.addLog(`${attacker.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                            this.addLog(`${attacker.getDisplayName()} blocked the debuff!`, 'block');
-                            const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                            attacker.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                            const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                            this.addLog(`${attacker.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
-                        } else {
-                            this.addLog(`${defender.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                            const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                            const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                        if (!this.tryWynjaBlock(attacker)) {
+                            this.logRuneActivated(defender, 'INGUZ');
+                            const randomStat = randomAttribute();
                             attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
-                            const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                            const stageWord = pluralizeStage(GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
                             this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                             result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed on reflection' });
                         }
@@ -897,7 +807,7 @@ class Combat {
             }
         }
         
-        // Troll family passive: Steal attribute stage when using skill (FIXED: only once per combat)
+        // Troll family passive: Steal attribute stage when using skill (once per combat)
         if (skill.type !== ATTACK_TYPES.UTILITY && !defender.isKnockedOut()) {
             if (!attacker.combatFlags.trollPassiveTriggered) {
                 this.applyFamilyPassive('onUseSkill', { vasen: attacker, defender: defender, isPlayer });
@@ -948,24 +858,7 @@ class Combat {
         // the attacker's Strength or Wisdom (with stage modifiers) is currently higher.
         const bindRuneUseBestStat = hasUseBestStatBindRune(attacker);
         
-        // Element matchup
-        let matchup = getMatchupType(skillElement, defender.species.element);
-        
-        // Jätte passive: Jotun's Fury
-        if (
-            attacker.species.family === FAMILIES.JATTE &&
-            !attacker.combatFlags.jattePassiveTriggered &&
-            attacker.currentHealth / attacker.maxHealth <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD
-        ) {
-            attacker.combatFlags.jattePassiveTriggered = true;
-            this.addLog(`${attacker.getDisplayName()} activated Jotun\'s Fury!`, 'passive');
-            if (matchup === 'WEAK') {
-                matchup = 'NEUTRAL';
-            } else if (matchup === 'NEUTRAL') {
-                matchup = 'POTENT';
-            }
-        }
-
+        const matchup = this.applyJotunsFury(attacker, getMatchupType(skillElement, defender.species.element));
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
         
         // Damage range
@@ -1007,7 +900,7 @@ class Combat {
         
         let power = skill.power;
         
-        // Loki's Betrayal: +35 power if the defender has any negative attribute stage
+        // Loki's Betrayal: bonus power if the defender has any negative attribute stage
         if (skill.lokiBetrayalBonus) {
             const defenderStages = defender.attributeStages;
             const hasNegativeStage = Object.values(defenderStages).some(stage => stage < 0);
@@ -1016,12 +909,12 @@ class Combat {
             }
         }
         
-        // Rotvälta: +40 power if the attacker was attacked this turn
+        // Rotvälta: bonus power if the attacker was attacked this turn
         if (skill.retaliationBonus && attacker.combatFlags.wasAttackedThisTurn) {
             power += skill.retaliationBonus;
         }
         
-        // Giantsbane: gains power based on target's max HP
+        // Giantsbane: gains power based on the target's current HP
         if (skill.giantsbaneBonus) {
             power += Math.floor(defender.currentHealth * skill.target_hp_bonus_percent);
         }
@@ -1095,27 +988,11 @@ class Combat {
         // Use the defender's element for the reflection
         const reflectElement = defender.species.element;
         
-        // Element matchup for the reflection
-        let matchup = getMatchupType(reflectElement, attacker.species.element);
-        
-        // Jätte passive on reflection
-        if (
-            defender.species.family === FAMILIES.JATTE &&
-            !defender.combatFlags.jattePassiveTriggered &&
-            defender.currentHealth / defender.maxHealth <= FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD
-        ) {
-            defender.combatFlags.jattePassiveTriggered = true;
-            this.addLog(`${defender.getDisplayName()} activated Jotun\'s Fury!`, 'passive');
-            if (matchup === 'WEAK') {
-                matchup = 'NEUTRAL';
-            } else if (matchup === 'NEUTRAL') {
-                matchup = 'POTENT';
-            }
-        }
-        
+        // Element matchup for the reflection (Jotun's Fury can also upgrade it)
+        const matchup = this.applyJotunsFury(defender, getMatchupType(reflectElement, attacker.species.element));
         const elementMod = DAMAGE_MULTIPLIERS[matchup];
-        
-        // Base reflected damage is 20% of original
+
+        // Base reflected damage is a fixed fraction of the original hit
         const baseReflectDamage = originalDamage * GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE;
         
         // Mixed attack: 50% based on Strength, 50% based on Wisdom
@@ -1139,7 +1016,126 @@ class Combat {
         const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));
         return powerFactor * damageRange * attackStat * elementMod * runeMod * defenseReduction;
     }
-    
+
+    // Jätte passive (Jotun's Fury): once per combat, at low health, upgrade the
+    // attacker's hit by one step (weak -> neutral -> potent). Returns the final matchup.
+    applyJotunsFury(attacker, matchup) {
+        if (
+            attacker.species.family !== FAMILIES.JATTE ||
+            attacker.combatFlags.jattePassiveTriggered ||
+            attacker.currentHealth / attacker.maxHealth > FAMILY_PASSIVE_CONFIG.JATTE_HEALTH_THRESHOLD
+        ) {
+            return matchup;
+        }
+        attacker.combatFlags.jattePassiveTriggered = true;
+        this.addLog(`${attacker.getDisplayName()} activated Jotun\'s Fury!`, 'passive');
+        if (matchup === 'WEAK') return 'NEUTRAL';
+        if (matchup === 'NEUTRAL') return 'POTENT';
+        return matchup;
+    }
+
+    // --- Shared combat log messages ---
+
+    logRuneActivated(vasen, runeId) {
+        this.addLog(`${vasen.getDisplayName()}'s ${RUNES[runeId].symbol} ${RUNES[runeId].name} was activated!`, 'rune');
+    }
+
+    logBindRuneActivated(vasen, bindRune) {
+        this.addLog(`${vasen.getDisplayName()}'s Bindrune ${bindRune.symbols} ${bindRune.names} was activated!`, 'rune');
+    }
+
+    logHealthGained(vasen, amount, type) {
+        this.addLog(`${vasen.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${amount} health</span>!`, type);
+    }
+
+    // Only potent and weak hits are announced; neutral hits stay silent
+    logMatchup(matchup) {
+        if (matchup === 'POTENT') {
+            this.addLog('Potent hit!', 'potent');
+        } else if (matchup === 'WEAK') {
+            this.addLog('Weak hit!', 'weak');
+        }
+    }
+
+    // --- Shared rune effects ---
+
+    // Wynja: blocks the first debuff aimed at this väsen each combat and raises a
+    // random attribute instead. Returns true if the debuff was blocked.
+    tryWynjaBlock(target) {
+        if (target.combatFlags.wynjaTriggered || !target.hasRune('WYNJA')) return false;
+        target.combatFlags.wynjaTriggered = true;
+        this.logRuneActivated(target, 'WYNJA');
+        this.addLog(`${target.getDisplayName()} blocked the debuff!`, 'block');
+        const counterStat = randomAttribute();
+        const stages = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE;
+        target.modifyAttributeStage(counterStat, stages);
+        this.addLog(`${target.getDisplayName()}'s ${counterStat} was raised by ${stages} ${pluralizeStage(stages)}!`, 'buff');
+        return true;
+    }
+
+    // Returns the first-use initial bonus stages for this skill on this side
+    // (0 if the skill has none or its bonus was already used this combat)
+    consumeInitialBonus(skill, isPlayer) {
+        if (!skill.initialBonus) return 0;
+        const initialBonusSet = isPlayer ? this.playerInitialBonusUsed : this.enemyInitialBonusUsed;
+        if (initialBonusSet.has(skill.name)) return 0;
+        initialBonusSet.add(skill.name);
+        return skill.initialBonus;
+    }
+
+    // Jera: chance to heal when using a low-cost skill
+    tryJeraHeal(attacker, skillName, result) {
+        if (!attacker.hasRune('JERA') || attacker.getSkillMeginCost(skillName) > GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) return;
+        if (Math.random() >= GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) return;
+        const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
+        if (healAmount > 0) {
+            this.logRuneActivated(attacker, 'JERA');
+            this.logHealthGained(attacker, healAmount);
+            result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
+        }
+    }
+
+    // Bind Rune - Jera + Odal: chance to raise a random attribute when using a low-cost skill
+    tryJeraOdalBuff(attacker, skillName) {
+        if (!hasLowCostRandomBuffBindRune(attacker) || attacker.getSkillMeginCost(skillName) > GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) return;
+        if (Math.random() >= GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE) return;
+        const jeraOdalBR = getActiveBindRunes(attacker).find(b => b.type === 'low_cost_random_buff');
+        const randomStat = randomAttribute();
+        const buffResult = attacker.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_BIND_JERA_ODAL_BUFF_STAGES);
+        this.logBindRuneActivated(attacker, jeraOdalBR);
+        if (buffResult.capped) {
+            this.addLog(`${attacker.getDisplayName()}'s ${randomStat} cannot be raised any higher.`, 'status');
+        } else if (buffResult.changed !== 0) {
+            this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was raised by ${Math.abs(buffResult.changed)} ${pluralizeStage(buffResult.changed)}!`, 'buff');
+        }
+    }
+
+    // Algiz: chance to heal when using a Nature skill
+    tryAlgizHeal(attacker, element, result) {
+        if (element !== ELEMENTS.NATURE || !attacker.hasRune('ALGIZ')) return;
+        if (Math.random() >= GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) return;
+        const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
+        if (healAmount > 0) {
+            this.logRuneActivated(attacker, 'ALGIZ');
+            this.logHealthGained(attacker, healAmount);
+            result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
+        }
+    }
+
+    // Eihwaz, Sol, Ehwaz, Isaz: chance to raise two attributes when using a skill of the rune's element
+    tryElementBuffRune(attacker, element, result) {
+        const buffData = ELEMENT_BUFF_RUNES[element];
+        if (!buffData || !attacker.hasRune(buffData.rune)) return;
+        if (Math.random() >= GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) return;
+        const stages = GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES;
+        this.logRuneActivated(attacker, buffData.rune);
+        buffData.attributes.forEach(stat => {
+            attacker.modifyAttributeStage(stat, stages);
+            this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by ${stages} ${pluralizeStage(stages)}!`, 'buff');
+        });
+        result.runeEffects.push({ rune: buffData.rune, effect: 'buffed' });
+    }
+
     // Apply utility effect
     applyUtilityEffect(user, target, skill, isPlayer, selectedAllyTarget = null) {
         const effects = [];
@@ -1148,17 +1144,17 @@ class Combat {
         if (!effect) return effects;
         
         if (effect.type === 'tyrs_sacrifice') {
-            // Tyr's Sacrifice: sacrifice 40% max HP to raise all attributes by 3 stages (lethal if HP runs out)
+            // Tyr's Sacrifice: sacrifice a share of max HP to raise all attributes (lethal if HP runs out)
             const healthCost = Math.floor(user.maxHealth * skill.healthCost);
             user.currentHealth = Math.max(0, user.currentHealth - healthCost);
             this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
 
             // Raise all 4 attributes by TYRS_SACRIFICE_STAGES stages
-            const sacrificeAttributes = ['strength', 'wisdom', 'defense', 'durability'];
+            const sacrificeAttributes = STAGEABLE_ATTRIBUTES;
             sacrificeAttributes.forEach(stat => {
                 const result = user.modifyAttributeStage(stat, GAME_CONFIG.TYRS_SACRIFICE_STAGES);
                 if (result.changed !== 0) {
-                    const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(result.changed);
                     this.addLog(`${user.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
                 }
@@ -1167,10 +1163,10 @@ class Combat {
             // Gifu: share the full buff (all 4 attributes) with allies
             if (!user.combatFlags.gifuTriggered && user.hasRune('GIFU')) {
                 user.combatFlags.gifuTriggered = true;
-                this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                this.logRuneActivated(user, 'GIFU');
 
                 const allies = isPlayer ? this.playerTeam : this.enemyTeam;
-                const stageWord = Math.abs(GAME_CONFIG.TYRS_SACRIFICE_STAGES) === 1 ? 'stage' : 'stages';
+                const stageWord = pluralizeStage(GAME_CONFIG.TYRS_SACRIFICE_STAGES);
                 allies.forEach(ally => {
                     if (ally !== user && !ally.isKnockedOut()) {
                         sacrificeAttributes.forEach(stat => {
@@ -1210,18 +1206,10 @@ class Combat {
                 targetVasen = user;
             }
 
-            // Determine whether this is the first use of a buff skill this combat for this side.
-            // (applies to both ally-targeted and self-targeted buffs).
-            // The bonus is applied to the direct target; Gifu then shares the full total to all
-            // other allies in one pass after the loop.
-            let initialBonusStages = 0;
-            if (skill.initialBonus) {
-                const initialBonusSet = isPlayer ? this.playerInitialBonusUsed : this.enemyInitialBonusUsed;
-                if (!initialBonusSet.has(skill.name)) {
-                    initialBonusSet.add(skill.name);
-                    initialBonusStages = skill.initialBonus;
-                }
-            }
+            // First use of this buff skill this combat for this side (ally- or self-targeted)
+            // grants bonus stages. The bonus is applied to the direct target; Gifu then shares
+            // the full total to all other allies in one pass after the loop.
+            const initialBonusStages = this.consumeInitialBonus(skill, isPlayer);
 
             const totalStagesToShare = effect.stages + initialBonusStages;
             const attributes = effect.attributes || [effect.stat];
@@ -1234,7 +1222,7 @@ class Combat {
                 if (initialBonusStages > 0) {
                     const bonusResult = targetVasen.modifyAttributeStage(stat, initialBonusStages);
                     if (bonusResult.changed !== 0) {
-                        const stageWord = Math.abs(bonusResult.changed) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(bonusResult.changed);
                         this.addLog(`Initial bonus! ${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'buff');
                         effects.push({ stat, change: bonusResult.changed });
                     }
@@ -1245,7 +1233,7 @@ class Combat {
                 if (result.capped) {
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} cannot be raised any higher.`, 'status');
                 } else if (result.changed !== 0) {
-                    const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(result.changed);
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     effects.push({ stat, change: result.changed });
                 }
@@ -1264,7 +1252,7 @@ class Combat {
                     elvMirrorStat = mirrorMap[attributes[0]];
                     const mirrorResult = targetVasen.modifyAttributeStage(elvMirrorStat, totalStagesToShare);
                     if (mirrorResult.changed !== 0) {
-                        const stageWord = Math.abs(mirrorResult.changed) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(mirrorResult.changed);
                         this.addLog(`${user.getDisplayName()} activated Elven Craftsmanship!`, 'passive');
                         this.addLog(`${targetVasen.getDisplayName()}'s ${elvMirrorStat} was raised by ${Math.abs(mirrorResult.changed)} ${stageWord}!`, 'buff');
                         effects.push({ stat: elvMirrorStat, change: mirrorResult.changed });
@@ -1279,9 +1267,9 @@ class Combat {
             // Gifu on the caster (user): share ALL buffed stats to allies in one activation.
             if (!user.combatFlags.gifuTriggered && user.hasRune('GIFU')) {
                 user.combatFlags.gifuTriggered = true;
-                this.addLog(`${user.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                this.logRuneActivated(user, 'GIFU');
 
-                const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
+                const stageWord = pluralizeStage(totalStagesToShare);
                 allies.forEach(ally => {
                     if (ally !== user && ally !== targetVasen && !ally.isKnockedOut()) {
                         statsToShare.forEach(stat => {
@@ -1296,9 +1284,9 @@ class Combat {
             // This handles the case where a benched ally is buffed and they carry Gifu.
             if (targetVasen !== user && !targetVasen.combatFlags.gifuTriggered && targetVasen.hasRune('GIFU')) {
                 targetVasen.combatFlags.gifuTriggered = true;
-                this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                this.logRuneActivated(targetVasen, 'GIFU');
 
-                const stageWord = Math.abs(totalStagesToShare) === 1 ? 'stage' : 'stages';
+                const stageWord = pluralizeStage(totalStagesToShare);
                 allies.forEach(ally => {
                     if (ally !== targetVasen && !ally.isKnockedOut()) {
                         statsToShare.forEach(stat => {
@@ -1314,35 +1302,17 @@ class Combat {
             const attributes = effect.attributes || [effect.stat];
             
             // Wynja: block first debuff entirely (including the first-use bonus)
-            if (!targetVasen.combatFlags.wynjaTriggered && targetVasen.hasRune('WYNJA')) {
-                targetVasen.combatFlags.wynjaTriggered = true;
-                this.addLog(`${targetVasen.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                this.addLog(`${targetVasen.getDisplayName()} blocked the debuff!`, 'block');
-                
-                // Raise random attribute
-                const randomStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                targetVasen.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                const stageWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                this.addLog(`${targetVasen.getDisplayName()}'s ${randomStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${stageWord}!`, 'buff');
-                return effects;
-            }
+            if (this.tryWynjaBlock(targetVasen)) return effects;
 
-            // Determine whether this is the first use of this debuff skill this combat for this side.
-            let initialBonusStages = 0;
-            if (skill.initialBonus) {
-                const initialBonusSet = isPlayer ? this.playerInitialBonusUsed : this.enemyInitialBonusUsed;
-                if (!initialBonusSet.has(skill.name)) {
-                    initialBonusSet.add(skill.name);
-                    initialBonusStages = skill.initialBonus;
-                }
-            }
+            // First use of this debuff skill this combat for this side grants extra lowering
+            const initialBonusStages = this.consumeInitialBonus(skill, isPlayer);
 
             attributes.forEach(stat => {
                 // Apply bonus stages on first use (extra lowering)
                 if (initialBonusStages > 0) {
                     const bonusResult = targetVasen.modifyAttributeStage(stat, -initialBonusStages);
                     if (bonusResult.changed !== 0) {
-                        const stageWord = Math.abs(bonusResult.changed) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(bonusResult.changed);
                         this.addLog(`Initial bonus! ${targetVasen.getDisplayName()}'s ${stat} was lowered by ${Math.abs(bonusResult.changed)} ${stageWord}!`, 'debuff');
                         effects.push({ stat, change: bonusResult.changed });
                     }
@@ -1353,7 +1323,7 @@ class Combat {
                 if (result.capped) {
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} cannot be lowered any further.`, 'status');
                 } else if (result.changed !== 0) {
-                    const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(result.changed);
                     this.addLog(`${targetVasen.getDisplayName()}'s ${stat} was lowered by ${Math.abs(result.changed)} ${stageWord}!`, 'debuff');
                     effects.push({ stat, change: result.changed });
                 }
@@ -1365,93 +1335,24 @@ class Combat {
     
     // Apply hit-based rune effects
     applyHitRuneEffects(attacker, defender, damageResult, result, isPlayer) {
-        const skill = ABILITIES[result.skill];
+        // Skill-use rune procs, keyed on the (possibly converted) hit element
         const skillElement = damageResult.element;
-        
-        // Element skill buffs (Eihwaz, Sol, Ehwaz, Isaz)
-        const elementSkillBuffs = {
-            [ELEMENTS.EARTH]: { rune: 'EIHWAZ', attributes: ['defense', 'durability'] },
-            [ELEMENTS.FIRE]: { rune: 'SOL', attributes: ['strength', 'wisdom'] },
-            [ELEMENTS.WIND]: { rune: 'EHWAZ', attributes: ['defense', 'durability'] },
-            [ELEMENTS.WATER]: { rune: 'ISAZ', attributes: ['wisdom', 'strength'] }
-        };
-        
-        if (elementSkillBuffs[skillElement] && attacker.hasRune(elementSkillBuffs[skillElement].rune)) {
-            if (Math.random() < GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) {
-                const buffData = elementSkillBuffs[skillElement];
-                this.addLog(`${attacker.getDisplayName()}'s ${RUNES[buffData.rune].symbol} ${RUNES[buffData.rune].name} was activated!`, 'rune');
-                buffData.attributes.forEach(stat => {
-                    attacker.modifyAttributeStage(stat, GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES);
-                    const stageWord = GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES === 1 ? 'stage' : 'stages';
-                    this.addLog(`${attacker.getDisplayName()}'s ${stat} was raised by ${GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES} ${stageWord}!`, 'buff');
-                });
-                result.runeEffects.push({ rune: buffData.rune, effect: 'buffed' });
-            }
-        }
-        
-        // Algiz: Nature skill heal
-        if (skillElement === ELEMENTS.NATURE && attacker.hasRune('ALGIZ')) {
-            if (Math.random() < GAME_CONFIG.RUNE_NATURE_HEAL_PROC_CHANCE) {
-                const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_ALGIZ_HEAL_PERCENT);
-                if (healAmount > 0) {
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.ALGIZ.symbol} ${RUNES.ALGIZ.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
-                    result.runeEffects.push({ rune: 'ALGIZ', effect: `healed ${healAmount}` });
-                }
-            }
-        }
-        
-        // Jera: low cost heal
-        if (attacker.hasRune('JERA') && attacker.getSkillMeginCost(result.skill) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
-            if (Math.random() < GAME_CONFIG.RUNE_LOW_COST_HEAL_PROC_CHANCE) {
-                const healAmount = attacker.healPercent(GAME_CONFIG.RUNE_JERA_HEAL_PERCENT);
-                if (healAmount > 0) {
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.JERA.symbol} ${RUNES.JERA.name} was activated!`, 'rune');
-                    this.addLog(`${attacker.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health</span>!`);
-                    result.runeEffects.push({ rune: 'JERA', effect: `healed ${healAmount}` });
-                }
-            }
-        }
+        this.tryElementBuffRune(attacker, skillElement, result);
+        this.tryAlgizHeal(attacker, skillElement, result);
+        this.tryJeraHeal(attacker, result.skill, result);
+        this.tryJeraOdalBuff(attacker, result.skill);
 
-        // Bind Rune - Jera + Odal: low cost skills have a chance to raise a random attribute
-        if (hasLowCostRandomBuffBindRune(attacker) && attacker.getSkillMeginCost(result.skill) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
-            if (Math.random() < GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE) {
-                const jeraOdalBR = getActiveBindRunes(attacker).find(b => b.type === 'low_cost_random_buff');
-                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
-                const buffResult = attacker.modifyAttributeStage(randomStat, GAME_CONFIG.RUNE_BIND_JERA_ODAL_BUFF_STAGES);
-                this.addLog(`${attacker.getDisplayName()}'s Bindrune ${jeraOdalBR.symbols} ${jeraOdalBR.names} was activated!`, 'rune');
-                if (buffResult.capped) {
-                    this.addLog(`${attacker.getDisplayName()}'s ${randomStat} cannot be raised any higher.`, 'status');
-                } else if (buffResult.changed !== 0) {
-                    const stageWord = Math.abs(buffResult.changed) === 1 ? 'stage' : 'stages';
-                    this.addLog(`${attacker.getDisplayName()}'s ${randomStat} was raised by ${Math.abs(buffResult.changed)} ${stageWord}!`, 'buff');
-                }
-            }
-        }
-        
         // Weak hit effects
         if (damageResult.matchup === 'WEAK') {
             // Naudiz: debuff on weak hit
             if (attacker.hasRune('NAUDIZ')) {
-                // Wynja: block first debuff on the defender
-                if (!defender.combatFlags.wynjaTriggered && defender.hasRune('WYNJA')) {
-                    defender.combatFlags.wynjaTriggered = true;
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
-                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                    this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
-                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                    defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                    this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
-                } else {
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.NAUDIZ.symbol} ${RUNES.NAUDIZ.name} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                this.logRuneActivated(attacker, 'NAUDIZ');
+                // Wynja on the defender blocks the first debuff
+                if (!this.tryWynjaBlock(defender)) {
                     for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
-                        const randomIndex = Math.floor(Math.random() * attributes.length);
-                        const stat = attributes[randomIndex];
+                        const stat = randomAttribute();
                         defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
-                        const stageWord = GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
                         this.addLog(`${defender.getDisplayName()}'s ${stat} was lowered by ${GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                     }
                 }
@@ -1462,22 +1363,12 @@ class Combat {
         // Inguz: chance to lower a random enemy attribute on any hit
         if (attacker.hasRune('INGUZ')) {
             if (Math.random() < GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE) {
-                // Wynja: block first debuff on the defender
-                if (!defender.combatFlags.wynjaTriggered && defender.hasRune('WYNJA')) {
-                    defender.combatFlags.wynjaTriggered = true;
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                    this.addLog(`${defender.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                    this.addLog(`${defender.getDisplayName()} blocked the debuff!`, 'block');
-                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                    defender.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                    this.addLog(`${defender.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
-                } else {
-                    this.addLog(`${attacker.getDisplayName()}'s ${RUNES.INGUZ.symbol} ${RUNES.INGUZ.name} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                    const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                this.logRuneActivated(attacker, 'INGUZ');
+                // Wynja on the defender blocks the first debuff
+                if (!this.tryWynjaBlock(defender)) {
+                    const randomStat = randomAttribute();
                     defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
-                    const stageWord = GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
                     this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                     result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed' });
                 }
@@ -1623,7 +1514,6 @@ class Combat {
             if (!vasen.combatFlags.andePassiveTriggered) {
                 vasen.combatFlags.andePassiveTriggered = true;
                 
-                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
                 const stages = FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_STAGES;
                 const rollCount = FAMILY_PASSIVE_CONFIG.ANDE_ATTRIBUTE_TIMES;
 
@@ -1632,9 +1522,9 @@ class Combat {
                 // Collect which attributes were actually raised so Gifu can share them all at once after
                 const raisedAttributes = [];
                 for (let i = 0; i < rollCount; i++) {
-                    const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                    const randomStat = randomAttribute();
                     const result = vasen.modifyAttributeStage(randomStat, stages);
-                    const stageWord = Math.abs(stages) === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(stages);
                     this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by ${stages} ${stageWord}!`, 'buff');
                     if (result.changed !== 0) {
                         raisedAttributes.push(randomStat);
@@ -1644,10 +1534,10 @@ class Combat {
                 // Gifu: share each raised stat to allies exactly once
                 if (raisedAttributes.length > 0 && !vasen.combatFlags.gifuTriggered && vasen.hasRune('GIFU')) {
                     vasen.combatFlags.gifuTriggered = true;
-                    this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                    this.logRuneActivated(vasen, 'GIFU');
                     const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                     raisedAttributes.forEach(randomStat => {
-                        const stageWord = Math.abs(stages) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(stages);
                         allies.forEach(ally => {
                             if (ally !== vasen && !ally.isKnockedOut()) {
                                 ally.modifyAttributeStage(randomStat, stages);
@@ -1674,7 +1564,7 @@ class Combat {
                     attributesToChange.forEach(item => {
                         const result = vasen.modifyAttributeStage(item.name, item.stages);
                         if (result.changed !== 0) {
-                            const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                            const stageWord = pluralizeStage(result.changed);
                             const actionWord = result.changed > 0 ? 'raised' : 'lowered';
                             const logType = result.changed > 0 ? 'buff' : 'debuff';
                             this.addLog(`${vasen.getDisplayName()}'s ${item.name} was ${actionWord} by ${Math.abs(result.changed)} ${stageWord}!`, logType);
@@ -1684,14 +1574,14 @@ class Combat {
                         if (vasen.hasRune('GIFU') && item.stages > 0) {
                             if (!vasen.combatFlags.gifuTriggered) {
                                 vasen.combatFlags.gifuTriggered = true;
-                                this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                                this.logRuneActivated(vasen, 'GIFU');
                             }
                             const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                             allies.forEach(ally => {
                                 if (ally !== vasen && !ally.isKnockedOut()) {
                                     const allyResult = ally.modifyAttributeStage(item.name, item.stages);
                                      if (allyResult.changed !== 0) {
-                                        const stageWord = Math.abs(allyResult.changed) === 1 ? 'stage' : 'stages';
+                                        const stageWord = pluralizeStage(allyResult.changed);
                                         const actionWord = allyResult.changed > 0 ? 'raised' : 'lowered';
                                         const logType = allyResult.changed > 0 ? 'buff' : 'debuff';
                                         this.addLog(`${ally.getDisplayName()}'s ${item.name} was ${actionWord} by ${Math.abs(allyResult.changed)} ${stageWord}!`, logType);
@@ -1708,9 +1598,9 @@ class Combat {
         if (trigger === 'onSwapOut' && vasen.species.family === FAMILIES.OKNYTT) {
             const { incomingVasen } = context;
             if (incomingVasen && !incomingVasen.isKnockedOut()) {
-                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                const attributes = [...STAGEABLE_ATTRIBUTES]; // copied: picks are removed so they don't repeat
                 const stages = FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_STAGES;
-                const stageWord = stages === 1 ? 'stage' : 'stages';
+                const stageWord = pluralizeStage(stages);
                 const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                 this.addLog(`${vasen.getDisplayName()} activated Tag Team!`, 'passive');
                 for (let i = 0; i < FAMILY_PASSIVE_CONFIG.OKNYTT_TAG_TEAM_ATTRIBUTE_COUNT; i++) {
@@ -1726,7 +1616,7 @@ class Combat {
                     if (incomingVasen.hasRune('GIFU')) {
                         if (!incomingVasen.combatFlags.gifuTriggered) {
                             incomingVasen.combatFlags.gifuTriggered = true;
-                            this.addLog(`${incomingVasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                            this.logRuneActivated(incomingVasen, 'GIFU');
                         }
                         allies.forEach(ally => {
                             if (ally !== incomingVasen && !ally.isKnockedOut()) {
@@ -1741,7 +1631,7 @@ class Combat {
                     if (vasen.hasRune('GIFU')) {
                         if (!vasen.combatFlags.gifuTriggered) {
                             vasen.combatFlags.gifuTriggered = true;
-                            this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                            this.logRuneActivated(vasen, 'GIFU');
                         }
                         allies.forEach(ally => {
                             if (ally !== incomingVasen && !ally.isKnockedOut()) {
@@ -1774,7 +1664,7 @@ class Combat {
                 // Gifu Sharing: share all buffed attributes in one activation (once per combat)
                 if (vasen.hasRune('GIFU') && !vasen.combatFlags.gifuTriggered) {
                     vasen.combatFlags.gifuTriggered = true;
-                    this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                    this.logRuneActivated(vasen, 'GIFU');
                     const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                     allies.forEach(ally => {
                         if (ally !== vasen && !ally.isKnockedOut()) {
@@ -1790,7 +1680,7 @@ class Combat {
 
         // --- BIND RUNE: FEHU + WYNJA (health threshold all-attribute buff) ---
         // When this väsen's health falls to the configured threshold or lower,
-        // raise all four attribute stages by 1. Triggers once per combat, at
+        // raise all four attribute stages. Triggers once per combat, at
         // the same onHealthThreshold point used by Drake's family passive
         // (after this väsen takes damage from an attack).
         if (trigger === 'onHealthThreshold' && hasHealthThresholdBuffAllBindRune(vasen)) {
@@ -1798,13 +1688,12 @@ class Combat {
             if (healthPercent <= GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD && !vasen.combatFlags.fehuWynjaPassiveTriggered) {
                 vasen.combatFlags.fehuWynjaPassiveTriggered = true;
                 const fehuWynjaBR = getActiveBindRunes(vasen).find(b => b.type === 'health_threshold_buff_all');
-                this.addLog(`${vasen.getDisplayName()}'s Bindrune ${fehuWynjaBR.symbols} ${fehuWynjaBR.names} was activated!`, 'rune');
+                this.logBindRuneActivated(vasen, fehuWynjaBR);
 
-                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                attributes.forEach(stat => {
+                STAGEABLE_ATTRIBUTES.forEach(stat => {
                     const result = vasen.modifyAttributeStage(stat, GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES);
                     if (result.changed !== 0) {
-                        const stageWord = Math.abs(result.changed) === 1 ? 'stage' : 'stages';
+                        const stageWord = pluralizeStage(result.changed);
                         this.addLog(`${vasen.getDisplayName()}'s ${stat} was raised by ${Math.abs(result.changed)} ${stageWord}!`, 'buff');
                     }
                 });
@@ -1816,7 +1705,7 @@ class Combat {
             const { attacker } = context;
             if (attacker && !attacker.isKnockedOut() && !vasen.combatFlags.raPassiveTriggered) {
                 vasen.combatFlags.raPassiveTriggered = true;
-                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
+                const attributes = [...STAGEABLE_ATTRIBUTES]; // copied: picks are removed so they don't repeat
                 const debuffedAttributes = [];
                 for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
                     if (attributes.length > 0) {
@@ -1829,7 +1718,7 @@ class Combat {
                 }
                 this.addLog(`${vasen.getDisplayName()} activated Malicious Retaliation!`, 'passive');
                 debuffedAttributes.forEach(stat => {
-                    const stageWord = FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES);
                     this.addLog(`${attacker.getDisplayName()}'s ${stat} was lowered by ${FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                 });
             }
@@ -1840,15 +1729,14 @@ class Combat {
             const { defender } = context;
             if (defender && !defender.isKnockedOut() && !vasen.combatFlags.trollPassiveTriggered) {
                 vasen.combatFlags.trollPassiveTriggered = true;
-                const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                const stealableAttributes = attributes.filter(stat => defender.attributeStages[stat] > 0);
+                const stealableAttributes = STAGEABLE_ATTRIBUTES.filter(stat => defender.attributeStages[stat] > 0);
                 
                 if (stealableAttributes.length > 0) {
                     const randomStat = stealableAttributes[Math.floor(Math.random() * stealableAttributes.length)];
                     defender.modifyAttributeStage(randomStat, -FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     vasen.modifyAttributeStage(randomStat, FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     
-                    const stageWord = FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL);
                     this.addLog(`${vasen.getDisplayName()} activated Troll Theft!`, 'passive');
                     this.addLog(`${defender.getDisplayName()}'s ${randomStat} was lowered by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'debuff');
                     this.addLog(`${vasen.getDisplayName()}'s ${randomStat} was raised by ${FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL} ${stageWord}!`, 'buff');
@@ -1856,7 +1744,7 @@ class Combat {
                     // Gifu Sharing (once per combat)
                     if (vasen.hasRune('GIFU') && !vasen.combatFlags.gifuTriggered) {
                         vasen.combatFlags.gifuTriggered = true;
-                        this.addLog(`${vasen.getDisplayName()}'s ${RUNES.GIFU.symbol} ${RUNES.GIFU.name} was activated!`, 'rune');
+                        this.logRuneActivated(vasen, 'GIFU');
                         const allies = isPlayer ? this.playerTeam : this.enemyTeam;
                         allies.forEach(ally => {
                             if (ally !== vasen && !ally.isKnockedOut()) {
@@ -1890,22 +1778,12 @@ class Combat {
             const opponent = isPlayer ? this.enemyActive : this.playerActive;
             if (opponent && !opponent.isKnockedOut()) {
                 const inguzDagazBR = getActiveBindRunes(vasen).find(b => b.type === 'enter_battlefield_debuff');
+                this.logBindRuneActivated(vasen, inguzDagazBR);
 
-                if (!opponent.combatFlags.wynjaTriggered && opponent.hasRune('WYNJA')) {
-                    opponent.combatFlags.wynjaTriggered = true;
-                    this.addLog(`${vasen.getDisplayName()}'s Bindrune ${inguzDagazBR.symbols} ${inguzDagazBR.names} was activated!`, 'rune');
-                    this.addLog(`${opponent.getDisplayName()}'s ${RUNES.WYNJA.symbol} ${RUNES.WYNJA.name} was activated!`, 'rune');
-                    this.addLog(`${opponent.getDisplayName()} blocked the debuff!`, 'block');
-                    const counterStat = ['strength', 'wisdom', 'defense', 'durability'][Math.floor(Math.random() * 4)];
-                    opponent.modifyAttributeStage(counterStat, GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE);
-                    const counterWord = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE === 1 ? 'stage' : 'stages';
-                    this.addLog(`${opponent.getDisplayName()}'s ${counterStat} was raised by ${GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE} ${counterWord}!`, 'buff');
-                } else {
-                    this.addLog(`${vasen.getDisplayName()}'s Bindrune ${inguzDagazBR.symbols} ${inguzDagazBR.names} was activated!`, 'rune');
-                    const attributes = ['strength', 'wisdom', 'defense', 'durability'];
-                    const randomStat = attributes[Math.floor(Math.random() * attributes.length)];
+                if (!this.tryWynjaBlock(opponent)) {
+                    const randomStat = randomAttribute();
                     opponent.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
-                    const stageWord = GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES === 1 ? 'stage' : 'stages';
+                    const stageWord = pluralizeStage(GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
                     this.addLog(`${opponent.getDisplayName()}'s ${randomStat} was lowered by ${GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES} ${stageWord}!`, 'debuff');
                 }
             }

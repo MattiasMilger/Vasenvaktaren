@@ -212,18 +212,10 @@
 
 .party-vasen-runes {
     display: flex;
-    gap: 2px;
+    flex-wrap: wrap;
+    gap: 2px 6px;
     justify-content: center;
-}
-
-.mini-rune {
     font-size: var(--font-size-sm);
-}
-
-.mini-bind-rune {
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    font-weight: var(--font-weight-semibold);
 }
 
 .party-slot-actions {

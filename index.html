@@ -85,11 +85,69 @@
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .profile-portrait:hover,
+        .profile-portrait:focus-visible,
+        .profile-portrait[aria-expanded="true"] {
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
         }
 
         .profile-portrait svg {
             width: 36px;
             height: 36px;
+        }
+
+        /* Face picker grid, opened by clicking the portrait */
+        .profile-face-picker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: inset 0 0 10px var(--black-overlay-medium);
+        }
+
+        .profile-face-picker[hidden] {
+            display: none;
+        }
+
+        .profile-face-option {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+        }
+
+        .profile-face-option svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .profile-face-option:hover,
+        .profile-face-option:focus-visible {
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            transform: scale(1.08);
+        }
+
+        .profile-face-option.selected {
+            border-color: var(--accent-gold);
+            color: var(--text-primary);
         }
 
         .profile-name-fields {
@@ -722,6 +780,8 @@
                         Power is a value shown on each skill that represents the basic damage multiplier, which is scaled by the associated damage attribute (strength/wisdom).</p>
                         <p><strong>Initial Bonus</strong><br>
                         Certain utility skills have an "initial bonus" that grants extra attribute stages on their first use per combat.</p>
+                        <p><strong>Empower</strong><br>
+                        Some attack skills empower the user, increasing the damage of its next attack by <span id="guide-empower-amount">12%</span>.</p>
                         <p><strong>Skill Priority</strong><br>
                         Swapping > Utility Skills > Attack Skills.<br>The player moves first inside each category.</p>
                     </div>

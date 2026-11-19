@@ -175,10 +175,10 @@ class EnemyAI {
                 }
             }
 
-            // Rotvälta: estimate the probskill the enemy will attack this turn.
+            // Rotvälta: estimate the probability that the enemy will attack this turn.
             // Turn 0 is commonly a setup round (buffs, utility), so the chance is lower.
             // From turn 1 onward attacks are far more likely, so the estimated bonus is higher.
-            // The max bonus (25) is intentionally moderate - the AI cannot know for certain.
+            // The max bonus is intentionally moderate - the AI cannot know for certain.
             if (skill.retaliationBonus) {
                 const turnsOnField = this.vasen.combatFlags.turnsOnField;
                 const estimatedAttackProb = turnsOnField === 0 ? 0.35 : 0.70;

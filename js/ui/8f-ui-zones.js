@@ -30,7 +30,6 @@ UIController.prototype.renderZones = function() {
         const isSelected = gameState.currentZone === zoneId;
         const isCleared = gameState.defeatedGuardians.has(zoneId);
 
-        // FIX: use zone-item instead of zone-btn
         const zoneBtn = document.createElement('button');
         zoneBtn.className = `zone-item ${isUnlocked ? '' : 'locked'} ${isSelected ? 'selected' : ''} ${isCleared ? 'cleared' : ''}`;
         zoneBtn.disabled = !isUnlocked;

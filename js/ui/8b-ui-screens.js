@@ -117,18 +117,70 @@ UIController.prototype.renderStarterSelection = function(starters, onSelect, onC
                     </div>
                 </div>
                 <p class="starter-description">${species.description}</p>
+                ${this.renderStarterSkillPreview(speciesName, species)}
             `;
             card.onclick = () => {
-                // Remove selection from all cards, add it to the clicked card
-                document.querySelectorAll('.starter-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
+                // Remove selection from all cards, add it to the clicked card.
+                // 'expanded' shows the card's skills; it's cleared again by
+                // clicking anywhere outside the cards (the selection stays).
+                document.querySelectorAll('.starter-card').forEach(c => c.classList.remove('selected', 'expanded'));
+                card.classList.add('selected', 'expanded');
                 onSelect(speciesName);
                 document.getElementById('confirm-starter-btn').disabled = false;
             };
             starterOptions.appendChild(card);
         });
 
+        // Clicking away from the cards minimizes the expanded skill list again.
+        // Assigned (not addEventListener) so re-rendering never stacks handlers.
+        document.getElementById('starter-select-screen').onclick = (e) => {
+            if (e.target.closest('.starter-card')) return;
+            document.querySelectorAll('.starter-card.expanded').forEach(c => c.classList.remove('expanded'));
+        };
+
         const confirmBtn = document.getElementById('confirm-starter-btn');
         confirmBtn.disabled = true;
         confirmBtn.onclick = () => onConfirm();
+    };
+
+    // Starter skill preview, hidden until the card is selected (CSS on
+    // .starter-card.expanded). Shows every skill with its details at once, so no
+    // further clicking is needed. Skills not yet known at
+    // GAME_CONFIG.STARTER_LEVEL are dimmed and show their learn level.
+UIController.prototype.renderStarterSkillPreview = function(speciesName, species) {
+        const rows = species.skills.map((skillName, index) => {
+            const skill = ABILITIES[skillName];
+            if (!skill) return '';
+
+            const learnLevel = SKILL_LEARN_LEVELS[index];
+            const isLearned = learnLevel <= GAME_CONFIG.STARTER_LEVEL;
+            const skillElement = skill.element || species.element;
+            const elementClass = skillElement.toLowerCase();
+            const meginCost = getSkillMeginCost(skillName, species.element);
+
+            return `
+                <div class="starter-skill element-${elementClass}${isLearned ? '' : ' locked'}">
+                    <div class="starter-skill-head">
+                        <span class="starter-skill-name">${skillTypeIcon(skill)}${skill.name}</span>
+                        <span class="starter-skill-meta">${isLearned ? `<span class="skill-cost">Megin ${meginCost}</span>` : `<span class="starter-skill-lvl">Lvl ${learnLevel}</span>`}</span>
+                    </div>
+                    <div class="starter-skill-body">
+                        <div class="skill-attributes">
+                            <span class="skill-element element-${elementClass}">${elementIcon(skillElement)}${skillElement}</span>
+                            <span class="skill-type-tag">${skill.type}</span>
+                            ${skill.healthCost ? `<span class="skill-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
+                            ${skill.power ? `<span class="skill-power">Power: ${getSkillPower(skillName, species.family)}</span>` : ''}
+                        </div>
+                        <p class="skill-description">${this.linkifyKeywords(skill.mechanicsDescription)}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="starter-skills">
+                <div class="starter-skills-title">Skills</div>
+                ${rows}
+            </div>
+        `;
     };

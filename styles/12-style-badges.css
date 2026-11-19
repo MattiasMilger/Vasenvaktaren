@@ -172,7 +172,9 @@
 }
 
 /* ── TEMPERAMENT ── clickable word inside a väsen name; opens .temperament-popup (toggleTemperamentDescription) */
-.clickable-temperament {
+/* .clickable-keyword shares the look: Initial Bonus, debuffed, runes, bindrunes (toggleKeywordPopup / toggleRunePopup) */
+.clickable-temperament,
+.clickable-keyword {
     cursor: pointer;
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);
@@ -180,7 +182,12 @@
     transition: color 0.2s, text-shadow 0.2s;
 }
 
-.clickable-temperament:hover {
+.rune-keyword {
+    white-space: nowrap;
+}
+
+.clickable-temperament:hover,
+.clickable-keyword:hover {
     color: var(--color-white);
     text-shadow: 0 0 8px color-mix(in srgb, var(--color-white) 90%, transparent);
 }
@@ -225,25 +232,24 @@
     color: var(--color-white);
 }
 
-/* ── ACHIEVEMENT (UPDATED: shimmer removed) ── */
-.achievement.earned {
+/* ── EARNED ACHIEVEMENT / ACHIEVED ENDLESS TOWER RECORD: gold card with pulsing glow ── */
+.achievement.earned,
+.endless-tower-record.achieved {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, 
-        var(--bg-card) 0%, 
-        var(--accent-gold-overlay) 50%, 
+    background: linear-gradient(135deg,
+        var(--bg-card) 0%,
+        var(--accent-gold-overlay) 50%,
         var(--bg-card) 100%
     );
     border: 2px solid var(--accent-gold-border);
-    box-shadow: 
+    box-shadow:
         0 0 12px var(--accent-gold-glow),
         inset 0 0 8px var(--accent-gold-shimmer-faint);
 }
 
-/* shimmer layer removed */
-
-/* keep pulsing glow */
-.achievement.earned::after {
+.achievement.earned::after,
+.endless-tower-record.achieved::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -354,38 +360,6 @@
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
 }
-
-/* === ENDLESS TOWER ACHIEVED (UPDATED: shimmer removed) === */
-.endless-tower-record.achieved {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, 
-        var(--bg-card) 0%, 
-        var(--accent-gold-overlay) 50%, 
-        var(--bg-card) 100%
-    );
-    border: 2px solid var(--accent-gold-border);
-    box-shadow: 
-        0 0 12px var(--accent-gold-glow),
-        inset 0 0 8px var(--accent-gold-shimmer-faint);
-}
-
-/* shimmer removed */
-
-/* keep pulsing glow */
-.endless-tower-record.achieved::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--border-radius);
-    box-shadow: 
-        inset 0 0 6px var(--accent-gold-glow),
-        0 0 16px var(--accent-gold-shadow);
-    animation: goldPulse 3s ease-in-out infinite alternate;
-    pointer-events: none;
-}
-
-/* Combat Animations - MOVED TO 13-style-animations.css */
 
 /* === BADGE RARITY ANIMATIONS === */
 @keyframes badgeCommonShimmer {

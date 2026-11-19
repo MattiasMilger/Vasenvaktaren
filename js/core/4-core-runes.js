@@ -89,7 +89,7 @@ const RUNES = {
         symbol: 'ᚺ',
         name: 'Hagal',
         fullName: 'Hagal',
-        flavor: 'The rune of chaotic, natural destruction. It strips the elegance from arcane power, forcing the wielder\'s insightful attacks to rely instead on overwhelming physical impact.',
+        flavor: 'The rune of chaotic, natural destruction. It strips the finesse from galdr, forcing the wielder\'s insightful attacks to rely instead on overwhelming physical impact.',
         get effect() {
             return `When this väsen is knocked out, the enemy gets all attributes lowered by ${GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES} stages`;
         },
@@ -232,7 +232,7 @@ const RUNES = {
         symbol: 'ᛜ',
         name: 'Inguz',
         fullName: 'Inguz',
-        flavor: 'The contained potential of the seed. Every strike plants a creeping instskill within the foe, germinating into a sudden rot that withers their fundamental prowess.',
+        flavor: 'The contained potential of the seed. Every strike plants a creeping instability within the foe, germinating into a sudden rot that withers their fundamental prowess.',
         get effect() {
             return `This väsen's hits have a ${Math.round(GAME_CONFIG.RUNE_INGUZ_DEBUFF_PROC_CHANCE * 100)}% chance to lower a random enemy attribute by ${GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES} stage`;
         },
@@ -630,25 +630,6 @@ function hasThursMeginGainBindRune(vasen) {
 // Returns true if the väsen has the HAGAL + NAUDIZ enemy_health_threshold_debuff_all bind rune active.
 function hasEnemyHealthThresholdDebuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enemy_health_threshold_debuff_all');
-}
-
-// Returns HTML string for displaying active bind rune effects.
-// Used in combat panel and väsen details.
-function getBindRuneDisplayHTML(vasen, isOpen = false) {
-    const active = getActiveBindRunes(vasen);
-    if (active.length === 0) return '';
-    const openClass = isOpen ? 'open' : '';
-    return active.map(br => `
-        <div class="rune-collapsible ${openClass}">
-            <div class="rune-collapsible-header" onclick="toggleRuneDescriptions()">
-                <span class="toggle-icon"></span>
-                ${br.symbols} Bindrune
-            </div>
-            <div class="rune-collapsible-body">
-                ${br.effectText}
-            </div>
-        </div>
-    `).join('');
 }
 
 // =============================================================================
