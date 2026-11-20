@@ -599,6 +599,28 @@ function toggleRunePopup(element, event, runeId) {
     }, 260);
 }
 
+function toggleItemPopup(element, event, itemId) {
+    toggleBodyPopup(element, event, () => {
+        const item = TAMING_ITEMS[itemId];
+        if (!item) return '';
+        return `<p><strong>${item.name}</strong><br>${ui.highlightItemKeywords(item.description)}</p>`;
+    }, 260);
+}
+
+// Clickable taming item name (glowing word); clicking shows the item's description.
+UIController.prototype.getItemTextHTML = function(itemId) {
+    const item = TAMING_ITEMS[itemId];
+    if (!item) return itemId;
+    return `<span class="clickable-keyword item-keyword" onclick="toggleItemPopup(this, event, '${itemId}')">${inlineIcon('items')}${item.name}</span>`;
+};
+
+// Clickable rune name (glowing word) for a single rune id.
+UIController.prototype.getRuneTextHTML = function(runeId) {
+    const rune = RUNES[runeId];
+    if (!rune) return runeId;
+    return `<span class="clickable-keyword rune-keyword" onclick="toggleRunePopup(this, event, '${runeId}')">${rune.symbol} ${rune.name}</span>`;
+};
+
 function toggleBindRunePopup(element, event, runeA, runeB) {
     toggleBodyPopup(element, event, () => {
         const br = BIND_RUNES.find(b => b.runes.includes(runeA) && b.runes.includes(runeB));

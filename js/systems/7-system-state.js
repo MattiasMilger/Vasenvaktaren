@@ -148,35 +148,6 @@ class GameState {
         return this.favoriteVasen.has(vasenId);
     }
     
-    // Initialize new game with starter Vasen
-    startNewGame(starterSpeciesId, starterTemperament) {
-        const speciesData = VASEN_SPECIES[starterSpeciesId];
-        if (!speciesData) {
-            console.error('Invalid starter species:', starterSpeciesId);
-            return false;
-        }
-        
-        // Create the starter Vasen (takes the species key, not the species data)
-        const starter = new VasenInstance(starterSpeciesId, GAME_CONFIG.STARTER_LEVEL, starterTemperament);
-        
-        // Add to collection
-        this.vasenCollection.push(starter);
-        this.checkAchievements();
-        
-        // Add to first party slot
-        this.party[0] = starter;
-        
-        // Give starter rune (Uruz) - equip directly to the väsen
-        this.collectedRunes.add('URUZ');
-        starter.equipRune('URUZ');
-        
-        this.gameStarted = true;
-        this.currentZone = 'ZONE1';
-        
-        this.saveGame();
-        return true;
-    }
-    
     // Add a Vasen to collection
     addVasenToCollection(vasenInstance) {
         if (this.vasenCollection.length >= GAME_CONFIG.MAX_INVENTORY_SIZE) {

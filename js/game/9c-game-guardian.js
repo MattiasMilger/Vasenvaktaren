@@ -132,7 +132,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
                 // Find existing entry or create new
                 let entry = combatResult.expGained.find(e => e.name === vasen.getDisplayName());
                 if (!entry) {
-                    entry = { name: vasen.getDisplayName(), amount: 0, leveledUp: false, newLevel: vasen.level };
+                    entry = { name: vasen.getDisplayName(), nameHTML: ui.getDisplayNameHTML(vasen), amount: 0, leveledUp: false, newLevel: vasen.level };
                     combatResult.expGained.push(entry);
                 }
                 // Only add to display amount if not at max level
@@ -194,8 +194,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
                 const itemsToGive = shuffled.slice(0, GAME_CONFIG.NEW_ZONE_ITEMS_AMOUNT);
                 itemsToGive.forEach(itemId => {
                     gameState.addItem(itemId, 1);
-                    const itemName = TAMING_ITEMS[itemId]?.name || itemId;
-                    message += `<p>You received: <strong>${inlineIcon('items')}${itemName}</strong>!</p>`;
+                    message += `<p>You received: <strong>${ui.getItemTextHTML(itemId)}</strong>!</p>`;
                 });
             }
         }

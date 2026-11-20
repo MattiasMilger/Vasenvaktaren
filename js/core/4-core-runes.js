@@ -263,7 +263,6 @@ const RUNES = {
 };
 
 const RUNE_LIST = Object.keys(RUNES);
-const STARTER_RUNE = 'URUZ';
 
 // =============================================================================
 // BIND RUNES

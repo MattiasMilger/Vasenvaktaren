@@ -168,7 +168,12 @@ UIController.prototype.autoEquipRunes = function() {
     // Track which runes have been assigned this round
     const assigned = new Set();
 
-    partyVasen.forEach(vasen => {
+    // Visit party members in random order so the lead väsen doesn't always get
+    // first pick (otherwise with few runes they would always go to slot 1).
+    const processOrder = partyVasen.slice();
+    shuffleInPlace(processOrder);
+
+    processOrder.forEach(vasen => {
         // Unequip all current runes from this väsen directly
         // (bypasses gameState.unequipRune to avoid per-call saves)
         const oldRunes = vasen.runes.slice();

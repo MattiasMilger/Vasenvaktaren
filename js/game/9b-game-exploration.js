@@ -126,6 +126,7 @@ Game.prototype.handleCombatEnd = function(result) {
             const levelResult = vasen.addExperience(expAmount);
             combatResult.expGained.push({
                 name: vasen.getDisplayName(),
+                nameHTML: ui.getDisplayNameHTML(vasen),
                 amount: displayExpAmount, // Show 0 if at max level
                 leveledUp: levelResult.leveledUp,
                 newLevel: levelResult.newLevel

@@ -122,7 +122,12 @@ UIController.prototype.renderStarterSelection = function(starters, onSelect, onC
             card.onclick = () => {
                 // Remove selection from all cards, add it to the clicked card.
                 // 'expanded' shows the card's skills; it's cleared again by
-                // clicking anywhere outside the cards (the selection stays).
+                // clicking the expanded card itself or anywhere outside the
+                // cards (the selection stays either way).
+                if (card.classList.contains('expanded')) {
+                    card.classList.remove('expanded');
+                    return;
+                }
                 document.querySelectorAll('.starter-card').forEach(c => c.classList.remove('selected', 'expanded'));
                 card.classList.add('selected', 'expanded');
                 onSelect(speciesName);

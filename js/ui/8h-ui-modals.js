@@ -68,30 +68,27 @@ modal.classList.add('active');
     //   species:       the chosen starter's species data (VASEN_SPECIES entry)
     //   temperament:   the rolled temperament data (TEMPERAMENTS entry)
     //   startingItems: array of taming item ids the player will receive
-    //   rune:          the starting rune data (e.g. RUNES.URUZ)
+    //   runeId:        the rolled starting rune id (RUNES key)
     //   onBegin:       called when "Begin Journey" is clicked
     // The dialogue is non-dismissible; "Cancel" closes it and returns to the
     // starter selection screen, which was never left.
-    UIController.prototype.showWelcomeDialogue = function(species, temperament, startingItems, rune, onBegin) {
-        let startingItemsMessage = '';
-        startingItems.forEach(itemId => {
-            const itemName = TAMING_ITEMS[itemId]?.name || itemId;
-            startingItemsMessage += `<p>You received: <strong>${inlineIcon('items')}${itemName}</strong>!</p>`;
-        });
+    // Temperament, rune and item names are clickable words that open info popups.
+    UIController.prototype.showWelcomeDialogue = function(species, temperament, startingItems, runeId, onBegin) {
+        const itemsMessage = startingItems.length > 0
+            ? `<p>You received: ${startingItems.map(id => `<strong>${this.getItemTextHTML(id)}</strong>`).join(', ')}</p>`
+            : '';
 
-        const temperamentMessage = species
-            ? `<p>Your <strong>${species.name}</strong>'s temperament is ${this.getTemperamentTextHTML(temperament)}.</p>`
+        const vasenMessage = species
+            ? `<p>Your <strong>${species.name}</strong>'s temperament is ${this.getTemperamentTextHTML(temperament)}.</p>
+               <p>Your <strong>${species.name}</strong> equipped a ${this.getRuneTextHTML(runeId)} rune.</p>`
             : '';
 
         this.showDialogue(
     'Welcome, Väktare',
     `
-        <p>The first rune has revealed itself to you:
-            <span class="rune-symbol">${rune.symbol}</span> ${rune.name}
-        </p>
-        <p class="rune-hint">${rune.effect}</p>
-        ${temperamentMessage}
-        ${startingItemsMessage}
+        <p><em>The old paths stir once more, and the väsen await one who can earn their trust.</em></p>
+        ${vasenMessage}
+        ${itemsMessage}
     `,
     [
         {
@@ -336,8 +333,10 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
                 let itemDialogue = this.highlightItemKeywords(result.dialogue);
                 const itemName = TAMING_ITEMS[result.itemId]?.name;
                 if (itemName) {
+                    // Item name becomes a clickable word showing the item's description
                     const escaped = itemName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    itemDialogue = itemDialogue.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
+                    itemDialogue = itemDialogue.replace(new RegExp(escaped, 'i'),
+                        `<strong><span class="clickable-keyword item-keyword" onclick="toggleItemPopup(this, event, '${result.itemId}')">$&</span></strong>`);
                 }
                 this.showDialogue('Item Found!', `<p>${itemDialogue}</p>`, confirmOrNextButtons(), false, null, 'items');
                 break;
@@ -375,13 +374,14 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
             message = '<p>Your party triumphs!</p>';
 
             if (result.tamed) {
-                message += `<p><strong>${result.tamedVasen.getDisplayName()}</strong> has joined you!</p>`;
+                message += `<p><strong>${this.getDisplayNameHTML(result.tamedVasen)}</strong> has joined you!</p>`;
             }
 
             if (result.expGained && result.expGained.length > 0) {
                 message += '<div class="exp-results">';
                 result.expGained.forEach(exp => {
-                    message += `<p>${exp.name} gained ${exp.amount} experience!`;
+                    // nameHTML has the temperament word clickable; name is the plain fallback
+                    message += `<p>${exp.nameHTML || exp.name} gained ${exp.amount} experience!`;
                     if (exp.leveledUp) {
                         message += ` <strong>Level up! Now Lvl ${exp.newLevel}!</strong>`;
                     }

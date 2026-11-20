@@ -95,23 +95,28 @@ class Game {
         // Take the first N unique items based on config
         const startingItems = shuffledZone1Items.slice(0, GAME_CONFIG.STARTING_ITEMS_AMOUNT);
 
-        // Show intro dialogue FIRST, before creating anything. The UI layer builds
+        // Create the starter now (it is only added to the game in the callback)
+        // so the starting rune can be rolled from the runes actually useful to it.
+        const starter = new VasenInstance(selectedStarterName, GAME_CONFIG.STARTER_LEVEL, starterTemperamentKey);
+        const runePool = getSoloValidRunesForVasen(starter);
+        const starterRuneId = runePool.length > 0
+            ? runePool[Math.floor(Math.random() * runePool.length)]
+            : 'URUZ';
+
+        // Show intro dialogue FIRST, before applying anything. The UI layer builds
         // the popup from exactly the values rolled above, so what the player sees
         // is what the callback below applies.
         ui.showWelcomeDialogue(
             selectedStarterSpecies,
             starterTemperament,
             startingItems,
-            RUNES.URUZ,
+            starterRuneId,
             () => {
                 // initialize new game and create everything
                 gameState.resetGame();
 
-                // Create starter Vasen at starter level with the pre-rolled temperament
-                const starter = new VasenInstance(selectedStarterName, GAME_CONFIG.STARTER_LEVEL, starterTemperamentKey);
-
-                // Give starting rune (Uruz)
-                starter.equipRune('URUZ');
+                // Give the rolled starting rune
+                starter.equipRune(starterRuneId);
                 starter.recalculateMaxMegin();
 
                 // Add to collection and party
@@ -119,7 +124,7 @@ class Game {
                 gameState.party[0] = starter;
 
                 // Add starting rune to collected
-                gameState.collectedRunes.add('URUZ');
+                gameState.collectedRunes.add(starterRuneId);
 
                 // Give the starting taming items selected above (matches what
                 // was shown in the welcome dialogue)
