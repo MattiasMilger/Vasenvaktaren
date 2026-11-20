@@ -92,6 +92,16 @@ class Game {
         // Copy + shuffle
         const shuffledZone1Items = [...zone1Items].sort(() => Math.random() - 0.5);
 
+        // Guarantee one item desired by a common Nature väsen of Zone 1: the
+        // first wild fights are Nature-only and the tutorial spawns väsen whose
+        // desired item the player carries, so the first fight is always tamable.
+        const guaranteedItem = this.pickTutorialStartingItem('ZONE1');
+        const guaranteedIndex = shuffledZone1Items.indexOf(guaranteedItem);
+        if (guaranteedIndex > 0) {
+            shuffledZone1Items.splice(guaranteedIndex, 1);
+            shuffledZone1Items.unshift(guaranteedItem);
+        }
+
         // Take the first N unique items based on config
         const startingItems = shuffledZone1Items.slice(0, GAME_CONFIG.STARTING_ITEMS_AMOUNT);
 
@@ -150,6 +160,26 @@ class Game {
                 game.showGameScreen();
             }
         );
+    }
+
+    // Random taming item of a common Nature väsen spawning in the zone
+    // (falls back to any Nature, then any spawn). null if the zone has none.
+    pickTutorialStartingItem(zoneKey) {
+        const zone = ZONES[zoneKey];
+        if (!zone) return null;
+        const spawns = (zone.spawns === 'ALL' ? VASEN_LIST : zone.spawns)
+            .filter(name => VASEN_SPECIES[name]?.tamingItem);
+        const isNature = name => VASEN_SPECIES[name].element === ELEMENTS.NATURE;
+        const isCommon = name => VASEN_SPECIES[name].rarity === RARITIES.COMMON;
+
+        const pools = [
+            spawns.filter(n => isNature(n) && isCommon(n)),
+            spawns.filter(isNature),
+            spawns
+        ];
+        const pool = pools.find(p => p.length > 0);
+        if (!pool) return null;
+        return VASEN_SPECIES[pool[Math.floor(Math.random() * pool.length)]].tamingItem;
     }
 
     // Show main game screen
@@ -247,10 +277,14 @@ class Game {
             ui.showDialogue(
                 'First Tame!',
                 `<p>Well done! You've tamed your first väsen.</p>
-                 <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read their item descriptions carefully to figure out what they desire.
+                 <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read descriptions carefully to figure out what they desire.
                  <br>Then use the <strong>Offer Item</strong> button and defeat them.</p>
-                 <p>You can find more tips in the <strong>Game Guide</strong>.</p>`,
-                [{ text: 'Confirm', callback: null }],
+                 <p>You can find more tips in the <strong>Game Guide</strong>.</p>
+                 <div class="tutorial-complete">
+                     <div class="tutorial-complete-label">Tutorial complete</div>
+                     <p>From here on, the path is yours. The old ways will no longer light up to guide you, so trust your wits, Väktare.</p>
+                 </div>`,
+                [{ text: `${uiIcon('compass')}Onward`, callback: null }],
                 false
             );
         }

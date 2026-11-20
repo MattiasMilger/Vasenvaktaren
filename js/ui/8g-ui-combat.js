@@ -477,24 +477,16 @@ UIController.prototype.renderActionButtons = function(combat) {
         !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
         combat.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || combat.correctItemGiven || combat.isAutoBattle;
 
-    // First combat tutorial - blink Offer Item button if player has matching item
-    if (!gameState.firstCombatTutorialShown && combat.isWildEncounter && !offerBtn.disabled) {
-        // Check if player has the correct taming item for this enemy
-        const enemySpecies = combat.enemyActive.speciesName;
-        const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
-
-        if (correctItem && gameState.itemInventory[correctItem] && gameState.itemInventory[correctItem] > 0) {
-            offerBtn.classList.add('tutorial-blink');
-        } else {
-            offerBtn.classList.remove('tutorial-blink');
-        }
-    } else {
-        offerBtn.classList.remove('tutorial-blink');
-    }
-
-    document.getElementById('btn-interrogate').disabled =
+    const interrogateBtn = document.getElementById('btn-interrogate');
+    interrogateBtn.disabled =
         !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
         activeVasen.combatFlags.hasSwapSickness || combat.correctItemGiven || combat.isAutoBattle;
+
+    // New-player tutorial (see Game.getCombatTutorialStage): only when the enemy
+    // desires an item the player owns - Interrogate glows first, then Offer Item.
+    const tutorialStage = game.getCombatTutorialStage(combat);
+    interrogateBtn.classList.toggle('tutorial-blink', tutorialStage === 'interrogate' && !interrogateBtn.disabled);
+    offerBtn.classList.toggle('tutorial-blink', tutorialStage === 'offer' && !offerBtn.disabled);
     document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoBattle;
     document.getElementById('btn-surrender').disabled = combat.isAutoBattle;
 

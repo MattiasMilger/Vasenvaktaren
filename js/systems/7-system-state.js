@@ -715,6 +715,14 @@ class GameState {
                 const useStarterNatureFilter = this.starterNatureBattlesRemaining > 0;
                 const elementFilter = useStarterNatureFilter ? ELEMENTS.NATURE : null;
 
+                // New-player tutorial (until the first tame): prefer väsen whose
+                // desired item the player carries, so the interrogate -> offer ->
+                // tame lesson is always possible. Falls back to the normal pool
+                // if no carried item matches anything in this zone.
+                const speciesFilter = !this.firstCombatTutorialShown
+                    ? name => this.itemInventory[VASEN_SPECIES[name]?.tamingItem] > 0
+                    : null;
+
                 // Same-väsen pity: if the same species has appeared twice in a
                 // row, guarantee a different species this time and reset the streak.
                 let speciesName;
@@ -726,11 +734,11 @@ class GameState {
                     // possible väsen (avoids an infinite loop in that edge case).
                     let attempts = 0;
                     do {
-                        speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter);
+                        speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter, speciesFilter);
                         attempts++;
                     } while (speciesName === this.lastVasenSpecies && attempts < 20);
                 } else {
-                    speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter);
+                    speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter, speciesFilter);
                 }
 
                 if (useStarterNatureFilter) {

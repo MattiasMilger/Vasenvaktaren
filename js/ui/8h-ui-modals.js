@@ -62,6 +62,11 @@ modal.classList.add('active');
 
 };
 
+    // Short new-player hint box for dialogues (styled by .tutorial-tip)
+    UIController.prototype.getTutorialTipHTML = function(text) {
+        return `<div class="tutorial-tip"><div class="tutorial-tip-title">Tip</div><p>${text}</p></div>`;
+    };
+
     // Show the "Welcome, Väktare" dialogue shown when a new game is confirmed.
     // Pure UI: Game rolls the temperament and starting items before calling this,
     // so what is displayed here is exactly what the caller goes on to apply.
@@ -89,6 +94,7 @@ modal.classList.add('active');
         <p><em>The old paths stir once more, and the väsen await one who can earn their trust.</em></p>
         ${vasenMessage}
         ${itemsMessage}
+        ${this.getTutorialTipHTML('Press <strong>Explore</strong> to search the wilds for väsen to tame.')}
     `,
     [
         {
@@ -130,7 +136,7 @@ modal.classList.add('active');
             // Check which item is correct for tutorial highlighting
             const enemySpecies = combat.enemyActive.speciesName;
             const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
-            const shouldShowTutorial = !gameState.firstCombatTutorialShown && combat.isWildEncounter;
+            const shouldShowTutorial = game.getCombatTutorialStage(combat) === 'offer';
 
             let correctItemBtn = null;
 
@@ -193,7 +199,7 @@ modal.classList.add('active');
         const enemySpecies = combat.enemyActive.speciesName;
         const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
         const isCorrectItem = itemId === correctItem;
-        const confirmClass = !gameState.firstCombatTutorialShown && combat.isWildEncounter && isCorrectItem
+        const confirmClass = game.getCombatTutorialStage(combat) === 'offer' && isCorrectItem
             ? 'btn btn-primary tutorial-blink'
             : 'btn btn-primary';
 
@@ -318,16 +324,25 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         ];
 
         switch (result.type) {
-            case 'vasen':
+            case 'vasen': {
+                // New-player hint, shown until the first väsen has been tamed
+                let encounterTip = '';
+                if (!gameState.firstCombatTutorialShown) {
+                    const desiredItem = VASEN_SPECIES[result.vasen.speciesName]?.tamingItem;
+                    encounterTip = desiredItem && gameState.itemInventory[desiredItem] > 0
+                        ? this.getTutorialTipHTML('You may carry something this väsen desires. <strong>Interrogate</strong> it to find out.')
+                        : this.getTutorialTipHTML('You carry nothing this väsen desires. Defeat it to gain experience, and keep exploring to find more items.');
+                }
                 this.showDialogue(
                     'Wild Encounter!',
-                    `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>`,
+                    `<p>A wild <strong>${result.vasen.getDisplayName()}</strong> appears!</p>${encounterTip}`,
                     [{ text: `${uiIcon('swords')}Combat!`, callback: () => game.startCombat(result.vasen), class: nextClass }],
                     false, // Not dismissible: the encounter must be fought
                     null,
                     'vasen'
                 );
                 break;
+            }
 
             case 'item': {
                 let itemDialogue = this.highlightItemKeywords(result.dialogue);
@@ -392,6 +407,8 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         } else {
             message = `<p>${result.message}</p>`;
         }
+
+        if (result.tip) message += this.getTutorialTipHTML(result.tip);
 
         this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false, null, 'swords');
 

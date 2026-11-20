@@ -1909,6 +1909,50 @@ button.tutorial-blink {
     border-color: var(--tutorial-color) !important;
 }
 
+/* New-player hint box inside dialogues. Same layout as .guardian-tutorial,
+   in the tutorial green; no outer glow, since glowing marks clickable things. */
+.tutorial-tip {
+    margin: var(--spacing-md) auto 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: fit-content;
+    max-width: 100%;
+    background: var(--bg-tertiary);
+    border: 1px solid color-mix(in srgb, var(--tutorial-color) 60%, transparent);
+    border-radius: var(--border-radius);
+}
+
+.tutorial-tip-title,
+.tutorial-complete-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--tutorial-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.tutorial-tip p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    text-align: center;
+}
+
+/* Closing note of the new-player tutorial (First Tame popup) */
+.tutorial-complete {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.tutorial-complete p {
+    margin: 0;
+    color: var(--text-primary);
+    font-style: italic;
+}
+
 /* =============================================================================
    MOBILE OVERRIDES - Collapsible Labels
    ============================================================================= */

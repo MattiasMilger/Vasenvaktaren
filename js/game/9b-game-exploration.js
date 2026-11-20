@@ -79,11 +79,17 @@ Game.prototype.handleCombatEnd = function(result) {
         return;
     }
 
+    // New-player hints (shown until the first väsen has been tamed)
+    const tutorialActive = this.isCombatTutorialActive(this.currentCombat);
+
     if (!result.victory) {
         this.leavePartyAtLowHealth();
+        const defeatTip = tutorialActive
+            ? ui.getTutorialTipHTML('Your väsen are weakened. Keep exploring: a <strong>Sacred Well</strong> will heal them.')
+            : '';
         ui.showDialogue(
             result.tie ? 'Tie' : 'Defeat',
-            `<p>${result.message || 'Your party was overwhelmed!'}</p>`,
+            `<p>${result.message || 'Your party was overwhelmed!'}</p>${defeatTip}`,
             [{ text: 'Continue', callback: () => this.endCombat() }],
             false,
             null,
@@ -175,6 +181,11 @@ Game.prototype.handleCombatEnd = function(result) {
             this.pendingFirstTameMessage = true;
             gameState.saveGame();
         }
+    }
+
+    // Won without taming during the tutorial: remind how taming works
+    if (tutorialActive && !result.tamed) {
+        combatResult.tip = 'To make a väsen join you, <strong>offer</strong> it the item it desires, then defeat it.';
     }
 
     this.applyVictoryHeal();

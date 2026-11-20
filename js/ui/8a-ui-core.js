@@ -185,9 +185,6 @@ class UIController {
         this.exploreBtn = document.getElementById('explore-btn');
         this.challengeBtn = document.getElementById('challenge-btn');
 
-        // Tutorial state for explore button
-        this.exploreTutorialActive = false;
-
         // Combat area
         this.combatArea = document.getElementById('combat-area');
         this.zoneDescription = document.getElementById('zone-description');

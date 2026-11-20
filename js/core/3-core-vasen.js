@@ -550,10 +550,13 @@ function isMythical(speciesName) {
 // the spawn pool is first narrowed to species of that element; if the zone
 // has no spawns of that element, the filter is ignored and the full spawn
 // pool is used instead (so this can never dead-end with an empty pool).
-function getRandomSpawnFromZone(zoneKey, elementFilter = null) {
+// speciesFilter (optional predicate on the species name) narrows the pool the
+// same way and takes priority over elementFilter: both are applied if that
+// leaves any spawns, otherwise speciesFilter alone, then elementFilter alone.
+function getRandomSpawnFromZone(zoneKey, elementFilter = null, speciesFilter = null) {
     const zone = ZONES[zoneKey];
     if (!zone) return null;
-    
+
     let spawns;
     if (zone.spawns === 'ALL') {
         spawns = VASEN_LIST;
@@ -561,14 +564,17 @@ function getRandomSpawnFromZone(zoneKey, elementFilter = null) {
         spawns = zone.spawns;
     }
 
+    // Narrow the pool, but never down to nothing
+    const narrow = (pool, predicate) => {
+        const filtered = pool.filter(predicate);
+        return filtered.length > 0 ? filtered : pool;
+    };
+
+    if (speciesFilter) {
+        spawns = narrow(spawns, speciesFilter);
+    }
     if (elementFilter) {
-        const filteredSpawns = spawns.filter(name => {
-            const species = VASEN_SPECIES[name];
-            return species && species.element === elementFilter;
-        });
-        if (filteredSpawns.length > 0) {
-            spawns = filteredSpawns;
-        }
+        spawns = narrow(spawns, name => VASEN_SPECIES[name]?.element === elementFilter);
     }
     
     // Group by rarity

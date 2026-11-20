@@ -109,7 +109,7 @@ class Combat {
                 result = this.offerItem(action.itemId);
                 break;
             case 'interrogate':
-                result = this.interrogate();
+                result = this.interrogate(action.freeTurn === true);
                 break;
             case 'pass':
                 result = this.playerPass();
@@ -523,20 +523,25 @@ class Combat {
     }
     
     // Player action: Interrogate
-    interrogate() {
+    // freeTurn: new-player tutorial - the enemy skips its action this turn.
+    interrogate(freeTurn = false) {
         if (this.isOver) return null;
-        
+
         this.startTurn();
-        
+
         // 1. Get correct names
         const playerName = typeof gameState !== 'undefined' ? (gameState.playerName || "Väktare") : "Väktare";
         const enemyName = this.enemyActive.getDisplayName();
         const tamingItem = this.enemyActive.species.tamingItem;
-        
-        // 2. Enemy acts (player passes)
-        const enemyAction = this.getEnemyAction();
+
+        // 2. Enemy acts (player passes), unless this is the tutorial's free turn
         const results = { player: { action: 'interrogate' }, enemy: null };
-        results.enemy = this.executeEnemyAction(enemyAction);
+        if (freeTurn) {
+            this.addLog(`${enemyName} is curious and waits to hear what you have to say.`, 'status');
+        } else {
+            const enemyAction = this.getEnemyAction();
+            results.enemy = this.executeEnemyAction(enemyAction);
+        }
         
         // 3. Resolve the rest of the turn first (knockouts, megin refill, Freya's
         //    Tears...) so the dialogue is always the last thing logged this turn.

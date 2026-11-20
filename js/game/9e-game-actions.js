@@ -28,6 +28,40 @@ Game.prototype.handleSwap = function(targetIndex) {
     this.currentCombat.executePlayerAction({ type: 'swap', targetIndex });
 };
 
+// -----------------------------------------------------------------------------
+// New-player combat tutorial
+// -----------------------------------------------------------------------------
+// Runs in wild encounters until the player has tamed their first väsen
+// (gameState.firstCombatTutorialShown is only set to true once
+// vasenCollection.length > 1, see Game.init / Game.endCombat). Saves that have
+// already completed it keep the flag true and never see it again.
+//
+// Two steps per combat, and only when the enemy desires an item the player owns:
+//   1. 'interrogate' - the Interrogate button glows. The first interrogation of
+//      the combat is a free turn: the enemy skips its action.
+//   2. 'offer'       - after interrogating, the Offer Item button glows, and in
+//      the offer modal the desired item and its Confirm button glow.
+// Outside the tutorial, interrogating still makes the Offer Item button glow
+// for the rest of that combat if the player owns the desired item.
+Game.prototype.isCombatTutorialActive = function(combat = this.currentCombat) {
+    return !!combat && !gameState.firstCombatTutorialShown &&
+        combat.isWildEncounter && combat.canTame && !combat.isEndlessTower;
+};
+
+// Returns 'interrogate', 'offer' or null
+Game.prototype.getCombatTutorialStage = function(combat = this.currentCombat) {
+    if (!combat || !combat.isWildEncounter || !combat.canTame || combat.isEndlessTower) return null;
+    if (combat.isOver || combat.correctItemGiven || !combat.enemyActive) return null;
+
+    const desiredItem = VASEN_SPECIES[combat.enemyActive.speciesName]?.tamingItem;
+    if (!desiredItem || !(gameState.itemInventory[desiredItem] > 0)) return null;
+
+    const tutorialActive = this.isCombatTutorialActive(combat);
+    if (tutorialActive && !combat.hasInterrogated) return 'interrogate';
+    if (tutorialActive || combat.hasInterrogated) return 'offer';
+    return null;
+};
+
 // Handle offer item
 Game.prototype.handleOfferItem = function(itemId) {
     if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
@@ -39,17 +73,18 @@ Game.prototype.handleOfferItem = function(itemId) {
         return;
     }
 
-    // Mark tutorial as shown when player offers an item; also unlock offering-type lore entries
-    if (!gameState.firstCombatTutorialShown && this.currentCombat.isWildEncounter) {
-        gameState.firstCombatTutorialShown = true;
-        findLoreEntryKeys('offering').forEach(k => {
-            if (!gameState.unlockedLoreEntries.has(k)) {
-                gameState.unlockedLoreEntries.add(k);
-                ui.showLoreUnlockMessage(k);
-            }
-        });
-        gameState.saveGame();
-    }
+    // Unlock offering-type lore entries on the first offer. The tutorial itself
+    // keeps running until the first successful tame (so losing the fight after
+    // offering doesn't leave a new player without guidance).
+    let unlockedLore = false;
+    findLoreEntryKeys('offering').forEach(k => {
+        if (!gameState.unlockedLoreEntries.has(k)) {
+            gameState.unlockedLoreEntries.add(k);
+            ui.showLoreUnlockMessage(k);
+            unlockedLore = true;
+        }
+    });
+    if (unlockedLore) gameState.saveGame();
 
     this.currentCombat.executePlayerAction({ type: 'offer', itemId });
 };
@@ -61,33 +96,32 @@ Game.prototype.handleInterrogate = function() {
     // Already offered the desired item - nothing left to learn
     if (this.currentCombat.correctItemGiven) return;
 
+    const isTutorialStep = this.getCombatTutorialStage(this.currentCombat) === 'interrogate';
+    const message = isTutorialStep
+        ? '<p>Ask the väsen what it desires most.</p><p>Interrogating normally costs a turn, but this väsen is curious about you and <strong>will not act this turn</strong>.</p>'
+        : '<p>Beware, this action will cost a turn.</p>';
+
     // Show the confirmation dialog
     ui.showDialogue(
         'Interrogate',
-        '<p>Beware, this action will cost a turn.</p>',
+        message,
         [
             {
                 text: 'Confirm',
-                class: 'btn-primary',
+                class: isTutorialStep ? 'btn-primary tutorial-blink' : 'btn-primary',
                 callback: () => {
-                    // Capture current names for the dialogue
-                    const player = gameState.playerName || "Väktare";
-                    const enemy = this.currentCombat.enemyActive;
-                    const enemyName = enemy.getDisplayName();
-                    const itemName = enemy.species.tamingItem;
+                    const combat = this.currentCombat;
+                    // The combat may have changed while the dialog was open
+                    if (!combat || combat.isOver || !combat.waitingForPlayerAction || combat.correctItemGiven) return;
 
-                    // Trigger tutorial by resetting the flag when asking about item
-                    if (this.currentCombat.isWildEncounter) {
-                        gameState.firstCombatTutorialShown = false;
-                        gameState.saveGame();
-                    }
+                    // Re-check at confirm time: only the tutorial's first
+                    // interrogation of this combat is a free turn.
+                    const freeTurn = this.getCombatTutorialStage(combat) === 'interrogate';
 
-                    // Execute the action with pre-formatted names so the UI can bold them
-                    this.currentCombat.executePlayerAction({ 
-                        type: 'interrogate',
-                        playerLine: `${player}: Tell me ${enemyName}, what is it that you desire the most?`,
-                        enemyLine: `${enemyName}: If you must know, ${itemName} is what I desire most.`
-                    });
+                    // From now on (this combat only) the Offer Item button guides the player
+                    combat.hasInterrogated = true;
+
+                    combat.executePlayerAction({ type: 'interrogate', freeTurn });
                 }
             },
             {
