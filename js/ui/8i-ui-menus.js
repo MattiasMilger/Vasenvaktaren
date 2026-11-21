@@ -40,29 +40,105 @@
         }
     };
 
-    UIController.prototype.exportSave = function() {
-        const saveData = gameState.exportSave();
-        navigator.clipboard.writeText(saveData).then(() => {
-            this.showMessage('Progress exported to clipboard!');
-        }).catch(() => {
-            // Fallback: show in textarea
-            const textarea = document.getElementById('import-save-data');
-            textarea.value = saveData;
-            this.showMessage('Copy the save data from the text area.');
-        });
+    // Suggested save file name: vasenvaktaren-<player>-<date>.json, so several
+    // backups can be told apart. Characters not allowed in file names are dropped.
+    UIController.prototype.getSaveFileName = function() {
+        const date = new Date().toISOString().slice(0, 10);
+        const player = (gameState.playerName || '')
+            .replace(/[\\/:*?"<>|\u0000-\u001F]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+            .slice(0, 40);
+        return `vasenvaktaren-${player ? player + '-' : ''}${date}.json`;
     };
 
-    UIController.prototype.importSave = function() {
-    const saveData = document.getElementById('import-save-data').value.trim();
+    // Save the game to a .json file. Where the browser supports it (desktop
+    // Chrome/Edge) this opens a real "Save As" dialog so the player can pick the
+    // name and folder; elsewhere it falls back to a normal download.
+    UIController.prototype.downloadSaveFile = async function() {
+        const saveData = gameState.exportSaveFile();
+        if (!saveData) {
+            this.showMessage('Could not create the save file.', 'error');
+            return;
+        }
+        const fileName = this.getSaveFileName();
+
+        if (typeof window.showSaveFilePicker === 'function') {
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: fileName,
+                    types: [{ description: 'Väsenväktaren save', accept: { 'application/json': ['.json'] } }]
+                });
+                const writable = await handle.createWritable();
+                await writable.write(saveData);
+                await writable.close();
+                this.showMessage('Game saved to file!');
+                return;
+            } catch (e) {
+                if (e && e.name === 'AbortError') return; // player cancelled the dialog
+                console.warn('Save As dialog failed, falling back to download:', e);
+            }
+        }
+
+        const blob = new Blob([saveData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        this.showMessage('Save file downloaded!');
+    };
+
+    // Read a chosen save file and, after confirmation, load it
+    UIController.prototype.loadSaveFile = function(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            const text = String(reader.result || '').trim();
+            if (!text) {
+                this.showMessage('That save file is empty.', 'error');
+                return;
+            }
+            const safeName = file.name.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            this.showDialogue(
+                'Load Save File',
+                `Load "${safeName}"? Your current progress will be replaced.`,
+                [
+                    {
+                        text: `${uiIcon('upload')}Load`,
+                        class: 'btn-primary',
+                        callback: () => this.importSave(text)
+                    },
+                    {
+                        text: 'Cancel',
+                        class: 'btn-secondary',
+                        callback: null
+                    }
+                ],
+                true,
+                null,
+                'upload'
+            );
+        };
+        reader.onerror = () => this.showMessage('Could not read that file.', 'error');
+        reader.readAsText(file);
+    };
+
+    // Replace the current game with the save text read from a save file
+    UIController.prototype.importSave = function(saveText) {
+    const saveData = String(saveText || '').trim();
     if (!saveData) {
-        this.showMessage('Please paste save data first.', 'error');
+        this.showMessage('That save file is empty.', 'error');
         return;
     }
 
     const success = gameState.importSave(saveData);
 
     if (success) {
-        this.showMessage('Save imported successfully!');
+        this.showMessage('Save loaded successfully!');
         this.hideSettings();
 
         // Clear combat state
@@ -78,7 +154,7 @@
         game.showGameScreen();
 
     } else {
-        this.showMessage('Invalid or corrupted save data.', 'error');
+        this.showMessage('Invalid or corrupted save.', 'error');
     }
 };
 

@@ -145,7 +145,12 @@ class UIController {
     // Initialize UI elements
     init() {
         this.cacheElements();
-        this.setupEventListeners();
+        // init() runs again after importing a save; only bind the static
+        // listeners once, or every button (and toggle) would fire twice.
+        if (!this._listenersBound) {
+            this.setupEventListeners();
+            this._listenersBound = true;
+        }
         this.restoreCombatLogState();
         this.restoreCombatCardsState();
     }
@@ -218,7 +223,15 @@ class UIController {
         // Settings
 document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
 document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
-document.getElementById('export-save-btn').addEventListener('click', () => this.exportSave());
+
+// Save file download / load
+document.getElementById('download-save-btn').addEventListener('click', () => this.downloadSaveFile());
+const loadSaveFileInput = document.getElementById('load-save-file-input');
+document.getElementById('load-save-file-btn').addEventListener('click', () => loadSaveFileInput.click());
+loadSaveFileInput.addEventListener('change', () => {
+    this.loadSaveFile(loadSaveFileInput.files[0]);
+    loadSaveFileInput.value = ''; // allow picking the same file again
+});
 
 // Unlock All Info toggle (Lore Book)
 const unlockAllInfoToggle = document.getElementById('unlock-all-info-toggle');
@@ -237,33 +250,6 @@ if (disableTutorialToggle) {
         this.toggleBeginnerTutorial(disableTutorialToggle.checked);
     });
 }
-
-// IMPORT SAVE
-const importTextarea = document.getElementById('import-save-data');
-const confirmImportBtn = document.getElementById('confirm-import-btn');
-
-document.getElementById('import-save-btn').addEventListener('click', () => {
-    const isHidden = importTextarea.style.display === 'none';
-
-    importTextarea.style.display = isHidden ? 'block' : 'none';
-    confirmImportBtn.style.display = isHidden ? 'block' : 'none';
-
-    if (isHidden) {
-        importTextarea.focus();
-    }
-});
-
-// Ctrl+Enter or Cmd+Enter to import
-importTextarea.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-        this.importSave();
-    }
-});
-
-// Click "Import Now" button
-confirmImportBtn.addEventListener('click', () => {
-    this.importSave();
-});
 
 document.getElementById('reset-game-btn').addEventListener('click', () => this.confirmReset());
 

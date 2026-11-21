@@ -92,8 +92,9 @@ Open `index.html` in a modern browser. No build tools or dependencies required.
 ## Save System
 
 - Game automatically saves to localStorage
-- Export your save from Settings to back up progress
-- Import saves to restore progress
+- Save to File (in Settings) saves your progress as a `.json` file named after the player and date (e.g. `vasenvaktaren-Testare-2026-11-21.json`); Load from File restores it. Use it to back up or move progress between devices
+- In desktop Chrome and Edge, Save to File opens a "Save As" dialog so you can choose the name and folder; other browsers download the file directly
+- Load from File also accepts a text file containing a save code exported by older versions
 - Reset game to start fresh
 
 ## Technical Requirements

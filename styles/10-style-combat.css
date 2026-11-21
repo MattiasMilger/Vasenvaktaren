@@ -1160,6 +1160,12 @@
     justify-content: center;
 }
 
+/* Save to File / Load from File side by side, equal width */
+.modal-settings .save-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .settings-section {
     margin-bottom: var(--spacing-lg);
 }
@@ -1255,19 +1261,6 @@
     flex-wrap: wrap;
 }
 
-.import-textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    color: var(--text-primary);
-    font-family: monospace;
-    font-size: var(--font-size-sm);
-    resize: vertical;
-    margin-bottom: var(--spacing-sm);
-}
 
 /* Profile Modal */
 .modal-profile {

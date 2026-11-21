@@ -41,3 +41,53 @@ body.modal-open {
 body.modal-open #game-screen {
     overflow: hidden;
 }
+
+/* =============================================================================
+   MOBILE PLAY ORDER (768px and below)
+   On phones the three desktop columns stack into one long page. Re-order them
+   so the things you actually play with come first:
+     - Out of combat: Zones + Explore, then the party, the zone description,
+       and the inventory last.
+     - In combat (body.in-combat, set by showCombatUI): the combat area first.
+   Only visual order changes; the DOM (and the desktop/tablet layout) is untouched.
+   ============================================================================= */
+@media (max-width: 768px) {
+    /* Let the stacked column be as tall as its content (#game-screen scrolls).
+       Without this the panels are squeezed into one screen height and their
+       content overflows on top of each other. */
+    .game-main {
+        gap: 0;
+        flex: 0 0 auto;
+    }
+
+    .game-main > .panel {
+        flex-shrink: 0;
+    }
+
+    .panel-middle { order: 1; }
+    .panel-right  { order: 2; }
+    .panel-left   { order: 3; }
+
+    /* Zones + Explore above the party */
+    .panel-middle .zone-section {
+        order: 1;
+        min-height: 0;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .panel-middle .party-section {
+        order: 2;
+        border-bottom: none;
+    }
+
+    /* In combat the arena goes on top and the zone/party/inventory follow */
+    body.in-combat .panel-right {
+        order: 0;
+    }
+
+    /* Keep the inventory list from becoming a tiny scroll box inside the
+       page scroll: give it a usable height on phones */
+    .panel-content {
+        max-height: 60vh;
+    }
+}

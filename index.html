@@ -643,20 +643,13 @@
         <!-- Save Management -->
         <div class="settings-section">
             <h4>Save Management</h4>
-            <p class="settings-note">Game auto-saves.</p>
+            <p class="settings-note">Game auto-saves. Save to a file to back up your progress or move it to another device.</p>
 
             <div class="save-buttons">
-                <button id="export-save-btn" class="btn btn-secondary"><i data-ui-icon="download" data-size="14"></i>Export Save</button>
-                <button id="import-save-btn" class="btn btn-secondary"><i data-ui-icon="upload" data-size="14"></i>Import Save</button>
+                <button id="download-save-btn" class="btn btn-secondary"><i data-ui-icon="download" data-size="14"></i>Save to File</button>
+                <button id="load-save-file-btn" class="btn btn-secondary"><i data-ui-icon="upload" data-size="14"></i>Load from File</button>
             </div>
-
-            <textarea id="import-save-data" class="import-textarea" 
-                      placeholder="Paste save data here..." 
-                      style="display: none;"></textarea>
-
-            <button id="confirm-import-btn" class="btn btn-primary" style="display:none;">
-                Import Now
-            </button>
+            <input type="file" id="load-save-file-input" accept=".json,.txt,application/json,text/plain" style="display: none;">
 
             <button id="reset-game-btn" class="btn btn-danger"><i data-ui-icon="trash" data-size="14"></i>Reset Game</button>
         </div>

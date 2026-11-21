@@ -1106,20 +1106,23 @@ class GameState {
         }
     }
     
-    // Export save data as string
-    exportSave() {
+    // Export save data as readable JSON (used for the downloadable save file).
+    exportSaveFile() {
         try {
-            return btoa(JSON.stringify(this.serialize()));
+            return JSON.stringify(this.serialize(), null, 2);
         } catch (e) {
-            console.error('Error exporting save:', e);
+            console.error('Error exporting save file:', e);
             return null;
         }
     }
-    
-    // Import save data from string
+
+    // Import save data from a save file's text. Accepts the plain JSON from
+    // Save to File, and also the base64 code that older versions' Export Save
+    // copied to the clipboard (pasted into a text file), so old backups still load.
     importSave(saveString) {
         try {
-            const data = JSON.parse(atob(saveString));
+            const text = String(saveString).trim().replace(/^﻿/, '');
+            const data = JSON.parse(text.startsWith('{') ? text : atob(text));
             if (this.deserialize(data)) {
                 this.saveGame();
                 return true;

@@ -35,6 +35,12 @@ UIController.prototype.showCombatUI = function() {
         this.combatLogMessages = [];
         this.combatLog.innerHTML = '';
 
+        // Mobile: CSS moves the combat area to the top of the stacked layout
+        // while this class is set; bring it into view so the player doesn't
+        // have to scroll down to find the fight.
+        document.body.classList.add('in-combat');
+        this.scrollMobileGameView(this.combatArea);
+
         // Auto-size combat log to fill remaining viewport on desktop
         if (!this._boundSizeCombatLog) {
                 this._boundSizeCombatLog = this._sizeCombatLog.bind(this);
@@ -44,11 +50,33 @@ UIController.prototype.showCombatUI = function() {
         requestAnimationFrame(() => this._sizeCombatLog());
 };
 
+// On phone layouts (single stacked column, see 14-style-responsive.css) scroll
+// the game screen so `target` is at the top, or to the very top when target is
+// null. Does nothing on tablet/desktop, where the panels are side by side.
+UIController.prototype.scrollMobileGameView = function(target) {
+        if (!window.matchMedia || !window.matchMedia('(max-width: 768px)').matches) return;
+        requestAnimationFrame(() => {
+                const scroller = document.getElementById('game-screen');
+                if (target) {
+                        target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+                } else {
+                        if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+        });
+};
+
 UIController.prototype.hideCombatUI = function() {
         this.combatArea.style.display = 'none';
         this.combatUI.style.display = 'none';
         this.combatUI.classList.remove('active');
         this.zoneDescription.style.display = 'block';
+
+        // Mobile: back to the normal order (Zones + Explore first) and scroll
+        // up so the Explore button is in view again.
+        const wasInCombat = document.body.classList.contains('in-combat');
+        document.body.classList.remove('in-combat');
+        if (wasInCombat) this.scrollMobileGameView(null);
 
         // Remove resize listener and reset height
         if (this._boundSizeCombatLog) {
