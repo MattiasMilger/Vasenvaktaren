@@ -199,7 +199,7 @@
             if (newName !== gameState.playerName) {
                 gameState.playerName = newName;
                 const displayName = newName || 'Väktare';
-                this.playerNameDisplay.textContent = 'Player Profile: ' + displayName;
+                this.playerNameDisplay.textContent = displayName;
                 gameState.saveGame();
             }
         }
@@ -289,7 +289,7 @@ achievementsHtml += '</div></div>';
             if (newName === gameState.playerName) return;
             gameState.playerName = newName;
             const displayName = newName || 'Väktare';
-            this.playerNameDisplay.textContent = 'Player Profile: ' + displayName;
+            this.playerNameDisplay.textContent = displayName;
             gameState.saveGame();
 
             // Flash "Saved" indicator
@@ -333,7 +333,7 @@ achievementsHtml += '</div></div>';
     // Update player name display
     UIController.prototype.updatePlayerName = function() {
         const name = gameState.playerName || 'Väktare';
-        this.playerNameDisplay.textContent = `Player Profile: ${name}`;
+        this.playerNameDisplay.textContent = name;
     };
 
     UIController.prototype.changeName = function() {

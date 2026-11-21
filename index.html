@@ -333,7 +333,9 @@
     <p class="starter-intro">You find yourself in a strange forest.</p>
     <p class="starter-prompt">Choose who to befriend:</p>
     <div id="starter-options" class="starter-options"></div>
-    <button id="confirm-starter-btn" class="btn btn-primary" disabled>Confirm</button>
+    <div class="starter-confirm-bar">
+      <button id="confirm-starter-btn" class="btn btn-primary" disabled>Confirm</button>
+    </div>
   </div>
 </div>
 
@@ -349,7 +351,7 @@
             <div class="header-center">
                 <button id="player-profile" class="player-profile btn btn-small">
                     <i data-ui-icon="profile" data-size="14"></i>
-                    <span id="player-name-display">Väktare</span>
+                    <span class="player-profile-prefix">Player Profile: </span><span id="player-name-display">Väktare</span>
                 </button>
             </div>
             <div class="header-right">
@@ -363,6 +365,7 @@
         <main class="game-main">
             <!-- Left Panel - Inventory -->
             <aside class="panel panel-left">
+                <h3 class="section-title inventory-title">Inventory</h3>
                 <div class="panel-tabs">
                     <button id="tab-vasen" class="tab-btn active" data-tab="vasen"><i data-ui-icon="vasen" data-size="16"></i>Väsen</button>
                     <button id="tab-runes" class="tab-btn" data-tab="runes"><i data-ui-icon="runes" data-size="16"></i>Runes</button>

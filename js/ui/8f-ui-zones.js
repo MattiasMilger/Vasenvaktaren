@@ -86,16 +86,35 @@ UIController.prototype.selectZone = function(zoneId) {
     // Update zone description
 UIController.prototype.updateZoneDescription = function() {
         const zone = ZONES[gameState.currentZone];
+        const expanded = !!this.zoneDescriptionExpanded;
 
+        // The toggle row is only shown on phones (14-style-responsive.css),
+        // where the description is collapsed under the zone list by default.
+        // On larger screens the body is always visible and the toggle hidden.
+        this.zoneDescription.classList.toggle('expanded', expanded);
         this.zoneDescription.innerHTML = `
-            ${zone.image ? `<img src="${zone.image}" alt="${zone.name}" class="zone-image">` : ''}
-            <h3>${zone.name}</h3>
-            <p>${zone.description}</p>
-            <div class="zone-meta">
-                <span>Level Range: ${zone.levelRange[0]} - ${zone.levelRange[1]}</span>
-                ${zone.guardian ? `<span>${inlineIcon('swords')}Guardian: ${zone.guardian.name} (Lvl ${zone.guardian.team[0].level})</span>` : ''}
+            <button type="button" class="zone-desc-toggle" aria-expanded="${expanded}" onclick="ui.toggleZoneDescription()">
+                <span class="zone-desc-toggle-label">About ${zone.name}</span>
+                <span class="zone-desc-toggle-icon" aria-hidden="true">▾</span>
+            </button>
+            <div class="zone-desc-body">
+                ${zone.image ? `<img src="${zone.image}" alt="${zone.name}" class="zone-image">` : ''}
+                <h3>${zone.name}</h3>
+                <p>${zone.description}</p>
+                <div class="zone-meta">
+                    <span>Level Range: ${zone.levelRange[0]} - ${zone.levelRange[1]}</span>
+                    ${zone.guardian ? `<span>${inlineIcon('swords')}Guardian: ${zone.guardian.name} (Lvl ${zone.guardian.team[0].level})</span>` : ''}
+                </div>
             </div>
         `;
+    };
+
+    // Phones: expand/collapse the zone description under the zone list
+UIController.prototype.toggleZoneDescription = function() {
+        this.zoneDescriptionExpanded = !this.zoneDescriptionExpanded;
+        this.zoneDescription.classList.toggle('expanded', this.zoneDescriptionExpanded);
+        const toggle = this.zoneDescription.querySelector('.zone-desc-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', String(this.zoneDescriptionExpanded));
     };
 
     // Update explore button

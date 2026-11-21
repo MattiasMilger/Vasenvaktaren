@@ -91,3 +91,683 @@ body.modal-open #game-screen {
         max-height: 60vh;
     }
 }
+
+/* =============================================================================
+   TOUCH INPUT
+   - No double-tap-to-zoom delay and no grey tap flash on game controls.
+   - Long-pressing a button doesn't start a text selection.
+   - Hover lift effects are dropped on touch screens: there they "stick" after
+     a tap, so a pressed skill would keep looking raised/highlighted.
+   ============================================================================= */
+/* Zone description "About <zone>" toggle and the "Inventory" title:
+   phones only (see PHONE LAYOUT) */
+.zone-desc-toggle,
+.inventory-title {
+    display: none;
+}
+
+button,
+.btn,
+.skill-btn,
+.tab-btn,
+.zone-item,
+.party-slot,
+.vasen-card,
+.item-card,
+.rune-card,
+.combat-card-toggle {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn,
+.skill-btn,
+.tab-btn,
+.combat-card-toggle {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+@media (hover: none) {
+    .btn:hover:not(:disabled),
+    .skill-btn:hover:not(:disabled),
+    .item-card:hover,
+    .rune-card:hover {
+        transform: none;
+    }
+
+    .combatant-image-container:hover {
+        transform: none;
+    }
+
+    /* Visible press feedback instead */
+    .btn:active:not(:disabled),
+    .skill-btn:active:not(:disabled) {
+        transform: scale(0.97);
+        filter: brightness(1.15);
+    }
+}
+
+/* =============================================================================
+   PHONE LAYOUT (600px and below)
+   - Every section gets room to breathe (16px section padding, 8px between
+     controls) so things read as separate blocks rather than one dense wall.
+   - In a fight, both combatants, the skills and the actions sit together
+     at the top; the rest of the game is hidden until the fight ends.
+   ============================================================================= */
+@media (max-width: 600px) {
+
+    /* ---------------------------------------------------------------------
+       HEADER: one sticky row of four equal buttons
+           [Profile] [Game Guide] [Lore Book] [Settings]
+       Pinned to the top while the page scrolls, so the menus are always one
+       tap away (also mid-fight). The game title is dropped on phones to keep
+       the bar a single row.
+       --------------------------------------------------------------------- */
+    .game-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+    }
+
+    .header-left {
+        display: none;
+    }
+
+    .header-center,
+    .header-right {
+        display: contents;
+    }
+
+    .game-header .btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        flex-direction: column;
+        gap: 3px;
+        padding: 6px 2px;
+        line-height: 1.15;
+    }
+
+    .game-header .btn .ui-icon {
+        margin-right: 0;
+    }
+
+    /* Profile button shows just the player's name */
+    .player-profile-prefix {
+        display: none;
+    }
+
+    #player-name-display {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ---------------------------------------------------------------------
+       SECTIONS: more space around and between blocks
+       --------------------------------------------------------------------- */
+    .party-section,
+    .zone-section {
+        padding: var(--spacing-md);
+    }
+
+    .section-title {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .zone-item {
+        margin-bottom: var(--spacing-sm);
+        min-height: 48px;
+    }
+
+    .zone-actions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .zone-actions .btn {
+        min-height: 52px;
+    }
+
+    /* Decorative rune backdrop under the zone description: on the stacked
+       phone layout it stretched into a huge empty block */
+    .panel-right .futhark-ornament {
+        display: none;
+    }
+
+    /* ---------------------------------------------------------------------
+       PAGE ORDER
+       The three desktop columns are flattened (display: contents) so each
+       section can be placed on its own:
+           Zones + Explore
+           About <zone>   (collapsed, tap to open)
+           Active Party
+           Väsen / Runes / Items
+       In combat the fight replaces all of it (see COMBAT below).
+       --------------------------------------------------------------------- */
+    .game-main > .panel-left,
+    .game-main > .panel-middle,
+    .game-main > .panel-right {
+        display: contents;
+    }
+
+    /* (.game-main prefix: outranks the older .panel-middle .zone-section
+       ordering in the 768px block above) */
+    .game-main .zone-section         { order: 1; }
+    .game-main .zone-description     { order: 2; }
+    .game-main .party-section        { order: 3; }
+    .game-main .inventory-title      { order: 4; }
+    .game-main .panel-tabs           { order: 5; }
+    .game-main .panel-content        { order: 6; }
+    .game-main .vasen-details-panel  { order: 7; }
+    .game-main .combat-area          { order: 0; }
+
+    /* The three blocks (Zones, Active Party, Inventory) each start with a
+       title and are set apart by a dark band, so it's clear where one ends
+       and the next begins */
+    .game-main {
+        background: var(--bg-primary);
+    }
+
+    .game-main .party-section,
+    .game-main .inventory-title {
+        margin-top: var(--spacing-md);
+        border-top: 2px solid var(--border-color);
+    }
+
+    .game-main .inventory-title {
+        display: block;
+        margin-bottom: 0;
+        padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+        background: var(--bg-tertiary); /* same as the tab bar below it */
+    }
+
+    .game-main .zone-description {
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    /* Each section is exactly as tall as its content (no stretching to fill
+       leftover screen height) */
+    .game-main .zone-section,
+    .game-main .zone-description,
+    .game-main .party-section,
+    .game-main .inventory-title,
+    .game-main .panel-tabs,
+    .game-main .panel-content,
+    .game-main .vasen-details-panel {
+        flex: 0 0 auto;
+        min-height: 0;
+    }
+
+    /* The panels' backgrounds, now carried by the sections themselves */
+    .zone-section,
+    .zone-description,
+    .party-section {
+        background: var(--bg-tertiary);
+    }
+
+    .panel-content {
+        background: var(--bg-secondary);
+    }
+
+    .combat-area {
+        background: var(--bg-primary);
+    }
+
+    /* Zones and their description read as one block */
+    .panel-middle .zone-section {
+        border-bottom: none;
+        padding-bottom: var(--spacing-sm);
+    }
+
+    .party-section {
+        border-top: 2px solid var(--border-color);
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    /* ---------------------------------------------------------------------
+       ZONE DESCRIPTION: collapsed into an "About <zone>" row under the
+       zone list; tap to show the image and text
+       --------------------------------------------------------------------- */
+    .zone-description {
+        padding: 0 var(--spacing-md) var(--spacing-md);
+        border-bottom: none;
+    }
+
+    .zone-desc-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--spacing-sm);
+        width: 100%;
+        min-height: 44px;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius);
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        cursor: pointer;
+    }
+
+    .zone-desc-toggle-icon {
+        display: inline-block; /* transforms don't apply to inline spans */
+        transition: transform var(--transition-base);
+    }
+
+    .zone-description.expanded .zone-desc-toggle {
+        color: var(--text-primary);
+    }
+
+    .zone-description.expanded .zone-desc-toggle-icon {
+        transform: rotate(180deg);
+    }
+
+    .zone-desc-body {
+        display: none;
+        padding-top: var(--spacing-md);
+    }
+
+    .zone-description.expanded .zone-desc-body {
+        display: block;
+    }
+
+    /* ---------------------------------------------------------------------
+       PARTY: each slot is a full-width row card
+           [portrait]  Name / Lvl / badges
+                       HP + MP bars
+                       STR  WIS  DEF  DUR
+                       Rune
+       --------------------------------------------------------------------- */
+    .party-slots {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .party-slot {
+        min-height: 0;
+        padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+    }
+
+    .party-slot .slot-content {
+        width: 100%;
+        min-width: 0;
+        text-align: left;
+    }
+
+    .party-vasen {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        column-gap: var(--spacing-md);
+        row-gap: var(--spacing-sm);
+        align-items: center;
+        padding: 0;
+    }
+
+    .party-vasen > * {
+        grid-column: 2;
+        min-width: 0;
+    }
+
+    .party-vasen > .party-vasen-img-container {
+        grid-column: 1;
+        grid-row: 1 / span 5;
+        align-self: start;
+    }
+
+    .party-vasen-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+        padding-right: 36px; /* clear of the favourite star */
+    }
+
+    .party-vasen-name {
+        white-space: normal;
+        text-align: left;
+    }
+
+    .party-vasen-level {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .party-vasen-level .lore-chip {
+        margin-left: 0;
+    }
+
+    .party-vasen-tags {
+        justify-content: flex-start;
+    }
+
+    .party-vasen-attributes {
+        justify-content: flex-start;
+        gap: var(--spacing-xs) var(--spacing-md);
+        font-size: var(--font-size-sm);
+    }
+
+    .party-vasen-runes {
+        justify-content: flex-start;
+    }
+
+    /* Empty slot: a single slim line instead of a tall box */
+    .party-empty {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-xs) 0 0;
+    }
+
+    .party-auto-actions {
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-md);
+    }
+
+    .party-auto-actions .btn {
+        min-height: 48px;
+    }
+
+    /* ---------------------------------------------------------------------
+       STARTER SELECTION: Confirm lives in its own bar along the bottom of
+       the screen, so it never sits on top of a card. The screen is the
+       (viewport-high) scroller that the bar sticks to.
+       --------------------------------------------------------------------- */
+    #starter-select-screen.active {
+        height: 100vh;
+        height: 100dvh;
+        overflow-y: auto;
+        justify-content: flex-start;
+        padding: var(--spacing-md) var(--spacing-md) 0;
+    }
+
+    .starter-options {
+        gap: var(--spacing-md);
+    }
+
+    .starter-confirm-bar {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        margin: var(--spacing-md) calc(-1 * var(--spacing-md)) 0;
+        padding: var(--spacing-sm) var(--spacing-md);
+        padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px));
+        background: var(--bg-secondary);
+        border-top: 2px solid var(--border-color);
+        box-shadow: 0 -6px 16px var(--black-overlay-heavy);
+    }
+
+    #confirm-starter-btn {
+        width: 100%;
+        max-width: 360px;
+        min-height: 48px;
+        margin: 0 auto;
+        font-size: var(--font-size-base);
+    }
+
+    #confirm-starter-btn:disabled {
+        opacity: 1;
+        filter: grayscale(0.6) brightness(0.7);
+    }
+
+    /* ---------------------------------------------------------------------
+       COMBAT: the fight is the whole screen
+       --------------------------------------------------------------------- */
+    /* Zones, party and inventory can't be used mid-fight; hiding them keeps
+       the page from scrolling away from the battle. They return when it ends. */
+    body.in-combat .panel-left,
+    body.in-combat .panel-middle {
+        display: none;
+    }
+
+    body.in-combat .panel-right {
+        border-bottom: none;
+    }
+
+    /* Let the combat area be as tall as its content (the short-screen flex
+       rules would otherwise squeeze it and clip the combatant cards) */
+    body.in-combat .panel-right,
+    .combat-area,
+    .combat-ui {
+        flex: 0 0 auto;
+        min-height: auto !important;
+    }
+
+    .combat-area {
+        padding: var(--spacing-sm);
+        /* Jumps to the fight (scrollIntoView) land below the sticky header */
+        scroll-margin-top: 64px;
+    }
+
+    /* Two compact cards side by side, each taking half the width */
+    .combat-arena {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+        gap: 6px;
+        /* the cards are framed already; no extra dark box around them */
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+        margin-bottom: 6px;
+    }
+
+    .combatant-panel {
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+        max-width: none;
+    }
+
+    /* Endless Tower floor: a full-width strip above the cards */
+    .combat-versus.has-floor {
+        order: -1;
+        flex: 1 1 100%;
+        font-size: var(--font-size-base);
+        text-align: center;
+    }
+
+    /* Show the whole card instead of a small inner scroll box */
+    .combat-arena .combatant-panel .combatant-scroll-inner {
+        max-height: none;
+        overflow: visible;
+        padding: 6px;
+    }
+
+    .combat-card-toggle {
+        width: 20px;
+        height: 20px;
+    }
+
+    .combatant-untamed {
+        margin-bottom: 0;
+    }
+
+    .combatant-name {
+        font-size: var(--font-size-sm);
+        line-height: 1.2;
+        margin-bottom: 2px;
+        padding-left: 20px;
+        padding-right: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .combatant-level {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 2px var(--spacing-xs);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .combatant-level-main {
+        font-size: var(--font-size-xs);
+    }
+
+    /* Portrait row: [ally] [active] [ally] instead of a two-row grid */
+    .combatant-image-wrapper {
+        display: flex;
+        gap: 2px;
+        min-height: 0;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .combatant-image-container {
+        width: 52px;
+        height: 52px;
+        margin: 0 var(--spacing-xs) !important;
+    }
+
+    .combatant-image {
+        width: 52px;
+        height: 52px;
+    }
+
+    .party-portrait {
+        width: 26px;
+        height: 26px;
+    }
+
+    .combatant-bars {
+        gap: 3px;
+    }
+
+    .health-bar,
+    .megin-bar {
+        height: 16px;
+        margin-top: 0;
+    }
+
+    .combat-bar-text {
+        top: 1px;
+        width: 100%;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+
+    .combatant-info {
+        margin-top: var(--spacing-xs);
+    }
+
+    .combatant-panel .element-badge,
+    .combatant-panel .rarity-badge,
+    .combatant-panel .family-badge {
+        font-size: 0.7rem;
+        padding: 0 5px;
+    }
+
+    .combatant-attributes {
+        gap: 2px;
+        margin-top: var(--spacing-xs);
+        padding-top: var(--spacing-xs);
+    }
+
+    .combat-attr-value {
+        font-size: var(--font-size-xs);
+    }
+
+    .combatant-info-row,
+    .combatant-attack-elements {
+        margin-top: var(--spacing-xs);
+    }
+
+    /* Skills: 2 x 2, compact, all the same size whatever their text length */
+    .skill-buttons {
+        gap: 6px;
+        margin-bottom: 0;
+        grid-auto-rows: 1fr;
+    }
+
+    .skill-btn {
+        min-height: 48px;
+        padding: 6px 8px;
+        gap: 2px;
+    }
+
+    .skill-btn-name {
+        font-size: var(--font-size-sm);
+    }
+
+    .skill-btn-type,
+    .skill-btn-attributes,
+    .skill-btn-desc {
+        font-size: var(--font-size-xs);
+    }
+
+    .skill-btn-desc {
+        -webkit-line-clamp: 2;
+        line-height: 1.25;
+    }
+
+    /* Actions: a bar stuck to the bottom of the screen, so Swap, Offer Item,
+       Interrogate, Pass, Auto Battle and Surrender are always in reach,
+       however far the page is scrolled. 3 x 2 grid, icon beside label. */
+    .action-buttons {
+        position: sticky;
+        bottom: 0;
+        z-index: 20;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        margin: 0 calc(-1 * var(--spacing-sm));
+        padding: var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px));
+        background: var(--bg-secondary);
+        border-top: 2px solid var(--border-color);
+        box-shadow: 0 -6px 16px var(--black-overlay-heavy);
+    }
+
+    .action-buttons .btn {
+        width: auto;
+        min-width: 0;
+        min-height: 40px;
+        gap: 4px;
+        padding: 4px;
+        font-size: var(--font-size-xs);
+        line-height: 1.15;
+        white-space: nowrap;
+    }
+
+    .action-buttons .btn .ui-icon {
+        margin-right: 0;
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Surrender in the bottom-right corner, away from the everyday actions */
+    #btn-surrender {
+        order: 1;
+    }
+
+    .combat-log-toggle-btn {
+        min-height: 40px;
+        margin-top: var(--spacing-sm);
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    .combat-log {
+        height: 160px;
+        margin-bottom: var(--spacing-sm);
+    }
+}
+
+/* Short phones: drop the skill description line so the action buttons sit
+   closer to the cards (the skill's element, cost and power stay visible; the
+   full text is in the Lore Book and Väsen details). */
+@media (max-width: 600px) and (max-height: 700px) {
+    .skill-btn-desc {
+        display: none;
+    }
+}
+

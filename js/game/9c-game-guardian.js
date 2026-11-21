@@ -19,16 +19,14 @@ Game.prototype.challengeGuardian = function() {
         ? (guardian.dialogue.rematch || guardian.dialogue.challenge)
         : guardian.dialogue.challenge;
 
-    // First-guardian tutorial: shown until any guardian has been defeated.
+    // First-guardian tip: shown until any guardian has been defeated.
     // Derived from defeatedGuardians, so it disappears on its own after the
     // first win and needs no separate save flag.
     let tutorialHtml = '';
-    if (gameState.defeatedGuardians.size === 0) {
-        tutorialHtml = `
-            <div class="guardian-tutorial">
-                <div class="guardian-tutorial-title">Recommended</div>
-                <p>A full party of ${MAX_PARTY_SIZE} healthy Väsen of matching level (Lvl ${guardian.team[0].level}).</p>
-            </div>`;
+    if (ui.isBeginnerTutorialEnabled() && gameState.defeatedGuardians.size === 0) {
+        tutorialHtml = ui.getTutorialTipHTML(
+            `Bring a full party of ${MAX_PARTY_SIZE} healthy väsen of matching level (<strong>Lvl ${guardian.team[0].level}</strong>).`
+        );
     }
 
     ui.showDialogue(

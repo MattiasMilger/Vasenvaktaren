@@ -11,15 +11,12 @@ UIController.prototype.renderParty = function() {
             slot.classList.add('filled');
             slotContent.classList.remove('empty');
 
-            let stagesHtml = '';
-            STAGEABLE_ATTRIBUTES.forEach(attr => {
-                const stage = vasen.attributeStages[attr];
-                if (stage !== 0) {
-                    const stageClass = stage > 0 ? 'positive' : 'negative';
-                    const stageText = stage > 0 ? `+${stage}` : stage;
-                    stagesHtml += `<span class="mini-stage ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
-                }
-            });
+            // Attributes show stage changes on the stat itself (▲N / ▼N), same
+            // as the combat cards; clicking a staged stat shows its original value.
+            const attrsHtml = STAGEABLE_ATTRIBUTES.map(attr => {
+                const staged = this.getStagedAttrParts(vasen, attr);
+                return `<span class="mini-attr${staged.stateClass}"${staged.clickAttrs}><span class="attr-label">${attr.substring(0, 3).toUpperCase()}</span> <span class="mini-attr-value">${staged.valueHtml}</span></span>`;
+            }).join('');
 
             // Runes + active bindrune as clickable words (popup shows what they do)
             const runesHtml = this.getRunesTextHTML(vasen);
@@ -58,13 +55,9 @@ UIController.prototype.renderParty = function() {
                     </div>
 
                     <div class="party-vasen-attributes">
-                        <span class="mini-attr"><span class="attr-label">STR</span> ${vasen.getAttribute('strength')}</span>
-                        <span class="mini-attr"><span class="attr-label">WIS</span> ${vasen.getAttribute('wisdom')}</span>
-                        <span class="mini-attr"><span class="attr-label">DEF</span> ${vasen.getAttribute('defense')}</span>
-                        <span class="mini-attr"><span class="attr-label">DUR</span> ${vasen.getAttribute('durability')}</span>
+                        ${attrsHtml}
                     </div>
 
-                    ${stagesHtml ? `<div class="party-vasen-stages">${stagesHtml}</div>` : ''}
                     ${runesHtml ? `<div class="party-vasen-runes">${runesHtml}</div>` : ''}
                 </div>
             `;

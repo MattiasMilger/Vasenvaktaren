@@ -297,15 +297,41 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
 // lowered ones red with ▼N (N = number of stages), so stage changes are read
 // directly on the stat instead of in a separate line.
 UIController.prototype.renderCombatAttrHTML = function(vasen, attr) {
-    const stage = vasen.attributeStages[attr] || 0;
-    const stateClass = stage > 0 ? ' attr-raised' : stage < 0 ? ' attr-lowered' : '';
-    const stageHtml = stage !== 0
-        ? `<span class="combat-attr-stage">${stage > 0 ? '▲' : '▼'}${Math.abs(stage)}</span>`
-        : '';
-    return `<div class="combat-attr${stateClass}">
+    const staged = this.getStagedAttrParts(vasen, attr);
+    return `<div class="combat-attr${staged.stateClass}"${staged.clickAttrs}>
         <span class="combat-attr-name">${attr.substring(0, 3).toUpperCase()}</span>
-        <span class="combat-attr-value">${vasen.getAttribute(attr)}${stageHtml}</span>
+        <span class="combat-attr-value">${staged.valueHtml}</span>
     </div>`;
+};
+
+// Shared by the combat cards and the Active Party cards: the attribute value
+// plus its stage marker (▲N / ▼N) and state class. Every stat is clickable
+// (clickAttrs) and opens a popup explaining the attribute; a staged one also
+// shows its base, unstaged value there.
+// Pass clickable = false where the whole card is a button (swap modals).
+UIController.prototype.getStagedAttrParts = function(vasen, attr, clickable = true) {
+    const stage = vasen.attributeStages[attr] || 0;
+    const current = vasen.getAttribute(attr);
+    if (stage === 0) {
+        return {
+            stateClass: clickable ? ' stat-clickable' : '',
+            clickAttrs: clickable ? statPopupAttrs(attr) : '',
+            valueHtml: `${current}`
+        };
+    }
+    // At the stage cap the marker reads ▲MAX / ▼MAX instead of the number,
+    // since further raises / lowers of this attribute have no effect.
+    const capped = stage >= GAME_CONFIG.MAX_ATTRIBUTE_STAGE || stage <= GAME_CONFIG.MIN_ATTRIBUTE_STAGE;
+    const clickAttrs = clickable
+        ? statPopupAttrs(attr, vasen.calculateAttribute(attr), capped ? (stage > 0 ? 'raised' : 'lowered') : undefined)
+        : '';
+    return {
+        stateClass: (stage > 0 ? ' attr-raised' : ' attr-lowered')
+            + (capped ? ' attr-capped' : '')
+            + (clickable ? ' stat-clickable' : ''),
+        clickAttrs,
+        valueHtml: `${current}<span class="combat-attr-stage">${stage > 0 ? '▲' : '▼'}${capped ? 'MAX' : Math.abs(stage)}</span>`
+    };
 };
 
 UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatInfo = false) {
@@ -313,22 +339,17 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
         // Runes + active bindrune as clickable words (popup shows what they do)
         const runesHtml = this.getRunesTextHTML(vasen);
 
-        // Build attribute stages HTML (only for combat info)
-        let stagesHtml = '';
-        if (showCombatInfo) {
-            STAGEABLE_ATTRIBUTES.forEach(attr => {
-                const stage = vasen.attributeStages[attr];
-                if (stage !== 0) {
-                    const stageClass = stage > 0 ? 'positive' : 'negative';
-                    const stageText = stage > 0 ? `+${stage}` : stage;
-                    stagesHtml += `<span class="mini-stage ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
-                }
-            });
-        }
-
-        // For combat displays, use getAttribute (includes stages)
-        // For non-combat displays, use calculateAttribute (base + runes only)
-        const getAttrValue = (attr) => showCombatInfo ? vasen.getAttribute(attr) : vasen.calculateAttribute(attr);
+        // Combat displays show staged values with ▲N / ▼N on the stat (same as
+        // the combat and Active Party cards); non-combat displays show
+        // calculateAttribute (base + runes only).
+        const attrsHtml = STAGEABLE_ATTRIBUTES.map(attr => {
+            const label = `<span class="attr-label">${attr.substring(0, 3).toUpperCase()}</span>`;
+            if (!showCombatInfo) {
+                return `<span class="mini-attr">${label} ${vasen.calculateAttribute(attr)}</span>`;
+            }
+            const staged = this.getStagedAttrParts(vasen, attr, false);
+            return `<span class="mini-attr${staged.stateClass}">${label} <span class="mini-attr-value">${staged.valueHtml}</span></span>`;
+        }).join('');
 
         return `
             <div class="standard-vasen-img-container holo-${vasen.species.rarity.toLowerCase()}">
@@ -355,12 +376,8 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
                     </div>
                 </div>
                 <div class="standard-vasen-attributes">
-                    <span class="mini-attr"><span class="attr-label">STR</span> ${getAttrValue('strength')}</span>
-                    <span class="mini-attr"><span class="attr-label">WIS</span> ${getAttrValue('wisdom')}</span>
-                    <span class="mini-attr"><span class="attr-label">DEF</span> ${getAttrValue('defense')}</span>
-                    <span class="mini-attr"><span class="attr-label">DUR</span> ${getAttrValue('durability')}</span>
+                    ${attrsHtml}
                 </div>
-                ${stagesHtml ? `<div class="standard-vasen-stages">${stagesHtml}</div>` : ''}
                 ${runesHtml ? `<div class="standard-vasen-runes">${runesHtml}</div>` : ''}
             </div>
         `;

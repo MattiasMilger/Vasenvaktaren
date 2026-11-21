@@ -67,13 +67,6 @@
     font-size: var(--font-size-sm);
 }
 
-.standard-vasen-stages {
-    display: flex;
-    gap: var(--spacing-xs);
-    flex-wrap: wrap;
-    font-size: var(--font-size-xs);
-}
-
 .standard-vasen-runes {
     display: flex;
     gap: 2px 6px;
@@ -132,11 +125,6 @@
 .knockout-swap-btn .standard-vasen-attributes,
 .add-vasen-btn .standard-vasen-attributes,
 .swap-party-card .standard-vasen-attributes,
-.ally-select-btn .standard-vasen-stages,
-.swap-modal-btn .standard-vasen-stages,
-.knockout-swap-btn .standard-vasen-stages,
-.add-vasen-btn .standard-vasen-stages,
-.swap-party-card .standard-vasen-stages,
 .ally-select-btn .standard-vasen-runes,
 .swap-modal-btn .standard-vasen-runes,
 .knockout-swap-btn .standard-vasen-runes,

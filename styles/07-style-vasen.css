@@ -315,6 +315,61 @@
     color: var(--text-muted);
 }
 
+/* Staged attributes on party / swap cards, matching the combat card:
+   green ▲N raised, red ▼N lowered (marker span is .combat-attr-stage) */
+.mini-attr.attr-raised .mini-attr-value,
+.mini-attr.attr-raised .attr-label {
+    color: var(--color-positive-soft);
+}
+
+.mini-attr.attr-raised .mini-attr-value {
+    text-shadow: 0 0 4px var(--buff-glow-color);
+}
+
+.mini-attr.attr-lowered .mini-attr-value,
+.mini-attr.attr-lowered .attr-label {
+    color: var(--accent-danger);
+}
+
+.mini-attr.attr-lowered .mini-attr-value {
+    text-shadow: 0 0 4px var(--damage-glow-color);
+}
+
+/* Stage cap reached (marker reads ▲MAX / ▼MAX): stronger glow on the value.
+   Applies to both the combat card (.combat-attr) and party cards (.mini-attr). */
+.attr-capped .combat-attr-stage {
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.attr-raised.attr-capped:is(.combat-attr, .mini-attr) :is(.combat-attr-value, .mini-attr-value) {
+    text-shadow: 0 0 6px var(--buff-glow-color), 0 0 10px var(--buff-glow-color);
+}
+
+.attr-lowered.attr-capped:is(.combat-attr, .mini-attr) :is(.combat-attr-value, .mini-attr-value) {
+    text-shadow: 0 0 6px var(--damage-glow-color), 0 0 10px var(--damage-glow-color);
+}
+
+.stat-popup-capped {
+    margin-top: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Attributes (party, combat and details cards) open a popup explaining the
+   attribute on click (toggleStatPopup). Raised / lowered ones also show their
+   base value there, marked by a dotted underline. */
+.stat-clickable {
+    cursor: pointer;
+}
+
+.stat-clickable:is(.attr-raised, .attr-lowered) .mini-attr-value,
+.stat-clickable:is(.attr-raised, .attr-lowered) .combat-attr-value {
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+}
+
 /* =============================================================================
    16. VASEN DETAILS PANEL
    ============================================================================= */

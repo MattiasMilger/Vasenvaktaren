@@ -613,19 +613,19 @@ UIController.prototype.renderVasenDetails = function(vasen) {
         <div class="details-attributes">
             <h4>Attributes</h4>
             <div class="attribute-grid">
-                <div class="attribute-item">
+                <div class="attribute-item stat-clickable"${statPopupAttrs('strength')}>
                     <span class="attr-name">Strength</span>
                     <span class="attr-value">${vasen.calculateAttribute('strength')}</span>
                 </div>
-                <div class="attribute-item">
+                <div class="attribute-item stat-clickable"${statPopupAttrs('wisdom')}>
                     <span class="attr-name">Wisdom</span>
                     <span class="attr-value">${vasen.calculateAttribute('wisdom')}</span>
                 </div>
-                <div class="attribute-item">
+                <div class="attribute-item stat-clickable"${statPopupAttrs('defense')}>
                     <span class="attr-name">Defense</span>
                     <span class="attr-value">${vasen.calculateAttribute('defense')}</span>
                 </div>
-                <div class="attribute-item">
+                <div class="attribute-item stat-clickable"${statPopupAttrs('durability')}>
                     <span class="attr-name">Durability</span>
                     <span class="attr-value">${vasen.calculateAttribute('durability')}</span>
                 </div>

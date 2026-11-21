@@ -164,7 +164,7 @@ class Game {
                 if (ui.isBeginnerTutorialEnabled()) {
                     ui.showDialogue(
                         'Into the Wilds',
-                        ui.getTutorialTipHTML('Press <strong>Explore</strong> to search for väsen to tame.'),
+                        ui.getTutorialTipHTML('To start your journey - Press <strong>Explore</strong> to search for väsen to tame.'),
                         [{ text: 'Got it', callback: null }],
                         true,
                         null,

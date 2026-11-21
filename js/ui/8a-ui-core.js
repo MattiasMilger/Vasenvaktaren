@@ -697,6 +697,44 @@ UIController.prototype.linkifyKeywords = function(text) {
         .replace(/\bEmpowers\b/g, `<span class="clickable-keyword" onclick="toggleKeywordPopup(this, event, 'empower')">Empowers</span>`);
 };
 
+// What each attribute does. Same text as the Attributes section of the
+// Game Guide (index.html); keep the two in sync.
+const ATTRIBUTE_DESCRIPTIONS = {
+    strength: 'Increases damage with strength attacks.',
+    wisdom: 'Increases damage with wisdom attacks.',
+    defense: 'Reduces damage taken from strength attacks.',
+    durability: 'Reduces damage taken from wisdom attacks.'
+};
+
+// Clicked attribute (combat cards, Active Party cards, väsen details panel):
+// shows what the attribute does. When the stat is raised / lowered in combat,
+// the stat also carries data-original and the popup adds its base value
+// (base + runes, without combat stages). See getStagedAttrParts.
+function toggleStatPopup(element, event) {
+    toggleBodyPopup(element, event, () => {
+        const d = element.dataset;
+        const name = capitalize(d.attr);
+        let html = `<p><strong>${name}</strong><br>${ATTRIBUTE_DESCRIPTIONS[d.attr] || ''}</p>`;
+        if (d.original !== undefined) {
+            html += `<hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">`
+                  + `<p>Base ${name}: <strong>${d.original}</strong></p>`;
+            if (d.capped) {
+                html += `<p class="stat-popup-capped">Can't be ${d.capped} further.</p>`;
+            }
+        }
+        return html;
+    }, 240);
+}
+
+// onclick + data attributes that make an attribute open toggleStatPopup.
+// Pass the base value only for a raised / lowered stat, and capped
+// ('raised' / 'lowered') only when that stat is at its stage cap.
+function statPopupAttrs(attr, baseValue, capped) {
+    return ` onclick="toggleStatPopup(this, event)" data-attr="${attr}"`
+        + (baseValue !== undefined ? ` data-original="${baseValue}"` : '')
+        + (capped ? ` data-capped="${capped}"` : '');
+}
+
 // Element / rarity / family badges on väsen inventory cards. The cards lift on hover
 // (CSS transform), which would trap a fixed-position popup inside them, so these
 // use the same body-level popup as temperaments.
@@ -723,7 +761,7 @@ function toggleCardBadgePopup(element, event, kind) {
 // runs for clicks whose own handlers stop propagation), and on scroll/resize since
 // the popup is positioned in viewport coordinates.
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .lore-chip, .temperament-popup')) return;
+    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .lore-chip, .stat-clickable, .temperament-popup')) return;
     closeTemperamentPopup();
 }, true);
 window.addEventListener('scroll', (e) => {

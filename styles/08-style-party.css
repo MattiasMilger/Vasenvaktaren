@@ -194,22 +194,6 @@
     flex-wrap: wrap;
 }
 
-.party-vasen-stages {
-    font-size: var(--font-size-xs);
-}
-
-.mini-stage {
-    margin-right: 2px;
-}
-
-.mini-stage.positive {
-    color: var(--accent-primary);
-}
-
-.mini-stage.negative {
-    color: var(--accent-danger);
-}
-
 .party-vasen-runes {
     display: flex;
     flex-wrap: wrap;
