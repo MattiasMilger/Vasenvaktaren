@@ -249,11 +249,22 @@ const GAME_CONFIG = {
     AI_WILD_VARIANCE: 20,                // High variance for wild combats (more random)
     
     // --- Swap Scoring ---
-    AI_SWAP_BASE_SCORE: 5,               // Base score for swapping
-    AI_SWAP_LOW_HEALTH_THRESHOLD: 0.3,   // Health fraction below which the low-health swap bonus is applied
-    AI_SWAP_LOW_HEALTH_BONUS: 30,        // Bonus for swapping when low on health
-    AI_SWAP_ELEMENT_ADVANTAGE_BONUS: 20, // Bonus for swapping to better matchup
-    AI_SWAP_VARIANCE: 10                 // Random variance for swap decisions
+    // Swaps are judged by "fight value": the share of the opponent's remaining
+    // health a Väsen is expected to deal before it falls. A swap is only made
+    // when the bench option is clearly better than the active one.
+    AI_SWAP_BASE_SCORE: 40,              // Score of a swap that just clears the value margin
+    AI_SWAP_VALUE_MARGIN: 1.6,           // Bench fight value must be at least this many times the active one's
+    AI_SWAP_IMPROVEMENT_WEIGHT: 50,      // Extra score per unit of value ratio above 1
+    AI_SWAP_MAX_SCORE: 100,              // Cap so a knockout attack still beats any swap
+    AI_SWAP_MIN_TURNS_ON_FIELD: 2,       // A Väsen must stay this many turns before swapping out (no ping-pong)
+    AI_SWAP_MIN_HEALTH_TO_RETREAT: 0.35, // Below this health fraction the active Väsen fights to the end
+    AI_SWAP_MIN_TARGET_HEALTH: 0.4,      // Never swap in a Väsen below this health fraction
+    AI_SWAP_VARIANCE: 10,                // Random variance for swap decisions
+
+    // Damage scaling: more damage relative to the target's remaining health scores higher
+    AI_DAMAGE_SCORE_WEIGHT: 40,          // Score for an attack that would deal the target's full remaining health
+    AI_DESPERATION_HEALTH: 0.35,         // Below this health fraction, prefer the hardest hit and ignore Megin thrift
+    AI_DESPERATION_DAMAGE_WEIGHT: 30     // Extra damage-scaled score while desperate
 };
 
 // Family Passive Configuration

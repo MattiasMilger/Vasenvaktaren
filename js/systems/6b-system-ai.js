@@ -134,6 +134,16 @@ class EnemyAI {
             } else if (predictedDamage >= this.target.maxHealth * GAME_CONFIG.AI_HIGH_DAMAGE_THRESHOLD) {
                 score += GAME_CONFIG.AI_HIGH_DAMAGE_BONUS; // High damage bonus
             }
+
+            // Scale with damage relative to the target's remaining health, so
+            // harder hits win over weaker ones even below the thresholds above.
+            const damageShare = Math.min(1, predictedDamage / Math.max(1, this.target.currentHealth));
+            score += damageShare * GAME_CONFIG.AI_DAMAGE_SCORE_WEIGHT;
+
+            // Last stand: a badly hurt Väsen goes all-in on its hardest hit.
+            if (this.isDesperate()) {
+                score += damageShare * GAME_CONFIG.AI_DESPERATION_DAMAGE_WEIGHT;
+            }
             
             // Empowerment strategy: 
             // If not empowered and skill grants empowerment, give bonus for setting up
@@ -228,16 +238,19 @@ class EnemyAI {
             }
         }
         
-        // Megin penalty
+        // Megin penalty (ignored in a last stand: saving Megin is pointless then)
         const meginCost = this.vasen.getEffectiveSkillMeginCost(skillName);
-        if (meginCost > this.vasen.currentMegin * GAME_CONFIG.AI_MEGIN_PENALTY_THRESHOLD) {
+        if (!this.isDesperate() && meginCost > this.vasen.currentMegin * GAME_CONFIG.AI_MEGIN_PENALTY_THRESHOLD) {
             score += GAME_CONFIG.AI_MEGIN_PENALTY;
         }
-        
-        // Risk penalty
-        const threatLevel = this.assessThreat();
-        if (threatLevel > GAME_CONFIG.AI_RISK_PENALTY_THRESHOLD) {
-            score += GAME_CONFIG.AI_RISK_PENALTY;
+
+        // Risk penalty: only discourages slow utility set-ups when under threat;
+        // attacks are never penalised for being in danger.
+        if (skill.type === ATTACK_TYPES.UTILITY) {
+            const threatLevel = this.assessThreat();
+            if (threatLevel > GAME_CONFIG.AI_RISK_PENALTY_THRESHOLD) {
+                score += GAME_CONFIG.AI_RISK_PENALTY;
+            }
         }
         
         // Variance
@@ -247,54 +260,86 @@ class EnemyAI {
         return score;
     }
     
+    // Swapping costs the turn, and the opponent's attack usually lands before
+    // the swap does. So a swap is only worth it when the bench Väsen is clearly
+    // a better fight than the active one, never just because the active one is low.
     scoreSwap(target) {
-        let score = GAME_CONFIG.AI_SWAP_BASE_SCORE;
-        
-        // Low health bonus
-        if (this.vasen.currentHealth < this.vasen.maxHealth * GAME_CONFIG.AI_SWAP_LOW_HEALTH_THRESHOLD) {
-            score += GAME_CONFIG.AI_SWAP_LOW_HEALTH_BONUS;
-        }
-        
-        // Type advantage
-        const currentMatchup = getMatchupType(this.target.species.element, this.vasen.species.element);
-        const newMatchup = getMatchupType(this.target.species.element, target.species.element);
-        
-        if (currentMatchup === 'POTENT' && newMatchup !== 'POTENT') {
-            score += GAME_CONFIG.AI_SWAP_ELEMENT_ADVANTAGE_BONUS;
-        }
-        
+        const NO_SWAP = -999;
+
+        // Fresh arrivals stay put for a while; this stops back-and-forth swapping.
+        if (this.vasen.combatFlags.turnsOnField < GAME_CONFIG.AI_SWAP_MIN_TURNS_ON_FIELD) return NO_SWAP;
+
+        // A badly hurt Väsen has little left to preserve; it makes its last stand.
+        if (this.vasen.currentHealth < this.vasen.maxHealth * GAME_CONFIG.AI_SWAP_MIN_HEALTH_TO_RETREAT) return NO_SWAP;
+
+        // Never throw a hurt bench Väsen into the fight.
+        if (target.currentHealth < target.maxHealth * GAME_CONFIG.AI_SWAP_MIN_TARGET_HEALTH) return NO_SWAP;
+
+        // If the active Väsen can knock the opponent out right now, just do it.
+        if (this.bestDamage(this.vasen, this.target) >= this.target.currentHealth) return NO_SWAP;
+
+        const currentValue = this.fightValue(this.vasen);
+        const targetValue = this.fightValue(target);
+        if (currentValue >= 1) return NO_SWAP; // already expected to win this duel
+        if (targetValue < currentValue * GAME_CONFIG.AI_SWAP_VALUE_MARGIN) return NO_SWAP;
+
+        const ratio = currentValue > 0 ? targetValue / currentValue : GAME_CONFIG.AI_SWAP_VALUE_MARGIN * 2;
+        let score = GAME_CONFIG.AI_SWAP_BASE_SCORE + (ratio - 1) * GAME_CONFIG.AI_SWAP_IMPROVEMENT_WEIGHT;
+        score = Math.min(score, GAME_CONFIG.AI_SWAP_MAX_SCORE);
+
         // Variance
         score += (Math.random() * GAME_CONFIG.AI_SWAP_VARIANCE) - (GAME_CONFIG.AI_SWAP_VARIANCE / 2);
-        
+
         return score;
     }
-    
-    predictDamage(skillName) {
+
+    // Expected share of the opponent's remaining health this Väsen deals
+    // before it is knocked out (best hit out x hits it can take).
+    fightValue(vasen) {
+        const damageOut = this.bestDamage(vasen, this.target);
+        const damageIn = Math.max(1, this.bestDamage(this.target, vasen));
+        const hitsSurvived = Math.ceil(vasen.currentHealth / damageIn);
+        return (damageOut * hitsSurvived) / Math.max(1, this.target.currentHealth);
+    }
+
+    // Highest predicted damage among the attacker's currently usable attacks.
+    bestDamage(attacker, defender) {
+        let best = 0;
+        attacker.getAvailableSkills().forEach(skillName => {
+            const skill = ABILITIES[skillName];
+            if (!skill || skill.type === ATTACK_TYPES.UTILITY) return;
+            if (!attacker.canUseSkill(skillName)) return;
+            best = Math.max(best, this.predictDamage(skillName, attacker, defender));
+        });
+        return best;
+    }
+
+    predictDamage(skillName, attacker = this.vasen, defender = this.target) {
         const skill = ABILITIES[skillName];
         if (skill.type === ATTACK_TYPES.UTILITY) return 0;
-        
+
         // Simplified damage prediction
-        const skillElement = getSkillElement(skillName, this.vasen.species.element);
-        const matchup = getMatchupType(skillElement, this.target.species.element);
+        const skillElement = getSkillElement(skillName, attacker.species.element);
+        const matchup = getMatchupType(skillElement, defender.species.element);
         let elementMod = DAMAGE_MULTIPLIERS[matchup];
-        
+
         // Account for empowerment boost
-        if (this.vasen.combatFlags.isEmpowered) {
+        if (attacker.combatFlags.isEmpowered) {
             elementMod *= (1 + GAME_CONFIG.TIER1_ATTACK_ABILITY_EMPOWERMENT);
         }
-        
+
         // Giantsbane: effective power is derived from target's current HP, not skill.power
         let power;
         if (skill.giantsbaneBonus) {
-            power = skill.power + Math.floor(this.target.currentHealth * skill.target_hp_bonus_percent);
+            power = skill.power + Math.floor(defender.currentHealth * skill.target_hp_bonus_percent);
         } else {
             power = skill.power;
         }
 
-        const attackStat = skill.type === ATTACK_TYPES.WISDOM ? 
-            this.vasen.getAttribute('wisdom') : this.vasen.getAttribute('strength');
+        const attackStat = skill.type === ATTACK_TYPES.WISDOM ?
+            attacker.getAttribute('wisdom') : attacker.getAttribute('strength');
         const defenseStatName = skill.type === ATTACK_TYPES.WISDOM ? 'durability' : 'defense';
-        const defenseStat = this.target.getAttribute(defenseStatName);
+        const defenseStat = defender.getAttribute(defenseStatName);
         
         const powerFactor = power / GAME_CONFIG.POWER_CONSTANT;
         const defenseReduction = 1 - (defenseStat / (defenseStat + GAME_CONFIG.DEFENSE_CONSTANT));
@@ -374,6 +419,10 @@ class EnemyAI {
             }
         }
         return best;
+    }
+
+    isDesperate() {
+        return this.vasen.currentHealth < this.vasen.maxHealth * GAME_CONFIG.AI_DESPERATION_HEALTH;
     }
 
     assessThreat() {

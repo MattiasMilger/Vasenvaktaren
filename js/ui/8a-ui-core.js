@@ -139,6 +139,7 @@ class UIController {
         this.vasenSortBy = savedVasenSortBy !== null ? savedVasenSortBy : 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
         const savedUnlockAllInfo = localStorage.getItem('unlockAllInfo');
         this.unlockAllInfoEnabled = savedUnlockAllInfo !== null ? savedUnlockAllInfo === 'true' : false;
+        this.beginnerTutorialDisabled = localStorage.getItem('disableBeginnerTutorial') === 'true'; // Off by default
     }
 
     // Initialize UI elements
@@ -225,6 +226,15 @@ if (unlockAllInfoToggle) {
     unlockAllInfoToggle.checked = this.unlockAllInfoEnabled;
     unlockAllInfoToggle.addEventListener('change', () => {
         this.toggleUnlockAllInfo(unlockAllInfoToggle.checked);
+    });
+}
+
+// Disable Beginner Tutorial toggle
+const disableTutorialToggle = document.getElementById('disable-tutorial-toggle');
+if (disableTutorialToggle) {
+    disableTutorialToggle.checked = this.beginnerTutorialDisabled;
+    disableTutorialToggle.addEventListener('change', () => {
+        this.toggleBeginnerTutorial(disableTutorialToggle.checked);
     });
 }
 
@@ -563,7 +573,7 @@ const KEYWORD_DEFINITIONS = {
     'initial-bonus': {
         title: 'Initial Bonus',
         get text() {
-            return 'The first time a side uses this skill in a combat, it changes attributes by this many extra stages.<br>Later uses only apply the normal effect.';
+            return 'The first use of this skill in each combat grants this many extra attribute stages.';
         }
     },
     'empower': {
@@ -640,6 +650,13 @@ UIController.prototype.getRunesTextHTML = function(vasen, separator = ' ') {
     });
     return parts.join(separator);
 };
+
+// Skill element tag on combat skill buttons: shows what the skill's element is
+// potent / neutral / weak against when attacking (body-level popup, like the
+// Initial Bonus and Empowers keywords on the same buttons).
+function toggleSkillElementPopup(element, event, skillElement) {
+    toggleBodyPopup(element, event, () => ui.generateAttackingMatchupsHTML(skillElement, false), 260);
+}
 
 UIController.prototype.getInitialBonusHTML = function(skill, className) {
     if (!skill.initialBonus) return '';

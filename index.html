@@ -619,17 +619,25 @@
     <div class="modal-content modal-settings">
         <h3 class="modal-title"><i data-ui-icon="settings" data-size="20"></i>Settings</h3>
 
-        <!-- Lore Book Settings -->
+        <!-- Gameplay toggles -->
         <div class="settings-section">
-            <h4>Lore Book</h4>
+            <label class="toggle-switch-row" for="disable-tutorial-toggle">
+                <span class="toggle-switch">
+                    <input type="checkbox" id="disable-tutorial-toggle">
+                    <span class="toggle-switch-slider"></span>
+                </span>
+                <span class="toggle-switch-label-text">Disable Beginner Tutorial</span>
+            </label>
+            <p class="settings-note">Hides new-player tips and glows.</p>
+
             <label class="toggle-switch-row" for="unlock-all-info-toggle">
                 <span class="toggle-switch">
                     <input type="checkbox" id="unlock-all-info-toggle">
                     <span class="toggle-switch-slider"></span>
                 </span>
-                <span class="toggle-switch-label-text">Unlock All Info</span>
+                <span class="toggle-switch-label-text">Lorebook Info Unlock</span>
             </label>
-            <p class="settings-note">Makes every "i" info button in the Lore Book show its full technical details without having to unlock them first.</p>
+            <p class="settings-note">Shows all Lore Book details.</p>
         </div>
 
         <!-- Save Management -->

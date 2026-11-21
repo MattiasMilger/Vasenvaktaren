@@ -94,7 +94,6 @@ modal.classList.add('active');
         <p><em>The old paths stir once more, and the väsen await one who can earn their trust.</em></p>
         ${vasenMessage}
         ${itemsMessage}
-        ${this.getTutorialTipHTML('Press <strong>Explore</strong> to search the wilds for väsen to tame.')}
     `,
     [
         {
@@ -314,7 +313,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
 
     // Show encounter result
     UIController.prototype.showEncounterResult = function(result) {
-        const tutorialActive = !gameState.firstExploreTutorialShown;
+        const tutorialActive = !gameState.firstExploreTutorialShown && this.isBeginnerTutorialEnabled();
         const nextClass = tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary';
 
         // Non-combat finds: confirm, or explore again straight away
@@ -327,7 +326,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
             case 'vasen': {
                 // New-player hint, shown until the first väsen has been tamed
                 let encounterTip = '';
-                if (!gameState.firstCombatTutorialShown) {
+                if (!gameState.firstCombatTutorialShown && this.isBeginnerTutorialEnabled()) {
                     const desiredItem = VASEN_SPECIES[result.vasen.speciesName]?.tamingItem;
                     encounterTip = desiredItem && gameState.itemInventory[desiredItem] > 0
                         ? this.getTutorialTipHTML('You may carry something this väsen desires. <strong>Interrogate</strong> it to find out.')

@@ -140,6 +140,13 @@ UIController.prototype.renderStarterSelection = function(starters, onSelect, onC
         // Assigned (not addEventListener) so re-rendering never stacks handlers.
         document.getElementById('starter-select-screen').onclick = (e) => {
             if (e.target.closest('.starter-card')) return;
+            // Clicks on or near the Confirm button are most likely a near-miss
+            // at Confirm; collapsing then would shift the button away, so keep
+            // the card expanded.
+            const btnRect = document.getElementById('confirm-starter-btn').getBoundingClientRect();
+            const NEAR_CONFIRM_MARGIN = 60;
+            if (e.clientX >= btnRect.left - NEAR_CONFIRM_MARGIN && e.clientX <= btnRect.right + NEAR_CONFIRM_MARGIN &&
+                e.clientY >= btnRect.top - NEAR_CONFIRM_MARGIN && e.clientY <= btnRect.bottom + NEAR_CONFIRM_MARGIN) return;
             document.querySelectorAll('.starter-card.expanded').forEach(c => c.classList.remove('expanded'));
         };
 

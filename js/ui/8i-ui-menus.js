@@ -11,6 +11,20 @@
         this.settingsModal.classList.remove('active');
     };
 
+    // Toggle the Disable Beginner Tutorial setting (persisted via localStorage).
+    // Only affects the new-player guidance (tips, tutorial glows, the free
+    // interrogation turn and guidance popups); action-driven glows such as Offer
+    // Item after interrogating are unaffected. Off by default.
+    UIController.prototype.toggleBeginnerTutorial = function(disabled) {
+        this.beginnerTutorialDisabled = disabled;
+        localStorage.setItem('disableBeginnerTutorial', disabled ? 'true' : 'false');
+        this.updateExploreButton();
+    };
+
+    UIController.prototype.isBeginnerTutorialEnabled = function() {
+        return !this.beginnerTutorialDisabled;
+    };
+
     // Toggle the Lore Book Unlock All Info setting (persisted via localStorage,
     // like the other UI display toggles). When on, every "i" info popup in the
     // Lore Book shows its full details without having to be discovered in-game

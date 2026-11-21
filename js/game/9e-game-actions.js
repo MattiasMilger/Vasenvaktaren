@@ -44,7 +44,7 @@ Game.prototype.handleSwap = function(targetIndex) {
 // Outside the tutorial, interrogating still makes the Offer Item button glow
 // for the rest of that combat if the player owns the desired item.
 Game.prototype.isCombatTutorialActive = function(combat = this.currentCombat) {
-    return !!combat && !gameState.firstCombatTutorialShown &&
+    return !!combat && !gameState.firstCombatTutorialShown && ui.isBeginnerTutorialEnabled() &&
         combat.isWildEncounter && combat.canTame && !combat.isEndlessTower;
 };
 
@@ -188,7 +188,7 @@ Game.prototype.handleAutoBattle = function() {
 
     ui.showDialogue(
         'Auto Battle',
-        '<p>Let the AI fight for you? The combat will play out automatically using the same AI as the enemy.</p>',
+        '<p>Let your väsen fight on their own? They will act on their own instincts, choosing their moves as cunningly as your foes do.</p>',
         [
             {
                 text: `${uiIcon('swords')}Start Auto Battle`,

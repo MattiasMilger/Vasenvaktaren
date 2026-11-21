@@ -158,6 +158,19 @@ class Game {
                 }
 
                 game.showGameScreen();
+
+                // First pointer, shown once the game screen (and the glowing
+                // Explore button) is actually visible
+                if (ui.isBeginnerTutorialEnabled()) {
+                    ui.showDialogue(
+                        'Into the Wilds',
+                        ui.getTutorialTipHTML('Press <strong>Explore</strong> to search for väsen to tame.'),
+                        [{ text: 'Got it', callback: null }],
+                        true,
+                        null,
+                        'compass'
+                    );
+                }
             }
         );
     }
@@ -272,21 +285,39 @@ class Game {
         // Show the first-tame guidance popup once, right after returning to
         // exploration (i.e. once the Victory dialogue's Continue button has
         // been clicked), mirroring the explore popups (title + confirm button).
+        if (this.pendingGuardianHint) {
+            this.pendingGuardianHint = false;
+            const guardian = ZONES[gameState.currentZone]?.guardian;
+            if (guardian && ui.isBeginnerTutorialEnabled() && gameState.defeatedGuardians.size === 0) {
+                const guardianLevel = guardian.team[0].level;
+                ui.showDialogue(
+                    'A Full Party',
+                    `<p>Three väsen now walk beside you. The forest feels a little less hostile.</p>
+                     ${ui.getTutorialTipHTML(`Keep exploring until all of your väsen are <strong>Lvl ${guardianLevel}</strong> or higher, then press <strong>Challenge Guardian</strong> to face this land's guardian and open the way onward.`)}
+                     <div class="tutorial-complete">
+                         <div class="tutorial-complete-label">Tutorial complete</div>
+                         <p>From here on, the path is yours. Trust your wits, Väktare.</p>
+                     </div>`,
+                    [{ text: `${uiIcon('compass')}Onward`, callback: null }],
+                    false
+                );
+            }
+        }
+
         if (this.pendingFirstTameMessage) {
             this.pendingFirstTameMessage = false;
-            ui.showDialogue(
-                'First Tame!',
-                `<p>Well done! You've tamed your first väsen.</p>
-                 <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read descriptions carefully to figure out what they desire.
-                 <br>Then use the <strong>Offer Item</strong> button and defeat them.</p>
-                 <p>You can find more tips in the <strong>Game Guide</strong>.</p>
-                 <div class="tutorial-complete">
-                     <div class="tutorial-complete-label">Tutorial complete</div>
-                     <p>From here on, the path is yours. The old ways will no longer light up to guide you, so trust your wits, Väktare.</p>
-                 </div>`,
-                [{ text: `${uiIcon('compass')}Onward`, callback: null }],
-                false
-            );
+            if (ui.isBeginnerTutorialEnabled()) {
+                ui.showDialogue(
+                    'First Tame!',
+                    `<p>Well done! You've tamed your first väsen.</p>
+                     <p>To tame more, try to <strong>interrogate</strong> wild väsen in combat, or read descriptions carefully to figure out what they desire.
+                     <br>Then use the <strong>Offer Item</strong> button and defeat them.</p>
+                     <p>You can find more tips in the <strong>Game Guide</strong>.</p>
+                     ${ui.getTutorialTipHTML('Tame more väsen to fill your party.')}`,
+                    [{ text: `${uiIcon('compass')}Onward`, callback: null }],
+                    false
+                );
+            }
         }
     }
 

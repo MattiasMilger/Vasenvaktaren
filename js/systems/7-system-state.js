@@ -91,6 +91,7 @@ class GameState {
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
         this.firstTameMessageShown = false;
+        this.guardianHintShown = false;
         
         this.endlessTowerRecord = createDefaultEndlessTowerRecord();
 
@@ -970,6 +971,7 @@ class GameState {
             firstCombatTutorialShown: this.firstCombatTutorialShown,
             firstExploreTutorialShown: this.firstExploreTutorialShown,
             firstTameMessageShown: this.firstTameMessageShown,
+            guardianHintShown: this.guardianHintShown,
             settings: this.settings,
             endlessTowerRecord: this.endlessTowerRecord,
             // Pity counters for exploration anti-grief system
@@ -1045,6 +1047,7 @@ class GameState {
             this.firstCombatTutorialShown = data.firstCombatTutorialShown || false;
             this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
             this.firstTameMessageShown = data.firstTameMessageShown || false;
+            this.guardianHintShown = data.guardianHintShown || false;
             
             this.endlessTowerRecord = data.endlessTowerRecord || createDefaultEndlessTowerRecord();
             
@@ -1159,6 +1162,7 @@ class GameState {
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
         this.firstTameMessageShown = false;
+        this.guardianHintShown = false;
         this.currentCombat = null;
         this.currentEncounter = null;
         this.inCombat = false;

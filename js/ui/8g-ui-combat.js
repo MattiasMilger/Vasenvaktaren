@@ -142,8 +142,9 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
     const runesHtml = this.getRunesTextHTML(vasen, '<span class="combatant-rune-sep">·</span>')
         || '<span class="no-rune">No runes</span>';
 
-    // Build attacking matchups for attack elements
-    const attackElements = vasen.getAttackElements();
+    // Build attacking matchups for attack elements (enemy card only: your own
+    // skills' element tags on the skill buttons already show their matchups)
+    const attackElements = side === 'enemy' ? vasen.getAttackElements() : [];
     const attackElementsHtml = attackElements.map(e => {
         return `
             <div class="element-matchup-collapsible inline-collapsible">
@@ -246,10 +247,11 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
             ${this.renderAttributeStages(vasen)}
         </div>
 
+        ${side === 'enemy' ? `
         <div class="combatant-attack-elements">
             <span class="elements-label">Attack Elements:</span>
             ${attackElementsHtml}
-        </div>
+        </div>` : ''}
         </div>
     `;
 
@@ -456,7 +458,7 @@ UIController.prototype.renderActionButtons = function(combat) {
             <span class="skill-btn-name">${skill.name}</span>
             <span class="skill-btn-type">${skillTypeIcon(skill)}${skill.type}</span>
             <span class="skill-btn-attributes">
-                <span class="skill-btn-element element-${skillElement.toLowerCase()}">${elementIcon(skillElement)}${skillElement}</span>
+                <span class="skill-btn-element element-${skillElement.toLowerCase()} card-badge-clickable" onclick="toggleSkillElementPopup(this, event, '${skillElement}')">${elementIcon(skillElement)}${skillElement}</span>
                 <span class="skill-btn-cost">Megin: ${meginCost}</span>
                 ${skill.healthCost ? `<span class="skill-btn-health-cost">Health: ${Math.round(skill.healthCost * 100)}%</span>` : ''}
                 ${skill.power ? `<span class="skill-btn-power">Power: ${getSkillPower(skillName, activeVasen.species.family)}</span>` : ''}

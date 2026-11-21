@@ -181,6 +181,17 @@ Game.prototype.handleCombatEnd = function(result) {
             this.pendingFirstTameMessage = true;
             gameState.saveGame();
         }
+
+        // One-time nudge towards the first guardian once the player owns
+        // exactly three väsen. Skipped for good if a guardian has already
+        // been defeated by then (the player clearly found the way already).
+        if (!gameState.guardianHintShown &&
+            gameState.vasenCollection.length === GAME_CONFIG.MAX_TEAM_SIZE &&
+            gameState.defeatedGuardians.size === 0) {
+            gameState.guardianHintShown = true;
+            this.pendingGuardianHint = true;
+            gameState.saveGame();
+        }
     }
 
     // Won without taming during the tutorial: remind how taming works
