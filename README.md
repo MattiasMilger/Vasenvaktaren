@@ -14,6 +14,10 @@ The live version is available at: https://mattiasmilger.github.io/Vasenvaktaren/
 
 Open `index.html` in a modern browser. No build tools or dependencies required.
 
+## Discussion
+
+Have thoughts on the game, balance ideas, or found a bug? Leave feedback and join the discussion on [GitHub Discussions](https://github.com/MattiasMilger/Vasenvaktaren/discussions/1).
+
 ## Game Features
 
 ### Väsen
