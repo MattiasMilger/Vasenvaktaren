@@ -94,12 +94,14 @@
 }
 
 .combatant-panel.player-side {
+    --side-color: var(--combat-player-border); /* portrait outlines */
     border-color: var(--combat-player-border);
     background: linear-gradient(135deg, var(--bg-card) 0%, var(--combat-player-overlay) 100%);
     box-shadow: var(--shadow-md), 0 0 20px var(--combat-player-glow-color);
 }
 
 .combatant-panel.enemy-side {
+    --side-color: var(--combat-enemy-border); /* portrait outlines */
     border-color: var(--combat-enemy-border);
     background: linear-gradient(135deg, var(--bg-card) 0%, var(--combat-enemy-overlay) 100%);
     box-shadow: var(--shadow-md), 0 0 20px var(--combat-enemy-glow-color);
@@ -150,6 +152,74 @@
 
 .combatant-image-container:hover .combatant-image {
     filter: brightness(1.1);
+}
+
+/* Main combat portrait: rounded frame in the side colour (blue player / red
+   enemy, --side-color from the panel). The aura behind it uses the element
+   colour (--aura-color, set inline from the species element). */
+.combatant-image {
+    border-radius: var(--border-radius);
+    border: 1px solid var(--side-color, var(--border-light));
+    box-shadow: 0 0 8px color-mix(in srgb, var(--side-color, transparent) 40%, transparent);
+}
+
+/* Element aura behind the portrait - breathes in step with the idle float
+   (combatantIdle, 3.5s) so the väsen feels alive */
+.combatant-image-container::before {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--aura-color, transparent) 45%, transparent) 0%, transparent 68%);
+    pointer-events: none;
+    animation: combatantAura 3.5s ease-in-out infinite;
+}
+
+/* Ground shadow under the portrait - shrinks and fades as the väsen floats up */
+.combatant-image-container::after {
+    content: '';
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: -9px;
+    height: 6px;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, var(--black-overlay-strong) 0%, transparent 70%);
+    pointer-events: none;
+    animation: combatantShadow 3.5s ease-in-out infinite;
+}
+
+@keyframes combatantAura {
+    0%, 100% { opacity: 0.6; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* Counter the parent's -3px float so the shadow stays on the ground */
+@keyframes combatantShadow {
+    0%, 100% { opacity: 1; transform: translateY(0) scaleX(1); }
+    50% { opacity: 0.6; transform: translateY(3px) scaleX(0.8); }
+}
+
+.combatant-image-container.knocked-out .combatant-image {
+    border-color: var(--border-color);
+    box-shadow: none;
+}
+
+.combatant-image-container.knocked-out::before {
+    display: none;
+}
+
+.combatant-image-container.knocked-out::after {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .combatant-image-container::before,
+    .combatant-image-container::after {
+        animation: none;
+    }
 }
 
 .combatant-untamed {
@@ -269,42 +339,123 @@
     font-size: var(--font-size-sm);
     color: var(--text-primary);
     font-weight: 600;
+    transition: color 0.2s;
 }
 
-/* Combatant Runes - one compact row of clickable rune words directly under
-   the stats. Effects are shown in a popup (toggleRunePopup), not inline. */
-.combatant-runes {
+/* Attribute stage changes shown on the stat itself: green ▲N raised, red ▼N lowered */
+.combat-attr-stage {
+    font-size: 0.7em;
+    margin-left: 2px;
+    vertical-align: 1px;
+}
+
+.combat-attr.attr-raised .combat-attr-value,
+.combat-attr.attr-raised .combat-attr-name {
+    color: var(--color-positive-soft);
+}
+
+.combat-attr.attr-raised .combat-attr-value {
+    text-shadow: 0 0 4px var(--buff-glow-color);
+}
+
+.combat-attr.attr-lowered .combat-attr-value,
+.combat-attr.attr-lowered .combat-attr-name {
+    color: var(--accent-danger);
+}
+
+.combat-attr.attr-lowered .combat-attr-value {
+    text-shadow: 0 0 4px var(--damage-glow-color);
+}
+
+/* Rune row: one compact line of clickable rune chips under the stats.
+   Rune effects open in a popup (toggleRunePopup / toggleBindRunePopup). The
+   Description chip (toggleVasenDescriptionPopup) lives in the header by the level. */
+.combatant-info-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 2px var(--spacing-xs);
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-}
-
-.combatant-rune-sep {
-    color: var(--text-muted);
-}
-
-.combatant-runes .no-rune {
-    color: var(--text-muted);
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
     font-size: var(--font-size-xs);
 }
 
-/* Väsen description - always visible (no toggle). Same box look the old
-   open collapsible had. */
-.combatant-description {
-    margin-top: var(--spacing-xs);
-    padding: var(--spacing-sm);
+.combatant-info-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.combatant-runes {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
+.combatant-runes .rune-keyword {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
     background: var(--bg-tertiary);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
     color: var(--text-primary);
-    line-height: 1.4;
-    text-align: center;
+    text-shadow: none;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.combatant-runes .rune-keyword {
+    border-color: color-mix(in srgb, var(--accent-gold) 55%, transparent);
+}
+
+.combatant-runes .rune-keyword:hover {
+    border-color: var(--accent-gold);
+    background: color-mix(in srgb, var(--accent-gold) 12%, var(--bg-tertiary));
+    text-shadow: none;
+}
+
+/* Inside a bindrune pill the rune chips become flat segments of one pill
+   (shared outer border from .bindrune-group, dividers between segments) */
+.combatant-runes .bindrune-group {
+    border-color: var(--accent-gold);
+    border-radius: 999px;
+    background: var(--bg-tertiary);
+}
+
+.combatant-runes .bindrune-group > .rune-keyword {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    padding: 2px 8px;
+    margin-left: 0;
+}
+
+.combatant-runes .bindrune-group > * + * {
+    border-left: 1px solid color-mix(in srgb, var(--accent-gold) 40%, transparent);
+}
+
+.combatant-runes .bindrune-group > .rune-keyword:hover {
+    background: color-mix(in srgb, var(--accent-gold) 12%, transparent);
+}
+
+.combatant-runes .bindrune-group > .rune-keyword.bindrune-keyword {
+    color: var(--accent-gold);
+    background: color-mix(in srgb, var(--accent-gold) 18%, transparent);
+}
+
+.combatant-runes .bindrune-group > .rune-keyword.bindrune-keyword:hover {
+    background: color-mix(in srgb, var(--accent-gold) 30%, transparent);
+}
+
+
+.combatant-runes .no-rune {
+    color: var(--text-muted);
+    font-style: italic;
 }
 
 .runes-toggle {
@@ -324,29 +475,6 @@
     font-weight: 700;
     display: inline-block;
     min-width: 14px;
-}
-
-/* Combatant Stages */
-.combatant-stages {
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-xs);
-}
-
-.stage-indicator {
-    display: inline-block;
-    margin-right: var(--spacing-xs);
-}
-
-.stage-indicator.positive {
-    color: var(--accent-primary);
-}
-
-.stage-indicator.negative {
-    color: var(--accent-danger);
-}
-
-.no-stages {
-    color: var(--text-muted);
 }
 
 /* Combatant Attack Elements */
@@ -505,9 +633,7 @@
 /* Minimized combatant panels - hide everything after HP/MP bars */
 .combatant-panel.minimized .combatant-info,
 .combatant-panel.minimized .combatant-attributes,
-.combatant-panel.minimized .combatant-description,
-.combatant-panel.minimized .combatant-runes,
-.combatant-panel.minimized .combatant-stages,
+.combatant-panel.minimized .combatant-info-row,
 .combatant-panel.minimized .combatant-attack-elements {
     display: none;
 }
@@ -1832,14 +1958,24 @@
 /* Portrait positioning */
 .party-portrait.left {
     order: 1;
-    border: none;
     margin-left: auto;
 }
 
 .party-portrait.right {
     order: 3;
-    border: none;
     margin-right: auto;
+}
+
+/* Side party portraits: thin rounded frame in the side colour (blue / red),
+   a bit dimmer than the main portrait's */
+.party-portrait.left,
+.party-portrait.right {
+    border: 1px solid color-mix(in srgb, var(--side-color, var(--border-light)) 60%, var(--border-color));
+}
+
+.party-portrait.knocked-out.left,
+.party-portrait.knocked-out.right {
+    border-color: var(--accent-danger);
 }
 
 /* =============================================================================

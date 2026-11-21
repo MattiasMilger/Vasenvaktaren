@@ -123,7 +123,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         const meginPercent = (member.currentMegin / member.maxMegin) * 100;
 
         return `
-            <div class="party-portrait ${position} ${member.isKnockedOut() ? 'knocked-out' : ''}">
+            <div class="party-portrait ${position} ${member.isKnockedOut() ? 'knocked-out' : ''}"
+                 style="--aura-color: var(--element-${member.species.element.toLowerCase()})">
                 <img src="${member.species.image}"
                      alt="${member.species.name}"
                      class="party-portrait-image">
@@ -139,8 +140,8 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
 
     // Runes + active bindrune as one compact row of clickable words under the
     // stats. Clicking a rune opens a popup with its effect (toggleRunePopup).
-    const runesHtml = this.getRunesTextHTML(vasen, '<span class="combatant-rune-sep">·</span>')
-        || '<span class="no-rune">No runes</span>';
+    const runesHtml = this.getRunesTextHTML(vasen, '')
+        || '<span class="no-rune">None</span>';
 
     // Build attacking matchups for attack elements (enemy card only: your own
     // skills' element tags on the skill buttons already show their matchups)
@@ -169,13 +170,14 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         <div class="combatant-header">
             ${untamedHtml}
             <h4 class="combatant-name">${this.getDisplayNameHTML(vasen)}</h4>
-            <span class="combatant-level"><span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span></span>
+            <span class="combatant-level"><span class="combatant-level-main">Lvl ${this.getLevelText(vasen.level)}</span>${this.getDescriptionChipHTML(vasen)}</span>
         </div>
 
         <div class="combatant-image-wrapper">
             ${createPartyPortraitHTML(partyPortraits.left, 'left')}
 
-            <div class="combatant-image-container ${vasen.isKnockedOut() ? '' : 'holo-' + vasen.species.rarity.toLowerCase()}">
+            <div class="combatant-image-container ${vasen.isKnockedOut() ? 'knocked-out' : 'holo-' + vasen.species.rarity.toLowerCase()}"
+                 style="--aura-color: var(--element-${vasen.species.element.toLowerCase()})">
                 <img src="${vasen.species.image}" alt="${vasen.species.name}"
                      class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
                 ${vasen.combatFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">' + inlineIcon('preparing') + 'Preparing</span>' : ''}
@@ -231,20 +233,12 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
         </div>
 
         <div class="combatant-attributes">
-            <div class="combat-attr"><span class="combat-attr-name">STR</span><span class="combat-attr-value">${vasen.getAttribute('strength')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">WIS</span><span class="combat-attr-value">${vasen.getAttribute('wisdom')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">DEF</span><span class="combat-attr-value">${vasen.getAttribute('defense')}</span></div>
-            <div class="combat-attr"><span class="combat-attr-name">DUR</span><span class="combat-attr-value">${vasen.getAttribute('durability')}</span></div>
+            ${STAGEABLE_ATTRIBUTES.map(attr => this.renderCombatAttrHTML(vasen, attr)).join('')}
         </div>
 
-        <div class="combatant-runes">
-            ${runesHtml}
-        </div>
-
-        <div class="combatant-description">${vasen.species.description}</div>
-
-        <div class="combatant-stages">
-            ${this.renderAttributeStages(vasen)}
+        <div class="combatant-info-row">
+            <span class="combatant-info-label">${(vasen.runes || []).length > 1 ? 'Runes' : 'Rune'}</span>
+            <span class="combatant-runes">${runesHtml}</span>
         </div>
 
         ${side === 'enemy' ? `
@@ -271,20 +265,19 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
     this.reapplyAnimations(side);
 };
 
-UIController.prototype.renderAttributeStages = function(vasen) {
-        const stages = vasen.attributeStages;
-        let html = '';
-
-        STAGEABLE_ATTRIBUTES.forEach(attr => {
-            const stage = stages[attr];
-            if (stage !== 0) {
-                const stageClass = stage > 0 ? 'positive' : 'negative';
-                const stageText = stage > 0 ? `+${stage}` : stage;
-                html += `<span class="stage-indicator ${stageClass}">${capitalize(attr).substring(0, 3)} ${stageText}</span>`;
-            }
-        });
-
-        return html || '<span class="no-stages">No attribute changes</span>';
+// One attribute cell on the combat card. Raised attributes show green with ▲N,
+// lowered ones red with ▼N (N = number of stages), so stage changes are read
+// directly on the stat instead of in a separate line.
+UIController.prototype.renderCombatAttrHTML = function(vasen, attr) {
+    const stage = vasen.attributeStages[attr] || 0;
+    const stateClass = stage > 0 ? ' attr-raised' : stage < 0 ? ' attr-lowered' : '';
+    const stageHtml = stage !== 0
+        ? `<span class="combat-attr-stage">${stage > 0 ? '▲' : '▼'}${Math.abs(stage)}</span>`
+        : '';
+    return `<div class="combat-attr${stateClass}">
+        <span class="combat-attr-name">${attr.substring(0, 3).toUpperCase()}</span>
+        <span class="combat-attr-value">${vasen.getAttribute(attr)}${stageHtml}</span>
+    </div>`;
 };
 
 UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatInfo = false) {

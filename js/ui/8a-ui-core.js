@@ -606,6 +606,30 @@ function toggleRunePopup(element, event, runeId) {
     }, 260);
 }
 
+// Escape text for use inside a double-quoted HTML attribute.
+function escapeAttr(text) {
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+// "Description" chip on combat cards: shows the species' lore text in a popup
+// instead of taking up space on the card. Text comes from the chip's data attributes.
+function toggleVasenDescriptionPopup(element, event) {
+    toggleBodyPopup(element, event, () => {
+        const desc = element.dataset.desc;
+        if (!desc) return '';
+        return `<p><strong>${escapeAttr(element.dataset.name)}</strong><br><span class="element-flavor-text">${escapeAttr(desc)}</span></p>`;
+    }, 280);
+}
+
+// "📖 Description" chip shown next to a väsen's level (combat cards, party slots).
+UIController.prototype.getDescriptionChipHTML = function(vasen) {
+    return `<span class="lore-chip" data-name="${escapeAttr(vasen.species.name)}" data-desc="${escapeAttr(vasen.species.description || '')}" onclick="toggleVasenDescriptionPopup(this, event)">${inlineIcon('book')}Description</span>`;
+};
+
 function toggleItemPopup(element, event, itemId) {
     toggleBodyPopup(element, event, () => {
         const item = TAMING_ITEMS[itemId];
@@ -637,18 +661,34 @@ function toggleBindRunePopup(element, event, runeA, runeB) {
     }, 260);
 }
 
-// HTML for a väsen's equipped runes (+ active bindrune) as clickable words.
+// HTML for a väsen's equipped runes (+ active bindrunes) as clickable words.
+// A bindrune is shown as one segmented pill: its two runes as segments, joined
+// to a gold end segment for the bindrune itself,
+//   ( ᚢ Uruz | ᚷ Gebo | ᚢᚷ Bindrune )
+// so it reads as the two runes bound together, not as a third rune.
+// Runes that are not part of a bindrune are listed first, on their own.
 UIController.prototype.getRunesTextHTML = function(vasen, separator = ' ') {
     if (!vasen || !vasen.runes || vasen.runes.length === 0) return '';
-    const parts = vasen.runes.map(id => {
+    const runeHTML = id => {
         const rune = RUNES[id];
         return rune ? `<span class="clickable-keyword rune-keyword" onclick="toggleRunePopup(this, event, '${id}')">${rune.symbol} ${rune.name}</span>` : '';
-    }).filter(Boolean);
-    getActiveBindRunes(vasen).forEach(br => {
+    };
+
+    const bindRunes = getActiveBindRunes(vasen);
+    const shown = new Set(); // a rune in two bindrunes (3 slots) gets its chip only once
+    const groups = bindRunes.map(br => {
         const ids = vasen.runes.filter(r => br.runes.includes(r));
-        parts.push(`<span class="clickable-keyword rune-keyword" onclick="toggleBindRunePopup(this, event, '${ids[0]}', '${ids[1]}')">${br.symbols} Bindrune</span>`);
+        const left = ids.map(id => {
+            if (shown.has(id)) return `<span class="bindrune-symbol">${RUNES[id].symbol}</span>`;
+            shown.add(id);
+            return runeHTML(id);
+        }).join('');
+        const bind = `<span class="clickable-keyword rune-keyword bindrune-keyword" onclick="toggleBindRunePopup(this, event, '${ids[0]}', '${ids[1]}')">${br.symbols} Bindrune</span>`;
+        return `<span class="bindrune-group">${left}${bind}</span>`;
     });
-    return parts.join(separator);
+
+    const loose = vasen.runes.filter(id => !shown.has(id)).map(runeHTML).filter(Boolean);
+    return [...loose, ...groups].join(separator);
 };
 
 // Skill element tag on combat skill buttons: shows what the skill's element is
@@ -697,7 +737,7 @@ function toggleCardBadgePopup(element, event, kind) {
 // runs for clicks whose own handlers stop propagation), and on scroll/resize since
 // the popup is positioned in viewport coordinates.
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .temperament-popup')) return;
+    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .lore-chip, .temperament-popup')) return;
     closeTemperamentPopup();
 }, true);
 window.addEventListener('scroll', (e) => {

@@ -673,12 +673,16 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     const maxSlots = vasen.getRuneSlotCount();
     let html = '';
 
+    // Runes that form an active bindrune get a gold border, matching the
+    // bindrune box under the slots, so the pair reads as bound together
+    const boundRunes = new Set(getActiveBindRunes(vasen).flatMap(br => br.runes));
+
     for (let i = 0; i < maxSlots; i++) {
         const runeId = vasen.runes[i];
         if (runeId && RUNES[runeId]) {
             const rune = RUNES[runeId];
             html += `
-                <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
+                <div class="rune-slot filled${boundRunes.has(runeId) ? ' bound' : ''}" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
                     <span class="rune-symbol">${rune.symbol}</span>
                     <span class="rune-name">${rune.name}</span>
                     <span class="rune-effect">${rune.effect}</span>
@@ -702,17 +706,19 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     return html;
 };
 
-// Render the active bind rune effect text (if any), shown below the rune
-// slot boxes rather than inside either individual slot. The label (symbols +
-// "Bindrune:") and the effect description are wrapped in separate spans so
-// they can be colored independently (label white, description grey), matching
-// the standard used for rune names/effects elsewhere in the UI.
+// Render the active bindrune(s) as a gold box below the rune slots (whose bound
+// runes get a matching gold border): bindrune symbols + name, the two runes it
+// is made of, and its effect.
 UIController.prototype.renderBindRuneEffectText = function(vasen) {
-    const activeBindRunes = getActiveBindRunes(vasen);
-    if (activeBindRunes.length === 0) return '';
-
-    const br = activeBindRunes[0];
-    return `<div class="rune-bind-effect"><span class="rune-bind-label">${br.symbols} Bindrune:</span> <span class="rune-bind-desc">${br.effectText}</span></div>`;
+    return getActiveBindRunes(vasen).map(br => `
+        <div class="rune-bind-effect">
+            <div class="rune-bind-header">
+                <span class="rune-bind-label">${br.symbols} Bindrune</span>
+                <span class="rune-bind-source">${br.runes.filter(id => RUNES[id]).map(id => RUNES[id].name).join(' + ')}</span>
+            </div>
+            <span class="rune-bind-desc">${br.effectText}</span>
+        </div>
+    `).join('');
 };
 
 // Render skills list (väsen details: flavor + mechanics)

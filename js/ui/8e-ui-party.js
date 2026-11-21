@@ -37,7 +37,7 @@ UIController.prototype.renderParty = function() {
 
                     <div class="party-vasen-info">
                         <span class="party-vasen-name">${this.getDisplayNameHTML(vasen)}</span>
-                        <span class="party-vasen-level">Lvl ${this.getLevelText(vasen.level)}</span>
+                        <span class="party-vasen-level">Lvl ${this.getLevelText(vasen.level)}${this.getDescriptionChipHTML(vasen)}</span>
 
                         <div class="party-vasen-tags">
                             <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
