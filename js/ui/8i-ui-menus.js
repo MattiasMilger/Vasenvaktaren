@@ -11,18 +11,22 @@
         this.settingsModal.classList.remove('active');
     };
 
-    // Toggle the Disable Beginner Tutorial setting (persisted via localStorage).
-    // Only affects the new-player guidance (tips, tutorial glows, the free
-    // interrogation turn and guidance popups); action-driven glows such as Offer
-    // Item after interrogating are unaffected. Off by default.
-    UIController.prototype.toggleBeginnerTutorial = function(disabled) {
-        this.beginnerTutorialDisabled = disabled;
+    // Toggle the Disable Tips setting (persisted via localStorage under the
+    // 'disableBeginnerTutorial' key, so the choice carries over from saves made
+    // when the setting was called Disable Beginner Tutorial).
+    // Hides the guidance: tip boxes in dialogues (new-player hints and reminders
+    // such as the turn cost of Interrogating), tutorial glows, the free
+    // interrogation turn and guidance popups. Confirmation dialogues still open;
+    // only their tip boxes are hidden. Action-driven glows such as Offer Item
+    // after interrogating are unaffected. Off by default.
+    UIController.prototype.toggleTips = function(disabled) {
+        this.tipsDisabled = disabled;
         localStorage.setItem('disableBeginnerTutorial', disabled ? 'true' : 'false');
         this.updateExploreButton();
     };
 
-    UIController.prototype.isBeginnerTutorialEnabled = function() {
-        return !this.beginnerTutorialDisabled;
+    UIController.prototype.areTipsEnabled = function() {
+        return !this.tipsDisabled;
     };
 
     // Toggle the Lore Book Unlock All Info setting (persisted via localStorage,

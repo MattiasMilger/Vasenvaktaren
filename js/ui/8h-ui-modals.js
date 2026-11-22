@@ -62,8 +62,9 @@ modal.classList.add('active');
 
 };
 
-    // Short new-player hint box for dialogues (styled by .tutorial-tip)
-    UIController.prototype.getTutorialTipHTML = function(text) {
+    // Short hint box for dialogues (styled by .tutorial-tip). Callers check
+    // areTipsEnabled() first, so tips stay hidden when Disable Tips is on.
+    UIController.prototype.getTipHTML = function(text) {
         return `<div class="tutorial-tip"><div class="tutorial-tip-title">Tip</div><p>${text}</p></div>`;
     };
 
@@ -194,7 +195,7 @@ modal.classList.add('active');
         const escaped = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         offerDesc = offerDesc.replace(new RegExp(escaped, 'i'), '<strong>$&</strong>');
 
-        // Highlight Confirm button only if this is the correct taming item during the first combat tutorial
+        // Highlight the Offer button only if this is the correct taming item during the first combat tutorial
         const enemySpecies = combat.enemyActive.speciesName;
         const correctItem = VASEN_SPECIES[enemySpecies]?.tamingItem;
         const isCorrectItem = itemId === correctItem;
@@ -206,8 +207,8 @@ modal.classList.add('active');
             <div class="offer-confirmation">
                 <p class="offer-item-description">${offerDesc}</p>
                 <div class="offer-confirmation-buttons">
+                    <button class="${confirmClass}" onclick="ui.confirmOfferItem('${itemId}')">${uiIcon('items')}Offer</button>
                     <button class="btn btn-secondary" onclick="ui.showOfferModal(game.currentCombat)">Cancel</button>
-                    <button class="${confirmClass}" onclick="ui.confirmOfferItem('${itemId}')">Confirm</button>
                 </div>
             </div>
         `;
@@ -313,7 +314,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
 
     // Show encounter result
     UIController.prototype.showEncounterResult = function(result) {
-        const tutorialActive = !gameState.firstExploreTutorialShown && this.isBeginnerTutorialEnabled();
+        const tutorialActive = !gameState.firstExploreTutorialShown && this.areTipsEnabled();
         const nextClass = tutorialActive ? 'btn-primary tutorial-blink' : 'btn-primary';
 
         // Non-combat finds: confirm, or explore again straight away
@@ -326,11 +327,11 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
             case 'vasen': {
                 // New-player hint, shown until the first väsen has been tamed
                 let encounterTip = '';
-                if (!gameState.firstCombatTutorialShown && this.isBeginnerTutorialEnabled()) {
+                if (!gameState.firstCombatTutorialShown && this.areTipsEnabled()) {
                     const desiredItem = VASEN_SPECIES[result.vasen.speciesName]?.tamingItem;
                     encounterTip = desiredItem && gameState.itemInventory[desiredItem] > 0
-                        ? this.getTutorialTipHTML('You may carry something this väsen desires. <strong>Interrogate</strong> it to find out.')
-                        : this.getTutorialTipHTML('You carry nothing this väsen desires. Defeat it to gain experience, and keep exploring to find more items.');
+                        ? this.getTipHTML('You may carry something this väsen desires. <strong>Interrogate</strong> it to find out.')
+                        : this.getTipHTML('You carry nothing this väsen desires. Defeat it to gain experience, and keep exploring to find more items.');
                 }
                 this.showDialogue(
                     'Wild Encounter!',
@@ -407,7 +408,7 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
             message = `<p>${result.message}</p>`;
         }
 
-        if (result.tip) message += this.getTutorialTipHTML(result.tip);
+        if (result.tip) message += this.getTipHTML(result.tip);
 
         this.showDialogue(result.victory ? 'Victory!' : 'Defeat', message, buttons, false, null, 'swords');
 

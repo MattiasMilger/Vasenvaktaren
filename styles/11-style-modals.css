@@ -1,1110 +1,940 @@
 /* =============================================================================
-   11-style-modals.css - Extracted Section
+   11-style-modals.css - Modals and Dialogues
    ============================================================================= */
 
 /* =============================================================================
-   24. RUNE INVENTORY
+   MODALS
    ============================================================================= */
-.rune-card {
+
+/* Modal animations */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Persistent modal overlay - stays visible across modal transitions */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--modal-overlay-bg);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    animation: modalFadeIn 0.2s ease;
+}
+
+.modal-overlay.active {
+    display: block;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-md);
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: flex;
+}
+
+#dialogue-modal {
+    z-index: 2000;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-xl);
+    animation: modalSlideIn 0.3s ease;
+}
+
+
+/* Enhanced modal header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+}
+
+#add-vasen-modal .modal-header,
+#swap-modal .modal-header,
+#ally-select-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: var(--spacing-sm);
+}
+
+.modal-title {
+    font-size: var(--font-size-lg);
+    color: var(--text-accent);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+    text-shadow: 1px 1px 2px var(--black-overlay-strong);
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: var(--border-radius);
+    color: var(--text-muted);
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    cursor: pointer;
+    transition: all var(--transition-base);
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
-    margin-bottom: var(--spacing-xs);
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
+    justify-content: center;
 }
 
-.rune-card:hover {
+.modal-close:hover {
     background: var(--bg-hover);
+    color: var(--text-primary);
     border-color: var(--border-light);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+    transform: scale(1.1);
 }
 
-.rune-card-symbol {
-    font-size: var(--font-size-xl);
-    width: 40px;
+.modal-close:active {
+    transform: scale(0.95);
+}
+
+.modal-body {
+    margin-bottom: var(--spacing-md);
+
+    font-weight: var(--font-weight-normal);}
+
+/* Modal lists - ensure grey background */
+#ally-select-list,
+#swap-modal-list,
+#knockout-swap-list,
+#add-vasen-list {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.modal-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Dialogue Modal */
+.modal-dialogue {
+    max-width: 500px;
     text-align: center;
 }
 
-.rune-card-info {
-    flex: 1;
+.dialogue-message {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: var(--spacing-md) 0;
 }
 
-.rune-card-name {
+.dialogue-message .rune-flavor {
+    color: var(--text-primary);
+    font-style: italic;
+    margin: 0;
+}
+
+.dialogue-message .rune-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: var(--spacing-sm) 0;
+}
+
+.dialogue-message .rune-effect {
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.dialogue-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+}
+
+.dialogue-buttons .btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* Move/Swap dialogue button styles */
+.move-vasen-dialogue .dialogue-buttons .btn-primary,
+.swap-into-party-dialogue .dialogue-buttons .btn-primary {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    overflow: visible;
+    white-space: normal;
+    text-align: left;
+}
+
+.move-vasen-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled),
+.swap-into-party-dialogue .dialogue-buttons .btn-primary:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow-md);
+    transform: none;
+}
+
+/* Menu windows: centered title (matching the dialogues) with room below it */
+.modal-settings .modal-title,
+.modal-tips .modal-title,
+.modal-profile .modal-title,
+.modal-lore .modal-title {
+    text-align: center;
+}
+
+.modal-settings .modal-title,
+.modal-tips .modal-title {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Settings Modal - short controls, laid out centered like a dialogue */
+.modal-settings {
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-settings .toggle-switch-row,
+.modal-settings .save-buttons {
+    justify-content: center;
+}
+
+/* Save to File / Load from File side by side, equal width */
+.modal-settings .save-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.settings-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.settings-section h4 {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.settings-note {
     font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    font-weight: var(--font-weight-semibold);
-}
-
-.rune-card-effect {
-    font-size: var(--font-size-xs);
-    color: var(--text-primary);
-}
-
-.rune-card-equipped {
-    font-size: var(--font-size-xs);
-    color: var(--text-primary);
-    font-weight: bold;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
 }
 
 /* =============================================================================
-   25. ITEM INVENTORY
+   TOGGLE SWITCH - used for the Verbose Combat Log setting
    ============================================================================= */
-.item-card {
+.toggle-switch-row {
     display: flex;
     align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    margin-bottom: var(--spacing-xs);
+    user-select: none;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: 24px;
+    transition: background var(--transition-base), border-color var(--transition-base);
+}
+
+.toggle-switch-slider::before {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    top: 2px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    transition: transform var(--transition-base), background var(--transition-base);
+}
+
+.toggle-switch input:checked + .toggle-switch-slider {
+    background: var(--accent-primary-overlay);
+    border-color: var(--accent-primary);
+}
+
+.toggle-switch input:checked + .toggle-switch-slider::before {
+    transform: translateX(18px);
+    background: var(--accent-primary);
+}
+
+.toggle-switch input:focus-visible + .toggle-switch-slider {
+    outline: 2px solid var(--border-light);
+    outline-offset: 2px;
+}
+
+.toggle-switch-label-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.save-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+
+/* Profile Modal */
+.modal-profile {
+    max-width: 450px;
+}
+
+.profile-content {
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-section h4 {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.profile-name-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-name-section label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.profile-name-input-wrapper {
+    position: relative;
+}
+
+.profile-name-input-wrapper input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    box-sizing: border-box;
+}
+
+.profile-name-input-wrapper input::placeholder {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-normal);
+}
+
+.profile-name-input-wrapper input:focus {
+    outline: none;
+    border-color: var(--border-light);
+    box-shadow: 0 0 0 2px var(--border-focus-shadow);
+}
+
+.profile-name-saved {
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--font-size-xs);
+    color: var(--accent-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.profile-name-saved.visible {
+    opacity: 1;
+}
+
+/* Profile section headings */
+.profile-collection-section,
+.achievements-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-collection-section h4,
+.achievements-section h4 {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.collection-stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.collection-stat {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.collection-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.collection-value {
+    font-size: var(--font-size-xs);
+    color: var(--text-primary);
+}
+
+.achievement-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.achievement-item {
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+}
+
+.achievement-item.unlocked {
+    border-left: 3px solid var(--accent-primary);
+}
+
+.achievement-item.locked {
+    opacity: 0.5;
+}
+
+.achievement {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.achievement-name {
+    display: block;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.achievement-desc {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+/* Combat Tips Modal */
+.modal-tips {
+    max-width: 600px;
+}
+
+.tips-content {
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: visible;
+    padding-right: var(--spacing-sm);
+}
+
+.tips-content h4 {
+    font-size: var(--font-size-base);
+    color: var(--text-accent);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+}
+
+.tips-content p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* =============================================================================
+   GAME GUIDE - COLLAPSIBLE CATEGORIES
+   ============================================================================= */
+
+.tips-header-controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-secondary);
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.guide-category-title {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.guide-category-first .guide-category-title {
+    margin-top: 0;
+}
+
+.guide-cat-chevron {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: inline-block;
+    line-height: 1;
+}
+
+.guide-cat-chevron::before {
+    content: '»';
+}
+
+.guide-category.guide-category-collapsed .guide-cat-chevron::before {
+    content: '«';
+}
+
+.guide-category.guide-category-collapsed .guide-category-body {
+    display: none;
+}
+
+/* Favorite star button - category favorites are shown first (see
+   UIController._reorderGuideCategories). Boxed style matching the
+   favorite-toggle buttons used elsewhere (väsen/rune/item cards),
+   pushed to the far right of the title row. */
+.guide-favorite-btn {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin-left: auto;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    line-height: 1;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.guide-favorite-btn:hover,
+.guide-favorite-btn.active {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+/* Swap Modal */
+.modal-swap {
+    max-width: 400px;
+    text-align: center;
+}
+
+.swap-vasen-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+/* Offer Modal */
+.modal-offer {
+    max-width: 400px;
+    text-align: center;
+}
+
+.offer-item-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Heal Modal */
+.modal-heal {
+    max-width: 400px;
+}
+
+.heal-vasen-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.heal-vasen-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.heal-vasen-btn:hover {
+    background: var(--bg-hover);
+}
+
+.heal-amount-overlay {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-card);
+    border: 2px solid var(--border-success);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.heal-amount {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-positive-soft);
+}
+
+.rune-to-vasen-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.rune-to-vasen-btn:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+}
+
+.rune-to-vasen-btn:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transition: none !important;
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    pointer-events: none;
+}
+
+.rune-to-vasen-btn.current-owner {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.rune-status-overlay {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.rune-status {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+/* Rune Modals */
+.modal-rune {
+    max-width: 400px;
+}
+
+.rune-equip-list,
+.rune-to-vasen-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.rune-equip-btn,
+.rune-select-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
-    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
+    text-align: left;
+    transition: background 0.2s, border-color 0.2s;
 }
 
-.item-card:hover {
+.rune-equip-btn:hover,
+.rune-select-btn:hover {
     background: var(--bg-hover);
     border-color: var(--border-light);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
 }
 
-.item-info {
+.rune-equip-btn:disabled,
+.rune-select-btn:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transition: none !important;
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    pointer-events: none;
+}
+
+.rune-info {
     flex: 1;
 }
 
-.item-name {
+.rune-info-name {
     font-size: var(--font-size-sm);
     color: var(--text-primary);
-    font-weight: var(--font-weight-semibold);
 }
 
-.item-desc {
+.rune-info-effect {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
+    color: var(--text-primary);
 }
 
-.item-count {
+/* Ally Select Modal */
+/* Rune reveal styling */
+.rune-reveal {
+    text-align: center;
+    margin: var(--spacing-md) 0;
+}
+
+.rune-hint {
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background: var(--bg-tertiary);
-    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-style: italic;
 }
 
-.item-actions {
+/* Add Vasen Modal list buttons */
+#add-vasen-list button {
     display: flex;
-    gap: var(--spacing-xs);
-    margin-left: var(--spacing-sm);
-}
-
-/* =============================================================================
-   26. ATTRIBUTE STAGES DISPLAY
-   ============================================================================= */
-.stage-display {
-    display: inline-flex;
-    gap: 2px;
-    font-size: var(--font-size-xs);
-}
-
-.stage-up {
-    color: var(--accent-primary);
-}
-
-.stage-down {
-    color: var(--accent-danger);
-}
-
-/* =============================================================================
-   27. RESPONSIVE - DESKTOP (1025px+)
-   ============================================================================= */
-@media (min-width: 1025px) {
-    html, body {
-        height: 100%;
-        overflow: hidden;
-    }
-
-    #game-screen {
-        height: 100vh;
-        /* Fallback scroll: if OS-level display scaling (e.g. Windows set to
-           125%/150%) shrinks the effective viewport below what the fixed-height
-           layout needs, allow the whole screen to scroll instead of hard-clipping
-           content (like the Explore button) with no way to reach it. */
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .game-main {
-        grid-template-columns: 300px 1fr 1fr;
-        overflow: hidden;
-    }
-
-    .panel {
-        overflow: hidden;
-    }
-
-    .panel-content {
-        overflow-y: auto;
-    }
-
-    .panel-left {
-        grid-column: 1;
-    }
-
-    .panel-middle {
-        grid-column: 2;
-        /* Allow this column (party section + zone list + zone actions) to
-           scroll internally if its content doesn't fit the available height,
-           rather than relying on .panel's overflow:hidden and losing access
-           to the Explore/Challenge buttons at higher OS display scaling. */
-        overflow-y: auto;
-    }
-
-    .panel-right {
-        grid-column: 3;
-    }
-}
-
-/* Large Desktop (1440px+) */
-@media (min-width: 1440px) {
-    .game-main {
-        grid-template-columns: 320px 1fr 1fr;
-    }
-}
-
-/* Standard Desktop (1025-1439px) */
-@media (min-width: 1025px) and (max-width: 1439px) {
-    .game-main {
-        grid-template-columns: 280px minmax(300px, 400px) 1fr;
-    }
-}
-
-/* Laptop (short screens) */
-@media (min-width: 1025px) and (max-height: 800px) {
-    .vasen-details-panel {
-        max-height: 40%;
-    }
-
-    .combat-log {
-        max-height: 120px;
-    }
-}
-
-/* =============================================================================
-   28. RESPONSIVE - TABLET (769-1100px)
-   ============================================================================= */
-
-/* Medium viewports or short screens - switch combat to column layout */
-@media (max-width: 1100px), (max-height: 850px) {
-
-    /* --- EXISTING BEHAVIOR --- */
-    .combat-arena {
-        flex-direction: column;
-        gap: var(--spacing-sm);
-
-        /* allow children to scroll */
-        min-height: 0 !important;
-        overflow: visible !important;
-    }
-
-    .combatant-panel {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .combatant-panel .combatant-scroll-inner {
-        /* make combatant cards scrollable */
-        min-height: 0;
-        max-height: 45vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .combat-versus {
-        font-size: var(--font-size-lg);
-    }
-
-    /* Stacked layout: the "VS" row only costs space. Hide it; in the
-       Endless Tower keep the floor number and hide just the VS text. */
-    .combat-versus:not(.has-floor),
-    .combat-versus-text {
-        display: none;
-    }
-
-    /* --- prevent combat log from covering combatants --- */
-    .panel-right {
-        display: flex;
-        flex-direction: column;
-        min-height: 0 !important;
-    }
-
-    .combat-area {
-        flex: 0 0 auto; /* reserve its own space */
-        min-height: 500px; /* adjust if needed */
-    }
-
-    .combat-log {
-        flex: 1 1 auto;
-        overflow-y: auto;
-        min-height: 100;
-    }
-}
-
-
-@media (min-width: 769px) and (max-width: 1024px) {
-    html, body {
-        height: 100%;
-        overflow: hidden;
-    
-    font-weight: var(--font-weight-normal);}
-
-    #game-screen {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .game-header {
-        flex-shrink: 0;
-    }
-
-    .game-main {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        grid-template-rows: auto auto; /* Auto-size rows, let content flow */
-        overflow: visible;
-        flex: 1 1 auto; /* Allow growth */
-        min-height: 0;
-    }
-
-    .panel {
-        overflow: visible;
-    }
-
-    .panel-left {
-        grid-column: 1;
-        grid-row: 1 / 3; /* Span both rows */
-        overflow: visible; /* No independent scroll */
-        display: flex;
-        flex-direction: column;
-    }
-
-    .panel-middle {
-        grid-column: 2;
-        grid-row: 1;
-        min-height: 450px;
-        overflow: visible; /* No independent scroll */
-    }
-
-    .panel-right {
-        grid-column: 2;
-        grid-row: 2;
-        overflow: visible; /* No independent scroll */
-    }
-
-    .panel-content {
-        overflow-y: auto;
-        overflow-x: visible;
-        max-height: 50vh;
-        min-height: 200px;
-    }
-
-    .vasen-details-panel {
-        max-height: 40vh;
-        overflow-y: auto;
-        overflow-x: visible;
-        flex-shrink: 0;
-    }
-
-    .zone-section {
-        min-height: 200px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .zone-list {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 80px;
-        max-height: 200px;
-    }
-
-    .zone-actions {
-        flex-shrink: 0;
-    }
-
-    .combat-area {
-        min-height: auto;
-    }
-
-    .combat-log {
-        max-height: 150px;
-    }
-
-    .screen {
-        overflow-y: auto;
-        overflow-x: hidden;
-        height: 100%;
-    }
-
-    .starter-options {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-
-/* Short viewports: keep bottom combat actions visible */
-@media (max-height: 845px) {
-    .panel-right {
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-    }
-
-    .combat-area {
-        flex: 1 1 auto;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .combat-log {
-        flex: 1 1 auto;
-        min-height: 0;
-        overflow-y: auto;
-    }
-
-    .action-buttons {
-        flex-shrink: 0;
-    }
-}
-
-
-/* =============================================================================
-   29. RESPONSIVE - MOBILE (768px and below)
-   ============================================================================= */
-@media (max-width: 768px) {
-    html, body {
-        height: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
-    
-    font-weight: var(--font-weight-normal);}
-
-    #game-screen {
-        height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .game-header {
-        flex-wrap: wrap;
-        padding: var(--spacing-sm);
-    }
-
-    .header-left {
-        flex: 1 1 100%;
-        order: 1;
-        margin-bottom: var(--spacing-xs);
-    }
-
-    .header-title {
-        font-size: var(--font-size-base);
-    }
-
-    .header-subtitle {
-        display: none;
-    }
-
-    .header-center {
-        order: 2;
-        flex: 1;
-    }
-
-    .header-right {
-        order: 3;
-        flex: 0 0 auto;
-    }
-
-    .game-main {
-        display: flex;
-        flex-direction: column;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        gap: var(--spacing-sm);
-        overflow: visible;
-    }
-
-    .panel {
-        overflow: visible;
-    }
-
-    .panel-left,
-    .panel-middle,
-    .panel-right {
-        width: 100%;
-        min-height: auto;
-        overflow: visible;
-        border-right: none;
-        border-bottom: 2px solid var(--border-color);
-    }
-
-    .panel-content {
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-height: 150px;
-        max-height: 45vh;
-    }
-
-    .vasen-details-panel {
-        max-height: 60vh;
-        overflow-y: auto;
-        overflow-x: visible;
-    }
-
-    .zone-section {
-        min-height: 200px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .zone-list {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 80px;
-        max-height: 200px;
-    }
-
-    .zone-actions {
-        flex-shrink: 0;
-    }
-
-    .zone-actions .btn {
-        width: 100%;
-        padding: var(--spacing-md);
-    }
-
-    .combat-area {
-        min-height: auto;
-    }
-
-    .combat-log {
-        max-height: 150px;
-    }
-
-    .screen {
-        overflow-y: auto;
-        overflow-x: hidden;
-        height: auto;
-        min-height: 100vh;
-    }
-
-    .dialogue-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
-/* Mobile Landscape */
-@media (max-width: 768px) and (orientation: landscape) {
-    .combat-arena {
-        flex-direction: row;
-    }
-
-    .party-slots {
-        flex-direction: row;
-    }
-}
-
-/* Small screens (600px and below) */
-@media (max-width: 600px) {
-    .combat-arena {
-        flex-direction: column;
-        gap: var(--spacing-sm);
-    }
-
-    .combatant-panel {
-        max-width: 100%;
-        width: 100%;
-    }
-}
-
-/* Small Mobile (480px and below) */
-@media (max-width: 480px) {
-    .party-slots {
-        flex-direction: column;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-    }
-
-    .action-buttons .btn {
-        width: 100%;
-    }
-
-    .game-footer {
-        flex-wrap: wrap;
-        text-align: center;
-    }
-
-    .footer-sep {
-        display: none;
-    }
-
-    .dialogue-buttons {
-        flex-direction: column;
-    }
-}
-
-/* Very Small Mobile (380px and below) */
-@media (max-width: 380px) {
-    :root {
-        --spacing-md: 12px;
-        --spacing-lg: 16px;
-    }
-
-    .game-title {
-        font-size: 1.75rem;
-    }
-
-    .modal-content {
-        padding: var(--spacing-md);
-    }
-}
-
-/* =============================================================================
-   30. ACCESSIBILITY
-   ============================================================================= */
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .btn {
-        min-height: 44px;
-    }
-
-    .tab-btn {
-        min-height: 44px;
-    }
-
-    .vasen-card,
-    .zone-item,
-    .party-slot {
-        min-height: 44px;
-    }
-}
-
-
-/* Enhanced focus states for accessibility */
-button:focus-visible,
-.btn:focus-visible {
-    outline: 2px solid var(--border-light);
-    outline-offset: 2px;
-}
-
-/* Tab buttons use .active class for visual state - no extra focus outline needed */
-.tab-btn:focus,
-.tab-btn:focus-visible {
-    outline: none;
-}
-
-.vasen-card:focus-visible,
-.zone-item:focus-visible,
-.party-slot:focus-visible {
-    outline: 2px solid var(--accent-secondary);
-    outline-offset: 2px;
-}
-
-.skill-btn:focus-visible {
-    outline: 2px solid var(--border-light);
-    outline-offset: 2px;
-}
-
-/* Reduce motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    
-    .vasen-card,
-    .zone-item,
-    .party-slot,
-    .skill-btn,
-    .starter-card {
-        animation: none !important;
-    }
-    
-    .modal,
-    .modal-content {
-        animation: none !important;
-    }
-}
-
-/* =============================================================================
-   31. ELEMENT MATCHUP COLLAPSIBLES
-   ============================================================================= */
-
-/* Clickable element badge styling */
-.clickable-element {
-    cursor: pointer;
-    transition: filter 0.2s ease, transform 0.1s ease;
-}
-
-.clickable-element:hover {
-    filter: brightness(1.1);
-    transform: scale(1.05);
-}
-
-/* Element matchup collapsible container */
-.element-matchup-collapsible {
-    position: relative;
-    display: inline-block;
-}
-
-/* Inline collapsible for combat attack elements */
-.element-matchup-collapsible.inline-collapsible {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-/* Matchup details dropdown */
-.element-matchup-collapsible .matchup-details {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    min-width: 180px;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-popup);
-    margin-top: 2px;
-    pointer-events: auto;
-}
-
-.element-matchup-collapsible.open .matchup-details {
-    display: block;
-}
-
-/* Matchup row styling */
-.matchup-row {
-    display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-xs);
-    font-size: var(--font-size-xs);
-}
-
-.matchup-row:last-child {
-    margin-bottom: 0;
-}
-
-.matchup-label {
-    color: var(--text-muted);
-    min-width: 80px;
-}
-
-/* Matchup type colors */
-.matchup-row.potent .matchup-label {
-    color: var(--accent-primary);
-}
-
-.matchup-row.vulnerable .matchup-label {
-    color: var(--accent-danger);
-}
-
-.matchup-row.weak .matchup-label {
-    color: var(--accent-danger);
-}
-
-.matchup-row.resists .matchup-label {
-    color: var(--accent-primary);
-}
-
-.matchup-row.neutral .matchup-label {
-    color: var(--text-muted);
-}
-
-/* Game Guide element collapsibles */
-.element-guide-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-}
-
-.element-guide-collapsible {
-    position: relative;
-}
-
-.element-guide-collapsible .element-guide-details {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 100;
-    min-width: 220px;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-popup);
-    margin-top: var(--spacing-xs);
-}
-
-.element-guide-collapsible.open .element-guide-details {
-    display: block;
-}
-
-.guide-matchup-section {
-    margin-bottom: var(--spacing-sm);
-}
-
-.guide-matchup-section:last-child {
-    margin-bottom: 0;
-}
-
-.guide-matchup-section strong {
-    display: block;
-    color: var(--text-accent);
-    font-size: var(--font-size-xs);
-    margin-bottom: var(--spacing-xs);
-}
-
-.matchup-instruction {
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-    margin-bottom: var(--spacing-sm);
-}
-
-/* Family Guide List */
-.family-guide-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-}
-
-.family-guide-collapsible {
-    position: relative;
-}
-
-.family-guide-collapsible .family-description-popup {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 100;
-    min-width: 250px;
-    max-width: 350px;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-popup);
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    line-height: 1.4;
-}
-
-.family-guide-collapsible.open .family-description-popup {
-    display: block;
-}
-
-.family-guide-item {
-    display: inline-block;
-}
-
-/* Family description collapsible popup (for details panel and combatant cards) */
-.family-matchup-collapsible {
-    position: relative;
-    display: inline-block;
-}
-
-/* Family description popup (inside combatant cards and the details panel it is positioned via JS) */
-.family-matchup-collapsible .family-description-popup {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    min-width: 250px;
-    max-width: 350px;
-    padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-popup);
-    margin-top: 2px;
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-    line-height: 1.4;
-    pointer-events: auto;
-}
-
-.family-matchup-collapsible.open .family-description-popup {
-    display: block;
-}
-
-.family-matchup-collapsible.inline-collapsible .family-description-popup {
-    left: 0;
-    transform: none;
-}
-
-/* Adjustments for combatant info element badge */
-.combatant-info .element-matchup-collapsible {
-    display: inline-block;
-}
-
-.combatant-info .matchup-details {
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-/* Adjustments for details meta element badge */
-.details-meta .element-matchup-collapsible {
-    display: inline-block;
-}
-
-/* Ensure family descriptions in details panel don't clip on desktop */
-.details-meta .family-matchup-collapsible .family-description-popup {
-    left: auto;
-    right: 0;
-    transform: none;
-    max-width: min(350px, calc(100vw - 32px));
-}
-
-/* Adjustments for skill attributes element badge */
-.skill-attributes .element-matchup-collapsible {
-    display: inline-block;
-}
-
-/* Adjustments for combat attack elements */
-.combatant-attack-elements .element-matchup-collapsible {
-    margin-right: 2px;
-}
-
-/* Ensure matchup details stay static (not fixed) on mobile */
-@media (max-width: 768px) {
-    /* Prevent matchup rows from wrapping so they can scroll horizontally */
-    .element-matchup-collapsible .matchup-details .matchup-row,
-    .element-guide-collapsible .element-guide-details .matchup-row,
-    .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
-        flex-wrap: nowrap;
-    }
-    
-    .element-matchup-collapsible .matchup-details {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: auto;
-        transform: none;
-        max-width: 90vw;
-        z-index: 9999;
-        margin-top: var(--spacing-xs);
-        overflow-x: visible;
-        overflow-y: visible;
-    }
-    
-    /* Special positioning for attack elements at bottom of combatant card */
-    .combatant-attack-elements .element-matchup-collapsible .matchup-details {
-        position: absolute;
-        bottom: 100%;
-        top: auto;
-        left: 0;
-        transform: none;
-        right: auto;
-        max-width: min(200px, calc(100vw - 32px));
-        margin-top: 0;
-        margin-bottom: var(--spacing-xs);
-        overflow-x: visible;
-        overflow-y: visible;
-    }
-    
-    /* Prevent wrapping in attack elements */
-    .combatant-attack-elements .element-matchup-collapsible .matchup-details .matchup-row {
-        flex-wrap: nowrap;
-    }
-    
-    /* Combatant panel popups use position:fixed via JS - rows wrap to fit width */
-    .combatant-panel .element-matchup-collapsible .matchup-details .matchup-row {
-        flex-wrap: wrap;
-    }
-
-    /* Give family popup content a min-width so it extends beyond container */
-    .family-matchup-collapsible .family-description-popup {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        max-width: none;
-        min-width: 200px;
-        padding: var(--spacing-md);
-        overflow: visible;
-        white-space: normal;
-    }
-
-    /* Combatant panel family popup: position handled by JS, content wraps */
-    .combatant-panel .family-matchup-collapsible .family-description-popup {
-        left: 0;
-        transform: none;
-    }
-
-    /* Inner content has min-width to force horizontal scroll (non-card contexts) */
-    .family-matchup-collapsible .family-description-popup > * {
-        min-width: 300px;
-    }
-
-    /* No forced min-width inside combatant card - content wraps instead */
-    .combatant-panel .family-matchup-collapsible .family-description-popup > * {
-        min-width: 0;
-    }
-    
-    .family-matchup-collapsible .family-description-popup p {
-        white-space: normal;
-        margin-bottom: var(--spacing-sm);
-        line-height: 1.6;
-    }
-    
-    .element-guide-collapsible .element-guide-details {
-        position: absolute;
-        top: 100%;
-        left: 0 !important;
-        right: auto !important;
-        transform: none;
-        max-width: 90vw;
-        z-index: 9999;
-        margin-top: var(--spacing-xs);
-        overflow-x: auto;
-        overflow-y: visible;
-        touch-action: pan-x;
-    }
-}
-
-/* Three-box layout (desktop) - Make right panel scrollable */
-@media (min-width: 1025px) {
-    .panel-right {
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto; /* Make scrollable */
-        overflow-x: hidden;
-        min-height: 0;     /* prevents flex overflow */
-    }
-}
-
-
-.combat-ui {
-    flex: 0 1 auto;
-    overflow: visible; /* Allow element matchup dropdowns to show */
-}
-
-.combat-log {
-    position: relative;
-    z-index: 1;
-    flex-shrink: 0;
-}
-
-.combat-arena {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap; /* prevent wrapping */
-    justify-content: space-between;
-    align-items: flex-start;
     gap: var(--spacing-md);
     width: 100%;
-    flex-shrink: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
 }
 
-
-.combatant-panel {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 100%;
+#add-vasen-list button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
 }
 
-.combat-ui {
+#add-vasen-list button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Rune to Vasen Modal list buttons */
+#rune-to-vasen-list button {
     display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: visible; /* Allow dropdowns to show */
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s, border-color 0.2s;
 }
 
-.combat-log,
-.skill-buttons,
-.action-buttons {
-    flex-shrink: 0;
+#rune-to-vasen-list button:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
 }
 
-.combat-bar-text {
+#rune-to-vasen-list button:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transition: none !important;
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    pointer-events: none;
+}
+
+/* =============================================================================
+   TUTORIAL BLINK ANIMATION - First Combat Help
+   ============================================================================= */
+@keyframes tutorial-blink {
+    0%, 100% {
+        box-shadow: 0 0 0 0 transparent;
+        border-color: var(--border-color);
+    }
+    50% {
+        box-shadow: 0 0 15px 3px color-mix(in srgb, var(--tutorial-color) 85%, transparent),
+                    0 0 25px 5px color-mix(in srgb, var(--tutorial-color) 40%, transparent);
+        border-color: var(--tutorial-color);
+    }
+}
+
+.tutorial-blink {
+    animation: tutorial-blink 1.5s ease-in-out infinite;
+    position: relative;
+}
+
+/* Ensure tutorial blink works on both buttons and modal items */
+button.tutorial-blink {
+    border-color: var(--tutorial-color) !important;
+}
+
+/* New-player hint box inside dialogues,
+   in the tutorial green; no outer glow, since glowing marks clickable things. */
+.tutorial-tip {
+    margin: var(--spacing-md) auto 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: fit-content;
+    max-width: 100%;
+    background: var(--bg-tertiary);
+    border: 1px solid color-mix(in srgb, var(--tutorial-color) 60%, transparent);
+    border-radius: var(--border-radius);
+}
+
+.tutorial-tip-title,
+.tutorial-complete-label {
     font-size: var(--font-size-xs);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--tutorial-color);
+    margin-bottom: var(--spacing-xs);
 }
 
-.toggle-icon {
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    font-family: monospace;
-}
-
-.description-content {
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
-    max-height: 200px;
-    opacity: 1;
-}
-
-.description-content.collapsed {
-    max-height: 0;
-    opacity: 0;
-}
-
-.description-content p {
+.tutorial-tip p {
     margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    text-align: center;
 }
 
-/* === Global combatant panel behavior: always scrollable === */
-.combat-arena {
-    min-height: 0;
-    overflow: visible;
+/* Closing note of the new-player tutorial (First Tame popup) */
+.tutorial-complete {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
 }
 
-.combat-arena .combatant-panel .combatant-scroll-inner {
-    min-height: 0;
-    max-height: 45vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+.tutorial-complete p {
+    margin: 0;
+    color: var(--text-primary);
+    font-style: italic;
 }
 
-/* Scrollbar on the inner scroll wrapper - panel's overflow:hidden clips it to rounded corners */
-.combatant-panel .combatant-scroll-inner::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-/* Combat area gets its own space */ .combat-area { flex: 0 0 auto; min-height: 200px; }
-
-/* =============================================================================   OFFER MODAL CONFIRMATION
+/* =============================================================================
+   OFFER MODAL CONFIRMATION
    ============================================================================= */
 
 /* Offer confirmation container */

@@ -139,7 +139,7 @@ class UIController {
         this.vasenSortBy = savedVasenSortBy !== null ? savedVasenSortBy : 'level'; // Sort option for väsen inventory: level, family, health, defense, durability, strength, wisdom, rarity
         const savedUnlockAllInfo = localStorage.getItem('unlockAllInfo');
         this.unlockAllInfoEnabled = savedUnlockAllInfo !== null ? savedUnlockAllInfo === 'true' : false;
-        this.beginnerTutorialDisabled = localStorage.getItem('disableBeginnerTutorial') === 'true'; // Off by default
+        this.tipsDisabled = localStorage.getItem('disableBeginnerTutorial') === 'true'; // Off by default
     }
 
     // Initialize UI elements
@@ -242,12 +242,12 @@ if (unlockAllInfoToggle) {
     });
 }
 
-// Disable Beginner Tutorial toggle
-const disableTutorialToggle = document.getElementById('disable-tutorial-toggle');
-if (disableTutorialToggle) {
-    disableTutorialToggle.checked = this.beginnerTutorialDisabled;
-    disableTutorialToggle.addEventListener('change', () => {
-        this.toggleBeginnerTutorial(disableTutorialToggle.checked);
+// Disable Tips toggle
+const disableTipsToggle = document.getElementById('disable-tips-toggle');
+if (disableTipsToggle) {
+    disableTipsToggle.checked = this.tipsDisabled;
+    disableTipsToggle.addEventListener('change', () => {
+        this.toggleTips(disableTipsToggle.checked);
     });
 }
 

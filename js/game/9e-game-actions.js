@@ -44,7 +44,7 @@ Game.prototype.handleSwap = function(targetIndex) {
 // Outside the tutorial, interrogating still makes the Offer Item button glow
 // for the rest of that combat if the player owns the desired item.
 Game.prototype.isCombatTutorialActive = function(combat = this.currentCombat) {
-    return !!combat && !gameState.firstCombatTutorialShown && ui.isBeginnerTutorialEnabled() &&
+    return !!combat && !gameState.firstCombatTutorialShown && ui.areTipsEnabled() &&
         combat.isWildEncounter && combat.canTame && !combat.isEndlessTower;
 };
 
@@ -97,9 +97,14 @@ Game.prototype.handleInterrogate = function() {
     if (this.currentCombat.correctItemGiven) return;
 
     const isTutorialStep = this.getCombatTutorialStage(this.currentCombat) === 'interrogate';
-    const message = isTutorialStep
-        ? '<p>Ask the väsen what it desires most.</p><p>Interrogating normally costs a turn, but this väsen is curious about you and <strong>will not act this turn</strong>.</p>'
-        : '<p>Beware, this action will cost a turn.</p>';
+    // The turn cost is shown as a tip (hidden when Disable Tips is on); during the
+    // tutorial step it explains the free turn instead.
+    let message = '<p>Ask this väsen what it desires?</p>';
+    if (isTutorialStep) {
+        message += ui.getTipHTML('Interrogating normally costs a turn, but this väsen is curious about you and <strong>will not act this turn</strong>.');
+    } else if (ui.areTipsEnabled()) {
+        message += ui.getTipHTML('Interrogating costs a turn.');
+    }
 
     // Show the confirmation dialog
     ui.showDialogue(
@@ -107,7 +112,7 @@ Game.prototype.handleInterrogate = function() {
         message,
         [
             {
-                text: 'Confirm',
+                text: `${uiIcon('interrogate')}Interrogate`,
                 class: isTutorialStep ? 'btn-primary tutorial-blink' : 'btn-primary',
                 callback: () => {
                     const combat = this.currentCombat;
@@ -125,7 +130,7 @@ Game.prototype.handleInterrogate = function() {
                 }
             },
             {
-                text: 'Close',
+                text: 'Cancel',
                 class: 'btn-secondary' // No callback: just closes the dialogue
             }
         ],
@@ -135,10 +140,34 @@ Game.prototype.handleInterrogate = function() {
     );
 };
 
-// Handle pass
+// Handle pass: asks for confirmation first, since a misclick wastes the turn
 Game.prototype.handlePass = function() {
     if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
-    this.currentCombat.executePlayerAction({ type: 'pass' });
+
+    ui.showDialogue(
+        'Pass?',
+        '<p>Skip this turn?</p>',
+        [
+            {
+                text: `${uiIcon('pass')}Pass`,
+                class: 'btn-primary',
+                callback: () => {
+                    const combat = this.currentCombat;
+                    // The combat may have changed while the dialog was open
+                    if (!combat || combat.isOver || !combat.waitingForPlayerAction) return;
+                    combat.executePlayerAction({ type: 'pass' });
+                }
+            },
+            {
+                text: 'Cancel',
+                class: 'btn-secondary',
+                callback: null
+            }
+        ],
+        true,
+        null,
+        'pass'
+    );
 };
 
 // Handle surrender

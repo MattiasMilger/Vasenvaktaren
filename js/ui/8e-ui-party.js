@@ -707,7 +707,8 @@ UIController.prototype.autoTeam = function() {
 UIController.prototype.confirmAutoHeal = function() {
     this.showDialogue(
         'Auto Heal Party?',
-        '<p>WARNING: This will consume taming items that could otherwise be used for taming väsen.</p>',
+        '<p>Heal your party using taming items?</p>' +
+            (this.areTipsEnabled() ? this.getTipHTML('Taming items used for healing can no longer be offered to tame väsen.') : ''),
         [
             {
                 text: `${uiIcon('heal')}Heal`,

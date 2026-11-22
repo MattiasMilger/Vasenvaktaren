@@ -1,5 +1,5 @@
 /* =============================================================================
-   13-style-animations.css - Combat Animations (The "Middle Ground" Edit)
+   13-style-animations.css - Idle, Attack, Hit and Shake Animations
    ============================================================================= */
 
 /* Base container optimization */
@@ -147,7 +147,7 @@
 }
 
 /* =============================================================================
-   SHAKE ANIMATIONS - Tightened 0.35s duration
+   SHAKE ANIMATIONS - 0.35s duration
    ============================================================================= */
 
 .hit-shake {

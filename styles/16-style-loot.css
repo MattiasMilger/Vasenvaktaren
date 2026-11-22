@@ -1,9 +1,9 @@
 /* =============================================================================
-   16-style-loot.css - Styles for loot UI
+   16-style-loot.css - Item and Rune Cards
    ============================================================================= */
 
 /* =============================================================================
-   1. CARD LAYOUT
+   CARD LAYOUT
    ============================================================================= */
 
 .rune-card, .item-card {
@@ -16,7 +16,7 @@
 }
 
 /* =============================================================================
-   2. FAVORITE BUTTON (for Items & Runes)
+   FAVORITE BUTTON (for Items & Runes)
    Shared visual styling (size, colors, border, hover/active) lives in the
    consolidated .favorite-toggle rule in 07-style-vasen.css alongside
    .vasen-favorite-btn / .details-favorite-btn, since it's the same button

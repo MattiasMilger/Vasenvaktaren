@@ -85,7 +85,7 @@ Game.prototype.handleCombatEnd = function(result) {
     if (!result.victory) {
         this.leavePartyAtLowHealth();
         const defeatTip = tutorialActive
-            ? ui.getTutorialTipHTML('Your väsen are weakened. Keep exploring: a <strong>Sacred Well</strong> will heal them.')
+            ? ui.getTipHTML('Your väsen are weakened. Keep exploring: a <strong>Sacred Well</strong> will heal them.')
             : '';
         ui.showDialogue(
             result.tie ? 'Tie' : 'Defeat',

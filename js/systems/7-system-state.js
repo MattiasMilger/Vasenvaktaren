@@ -29,6 +29,68 @@ function syncMeginForRuneChange(vasen, addedRune, removedRune) {
     }
 }
 
+// Move a rune already equipped on this väsen into another of its slots. Whatever
+// occupied the target slot (a rune or nothing) moves into the rune's old slot.
+function moveRuneWithinVasen(vasen, fromIndex, toIndex) {
+    // Pad the array if the target slot is beyond the current length
+    while (vasen.runes.length <= toIndex) {
+        vasen.runes.push(null);
+    }
+
+    const displacedRune = vasen.runes[toIndex];
+    vasen.runes[toIndex] = vasen.runes[fromIndex];
+    vasen.runes[fromIndex] = displacedRune;
+
+    // A swap never changes whether Uruz is equipped on this väsen,
+    // only which slot it occupies, so maxMegin is unaffected.
+    trimTrailingEmptyRuneSlots(vasen);
+}
+
+// Place a rune in the exact slot the player chose - whether that slot is
+// currently filled (replace), the next slot in sequence, or an empty slot reached
+// only by skipping over other empty slots (e.g. clicking the right slot while
+// both slots are empty). Skipped slots are recorded as `null` placeholders, which
+// render and behave as empty slots everywhere they're read.
+function placeRuneInSlot(vasen, runeId, slotIndex) {
+    if (slotIndex < vasen.runes.length) {
+        // Targeted slot is within the current array - replace (or fill, if it
+        // currently holds a null placeholder) directly at that index
+        const removedRune = vasen.runes[slotIndex];
+        vasen.runes[slotIndex] = runeId;
+        syncMeginForRuneChange(vasen, runeId, removedRune);
+        return;
+    }
+
+    // Targeted slot is beyond the current array - pad any skipped slots
+    while (vasen.runes.length < slotIndex) {
+        vasen.runes.push(null);
+    }
+    vasen.runes.push(runeId);
+    syncMeginForRuneChange(vasen, runeId);
+}
+
+// Place a rune when no slot was chosen: fill the first empty slot, add a slot
+// if there is room, or replace the last slot when all slots are full
+function placeRuneInFirstFreeSlot(vasen, runeId, maxRunes) {
+    // Count actually-equipped runes (ignoring null placeholders), since
+    // array length alone doesn't reflect how many slots are filled.
+    const equippedCount = vasen.runes.filter(r => r !== null).length;
+    const nullIndex = vasen.runes.indexOf(null);
+
+    if (nullIndex !== -1) {
+        vasen.runes[nullIndex] = runeId;
+        syncMeginForRuneChange(vasen, runeId);
+    } else if (equippedCount < maxRunes) {
+        vasen.runes.push(runeId);
+        syncMeginForRuneChange(vasen, runeId);
+    } else {
+        const indexToReplace = vasen.runes.length - 1;
+        const removedRune = vasen.runes[indexToReplace];
+        vasen.runes[indexToReplace] = runeId;
+        syncMeginForRuneChange(vasen, runeId, removedRune);
+    }
+}
+
 // GameState manages all persistent game data including inventory, progression, and saves
 class GameState {
     constructor() {
@@ -279,30 +341,16 @@ class GameState {
         }
 
         const maxRunes = vasen.getRuneSlotCount();
+        // A slot index is honored only when it is within the väsen's current slot range
+        const hasValidExplicitSlot = slotIndex !== null && slotIndex !== undefined &&
+            slotIndex >= 0 && slotIndex < maxRunes;
 
         // Already has this rune equipped somewhere on this same väsen?
         const currentIndexOnThisVasen = vasen.runes.indexOf(runeId);
         if (currentIndexOnThisVasen !== -1) {
-            const hasValidExplicitSlotForSwap = slotIndex !== null && slotIndex !== undefined &&
-                slotIndex >= 0 && slotIndex < maxRunes;
-
-            // If a specific (different) slot was clicked, treat this as a swap:
-            // move this rune into the clicked slot, and move whatever was
-            // occupying the clicked slot (if anything) into this rune's old slot.
-            if (hasValidExplicitSlotForSwap && slotIndex !== currentIndexOnThisVasen) {
-                // Pad the array if the clicked slot is beyond the current length
-                while (vasen.runes.length <= slotIndex) {
-                    vasen.runes.push(null);
-                }
-
-                const displacedRune = vasen.runes[slotIndex];
-                vasen.runes[slotIndex] = runeId;
-                vasen.runes[currentIndexOnThisVasen] = displacedRune;
-
-                // A swap never changes whether Uruz is equipped on this väsen,
-                // only which slot it occupies, so maxMegin is unaffected.
-                trimTrailingEmptyRuneSlots(vasen);
-
+            // If a specific (different) slot was clicked, treat this as a swap
+            if (hasValidExplicitSlot && slotIndex !== currentIndexOnThisVasen) {
+                moveRuneWithinVasen(vasen, currentIndexOnThisVasen, slotIndex);
                 this.saveGame();
                 return { success: true, message: `Rune swapped on ${vasen.getDisplayName()}.` };
             }
@@ -312,70 +360,22 @@ class GameState {
             return { success: false, message: 'This Väsen already has this rune equipped.' };
         }
 
-        // If another väsen has this rune, unequip it first
-        for (const otherVasen of this.vasenCollection) {
-            if (otherVasen.id !== vasenId && otherVasen.runes.includes(runeId)) {
-                otherVasen.unequipRune(runeId);
-                break;
-            }
+        // A rune can only be equipped on one väsen - take it from its current owner
+        const previousOwner = this.vasenCollection.find(v => v.id !== vasenId && v.runes.includes(runeId));
+        if (previousOwner) {
+            previousOwner.unequipRune(runeId);
         }
 
-        // Determine which slot index to place the rune in.
-        // A valid, explicit slotIndex (within the väsen's current slot range) is
-        // always honored exactly as clicked - whether that slot is currently
-        // filled (replace), the next slot in sequence, or an empty slot reached
-        // only by skipping over other empty slots (e.g. clicking the right slot
-        // while both slots are empty).
-        // Empty slots that are skipped over are recorded as `null` placeholders
-        // so the rune lands in the exact slot the player chose; these placeholders
-        // render and behave as empty slots everywhere they're read.
-        const hasValidExplicitSlot = slotIndex !== null && slotIndex !== undefined &&
-            slotIndex >= 0 && slotIndex < maxRunes;
-
-        if (hasValidExplicitSlot && slotIndex < vasen.runes.length) {
-            // Targeted slot is within the current array - replace (or fill, if it
-            // currently holds a null placeholder) directly at that index
-            const removedRune = vasen.runes[slotIndex];
-            vasen.runes[slotIndex] = runeId;
-            syncMeginForRuneChange(vasen, runeId, removedRune);
-        } else if (hasValidExplicitSlot && slotIndex >= vasen.runes.length) {
-            // Targeted slot is beyond the current array - pad any skipped slots
-            // with a null placeholder (rendered/treated as empty) so the rune
-            // lands exactly at the clicked index
-            while (vasen.runes.length < slotIndex) {
-                vasen.runes.push(null);
-            }
-            vasen.runes.push(runeId);
-            syncMeginForRuneChange(vasen, runeId);
+        if (hasValidExplicitSlot) {
+            placeRuneInSlot(vasen, runeId, slotIndex);
         } else {
-            // No explicit (or invalid) slot specified.
-            // Count actually-equipped runes (ignoring null placeholders), since
-            // array length alone doesn't reflect how many slots are filled.
-            const equippedCount = vasen.runes.filter(r => r !== null).length;
-            const nullIndex = vasen.runes.indexOf(null);
-
-            if (nullIndex !== -1) {
-                // An empty (null) slot exists - fill it first
-                vasen.runes[nullIndex] = runeId;
-                syncMeginForRuneChange(vasen, runeId);
-            } else if (equippedCount < maxRunes) {
-                // Room remains and no null placeholder exists - just add the rune
-                vasen.runes.push(runeId);
-                syncMeginForRuneChange(vasen, runeId);
-            } else {
-                // Slots are genuinely full - replace the last slot
-                const indexToReplace = vasen.runes.length - 1;
-                const removedRune = vasen.runes[indexToReplace];
-                vasen.runes[indexToReplace] = runeId;
-                syncMeginForRuneChange(vasen, runeId, removedRune);
-            }
+            placeRuneInFirstFreeSlot(vasen, runeId, maxRunes);
         }
 
         this.saveGame();
         return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
     }
 
-    
     // Unequip rune from a specific väsen
     unequipRune(vasenId, runeId) {
         if (this.currentCombat || this.inCombat) {
@@ -631,12 +631,40 @@ class GameState {
     explore() {
         const zone = ZONES[this.currentZone];
         if (!zone) return null;
-        
+
+        const encounterType = this.rollEncounterType();
+        this.lastEncounterType = encounterType;
+        this.updatePityCounters(encounterType);
+
+        let result;
+        switch (encounterType) {
+            case 'vasen':
+                result = this.createWildEncounter();
+                break;
+            case 'item':
+                result = this.findZoneItem(zone);
+                break;
+            case 'well':
+                result = this.visitSacredWell();
+                break;
+            case 'rune':
+                result = this.discoverRune();
+                // Safety net: the rune roll is skipped once every rune is collected
+                if (!result) return this.explore();
+                break;
+        }
+
+        this.saveGame();
+        return result;
+    }
+
+    // Decide what the next exploration finds: pity counters take priority over the random roll
+    rollEncounterType() {
         // Check if all runes collected
         const allRunesCollected = this.collectedRunes.size >= RUNE_LIST.length;
-        
+
         let encounterType;
-        
+
         // Priority 1: Sacred Well pity (triggers after threshold combats without a well)
         if (this.sacredWellCounter >= GAME_CONFIG.PITY_SACRED_WELL_THRESHOLD) {
             encounterType = 'well';
@@ -656,7 +684,7 @@ class GameState {
         // Priority 5: Normal RNG
         else {
             const roll = Math.random();
-            
+
             // If all runes collected, rune chance is added to vasen chance
             if (roll < EXPLORATION_RATES.WILD_VASEN + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
                 encounterType = 'vasen';
@@ -668,16 +696,17 @@ class GameState {
                 encounterType = 'rune';
             }
         }
-        
+
         // Prevent consecutive Sacred Wells - re-roll as a combat encounter
         if (encounterType === 'well' && this.lastEncounterType === 'well') {
             encounterType = 'vasen';
         }
 
-        // Track last encounter type
-        this.lastEncounterType = encounterType;
+        return encounterType;
+    }
 
-        // Update pity counters based on encounter type
+    // Reset the pity counter of the encounter type that was found and advance the others
+    updatePityCounters(encounterType) {
         switch (encounterType) {
             case 'vasen':
                 this.combatCounter = 0;       // Reset: got combat
@@ -704,111 +733,97 @@ class GameState {
                 // sacredWellCounter unchanged: only increments on combats
                 break;
         }
-        
-        // Process encounter and return result
-        let result;
-        
-        switch (encounterType) {
-            case 'vasen': {
-                // Starter guarantee: the first few wild väsen encounters of a
-                // new game are restricted to Nature element, so early combat
-                // isn't decided by a bad elemental matchup roll.
-                const useStarterNatureFilter = this.starterNatureBattlesRemaining > 0;
-                const elementFilter = useStarterNatureFilter ? ELEMENTS.NATURE : null;
+    }
 
-                // New-player tutorial (until the first tame): prefer väsen whose
-                // desired item the player carries, so the interrogate -> offer ->
-                // tame lesson is always possible. Falls back to the normal pool
-                // if no carried item matches anything in this zone.
-                const speciesFilter = !this.firstCombatTutorialShown
-                    ? name => this.itemInventory[VASEN_SPECIES[name]?.tamingItem] > 0
-                    : null;
+    // Wild väsen encounter, honoring the starter, tutorial and same-väsen pity rules
+    createWildEncounter() {
+        // Starter guarantee: the first few wild väsen encounters of a
+        // new game are restricted to Nature element, so early combat
+        // isn't decided by a bad elemental matchup roll.
+        const useStarterNatureFilter = this.starterNatureBattlesRemaining > 0;
+        const elementFilter = useStarterNatureFilter ? ELEMENTS.NATURE : null;
 
-                // Same-väsen pity: if the same species has appeared twice in a
-                // row, guarantee a different species this time and reset the streak.
-                let speciesName;
-                const forceDifferentSpecies = this.sameVasenCounter >= 2 && this.lastVasenSpecies;
+        // New-player tutorial (until the first tame): prefer väsen whose
+        // desired item the player carries, so the interrogate -> offer ->
+        // tame lesson is always possible. Falls back to the normal pool
+        // if no carried item matches anything in this zone.
+        const speciesFilter = !this.firstCombatTutorialShown
+            ? name => this.itemInventory[VASEN_SPECIES[name]?.tamingItem] > 0
+            : null;
 
-                if (forceDifferentSpecies) {
-                    // Retry a bounded number of times in case of bad luck; falls
-                    // back to the normal roll if the zone genuinely only has one
-                    // possible väsen (avoids an infinite loop in that edge case).
-                    let attempts = 0;
-                    do {
-                        speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter, speciesFilter);
-                        attempts++;
-                    } while (speciesName === this.lastVasenSpecies && attempts < 20);
-                } else {
-                    speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter, speciesFilter);
-                }
+        // Same-väsen pity: if the same species has appeared twice in a
+        // row, guarantee a different species this time and reset the streak.
+        let speciesName;
+        const forceDifferentSpecies = this.sameVasenCounter >= 2 && this.lastVasenSpecies;
 
-                if (useStarterNatureFilter) {
-                    this.starterNatureBattlesRemaining--;
-                }
-
-                // Track the consecutive same-väsen streak
-                if (speciesName === this.lastVasenSpecies) {
-                    this.sameVasenCounter++;
-                } else {
-                    this.lastVasenSpecies = speciesName;
-                    this.sameVasenCounter = 1;
-                }
-
-                const level = getRandomLevelForZone(this.currentZone);
-                const vasen = createWildVasen(speciesName, level);
-                result = { type: 'vasen', vasen };
-                break;
-            }
-            
-            case 'item': {
-                // Get items from Väsen that spawn in this zone
-                const spawns = zone.spawns === 'ALL' ? VASEN_LIST : zone.spawns;
-                const items = spawns.map(name => VASEN_SPECIES[name]?.tamingItem).filter(Boolean);
-                const randomItem = items[Math.floor(Math.random() * items.length)];
-                
-                // Add to inventory
-                this.addItem(randomItem, 1);
-                
-                // Get item dialogue (derive from description)
-                const itemData = TAMING_ITEMS[randomItem];
-                const dialogue = itemData ? 'You found ' + itemData.description[0].toLowerCase() + itemData.description.slice(1) : `You found a ${randomItem}!`;
-                
-                result = { type: 'item', itemId: randomItem, dialogue };
-                break;
-            }
-            
-            case 'well': {
-                const anyHealed = this.applySacredWellHealing();
-                const healPercent = Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100);
-                const dialogue = anyHealed 
-                    ? `A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your Väsen drink deeply and feel renewed. All tamed Väsen are healed by <span style="color: var(--color-positive-soft); font-weight: 700;">${healPercent}%</span>.`
-                    : 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your tamed Väsen are already at full vigor, but the sacred waters shimmer with approval.';
-                result = { type: 'well', dialogue };
-                break;
-            }
-            
-            case 'rune': {
-                // Get uncollected runes
-                const uncollectedRunes = RUNE_LIST.filter(r => !this.collectedRunes.has(r));
-                if (uncollectedRunes.length === 0) {
-                    // Safety net: the rune roll is skipped once every rune is collected
-                    return this.explore();
-                }
-                
-                const randomRune = uncollectedRunes[Math.floor(Math.random() * uncollectedRunes.length)];
-                this.collectedRunes.add(randomRune);
-                this.saveGame();
-                
-                const runeData = RUNES[randomRune];
-                const dialogue = `The wind carries a whisper of old galdr. Another rune has chosen to reveal itself to you. You discovered ${runeData.symbol} ${runeData.name}.`;
-                
-                result = { type: 'rune', runeId: randomRune, dialogue };
-                break;
-            }
+        if (forceDifferentSpecies) {
+            // Retry a bounded number of times in case of bad luck; falls
+            // back to the normal roll if the zone genuinely only has one
+            // possible väsen (avoids an infinite loop in that edge case).
+            let attempts = 0;
+            do {
+                speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter, speciesFilter);
+                attempts++;
+            } while (speciesName === this.lastVasenSpecies && attempts < 20);
+        } else {
+            speciesName = getRandomSpawnFromZone(this.currentZone, elementFilter, speciesFilter);
         }
-        
-        this.saveGame();
-        return result;
+
+        if (useStarterNatureFilter) {
+            this.starterNatureBattlesRemaining--;
+        }
+
+        // Track the consecutive same-väsen streak
+        if (speciesName === this.lastVasenSpecies) {
+            this.sameVasenCounter++;
+        } else {
+            this.lastVasenSpecies = speciesName;
+            this.sameVasenCounter = 1;
+        }
+
+        const level = getRandomLevelForZone(this.currentZone);
+        const vasen = createWildVasen(speciesName, level);
+        return { type: 'vasen', vasen };
+    }
+
+    // Find a taming item wanted by one of the väsen that spawn in this zone
+    findZoneItem(zone) {
+        const spawns = zone.spawns === 'ALL' ? VASEN_LIST : zone.spawns;
+        const items = spawns.map(name => VASEN_SPECIES[name]?.tamingItem).filter(Boolean);
+        const randomItem = items[Math.floor(Math.random() * items.length)];
+
+        this.addItem(randomItem, 1);
+
+        // Item dialogue is derived from the item description
+        const itemData = TAMING_ITEMS[randomItem];
+        const dialogue = itemData ? 'You found ' + itemData.description[0].toLowerCase() + itemData.description.slice(1) : `You found a ${randomItem}!`;
+
+        return { type: 'item', itemId: randomItem, dialogue };
+    }
+
+    // Sacred Well: heal every tamed väsen
+    visitSacredWell() {
+        const anyHealed = this.applySacredWellHealing();
+        const healPercent = Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100);
+        const dialogue = anyHealed
+            ? `A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your Väsen drink deeply and feel renewed. All tamed Väsen are healed by <span style="color: var(--color-positive-soft); font-weight: 700;">${healPercent}%</span>.`
+            : 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your tamed Väsen are already at full vigor, but the sacred waters shimmer with approval.';
+        return { type: 'well', dialogue };
+    }
+
+    // Discover a random rune the player does not own yet. Returns null when every
+    // rune is already collected.
+    discoverRune() {
+        const uncollectedRunes = RUNE_LIST.filter(r => !this.collectedRunes.has(r));
+        if (uncollectedRunes.length === 0) return null;
+
+        const randomRune = uncollectedRunes[Math.floor(Math.random() * uncollectedRunes.length)];
+        this.collectedRunes.add(randomRune);
+
+        const runeData = RUNES[randomRune];
+        const dialogue = `The wind carries a whisper of old galdr. Another rune has chosen to reveal itself to you. You discovered ${runeData.symbol} ${runeData.name}.`;
+
+        return { type: 'rune', runeId: randomRune, dialogue };
     }
     
     // Get active party (non-null members)

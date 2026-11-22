@@ -86,6 +86,12 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 - Collect lore entries by taming Väsen, defeating guardians, and finding items
 - Entries organised into categories: Families, Väsen, Items, Skills, Locations, Concepts
 
+### Tips
+
+- New players are guided by tip boxes and glowing buttons until their first tame and first guardian
+- Confirmation dialogues show reminder tips, such as Interrogate costing a turn or Auto Heal using up taming items
+- Disable Tips (in Settings) hides all tips and tutorial glows; confirmation dialogues still appear
+
 ## Achievements
 
 - **Champion**: Defeat all zone guardians
@@ -114,23 +120,23 @@ Vasenvaktaren/
 ├── README.md                       (project information)
 │
 ├── styles/
-│   ├── style-main.css              (import file)
+│   ├── style-main.css              (import file; the import order is the cascade order)
 │   ├── 01-style-variables.css      (CSS variables)
 │   ├── 02-style-reset.css          (reset & base styles)
-│   ├── 03-style-utilities.css      (utility classes)
-│   ├── 04-style-layout.css         (screens & layout)
+│   ├── 03-style-utilities.css      (utility classes and messages)
+│   ├── 04-style-layout.css         (screens, main menu, starter selection, game layout, header, footer)
 │   ├── 05-style-buttons.css        (button styles)
-│   ├── 06-style-panels.css         (panels & tabs)
-│   ├── 07-style-vasen.css          (väsen UI)
+│   ├── 06-style-panels.css         (main game area & panels)
+│   ├── 07-style-vasen.css          (väsen, rune & item inventories, details panel, väsen cards)
 │   ├── 08-style-party.css          (party section)
 │   ├── 09-style-zones.css          (zone section)
-│   ├── 10-style-combat.css         (combat UI)
-│   ├── 11-style-modals.css         (modal styles)
-│   ├── 12-style-badges.css         (badges & effects)
-│   ├── 13-style-animations.css     (animations & skill animations)
-│   ├── 14-style-responsive.css     (responsive design)
+│   ├── 10-style-combat.css         (combat screen: combatant panels, portraits, skills, combat log)
+│   ├── 11-style-modals.css         (modals, dialogues, game guide, tip boxes)
+│   ├── 12-style-badges.css         (element & family badges with their popups, rarity badges)
+│   ├── 13-style-animations.css     (idle, attack, hit & shake animations)
+│   ├── 14-style-responsive.css     (responsive breakpoints, combat layout, touch input, accessibility)
 │   ├── 15-style-lore.css           (lore book styles)
-│   └── 16-style-loot.css           (loot UI styles)
+│   └── 16-style-loot.css           (item & rune cards)
 │
 ├── js/
 │   ├── core/
@@ -143,9 +149,11 @@ Vasenvaktaren/
 │   │   └── 10-core-lore.js         (lore entries, categories, and unlock keys)
 │   │
 │   ├── systems/
-│   │   ├── 6a-system-combat.js     (Combat class)
+│   │   ├── 6a-system-combat.js     (Combat class: turn flow, player & enemy actions, knockouts, experience, combat log)
 │   │   ├── 6b-system-ai.js         (EnemyAI class)
-│   │   └── 7-system-state.js       (GameState class)
+│   │   ├── 6c-system-combat-skills.js   (Combat: skill resolution, damage calculation, utility skill effects)
+│   │   ├── 6d-system-combat-passives.js (Combat: rune effects and family passives)
+│   │   └── 7-system-state.js       (GameState class: collection, party, runes, items, exploration, save/load)
 │   │
 │   ├── ui/
 │   │   ├── 8a-ui-core.js           (UIController class, initialization, and overlay management)

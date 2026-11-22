@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Väsenväktaren</title>
     <link rel="stylesheet" href="styles/style-main.css">
-    <link rel="stylesheet" href="styles/16-style-loot.css">
     <style>
         /* Prevent flash on page load - hide all screens until JS initializes */
         body.loading .screen {
@@ -624,14 +623,14 @@
 
         <!-- Gameplay toggles -->
         <div class="settings-section">
-            <label class="toggle-switch-row" for="disable-tutorial-toggle">
+            <label class="toggle-switch-row" for="disable-tips-toggle">
                 <span class="toggle-switch">
-                    <input type="checkbox" id="disable-tutorial-toggle">
+                    <input type="checkbox" id="disable-tips-toggle">
                     <span class="toggle-switch-slider"></span>
                 </span>
-                <span class="toggle-switch-label-text">Disable Beginner Tutorial</span>
+                <span class="toggle-switch-label-text">Disable Tips</span>
             </label>
-            <p class="settings-note">Hides new-player tips and glows.</p>
+            <p class="settings-note">Hides tips and tutorial glows.</p>
 
             <label class="toggle-switch-row" for="unlock-all-info-toggle">
                 <span class="toggle-switch">
@@ -843,6 +842,8 @@
     <!-- Game Systems -->
     <script src="js/systems/6a-system-combat.js"></script>
     <script src="js/systems/6b-system-ai.js"></script>
+    <script src="js/systems/6c-system-combat-skills.js"></script>
+    <script src="js/systems/6d-system-combat-passives.js"></script>
     <script src="js/systems/7-system-state.js"></script>
     
     <!-- UI Controller (modular) -->

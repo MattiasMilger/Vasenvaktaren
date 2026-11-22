@@ -134,7 +134,7 @@ UIController.prototype.updateExploreButton = function() {
             // handleCombatEnd(), before endCombat() runs) can't strip the blink
             // prematurely regardless of whether the väsen was tamed.
             this.exploreBtn.classList.toggle('tutorial-blink',
-                !gameState.firstExploreTutorialShown && hasParty && this.isBeginnerTutorialEnabled());
+                !gameState.firstExploreTutorialShown && hasParty && this.areTipsEnabled());
 
             // Show/hide challenge button
             if (zone.guardian) {

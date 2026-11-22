@@ -1,9 +1,9 @@
 /* =============================================================================
-   04-style-layout.css - Extracted Section
+   04-style-layout.css - Screens, Main Menu, Starter Selection, Game Layout, Header and Footer
    ============================================================================= */
 
 /* =============================================================================
-   7. SCREENS
+   SCREENS
    ============================================================================= */
 .screen {
     display: none;
@@ -24,7 +24,7 @@
 }
 
 /* =============================================================================
-   8. MAIN MENU SCREEN
+   MAIN MENU SCREEN
    ============================================================================= */
 #main-menu-screen {
     justify-content: center;
@@ -68,7 +68,7 @@
 }
 
 /* =============================================================================
-   9. STARTER SELECTION SCREEN
+   STARTER SELECTION SCREEN
    ============================================================================= */
 #starter-select-screen {
     padding: var(--spacing-xl);
@@ -322,7 +322,7 @@
 }
 
 /* =============================================================================
-   10. GAME SCREEN LAYOUT
+   GAME SCREEN LAYOUT
    ============================================================================= */
 #game-screen {
     height: 100vh;
@@ -330,7 +330,7 @@
 }
 
 /* =============================================================================
-   11. HEADER
+   HEADER
    ============================================================================= */
 .game-header {
     display: flex;
@@ -399,4 +399,24 @@
     .header-right {
         flex-shrink: 0;
     }
+}
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+.game-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border-top: 2px solid var(--border-color);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.footer-sep {
+    color: var(--border-color);
 }

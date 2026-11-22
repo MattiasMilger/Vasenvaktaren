@@ -23,8 +23,8 @@ Game.prototype.challengeGuardian = function() {
     // Derived from defeatedGuardians, so it disappears on its own after the
     // first win and needs no separate save flag.
     let tutorialHtml = '';
-    if (ui.isBeginnerTutorialEnabled() && gameState.defeatedGuardians.size === 0) {
-        tutorialHtml = ui.getTutorialTipHTML(
+    if (ui.areTipsEnabled() && gameState.defeatedGuardians.size === 0) {
+        tutorialHtml = ui.getTipHTML(
             `Bring a full party of ${MAX_PARTY_SIZE} healthy väsen of matching level (<strong>Lvl ${guardian.team[0].level}</strong>).`
         );
     }
