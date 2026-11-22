@@ -419,7 +419,9 @@ class Combat {
         const enemyPriority = (enemySkill ? enemySkill.priority : 0) || 0;
 
         let playerFirst = true;
-        if (enemyPriority > playerPriority) {
+        // Swap has highest priority: an enemy swap resolves before the player's
+        // skill, so the incoming Väsen takes the hit (mirrors playerSwap).
+        if (enemyAction.type === 'swap' || enemyPriority > playerPriority) {
             playerFirst = false;
         }
 
