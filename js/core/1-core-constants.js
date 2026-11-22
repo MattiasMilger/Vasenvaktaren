@@ -65,7 +65,7 @@ const GAME_CONFIG = {
     // =============================================================================
     // DAMAGE CALCULATION
     // =============================================================================
-    POWER_CONSTANT: 250,            // Divisor that converts a skill's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. A skill with power 250 produces a 1× multiplier against the attacker's stat.
+    POWER_CONSTANT: 265,            // Divisor that converts a skill's raw power value into a damage multiplier: powerFactor = power / POWER_CONSTANT. A skill with power 265 produces a 1× multiplier against the attacker's stat.
     DEFENSE_CONSTANT: 190,          // Softcap divisor in the defense reduction formula: reduction = 1 - (defense / (defense + DEFENSE_CONSTANT)). At defense equal to this value the target takes 50% damage; higher values make defense less effective overall.
     DAMAGE_RANGE_VARIANCE: 0.1,         // Random damage variance applied symmetrically around base damage
     

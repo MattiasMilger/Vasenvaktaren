@@ -666,11 +666,18 @@ class Combat {
         result.damage = damageResult.damage;
         result.matchup = damageResult.matchup;
         result.attackType = damageResult.attackType;
-        
+
         // Apply damage
         const actualDamage = defender.takeDamage(result.damage);
 
         this.addLog(`${attacker.getDisplayName()} deals ${actualDamage} damage to ${defender.getDisplayName()}!`, 'damage');
+
+        // Empowerment: any attack consumes a held empowerment (its bonus was applied
+        // in calculateDamage); skills that grant empowerment then charge the next attack.
+        attacker.combatFlags.isEmpowered = skillGrantsEmpowerment(skillName);
+        if (attacker.combatFlags.isEmpowered) {
+            this.addLog(`${attacker.getDisplayName()} is empowered! Its next attack deals ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}% more damage.`, 'buff');
+        }
 
         // Bind Rune - Elemental Conversion: log when element was converted
         if (damageResult.bindRuneEleConverted) {
@@ -900,6 +907,11 @@ class Combat {
         // Fehu: reduce potent damage taken
         if (matchup === 'POTENT' && defender.hasRune('FEHU')) {
             runeMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
+        }
+
+        // Empowerment from a previous Tier 1 attack (consumed in executeSkill)
+        if (attacker.combatFlags.isEmpowered) {
+            runeMod *= 1 + GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT;
         }
         
         // Calculate damage based on attack type
