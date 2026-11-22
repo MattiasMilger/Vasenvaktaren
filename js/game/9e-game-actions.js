@@ -217,7 +217,7 @@ Game.prototype.handleAutoBattle = function() {
 
     ui.showDialogue(
         'Auto Battle',
-        '<p>Let your väsen fight on their own? They will act on their own instincts, choosing their moves as cunningly as your foes do.</p>',
+        '<p>Let your väsen fight on their own?</p>',
         [
             {
                 text: `${uiIcon('swords')}Start Auto Battle`,
