@@ -668,9 +668,9 @@ achievementsHtml += '</div></div>';
         setText('guide-endless-heal', `${Math.round(GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT * 100)}%`);
     };
 
-    // Generate Level Milestones HTML from SKILL_LEARN_LEVELS and GAME_CONFIG.TWO_RUNE_LEVEL.
+    // Generate Level Milestones HTML from SKILL_LEARN_LEVELS, GAME_CONFIG.TWO_RUNE_LEVEL and GAME_CONFIG.MAX_LEVEL.
     // Lists which skill slot is learned at each level in SKILL_LEARN_LEVELS, plus the level
-    // at which a second rune slot is unlocked, sorted ascending by level.
+    // at which a second rune slot is unlocked and the max level, sorted ascending by level.
     UIController.prototype.generateLevelMilestonesHTML = function() {
         const milestones = [];
 
@@ -679,6 +679,7 @@ achievementsHtml += '</div></div>';
         });
 
         milestones.push({ level: GAME_CONFIG.TWO_RUNE_LEVEL, text: 'Second Rune Slot unlocked' });
+        milestones.push({ level: GAME_CONFIG.MAX_LEVEL, text: 'Max level' });
 
         milestones.sort((a, b) => a.level - b.level);
 

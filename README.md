@@ -35,7 +35,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 ### Runes
 
 - 24 equippable runes with unique effects
-- One rune slot (two at level 25)
+- One rune slot (two at level 20)
 - Strategic combinations for different builds
 - Bindrunes: certain rune pairs unlock a hidden combined effect when equipped together
 

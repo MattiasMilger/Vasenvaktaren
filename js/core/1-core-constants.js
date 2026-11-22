@@ -16,7 +16,7 @@ const GAME_CONFIG = {
     // LEVEL & PROGRESSION
     // =============================================================================
     MAX_LEVEL: 30,
-    TWO_RUNE_LEVEL: 25,             // Level at which a Väsen unlocks a second rune slot
+    TWO_RUNE_LEVEL: 20,             // Level at which a Väsen unlocks a second rune slot
     ENEMY_MAX_LEVEL: 999,
     STARTER_LEVEL: 10,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
@@ -534,7 +534,7 @@ const ELEMENT_BONUSES = {
     [ELEMENTS.WIND]: { durability: 5 }
 };
 
-const SKILL_LEARN_LEVELS = [1, 5, 10, 20];
+const SKILL_LEARN_LEVELS = [1, 5, 10, 15];
 
 // The four attributes that can be raised or lowered by stages in combat (health cannot).
 // Frozen because it is shared; copy it before mutating.
@@ -677,9 +677,9 @@ const ZONES = {
         guardian: {
             name: 'Sigurd',
             team: [
-                { species: 'Norna', level: 20, temperament: 'WISDOM_STRENGTH', runes: ['GIFU'] },
-                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_STRENGTH', runes: ['ODAL'] },
-                { species: 'Nacken', level: 20, temperament: 'HEALTH_DEFENSE', runes: ['INGUZ'] }
+                { species: 'Norna', level: 20, temperament: 'WISDOM_STRENGTH', runes: ['GIFU', 'MANNAZ'] },
+                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_STRENGTH', runes: ['ODAL', 'HAGAL'] },
+                { species: 'Nacken', level: 20, temperament: 'HEALTH_DEFENSE', runes: ['INGUZ', 'DAGAZ'] }
             ],
             dialogue: {
                 challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
