@@ -78,7 +78,7 @@ UIController.prototype.renderLore = function() {
     sortedCategories.forEach(cat => {
         if (!grouped[cat] || grouped[cat].length === 0) return;
 
-        const catLabel = (LORE_CATEGORY_ICONS[cat] ? inlineIcon(LORE_CATEGORY_ICONS[cat]) : '') + LORE_CATEGORIES[cat].label;
+        const catLabel = LORE_CATEGORIES[cat].label;
         const isCatFavorite = gameState.favoriteLoreCategories.has(cat);
 
         // Category-level Additional Info button - only for Skills, Items, and
@@ -307,7 +307,7 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     const labelSource   = 'Source:';
     const labelHeritage = 'Heritage:';
     const labelFamily   = 'Family:';
-    const labelVasen    = `${inlineIcon('vasen')}Väsen:`;
+    const labelVasen    = `Väsen:`;
 
     let extraMeta = '';
     if (entry.unlockType === 'vasen' && entry.unlockKey && !entry.family) {
@@ -387,12 +387,11 @@ UIController.prototype.renderLockedInfoRow = function(label) {
 // Generic show/hide for the Lore Info modal. Mirrors showLore()/hideLore()
 // (no overlay backdrop) so opening it doesn't darken the background, matching
 // the Lore Book modal it's nested inside.
-UIController.prototype.showLoreInfoModal = function(title, bodyHtml, icon = null) {
+UIController.prototype.showLoreInfoModal = function(title, bodyHtml) {
     const modal = document.getElementById('lore-info-modal');
     if (!modal) return;
     const titleEl = document.getElementById('lore-info-title');
     titleEl.textContent = title;
-    if (icon) titleEl.insertAdjacentHTML('afterbegin', uiIcon(icon, 20));
     const content = document.getElementById('lore-info-content');
     content.innerHTML = bodyHtml;
     modal.classList.add('active');
@@ -635,7 +634,7 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
                 </div>
             </div>
             <p class="lore-info-description">${species.description}</p>
-            <div class="lore-info-row"><span class="lore-info-label">${inlineIcon('items')}Taming Item:</span> <span class="lore-info-value">${species.tamingItem}</span></div>
+            <div class="lore-info-row"><span class="lore-info-label">Taming Item:</span> <span class="lore-info-value">${species.tamingItem}</span></div>
             <div class="lore-info-row"><span class="lore-info-label">Zones:</span> <span class="lore-info-value">${zoneNames.join(', ')}</span></div>
             <h4 class="lore-info-subheading">Base Attributes (Level 1)</h4>
             <div class="attribute-grid">${buildAttrGridHtml(1)}</div>
@@ -705,7 +704,7 @@ UIController.prototype.showSacredWellInfoModal = function() {
         </ul>
     `;
 
-    this.showLoreInfoModal('Sacred Wells', bodyHtml, 'heal');
+    this.showLoreInfoModal('Sacred Wells', bodyHtml);
 };
 
 // Locations technical info: every zone, its väsen spawns, and its guardian
@@ -750,8 +749,8 @@ UIController.prototype.showLocationsInfoModal = function() {
                 <div class="lore-info-item-header"><span class="lore-info-item-name">${zone.name}</span></div>
                 <p class="lore-info-item-desc">${zone.description}</p>
                 <div class="lore-info-row"><span class="lore-info-label">Level Range:</span> <span class="lore-info-value">${zone.levelRange[0]} - ${zone.levelRange[1]}</span></div>
-                <div class="lore-info-row"><span class="lore-info-label">${inlineIcon('vasen')}Väsen:</span> <span class="lore-info-value">${spawnsList}</span></div>
-                <div class="lore-info-row"><span class="lore-info-label">${inlineIcon('swords')}Guardian:</span> <span class="lore-info-value">${guardianValue}</span></div>
+                <div class="lore-info-row"><span class="lore-info-label">Väsen:</span> <span class="lore-info-value">${spawnsList}</span></div>
+                <div class="lore-info-row"><span class="lore-info-label">Guardian:</span> <span class="lore-info-value">${guardianValue}</span></div>
             </div>
         `;
     }).join('');
@@ -789,7 +788,7 @@ UIController.prototype.showRunesInfoModal = function() {
 
     const bindRunesCategoryHtml = discoveredBindRunes.length > 0 ? `
         <div class="lore-category">
-            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${inlineIcon('runes')}Bind Runes</h4>
+            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bind Runes</h4>
             <div class="lore-entry-list">
                 <p class="lore-info-description">Order does not matter.</p>
                 <div class="lore-info-bindrune-list">${bindRunesHtml}</div>
@@ -799,14 +798,14 @@ UIController.prototype.showRunesInfoModal = function() {
 
     const bodyHtml = `
         <div class="lore-category">
-            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${inlineIcon('runes')}Runes</h4>
+            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Runes</h4>
             <div class="lore-entry-list">
                 <div class="lore-info-bindrune-list">${runesHtml}</div>
             </div>
         </div>
         ${bindRunesCategoryHtml}
     `;
-    this.showLoreInfoModal('Runes', bodyHtml, 'runes');
+    this.showLoreInfoModal('Runes', bodyHtml);
 };
 
 // Skills technical info: every skill in the game and its standard info,
@@ -877,11 +876,11 @@ UIController.prototype.showItemsInfoModal = function() {
         return `
             <div class="lore-info-item-row">
                 <div class="lore-info-item-header">
-                    <span class="lore-info-item-name">${inlineIcon('items')}${item.name}</span>
+                    <span class="lore-info-item-name">${item.name}</span>
                 </div>
                 <p class="lore-info-item-desc">${item.description}</p>
                 <div class="lore-info-item-meta">
-                    <span class="lore-meta-label">${inlineIcon('vasen')}Väsen:</span> <span class="lore-meta-value">${speciesName}</span>
+                    <span class="lore-meta-label">Väsen:</span> <span class="lore-meta-value">${speciesName}</span>
                     <span class="lore-meta-sep">|</span>
                     <span class="lore-meta-label">Zones:</span> <span class="lore-meta-value">${zoneNames.join(', ')}</span>
                 </div>
@@ -890,5 +889,5 @@ UIController.prototype.showItemsInfoModal = function() {
     }).join('');
 
     const bodyHtml = `<div class="lore-info-items-list">${rowsHtml}</div>`;
-    this.showLoreInfoModal('Items', bodyHtml, 'items');
+    this.showLoreInfoModal('Items', bodyHtml);
 };

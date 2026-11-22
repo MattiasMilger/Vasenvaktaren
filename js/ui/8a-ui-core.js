@@ -102,12 +102,6 @@ function skillTypeIcon(skill) {
     return skill ? inlineIcon(SKILL_TYPE_ICONS[skill.type]) : '';
 }
 
-// Lore Book categories that match an iconed concept (keys of LORE_CATEGORIES)
-const LORE_CATEGORY_ICONS = {
-    vasen: 'vasen',
-    vasen_inaccessible: 'vasen',
-    items: 'items'
-};
 
 // element: an ELEMENTS value ('Earth', 'Fire', ...)
 function elementIcon(element) {
