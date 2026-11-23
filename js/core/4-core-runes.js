@@ -566,8 +566,115 @@ const BIND_RUNES = [
         },
         symbols: `${RUNES.HAGAL.symbol}${RUNES.NAUDIZ.symbol}`,
         names: `${RUNES.HAGAL.name} ${RUNES.NAUDIZ.name}`
-    }
+    },
+
+    // ── DAGAZ + JERA ──────────────────────────────────────────────────────────
+    // Dagaz's first-round damage bonus lasts RUNE_BIND_DAGAZ_JERA_ROUNDS rounds.
+    // Tracked via the dagazBonusRoundsLeft combat flag, set in endTurn when the
+    // first round ends and cleared when the väsen leaves the battlefield.
+    {
+        runes: ['DAGAZ', 'JERA'],
+        type: 'dagaz_extended',
+        get effectText() {
+            return `This väsen's Dagaz bonus lasts for the first ${GAME_CONFIG.RUNE_BIND_DAGAZ_JERA_ROUNDS} rounds after entering the battlefield`;
+        },
+        symbols: `${RUNES.DAGAZ.symbol}${RUNES.JERA.symbol}`,
+        names: `${RUNES.DAGAZ.name} ${RUNES.JERA.name}`
+    },
+
+    // ── DAGAZ + THURS ─────────────────────────────────────────────────────────
+    // The first time this väsen enters the battlefield each combat, it uses
+    // RUNE_BIND_DAGAZ_THURS_SKILL (Basic Strike) on the enemy for free. Tracked
+    // via the dagazThursStrikeTriggered once-per-combat flag.
+    {
+        runes: ['DAGAZ', 'THURS'],
+        type: 'enter_battlefield_strike',
+        get effectText() {
+            return `This väsen triggers a ${GAME_CONFIG.RUNE_BIND_DAGAZ_THURS_SKILL} when entering the battlefield (once per combat)`;
+        },
+        symbols: `${RUNES.DAGAZ.symbol}${RUNES.THURS.symbol}`,
+        names: `${RUNES.DAGAZ.name} ${RUNES.THURS.name}`
+    },
+
+    // ── DAGAZ + URUZ ──────────────────────────────────────────────────────────
+    // Gains a fraction of max megin whenever this väsen enters the battlefield.
+    {
+        runes: ['DAGAZ', 'URUZ'],
+        type: 'enter_battlefield_megin',
+        get effectText() {
+            return `This väsen gains ${Math.round(GAME_CONFIG.RUNE_BIND_DAGAZ_URUZ_MEGIN_PERCENT * 100)}% megin when entering the battlefield`;
+        },
+        symbols: `${RUNES.DAGAZ.symbol}${RUNES.URUZ.symbol}`,
+        names: `${RUNES.DAGAZ.name} ${RUNES.URUZ.name}`
+    },
+
+    // ── WYNJA + THURS ─────────────────────────────────────────────────────────
+    // When this väsen's Wynja blocks a debuff, the opponent on the battlefield
+    // gets different random attributes lowered. Can itself be blocked by the
+    // opponent's Wynja.
+    {
+        runes: ['WYNJA', 'THURS'],
+        type: 'wynja_block_debuff',
+        get effectText() {
+            return `When this väsen's Wynja blocks a debuff, lowers ${GAME_CONFIG.RUNE_BIND_WYNJA_THURS_DEBUFF_COUNT} random enemy attributes by ${GAME_CONFIG.RUNE_BIND_WYNJA_THURS_DEBUFF_STAGES} stage`;
+        },
+        symbols: `${RUNES.WYNJA.symbol}${RUNES.THURS.symbol}`,
+        names: `${RUNES.WYNJA.name} ${RUNES.THURS.name}`
+    },
+
+    // ── FEHU + PROC RUNE ──────────────────────────────────────────────────────
+    // When this väsen is hit by a potent hit (Thurs reflections included), it
+    // has a chance to trigger the partner rune's effect, regardless of element.
+    ...['SOL', 'ISAZ', 'EIHWAZ', 'EHWAZ', 'ALGIZ', 'JERA', 'INGUZ'].map(procRune =>
+        makeProcBindRune('FEHU', procRune, 'potent_hit_proc', 'is hit by a potent hit', 'RUNE_BIND_FEHU_PROC_CHANCE')
+    ),
+
+    // ── NAUDIZ + PROC RUNE ────────────────────────────────────────────────────
+    // Mirror of the Fehu pairs: when this väsen deals a weak hit (Thurs
+    // reflections included), it has a chance to trigger the partner rune's effect.
+    ...['SOL', 'ISAZ', 'EIHWAZ', 'EHWAZ', 'ALGIZ', 'JERA'].map(procRune =>
+        makeProcBindRune('NAUDIZ', procRune, 'weak_hit_proc', 'deals a weak hit', 'RUNE_BIND_NAUDIZ_PROC_CHANCE')
+    )
 ];
+
+// What each proc rune does when a Fehu or Naudiz bind rune triggers it. The
+// buff runes raise the same attributes as their own element proc, the heal
+// runes heal, and Inguz lowers a random attribute of the opponent. Amounts
+// come from the RUNE_BIND_PROC_* constants.
+const BIND_RUNE_PROC_EFFECTS = {
+    SOL:    { kind: 'buff', attributes: ['strength', 'wisdom'] },
+    ISAZ:   { kind: 'buff', attributes: ['wisdom', 'strength'] },
+    EIHWAZ: { kind: 'buff', attributes: ['defense', 'durability'] },
+    EHWAZ:  { kind: 'buff', attributes: ['defense', 'durability'] },
+    ALGIZ:  { kind: 'heal' },
+    JERA:   { kind: 'heal' },
+    INGUZ:  { kind: 'debuff' }
+};
+
+// Builds a Fehu/Naudiz-style bind rune: `triggerText` describes when it rolls,
+// `chanceKey` names the GAME_CONFIG proc chance, and `procRune` decides what happens.
+function makeProcBindRune(triggerRune, procRune, type, triggerText, chanceKey) {
+    return {
+        runes: [triggerRune, procRune],
+        type: type,
+        procRune: procRune,
+        get effectText() {
+            const chance = Math.round(GAME_CONFIG[chanceKey] * 100);
+            const effect = BIND_RUNE_PROC_EFFECTS[procRune];
+            let outcome;
+            if (effect.kind === 'buff') {
+                outcome = `raise its ${effect.attributes.join(' and ')} attributes by ${GAME_CONFIG.RUNE_BIND_PROC_BUFF_STAGES} stage`;
+            } else if (effect.kind === 'heal') {
+                outcome = `heal it by ${Math.round(GAME_CONFIG.RUNE_BIND_PROC_HEAL_PERCENT * 100)}%`;
+            } else {
+                outcome = `lower a random enemy attribute by ${GAME_CONFIG.RUNE_BIND_PROC_DEBUFF_STAGES} stage`;
+            }
+            return `When this väsen ${triggerText}, it has a ${chance}% chance to ${outcome}`;
+        },
+        symbols: `${RUNES[triggerRune].symbol}${RUNES[procRune].symbol}`,
+        names: `${RUNES[triggerRune].name} ${RUNES[procRune].name}`
+    };
+}
 
 // Returns an array of active bind rune definitions for a given VasenInstance.
 // A bind rune is active only when the väsen has BOTH runes in the pair equipped.
@@ -631,6 +738,18 @@ function hasEnemyHealthThresholdDebuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enemy_health_threshold_debuff_all');
 }
 
+// Returns true if the väsen has the DAGAZ + JERA dagaz_extended bind rune active.
+function hasDagazExtendedBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'dagaz_extended');
+}
+
+// Returns the active bind rune of the given type for a väsen (e.g.
+// 'wynja_block_debuff', 'potent_hit_proc'), or null. A väsen holds two runes,
+// so at most one bind rune is active.
+function getActiveBindRuneOfType(vasen, type) {
+    return getActiveBindRunes(vasen).find(br => br.type === type) || null;
+}
+
 // =============================================================================
 // Returns the set of rune IDs that are eligible due to bindrune viability,
 // independent of whether the rune passes its own solo filter rule.
@@ -646,6 +765,9 @@ function hasEnemyHealthThresholdDebuffAllBindRune(vasen) {
 //   - FEHU + WYNJA: always viable.
 //   - URUZ + THURS: always viable.
 //   - HAGAL + NAUDIZ: always viable.
+//   - DAGAZ + JERA, DAGAZ + THURS, DAGAZ + URUZ, WYNJA + THURS: always viable.
+//   - FEHU + proc rune, NAUDIZ + proc rune: always viable (the proc ignores
+//     the partner rune's element).
 // =============================================================================
 function getBindRuneEligibleRunes(vasen) {
     const eligible = new Set();
@@ -698,6 +820,12 @@ function getBindRuneEligibleRunes(vasen) {
                 viable = true;
                 break;
             case 'enemy_health_threshold_debuff_all': // HAGAL + NAUDIZ
+            case 'dagaz_extended':                    // DAGAZ + JERA
+            case 'enter_battlefield_strike':          // DAGAZ + THURS
+            case 'enter_battlefield_megin':           // DAGAZ + URUZ
+            case 'wynja_block_debuff':                // WYNJA + THURS
+            case 'potent_hit_proc':                   // FEHU + proc rune (any element)
+            case 'weak_hit_proc':                     // NAUDIZ + proc rune (any element)
                 viable = true;
                 break;
             default:

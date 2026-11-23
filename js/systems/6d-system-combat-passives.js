@@ -21,7 +21,8 @@ const ELEMENT_BUFF_RUNES = {
 // flag). Jätte (Jotun's Fury) and Alv (Elven Craftsmanship) are not listed: they
 // modify a hit or a buff while it is calculated, so they are called from there.
 const COMBAT_PASSIVE_HANDLERS = {
-    onEnterBattlefield: ['passiveEtherealSurge', 'bindRuneEntryDebuff'],
+    // The entry strike resolves last, so it hits with the other entry effects applied
+    onEnterBattlefield: ['passiveEtherealSurge', 'bindRuneEntryDebuff', 'bindRuneEntryMegin', 'bindRuneEntryStrike'],
     onTurnEnd:          ['passiveBestialRage'],
     onSwapOut:          ['passiveTagTeam'],
     onHealthThreshold:  ['passiveDraconicResilience', 'bindRuneLowHealthBuffAll'],
@@ -67,7 +68,79 @@ Combat.prototype.tryWynjaBlock = function(target) {
     const stages = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE;
     target.modifyAttributeStage(counterStat, stages);
     this.logStageChange(target, counterStat, stages);
+    this.tryWynjaThursDebuff(target);
     return true;
+};
+
+// Bind Rune - Wynja + Thurs: after Wynja blocks a debuff, lower different random
+// attributes of the opponent currently on the battlefield. The opponent's own
+// Wynja can block it (and, with Wynja + Thurs, answer once in return; each
+// Wynja blocks only once per combat, so this always ends).
+Combat.prototype.tryWynjaThursDebuff = function(vasen) {
+    const br = getActiveBindRuneOfType(vasen, 'wynja_block_debuff');
+    if (!br) return;
+    const opponent = vasen === this.playerActive ? this.enemyActive
+        : vasen === this.enemyActive ? this.playerActive : null;
+    if (!opponent || opponent.isKnockedOut()) return;
+
+    this.logBindRuneActivated(vasen, br);
+    if (this.tryWynjaBlock(opponent)) return;
+
+    const stages = GAME_CONFIG.RUNE_BIND_WYNJA_THURS_DEBUFF_STAGES;
+    const attributes = [...STAGEABLE_ATTRIBUTES]; // copied: picks are removed so they don't repeat
+    for (let i = 0; i < GAME_CONFIG.RUNE_BIND_WYNJA_THURS_DEBUFF_COUNT && attributes.length > 0; i++) {
+        const stat = attributes.splice(Math.floor(Math.random() * attributes.length), 1)[0];
+        const stageResult = opponent.modifyAttributeStage(stat, -stages);
+        if (stageResult.changed !== 0) {
+            this.logStageChange(opponent, stat, stageResult.changed);
+        }
+    }
+};
+
+// Bind Rune - Fehu / Naudiz + proc rune: after `hitter` lands a hit on `target`,
+// a potent hit rolls the target's Fehu pair ('potent_hit_proc') and a weak hit
+// rolls the hitter's Naudiz pair ('weak_hit_proc'). The partner rune's effect
+// ignores its element. Thurs reflections count as hits too.
+Combat.prototype.tryHitProcBindRunes = function(hitter, target, matchup) {
+    if (matchup === 'POTENT') {
+        this.tryHitProcBindRune(target, hitter, 'potent_hit_proc', GAME_CONFIG.RUNE_BIND_FEHU_PROC_CHANCE);
+    } else if (matchup === 'WEAK') {
+        this.tryHitProcBindRune(hitter, target, 'weak_hit_proc', GAME_CONFIG.RUNE_BIND_NAUDIZ_PROC_CHANCE);
+    }
+};
+
+Combat.prototype.tryHitProcBindRune = function(vasen, opponent, type, chance) {
+    if (vasen.isKnockedOut()) return;
+    const br = getActiveBindRuneOfType(vasen, type);
+    if (!br || Math.random() >= chance) return;
+
+    const effect = BIND_RUNE_PROC_EFFECTS[br.procRune];
+    if (effect.kind === 'buff') {
+        this.logBindRuneActivated(vasen, br);
+        const stages = GAME_CONFIG.RUNE_BIND_PROC_BUFF_STAGES;
+        effect.attributes.forEach(stat => {
+            const stageResult = vasen.modifyAttributeStage(stat, stages);
+            if (stageResult.capped && stageResult.changed === 0) {
+                this.addLog(`${vasen.getDisplayName()}'s ${stat} cannot be raised any higher.`, 'status');
+            } else if (stageResult.changed !== 0) {
+                this.logStageChange(vasen, stat, stageResult.changed);
+            }
+        });
+    } else if (effect.kind === 'heal') {
+        const healAmount = vasen.healPercent(GAME_CONFIG.RUNE_BIND_PROC_HEAL_PERCENT);
+        if (healAmount <= 0) return; // already at full health: nothing to show
+        this.logBindRuneActivated(vasen, br);
+        this.logHealthGained(vasen, healAmount);
+    } else if (effect.kind === 'debuff') {
+        if (!opponent || opponent.isKnockedOut()) return;
+        this.logBindRuneActivated(vasen, br);
+        if (this.tryWynjaBlock(opponent)) return;
+        const stat = randomAttribute();
+        const stageResult = opponent.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_BIND_PROC_DEBUFF_STAGES);
+        if (stageResult.changed !== 0) {
+            this.logStageChange(opponent, stat, stageResult.changed);
+        }
+    }
 };
 
 // Jera: chance to heal when using a low-cost skill
@@ -235,6 +308,14 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
     // Bind Rune - Use Best Stat (Ansuz + Raido): the higher of Strength/Wisdom was used
     if (damageResult.bindRuneUseBestStat) {
         const br = getActiveBindRunes(attacker).find(b => b.type === 'use_best_stat');
+        if (br) {
+            this.logBindRuneActivated(attacker, br);
+        }
+    }
+
+    // Bind Rune - Dagaz + Jera: the Dagaz bonus applied in its extra round
+    if (damageResult.bindRuneDagazExtended) {
+        const br = getActiveBindRunes(attacker).find(b => b.type === 'dagaz_extended');
         if (br) {
             this.logBindRuneActivated(attacker, br);
         }
@@ -492,6 +573,34 @@ Combat.prototype.bindRuneEntryDebuff = function({ vasen, isPlayer }) {
         opponent.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
         this.logStageChange(opponent, randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
     }
+};
+
+// --- BIND RUNE: DAGAZ + URUZ (enter battlefield megin) ---
+// Gains a fraction of max megin whenever this väsen enters the battlefield.
+Combat.prototype.bindRuneEntryMegin = function({ vasen }) {
+    const br = getActiveBindRuneOfType(vasen, 'enter_battlefield_megin');
+    if (!br || vasen.isKnockedOut()) return;
+    const gained = vasen.gainMegin(Math.floor(vasen.maxMegin * GAME_CONFIG.RUNE_BIND_DAGAZ_URUZ_MEGIN_PERCENT));
+    if (gained <= 0) return; // already full (e.g. at combat start): nothing to show
+    this.logBindRuneActivated(vasen, br);
+    this.addLog(`${vasen.getDisplayName()} gained ${gained} Megin!`, 'megin');
+};
+
+// --- BIND RUNE: DAGAZ + THURS (enter battlefield strike) ---
+// The first time this väsen enters the battlefield each combat, it uses a free
+// Basic Strike (RUNE_BIND_DAGAZ_THURS_SKILL) on the opponent. It resolves as a
+// normal hit (runes, passives, Thurs reflection). Knockouts it causes outside
+// a turn are resolved by resolveOutOfTurnKnockouts (combat start) or by the
+// turn's handlePostTurn (swaps).
+Combat.prototype.bindRuneEntryStrike = function({ vasen, isPlayer }) {
+    const br = getActiveBindRuneOfType(vasen, 'enter_battlefield_strike');
+    if (!br || vasen.combatFlags.dagazThursStrikeTriggered || this.isOver) return;
+    const opponent = isPlayer ? this.enemyActive : this.playerActive;
+    if (vasen.isKnockedOut() || !opponent || opponent.isKnockedOut()) return;
+
+    vasen.combatFlags.dagazThursStrikeTriggered = true;
+    this.logBindRuneActivated(vasen, br);
+    this.executeSkill(vasen, opponent, GAME_CONFIG.RUNE_BIND_DAGAZ_THURS_SKILL, isPlayer, null, true);
 };
 
 // --- JÄTTE: JOTUN'S FURY ---

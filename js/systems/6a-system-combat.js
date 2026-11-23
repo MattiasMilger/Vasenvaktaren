@@ -70,6 +70,8 @@ class Combat {
 
         // Action state
         this.waitingForPlayerAction = true;
+        this.turnInProgress = false;        // Between startTurn and the end of endTurn
+        this.awaitingKnockoutSwap = false;  // Knockout swap prompt is open
         
         // Initialize active Väsen
         this.setPlayerActive(0);
@@ -77,10 +79,24 @@ class Combat {
 
         // Defer initial passives to allow UI to set up loggers
         setTimeout(() => {
-            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.playerActive, isPlayer: true });
-            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.enemyActive, isPlayer: false });
+            this.runEntryEffects(true);
             if (this.onUpdate) this.onUpdate();
         }, 50);
+    }
+
+    // Entering-the-battlefield effects outside a turn: at combat start, and for
+    // the new enemy on each later Endless Tower floor (playerEnters = false when
+    // the player's väsen is already on the field).
+    runEntryEffects(playerEnters) {
+        const enemy = this.enemyActive;
+        if (playerEnters) {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen: this.playerActive, isPlayer: true });
+        }
+        // An entry strike (Dagaz + Thurs) may already have knocked out the enemy
+        if (!enemy.isKnockedOut()) {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen: enemy, isPlayer: false });
+        }
+        this.resolveOutOfTurnKnockouts();
     }
     
     // Execute player action (dispatcher method)
@@ -91,7 +107,10 @@ class Combat {
         this.waitingForPlayerAction = false;
         
         let result = null;
-        
+
+        // Last action taken this combat (a pass in a row skips the Pass confirmation)
+        this.lastPlayerActionType = action.type;
+
         switch (action.type) {
             case 'skill':
                 // Get ally target if specified
@@ -135,77 +154,62 @@ class Combat {
         return result;
     }
     
-    // Set player's active Väsen
-    setPlayerActive(index, isSwap = false) {
-        const vasen = this.playerTeam[index];
-        if (!vasen || vasen.isKnockedOut()) return false;
-        
-        // Handle Oknytt passive for outgoing Väsen
-        if (isSwap && this.playerActive && this.playerActive.species.family === FAMILIES.OKNYTT) {
-            this.applyFamilyPassive('onSwapOut', { 
-                vasen: this.playerActive, 
-                incomingVasen: vasen,
-                isPlayer: true 
-            });
-        }
-        
-        if (this.playerActive) {
-            this.playerActive.combatFlags.hasSwapSickness = false;
-            if (isSwap) {
-                this.playerActive.combatFlags.odjurPassiveTriggered = false;
-            }
-        }
-        
-        this.playerActive = vasen;
-        this.playerActiveIndex = index;
-        if (this.onPlayerActiveChange) this.onPlayerActiveChange(vasen);
-        
-        if (isSwap) {
-            vasen.combatFlags.hasSwapSickness = true;
-            vasen.combatFlags.isFirstRound = true;
-            vasen.combatFlags.turnsOnField = 0;
-        }
-        
-        
-        // Trigger Ande passive when entering battlefield (via swap)
-        if (isSwap) {
-            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: true });
-        }
-        
-        return true;
+    // Set player's active Väsen.
+    // isSwap: a voluntary swap (Oknytt Tag Team, swap sickness).
+    // entersBattlefield: run the "entering the battlefield" effects (Ande,
+    // Dagaz bind runes). True for swaps and knockout replacements; false only
+    // for the initial setup, whose entry effects the constructor runs once the
+    // UI is ready.
+    setPlayerActive(index, isSwap = false, entersBattlefield = isSwap) {
+        return this.setActive(true, index, isSwap, entersBattlefield);
     }
-    
-    // Set enemy's active Väsen
-    setEnemyActive(index, isSwap = false) {
-        const vasen = this.enemyTeam[index];
+
+    // Set enemy's active Väsen (same parameters as setPlayerActive)
+    setEnemyActive(index, isSwap = false, entersBattlefield = isSwap) {
+        return this.setActive(false, index, isSwap, entersBattlefield);
+    }
+
+    setActive(isPlayer, index, isSwap, entersBattlefield) {
+        const team = this.getTeam(isPlayer);
+        const vasen = team[index];
         if (!vasen || vasen.isKnockedOut()) return false;
-        
+        const outgoing = isPlayer ? this.playerActive : this.enemyActive;
+
         // Handle Oknytt passive for outgoing Väsen
-        if (isSwap && this.enemyActive && this.enemyActive.species.family === FAMILIES.OKNYTT) {
-            this.applyFamilyPassive('onSwapOut', { 
-                vasen: this.enemyActive, 
-                incomingVasen: vasen,
-                isPlayer: false 
-            });
+        if (isSwap && outgoing && outgoing.species.family === FAMILIES.OKNYTT) {
+            this.applyFamilyPassive('onSwapOut', { vasen: outgoing, incomingVasen: vasen, isPlayer });
         }
-        
-        if (this.enemyActive) {
-            this.enemyActive.combatFlags.hasSwapSickness = false;
+
+        if (outgoing) {
+            outgoing.combatFlags.hasSwapSickness = false;
+            outgoing.combatFlags.dagazBonusRoundsLeft = 0; // left the battlefield
             if (isSwap) {
-                this.enemyActive.combatFlags.odjurPassiveTriggered = false;
+                outgoing.combatFlags.odjurPassiveTriggered = false;
             }
         }
-        
-        this.enemyActive = vasen;
-        this.enemyActiveIndex = index;
+
+        if (isPlayer) {
+            this.playerActive = vasen;
+            this.playerActiveIndex = index;
+            if (this.onPlayerActiveChange) this.onPlayerActiveChange(vasen);
+        } else {
+            this.enemyActive = vasen;
+            this.enemyActiveIndex = index;
+        }
+
+        // Fresh on the battlefield. Entering mid-turn (swap, knockout replacement)
+        // must not use up the first round: endTurn skips it once (enteredThisTurn).
+        // Only a player swap causes swap sickness, as before.
+        if (isSwap && isPlayer) vasen.combatFlags.hasSwapSickness = true;
         vasen.combatFlags.isFirstRound = true;
         vasen.combatFlags.turnsOnField = 0;
-        
-        // Trigger Ande passive when entering battlefield (via swap)
-        if (isSwap) {
-            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer: false });
+        vasen.combatFlags.dagazBonusRoundsLeft = 0;
+        vasen.combatFlags.enteredThisTurn = this.turnInProgress === true;
+
+        if (entersBattlefield) {
+            this.applyFamilyPassive('onEnterBattlefield', { vasen, isPlayer });
         }
-        
+
         return true;
     }
     
@@ -223,6 +227,7 @@ class Combat {
     
     // Start a new turn
     startTurn() {
+        this.turnInProgress = true;
         this.turnCount++;
         this.addLog(`Turn ${this.turnCount} begins.`, 'turn');
     }
@@ -296,15 +301,29 @@ class Combat {
             }
         }
         
-        // Clear swap sickness and temporary flags
-        if (this.playerActive) {
-            this.playerActive.combatFlags.hasSwapSickness = false;
-            this.playerActive.combatFlags.isFirstRound = false;
-        }
-        if (this.enemyActive) {
-            this.enemyActive.combatFlags.hasSwapSickness = false;
-            this.enemyActive.combatFlags.isFirstRound = false;
-        }
+        // Clear swap sickness and temporary flags. Dagaz + Jera: a väsen whose
+        // first round just ended keeps the Dagaz bonus for the remaining
+        // RUNE_BIND_DAGAZ_JERA_ROUNDS - 1 rounds, counted down here each round.
+        [this.playerActive, this.enemyActive].forEach(v => {
+            if (!v) return;
+            v.combatFlags.hasSwapSickness = false;
+            // Entered during this turn: its first round is the next one
+            if (v.combatFlags.enteredThisTurn) {
+                v.combatFlags.enteredThisTurn = false;
+                return;
+            }
+            if (v.combatFlags.isFirstRound) {
+                v.combatFlags.dagazBonusRoundsLeft = hasDagazExtendedBindRune(v)
+                    ? Math.max(0, GAME_CONFIG.RUNE_BIND_DAGAZ_JERA_ROUNDS - 1)
+                    : 0;
+            } else if (v.combatFlags.dagazBonusRoundsLeft > 0) {
+                v.combatFlags.dagazBonusRoundsLeft--;
+            }
+            v.combatFlags.isFirstRound = false;
+        });
+        // From here on, a väsen placed on the battlefield (e.g. picked in the
+        // knockout swap prompt) enters before the next turn, not during this one
+        this.turnInProgress = false;
         
         // turnsOnField is incremented now that this turn has fully completed,
         // so it represents turns fully completed on the battlefield. The
@@ -446,11 +465,12 @@ class Combat {
         this.addLog(`${target.getDisplayName()} enters the fray!`, 'swap');
         this.setPlayerActive(index, true);
         
-        // Enemy still acts
-        const enemyAction = this.getEnemyAction();
+        // Enemy still acts (unless an entry strike's Thurs reflection knocked
+        // out the incoming väsen; executeEnemyAction skips a knocked-out enemy)
         const results = { player: { action: 'swap' }, enemy: null };
-        
-        results.enemy = this.executeEnemyAction(enemyAction);
+        if (!this.playerActive.isKnockedOut()) {
+            results.enemy = this.executeEnemyAction(this.getEnemyAction());
+        }
         
         this.handlePostTurn(results);
         this.endTurn();
@@ -664,30 +684,8 @@ class Combat {
         this.reportPlayerKnockouts();
 
         // Handle player knockout
-        if (this.playerActive && this.playerActive.isKnockedOut()) {
-            const aliveTeam = this.playerTeam.filter(v => !v.isKnockedOut());
-            if (aliveTeam.length === 0) {
-                this.checkCombatEnd();
-                return;
-            }
-            
-            // Check if enemy team is also wiped out (combat ends)
-            const enemyAliveTeam = this.enemyTeam.filter(v => !v.isKnockedOut());
-            if (enemyAliveTeam.length === 0) {
-                this.checkCombatEnd();
-                return;
-            }
-            
-            // Need to swap - call UI to show swap modal
-            if (this.onKnockoutSwap) {
-                this.onKnockoutSwap((index) => {
-                    this.setPlayerActive(index, false); // No swap sickness for forced swap
-                    this.addLog(`${this.playerActive.getDisplayName()} enters the fray!`, 'swap');
-                    if (this.onUpdate) this.onUpdate();
-                });
-            }
-        }
-        
+        if (this.playerActive && this.playerActive.isKnockedOut() && this.handlePlayerKnockout()) return;
+
         // Handle enemy knockout
         if (this.enemyActive && this.enemyActive.isKnockedOut()) {
             const aliveTeam = this.enemyTeam.filter(v => !v.isKnockedOut());
@@ -695,10 +693,65 @@ class Combat {
                 // Auto swap to next enemy
                 const nextIndex = this.enemyTeam.findIndex(v => !v.isKnockedOut());
                 if (nextIndex !== -1) {
+                    this.addLog(`The enemy sends out ${this.enemyTeam[nextIndex].getDisplayName()}!`, 'swap');
                     this.setEnemyActive(nextIndex, true);
-                    this.addLog(`The enemy sends out ${this.enemyActive.getDisplayName()}!`, 'swap');
                 }
             }
+        }
+
+        // Entry effects resolved above can knock out the player's väsen after
+        // the first check: the incoming enemy's entry strike (Dagaz + Thurs), or
+        // a Thurs reflection against a replacement picked right away. The
+        // awaitingKnockoutSwap guard keeps an open prompt from being asked twice.
+        if (this.playerActive && this.playerActive.isKnockedOut()) {
+            this.reportPlayerKnockouts();
+            this.handlePlayerKnockout();
+        }
+    }
+
+    // The player's active väsen is knocked out: end the combat if a side is
+    // wiped out, otherwise ask the player for a replacement. Returns true if
+    // the combat ended.
+    handlePlayerKnockout() {
+        const aliveTeam = this.playerTeam.filter(v => !v.isKnockedOut());
+        const enemyAliveTeam = this.enemyTeam.filter(v => !v.isKnockedOut());
+        // Either team wiped out (incl. both at once): combat ends
+        if (aliveTeam.length === 0 || enemyAliveTeam.length === 0) {
+            this.checkCombatEnd();
+            return true;
+        }
+
+        // Need to swap - call UI to show swap modal. The prompt may answer right
+        // away (one ally left, auto battle) or after the turn has ended.
+        if (this.onKnockoutSwap && !this.awaitingKnockoutSwap) {
+            this.awaitingKnockoutSwap = true;
+            this.onKnockoutSwap((index) => {
+                this.awaitingKnockoutSwap = false;
+                const incoming = this.playerTeam[index];
+                if (!incoming || incoming.isKnockedOut()) return;
+                this.addLog(`${incoming.getDisplayName()} enters the fray!`, 'swap');
+                // No swap sickness for a forced swap, but it does enter the battlefield
+                this.setPlayerActive(index, false, true);
+                // Picked after the turn ended: an entry strike's knockouts need resolving here
+                // (during a turn, handlePostTurn resolves them)
+                if (!this.turnInProgress) this.resolveOutOfTurnKnockouts();
+                if (this.onUpdate) this.onUpdate();
+            });
+        }
+        return false;
+    }
+
+    // Knockouts caused outside a turn (an entry strike at combat start): bring
+    // in replacements and end the combat if a side is wiped out, as a turn would.
+    resolveOutOfTurnKnockouts() {
+        if (this.isOver) return;
+        if (!this.playerActive.isKnockedOut() && !this.enemyActive.isKnockedOut()) return;
+        this.handlePostTurn({});
+        if (!this.isOver) this.checkCombatEnd();
+        if (this.isOver && this.onEnd) {
+            setTimeout(() => {
+                this.onEnd(this.getCombatResult());
+            }, GAME_CONFIG.COMBAT_END_ANIMATION_DELAY);
         }
     }
     

@@ -10,6 +10,7 @@ const ONCE_PER_COMBAT_FLAGS = [
     'mannazTeamHealTriggered',
     'fehuWynjaPassiveTriggered',
     'hagalNaudizPassiveTriggered',
+    'dagazThursStrikeTriggered',
     // Family passives
     'andePassiveTriggered',
     'drakePassiveTriggered',
@@ -293,6 +294,8 @@ class VasenInstance {
             hasSwapSickness: false,
             turnsOnField: 0,
             isFirstRound: true,
+            dagazBonusRoundsLeft: 0, // Dagaz + Jera: rounds the Dagaz bonus still lasts after the first
+            enteredThisTurn: false,  // Entered mid-turn: that turn's end does not use up its first round
             isEmpowered: false // Tracks if next attack deals bonus damage
         };
         this.resetOncePerCombatFlags();

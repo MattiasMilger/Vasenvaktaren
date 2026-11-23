@@ -79,9 +79,8 @@ class Game {
         ui.renderMainMenu(this.getSlotSummaries(), {
             onContinue: slot => this.continueSlot(slot),
             onNewGame: () => this.startNewGame(),
-            onView: slot => this.viewEndedSave(slot),
             onExport: slot => this.exportSlot(slot),
-            onSummary: slot => this.exportSlotSummary(slot),
+            onSummary: slot => this.showSlotSummary(slot),
             onDelete: slot => this.confirmDeleteSlot(slot),
             onLoadFile: file => this.loadFileFromMenu(file)
         });

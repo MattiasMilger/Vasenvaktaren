@@ -79,7 +79,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 
 - Portrait shown in the header, next to the player's name, and again inside the Player Profile screen next to the name field
 - Click the header portrait/name to open the Player Profile screen, view collection stats, achievements, and the Endless Tower record
-- Click the portrait inside the Player Profile screen to choose a face (6 round outline faces: Helmet, Glasses, Moustache, Fringe, Eyepatch, Hood; Helmet is the default); the choice is saved. The header button keeps the person silhouette
+- Click the portrait inside the Player Profile screen to choose a face (8 round outline faces). Plain, Fringe, Parted and Moustache are available from the start (Plain is the default); Helmet (Champion), Glasses (Hoarder), One-Eyed (Lore Master) and Rune-Marked (Rune Master) unlock with that save's achievements and show greyed out with a lock until then (clicking a locked face names its achievement). The choice is saved per save. The header button keeps the person silhouette
 
 ### Lore Book
 
@@ -129,9 +129,9 @@ Optional rules for a harder journey. On the New Game screen, click the red **Rag
 
 - The game saves automatically to localStorage, in three save slots. It opens the save you played last
 - Everything about saves lives on the **main menu** (Settings > Main Menu gets you there). Each save card shows the player, zone, väsen, guardians, fallen väsen, Endless Tower floor, achievements and Ragnarök difficulty, with these buttons:
-  - **Continue** (or **View** for a Permadeath save that is over)
+  - **Continue** (a Permadeath save that is over has no Continue; use its Summary)
   - **Save File**: saves that slot as a `.json` file named after the player, rules and date (e.g. `vasenvaktaren-Testare-permadeath-2026-11-21.json`). Use it to back up or move progress between devices. In desktop Chrome and Edge it opens a "Save As" dialog; other browsers download the file directly
-  - **Summary**: a readable `.txt` of the save (rules, progress, achievements, Endless Tower record, party, whole collection and fallen väsen). Handy to keep before deleting a save, or as a record of one in progress. Saves that are over also offer it in their View and Game Over screens
+  - **Summary**: shows the save's summary in a dialogue first (stats, achievements, party, collection; for an ended save also how it ended, plus Delete), with **Download Summary** there for a readable `.txt` of the save (rules, progress, achievements, Endless Tower record, party, whole collection and fallen väsen). Handy to keep before deleting a save, or as a record of one in progress.
   - **Delete**: removes the save for good, after a confirmation
 - **Load from File** (main menu) puts a save file into an empty slot, or asks which save to replace when all are in use. It also accepts a text file containing a save code exported by older versions
 - Settings shows the current save's slot and difficulty, and a **Main Menu** button

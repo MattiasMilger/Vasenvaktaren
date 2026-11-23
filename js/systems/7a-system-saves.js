@@ -308,7 +308,7 @@ function buildSaveRecord(data) {
     const record = data.endlessTowerRecord || {};
     return {
         playerName: data.playerName || 'Väktare',
-        playerFace: data.playerFace || 'helmet',
+        playerFace: data.playerFace || 'plain',
         modes: normalizeModes(data.modes),
         startedAt: data.createdAt || null,
         ended: data.ended || null,

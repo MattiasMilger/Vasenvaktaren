@@ -22,12 +22,13 @@ const ELEMENT_DAMAGE_RUNES = {
 // SKILL RESOLUTION
 // =============================================================================
 
-// Execute a skill: spend its megin, then resolve it as a utility effect or a damaging hit
-Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer, selectedAllyTarget = null) {
+// Execute a skill: spend its megin, then resolve it as a utility effect or a damaging hit.
+// isFree: the skill was triggered by an effect (Dagaz + Thurs) and costs no megin.
+Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer, selectedAllyTarget = null, isFree = false) {
     const skill = ABILITIES[skillName];
     if (!skill) return null;
 
-    const meginCost = attacker.getSkillMeginCost(skillName);
+    const meginCost = isFree ? 0 : attacker.getSkillMeginCost(skillName);
     attacker.spendMegin(meginCost);
 
     // Log skill use
@@ -114,6 +115,7 @@ Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer
 
     // Handle rune effects for hits
     this.applyHitRuneEffects(attacker, defender, damageResult, result, isPlayer);
+    this.tryHitProcBindRunes(attacker, defender, damageResult.matchup);
 
     if (willKnockout) {
         this.resolveKnockout(attacker, defender, isPlayer);
@@ -169,9 +171,19 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result) {
     const reflectResult = this.calculateThursReflection(defender, attacker, result.damage);
     if (reflectResult.damage <= 0) return;
 
-    attacker.takeDamage(reflectResult.damage);
+    const reflectedDamage = attacker.takeDamage(reflectResult.damage);
     this.addLog(`${attacker.getDisplayName()} took ${reflectResult.damage} damage!`, 'damage');
     result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectResult.damage}` });
+
+    // Bind Rune - Uruz + Thurs: the Thurs user gains part of the reflected damage as megin
+    const uruzThursBR = getActiveBindRuneOfType(defender, 'thurs_megin_gain');
+    if (uruzThursBR && !defender.isKnockedOut()) {
+        const meginGained = defender.gainMegin(Math.floor(reflectedDamage * GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT));
+        if (meginGained > 0) {
+            this.logBindRuneActivated(defender, uruzThursBR);
+            this.addLog(`${defender.getDisplayName()} gained ${meginGained} Megin!`, 'megin');
+        }
+    }
 
     this.logMatchup(reflectResult.matchup);
 
@@ -200,6 +212,9 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result) {
             }
         }
     }
+
+    // Fehu / Naudiz bind runes: the reflection is a hit from the Thurs user
+    this.tryHitProcBindRunes(defender, attacker, reflectResult.matchup);
 };
 
 // Returns the first-use initial bonus stages for this skill on this side
@@ -330,7 +345,9 @@ Combat.prototype.calculateDamage = function(attacker, defender, skillName) {
         attackType: skill.type,
         element: skillElement,
         bindRuneEleConverted: bindRuneEleConverted,
-        bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED)
+        bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED),
+        // Dagaz + Jera: the Dagaz bonus applied only because of the extra rounds
+        bindRuneDagazExtended: attacker.hasRune('DAGAZ') && !attacker.combatFlags.isFirstRound && attacker.combatFlags.dagazBonusRoundsLeft > 0
     };
 };
 
@@ -350,8 +367,8 @@ Combat.prototype.getDamageModifier = function(attacker, defender, skillName, ski
         damageMod += GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST;
     }
 
-    // Dagaz: first round bonus
-    if (attacker.hasRune('DAGAZ') && attacker.combatFlags.isFirstRound) {
+    // Dagaz: first round bonus (Dagaz + Jera: lasts RUNE_BIND_DAGAZ_JERA_ROUNDS rounds)
+    if (attacker.hasRune('DAGAZ') && (attacker.combatFlags.isFirstRound || attacker.combatFlags.dagazBonusRoundsLeft > 0)) {
         damageMod += GAME_CONFIG.RUNE_DAGAZ_DAMAGE_BOOST;
     }
 

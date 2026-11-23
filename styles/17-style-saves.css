@@ -631,10 +631,10 @@
     color: var(--text-secondary);
 }
 
-/* Every rule on: Ragnarök. The panel burns. */
+/* Every rule on: Ragnarök. The panel glows (static, no animation). */
 .ragnarok-panel.is-ragnarok {
     border-color: var(--tier-3);
-    animation: ragnarokPulse 2.4s ease-in-out infinite alternate;
+    box-shadow: 0 0 16px rgba(242, 161, 68, 0.35), inset 0 -24px 34px -20px rgba(210, 122, 106, 0.28);
 }
 
 .ragnarok-panel.is-ragnarok .ragnarok-tier-name {
@@ -642,7 +642,6 @@
     text-transform: uppercase;
     letter-spacing: 0.12em;
     text-shadow: 0 0 10px var(--tier-3-glow), 0 0 22px rgba(210, 122, 106, 0.4);
-    animation: ragnarokFlicker 3s ease-in-out infinite;
 }
 
 .ragnarok-panel.is-ragnarok .ragnarok-meter-fill {
@@ -651,61 +650,6 @@
 
 .ragnarok-panel.is-ragnarok .ragnarok-tier-line {
     color: var(--text-primary);
-}
-
-/* Embers rising from the bottom of the panel, behind its content, fading as they climb */
-.ragnarok-panel > * {
-    position: relative;
-    z-index: 1;
-}
-
-.ragnarok-panel::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0;
-    background-image:
-        radial-gradient(circle, rgba(242, 161, 68, 0.9) 0 1.2px, transparent 2.2px),
-        radial-gradient(circle, rgba(210, 122, 106, 0.8) 0 1px, transparent 2px),
-        radial-gradient(circle, rgba(255, 210, 140, 0.7) 0 0.8px, transparent 1.8px);
-    background-size: 173px 110px, 241px 150px, 127px 95px;
-    background-position: 10px 0, 90px 30px, 50px 60px;
-    -webkit-mask-image: linear-gradient(to top, black 0%, rgba(0, 0, 0, 0.5) 35%, transparent 75%);
-    mask-image: linear-gradient(to top, black 0%, rgba(0, 0, 0, 0.5) 35%, transparent 75%);
-    transition: opacity 0.6s ease;
-}
-
-.ragnarok-panel.is-ragnarok::after {
-    opacity: 1;
-    animation: ragnarokEmbers 6s linear infinite;
-}
-
-@keyframes ragnarokEmbers {
-    /* Each layer moves up a whole number of its tiles, so the loop is seamless */
-    from { background-position: 10px 0, 90px 30px, 50px 60px; }
-    to   { background-position: 10px -330px, 90px -420px, 50px -225px; }
-}
-
-@keyframes ragnarokPulse {
-    from { box-shadow: 0 0 10px rgba(242, 161, 68, 0.25), inset 0 -20px 30px -20px rgba(210, 122, 106, 0.25); }
-    to   { box-shadow: 0 0 22px rgba(242, 161, 68, 0.45), inset 0 -30px 40px -20px rgba(242, 161, 68, 0.3); }
-}
-
-@keyframes ragnarokFlicker {
-    0%, 100% { opacity: 1; }
-    45% { opacity: 0.88; }
-    50% { opacity: 1; }
-    70% { opacity: 0.93; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .ragnarok-panel.is-ragnarok,
-    .ragnarok-panel.is-ragnarok::after,
-    .ragnarok-panel.is-ragnarok .ragnarok-tier-name {
-        animation: none;
-    }
 }
 
 .journey-lock-note {
@@ -1000,6 +944,12 @@
     margin-top: var(--spacing-sm);
     padding-top: var(--spacing-sm);
     border-top: 1px solid var(--border-color);
+}
+
+/* Save summary: the collection list scrolls on its own */
+.record-collection {
+    max-height: 220px;
+    overflow-y: auto;
 }
 
 .record-section-title {

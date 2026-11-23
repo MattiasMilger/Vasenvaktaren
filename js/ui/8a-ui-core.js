@@ -72,23 +72,47 @@ const UI_ICONS = {
 
 // =============================================================================
 // Player faces - selectable profile portraits (same 24x24, 2px stroke style).
-// Every face shares the same round head; they differ by one facial feature.
-// All faces share the same mouth, so the feature is the only difference.
-// 'helmet' is the default. The header button keeps the person silhouette.
+// Every face shares the same round head and mouth; they differ by one feature.
+// Faces without `unlockedBy` are available from the start. The rest unlock
+// with an achievement (ACHIEVEMENTS id) of the current save; locked faces are
+// shown greyed out in the picker. 'plain' is the default. The header button
+// keeps the person silhouette.
 // =============================================================================
 const FACE_HEAD = '<circle cx="12" cy="12" r="10"/>';
 const FACE_MOUTH = '<path d="M9.5 16.5q2.5 1.5 5 0"/>';
+const DEFAULT_PLAYER_FACE = 'plain';
 const PLAYER_FACES = {
-    helmet:    { name: 'Helmet',    paths: FACE_HEAD + '<path d="M2.5 9h19"/><path d="M12 2v7"/><path d="M12 9v5"/><path d="M8.5 11.5h.01M15.5 11.5h.01"/>' + FACE_MOUTH },
-    glasses:   { name: 'Glasses',   paths: FACE_HEAD + '<circle cx="8.5" cy="10.5" r="2.2"/><circle cx="15.5" cy="10.5" r="2.2"/><path d="M10.7 10.5h2.6"/>' + FACE_MOUTH },
-    moustache: { name: 'Moustache', paths: FACE_HEAD + '<path d="M9 10h.01M15 10h.01"/><path d="M7.5 14.5c1.5 0 2.5-2 4.5-1.5 2-.5 3 1.5 4.5 1.5"/>' + FACE_MOUTH },
+    plain:     { name: 'Plain',     paths: FACE_HEAD + '<path d="M9 11h.01M15 11h.01"/>' + FACE_MOUTH },
     hair:      { name: 'Fringe',    paths: FACE_HEAD + '<path d="M3.3 8c2.2.6 4.4-.3 5.7-2.6 1.6 2.2 5.2 3.2 11.7 2.6"/><path d="M9 11.5h.01M15 11.5h.01"/>' + FACE_MOUTH },
-    eyepatch:  { name: 'Eyepatch',  paths: FACE_HEAD + '<path d="M3 7l18 3.5"/><circle cx="15.5" cy="10.5" r="1.8"/><path d="M8.5 10.5h.01"/>' + FACE_MOUTH },
-    hood:      { name: 'Hood',      paths: FACE_HEAD + '<path d="M5 19.5V11a7 7 0 0 1 14 0v8.5"/><path d="M9.5 12h.01M14.5 12h.01"/>' + FACE_MOUTH }
+    // Hair parted in the middle, falling to both sides
+    parted:    { name: 'Parted',    paths: FACE_HEAD + '<path d="M3 9.5C7 9 10.5 6.5 12 2.5c1.5 4 5 6.5 9 7"/><path d="M9 12h.01M15 12h.01"/>' + FACE_MOUTH },
+    moustache: { name: 'Moustache', paths: FACE_HEAD + '<path d="M9 10h.01M15 10h.01"/><path d="M7.5 14.5c1.5 0 2.5-2 4.5-1.5 2-.5 3 1.5 4.5 1.5"/>' + FACE_MOUTH },
+    // Champion: the nasal helmet of a warrior
+    helmet:    { name: 'Helmet',    unlockedBy: 'champion',    paths: FACE_HEAD + '<path d="M2.5 9h19"/><path d="M12 2v7"/><path d="M12 9v5"/><path d="M8.5 11.5h.01M15.5 11.5h.01"/>' + FACE_MOUTH },
+    // Hoarder: small round glasses, for studying every väsen
+    glasses:   { name: 'Glasses',   unlockedBy: 'hoarder',     paths: FACE_HEAD + '<circle cx="8.5" cy="11" r="1.6"/><circle cx="15.5" cy="11" r="1.6"/><path d="M10.1 11h3.8"/>' + FACE_MOUTH },
+    // Lore Master: one eye given for wisdom, like Odin at Mímir's well
+    eyepatch:  { name: 'One-Eyed',  unlockedBy: 'lore_master', paths: FACE_HEAD + '<path d="M2.8 8.2 13.5 10M17.5 10l3.7-1.8"/><path d="M13.5 10h4v1.3a2 2 0 0 1-4 0z" fill="currentColor"/><path d="M9 11.5h.01"/>' + FACE_MOUTH },
+    // Rune Master: the rune Algiz marked on the brow
+    runes:     { name: 'Rune-Marked', unlockedBy: 'rune_master', paths: FACE_HEAD + '<path d="M12 4v6M12 7.5 9.3 4.5M12 7.5l2.7-3"/><path d="M8.5 12.5h.01M15.5 12.5h.01"/>' + FACE_MOUTH }
 };
 
-function getPlayerFaceId(faceId) {
-    return PLAYER_FACES[faceId] ? faceId : 'helmet';
+// achievements: a save's achievements map ({ id: true }) or an array of earned ids
+function isPlayerFaceUnlocked(faceId, achievements) {
+    const face = PLAYER_FACES[faceId];
+    if (!face) return false;
+    if (!face.unlockedBy) return true;
+    if (Array.isArray(achievements)) return achievements.includes(face.unlockedBy);
+    return !!(achievements && achievements[face.unlockedBy] === true);
+}
+
+// The face to show: the chosen one if it exists and is unlocked, else the default
+function getPlayerFaceId(faceId, achievements) {
+    return isPlayerFaceUnlocked(faceId, achievements) ? faceId : DEFAULT_PLAYER_FACE;
+}
+
+function getAchievementById(id) {
+    return Object.values(ACHIEVEMENTS).find(a => a.id === id) || null;
 }
 
 // size: a number (px) or any CSS length such as '1em'. extraClass is appended to "ui-icon".

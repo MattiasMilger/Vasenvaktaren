@@ -128,11 +128,13 @@ let achievementsHtml = '<div class="achievements-section"><h4>' + uiIcon('trophy
 
 Object.values(ACHIEVEMENTS).forEach(achievement => {
     const earned = gameState.achievements[achievement.id] === true;
+    const rewardFace = Object.values(PLAYER_FACES).find(face => face.unlockedBy === achievement.id);
     achievementsHtml += `
         <div class="achievement ${earned ? 'earned' : 'locked'}">
             <div class="achievement-content">
                 <span class="achievement-name">${uiIcon(earned ? 'trophy' : 'lock', 14)}${achievement.name}</span>
                 <span class="achievement-desc">${achievement.description}</span>
+                ${rewardFace ? `<span class="achievement-reward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${rewardFace.paths}</svg>Face: ${rewardFace.name}</span>` : ''}
             </div>
         </div>
     `;
@@ -140,12 +142,18 @@ Object.values(ACHIEVEMENTS).forEach(achievement => {
 achievementsHtml += '</div></div>';
 
         // Face picker options
-        const currentFace = getPlayerFaceId(gameState.playerFace);
-        const faceOptionsHtml = Object.entries(PLAYER_FACES).map(([id, face]) => `
-            <button type="button" class="profile-face-option${id === currentFace ? ' selected' : ''}" data-face="${id}" aria-label="${face.name}" aria-pressed="${id === currentFace}">
+        // Faces unlock per save through its achievements; locked ones are greyed out
+        const currentFace = getPlayerFaceId(gameState.playerFace, gameState.achievements);
+        const faceOptionsHtml = Object.entries(PLAYER_FACES).map(([id, face]) => {
+            const unlocked = isPlayerFaceUnlocked(id, gameState.achievements);
+            const achievement = face.unlockedBy ? getAchievementById(face.unlockedBy) : null;
+            const label = unlocked ? face.name : `${face.name} (locked, unlocked by ${achievement ? achievement.name : 'an achievement'})`;
+            return `
+            <button type="button" class="profile-face-option${id === currentFace ? ' selected' : ''}${unlocked ? '' : ' locked'}" data-face="${id}" aria-label="${label}" aria-pressed="${id === currentFace}"${unlocked ? '' : ' aria-disabled="true"'}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${face.paths}</svg>
-            </button>
-        `).join('');
+                ${unlocked ? '' : `<span class="profile-face-lock">${uiIcon('lock', 10)}</span>`}
+            </button>`;
+        }).join('');
 
         content.innerHTML = `
             <div class="profile-name-section">
@@ -159,8 +167,11 @@ achievementsHtml += '</div></div>';
                         </div>
                     </div>
                 </div>
-                <div id="profile-face-picker" class="profile-face-picker" hidden>
-                    ${faceOptionsHtml}
+                <div id="profile-face-picker-wrap" hidden>
+                    <div id="profile-face-picker" class="profile-face-picker">
+                        ${faceOptionsHtml}
+                    </div>
+                    <p id="profile-face-hint" class="profile-face-hint">Earn achievements to unlock more faces.</p>
                 </div>
             </div>
 
@@ -216,15 +227,28 @@ achievementsHtml += '</div></div>';
 
         // Face picker: portrait toggles the grid, picking a face saves and closes it
         const portraitBtn = document.getElementById('profile-portrait-btn');
+        const facePickerWrap = document.getElementById('profile-face-picker-wrap');
         const facePicker = document.getElementById('profile-face-picker');
+        const faceHint = document.getElementById('profile-face-hint');
+        const defaultHint = faceHint.textContent;
         portraitBtn.addEventListener('click', () => {
-            facePicker.hidden = !facePicker.hidden;
-            portraitBtn.setAttribute('aria-expanded', String(!facePicker.hidden));
+            facePickerWrap.hidden = !facePickerWrap.hidden;
+            faceHint.textContent = defaultHint;
+            portraitBtn.setAttribute('aria-expanded', String(!facePickerWrap.hidden));
         });
         facePicker.addEventListener('click', (e) => {
             const option = e.target.closest('.profile-face-option');
             if (!option) return;
-            const faceId = getPlayerFaceId(option.dataset.face);
+            // Locked: say which achievement unlocks it instead of picking it
+            if (!isPlayerFaceUnlocked(option.dataset.face, gameState.achievements)) {
+                const face = PLAYER_FACES[option.dataset.face];
+                const achievement = face && getAchievementById(face.unlockedBy);
+                faceHint.innerHTML = achievement
+                    ? `${uiIcon('lock', 12)}<strong>${face.name}</strong>: unlocked by <strong>${achievement.name}</strong> (${achievement.description.charAt(0).toLowerCase() + achievement.description.slice(1)}).`
+                    : defaultHint;
+                return;
+            }
+            const faceId = getPlayerFaceId(option.dataset.face, gameState.achievements);
             gameState.playerFace = faceId;
             gameState.saveGame();
             portraitBtn.querySelector('svg').innerHTML = PLAYER_FACES[faceId].paths;
@@ -233,7 +257,7 @@ achievementsHtml += '</div></div>';
                 btn.classList.toggle('selected', isSelected);
                 btn.setAttribute('aria-pressed', String(isSelected));
             });
-            facePicker.hidden = true;
+            facePickerWrap.hidden = true;
             portraitBtn.setAttribute('aria-expanded', 'false');
         });
 

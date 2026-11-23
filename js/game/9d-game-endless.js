@@ -113,10 +113,11 @@ Game.prototype.startEndlessTowerCombat = function() {
 
         // If the previously active player Väsen was knocked out in the last floor
         // (simultaneous KO scenario), auto-swap to the first alive team member.
+        let playerEnters = false;
         if (this.currentCombat.playerActive && this.currentCombat.playerActive.isKnockedOut()) {
             const firstAliveIndex = this.currentCombat.playerTeam.findIndex(v => !v.isKnockedOut());
             if (firstAliveIndex !== -1) {
-                this.currentCombat.setPlayerActive(firstAliveIndex, false);
+                playerEnters = this.currentCombat.setPlayerActive(firstAliveIndex, false);
             }
         }
 
@@ -127,19 +128,30 @@ Game.prototype.startEndlessTowerCombat = function() {
         this.currentCombat.enemyInitialBonusUsed = new Set();
         this.currentCombat.enemyUtilityUsage = new Map();
 
+        // Announce the floor, then the new enemy (and a replacement player väsen)
+        // enter the battlefield. Runs after isOver is reset, so effects like the
+        // Dagaz + Thurs strike apply, and before auto battle can act.
+        logEncounter();
+        this.currentCombat.runEntryEffects(playerEnters);
+
         ui.renderCombat(this.currentCombat);
 
         // Resume auto battle if it was active
-        if (this.currentCombat.isAutoBattle) {
+        if (this.currentCombat.isAutoBattle && !this.currentCombat.isOver) {
             this.autoBattleTick();
         }
+        return;
     }
 
-    // Log encounter message
-    if (isDualFloor) {
-        ui.addCombatLog(`Floor ${floor}: Two foes appear! ${enemyTeam[0].getDisplayName()} and ${enemyTeam[1].getDisplayName()} (Lvl ${enemyLevel}) stand before you!`, 'encounter');
-    } else {
-        ui.addCombatLog(`Floor ${floor}: A wild ${enemyTeam[0].getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');
+    // First floor: entry effects run from the Combat constructor, after this message
+    logEncounter();
+
+    function logEncounter() {
+        if (isDualFloor) {
+            ui.addCombatLog(`Floor ${floor}: Two foes appear! ${enemyTeam[0].getDisplayName()} and ${enemyTeam[1].getDisplayName()} (Lvl ${enemyLevel}) stand before you!`, 'encounter');
+        } else {
+            ui.addCombatLog(`Floor ${floor}: A wild ${enemyTeam[0].getDisplayName()} (Lvl ${enemyLevel}) appears!`, 'encounter');
+        }
     }
 };
 

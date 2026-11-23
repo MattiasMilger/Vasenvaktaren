@@ -78,7 +78,19 @@ Game.prototype.viewEndedSave = function(slot) {
     ui.showEndedSaveDialogue(buildSaveRecord(data), () => this.confirmDeleteSlot(slot), () => this.exportSlotSummary(slot));
 };
 
-// Summary on a main menu save card: a readable .txt of the save, to keep
+// Summary on a main menu save card: show the summary first (an ended save uses
+// its journey dialogue, with Delete), downloading it from there
+Game.prototype.showSlotSummary = function(slot) {
+    const data = SaveSlots.read(slot);
+    if (!data) return;
+    if (data.ended) {
+        this.viewEndedSave(slot);
+        return;
+    }
+    ui.showSaveSummaryDialogue(data, slot, () => this.exportSlotSummary(slot));
+};
+
+// Download Summary: a readable .txt of the save, to keep
 // before deleting it or as a record of a save in progress
 Game.prototype.exportSlotSummary = function(slot) {
     const data = SaveSlots.read(slot);
@@ -524,8 +536,7 @@ Game.prototype.endSave = function(cause) {
     gameState.saveBlocked = true;
     SaveSlots.clearActive();
 
-    const slot = gameState.saveSlot;
-    ui.showGameOverDialogue(buildSaveRecord(gameState.serialize()), () => this.returnToMenuAfterEnd(), () => this.exportSlotSummary(slot));
+    ui.showGameOverDialogue(buildSaveRecord(gameState.serialize()), () => this.returnToMenuAfterEnd());
 };
 
 Game.prototype.returnToMenuAfterEnd = function() {

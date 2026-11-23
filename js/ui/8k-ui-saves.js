@@ -12,8 +12,8 @@ function formatShortDate(timestamp) {
     return timestamp ? new Date(timestamp).toLocaleDateString() : '';
 }
 
-function playerFaceSVG(faceId) {
-    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PLAYER_FACES[getPlayerFaceId(faceId)].paths}</svg>`;
+function playerFaceSVG(faceId, achievements) {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PLAYER_FACES[getPlayerFaceId(faceId, achievements)].paths}</svg>`;
 }
 
 function getVasenRecordName(record) {
@@ -85,7 +85,7 @@ UIController.prototype.getWelcomeModesHTML = function(modes) {
 // =============================================================================
 
 // Save cards plus New Game / Load from File. Everything about saves lives here.
-// handlers: { onContinue(slot), onView(slot), onExport(slot), onSummary(slot), onDelete(slot), onNewGame(), onLoadFile(text) }
+// handlers: { onContinue(slot), onExport(slot), onSummary(slot), onDelete(slot), onNewGame(), onLoadFile(text) }
 UIController.prototype.renderMainMenu = function(summaries, handlers) {
     const slotsEl = document.getElementById('save-slots');
     const hasSaves = summaries.some(Boolean);
@@ -98,7 +98,7 @@ UIController.prototype.renderMainMenu = function(summaries, handlers) {
 
     slotsEl.querySelectorAll('[data-action]').forEach(btn => {
         const slot = parseInt(btn.dataset.slot, 10);
-        const action = { continue: handlers.onContinue, view: handlers.onView, export: handlers.onExport, summary: handlers.onSummary, delete: handlers.onDelete }[btn.dataset.action];
+        const action = { continue: handlers.onContinue, export: handlers.onExport, summary: handlers.onSummary, delete: handlers.onDelete }[btn.dataset.action];
         btn.onclick = () => action(slot);
     });
 
@@ -142,8 +142,9 @@ UIController.prototype.getSaveCardHTML = function(summary, slot, isLastPlayed) {
         .map(a => a.name);
     const tier = getRagnarokTier(summary.modes);
 
+    // An ended save has no main button: its Summary shows how it went
     const mainButton = ended
-        ? `<button type="button" class="btn btn-secondary save-slot-main" data-action="view" data-slot="${slot}">View</button>`
+        ? ''
         : `<button type="button" class="btn btn-primary save-slot-main" data-action="continue" data-slot="${slot}">Continue</button>`;
 
     return `
@@ -154,7 +155,7 @@ UIController.prototype.getSaveCardHTML = function(summary, slot, isLastPlayed) {
                 <span class="save-slot-modes">${this.getRagnarokBadgeHTML(summary.modes)}</span>
             </div>
             <div class="save-slot-identity">
-                <span class="save-slot-face">${playerFaceSVG(summary.playerFace)}</span>
+                <span class="save-slot-face">${playerFaceSVG(summary.playerFace, summary.achievements)}</span>
                 <span class="save-slot-who">
                     <span class="save-slot-name">${escapeHTML(summary.playerName)}</span>
                     <span class="save-slot-zone">${uiIcon('compass', 12)}${summary.zoneName}</span>
@@ -444,23 +445,19 @@ UIController.prototype.getSaveRecordDetailsHTML = function(record) {
             ${record.towerFloor > 0 ? stat('trophy', 'Endless Tower', `Floor ${record.towerFloor}`) : ''}
         </div>
         ${achievements.length > 0 ? `<div class="record-section"><div class="record-section-title">${uiIcon('trophy', 13)}Achievements</div><p class="record-achievements">${achievements.map(a => a.name).join(' · ')}</p></div>` : ''}
-        ${party ? `<div class="record-section"><div class="record-section-title">${uiIcon('vasen', 13)}Final Party</div>${party}</div>` : ''}
+        ${party ? `<div class="record-section"><div class="record-section-title">${uiIcon('vasen', 13)}${record.ended ? 'Final Party' : 'Party'}</div>${party}</div>` : ''}
         ${record.fallen && record.fallen.length > 0 ? `<div class="record-section"><div class="record-section-title">${uiIcon('permadeath', 13)}Fallen (${record.fallen.length})</div>${this.getFallenListHTML(record.fallen.slice().reverse())}</div>` : ''}`;
 };
 
 // Permadeath has left no väsen: the save is over (already saved as ended)
-UIController.prototype.showGameOverDialogue = function(record, onMenu, onSummary) {
+UIController.prototype.showGameOverDialogue = function(record, onMenu) {
     this.showDialogue(
         'Game Over',
         `<p class="game-over-cause">${record.ended ? record.ended.cause : ''}</p>
          <div class="game-over-details">${this.getSaveRecordDetailsHTML(record)}</div>
-         <p class="game-over-note">The save stays in its slot. You can look at it or delete it from the main menu.</p>`,
+         <p class="game-over-note">The save stays in its slot. You can see its summary, download it, or delete it from the main menu.</p>`,
         [
-            { text: `${uiIcon('home')}Main Menu`, class: 'btn-primary', callback: onMenu },
-            { text: `${uiIcon('summary')}Download Summary`, class: 'btn-secondary', callback: () => {
-                if (onSummary) onSummary();
-                this.showGameOverDialogue(record, onMenu, onSummary); // stay on Game Over
-            } }
+            { text: `${uiIcon('home')}Main Menu`, class: 'btn-primary', callback: onMenu }
         ],
         false,
         'game-over-dialogue',
@@ -468,23 +465,58 @@ UIController.prototype.showGameOverDialogue = function(record, onMenu, onSummary
     );
 };
 
-// View on an ended save card
+// Summary on an ended save card
 UIController.prototype.showEndedSaveDialogue = function(record, onDelete, onSummary) {
     this.showDialogue(
         `${record.playerName}'s Journey`,
         `<p class="game-over-cause">${record.ended ? record.ended.cause : ''}</p>
          <div class="game-over-details">${this.getSaveRecordDetailsHTML(record)}</div>`,
         [
-            { text: 'Close', class: 'btn-primary', callback: null },
             { text: `${uiIcon('summary')}Download Summary`, class: 'btn-secondary', callback: () => {
                 onSummary();
                 this.showEndedSaveDialogue(record, onDelete, onSummary); // keep the summary open
             } },
-            { text: `${uiIcon('trash')}Delete Save`, class: 'btn-secondary', callback: onDelete }
+            { text: `${uiIcon('trash')}Delete Save`, class: 'btn-danger', callback: onDelete },
+            { text: 'Close', class: 'btn-secondary', callback: null } // Close last, like other dialogues
         ],
         true,
         'game-over-dialogue',
         'permadeath'
+    );
+};
+
+// Summary on a save card in progress: the save's summary shown first, with the
+// option to download it as a text file. data: the raw save data.
+UIController.prototype.showSaveSummaryDialogue = function(data, slot, onDownload) {
+    const record = buildSaveRecord(data);
+    const runesFound = new Set([...(data.foundRunes || []), ...(data.collectedRunes || [])]).size;
+    const collection = (data.vasenCollection || []).slice().sort((a, b) => b.level - a.level);
+    const collectionHTML = collection.map(v => `
+        <div class="record-vasen">
+            <span class="record-vasen-name">${getVasenRecordName(v)}</span>
+            <span class="record-vasen-level">Lvl ${this.getLevelText(v.level)}</span>
+        </div>`).join('');
+
+    this.showDialogue(
+        `${record.playerName}'s Journey`,
+        `<div class="game-over-details">
+            ${this.getSaveRecordDetailsHTML(record)}
+            <div class="record-section collection-attributes record-stats">
+                <div class="collection-stat"><span class="collection-label">${uiIcon('runes', 14)}Runes Found</span><span class="collection-value">${runesFound} / ${RUNE_LIST.length}</span></div>
+                <div class="collection-stat"><span class="collection-label">${uiIcon('book', 14)}Lore Entries</span><span class="collection-value">${(data.unlockedLoreEntries || []).length} / ${LORE_TOTAL}</span></div>
+            </div>
+            ${collection.length ? `<div class="record-section"><div class="record-section-title">${uiIcon('vasen', 13)}Collection (${collection.length})</div><div class="record-collection">${collectionHTML}</div></div>` : ''}
+         </div>`,
+        [
+            { text: `${uiIcon('download')}Download Summary`, class: 'btn-secondary', callback: () => {
+                onDownload();
+                this.showSaveSummaryDialogue(data, slot, onDownload); // keep the summary open
+            } },
+            { text: 'Close', class: 'btn-secondary', callback: null } // Close last, like other dialogues
+        ],
+        true,
+        'game-over-dialogue',
+        'summary'
     );
 };
 

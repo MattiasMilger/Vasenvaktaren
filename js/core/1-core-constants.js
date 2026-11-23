@@ -190,7 +190,6 @@ const GAME_CONFIG = {
 
     // Bind Runes
     // Gifu + Mannaz: Mannaz's utility heal also heals allies (reuses RUNE_MANNAZ_HEAL_PERCENT, once per combat)
-    // Uruz + Dagaz: this väsen's first skill use in combat costs 0 Megin (no tunable value)
     // Inguz + Dagaz: lowers a random enemy attribute when this väsen enters the battlefield
     RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES: 1,           // Stages the random enemy attribute is lowered by
     // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
@@ -204,6 +203,23 @@ const GAME_CONFIG = {
     // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per combat)
     RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD: 0.50,    // Enemy health fraction at or below which the bind rune triggers
     RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES: 1,          // Stages each of the enemy's attributes is lowered by
+    // Dagaz + Jera: Dagaz's damage bonus lasts for more rounds after entering the battlefield
+    RUNE_BIND_DAGAZ_JERA_ROUNDS: 2,                   // Rounds the Dagaz bonus lasts (Dagaz alone: 1)
+    // Dagaz + Thurs: uses a free skill on the enemy when entering the battlefield (once per combat)
+    RUNE_BIND_DAGAZ_THURS_SKILL: 'Basic Strike',      // Skill used (megin cost is not spent)
+    // Dagaz + Uruz: gains megin when entering the battlefield
+    RUNE_BIND_DAGAZ_URUZ_MEGIN_PERCENT: 0.10,         // Fraction of max megin gained
+    // Wynja + Thurs: when Wynja blocks a debuff, lowers different random opponent attributes
+    RUNE_BIND_WYNJA_THURS_DEBUFF_COUNT: 2,            // Number of different opponent attributes lowered
+    RUNE_BIND_WYNJA_THURS_DEBUFF_STAGES: 1,           // Stages each attribute is lowered by
+    // Fehu + proc rune: chance to trigger the partner rune's effect when hit by a potent hit
+    RUNE_BIND_FEHU_PROC_CHANCE: 0.30,
+    // Naudiz + proc rune: chance to trigger the partner rune's effect when dealing a weak hit
+    RUNE_BIND_NAUDIZ_PROC_CHANCE: 0.30,
+    // Effects of the partner rune when a Fehu or Naudiz bind rune triggers
+    RUNE_BIND_PROC_BUFF_STAGES: 1,                    // Sol/Isaz/Eihwaz/Ehwaz: stages each of the rune's two attributes is raised by
+    RUNE_BIND_PROC_HEAL_PERCENT: 0.08,                // Algiz/Jera: fraction of max health healed
+    RUNE_BIND_PROC_DEBUFF_STAGES: 1,                  // Inguz: stages the random enemy attribute is lowered by
     
     // =============================================================================
     // ENEMY AI CONFIGURATION

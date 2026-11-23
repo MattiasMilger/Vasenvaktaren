@@ -149,6 +149,54 @@
             color: var(--text-primary);
         }
 
+        /* Locked faces: greyed out, with a small lock in the corner */
+        .profile-face-option {
+            position: relative;
+        }
+
+        .profile-face-option.locked {
+            opacity: 0.35;
+            cursor: help;
+        }
+
+        .profile-face-option.locked:hover,
+        .profile-face-option.locked:focus-visible {
+            opacity: 0.6;
+            transform: none;
+        }
+
+        .profile-face-lock {
+            position: absolute;
+            right: 3px;
+            bottom: 3px;
+            display: flex;
+            line-height: 0;
+        }
+
+        .profile-face-hint {
+            margin: var(--spacing-sm) 0 0;
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        /* Face reward on an achievement card */
+        .achievement-reward {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+        }
+
+        .achievement-reward svg {
+            width: 14px;
+            height: 14px;
+        }
+
         .profile-name-fields {
             flex: 1;
             min-width: 0;

@@ -95,7 +95,7 @@ function placeRuneInFirstFreeSlot(vasen, runeId, maxRunes) {
 class GameState {
     constructor() {
         this.playerName = '';
-        this.playerFace = 'helmet';
+        this.playerFace = 'plain';
         this.playerLevel = 1;
         
         // Party: array of 3 slots, each can hold a VasenInstance or null.
@@ -1099,7 +1099,7 @@ class GameState {
         
         try {
             this.playerName = data.playerName || '';
-            this.playerFace = data.playerFace || 'helmet';
+            this.playerFace = data.playerFace || 'plain';
             this.playerLevel = data.playerLevel || 1;
             
             // Restore Vasen collection first (runes are stored on each väsen)
@@ -1259,7 +1259,7 @@ class GameState {
         localStorage.removeItem('combatCardsMinimized');
 
         this.playerName = '';
-        this.playerFace = 'helmet';
+        this.playerFace = 'plain';
         this.playerLevel = 1;
         this.party = [null, null, null];
         this.vasenCollection = [];

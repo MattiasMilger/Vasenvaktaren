@@ -140,9 +140,16 @@ Game.prototype.handleInterrogate = function() {
     );
 };
 
-// Handle pass: asks for confirmation first, since a misclick wastes the turn
+// Handle pass: asks for confirmation first, since a misclick wastes the turn.
+// Once confirmed, further passes in a row this combat go through without
+// asking, until another action is taken.
 Game.prototype.handlePass = function() {
     if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
+
+    if (this.currentCombat.lastPlayerActionType === 'pass') {
+        this.currentCombat.executePlayerAction({ type: 'pass' });
+        return;
+    }
 
     ui.showDialogue(
         'Pass?',
