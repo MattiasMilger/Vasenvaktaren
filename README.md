@@ -107,11 +107,10 @@ Optional rules for a harder journey. On the New Game screen, click the red **Rag
 | :--- | :--- |
 | **Permadeath** | Väsen knocked out in combat die for good. If none are left, the save is over |
 | **Lost Runes** | Väsen knocked out in combat lose the runes they wear. Lost runes can be found again by exploring |
-
-- **Fleeing** knocks out the väsen on the field: it stays behind to cover the retreat. In a normal game that changes nothing (the party is left at 5% health anyway), but with Permadeath it dies and with Lost Runes it loses its runes. Swap in another väsen first to choose who stays behind
 | **Weak Healing** | Healing outside combat is halved: Sacred Wells, taming items and the heal after each fight |
 | **More Fights** | Wild väsen are met far more often while exploring, so items, Sacred Wells and runes turn up less. Measured over many explorations, including the guaranteed-find rules: about 57% of explorations become fights instead of 39%, with about half as many items and Sacred Wells per fight |
 
+- **Fleeing** knocks out the väsen on the field: it stays behind to cover the retreat. In a normal game that changes nothing (the party is left at 5% health anyway), but with Permadeath it dies and with Lost Runes it loses its runes. Swap in another väsen first to choose who stays behind
 - Every rule counts the same. A meter fills as rules are added and names the difficulty after the events before the end of the world: one rule is **Fimbulvinter**, two are **Gjallarhorn**, and any three (all but one) reach **Ragnarök**
 - **Permadeath-free zone:** Idunn's apples keep every väsen, and its runes, safe within the Endless Tower. Even with Permadeath or Lost Runes, väsen that fall in the tower are restored when the run ends
 - When a väsen dies or loses its runes, a popup and a combat log line say so at once, and a summary follows the fight

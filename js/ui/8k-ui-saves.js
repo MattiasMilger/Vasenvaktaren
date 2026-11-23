@@ -456,7 +456,7 @@ UIController.prototype.showGameOverDialogue = function(record, onMenu, onSummary
          <div class="game-over-details">${this.getSaveRecordDetailsHTML(record)}</div>
          <p class="game-over-note">The save stays in its slot. You can look at it or delete it from the main menu.</p>`,
         [
-            { text: `${uiIcon('compass')}Main Menu`, class: 'btn-primary', callback: onMenu },
+            { text: `${uiIcon('home')}Main Menu`, class: 'btn-primary', callback: onMenu },
             { text: `${uiIcon('summary')}Download Summary`, class: 'btn-secondary', callback: () => {
                 if (onSummary) onSummary();
                 this.showGameOverDialogue(record, onMenu, onSummary); // stay on Game Over
