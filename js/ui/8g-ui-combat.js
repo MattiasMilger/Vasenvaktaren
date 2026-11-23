@@ -209,7 +209,7 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
                 <img src="${vasen.species.image}" alt="${vasen.species.name}"
                      class="combatant-image ${vasen.isKnockedOut() ? 'knocked-out' : ''}">
                 ${vasen.combatFlags.hasSwapSickness ? '<span class="status-icon swap-sickness">' + inlineIcon('preparing') + 'Preparing</span>' : ''}
-                ${vasen.combatFlags.valnadPassiveTriggered ? '<span class="deathless-rune">ᛣ</span>' : ''}
+                ${vasen.combatFlags.valnadPassiveTriggered ? this.getDeathlessRuneHTML() : ''}
             </div>
 
             ${createPartyPortraitHTML(partyPortraits.right, 'right')}
@@ -619,6 +619,14 @@ UIController.prototype.colorCodeCombatMessage = function(message) {
     result = result.replace(/ᛣ/g, '<span class="combat-damage">ᛣ</span>');
 
     return result;
+};
+
+// Deathless rune on the portrait of a Vålnad whose revive has been used.
+// Clicking it opens a body-level popup (the portrait is transformed/animated, so
+// an in-place popup could not escape it).
+UIController.prototype.getDeathlessRuneHTML = function() {
+    return `<span class="deathless-rune clickable-keyword" role="button" aria-label="Deathless passive info"
+                  onclick="toggleKeywordPopup(this, event, 'deathless')">ᛣ</span>`;
 };
 
 UIController.prototype.clearCombatLog = function() {

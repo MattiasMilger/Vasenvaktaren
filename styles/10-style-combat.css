@@ -1240,14 +1240,28 @@
     }
 }
 
+/* Clickable: opens the 'deathless' keyword popup (toggleKeywordPopup) */
 .deathless-rune {
     position: absolute;
     bottom: -4px;
     left: -4px;
+    cursor: pointer;
     font-size: 24px;
     color: var(--accent-danger);
     text-shadow: 0 0 5px var(--black-overlay-darker);
     z-index: 1;
+}
+
+/* Keep the rune red - beats the shared .clickable-keyword look */
+.deathless-rune.clickable-keyword {
+    font-weight: normal;
+    color: var(--accent-danger);
+    text-shadow: 0 0 5px var(--black-overlay-darker);
+}
+
+.deathless-rune.clickable-keyword:hover {
+    color: var(--accent-danger);
+    text-shadow: 0 0 5px var(--black-overlay-darker), 0 0 8px var(--accent-danger);
 }
 
 /* Swap sickness ("Preparing") status pill, overlaid on the portrait's bottom-right

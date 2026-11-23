@@ -562,6 +562,14 @@ const KEYWORD_DEFINITIONS = {
             return `Increases the damage of this väsen's next attack by ${Math.round(GAME_CONFIG.TIER1_ATTACK_SKILL_EMPOWERMENT * 100)}%.`;
         }
     },
+    'deathless': {
+        get title() {
+            return `${FAMILY_PASSIVES[FAMILIES.VALNAD].name} triggered`;
+        },
+        get text() {
+            return `This väsen was knocked out and revived with ${Math.round(FAMILY_PASSIVE_CONFIG.VALNAD_REVIVE_HEALTH_PERCENT * 100)}% health.`;
+        }
+    },
     'debuffed': {
         title: 'Debuffed',
         get text() {
