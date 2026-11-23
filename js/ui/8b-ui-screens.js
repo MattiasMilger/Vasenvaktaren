@@ -48,6 +48,7 @@ UIController.prototype.refreshAll = function() {
         this.updateZoneDescription();
         this.refreshCurrentTab();
         this.updatePlayerName();
+        this.renderModeBadges();
 
         if (this.selectedVasen) {
             const updatedVasen = gameState.vasenCollection.find(v => v.id === this.selectedVasen.id);
@@ -76,7 +77,7 @@ UIController.prototype.refreshAll = function() {
     //   starters:  array of VASEN_SPECIES keys (unknown keys are skipped)
     //   onSelect:  called with the species key when a card is clicked
     //   onConfirm: called when the Confirm button is clicked
-UIController.prototype.renderStarterSelection = function(starters, onSelect, onConfirm) {
+UIController.prototype.renderStarterSelection = function(starters, onSelect, onConfirm, onBack) {
         const starterOptions = document.getElementById('starter-options');
         starterOptions.innerHTML = '';
 
@@ -153,6 +154,11 @@ UIController.prototype.renderStarterSelection = function(starters, onSelect, onC
         const confirmBtn = document.getElementById('confirm-starter-btn');
         confirmBtn.disabled = true;
         confirmBtn.onclick = () => onConfirm();
+
+        // Back to the previous screen (New Game), when the caller offers one
+        const backBtn = document.getElementById('starter-back-btn');
+        backBtn.hidden = !onBack;
+        backBtn.onclick = onBack ? () => onBack() : null;
     };
 
     // Starter skill preview, hidden until the card is selected (CSS on

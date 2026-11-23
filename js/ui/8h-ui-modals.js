@@ -75,11 +75,12 @@ modal.classList.add('active');
     //   temperament:   the rolled temperament data (TEMPERAMENTS entry)
     //   startingItems: array of taming item ids the player will receive
     //   runeId:        the rolled starting rune id (RUNES key)
+    //   modes:         the save modes chosen on the New Journey screen
     //   onBegin:       called when "Begin Journey" is clicked
     // The dialogue is non-dismissible; "Cancel" closes it and returns to the
     // starter selection screen, which was never left.
     // Temperament, rune and item names are clickable words that open info popups.
-    UIController.prototype.showWelcomeDialogue = function(species, temperament, startingItems, runeId, onBegin) {
+    UIController.prototype.showWelcomeDialogue = function(species, temperament, startingItems, runeId, modes, onBegin) {
         const itemsMessage = startingItems.length > 0
             ? `<p>You received: ${startingItems.map(id => `<strong>${this.getItemTextHTML(id)}</strong>`).join(', ')}</p>`
             : '';
@@ -95,6 +96,7 @@ modal.classList.add('active');
         <p><em>The old paths stir once more, and the väsen await one who can earn their trust.</em></p>
         ${vasenMessage}
         ${itemsMessage}
+        ${this.getWelcomeModesHTML(modes)}
     `,
     [
         {

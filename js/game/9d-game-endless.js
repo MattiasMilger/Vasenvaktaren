@@ -18,6 +18,7 @@ Game.prototype.challengeEndlessTower = function() {
         'Endless Tower',
         `<p>The Endless Tower stretches infinitely into the void, a test of endurance and strength. Every ${interval} floors, Idunn replenishes your team - healing ${healPercent}% health, cleansing ${cleanseStages} debuff stage of each attribute, and renewing passives.</p>
          ${ui.areTipsEnabled() ? ui.getTipHTML('Väsen cannot be tamed in this mode. Victory or defeat will end your run.') : ''}
+         ${this.getModeWarningHTML('tower')}
          ${gameState.endlessTowerRecord.highestFloor > 0
             ? `<p class="record-reminder">Current Record: Floor ${gameState.endlessTowerRecord.highestFloor}</p>`
             : ''}`,
@@ -215,6 +216,8 @@ Game.prototype.showEndlessTowerRunDialogue = function(title, bodyHtml) {
             callback: () => {
                 ui.hideCombatUI();
                 this.refreshUI();
+                // Permadeath: name the väsen lost in the tower
+                this.showFallenNoticeThen(null);
             }
         }],
         false,
@@ -246,7 +249,7 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
 
         this.showEndlessTowerRunDialogue(
             'Tower Run Ended',
-            `<p>You surrendered on Floor ${floor}.</p>
+            `<p>You fled on Floor ${floor}.</p>
              ${getEndlessTowerRecordHtml(reachedFloor, isNewRecord)}`
         );
         return;

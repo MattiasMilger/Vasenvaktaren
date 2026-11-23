@@ -45,8 +45,6 @@ class Combat {
         this.canTame = combatType === COMBAT_TYPES.WILD;
         this.isWildEncounter = combatType === COMBAT_TYPES.WILD;
         
-        // Experience tracking
-        this.expTracker = new Map(); // vasen id -> { participated: boolean, turnsOnField: number, dealtKillingBlow: boolean }
         
         // Enemy utility usage tracking (for AI)
         this.enemyUtilityUsage = new Map(); // "vasenId-skillName" -> count
@@ -62,7 +60,14 @@ class Combat {
         this.onAttack = null;
         this.onKnockoutSwap = null;
         this.onEnd = null;
-        
+        // Called with the väsen sent onto the field (Ragnarök saves remember it,
+        // so a reload mid-battle knows who covers the retreat)
+        this.onPlayerActiveChange = null;
+        // Called once for each player väsen that is knocked out (after revives
+        // had their chance), with (vasen, enemyActive). Used by Permadeath.
+        this.onPlayerKnockout = null;
+        this.reportedKnockouts = new Set();
+
         // Action state
         this.waitingForPlayerAction = true;
         
@@ -153,6 +158,7 @@ class Combat {
         
         this.playerActive = vasen;
         this.playerActiveIndex = index;
+        if (this.onPlayerActiveChange) this.onPlayerActiveChange(vasen);
         
         if (isSwap) {
             vasen.combatFlags.hasSwapSickness = true;
@@ -160,12 +166,6 @@ class Combat {
             vasen.combatFlags.turnsOnField = 0;
         }
         
-        // Initialize exp tracking
-        if (!this.expTracker.has(vasen.id)) {
-            this.expTracker.set(vasen.id, { participated: true, turnsOnField: 0, dealtKillingBlow: false });
-        } else {
-            this.expTracker.get(vasen.id).participated = true;
-        }
         
         // Trigger Ande passive when entering battlefield (via swap)
         if (isSwap) {
@@ -225,12 +225,6 @@ class Combat {
     startTurn() {
         this.turnCount++;
         this.addLog(`Turn ${this.turnCount} begins.`, 'turn');
-        
-        // Track participation
-        if (this.playerActive && !this.playerActive.isKnockedOut()) {
-            const tracker = this.expTracker.get(this.playerActive.id);
-            if (tracker) tracker.turnsOnField++;
-        }
     }
     
     // End turn (refill megin, clear flags)
@@ -327,6 +321,8 @@ class Combat {
         this.applyFamilyPassive('onTurnEnd', { vasen: this.playerActive, isPlayer: true });
         this.applyFamilyPassive('onTurnEnd', { vasen: this.enemyActive, isPlayer: false });
 
+        this.reportPlayerKnockouts();
+
         // Check for combat end
         this.checkCombatEnd();
         
@@ -355,7 +351,7 @@ class Combat {
             tamed: isVictory && this.correctItemGiven && this.canTame,
             surrendered: false,
             tamedVasen: this.correctItemGiven && this.canTame ? this.enemyTeam[0] : null,
-            expGained: isVictory ? this.calculateExperience() : [],
+            // Experience is awarded (and shown) by the victory handlers in 9b/9c
             message: isVictory ? 'Victory!' : (isTie ? 'Both sides fell at the same moment. The battle ends in a tie.' : 'Your party has been defeated!')
         };
     }
@@ -553,11 +549,20 @@ class Combat {
         return results;
     }
     
-    // Player action: surrender
+    // Player action: surrender (shown to the player as "Flee"). The väsen on
+    // the field stays behind to cover the retreat and is knocked out. In a
+    // normal game that changes nothing (the party is left at low health after
+    // fleeing anyway); Ragnarök Mode rules apply to it like any knockout.
     surrender() {
         this.isOver = true;
         this.winner = 'enemy';
-        this.addLog('You call retreat. Your party withdraws..', 'surrender');
+        this.fleeing = true;
+        if (this.playerActive && !this.playerActive.isKnockedOut()) {
+            this.addLog(`${this.playerActive.getDisplayName()} stays behind to cover the retreat!`, 'surrender');
+            this.playerActive.currentHealth = 0;
+            this.reportPlayerKnockouts();
+        }
+        this.addLog('You flee. Your party withdraws.', 'surrender');
         
         if (this.onUpdate) {
             this.onUpdate();
@@ -642,8 +647,22 @@ class Combat {
         return null;
     }
     
+    // Report each newly knocked-out player väsen once to onPlayerKnockout.
+    // Runs after the turn's hits, so a väsen revived by Deathless is not reported.
+    reportPlayerKnockouts() {
+        if (!this.onPlayerKnockout) return;
+        this.playerTeam.forEach(vasen => {
+            if (vasen.isKnockedOut() && !this.reportedKnockouts.has(vasen.id)) {
+                this.reportedKnockouts.add(vasen.id);
+                this.onPlayerKnockout(vasen, this.enemyActive);
+            }
+        });
+    }
+
     // Handle post-turn effects and knockouts
     handlePostTurn(results) {
+        this.reportPlayerKnockouts();
+
         // Handle player knockout
         if (this.playerActive && this.playerActive.isKnockedOut()) {
             const aliveTeam = this.playerTeam.filter(v => !v.isKnockedOut());
@@ -686,48 +705,6 @@ class Combat {
     // Get alive player team members for swap
     getAlivePlayerTeam() {
         return this.playerTeam.filter(v => !v.isKnockedOut() && v !== this.playerActive);
-    }
-    
-    // Calculate and award experience
-    calculateExperience() {
-        if (this.winner !== 'player') return [];
-        
-        const totalEnemyExp = this.enemyTeam.reduce((sum, enemy) => {
-            return sum + getExpYield(enemy.level, enemy.species.rarity);
-        }, 0);
-        
-        const results = [];
-        
-        this.playerTeam.forEach(vasen => {
-            if (vasen.isKnockedOut()) return; // Fainted get nothing
-            
-            const tracker = this.expTracker.get(vasen.id);
-            if (!tracker) return;
-            
-            let expPercent = 0;
-            
-            if (tracker.dealtKillingBlow) {
-                expPercent = 1.0; // 100%
-            } else if (tracker.turnsOnField > 0) {
-                expPercent = 0.6; // 60% for participated
-            } else if (tracker.participated) {
-                expPercent = 0.3; // 30% for in party but not on field
-            }
-            
-            const expGained = Math.floor(totalEnemyExp * expPercent);
-            if (expGained > 0) {
-                const levelResult = vasen.addExperience(expGained);
-                results.push({
-                    vasen: vasen,
-                    expGained: expGained,
-                    leveledUp: levelResult.leveledUp,
-                    newLevel: levelResult.newLevel,
-                    previousLevel: levelResult.previousLevel
-                });
-            }
-        });
-        
-        return results;
     }
     
     // Check if taming conditions are met

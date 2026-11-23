@@ -31,7 +31,7 @@ Game.prototype.challengeGuardian = function() {
 
     ui.showDialogue(
         guardian.name,
-        `<p>${dialogueText}</p>${tutorialHtml}`,
+        `<p>${dialogueText}</p>${tutorialHtml}${this.getModeWarningHTML('guardian')}`,
         [
             {
                 text: `${uiIcon('swords')}Fight!`,
@@ -78,7 +78,6 @@ Game.prototype.startGuardianCombat = function(guardian) {
 Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
     if (result.surrendered) {
         this.leavePartyAtLowHealth();
-        ui.addCombatLog('You call retreat. Your party withdraws.', 'system');
         this.endCombat();
         return;
     }

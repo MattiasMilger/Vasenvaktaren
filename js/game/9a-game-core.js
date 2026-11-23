@@ -8,12 +8,38 @@ class Game {
         this.pendingFirstTameMessage = false;
     }
 
-    // Initialize the game
+    // Initialize the game: open the save played last, straight into the game.
+    // The main menu is shown when there is no such save, or when the player
+    // chose Main Menu in Settings (a one-time flag that survives the reload).
     init() {
         ui.init();
 
+        let showMenu = false;
+        try {
+            showMenu = sessionStorage.getItem(SHOW_MENU_FLAG) === '1';
+            sessionStorage.removeItem(SHOW_MENU_FLAG);
+        } catch (e) { /* ignore */ }
+
+        const activeSlot = SaveSlots.getActive();
+        if (showMenu || activeSlot === null || !this.openSlot(activeSlot)) {
+            this.showMainMenu();
+        }
+
+        ui.showFlashMessage();
+
+        // Remove loading class to reveal the correct screen
+        document.body.classList.remove('loading');
+    }
+
+    // Load a save slot and enter the game. Returns false if the slot can't be
+    // played (empty, unreadable, or a Permadeath save that is over).
+    openSlot(slot) {
+        gameState.saveSlot = slot;
+
         // Check for existing save
-        if (gameState.loadGame()) {
+        if (gameState.loadGame() && this.checkLoadedRun()) {
+            SaveSlots.setActive(slot);
+
             // Reset tutorial on page load only if player has tamed at least one Vasen
             // This allows the first tutorial to persist until first tame, but prevents reload exploit after
             if (!gameState.firstCombatTutorialShown && gameState.vasenCollection.length > 1) {
@@ -35,20 +61,30 @@ class Game {
 
             // Has save data - go to game screen
             this.showGameScreen();
-        } else {
-            // No save - show main menu
-            this.showMainMenu();
+
+            // Finish a battle or encounter left open when the page was closed
+            // (saves with a mode on only, see 9g-game-modes.js)
+            this.resumeModesAfterLoad();
+            return true;
         }
 
-        // Remove loading class to reveal the correct screen
-        document.body.classList.remove('loading');
+        // Nothing playable here. The slot's data is left untouched; loading
+        // another slot or starting a new game replaces this state entirely.
+        return false;
     }
 
     // Show main menu
     showMainMenu() {
         ui.showScreen('mainMenu');
-
-        document.getElementById('new-game-btn').onclick = () => this.showStarterSelection();
+        ui.renderMainMenu(this.getSlotSummaries(), {
+            onContinue: slot => this.continueSlot(slot),
+            onNewGame: () => this.startNewGame(),
+            onView: slot => this.viewEndedSave(slot),
+            onExport: slot => this.exportSlot(slot),
+            onSummary: slot => this.exportSlotSummary(slot),
+            onDelete: slot => this.confirmDeleteSlot(slot),
+            onLoadFile: file => this.loadFileFromMenu(file)
+        });
     }
 
     // Show starter selection
@@ -60,8 +96,20 @@ class Game {
         ui.renderStarterSelection(
             STARTER_VASEN,
             speciesName => this.selectStarter(speciesName),
-            () => this.confirmStarter()
+            () => this.confirmStarter(),
+            () => this.backFromStarterSelection()
         );
+    }
+
+    // Back to the New Game screen, keeping the slot and Ragnarök rules chosen there
+    backFromStarterSelection() {
+        this.selectedStarter = null;
+        const run = this.newRun;
+        if (run) {
+            this.showNewJourney(run.slot, run.modes);
+        } else {
+            this.showMainMenu();
+        }
     }
 
     // Select starter (the UI layer handles the card highlight and enables Confirm)
@@ -121,9 +169,19 @@ class Game {
             starterTemperament,
             startingItems,
             starterRuneId,
+            (this.newRun && this.newRun.modes) || createDefaultModes(),
             () => {
+                // The slot and Ragnarök rules chosen on the New Game screen.
+                // A save already in that slot is replaced.
+                const newRun = this.newRun || { slot: SaveSlots.firstEmpty() ?? 0, modes: createDefaultModes() };
+                this.newRun = null;
+                if (SaveSlots.hasSave(newRun.slot)) SaveSlots.discard(newRun.slot);
+                gameState.saveSlot = newRun.slot;
+
                 // initialize new game and create everything
                 gameState.resetGame();
+                gameState.startRun(newRun.modes);
+                SaveSlots.setActive(newRun.slot);
 
                 // Give the rolled starting rune
                 starter.equipRune(starterRuneId);
@@ -214,7 +272,16 @@ class Game {
         combat.onHit = (side, matchup) => ui.flashCombatant(side, matchup);
         combat.onAttack = (side, skillType) => ui.triggerAttackAnimation(side, skillType);
         combat.onKnockoutSwap = (callback) => ui.showKnockoutSwapModal(this.currentCombat, callback);
-        combat.onEnd = onEnd;
+
+        // Ragnarök rules run first; Permadeath may end the save instead
+        // of the combat type's normal ending (see 9g-game-modes.js)
+        combat.onPlayerKnockout = (vasen, killer) => this.handleModeKnockout(vasen, killer);
+        combat.onPlayerActiveChange = (vasen) => this.noteModeActiveVasen(vasen);
+        combat.onEnd = (result) => {
+            if (this.applyModeRulesOnCombatEnd(result)) return;
+            onEnd(result);
+        };
+        this.beginModeCombat();
     }
 
     // Unlock a lore entry and announce it; no-op for a missing or already unlocked key
@@ -224,11 +291,11 @@ class Game {
         }
     }
 
-    // After a loss or surrender, every party member is left at low health (at least 1 HP)
+    // After a loss or fleeing, every party member is left at low health (at least 1 HP)
     leavePartyAtLowHealth() {
         gameState.party.forEach(v => {
             if (v) {
-                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT));
+                v.currentHealth = Math.max(1, Math.floor(v.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT * gameState.getHealMultiplier()));
             }
         });
     }
@@ -243,7 +310,7 @@ class Game {
     applyVictoryHeal() {
         gameState.party.forEach(v => {
             if (v) {
-                v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
+                v.healPercent(GAME_CONFIG.POST_COMBAT_HEAL_PERCENT * gameState.getHealMultiplier());
                 v.currentMegin = v.maxMegin;
             }
         });
@@ -282,6 +349,12 @@ class Game {
         this.refreshUI();
         gameState.saveGame();
 
+        // Permadeath: name the väsen lost in this combat first, then the usual popups
+        this.showFallenNoticeThen(() => this.showPostCombatNotices());
+    }
+
+    // One-time guidance popups shown after returning from combat
+    showPostCombatNotices() {
         // Show the first-tame guidance popup once, right after returning to
         // exploration (i.e. once the Victory dialogue's Continue button has
         // been clicked), mirroring the explore popups (title + confirm button).
@@ -336,7 +409,7 @@ class Game {
 
         // Calculate heal
         const isCorrectItem = vasen.species.tamingItem === itemId;
-        const healPercent = isCorrectItem ? GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT;
+        const healPercent = (isCorrectItem ? GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT) * gameState.getHealMultiplier();
         const healed = vasen.healPercent(healPercent);
 
         ui.showMessage(`${vasen.getName()} health restored <span style="font-weight: 700;">${Math.round(healPercent * 100)}%</span>. (+<span style="font-weight: 700;">${healed}</span> HP)`, 'success');

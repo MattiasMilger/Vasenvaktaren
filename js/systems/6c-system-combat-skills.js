@@ -154,9 +154,6 @@ Combat.prototype.resolveKnockout = function(attacker, defender, isPlayer) {
 
     if (isPlayer) {
         this.addLog(`${defender.getDisplayName()} collapses!`, 'knockout');
-        // Mark killing blow
-        const tracker = this.expTracker.get(attacker.id);
-        if (tracker) tracker.dealtKillingBlow = true;
     } else {
         this.addLog(`${defender.getDisplayName()} has fainted!`, 'knockout');
     }

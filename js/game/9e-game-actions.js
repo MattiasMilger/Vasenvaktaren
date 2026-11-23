@@ -170,16 +170,16 @@ Game.prototype.handlePass = function() {
     );
 };
 
-// Handle surrender
+// Handle fleeing (the "surrender" action, shown to the player as Flee)
 Game.prototype.handleSurrender = function() {
     if (!this.currentCombat) return;
 
     ui.showDialogue(
-        'Surrender?',
-        '<p>Are you sure you want to surrender? Your party will be left at very low health.</p>',
+        'Flee?',
+        `<p>Flee from this battle? The väsen on the field stays behind to cover the retreat and is knocked out, and your party is left at very low health.</p>${this.getFleeWarningHTML()}${this.getModeWarningHTML('surrender')}`,
         [
             {
-                text: `${uiIcon('surrender')}Surrender`,
+                text: `${uiIcon('surrender')}Flee`,
                 class: 'btn-danger',
                 callback: () => {
                     this.currentCombat.executePlayerAction({ type: 'surrender' });
@@ -217,7 +217,7 @@ Game.prototype.handleAutoBattle = function() {
 
     ui.showDialogue(
         'Auto Battle',
-        '<p>Let your väsen fight on their own?</p>',
+        `<p>Let your väsen fight on their own?</p>${this.getModeWarningHTML('autoBattle')}`,
         [
             {
                 text: `${uiIcon('swords')}Start Auto Battle`,

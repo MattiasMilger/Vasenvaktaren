@@ -74,7 +74,6 @@ Game.prototype.unlockSkillLoreEntries = function(vasen) {
 Game.prototype.handleCombatEnd = function(result) {
     if (result.surrendered) {
         this.leavePartyAtLowHealth();
-        ui.addCombatLog('You call retreat. Your party withdraws.', 'system');
         this.endCombat();
         return;
     }

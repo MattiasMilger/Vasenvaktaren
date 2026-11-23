@@ -278,8 +278,40 @@
             <svg class="game-emblem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3c0 4 1 6 3 7"/><path d="M19 3c0 4-1 6-3 7"/><path d="M8 10h8l1 5-5 6-5-6z"/><path d="M10 14h.01"/><path d="M14 14h.01"/></svg>
             <h1 class="game-title">Väsenväktaren</h1>
             <p class="game-subtitle">Catch creatures of Swedish folklore</p>
+            <!-- Save cards, rendered by ui.renderMainMenu() -->
+            <div id="save-slots" class="save-slots" hidden></div>
             <div class="menu-buttons">
                 <button id="new-game-btn" class="btn btn-primary">New Game</button>
+                <div class="menu-secondary-buttons">
+                    <button id="menu-load-file-btn" class="btn btn-secondary"><i data-ui-icon="upload" data-size="14"></i>Load from File</button>
+                </div>
+            </div>
+            <input type="file" id="menu-load-file-input" accept=".json,.txt,application/json,text/plain" style="display: none;">
+        </div>
+    </div>
+
+    <!-- New Game Screen: optional Ragnarök Mode rules (rendered by ui.renderNewJourney()) -->
+    <div id="new-journey-screen" class="screen">
+        <div class="journey-content">
+            <p class="starter-prompt">New Game</p>
+            <button type="button" id="ragnarok-toggle-btn" class="ragnarok-toggle" aria-expanded="false" aria-controls="ragnarok-panel">
+                <i data-ui-icon="ragnarok" data-size="16"></i><span id="ragnarok-toggle-label">Ragnarök Mode</span><span class="ragnarok-toggle-chevron" aria-hidden="true"></span>
+            </button>
+            <p class="ragnarok-hint">Click <strong>Ragnarök Mode</strong> to choose optional rules for a harder journey.</p>
+            <div id="ragnarok-panel" class="ragnarok-panel" hidden>
+                <div id="journey-modes" class="journey-modes"></div>
+                <div class="ragnarok-difficulty">
+                    <div id="ragnarok-tier-name" class="ragnarok-tier-name"></div>
+                    <div class="ragnarok-meter"><div id="ragnarok-meter-fill" class="ragnarok-meter-fill"></div></div>
+                    <p id="ragnarok-tier-line" class="ragnarok-tier-line"></p>
+                </div>
+                <p class="journey-lock-note"><i data-ui-icon="lock" data-size="12"></i>Can't be changed once the game has started.</p>
+                <p class="journey-lock-note journey-reload-note"><i data-ui-icon="surrender" data-size="12"></i>Fleeing knocks out the väsen on the field. Closing or reloading the page during a battle counts as fleeing.</p>
+            </div>
+            <p id="journey-replace-note" class="journey-replace-note" hidden></p>
+            <div class="journey-buttons">
+                <button id="journey-back-btn" class="btn btn-secondary">Back</button>
+                <button id="journey-begin-btn" class="btn btn-primary">Choose Starter</button>
             </div>
         </div>
     </div>
@@ -333,6 +365,7 @@
     <p class="starter-prompt">Choose who to befriend:</p>
     <div id="starter-options" class="starter-options"></div>
     <div class="starter-confirm-bar">
+      <button id="starter-back-btn" class="btn btn-secondary">Back</button>
       <button id="confirm-starter-btn" class="btn btn-primary" disabled>Confirm</button>
     </div>
   </div>
@@ -352,6 +385,8 @@
                     <i data-ui-icon="profile" data-size="14"></i>
                     <span class="player-profile-prefix">Player Profile: </span><span id="player-name-display">Väktare</span>
                 </button>
+                <!-- The current save's modes (Permadeath / Hardcore), rendered by ui.renderModeBadges() -->
+                <span id="save-mode-badges" class="save-mode-badges" hidden></span>
             </div>
             <div class="header-right">
                 <button id="combat-tips-btn" class="btn btn-small"><i data-ui-icon="guide" data-size="14"></i>Game Guide</button>
@@ -476,7 +511,7 @@
                         <button id="btn-offer" class="btn btn-action"><i data-ui-icon="items" data-size="16"></i>Offer Item</button>
                         <button id="btn-interrogate" class="btn btn-action"><i data-ui-icon="interrogate" data-size="16"></i>Interrogate</button>
                         <button id="btn-pass" class="btn btn-action"><i data-ui-icon="pass" data-size="16"></i>Pass</button>
-                        <button id="btn-surrender" class="btn btn-danger"><i data-ui-icon="surrender" data-size="16"></i>Surrender</button>
+                        <button id="btn-surrender" class="btn btn-danger"><i data-ui-icon="surrender" data-size="16"></i>Flee</button>
                         <button id="btn-auto-combat" class="btn btn-action btn-auto-combat"><i data-ui-icon="swords" data-size="16"></i>Auto Battle</button>
                     </div>
 
@@ -645,16 +680,11 @@
 
         <!-- Save Management -->
         <div class="settings-section">
-            <h4>Save Management</h4>
-            <p class="settings-note">Game auto-saves. Save to a file to back up your progress or move it to another device.</p>
+            <h4>Save</h4>
+            <p id="settings-save-info" class="settings-save-info"></p>
+            <p class="settings-note">The game saves automatically. Save to File, Load from File and Delete are on the main menu.</p>
 
-            <div class="save-buttons">
-                <button id="download-save-btn" class="btn btn-secondary"><i data-ui-icon="download" data-size="14"></i>Save to File</button>
-                <button id="load-save-file-btn" class="btn btn-secondary"><i data-ui-icon="upload" data-size="14"></i>Load from File</button>
-            </div>
-            <input type="file" id="load-save-file-input" accept=".json,.txt,application/json,text/plain" style="display: none;">
-
-            <button id="reset-game-btn" class="btn btn-danger"><i data-ui-icon="trash" data-size="14"></i>Reset Game</button>
+            <button id="settings-main-menu-btn" class="btn btn-secondary settings-main-menu-btn"><i data-ui-icon="compass" data-size="14"></i>Main Menu</button>
         </div>
 
         <!-- Credits Section -->
@@ -805,6 +835,7 @@
                     <div class="guide-category-body">
                         <p><strong>Guardian Battles</strong><br>Every zone except Ginnungagap is watched over by a Guardian fielding a team of 3 Väsen. Click "Challenge Guardian" to face them. Defeating a Guardian for the first time fully restores your party's health and Megin, permanently unlocks the next zone, and grants rewards.</p>
                         <p><strong>Endless Tower</strong><br>Once Ginnungagap is unlocked, you may challenge the Endless Tower: an ever-climbing gauntlet of floors that grow tougher the deeper you go. Väsen cannot be tamed within, and your team is periodically restored and renewed as you climb. Your highest floor and the team you used are saved as a permanent record.</p>
+                        <p><strong>Permadeath-free zone</strong><br>Idunn's apples keep every väsen, and its runes, safe within the tower. Even with the Permadeath or Lost Runes rules of Ragnarök Mode, väsen that fall in the tower are restored when the run ends.</p>
                     </div>
                 </div>
 
@@ -830,7 +861,7 @@
                         <p><strong>Offer Item</strong><br>Free action. Limited per combat, wild väsen only.</p>
                         <p><strong>Interrogate</strong><br>Costs a turn. Ask a wild väsen what it desires.</p>
                         <p><strong>Pass</strong><br>Skip your turn.</p>
-                        <p><strong>Surrender</strong><br>Retreat and end the combat.</p>
+                        <p><strong>Flee</strong><br>Retreat and end the combat. The väsen on the field stays behind to cover the retreat and is knocked out, and your party is left at very low health. In Ragnarök Mode that knockout follows the rules (Permadeath, Lost Runes), and closing or reloading the page during a battle counts as fleeing.</p>
                         <p><strong>Auto Battle</strong><br>Let your väsen fight on their own. Press again to take back control.</p>
                     </div>
                 </div>
@@ -857,6 +888,7 @@
     <script src="js/systems/6b-system-ai.js"></script>
     <script src="js/systems/6c-system-combat-skills.js"></script>
     <script src="js/systems/6d-system-combat-passives.js"></script>
+    <script src="js/systems/7a-system-saves.js"></script>
     <script src="js/systems/7-system-state.js"></script>
     
     <!-- UI Controller (modular) -->
@@ -871,6 +903,7 @@
     <script src="js/ui/8h-ui-modals.js"></script>
     <script src="js/ui/8i-ui-menus.js"></script>
     <script src="js/ui/8j-ui-lore.js"></script>
+    <script src="js/ui/8k-ui-saves.js"></script>
 
     <!-- Game Controller (modular) -->
     <script src="js/game/9a-game-core.js"></script>
@@ -878,6 +911,7 @@
     <script src="js/game/9c-game-guardian.js"></script>
     <script src="js/game/9d-game-endless.js"></script>
     <script src="js/game/9e-game-actions.js"></script>
+    <script src="js/game/9g-game-modes.js"></script>
     <script src="js/game/9f-game-init.js"></script>
 </body>
 </html>

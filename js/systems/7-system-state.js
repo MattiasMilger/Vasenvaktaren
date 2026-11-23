@@ -184,11 +184,78 @@ class GameState {
         // at the start of a new game. Set by resetGame(); 0 means no guarantee
         // is currently active.
         this.starterNatureBattlesRemaining = 0;
+
+        // Save slot this game is stored in (index into SAVE_SLOT_KEYS, not saved)
+        this.saveSlot = 0;
+        // Set when this tab must stop writing: the save ended, or another tab
+        // continued this save (not saved). See 7b-system-saves.js.
+        this.saveBlocked = false;
+        this.resetRunFields();
+    }
+
+    // Save modes and run bookkeeping (see 7b-system-saves.js and 9g-game-modes.js).
+    // Modes are chosen when a new game starts and never change afterwards.
+    resetRunFields() {
+        this.modes = createDefaultModes(); // Ragnarök Mode rules (see 7a-system-saves.js)
+        this.runId = null;          // Identifies this save across tabs and files
+        this.createdAt = null;      // When the game was started (null for saves older than this field)
+        this.saveCounter = 0;       // Increases on every write of a Ragnarök save
+        this.ended = null;          // Permadeath: { cause, date } once no väsen are left
+        this.fallenVasen = [];      // Permadeath: records of väsen that died, oldest first
+        this.pendingCombat = null;  // A Ragnarök combat in progress (see 9g)
+        this.pendingEncounter = null; // A rolled wild encounter not yet fought (Ragnarök only)
+        // Everything ever collected, so profile counts never go down when a
+        // väsen dies or is released, or a rune is lost
+        this.foundRunes = new Set();
+        this.tamedSpecies = new Set();
+    }
+
+    // True when the save has any Ragnarök Mode rule on
+    hasModes() {
+        return getActiveModeIds(this.modes).length > 0;
+    }
+
+    // Weak Healing: multiplier for healing outside combat (1 when the rule is off)
+    getHealMultiplier() {
+        return this.modes.weakHealing ? GAME_MODES.weakHealing.healMultiplier : 1;
+    }
+
+    // More Fights: exploration odds with wild väsen raised to the rule's share
+    // and the other finds scaled down to fit (the normal odds when it is off)
+    getExplorationRates() {
+        if (!this.modes.moreFights) return EXPLORATION_RATES;
+        const wild = GAME_MODES.moreFights.wildChance;
+        const scale = (1 - wild) / (1 - EXPLORATION_RATES.WILD_VASEN);
+        return {
+            WILD_VASEN: wild,
+            ITEM: EXPLORATION_RATES.ITEM * scale,
+            SACRED_WELL: EXPLORATION_RATES.SACRED_WELL * scale,
+            RUNE: EXPLORATION_RATES.RUNE * scale
+        };
+    }
+
+    // Pity threshold (GAME_CONFIG key). More Fights makes items, Sacred Wells
+    // and runes wait longer, so their pity doesn't undo the rule.
+    getPityThreshold(key) {
+        const base = GAME_CONFIG[key];
+        if (!this.modes.moreFights || key === 'PITY_COMBAT_THRESHOLD') return base;
+        return Math.round(base * GAME_MODES.moreFights.pityMultiplier);
+    }
+
+    // Runes ever found (runes lost to Lost Runes still count)
+    getFoundRuneCount() {
+        return new Set([...this.foundRunes, ...this.collectedRunes]).size;
+    }
+
+    // localStorage key of this game's save slot
+    get saveKey() {
+        return getSaveSlotKey(this.saveSlot);
     }
     
     // count väsen types tamed
+    // Väsen types ever tamed (released or fallen väsen still count)
     getUniqueSpeciesTamed() {
-        const set = new Set();
+        const set = new Set(this.tamedSpecies);
         this.vasenCollection.forEach(v => set.add(v.speciesName));
         return set.size;
     }
@@ -474,7 +541,7 @@ class GameState {
     
     // Check if all runes collected
     hasAllRunes() {
-        return this.collectedRunes.size >= Object.keys(RUNES).length;
+        return this.getFoundRuneCount() >= Object.keys(RUNES).length;
     }
 
     // Unlock a single lore entry by key; returns true if newly unlocked
@@ -560,7 +627,9 @@ class GameState {
     // discoveries from released väsen are kept. Only ever adds, so discoveries
     // persist after a väsen is released. Does not save by itself (saveGame() calls it).
     syncDiscoveries() {
+        this.collectedRunes.forEach(runeId => this.foundRunes.add(runeId));
         this.vasenCollection.forEach(vasen => {
+            this.tamedSpecies.add(vasen.speciesName);
             vasen.getAvailableSkills().forEach(skillName => this.discoveredSkills.add(skillName));
             if (vasen.species.tamingItem) this.discoveredItems.add(vasen.species.tamingItem);
         });
@@ -590,7 +659,7 @@ class GameState {
     }
 
     isRuneDiscovered(runeId) {
-        return this.collectedRunes.has(runeId);
+        return this.collectedRunes.has(runeId) || this.foundRunes.has(runeId);
     }
 
     // A bind rune is discovered once both runes of its pair are collected
@@ -654,6 +723,12 @@ class GameState {
                 break;
         }
 
+        // With a mode on, a rolled wild encounter is saved until it is fought,
+        // so reloading the page can't skip it (see 9g-game-modes.js)
+        this.pendingEncounter = (result.type === 'vasen' && this.hasModes())
+            ? serializeWildEncounter(result.vasen)
+            : null;
+
         this.saveGame();
         return result;
     }
@@ -662,11 +737,12 @@ class GameState {
     rollEncounterType() {
         // Check if all runes collected
         const allRunesCollected = this.collectedRunes.size >= RUNE_LIST.length;
+        const rates = this.getExplorationRates(); // Ragnarök Mode: More Fights
 
         let encounterType;
 
         // Priority 1: Sacred Well pity (triggers after threshold combats without a well)
-        if (this.sacredWellCounter >= GAME_CONFIG.PITY_SACRED_WELL_THRESHOLD) {
+        if (this.sacredWellCounter >= this.getPityThreshold('PITY_SACRED_WELL_THRESHOLD')) {
             encounterType = 'well';
         }
         // Priority 2: Combat pity (triggers after threshold explores without combat)
@@ -674,11 +750,11 @@ class GameState {
             encounterType = 'vasen';
         }
         // Priority 3: Item pity (triggers after threshold explores without an item)
-        else if (this.itemCounter >= GAME_CONFIG.PITY_ITEM_THRESHOLD) {
+        else if (this.itemCounter >= this.getPityThreshold('PITY_ITEM_THRESHOLD')) {
             encounterType = 'item';
         }
         // Priority 4: Rune pity (triggers after threshold explores without a rune, only if runes remain)
-        else if (!allRunesCollected && this.runeCounter >= GAME_CONFIG.PITY_RUNE_THRESHOLD) {
+        else if (!allRunesCollected && this.runeCounter >= this.getPityThreshold('PITY_RUNE_THRESHOLD')) {
             encounterType = 'rune';
         }
         // Priority 5: Normal RNG
@@ -686,11 +762,11 @@ class GameState {
             const roll = Math.random();
 
             // If all runes collected, rune chance is added to vasen chance
-            if (roll < EXPLORATION_RATES.WILD_VASEN + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+            if (roll < rates.WILD_VASEN + (allRunesCollected ? rates.RUNE : 0)) {
                 encounterType = 'vasen';
-            } else if (roll < EXPLORATION_RATES.WILD_VASEN + EXPLORATION_RATES.ITEM + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+            } else if (roll < rates.WILD_VASEN + rates.ITEM + (allRunesCollected ? rates.RUNE : 0)) {
                 encounterType = 'item';
-            } else if (roll < EXPLORATION_RATES.WILD_VASEN + EXPLORATION_RATES.ITEM + EXPLORATION_RATES.SACRED_WELL + (allRunesCollected ? EXPLORATION_RATES.RUNE : 0)) {
+            } else if (roll < rates.WILD_VASEN + rates.ITEM + rates.SACRED_WELL + (allRunesCollected ? rates.RUNE : 0)) {
                 encounterType = 'well';
             } else {
                 encounterType = 'rune';
@@ -804,7 +880,7 @@ class GameState {
     // Sacred Well: heal every tamed väsen
     visitSacredWell() {
         const anyHealed = this.applySacredWellHealing();
-        const healPercent = Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * 100);
+        const healPercent = Math.round(GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * this.getHealMultiplier() * 100);
         const dialogue = anyHealed
             ? `A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your Väsen drink deeply and feel renewed. All tamed Väsen are healed by <span style="color: var(--color-positive-soft); font-weight: 700;">${healPercent}%</span>.`
             : 'A spring of crystal-clear water bubbles forth, shimmering with sacred power. Your tamed Väsen are already at full vigor, but the sacred waters shimmer with approval.';
@@ -840,7 +916,7 @@ class GameState {
     applyPostCombatHealing() {
         this.party.forEach(vasen => {
             if (vasen) {
-                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT);
+                const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.POST_COMBAT_HEAL_PERCENT * this.getHealMultiplier());
                 vasen.currentHealth = Math.max(vasen.currentHealth, healAmount);
                 vasen.currentMegin = vasen.maxMegin; // Full megin restore
             }
@@ -856,7 +932,7 @@ class GameState {
             if (vasen.currentHealth < vasen.maxHealth) {
                 anyHealed = true;
             }
-            const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.SACRED_WELL_HEAL_PERCENT);
+            const healAmount = Math.floor(vasen.maxHealth * GAME_CONFIG.SACRED_WELL_HEAL_PERCENT * this.getHealMultiplier());
             vasen.currentHealth = Math.min(vasen.maxHealth, vasen.currentHealth + healAmount);
         });
         
@@ -877,7 +953,7 @@ class GameState {
         }
 
         const isCorrectItem = vasenInstance.species.tamingItem === itemId;
-        const healPercent = isCorrectItem ? 1.0 : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT;
+        const healPercent = (isCorrectItem ? 1.0 : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT) * this.getHealMultiplier();
 
         const calculatedHealAmount = Math.floor(vasenInstance.maxHealth * healPercent);
         
@@ -999,7 +1075,18 @@ class GameState {
             lastVasenSpecies: this.lastVasenSpecies,
             sameVasenCounter: this.sameVasenCounter,
             // Starter guaranteed-Nature-battle counter
-            starterNatureBattlesRemaining: this.starterNatureBattlesRemaining
+            starterNatureBattlesRemaining: this.starterNatureBattlesRemaining,
+            // Save modes and run bookkeeping (older versions of the game ignore these)
+            modes: this.modes,
+            runId: this.runId,
+            createdAt: this.createdAt,
+            saveCounter: this.saveCounter,
+            ended: this.ended,
+            fallenVasen: this.fallenVasen,
+            foundRunes: Array.from(this.foundRunes),
+            tamedSpecies: Array.from(this.tamedSpecies),
+            pendingCombat: this.pendingCombat,
+            pendingEncounter: this.pendingEncounter
         };
     }
 
@@ -1081,7 +1168,26 @@ class GameState {
             // backwards compatibility - the guarantee only ever matters at the
             // very start of a new game, so old saves simply have none left)
             this.starterNatureBattlesRemaining = data.starterNatureBattlesRemaining || 0;
-            
+
+            // Save modes and run bookkeeping (saves made before modes existed
+            // are normal saves with nothing pending)
+            this.modes = normalizeModes(data.modes);
+            this.runId = data.runId || null;
+            this.createdAt = data.createdAt || null;
+            this.saveCounter = data.saveCounter || 0;
+            this.ended = data.ended || null;
+            this.fallenVasen = Array.isArray(data.fallenVasen) ? data.fallenVasen : [];
+            // Everything ever collected (saves older than these fields start
+            // from what they hold now)
+            this.foundRunes = new Set([...(data.foundRunes || []), ...this.collectedRunes].filter(id => RUNES[id]));
+            this.tamedSpecies = new Set([
+                ...(data.tamedSpecies || []),
+                ...this.vasenCollection.map(v => v.speciesName),
+                ...this.fallenVasen.map(f => f.speciesName)
+            ].filter(name => VASEN_SPECIES[name]));
+            this.pendingCombat = data.pendingCombat || null;
+            this.pendingEncounter = data.pendingEncounter || null;
+
             return true;
         } catch (e) {
             console.error('Error deserializing game state:', e);
@@ -1093,24 +1199,35 @@ class GameState {
     saveGame() {
         // Never save mid-combat - party health is in a transient combat state.
         // All end-of-combat paths set inCombat = false before saving.
+        // (Mode-protected combats write their checkpoints with writeSave().)
         if (this.inCombat) return true;
+        return this.writeSave();
+    }
+
+    // Write the save to its slot, also mid-combat. Saves with a mode on go
+    // through the run guard, which refuses the write if this tab's copy is out
+    // of date (another tab continued it) or the save has ended.
+    writeSave() {
+        if (this.saveBlocked) return false;
         // Capture any newly discovered skills/items before persisting, so they
         // are never lost if a väsen is released afterwards.
         this.syncDiscoveries();
+        if (!RunGuard.beforeWrite(this)) return false;
         try {
             const saveData = JSON.stringify(this.serialize());
-            localStorage.setItem(SAVE_KEY, saveData);
+            localStorage.setItem(this.saveKey, saveData);
+            RunGuard.afterWrite(this);
             return true;
         } catch (e) {
             console.error('Error saving game:', e);
             return false;
         }
     }
-    
+
     // Load game from localStorage
     loadGame() {
         try {
-            const saveData = localStorage.getItem(SAVE_KEY);
+            const saveData = localStorage.getItem(this.saveKey);
             if (!saveData) return false;
             
             const data = JSON.parse(saveData);
@@ -1131,27 +1248,12 @@ class GameState {
         }
     }
 
-    // Import save data from a save file's text. Accepts the plain JSON from
-    // Save to File, and also the base64 code that older versions' Export Save
-    // copied to the clipboard (pasted into a text file), so old backups still load.
-    importSave(saveString) {
-        try {
-            const text = String(saveString).trim().replace(/^﻿/, '');
-            const data = JSON.parse(text.startsWith('{') ? text : atob(text));
-            if (this.deserialize(data)) {
-                this.saveGame();
-                return true;
-            }
-            return false;
-        } catch (e) {
-            console.error('Error importing save:', e);
-            return false;
-        }
-    }
-    
+    // Save files are imported by Game.importSaveIntoSlot() (9g-game-modes.js),
+    // which reads them with parseSaveText() and puts them into a save slot.
+
     // Reset game
     resetGame() {
-        localStorage.removeItem(SAVE_KEY);
+        localStorage.removeItem(this.saveKey);
         localStorage.removeItem('combatRunesVisible');
         localStorage.removeItem('combatDescriptionVisible');
         localStorage.removeItem('combatCardsMinimized');
@@ -1199,6 +1301,18 @@ class GameState {
 
         // Arm the starter guaranteed-Nature-battle counter for the new game
         this.starterNatureBattlesRemaining = GAME_CONFIG.STARTER_GUARANTEED_NATURE_BATTLES;
+
+        // Modes and run bookkeeping are set again by startRun() for a new game
+        this.resetRunFields();
+        this.saveBlocked = false;
+    }
+
+    // Begin a new run with the chosen modes (called right after resetGame())
+    startRun(modes) {
+        this.modes = normalizeModes(modes);
+        this.runId = generateRunId();
+        this.createdAt = Date.now();
+        this.saveCounter = 0;
     }
 }
 

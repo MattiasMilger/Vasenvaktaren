@@ -62,7 +62,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 | **Offer Item** | Offer taming items to wild Väsen |
 | **Interrogate** | Learn what item the Väsen wants |
 | **Pass** | Skip your turn |
-| **Surrender** | Exit combat (reduces party to 5% health) |
+| **Flee** | Exit combat. The väsen on the field stays behind to cover the retreat and is knocked out; the party is left at 5% health |
 | **Auto Battle** | Let AI take control |
 
 ### Party Management
@@ -99,13 +99,44 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 - **Lore Master**: Collect all lore entries
 - **Rune Master**: Collect all runes
 
+## Ragnarök Mode
+
+Optional rules for a harder journey. On the New Game screen, click the red **Ragnarök Mode** button to open the rules and switch on the ones you want. Leave it closed for a normal game. Any combination works, and the rules can never be changed once the game has started.
+
+| Rule | Effect |
+| :--- | :--- |
+| **Permadeath** | Väsen knocked out in combat die for good. If none are left, the save is over |
+| **Lost Runes** | Väsen knocked out in combat lose the runes they wear. Lost runes can be found again by exploring |
+
+- **Fleeing** knocks out the väsen on the field: it stays behind to cover the retreat. In a normal game that changes nothing (the party is left at 5% health anyway), but with Permadeath it dies and with Lost Runes it loses its runes. Swap in another väsen first to choose who stays behind
+| **Weak Healing** | Healing outside combat is halved: Sacred Wells, taming items and the heal after each fight |
+| **More Fights** | Wild väsen are met far more often while exploring, so items, Sacred Wells and runes turn up less. Measured over many explorations, including the guaranteed-find rules: about 57% of explorations become fights instead of 39%, with about half as many items and Sacred Wells per fight |
+
+- Every rule counts the same. A meter fills as rules are added and names the difficulty after the events before the end of the world: one rule is **Fimbulvinter**, two are **Gjallarhorn**, and any three (all but one) reach **Ragnarök**
+- **Permadeath-free zone:** Idunn's apples keep every väsen, and its runes, safe within the Endless Tower. Even with Permadeath or Lost Runes, väsen that fall in the tower are restored when the run ends
+- When a väsen dies or loses its runes, a popup and a combat log line say so at once, and a summary follows the fight
+- The difficulty is shown next to the Player Profile button (click it for the rules), in the Player Profile, in Settings and on the main menu save cards
+- A Permadeath save that is over stays in its slot, marked as fallen, so it can be viewed (cause, party, fallen väsen) and deleted
+- **Closing or reloading the page during a battle counts as fleeing**, so a reload can't undo a death or a lost rune: the väsen that was on the field stays behind. On the next start, a "Battle Abandoned" message explains what happened, and any losses from the battle stand. A rolled wild encounter also comes back after a reload instead of being skipped. Normal saves behave as before
+- Runes and väsen types in the Player Profile count everything ever collected, so they never go down when a väsen dies or is released, or a rune is lost
+
+## Starting a New Game
+
+1. **New Game** on the main menu (uses the first empty slot, or asks which save to replace when all three are in use)
+2. Optionally open **Ragnarök Mode** and choose rules
+3. Choose a starter. **Back** returns to the previous step with your rules kept
+
 ## Save System
 
-- Game automatically saves to localStorage
-- Save to File (in Settings) saves your progress as a `.json` file named after the player and date (e.g. `vasenvaktaren-Testare-2026-11-21.json`); Load from File restores it. Use it to back up or move progress between devices
-- In desktop Chrome and Edge, Save to File opens a "Save As" dialog so you can choose the name and folder; other browsers download the file directly
-- Load from File also accepts a text file containing a save code exported by older versions
-- Reset game to start fresh
+- The game saves automatically to localStorage, in three save slots. It opens the save you played last
+- Everything about saves lives on the **main menu** (Settings > Main Menu gets you there). Each save card shows the player, zone, väsen, guardians, fallen väsen, Endless Tower floor, achievements and Ragnarök difficulty, with these buttons:
+  - **Continue** (or **View** for a Permadeath save that is over)
+  - **Save File**: saves that slot as a `.json` file named after the player, rules and date (e.g. `vasenvaktaren-Testare-permadeath-2026-11-21.json`). Use it to back up or move progress between devices. In desktop Chrome and Edge it opens a "Save As" dialog; other browsers download the file directly
+  - **Summary**: a readable `.txt` of the save (rules, progress, achievements, Endless Tower record, party, whole collection and fallen väsen). Handy to keep before deleting a save, or as a record of one in progress. Saves that are over also offer it in their View and Game Over screens
+  - **Delete**: removes the save for good, after a confirmation
+- **Load from File** (main menu) puts a save file into an empty slot, or asks which save to replace when all are in use. It also accepts a text file containing a save code exported by older versions
+- Settings shows the current save's slot and difficulty, and a **Main Menu** button
+- Ragnarök saves can't be rolled back: an older copy of the same save, a save that is over or was deleted, or a save already in another slot can't be loaded, and a second tab with an outdated copy stops saving
 
 ## Technical Requirements
 
@@ -136,7 +167,8 @@ Vasenvaktaren/
 │   ├── 13-style-animations.css           (idle, attack, hit & shake animations)
 │   ├── 14-style-responsive.css           (breakpoints, combat layout, touch, accessibility)
 │   ├── 15-style-lore.css                 (lore book styles)
-│   └── 16-style-loot.css                 (item & rune cards)
+│   ├── 16-style-loot.css                 (item & rune cards)
+│   └── 17-style-saves.css                (save cards, Ragnarök Mode, difficulty badge, fallen väsen, Game Over)
 │
 ├── js/
 │   ├── core/
@@ -153,6 +185,7 @@ Vasenvaktaren/
 │   │   ├── 6b-system-ai.js               (EnemyAI class)
 │   │   ├── 6c-system-combat-skills.js    (Combat: skills, damage, utility effects)
 │   │   ├── 6d-system-combat-passives.js  (Combat: rune effects and family passives)
+│   │   ├── 7a-system-saves.js            (save slots, Ragnarök Mode rules and tiers, run guard; loads before 7)
 │   │   └── 7-system-state.js             (GameState class: collection, exploration, saves)
 │   │
 │   ├── ui/
@@ -166,7 +199,8 @@ Vasenvaktaren/
 │   │   ├── 8g-ui-combat.js               (combat rendering, action buttons, animations)
 │   │   ├── 8h-ui-modals.js               (dialogues, offer flow, encounter results)
 │   │   ├── 8i-ui-menus.js                (settings, profile, and game guide)
-│   │   └── 8j-ui-lore.js                 (lore book rendering, search, language toggle)
+│   │   ├── 8j-ui-lore.js                 (lore book rendering, search, language toggle)
+│   │   └── 8k-ui-saves.js                (main menu save cards, Ragnarök Mode screen, difficulty badge, Game Over)
 │   │
 │   └── game/
 │       ├── 9a-game-core.js               (Game class, menu flow, and core lifecycle)
@@ -174,6 +208,7 @@ Vasenvaktaren/
 │       ├── 9c-game-guardian.js           (guardian combats)
 │       ├── 9d-game-endless.js            (endless tower mode)
 │       ├── 9e-game-actions.js            (combat action handlers)
+│       ├── 9g-game-modes.js              (Ragnarök Mode rules, save slots and files, Game Over)
 │       └── 9f-game-init.js               (bootstrap and event bindings)
 │
 └── assets/

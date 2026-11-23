@@ -1,0 +1,1051 @@
+/* =============================================================================
+   17-style-saves.css - Save Cards, New Game / Ragnarök Mode, Difficulty Badge,
+                        Fallen Väsen and Game Over
+   ============================================================================= */
+
+:root {
+    /* Ragnarök Mode tiers: the long winter, the horn of war, the world on fire */
+    --tier-1: #8fc3e6;  /* Fimbulvinter - ice */
+    --tier-2: #d27a6a;  /* Gjallarhorn - blood */
+    --tier-3: #f2a144;  /* Ragnarök - fire */
+    --tier-3-glow: rgba(242, 161, 68, 0.45);
+    /* The meter heats up: cold ash, winter ice, blood, fire */
+    --ragnarok-meter-gradient: linear-gradient(90deg, #7d8794 0%, var(--tier-1) 30%, var(--tier-2) 65%, var(--tier-3) 100%);
+
+    /* Fallen väsen: the pale grey of bone */
+    --fallen-color: #c8c4bc;
+    --fallen-soft: rgba(200, 196, 188, 0.12);
+}
+
+/* The hidden attribute must win over the display of .btn and flex containers */
+.save-slots[hidden],
+.save-mode-badges[hidden],
+.journey-replace-note[hidden],
+.ragnarok-panel[hidden] {
+    display: none !important;
+}
+
+.tier-1 { --tier-color: var(--tier-1); }
+.tier-2 { --tier-color: var(--tier-2); }
+.tier-3 { --tier-color: var(--tier-3); }
+
+/* =============================================================================
+   MAIN MENU - save cards
+   ============================================================================= */
+#main-menu-screen .main-menu-content {
+    width: 100%;
+    max-width: 880px;
+}
+
+/* Load from File: a smaller row under New Game */
+.menu-buttons .menu-secondary-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.menu-buttons .menu-secondary-buttons .btn {
+    flex: 1;
+    width: auto;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+}
+
+.save-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: var(--spacing-md);
+    margin: 0 auto var(--spacing-lg);
+    text-align: left;
+}
+
+.save-slot-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.save-slot-card:not(.empty):hover {
+    border-color: var(--border-light);
+}
+
+.save-slot-card.ragnarok {
+    border-color: color-mix(in srgb, var(--tier-color) 40%, var(--border-color));
+}
+
+.save-slot-card.tier-3 {
+    box-shadow: var(--shadow-md), 0 0 14px rgba(242, 161, 68, 0.15);
+}
+
+/* A Permadeath save that is over: kept to look at or delete */
+.save-slot-card.ended {
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--fallen-color) 30%, var(--border-color));
+    background: var(--bg-secondary);
+    box-shadow: none;
+}
+
+.save-slot-card.ended .save-slot-face,
+.save-slot-card.ended .save-slot-name {
+    color: var(--text-muted);
+}
+
+.save-slot-card.empty {
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+    background: transparent;
+    border-style: dashed;
+    box-shadow: none;
+}
+
+.save-slot-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs) var(--spacing-sm);
+    min-height: 26px;
+}
+
+.save-slot-label {
+    white-space: nowrap;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.save-slot-empty-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.save-slot-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: var(--font-size-xxs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    padding: 1px 6px;
+    border: 1px solid var(--accent-gold-glow);
+    border-radius: 999px;
+}
+
+.save-slot-tag.ended-tag {
+    color: var(--fallen-color);
+    border-color: color-mix(in srgb, var(--fallen-color) 40%, transparent);
+}
+
+.save-slot-modes {
+    display: inline-flex;
+    margin-left: auto;
+}
+
+.save-slot-identity {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.save-slot-face {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    color: var(--accent-gold);
+}
+
+.save-slot-face svg {
+    width: 100%;
+    height: 100%;
+}
+
+.save-slot-who {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.save-slot-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-accent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.save-slot-zone {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+.save-slot-cause {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.save-slot-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs) var(--spacing-sm);
+}
+
+.save-slot-stats > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+.save-slot-stats .save-slot-fallen {
+    color: var(--fallen-color);
+}
+
+.save-slot-achievements {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--accent-gold);
+}
+
+.save-slot-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-top: auto;
+}
+
+.save-slot-main {
+    width: 100%;
+}
+
+/* Small labelled buttons under Continue / View: Save File, Summary, Delete */
+.save-slot-tools {
+    display: flex;
+    gap: 4px;
+}
+
+.save-slot-tool .ui-icon {
+    flex-shrink: 0;
+}
+
+.save-slot-tool {
+    flex: 1 1 0;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px 2px;
+    font-family: inherit;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color var(--transition-base), border-color var(--transition-base), background var(--transition-base);
+}
+
+.save-slot-tool:hover {
+    color: var(--text-primary);
+    border-color: var(--border-light);
+    background: var(--bg-hover);
+}
+
+.save-slot-tool:focus-visible {
+    outline: 2px solid var(--border-light);
+    outline-offset: 1px;
+}
+
+.save-slot-tool.save-slot-delete:hover {
+    color: var(--accent-danger);
+    border-color: var(--accent-danger);
+}
+
+/* =============================================================================
+   DIFFICULTY BADGE - tier name with the flame icon
+   ============================================================================= */
+.ragnarok-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px 2px 6px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--tier-color);
+    background: var(--bg-tertiary);
+    border: 1px solid color-mix(in srgb, var(--tier-color) 60%, transparent);
+    border-radius: 999px;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.ragnarok-badge .ui-icon {
+    display: block;
+    flex-shrink: 0;
+}
+
+.ragnarok-badge.tier-3 {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(242, 161, 68, 0.18) 100%);
+    box-shadow: 0 0 8px var(--tier-3-glow);
+    text-shadow: 0 0 6px var(--tier-3-glow);
+}
+
+.ragnarok-badge-clickable {
+    cursor: pointer;
+    transition: box-shadow var(--transition-base);
+}
+
+.ragnarok-badge-clickable:hover {
+    box-shadow: 0 0 8px color-mix(in srgb, var(--tier-color) 40%, transparent);
+}
+
+/* Header: the badge sits next to the Player Profile button */
+.header-center {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.save-mode-badges {
+    display: inline-flex;
+}
+
+/* Rule list (popup, Profile, welcome dialogue) */
+.rule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: var(--spacing-xs);
+    text-align: left;
+}
+
+.rule-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-secondary);
+}
+
+.rule-line .ui-icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--text-primary);
+}
+
+.rule-line strong {
+    color: var(--text-primary);
+}
+
+/* Welcome dialogue */
+.welcome-modes {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.welcome-modes-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.welcome-modes-tier {
+    margin-bottom: var(--spacing-xs);
+}
+
+.welcome-modes .rule-list {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* =============================================================================
+   NEW GAME SCREEN - Ragnarök Mode
+   ============================================================================= */
+#new-journey-screen {
+    position: relative;
+    padding: var(--spacing-xl);
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+#new-journey-screen .futhark-ornament {
+    position: absolute;
+    inset: 0;
+    flex: none;
+    z-index: 0;
+    align-content: start;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    --futhark-ornament-color: #383848;
+}
+
+.journey-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+}
+
+/* The button that reveals the rules: small, so a normal game stays the
+   obvious path, but in ember red so it reads as the hard road */
+.ragnarok-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: var(--spacing-xs);
+    padding: 6px var(--spacing-md);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--tier-2);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(210, 122, 106, 0.12) 100%);
+    border: 1px solid color-mix(in srgb, var(--tier-2) 55%, transparent);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.ragnarok-toggle:hover,
+.ragnarok-toggle[aria-expanded="true"] {
+    border-color: var(--tier-2);
+    box-shadow: 0 0 10px rgba(210, 122, 106, 0.3);
+}
+
+.ragnarok-toggle.active {
+    color: var(--tier-3);
+    border-color: color-mix(in srgb, var(--tier-3) 60%, transparent);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(242, 161, 68, 0.14) 100%);
+}
+
+.ragnarok-toggle:focus-visible {
+    outline: 2px solid var(--border-light);
+    outline-offset: 2px;
+}
+
+.ragnarok-hint {
+    margin: 0 0 var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.ragnarok-hint[hidden] {
+    display: none;
+}
+
+.ragnarok-hint strong {
+    color: var(--tier-2);
+}
+
+/* While closed with no rules chosen, the button glows softly to invite a click */
+.ragnarok-toggle[aria-expanded="false"]:not(.active) {
+    animation: ragnarokInvite 2.2s ease-in-out infinite;
+}
+
+@keyframes ragnarokInvite {
+    0%, 100% { box-shadow: 0 0 0 rgba(210, 122, 106, 0); }
+    50%      { box-shadow: 0 0 14px rgba(210, 122, 106, 0.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ragnarok-toggle[aria-expanded="false"]:not(.active) {
+        animation: none;
+    }
+}
+
+.ragnarok-toggle-chevron {
+    width: 7px;
+    height: 7px;
+    margin-left: 2px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform var(--transition-base);
+}
+
+.ragnarok-toggle[aria-expanded="true"] .ragnarok-toggle-chevron {
+    transform: rotate(-135deg) translateY(-2px);
+}
+
+.ragnarok-panel {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-xs);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    text-align: left;
+    animation: modalSlideIn 0.25s ease;
+    transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.journey-modes {
+    display: flex;
+    flex-direction: column;
+}
+
+.journey-mode-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--border-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.journey-mode-row:first-child {
+    border-top: none;
+}
+
+.journey-mode-row.unavailable {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.journey-mode-icon {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: color var(--transition-base);
+}
+
+.journey-mode-row.selected .journey-mode-icon {
+    color: var(--tier-3);
+}
+
+.journey-mode-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.journey-mode-name {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.journey-mode-requires {
+    font-size: var(--font-size-xxs);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-muted);
+}
+
+.journey-mode-desc {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+}
+
+/* Rule toggles switch on in fire */
+.journey-mode-row .toggle-switch input:checked + .toggle-switch-slider {
+    background: rgba(242, 161, 68, 0.12);
+    border-color: var(--tier-3);
+}
+
+.journey-mode-row .toggle-switch input:checked + .toggle-switch-slider::before {
+    background: var(--tier-3);
+}
+
+.journey-mode-row .toggle-switch input:disabled + .toggle-switch-slider {
+    cursor: default;
+}
+
+/* Difficulty: the tier name over a meter that fills with the hidden points */
+.ragnarok-difficulty {
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.ragnarok-tier-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    transition: color var(--transition-slow), font-size var(--transition-slow);
+}
+
+.ragnarok-panel[class*="tier-"] .ragnarok-tier-name {
+    color: var(--tier-color);
+}
+
+.ragnarok-meter {
+    height: 8px;
+    margin: var(--spacing-xs) 0;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.ragnarok-meter-fill {
+    height: 100%;
+    width: 0;
+    background: var(--ragnarok-meter-gradient);
+    background-repeat: no-repeat;
+    border-radius: 999px;
+    transition: width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ragnarok-tier-line {
+    margin: 0;
+    min-height: 1.2em;
+    font-size: var(--font-size-xs);
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+/* Every rule on: Ragnarök. The panel burns. */
+.ragnarok-panel.is-ragnarok {
+    border-color: var(--tier-3);
+    animation: ragnarokPulse 2.4s ease-in-out infinite alternate;
+}
+
+.ragnarok-panel.is-ragnarok .ragnarok-tier-name {
+    font-size: var(--font-size-2xl);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 10px var(--tier-3-glow), 0 0 22px rgba(210, 122, 106, 0.4);
+    animation: ragnarokFlicker 3s ease-in-out infinite;
+}
+
+.ragnarok-panel.is-ragnarok .ragnarok-meter-fill {
+    box-shadow: 0 0 10px var(--tier-3-glow);
+}
+
+.ragnarok-panel.is-ragnarok .ragnarok-tier-line {
+    color: var(--text-primary);
+}
+
+/* Embers rising from the bottom of the panel, behind its content, fading as they climb */
+.ragnarok-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+.ragnarok-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background-image:
+        radial-gradient(circle, rgba(242, 161, 68, 0.9) 0 1.2px, transparent 2.2px),
+        radial-gradient(circle, rgba(210, 122, 106, 0.8) 0 1px, transparent 2px),
+        radial-gradient(circle, rgba(255, 210, 140, 0.7) 0 0.8px, transparent 1.8px);
+    background-size: 173px 110px, 241px 150px, 127px 95px;
+    background-position: 10px 0, 90px 30px, 50px 60px;
+    -webkit-mask-image: linear-gradient(to top, black 0%, rgba(0, 0, 0, 0.5) 35%, transparent 75%);
+    mask-image: linear-gradient(to top, black 0%, rgba(0, 0, 0, 0.5) 35%, transparent 75%);
+    transition: opacity 0.6s ease;
+}
+
+.ragnarok-panel.is-ragnarok::after {
+    opacity: 1;
+    animation: ragnarokEmbers 6s linear infinite;
+}
+
+@keyframes ragnarokEmbers {
+    /* Each layer moves up a whole number of its tiles, so the loop is seamless */
+    from { background-position: 10px 0, 90px 30px, 50px 60px; }
+    to   { background-position: 10px -330px, 90px -420px, 50px -225px; }
+}
+
+@keyframes ragnarokPulse {
+    from { box-shadow: 0 0 10px rgba(242, 161, 68, 0.25), inset 0 -20px 30px -20px rgba(210, 122, 106, 0.25); }
+    to   { box-shadow: 0 0 22px rgba(242, 161, 68, 0.45), inset 0 -30px 40px -20px rgba(242, 161, 68, 0.3); }
+}
+
+@keyframes ragnarokFlicker {
+    0%, 100% { opacity: 1; }
+    45% { opacity: 0.88; }
+    50% { opacity: 1; }
+    70% { opacity: 0.93; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ragnarok-panel.is-ragnarok,
+    .ragnarok-panel.is-ragnarok::after,
+    .ragnarok-panel.is-ragnarok .ragnarok-tier-name {
+        animation: none;
+    }
+}
+
+.journey-lock-note {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: var(--spacing-xs) 0;
+    border-top: 1px solid var(--border-color);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+/* The reload rule sits right under the lock note, without its own divider */
+.journey-lock-note.journey-reload-note {
+    border-top: none;
+    padding-top: 0;
+}
+
+.journey-replace-note {
+    margin: 0 auto var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: fit-content;
+    max-width: 100%;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 1px solid color-mix(in srgb, var(--accent-warning) 60%, transparent);
+    border-radius: var(--border-radius);
+}
+
+.journey-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.journey-buttons .btn {
+    min-width: 150px;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+}
+
+/* Flee confirmation: what the väsen covering the retreat will lose */
+.flee-warning {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    margin: var(--spacing-sm) auto 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: fit-content;
+    max-width: 100%;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 1px solid color-mix(in srgb, var(--accent-danger) 70%, transparent);
+    border-radius: var(--border-radius);
+}
+
+.flee-warning .ui-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--accent-danger);
+}
+
+/* Starter screen: Back and Confirm side by side */
+.starter-confirm-bar {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+#starter-back-btn[hidden] {
+    display: none;
+}
+
+/* =============================================================================
+   FALLEN VÄSEN - toast, combat log line, lists
+   ============================================================================= */
+.game-message.fallen {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    border-color: var(--fallen-color);
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--fallen-soft) 100%);
+    box-shadow: 0 0 12px var(--fallen-soft);
+}
+
+.game-message.fallen .ui-icon {
+    color: var(--fallen-color);
+    flex-shrink: 0;
+}
+
+.combat-log-entry.combat-log-fallen {
+    color: var(--fallen-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.fallen-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    text-align: left;
+}
+
+.fallen-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border-left: 3px solid var(--fallen-color);
+    border-radius: var(--border-radius-sm);
+}
+
+.fallen-icon {
+    display: flex;
+    padding-top: 2px;
+    color: var(--fallen-color);
+    flex-shrink: 0;
+}
+
+.fallen-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.fallen-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.fallen-level {
+    margin-left: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-muted);
+}
+
+.fallen-cause,
+.fallen-runes {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-secondary);
+}
+
+.fallen-runes {
+    color: var(--text-muted);
+}
+
+/* =============================================================================
+   PLAYER PROFILE AND SETTINGS - the current save
+   ============================================================================= */
+.profile-save-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.profile-save-section h4 {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.profile-save-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.profile-save-slot {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.profile-save-started {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-muted);
+}
+
+.profile-save-tier {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-secondary);
+}
+
+.settings-save-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.settings-save-slot,
+.settings-save-normal {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.settings-save-normal {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-normal);
+}
+
+.settings-save-slot::after {
+    content: '·';
+    margin-left: var(--spacing-xs);
+    color: var(--text-muted);
+}
+
+/* Settings > Main Menu: full width above the save file buttons */
+.modal-settings .settings-main-menu-btn {
+    width: 100%;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Slot picker buttons (Replace a Save) */
+.dialogue-buttons .slot-pick-btn {
+    gap: var(--spacing-sm);
+}
+
+.slot-pick-label {
+    font-weight: var(--font-weight-semibold);
+}
+
+.slot-pick-name {
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =============================================================================
+   GAME OVER AND ENDED SAVES
+   ============================================================================= */
+#dialogue-modal.game-over-dialogue .modal-dialogue {
+    max-width: 520px;
+}
+
+.game-over-cause {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.game-over-details {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    text-align: left;
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius);
+}
+
+.game-over-note {
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.record-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.record-stats .collection-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-xs);
+}
+
+.record-section {
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+}
+
+.record-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.record-achievements {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--accent-gold);
+}
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+@media (max-width: 600px) {
+    .save-slots {
+        grid-template-columns: 1fr;
+    }
+
+    #new-journey-screen {
+        padding: var(--spacing-md);
+    }
+
+    .journey-buttons .btn {
+        min-width: 0;
+        flex: 1;
+    }
+
+    /* Sticky mobile bar: a compact Back beside the full Confirm button */
+    #starter-back-btn {
+        flex: 0 0 auto;
+        min-height: 48px;
+        padding: 0 var(--spacing-lg);
+    }
+
+    .starter-confirm-bar #confirm-starter-btn {
+        flex: 1;
+        margin: 0;
+    }
+}

@@ -54,6 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-offer').addEventListener('click', () => game.showOfferModal());
     document.getElementById('btn-interrogate').addEventListener('click', () => game.handleInterrogate());
     document.getElementById('btn-pass').addEventListener('click', () => game.handlePass());
-    document.getElementById('btn-surrender').addEventListener('click', () => game.handleSurrender());
+    document.getElementById('btn-surrender').addEventListener('click', () => game.handleSurrender()); // "Flee" 
     document.getElementById('btn-auto-combat').addEventListener('click', () => game.handleAutoBattle());
 });

@@ -688,6 +688,7 @@ UIController.prototype.showIdunnApplesInfoModal = function() {
             <li>Cleanses up to <strong>${cleanseStages}</strong> negative attribute ${stageWord} per attribute.</li>
             <li>Renews all once-per-combat passives and rune effects.</li>
         </ul>
+        <p>Idunn's apples also make the tower a <strong>Permadeath-free zone</strong>: no väsen that falls within it dies or loses its runes, even in Ragnarök Mode. The party is restored when the run ends.</p>
     `;
 
     this.showLoreInfoModal("Idunn's Apples", bodyHtml);

@@ -50,11 +50,23 @@ const UI_ICONS = {
     swap:        '<path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/>',
     interrogate: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
     pass:        '<path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>',
-    surrender:   '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>',
+    surrender:   '<circle cx="15" cy="4.5" r="2"/><path d="m9 9.5 3.5-2 3 1.5-2 4.5 3 2.5 1 5"/><path d="m13.5 13.5-3 3-4.5.5"/><path d="m15.5 9 2.5 2.5 3-1"/>', // Flee: a running figure
+    summary:     '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
     shuffle:     '<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
     profile:     '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
     guide:       '<path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-2 2v1"/>',
-    settings:    '<g transform="translate(4.1 1.8) scale(0.66)" stroke-width="3"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></g><path d="M4 22l16-5"/><path d="M20 22L4 17"/>'
+    settings:    '<g transform="translate(4.1 1.8) scale(0.66)" stroke-width="3"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></g><path d="M4 22l16-5"/><path d="M20 22L4 17"/>',
+
+    // Ragnarök Mode rules and difficulty
+    // permadeath  - a skull: fallen väsen are dead for good
+    // weakHealing - a cracked heart: healing outside combat is halved
+    // lostRunes   - a broken rune stave: knocked-out väsen lose their runes
+    // More Fights uses the crossed swords ('swords')
+    // ragnarok    - the flames of Surtr: the difficulty badge
+    permadeath:  '<path d="m12.5 17-.5-1-.5 1h1z"/><path d="M15 22a1 1 0 0 0 1-1v-1a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20v1a1 1 0 0 0 1 1z"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="12" r="1"/>',
+    weakHealing: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="m12 13-1-1 2-2-3-3 2-2"/>',
+    lostRunes:   '<path d="M10 3v7"/><path d="M10 13v8"/><path d="m10 8 7-4.5"/><path d="m10 15 7-4.5"/><path d="m7 12 6-1"/>',
+    ragnarok:    '<path d="M12 22c4.5 0 7.5-3 7.5-7 0-3.5-2-6-4-8 0 2.5-1 4-2.5 4.5C13.5 7 12 4 9 2c.5 3-1 5.5-2.5 7.5S4.5 13 4.5 15c0 4 3 7 7.5 7z"/><path d="M12 22c-2 0-3.2-1.4-3.2-3.2 0-1.6 1.2-3 2.2-4 .3 1 .8 1.5 1.5 1.7.2-1.2.8-2.2 1.7-3 .9 1.3 1.3 2.6 1.3 4.2 0 2.5-1.5 4.3-3.5 4.3z"/>'
 };
 
 // =============================================================================
@@ -157,6 +169,7 @@ class UIController {
         // Screens
         this.screens = {
             mainMenu: document.getElementById('main-menu-screen'),
+            newJourney: document.getElementById('new-journey-screen'),
             starterSelect: document.getElementById('starter-select-screen'),
             game: document.getElementById('game-screen')
         };
@@ -218,15 +231,6 @@ class UIController {
 document.getElementById('settings-btn').addEventListener('click', () => this.showSettings());
 document.getElementById('close-settings').addEventListener('click', () => this.hideSettings());
 
-// Save file download / load
-document.getElementById('download-save-btn').addEventListener('click', () => this.downloadSaveFile());
-const loadSaveFileInput = document.getElementById('load-save-file-input');
-document.getElementById('load-save-file-btn').addEventListener('click', () => loadSaveFileInput.click());
-loadSaveFileInput.addEventListener('change', () => {
-    this.loadSaveFile(loadSaveFileInput.files[0]);
-    loadSaveFileInput.value = ''; // allow picking the same file again
-});
-
 // Unlock All Info toggle (Lore Book)
 const unlockAllInfoToggle = document.getElementById('unlock-all-info-toggle');
 if (unlockAllInfoToggle) {
@@ -244,8 +248,6 @@ if (disableTipsToggle) {
         this.toggleTips(disableTipsToggle.checked);
     });
 }
-
-document.getElementById('reset-game-btn').addEventListener('click', () => this.confirmReset());
 
 // Lore book
 document.getElementById('lore-btn').addEventListener('click', () => this.showLore());
@@ -763,7 +765,7 @@ function toggleCardBadgePopup(element, event, kind) {
 // runs for clicks whose own handlers stop propagation), and on scroll/resize since
 // the popup is positioned in viewport coordinates.
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .lore-chip, .stat-clickable, .temperament-popup')) return;
+    if (e.target.closest('.clickable-temperament, .clickable-keyword, .card-badge-clickable, .lore-chip, .stat-clickable, .ragnarok-badge, .temperament-popup')) return;
     closeTemperamentPopup();
 }, true);
 window.addEventListener('scroll', (e) => {

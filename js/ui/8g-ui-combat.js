@@ -719,7 +719,7 @@ UIController.prototype.triggerAttackAnimation = function(side, skillType) {
             animationClass = side === 'player' ? 'attacking-player' : 'attacking-enemy';
             duration = 500;
         } else {
-            // No animation for non-skill actions (pass, offer, interrogate, surrender)
+            // No animation for non-skill actions (pass, offer, interrogate, flee)
             return;
         }
 

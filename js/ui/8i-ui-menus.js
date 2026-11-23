@@ -4,6 +4,7 @@
 
     // Settings methods
     UIController.prototype.showSettings = function() {
+        this.renderSettingsSaveInfo();
         this.settingsModal.classList.add('active');
     };
 
@@ -44,39 +45,42 @@
         }
     };
 
-    // Suggested save file name: vasenvaktaren-<player>-<date>.json, so several
-    // backups can be told apart. Characters not allowed in file names are dropped.
-    UIController.prototype.getSaveFileName = function() {
+    // Suggested save file name: vasenvaktaren-<player>-<rules>-<date>.json, so
+    // several backups can be told apart. Characters not allowed in file names
+    // are dropped. data: the save's data (a save slot's contents).
+    UIController.prototype.getSaveFileName = function(data) {
         const date = new Date().toISOString().slice(0, 10);
-        const player = (gameState.playerName || '')
+        const player = (data.playerName || '')
             .replace(/[\\/:*?"<>|\u0000-\u001F]/g, '')
             .trim()
             .replace(/\s+/g, '-')
             .slice(0, 40);
-        return `vasenvaktaren-${player ? player + '-' : ''}${date}.json`;
+        const modes = getActiveModeIds(normalizeModes(data.modes)).join('-');
+        return `vasenvaktaren-${player ? player + '-' : ''}${modes ? modes + '-' : ''}${date}.json`;
     };
 
-    // Save the game to a .json file. Where the browser supports it (desktop
-    // Chrome/Edge) this opens a real "Save As" dialog so the player can pick the
-    // name and folder; elsewhere it falls back to a normal download.
-    UIController.prototype.downloadSaveFile = async function() {
-        const saveData = gameState.exportSaveFile();
-        if (!saveData) {
-            this.showMessage('Could not create the save file.', 'error');
-            return;
-        }
-        const fileName = this.getSaveFileName();
+    // Write save text to a .json file (main menu > Save File)
+    UIController.prototype.downloadSaveFile = function(saveText, fileName) {
+        return this.downloadTextFile(saveText, fileName, {
+            description: 'Väsenväktaren save', mime: 'application/json', ext: '.json', doneMessage: 'Game saved to file!'
+        });
+    };
 
+    // Write text to a file. Where the browser supports it (desktop Chrome/Edge)
+    // this opens a real "Save As" dialog so the player can pick the name and
+    // folder; elsewhere it falls back to a normal download.
+    UIController.prototype.downloadTextFile = async function(text, fileName, options) {
+        const { description, mime, ext, doneMessage } = options;
         if (typeof window.showSaveFilePicker === 'function') {
             try {
                 const handle = await window.showSaveFilePicker({
                     suggestedName: fileName,
-                    types: [{ description: 'Väsenväktaren save', accept: { 'application/json': ['.json'] } }]
+                    types: [{ description, accept: { [mime]: [ext] } }]
                 });
                 const writable = await handle.createWritable();
-                await writable.write(saveData);
+                await writable.write(text);
                 await writable.close();
-                this.showMessage('Game saved to file!');
+                this.showMessage(doneMessage);
                 return;
             } catch (e) {
                 if (e && e.name === 'AbortError') return; // player cancelled the dialog
@@ -84,7 +88,7 @@
             }
         }
 
-        const blob = new Blob([saveData], { type: 'application/json' });
+        const blob = new Blob([text], { type: mime });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -93,101 +97,7 @@
         link.click();
         link.remove();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
-        this.showMessage('Save file downloaded!');
-    };
-
-    // Read a chosen save file and, after confirmation, load it
-    UIController.prototype.loadSaveFile = function(file) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            const text = String(reader.result || '').trim();
-            if (!text) {
-                this.showMessage('That save file is empty.', 'error');
-                return;
-            }
-            const safeName = file.name.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-            this.showDialogue(
-                'Load Save File',
-                `Load "${safeName}"? Your current progress will be replaced.`,
-                [
-                    {
-                        text: `${uiIcon('upload')}Load`,
-                        class: 'btn-primary',
-                        callback: () => this.importSave(text)
-                    },
-                    {
-                        text: 'Cancel',
-                        class: 'btn-secondary',
-                        callback: null
-                    }
-                ],
-                true,
-                null,
-                'upload'
-            );
-        };
-        reader.onerror = () => this.showMessage('Could not read that file.', 'error');
-        reader.readAsText(file);
-    };
-
-    // Replace the current game with the save text read from a save file
-    UIController.prototype.importSave = function(saveText) {
-    const saveData = String(saveText || '').trim();
-    if (!saveData) {
-        this.showMessage('That save file is empty.', 'error');
-        return;
-    }
-
-    const success = gameState.importSave(saveData);
-
-    if (success) {
-        this.showMessage('Save loaded successfully!');
-        this.hideSettings();
-
-        // Clear combat state
-        game.currentCombat = null;
-        this.hideCombatUI();
-
-        // Retroactively unlock any lore entries added since this save was
-        // created (mirrors the same call in Game.init() on a normal page load)
-        gameState.retroactivelyUnlockLoreEntries();
-
-        // Reinitialize UI exactly like Game.init()
-        ui.init();
-        game.showGameScreen();
-
-    } else {
-        this.showMessage('Invalid or corrupted save.', 'error');
-    }
-};
-
-    UIController.prototype.confirmReset = function() {
-        this.showDialogue(
-            'Reset Game',
-            'Reset all progress? All caught Väsen, runes, and zone progress will be lost permanently. Confirm to proceed.',
-            [
-                {
-                    text: `${uiIcon('trash')}Reset`,
-                    class: 'btn-danger',
-                    callback: () => {
-                        gameState.resetGame();
-                        // Clear game controller combat state
-                        game.currentCombat = null;
-                        this.hideCombatUI();
-                        location.reload();
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    class: 'btn-secondary',
-                    callback: null
-                }
-            ],
-            true,
-            null,
-            'trash'
-        );
+        this.showMessage(ext === '.json' ? 'Save file downloaded!' : 'Summary downloaded!');
     };
 
     UIController.prototype.showProfile = function() {
@@ -254,13 +164,15 @@ achievementsHtml += '</div></div>';
                 </div>
             </div>
 
+            ${this.renderProfileSaveSection()}
+
             <div class="profile-collection-section">
                 <h4>${uiIcon('gem', 14)}Collection:</h4>
                 <div class="achievement">
                     <div class="collection-attributes">
                         <div class="collection-stat">
                             <span class="collection-label">${uiIcon('runes', 14)}Runes Collected</span>
-                            <span class="collection-value">${gameState.collectedRunes.size} / ${RUNE_LIST.length}</span>
+                            <span class="collection-value">${gameState.getFoundRuneCount()} / ${RUNE_LIST.length}</span>
                         </div>
                         <div class="collection-stat">
                             <span class="collection-label">${uiIcon('book', 14)}Lore Entries Collected</span>
