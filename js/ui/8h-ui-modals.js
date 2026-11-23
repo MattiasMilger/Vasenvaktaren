@@ -122,6 +122,12 @@ modal.classList.add('active');
         const closeBtn = document.getElementById('close-offer-modal');
         itemList.innerHTML = '';
 
+        // Free-action tip, kept outside the scrolling list (hidden when Disable Tips is on)
+        const max = GAME_CONFIG.MAX_OFFERS_PER_COMBAT;
+        document.getElementById('offer-modal-tip').innerHTML = this.areTipsEnabled()
+            ? this.getTipHTML(`Offering is a free action, but you can only offer ${max} item${max === 1 ? '' : 's'} per combat.`)
+            : '';
+
         const items = Object.entries(gameState.itemInventory);
         // Sort items alphabetically by name
         items.sort(([aId], [bId]) => {

@@ -537,6 +537,7 @@
     <div id="offer-modal" class="modal">
         <div class="modal-content modal-offer">
             <h3 class="modal-title"><i data-ui-icon="items" data-size="20"></i>Offer Item</h3>
+            <div id="offer-modal-tip"></div>
             <div id="offer-item-list" class="offer-item-list"></div>
             <button id="close-offer-modal" class="btn btn-secondary">Cancel</button>
         </div>
@@ -717,7 +718,7 @@
                 <div class="guide-category" data-cat="taming">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Taming<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Tame</strong><br>Tame a väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. You can offer up to <span id="guide-max-offers"></span> items per combat.</p>
+                        <p><strong>Tame</strong><br>Tame a väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. Offering is a free action, but you can offer up to <span id="guide-max-offers"></span> items per combat.</p>
                     </div>
                 </div>
 
@@ -819,6 +820,18 @@
                         <p><em>Note: Experience is only awarded after combat ends.</em></p>
                         <p><strong>Level Milestones</strong><br>
                         <span id="guide-level-milestones"></span></p>
+                    </div>
+                </div>
+
+                <div class="guide-category" data-cat="combat-actions">
+                    <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Combat Actions<button class="guide-favorite-btn" type="button">☆</button></h4>
+                    <div class="guide-category-body">
+                        <p><strong>Swap</strong><br>Costs a turn. The incoming väsen is "Preparing" and can't use skills until next turn.</p>
+                        <p><strong>Offer Item</strong><br>Free action. Limited per combat, wild väsen only.</p>
+                        <p><strong>Interrogate</strong><br>Costs a turn. Ask a wild väsen what it desires.</p>
+                        <p><strong>Pass</strong><br>Skip your turn.</p>
+                        <p><strong>Surrender</strong><br>Retreat and end the combat.</p>
+                        <p><strong>Auto Battle</strong><br>Let your väsen fight on their own. Press again to take back control.</p>
                     </div>
                 </div>
 
