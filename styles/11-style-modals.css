@@ -378,6 +378,7 @@
 }
 
 .profile-name-section label {
+    display: block;
     font-size: var(--font-size-sm);
     font-weight: 600;
     color: var(--text-muted);
@@ -392,7 +393,7 @@
     width: 100%;
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-lighter);
     border-radius: var(--border-radius);
     color: var(--text-primary);
     font-family: var(--font-family);
@@ -400,6 +401,11 @@
     font-weight: var(--font-weight-normal);
     transition: border-color var(--transition-base), box-shadow var(--transition-base);
     box-sizing: border-box;
+    cursor: text;
+}
+
+.profile-name-input-wrapper input:hover {
+    border-color: var(--accent-gold);
 }
 
 .profile-name-input-wrapper input::placeholder {
@@ -909,15 +915,45 @@ button.tutorial-blink {
     border-radius: var(--border-radius);
 }
 
-.tutorial-tip-title,
-.tutorial-complete-label {
+/* The "Tip" header is a button: click to minimize the tip to a small pill,
+   click again to show it (remembered per save) */
+.tutorial-tip-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin: 0 0 var(--spacing-xs);
+    padding: 0;
+    font-family: inherit;
     font-size: var(--font-size-xs);
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    text-align: center;
     color: var(--tutorial-color);
-    margin-bottom: var(--spacing-xs);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.tutorial-tip-title:hover {
+    filter: brightness(1.2);
+}
+
+.tutorial-tip-title:focus-visible {
+    outline: 2px solid var(--border-light);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Chevron: points up (collapse) when open, down (expand) when minimized */
+.tutorial-tip-chevron {
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-135deg) translate(-1px, -1px);
+    transition: transform var(--transition-base);
 }
 
 .tutorial-tip p {
@@ -927,18 +963,26 @@ button.tutorial-blink {
     text-align: center;
 }
 
-/* Closing note of the new-player tutorial (First Tame popup) */
-.tutorial-complete {
-    margin-top: var(--spacing-md);
-    padding-top: var(--spacing-md);
-    border-top: 1px solid var(--border-color);
-    text-align: center;
+.tutorial-tip.minimized {
+    padding: 2px var(--spacing-sm);
+    border-radius: 999px;
+    opacity: 0.75;
 }
 
-.tutorial-complete p {
+.tutorial-tip.minimized:hover {
+    opacity: 1;
+}
+
+.tutorial-tip.minimized .tutorial-tip-title {
     margin: 0;
-    color: var(--text-primary);
-    font-style: italic;
+}
+
+.tutorial-tip.minimized .tutorial-tip-chevron {
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.tutorial-tip.minimized p {
+    display: none;
 }
 
 /* =============================================================================

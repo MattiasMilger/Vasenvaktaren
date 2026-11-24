@@ -2,6 +2,30 @@
 // 8h-ui-modals.js - Dialogue System, Welcome Dialogue, Offer Flow, and Encounter Results
 // =============================================================================
 
+// Stable id for a tip from its text: tags and numbers stripped, then hashed
+function getTipId(text) {
+    const plain = String(text).replace(/<[^>]*>/g, '').replace(/[0-9]+/g, '#').trim();
+    let hash = 0;
+    for (let i = 0; i < plain.length; i++) hash = (hash * 31 + plain.charCodeAt(i)) | 0;
+    return 't' + (hash >>> 0).toString(36);
+}
+
+// Minimize or restore a tip (every copy on screen), remembered per save
+function toggleTipMinimized(button) {
+    const tip = button.closest('.tutorial-tip');
+    if (!tip) return;
+    const id = tip.dataset.tipId;
+    const minimize = !tip.classList.contains('minimized');
+    if (minimize) gameState.minimizedTips.add(id); else gameState.minimizedTips.delete(id);
+    document.querySelectorAll(`.tutorial-tip[data-tip-id="${id}"]`).forEach(el => {
+        el.classList.toggle('minimized', minimize);
+        const btn = el.querySelector('.tutorial-tip-title');
+        btn.setAttribute('aria-expanded', String(!minimize));
+        btn.title = minimize ? 'Show this tip' : 'Minimize this tip';
+    });
+    gameState.saveGame();
+}
+
     // Show dialogue modal
 UIController.prototype.showDialogue = function(title, message, buttons = [{ text: 'Confirm', callback: null }], dismissible = true, extraClass = null, icon = null) {
     const modal = document.getElementById('dialogue-modal');
@@ -64,8 +88,16 @@ modal.classList.add('active');
 
     // Short hint box for dialogues (styled by .tutorial-tip). Callers check
     // areTipsEnabled() first, so tips stay hidden when Disable Tips is on.
-    UIController.prototype.getTipHTML = function(text) {
-        return `<div class="tutorial-tip"><div class="tutorial-tip-title">Tip</div><p>${text}</p></div>`;
+    // Clicking the "Tip" header minimizes the tip to a small pill; the choice
+    // is kept per save (gameState.minimizedTips) and clicking again restores it.
+    // tipId defaults to one derived from the text (tags and numbers ignored, so
+    // a tip with a changing level or count keeps the same id).
+    UIController.prototype.getTipHTML = function(text, tipId = getTipId(text)) {
+        const minimized = !!(gameState.minimizedTips && gameState.minimizedTips.has(tipId));
+        return `<div class="tutorial-tip${minimized ? ' minimized' : ''}" data-tip-id="${tipId}">
+            <button type="button" class="tutorial-tip-title" onclick="toggleTipMinimized(this)" aria-expanded="${!minimized}" title="${minimized ? 'Show this tip' : 'Minimize this tip'}">Tip<span class="tutorial-tip-chevron" aria-hidden="true"></span></button>
+            <p>${text}</p>
+        </div>`;
     };
 
     // Show the "Welcome, Väktare" dialogue shown when a new game is confirmed.
@@ -127,7 +159,7 @@ modal.classList.add('active');
         // Free-action tip, kept outside the scrolling list (hidden when Disable Tips is on)
         const max = GAME_CONFIG.MAX_OFFERS_PER_COMBAT;
         document.getElementById('offer-modal-tip').innerHTML = this.areTipsEnabled()
-            ? this.getTipHTML(`Offering is a free action, but you can only offer ${max} item${max === 1 ? '' : 's'} per combat.`)
+            ? this.getTipHTML(`Offering is a free action. You can offer up to ${max} item${max === 1 ? '' : 's'} per combat, but once the väsen gets the item it desires, it won't take any more.`)
             : '';
 
         const items = Object.entries(gameState.itemInventory);

@@ -158,12 +158,14 @@ achievementsHtml += '</div></div>';
         content.innerHTML = `
             <div class="profile-name-section">
                 <div class="profile-identity-row">
-                    <button type="button" id="profile-portrait-btn" class="profile-portrait" aria-label="Choose face" aria-expanded="false" aria-controls="profile-face-picker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${PLAYER_FACES[currentFace].paths}</svg></button>
+                    <div class="profile-portrait-field">
+                        <label for="profile-portrait-btn">Face:</label>
+                        <button type="button" id="profile-portrait-btn" class="profile-portrait" title="Change face" aria-label="Change face" aria-expanded="false" aria-controls="profile-face-picker"><svg class="profile-portrait-face" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${PLAYER_FACES[currentFace].paths}</svg></button>
+                    </div>
                     <div class="profile-name-fields">
                         <label for="profile-name-input">Player Name:</label>
                         <div class="profile-name-input-wrapper">
-                            <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off">
-                            <span id="profile-name-saved" class="profile-name-saved">Saved</span>
+                            <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off" title="Click to change your name">                            <span id="profile-name-saved" class="profile-name-saved">Saved</span>
                         </div>
                     </div>
                 </div>
@@ -174,8 +176,6 @@ achievementsHtml += '</div></div>';
                     <p id="profile-face-hint" class="profile-face-hint">Earn achievements to unlock more faces.</p>
                 </div>
             </div>
-
-            ${this.renderProfileSaveSection()}
 
             <div class="profile-collection-section">
                 <h4>${uiIcon('gem', 14)}Collection:</h4>
@@ -251,7 +251,7 @@ achievementsHtml += '</div></div>';
             const faceId = getPlayerFaceId(option.dataset.face, gameState.achievements);
             gameState.playerFace = faceId;
             gameState.saveGame();
-            portraitBtn.querySelector('svg').innerHTML = PLAYER_FACES[faceId].paths;
+            portraitBtn.querySelector('.profile-portrait-face').innerHTML = PLAYER_FACES[faceId].paths;
             facePicker.querySelectorAll('.profile-face-option').forEach(btn => {
                 const isSelected = btn === option;
                 btn.classList.toggle('selected', isSelected);

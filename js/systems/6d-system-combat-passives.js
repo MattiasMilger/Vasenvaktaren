@@ -46,19 +46,28 @@ Combat.prototype.tryActivateGifu = function(vasen) {
 };
 
 // Raises the given attributes on every conscious ally not in `excluded` and logs
-// each one. Used when Gifu shares a buff with the rest of the team.
+// each change that happened. Used when Gifu shares a buff with the rest of the team.
 Combat.prototype.raiseAlliesStages = function(allies, excluded, stats, stages) {
     allies.forEach(ally => {
         if (excluded.includes(ally) || ally.isKnockedOut()) return;
         stats.forEach(stat => {
-            ally.modifyAttributeStage(stat, stages);
-            this.logStageChange(ally, stat, stages);
+            this.logStageChange(ally, stat, ally.modifyAttributeStage(stat, stages).changed);
         });
     });
 };
 
-// Wynja: blocks the first debuff aimed at this väsen each combat and raises a
-// random attribute instead. Returns true if the debuff was blocked.
+// Gifu: `vasen` just had `stats` raised by `stages`; share them with its allies
+// (once per combat). Does nothing if no attribute was actually raised.
+Combat.prototype.shareRaiseWithGifu = function(vasen, stats, stages) {
+    if (stats.length === 0 || !this.tryActivateGifu(vasen)) return;
+    const team = this.playerTeam.includes(vasen) ? this.playerTeam : this.enemyTeam;
+    this.raiseAlliesStages(team, [vasen], stats, stages);
+};
+
+// Wynja: blocks the first debuff an enemy aims at this väsen each combat and
+// raises a random attribute instead. Self-inflicted lowering (Odjur's Bestial
+// Rage) is not a debuff from an enemy and is never checked here. Returns true
+// if the debuff was blocked.
 Combat.prototype.tryWynjaBlock = function(target) {
     if (target.combatFlags.wynjaTriggered || !target.hasRune('WYNJA')) return false;
     target.combatFlags.wynjaTriggered = true;
@@ -66,35 +75,29 @@ Combat.prototype.tryWynjaBlock = function(target) {
     this.addLog(`${target.getDisplayName()} blocked the debuff!`, 'block');
     const counterStat = randomAttribute();
     const stages = GAME_CONFIG.RUNE_WYNJA_COUNTER_STAGE;
-    target.modifyAttributeStage(counterStat, stages);
-    this.logStageChange(target, counterStat, stages);
-    this.tryWynjaThursDebuff(target);
+    const changed = target.modifyAttributeStage(counterStat, stages).changed;
+    this.logStageChange(target, counterStat, changed);
+    this.shareRaiseWithGifu(target, changed > 0 ? [counterStat] : [], stages);
+    this.tryWynjaThursStrike(target);
     return true;
 };
 
-// Bind Rune - Wynja + Thurs: after Wynja blocks a debuff, lower different random
-// attributes of the opponent currently on the battlefield. The opponent's own
-// Wynja can block it (and, with Wynja + Thurs, answer once in return; each
-// Wynja blocks only once per combat, so this always ends).
-Combat.prototype.tryWynjaThursDebuff = function(vasen) {
-    const br = getActiveBindRuneOfType(vasen, 'wynja_block_debuff');
-    if (!br) return;
-    const opponent = vasen === this.playerActive ? this.enemyActive
-        : vasen === this.enemyActive ? this.playerActive : null;
+// Bind Rune - Wynja + Thurs: after Wynja blocks a debuff, this väsen uses a free
+// Basic Strike (RUNE_BIND_WYNJA_THURS_SKILL) on the opponent currently on the
+// battlefield. It resolves as a normal hit (runes, passives, Thurs reflection),
+// like the Dagaz + Thurs entry strike. Wynja blocks only once per combat, so this
+// triggers at most once. Knockouts it causes outside a turn (a block during an
+// entry effect) are resolved by resolveOutOfTurnKnockouts or handlePostTurn.
+Combat.prototype.tryWynjaThursStrike = function(vasen) {
+    const br = getActiveBindRuneOfType(vasen, 'wynja_block_strike');
+    if (!br || this.isOver || vasen.isKnockedOut()) return;
+    const isPlayer = vasen === this.playerActive;
+    if (!isPlayer && vasen !== this.enemyActive) return; // not on the battlefield
+    const opponent = isPlayer ? this.enemyActive : this.playerActive;
     if (!opponent || opponent.isKnockedOut()) return;
 
     this.logBindRuneActivated(vasen, br);
-    if (this.tryWynjaBlock(opponent)) return;
-
-    const stages = GAME_CONFIG.RUNE_BIND_WYNJA_THURS_DEBUFF_STAGES;
-    const attributes = [...STAGEABLE_ATTRIBUTES]; // copied: picks are removed so they don't repeat
-    for (let i = 0; i < GAME_CONFIG.RUNE_BIND_WYNJA_THURS_DEBUFF_COUNT && attributes.length > 0; i++) {
-        const stat = attributes.splice(Math.floor(Math.random() * attributes.length), 1)[0];
-        const stageResult = opponent.modifyAttributeStage(stat, -stages);
-        if (stageResult.changed !== 0) {
-            this.logStageChange(opponent, stat, stageResult.changed);
-        }
-    }
+    this.executeSkill(vasen, opponent, GAME_CONFIG.RUNE_BIND_WYNJA_THURS_SKILL, isPlayer, null, true);
 };
 
 // Bind Rune - Fehu / Naudiz + proc rune: after `hitter` lands a hit on `target`,
@@ -189,10 +192,12 @@ Combat.prototype.tryElementBuffRune = function(attacker, element, result) {
     if (Math.random() >= GAME_CONFIG.RUNE_ELEMENT_BUFF_PROC_CHANCE) return;
     const stages = GAME_CONFIG.RUNE_ELEMENT_BUFF_STAGES;
     this.logRuneActivated(attacker, buffData.rune);
-    buffData.attributes.forEach(stat => {
-        attacker.modifyAttributeStage(stat, stages);
-        this.logStageChange(attacker, stat, stages);
+    const raised = buffData.attributes.filter(stat => {
+        const changed = attacker.modifyAttributeStage(stat, stages).changed;
+        this.logStageChange(attacker, stat, changed);
+        return changed > 0;
     });
+    this.shareRaiseWithGifu(attacker, raised, stages);
     result.runeEffects.push({ rune: buffData.rune, effect: 'buffed' });
 };
 
@@ -238,8 +243,10 @@ Combat.prototype.applyUtilityRuneEffects = function(attacker, skill, isPlayer, r
 
 // Rune effects that trigger when an attack skill hits
 Combat.prototype.applyHitRuneEffects = function(attacker, defender, damageResult, result, isPlayer) {
-    // Skill-use rune procs, keyed on the (possibly converted) hit element
-    const skillElement = damageResult.element;
+    // Skill-use rune procs, keyed on the skill's own element: an elemental
+    // conversion bind rune changes the hit, not the skill, so the source rune
+    // (e.g. Sol in Sol + Pertho) still procs on its element's skills
+    const skillElement = getSkillElement(result.skill, attacker.species.element);
     this.tryElementBuffRune(attacker, skillElement, result);
     this.tryAlgizHeal(attacker, skillElement, result);
     this.tryJeraHeal(attacker, result.skill, result);
@@ -252,8 +259,7 @@ Combat.prototype.applyHitRuneEffects = function(attacker, defender, damageResult
         if (!this.tryWynjaBlock(defender)) {
             for (let i = 0; i < GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_COUNT; i++) {
                 const stat = randomAttribute();
-                defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
-                this.logStageChange(defender, stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
+                this.logStageChange(defender, stat, defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES).changed);
             }
         }
         result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed' });
@@ -266,8 +272,7 @@ Combat.prototype.applyHitRuneEffects = function(attacker, defender, damageResult
             // Wynja on the defender blocks the first debuff
             if (!this.tryWynjaBlock(defender)) {
                 const randomStat = randomAttribute();
-                defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
-                this.logStageChange(defender, randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
+                this.logStageChange(defender, randomStat, defender.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES).changed);
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed' });
             }
         }
@@ -286,6 +291,9 @@ Combat.prototype.tryHagalNaudizDebuff = function(attacker, defender) {
     attacker.combatFlags.hagalNaudizPassiveTriggered = true;
     const hagalNaudizBR = getActiveBindRunes(attacker).find(b => b.type === 'enemy_health_threshold_debuff_all');
     this.logBindRuneActivated(attacker, hagalNaudizBR);
+
+    // Wynja on the defender blocks the whole debuff (the bind rune is still spent)
+    if (this.tryWynjaBlock(defender)) return;
 
     STAGEABLE_ATTRIBUTES.forEach(stat => {
         const result = defender.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES);
@@ -354,7 +362,7 @@ Combat.prototype.passiveEtherealSurge = function({ vasen, isPlayer }) {
     for (let i = 0; i < rollCount; i++) {
         const randomStat = randomAttribute();
         const result = vasen.modifyAttributeStage(randomStat, stages);
-        this.logStageChange(vasen, randomStat, stages);
+        this.logStageChange(vasen, randomStat, result.changed);
         if (result.changed !== 0) {
             raisedAttributes.push(randomStat);
         }
@@ -371,7 +379,7 @@ Combat.prototype.passiveEtherealSurge = function({ vasen, isPlayer }) {
 
 // --- ODJUR: BESTIAL RAGE ---
 // After enough turns on the battlefield, raise Strength and lower Wisdom
-// (once per stay on the battlefield; the flag resets on swap)
+// (once per combat; renewed only when once-per-combat flags are reset)
 Combat.prototype.passiveBestialRage = function({ vasen, isPlayer }) {
     if (vasen.species.family !== FAMILIES.ODJUR) return;
     if (vasen.combatFlags.turnsOnField < FAMILY_PASSIVE_CONFIG.ODJUR_TURNS_REQUIRED) return;
@@ -384,27 +392,13 @@ Combat.prototype.passiveBestialRage = function({ vasen, isPlayer }) {
         { name: 'wisdom', stages: FAMILY_PASSIVE_CONFIG.ODJUR_WISDOM_STAGES }
     ];
 
+    // Gifu: share the raised Strength with allies (the lowered Wisdom is not shared),
+    // only if it was actually raised (once per combat)
     attributesToChange.forEach(item => {
-        const result = vasen.modifyAttributeStage(item.name, item.stages);
-        if (result.changed !== 0) {
-            this.logStageChange(vasen, item.name, result.changed);
-        }
+        const changed = vasen.modifyAttributeStage(item.name, item.stages).changed;
+        this.logStageChange(vasen, item.name, changed);
+        if (changed > 0) this.shareRaiseWithGifu(vasen, [item.name], item.stages);
     });
-
-    // Gifu: share the raised attributes with allies (the lowered one is not shared)
-    // in one activation (once per combat)
-    const raisedAttributes = attributesToChange.filter(item => item.stages > 0);
-    if (raisedAttributes.length > 0 && this.tryActivateGifu(vasen)) {
-        this.getTeam(isPlayer).forEach(ally => {
-            if (ally === vasen || ally.isKnockedOut()) return;
-            raisedAttributes.forEach(item => {
-                const allyResult = ally.modifyAttributeStage(item.name, item.stages);
-                if (allyResult.changed !== 0) {
-                    this.logStageChange(ally, item.name, allyResult.changed);
-                }
-            });
-        });
-    }
 };
 
 // --- OKNYTT: TAG TEAM ---
@@ -424,9 +418,9 @@ Combat.prototype.passiveTagTeam = function({ vasen, incomingVasen, isPlayer }) {
         const randomIndex = Math.floor(Math.random() * attributes.length);
         const randomStat = attributes[randomIndex];
         attributes.splice(randomIndex, 1);
-        incomingVasen.modifyAttributeStage(randomStat, stages);
-        this.logStageChange(incomingVasen, randomStat, stages);
-        raisedAttributes.push(randomStat);
+        const changed = incomingVasen.modifyAttributeStage(randomStat, stages).changed;
+        this.logStageChange(incomingVasen, randomStat, changed);
+        if (changed > 0) raisedAttributes.push(randomStat);
     }
     if (raisedAttributes.length === 0) return;
 
@@ -458,15 +452,14 @@ Combat.prototype.passiveDraconicResilience = function({ vasen, isPlayer }) {
     const stages = FAMILY_PASSIVE_CONFIG.DRAKE_DEFENSE_DURABILITY_STAGES;
     const attributesToBuff = ['defense', 'durability'];
 
-    attributesToBuff.forEach(stat => {
-        vasen.modifyAttributeStage(stat, stages);
-        this.logStageChange(vasen, stat, stages);
+    const raised = attributesToBuff.filter(stat => {
+        const changed = vasen.modifyAttributeStage(stat, stages).changed;
+        this.logStageChange(vasen, stat, changed);
+        return changed > 0;
     });
 
-    // Gifu: share all buffed attributes in one activation (once per combat)
-    if (this.tryActivateGifu(vasen)) {
-        this.raiseAlliesStages(this.getTeam(isPlayer), [vasen], attributesToBuff, stages);
-    }
+    // Gifu: share all raised attributes in one activation (once per combat)
+    this.shareRaiseWithGifu(vasen, raised, stages);
 };
 
 // --- BIND RUNE: FEHU + WYNJA (health threshold all-attribute buff) ---
@@ -498,23 +491,16 @@ Combat.prototype.passiveMaliciousRetaliation = function({ vasen, attacker }) {
     if (!attacker || attacker.isKnockedOut()) return;
     vasen.combatFlags.raPassiveTriggered = true;
 
+    this.addLog(`${vasen.getDisplayName()} activated Malicious Retaliation!`, 'passive');
+    // Wynja on the attacker blocks the whole debuff (the passive is still spent)
+    if (this.tryWynjaBlock(attacker)) return;
+
     const stages = FAMILY_PASSIVE_CONFIG.RA_DEBUFF_STAGES;
     const attributes = [...STAGEABLE_ATTRIBUTES]; // copied: picks are removed so they don't repeat
-    const debuffedAttributes = [];
-    for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT; i++) {
-        if (attributes.length > 0) {
-            const randomIndex = Math.floor(Math.random() * attributes.length);
-            const stat = attributes[randomIndex];
-            attacker.modifyAttributeStage(stat, -stages);
-            debuffedAttributes.push(stat);
-            attributes.splice(randomIndex, 1);
-        }
+    for (let i = 0; i < FAMILY_PASSIVE_CONFIG.RA_DEBUFF_COUNT && attributes.length > 0; i++) {
+        const stat = attributes.splice(Math.floor(Math.random() * attributes.length), 1)[0];
+        this.logStageChange(attacker, stat, attacker.modifyAttributeStage(stat, -stages).changed);
     }
-
-    this.addLog(`${vasen.getDisplayName()} activated Malicious Retaliation!`, 'passive');
-    debuffedAttributes.forEach(stat => {
-        this.logStageChange(attacker, stat, -stages);
-    });
 };
 
 // --- TROLL: TROLL THEFT ---
@@ -527,19 +513,18 @@ Combat.prototype.passiveTrollTheft = function({ vasen, defender, isPlayer }) {
     const stealableAttributes = STAGEABLE_ATTRIBUTES.filter(stat => defender.attributeStages[stat] > 0);
     if (stealableAttributes.length === 0) return;
 
+    this.addLog(`${vasen.getDisplayName()} activated Troll Theft!`, 'passive');
+    // Wynja on the defender blocks the theft: nothing is lowered or gained
+    if (this.tryWynjaBlock(defender)) return;
+
     const stages = FAMILY_PASSIVE_CONFIG.TROLL_STAGE_STEAL;
     const randomStat = stealableAttributes[Math.floor(Math.random() * stealableAttributes.length)];
-    defender.modifyAttributeStage(randomStat, -stages);
-    vasen.modifyAttributeStage(randomStat, stages);
-
-    this.addLog(`${vasen.getDisplayName()} activated Troll Theft!`, 'passive');
-    this.logStageChange(defender, randomStat, -stages);
-    this.logStageChange(vasen, randomStat, stages);
+    this.logStageChange(defender, randomStat, defender.modifyAttributeStage(randomStat, -stages).changed);
+    const gained = vasen.modifyAttributeStage(randomStat, stages).changed;
+    this.logStageChange(vasen, randomStat, gained);
 
     // Gifu: share the stolen stage with allies (once per combat)
-    if (this.tryActivateGifu(vasen)) {
-        this.raiseAlliesStages(this.getTeam(isPlayer), [vasen], [randomStat], stages);
-    }
+    this.shareRaiseWithGifu(vasen, gained > 0 ? [randomStat] : [], stages);
 };
 
 // --- VALNAD: DEATHLESS ---
@@ -570,8 +555,7 @@ Combat.prototype.bindRuneEntryDebuff = function({ vasen, isPlayer }) {
 
     if (!this.tryWynjaBlock(opponent)) {
         const randomStat = randomAttribute();
-        opponent.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
-        this.logStageChange(opponent, randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES);
+        this.logStageChange(opponent, randomStat, opponent.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_BIND_INGUZ_DAGAZ_DEBUFF_STAGES).changed);
     }
 };
 

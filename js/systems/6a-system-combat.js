@@ -183,9 +183,6 @@ class Combat {
         if (outgoing) {
             outgoing.combatFlags.hasSwapSickness = false;
             outgoing.combatFlags.dagazBonusRoundsLeft = 0; // left the battlefield
-            if (isSwap) {
-                outgoing.combatFlags.odjurPassiveTriggered = false;
-            }
         }
 
         if (isPlayer) {
@@ -266,7 +263,7 @@ class Combat {
                 if (healAmount > 0) {
                     vasen.heal(healAmount);
                     // 2. Log gained health right after
-                    this.addLog(`${vasen.getDisplayName()} gained <span style="color: var(--color-positive-soft); font-weight: 700;">${healAmount} health!`, 'heal');
+                    this.logHealthGained(vasen, healAmount, 'heal');
                 }
 
                 // Megin refill
@@ -304,6 +301,9 @@ class Combat {
         // Clear swap sickness and temporary flags. Dagaz + Jera: a väsen whose
         // first round just ended keeps the Dagaz bonus for the remaining
         // RUNE_BIND_DAGAZ_JERA_ROUNDS - 1 rounds, counted down here each round.
+        // Rotvälta: whether the opponent attacked is decided anew each turn
+        allCombatants.forEach(v => { v.combatFlags.wasAttackedThisTurn = false; });
+
         [this.playerActive, this.enemyActive].forEach(v => {
             if (!v) return;
             v.combatFlags.hasSwapSickness = false;
@@ -520,7 +520,7 @@ class Combat {
         if (isCorrect) {
             this.correctItemGiven = true;
             // "Name: line" format lets the UI bold the speaker's name
-            this.addLog(`${enemyName}: Thanks, I love this item. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.`, 'dialogue');
+            this.addLog(`${enemyName}: Thanks, I love this item, and I need nothing more. But you have to prove yourself worthy before I join you. Go ahead and try to defeat me.`, 'dialogue');
         } else {
             this.addLog(`${enemyName}: What am I supposed to do with this?`, 'dialogue');
         }
@@ -621,7 +621,9 @@ class Combat {
 
     // Logs an attribute stage change. The sign of `change` picks "raised" / "lowered"
     // and the buff / debuff log style; `prefix` is prepended (e.g. "Initial bonus! ").
+    // Pass the actual change: nothing is logged when the stage did not move (capped).
     logStageChange(vasen, stat, change, prefix = '') {
+        if (!change) return;
         const raised = change > 0;
         this.addLog(`${prefix}${vasen.getDisplayName()}'s ${stat} was ${raised ? 'raised' : 'lowered'} by ${Math.abs(change)} ${pluralizeStage(change)}!`, raised ? 'buff' : 'debuff');
     }

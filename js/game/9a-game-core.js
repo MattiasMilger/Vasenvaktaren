@@ -365,11 +365,7 @@ class Game {
                 ui.showDialogue(
                     'A Full Party',
                     `<p>Three väsen now walk beside you. The forest feels a little less hostile.</p>
-                     ${ui.getTipHTML(`Keep exploring until all of your väsen are <strong>Lvl ${guardianLevel}</strong> or higher, then press <strong>Challenge Guardian</strong> to face this land's guardian and open the way onward.`)}
-                     <div class="tutorial-complete">
-                         <div class="tutorial-complete-label">Tutorial complete</div>
-                         <p>From here on, the path is yours. Trust your wits, Väktare.</p>
-                     </div>`,
+                     ${ui.getTipHTML(`Keep exploring until all of your väsen are <strong>Lvl ${guardianLevel}</strong> or higher, then press <strong>Challenge Guardian</strong> to face this land's guardian and open the way onward.`)}`,
                     [{ text: `${uiIcon('compass')}Onward`, callback: null }],
                     false
                 );

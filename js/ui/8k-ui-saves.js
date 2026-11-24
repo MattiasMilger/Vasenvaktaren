@@ -45,7 +45,7 @@ function toggleRagnarokPopup(element, event) {
         (element.dataset.rules || '').split(',').filter(Boolean).forEach(id => { modes[id] = true; });
         const tier = getRagnarokTier(modes);
         if (!tier) return '';
-        return `<p><strong>Ragnarök Mode: ${tier.name}</strong><br><em>${tier.line}</em></p>${ui.getRuleListHTML(modes)}`;
+        return `<p class="ragnarok-popup-head"><span class="ragnarok-popup-kicker">Ragnarök Mode · Level ${tier.level} of ${RAGNAROK_TIERS.length}</span><strong>${tier.name}</strong><em>${tier.line}</em></p>${ui.getRuleListHTML(modes)}`;
     }, 280);
 }
 
@@ -218,16 +218,30 @@ UIController.prototype.renderNewJourney = function(replacing, onBegin, onBack, i
 
     const modes = initialModes ? normalizeModes(initialModes) : createDefaultModes();
     const panel = document.getElementById('ragnarok-panel');
-    const toggleBtn = document.getElementById('ragnarok-toggle-btn');
-    const toggleLabel = document.getElementById('ragnarok-toggle-label');
-    // Closed for a fresh New Game; open again when coming back with rules chosen
-    panel.hidden = getActiveModeIds(modes).length === 0;
-    toggleBtn.setAttribute('aria-expanded', String(!panel.hidden));
-    toggleBtn.onclick = () => {
-        panel.hidden = !panel.hidden;
-        toggleBtn.setAttribute('aria-expanded', String(!panel.hidden));
+    const standardBtn = document.getElementById('mode-standard-btn');
+    const ragnarokBtn = document.getElementById('mode-ragnarok-btn');
+    const beginBtn = document.getElementById('journey-begin-btn');
+    // Standard for a fresh New Game; Ragnarök again when coming back with rules
+    // chosen. Switching to Standard keeps the toggles, so switching back restores them.
+    let ragnarokChosen = getActiveModeIds(modes).length > 0;
+    // Ragnarök Mode needs at least one rule on before the game can begin
+    const refreshBegin = () => {
+        const blocked = ragnarokChosen && getActiveModeIds(modes).length === 0;
+        beginBtn.disabled = blocked;
+        beginBtn.title = blocked ? 'Turn on at least one rule, or choose Standard.' : '';
     };
-    document.querySelector('.ragnarok-hint').hidden = !panel.hidden;
+    const setChoice = (ragnarok) => {
+        ragnarokChosen = ragnarok;
+        panel.hidden = !ragnarok;
+        standardBtn.classList.toggle('selected', !ragnarok);
+        ragnarokBtn.classList.toggle('selected', ragnarok);
+        standardBtn.setAttribute('aria-checked', String(!ragnarok));
+        ragnarokBtn.setAttribute('aria-checked', String(ragnarok));
+        refreshBegin();
+    };
+    standardBtn.onclick = () => setChoice(false);
+    ragnarokBtn.onclick = () => setChoice(true);
+    setChoice(ragnarokChosen);
 
     // One row per rule with the same toggle switch as Settings; all off
     const list = document.getElementById('journey-modes');
@@ -261,10 +275,7 @@ UIController.prototype.renderNewJourney = function(replacing, onBegin, onBack, i
             input.closest('.journey-mode-row').classList.toggle('unavailable', !available);
         });
         this.renderRagnarokMeter(modes);
-        const tier = getRagnarokTier(modes);
-        toggleLabel.textContent = tier ? `Ragnarök Mode: ${tier.name}` : 'Ragnarök Mode';
-        toggleBtn.classList.toggle('active', !!tier);
-        document.querySelector('.ragnarok-hint').hidden = !panel.hidden;
+        refreshBegin();
     };
 
     list.querySelectorAll('input[data-mode]').forEach(input => {
@@ -281,7 +292,8 @@ UIController.prototype.renderNewJourney = function(replacing, onBegin, onBack, i
         ? `This replaces <strong>Slot ${replacing.slot + 1}</strong> (${escapeHTML(replacing.playerName)}, ${replacing.ended ? 'fallen' : replacing.zoneName}).`
         : '';
 
-    document.getElementById('journey-begin-btn').onclick = () => onBegin({ ...modes });
+    // Standard starts without rules, whatever the hidden toggles say
+    beginBtn.onclick = () => onBegin(ragnarokChosen ? { ...modes } : createDefaultModes());
     document.getElementById('journey-back-btn').onclick = () => onBack();
 };
 
@@ -297,7 +309,7 @@ UIController.prototype.renderRagnarokMeter = function(modes) {
     fill.style.backgroundSize = fraction > 0 ? `${100 / fraction}% 100%` : '100% 100%';
 
     document.getElementById('ragnarok-tier-name').textContent = tier ? tier.name : 'No rules';
-    document.getElementById('ragnarok-tier-line').textContent = tier ? tier.line : 'Turn on rules to raise the difficulty.';
+    document.getElementById('ragnarok-tier-line').textContent = tier ? tier.line : 'Turn on at least one rule to begin.';
 
     const panel = document.getElementById('ragnarok-panel');
     panel.classList.remove(...RAGNAROK_TIERS.map(t => `tier-${t.level}`));
@@ -371,31 +383,15 @@ UIController.prototype.showFallenDialogue = function(fallen, lostRunes, next) {
 };
 
 // =============================================================================
-// Player Profile and Settings: the current save
+// Settings: the current save
 // =============================================================================
-
-UIController.prototype.renderProfileSaveSection = function() {
-    const tier = getRagnarokTier(gameState.modes);
-    const started = gameState.createdAt ? `<span class="profile-save-started">Started ${formatShortDate(gameState.createdAt)}</span>` : '';
-    const rules = tier
-        ? `<div class="profile-save-tier">${this.getRagnarokBadgeHTML(gameState.modes, { clickable: false })}<em>${tier.line}</em></div>${this.getRuleListHTML(gameState.modes)}`
-        : '<p class="rule-line">A normal game, without Ragnarök Mode rules.</p>';
-
-    return `
-        <div class="profile-save-section">
-            <h4>${uiIcon('download', 14)}Save:</h4>
-            <div class="achievement profile-save-card">
-                <div class="profile-save-row"><span class="profile-save-slot">Slot ${gameState.saveSlot + 1}</span>${started}</div>
-                ${rules}
-            </div>
-        </div>`;
-};
 
 UIController.prototype.renderSettingsSaveInfo = function() {
     const el = document.getElementById('settings-save-info');
     if (!el) return;
     const badge = this.getRagnarokBadgeHTML(gameState.modes);
-    el.innerHTML = `<span class="settings-save-slot">Slot ${gameState.saveSlot + 1}</span>${badge || '<span class="settings-save-normal">Normal</span>'}`;
+    const started = gameState.createdAt ? `<span class="settings-save-started">Started ${formatShortDate(gameState.createdAt)}</span>` : '';
+    el.innerHTML = `<span class="settings-save-slot">Slot ${gameState.saveSlot + 1}</span>${badge || '<span class="settings-save-normal">Standard</span>'}${started}`;
 };
 
 // Another tab continued this save: this tab stops saving until reloaded
@@ -545,7 +541,7 @@ function buildSaveSummaryText(data, slot) {
     row('Status', record.ended ? `Over (${formatShortDate(record.ended.date)}). ${record.ended.cause}` : 'In progress');
 
     const tier = getRagnarokTier(record.modes);
-    row('Ragnarök Mode', tier ? `${tier.name} - ${getActiveModeIds(record.modes).map(id => GAME_MODES[id].name).join(', ')}` : 'Off (normal game)');
+    row('Ragnarök Mode', tier ? `${tier.name} - ${getActiveModeIds(record.modes).map(id => GAME_MODES[id].name).join(', ')}` : 'Off (Standard)');
 
     rule('Progress');
     row('Current zone', record.zoneName || '-');

@@ -40,6 +40,7 @@
     /* Border Colors */
     --border-color: #3f3f52;
     --border-light: #505066;
+    --border-lighter: #6e6e8a; /* Editable fields that should read as clickable (Player Profile) */
     --border-focus: #7a92ab;
     --border-focus-shadow: rgba(80, 80, 102, 0.25); /* Focus ring shadow for inputs */
 

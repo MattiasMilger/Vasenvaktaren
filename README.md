@@ -59,7 +59,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 | **Skills** | Use learned attacks (cost Megin) |
 | **Basic Strike** | Free attack using your element |
 | **Swap** | Change active Väsen (causes Swap Sickness) |
-| **Offer Item** | Offer taming items to wild Väsen |
+| **Offer Item** | Offer taming items to wild Väsen (free action, up to 3 per combat). Once the desired item is given, no more can be offered |
 | **Interrogate** | Learn what item the Väsen wants |
 | **Pass** | Skip your turn |
 | **Flee** | Exit combat. The väsen on the field stays behind to cover the retreat and is knocked out; the party is left at 5% health |
@@ -77,9 +77,9 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 
 ### Player Profile
 
-- Portrait shown in the header, next to the player's name, and again inside the Player Profile screen next to the name field
+- Portrait shown inside the Player Profile screen next to the name field. The header button and the screen's title use the person silhouette
 - Click the header portrait/name to open the Player Profile screen, view collection stats, achievements, and the Endless Tower record
-- Click the portrait inside the Player Profile screen to choose a face (8 round outline faces). Plain, Fringe, Parted and Moustache are available from the start (Plain is the default); Helmet (Champion), Glasses (Hoarder), One-Eyed (Lore Master) and Rune-Marked (Rune Master) unlock with that save's achievements and show greyed out with a lock until then (clicking a locked face names its achievement). The choice is saved per save. The header button keeps the person silhouette
+- Click the portrait inside the Player Profile screen to choose a face (8 round outline faces). Plain, Fringe, Parted and Moustache are available from the start (Plain is the default); Helmet (Champion), Glasses (Hoarder), One-Eyed (Lore Master) and Rune-Marked (Rune Master) unlock with that save's achievements and show greyed out with a lock until then (clicking a locked face names its achievement). The choice is saved per save
 
 ### Lore Book
 
@@ -101,7 +101,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 
 ## Ragnarök Mode
 
-Optional rules for a harder journey. On the New Game screen, click the red **Ragnarök Mode** button to open the rules and switch on the ones you want. Leave it closed for a normal game. Any combination works, and the rules can never be changed once the game has started.
+Optional rules for a harder journey. On the New Game screen, choose **Standard** (the default) or **Ragnarök Mode**, which opens the rules so you can switch on the ones you want. Any combination works, and the rules can never be changed once the game has started.
 
 | Rule | Effect |
 | :--- | :--- |
@@ -114,7 +114,7 @@ Optional rules for a harder journey. On the New Game screen, click the red **Rag
 - Every rule counts the same. A meter fills as rules are added and names the difficulty after the events before the end of the world: one rule is **Fimbulvinter**, two are **Gjallarhorn**, and any three (all but one) reach **Ragnarök**
 - **Permadeath-free zone:** Idunn's apples keep every väsen, and its runes, safe within the Endless Tower. Even with Permadeath or Lost Runes, väsen that fall in the tower are restored when the run ends
 - When a väsen dies or loses its runes, a popup and a combat log line say so at once, and a summary follows the fight
-- The difficulty is shown next to the Player Profile button (click it for the rules), in the Player Profile, in Settings and on the main menu save cards
+- The difficulty is shown next to the Player Profile button (click it for the rules), in Settings (with the save slot and start date) and on the main menu save cards
 - A Permadeath save that is over stays in its slot, marked as fallen, so it can be viewed (cause, party, fallen väsen) and deleted
 - **Closing or reloading the page during a battle counts as fleeing**, so a reload can't undo a death or a lost rune: the väsen that was on the field stays behind. On the next start, a "Battle Abandoned" message explains what happened, and any losses from the battle stand. A rolled wild encounter also comes back after a reload instead of being skipped. Normal saves behave as before
 - Runes and väsen types in the Player Profile count everything ever collected, so they never go down when a väsen dies or is released, or a rune is lost
@@ -122,7 +122,7 @@ Optional rules for a harder journey. On the New Game screen, click the red **Rag
 ## Starting a New Game
 
 1. **New Game** on the main menu (uses the first empty slot, or asks which save to replace when all three are in use)
-2. Optionally open **Ragnarök Mode** and choose rules
+2. Keep **Standard**, or choose **Ragnarök Mode** and pick rules
 3. Choose a starter. **Back** returns to the previous step with your rules kept
 
 ## Save System

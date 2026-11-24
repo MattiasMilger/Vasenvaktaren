@@ -154,6 +154,7 @@ class GameState {
         this.firstExploreTutorialShown = false;
         this.firstTameMessageShown = false;
         this.guardianHintShown = false;
+        this.minimizedTips = new Set(); // ids of tips the player collapsed (see getTipHTML)
         
         this.endlessTowerRecord = createDefaultEndlessTowerRecord();
 
@@ -1063,6 +1064,7 @@ class GameState {
             firstExploreTutorialShown: this.firstExploreTutorialShown,
             firstTameMessageShown: this.firstTameMessageShown,
             guardianHintShown: this.guardianHintShown,
+            minimizedTips: Array.from(this.minimizedTips),
             settings: this.settings,
             endlessTowerRecord: this.endlessTowerRecord,
             // Pity counters for exploration anti-grief system
@@ -1150,6 +1152,7 @@ class GameState {
             this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
             this.firstTameMessageShown = data.firstTameMessageShown || false;
             this.guardianHintShown = data.guardianHintShown || false;
+            this.minimizedTips = new Set(data.minimizedTips || []);
             
             this.endlessTowerRecord = data.endlessTowerRecord || createDefaultEndlessTowerRecord();
             
@@ -1283,6 +1286,7 @@ class GameState {
         this.firstExploreTutorialShown = false;
         this.firstTameMessageShown = false;
         this.guardianHintShown = false;
+        this.minimizedTips = new Set();
         this.currentCombat = null;
         this.currentEncounter = null;
         this.inCombat = false;

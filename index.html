@@ -69,15 +69,22 @@
         /* Player profile portrait - Player Profile modal */
         .profile-identity-row {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: var(--spacing-md);
         }
 
+        .profile-portrait-field {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
         .profile-portrait {
+            position: relative;
             width: 64px;
             height: 64px;
             border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-lighter);
             box-shadow: inset 0 0 10px var(--black-overlay-medium);
             flex-shrink: 0;
             display: flex;
@@ -97,7 +104,7 @@
             color: var(--text-primary);
         }
 
-        .profile-portrait svg {
+        .profile-portrait .profile-portrait-face {
             width: 36px;
             height: 36px;
         }
@@ -109,7 +116,7 @@
             gap: var(--spacing-sm);
             margin-top: var(--spacing-md);
             padding: var(--spacing-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-lighter);
             border-radius: var(--border-radius);
             box-shadow: inset 0 0 10px var(--black-overlay-medium);
         }
@@ -342,10 +349,24 @@
     <div id="new-journey-screen" class="screen">
         <div class="journey-content">
             <p class="starter-prompt">New Game</p>
-            <button type="button" id="ragnarok-toggle-btn" class="ragnarok-toggle" aria-expanded="false" aria-controls="ragnarok-panel">
-                <i data-ui-icon="ragnarok" data-size="16"></i><span id="ragnarok-toggle-label">Ragnarök Mode</span><span class="ragnarok-toggle-chevron" aria-hidden="true"></span>
-            </button>
-            <p class="ragnarok-hint">Click <strong>Ragnarök Mode</strong> to choose optional rules for a harder journey.</p>
+            <div class="game-mode-choice" role="radiogroup" aria-label="Game mode">
+                <button type="button" id="mode-standard-btn" class="game-mode-option" role="radio" aria-checked="true">
+                    <span class="game-mode-radio" aria-hidden="true"></span>
+                    <span class="game-mode-icon"><i data-ui-icon="standard" data-size="20"></i></span>
+                    <span class="game-mode-text">
+                        <span class="game-mode-name">Standard</span>
+                        <span class="game-mode-desc">The journey as intended.</span>
+                    </span>
+                </button>
+                <button type="button" id="mode-ragnarok-btn" class="game-mode-option ragnarok" role="radio" aria-checked="false" aria-controls="ragnarok-panel">
+                    <span class="game-mode-radio" aria-hidden="true"></span>
+                    <span class="game-mode-icon"><i data-ui-icon="ragnarok" data-size="20"></i></span>
+                    <span class="game-mode-text">
+                        <span class="game-mode-name">Ragnarök Mode</span>
+                        <span class="game-mode-desc">Choose optional rules for a harder journey.</span>
+                    </span>
+                </button>
+            </div>
             <div id="ragnarok-panel" class="ragnarok-panel" hidden>
                 <div id="journey-modes" class="journey-modes"></div>
                 <div class="ragnarok-difficulty">
@@ -747,15 +768,6 @@
                     GitHub Repository
                 </a>
             </p>
-            <p>
-                <a href="https://mattiasmilger.github.io/"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   title="See more of my projects."
-                   class="github-link">
-                    More Projects
-                </a>
-            </p>
         </div>
 
         <button id="close-settings" class="btn btn-secondary">Close</button>
@@ -796,7 +808,7 @@
                 <div class="guide-category" data-cat="taming">
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Taming<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
-                        <p><strong>Tame</strong><br>Tame a väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. Offering is a free action, but you can offer up to <span id="guide-max-offers"></span> items per combat.</p>
+                        <p><strong>Tame</strong><br>Tame a väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. Offering is a free action. You can offer up to <span id="guide-max-offers"></span> items per combat, but once the väsen has its desired item it won't accept any more.</p>
                     </div>
                 </div>
 
@@ -906,7 +918,7 @@
                     <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Combat Actions<button class="guide-favorite-btn" type="button">☆</button></h4>
                     <div class="guide-category-body">
                         <p><strong>Swap</strong><br>Costs a turn. The incoming väsen is "Preparing" and can't use skills until next turn.</p>
-                        <p><strong>Offer Item</strong><br>Free action. Limited per combat, wild väsen only.</p>
+                        <p><strong>Offer Item</strong><br>Free action. Limited per combat, wild väsen only. Once the desired item is given, no more can be offered.</p>
                         <p><strong>Interrogate</strong><br>Costs a turn. Ask a wild väsen what it desires.</p>
                         <p><strong>Pass</strong><br>Skip your turn.</p>
                         <p><strong>Flee</strong><br>Retreat and end the combat. The väsen on the field stays behind to cover the retreat and is knocked out, and your party is left at very low health. In Ragnarök Mode that knockout follows the rules (Permadeath, Lost Runes), and closing or reloading the page during a battle counts as fleeing.</p>

@@ -23,7 +23,7 @@ const ELEMENT_DAMAGE_RUNES = {
 // =============================================================================
 
 // Execute a skill: spend its megin, then resolve it as a utility effect or a damaging hit.
-// isFree: the skill was triggered by an effect (Dagaz + Thurs) and costs no megin.
+// isFree: the skill was triggered by an effect (Dagaz + Thurs, Wynja + Thurs) and costs no megin.
 Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer, selectedAllyTarget = null, isFree = false) {
     const skill = ABILITIES[skillName];
     if (!skill) return null;
@@ -55,7 +55,12 @@ Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer
     // Handle utility skills
     if (skill.type === ATTACK_TYPES.UTILITY) {
         result.effects = this.applyUtilityEffect(attacker, defender, skill, isPlayer, selectedAllyTarget);
-        this.applyUtilityRuneEffects(attacker, skill, isPlayer, result);
+        // A user knocked out by its own skill (Tyr's Sacrifice) gets no rune
+        // procs: a Mannaz or Jera heal would otherwise bring it back
+        if (!attacker.isKnockedOut()) {
+            this.applyUtilityRuneEffects(attacker, skill, isPlayer, result);
+        }
+        this.tryTrollTheft(attacker, defender, isPlayer);
 
         // Trigger debuff flash animation if this is a debuff skill
         if (skill.effect && skill.effect.type === 'debuff' && this.onHit) {
@@ -123,31 +128,37 @@ Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer
 
     // Thurs: damage reflect as Mixed hit (only if the attacker is still standing)
     if (!attacker.isKnockedOut() && defender.hasRune('THURS') && result.damage > 0) {
-        this.applyThursReflection(attacker, defender, result);
+        this.applyThursReflection(attacker, defender, result, isPlayer);
     }
 
-    // Troll family passive: Steal attribute stage when using skill (once per combat)
-    if (skill.type !== ATTACK_TYPES.UTILITY && !defender.isKnockedOut()) {
-        if (!attacker.combatFlags.trollPassiveTriggered) {
-            this.applyFamilyPassive('onUseSkill', { vasen: attacker, defender: defender, isPlayer });
-        }
-    }
+    this.tryTrollTheft(attacker, defender, isPlayer);
 
     return result;
+};
+
+// Troll family passive: steal an attribute stage when using any skill (once per
+// combat). Not if either side is knocked out (e.g. the Troll by a Thurs reflection).
+Combat.prototype.tryTrollTheft = function(attacker, defender, isPlayer) {
+    if (attacker.isKnockedOut() || !defender || defender.isKnockedOut()) return;
+    if (attacker.combatFlags.trollPassiveTriggered) return;
+    this.applyFamilyPassive('onUseSkill', { vasen: attacker, defender: defender, isPlayer });
 };
 
 // A hit has knocked the defender out: knockout-triggered runes and passives
 // resolve first, then the knockout is logged unless the defender was revived.
 Combat.prototype.resolveKnockout = function(attacker, defender, isPlayer) {
-    // Hagal rune: Debuff enemy on knockout (triggers BEFORE revive check)
-    if (defender.hasRune('HAGAL')) {
+    // Hagal rune: Debuff enemy on knockout (triggers BEFORE revive check).
+    // Wynja on the attacker blocks it.
+    if (defender.hasRune('HAGAL') && attacker && !attacker.isKnockedOut()) {
         this.logRuneActivated(defender, 'HAGAL');
-        STAGEABLE_ATTRIBUTES.forEach(stat => {
-            const result = attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES);
-            if (result.changed !== 0) {
-                this.logStageChange(attacker, stat, result.changed);
-            }
-        });
+        if (!this.tryWynjaBlock(attacker)) {
+            STAGEABLE_ATTRIBUTES.forEach(stat => {
+                const result = attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_HAGAL_DEBUFF_STAGES);
+                if (result.changed !== 0) {
+                    this.logStageChange(attacker, stat, result.changed);
+                }
+            });
+        }
     }
 
     // Vålnad family passive: Deathless - attempt to revive
@@ -163,7 +174,8 @@ Combat.prototype.resolveKnockout = function(attacker, defender, isPlayer) {
 
 // Thurs: the defender reflects part of the hit back at the attacker as a Mixed
 // hit, which can in turn trigger the defender's Naudiz and Inguz runes.
-Combat.prototype.applyThursReflection = function(attacker, defender, result) {
+// isPlayer: whether the original attacker is on the player's side.
+Combat.prototype.applyThursReflection = function(attacker, defender, result, isPlayer) {
     this.logRuneActivated(defender, 'THURS');
 
     // The defender (Thurs user) becomes the "attacker" for the reflection
@@ -194,8 +206,7 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result) {
             const stat = randomAttribute();
             // Wynja on the original attacker blocks the entire Naudiz sequence
             if (this.tryWynjaBlock(attacker)) break;
-            attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
-            this.logStageChange(attacker, stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES);
+            this.logStageChange(attacker, stat, attacker.modifyAttributeStage(stat, -GAME_CONFIG.RUNE_NAUDIZ_DEBUFF_STAGES).changed);
         }
         result.runeEffects.push({ rune: 'NAUDIZ', effect: 'debuffed on weak reflection' });
     }
@@ -206,8 +217,7 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result) {
             if (!this.tryWynjaBlock(attacker)) {
                 this.logRuneActivated(defender, 'INGUZ');
                 const randomStat = randomAttribute();
-                attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
-                this.logStageChange(attacker, randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES);
+                this.logStageChange(attacker, randomStat, attacker.modifyAttributeStage(randomStat, -GAME_CONFIG.RUNE_INGUZ_DEBUFF_STAGES).changed);
                 result.runeEffects.push({ rune: 'INGUZ', effect: 'debuffed on reflection' });
             }
         }
@@ -215,6 +225,13 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result) {
 
     // Fehu / Naudiz bind runes: the reflection is a hit from the Thurs user
     this.tryHitProcBindRunes(defender, attacker, reflectResult.matchup);
+
+    // The reflection knocked out the original attacker: resolve it like any
+    // knockout from a hit, with the Thurs user as the one who landed it (Hagal,
+    // Deathless, knockout log)
+    if (attacker.isKnockedOut()) {
+        this.resolveKnockout(defender, attacker, !isPlayer);
+    }
 };
 
 // Returns the first-use initial bonus stages for this skill on this side
@@ -418,7 +435,12 @@ Combat.prototype.calculateThursReflection = function(defender, attacker, origina
 
     // Element matchup for the reflection (Jotun's Fury can also upgrade it)
     const matchup = this.applyJotunsFury(defender, getMatchupType(reflectElement, attacker.species.element));
-    const elementMod = DAMAGE_MULTIPLIERS[matchup];
+    let elementMod = DAMAGE_MULTIPLIERS[matchup];
+
+    // Fehu: a potent reflection is a potent hit, so it deals less damage too
+    if (matchup === 'POTENT' && attacker.hasRune('FEHU')) {
+        elementMod *= GAME_CONFIG.RUNE_FEHU_DAMAGE_REDUCTION;
+    }
 
     // Base reflected damage is a fixed fraction of the original hit
     const baseReflectDamage = originalDamage * GAME_CONFIG.RUNE_THURS_RETURN_DAMAGE;
@@ -475,37 +497,44 @@ Combat.prototype.applyTyrsSacrifice = function(user, skill, isPlayer) {
 
     const healthCost = Math.floor(user.maxHealth * skill.healthCost);
     user.currentHealth = Math.max(0, user.currentHealth - healthCost);
-    this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP</span>!`, 'damage');
+    this.addLog(`${user.getDisplayName()} sacrifices ${healthCost} HP!`, 'damage');
 
-    STAGEABLE_ATTRIBUTES.forEach(stat => {
+    // The sacrifice knocked the user out: resolve it like any knockout, with the
+    // opponent on the battlefield as the enemy (Hagal, Deathless, knockout log).
+    // Revived by Deathless, it still gets the attributes; otherwise nothing more happens.
+    if (user.isKnockedOut()) {
+        const opponent = isPlayer ? this.enemyActive : this.playerActive;
+        this.resolveKnockout(opponent, user, !isPlayer);
+        if (user.isKnockedOut()) return effects;
+    }
+
+    const raised = STAGEABLE_ATTRIBUTES.filter(stat => {
         const result = user.modifyAttributeStage(stat, stages);
         if (result.changed !== 0) {
             this.logStageChange(user, stat, result.changed);
             effects.push({ stat, change: result.changed });
         }
+        return result.changed > 0;
     });
 
-    // Gifu: share the full buff (all 4 attributes) with allies
-    if (this.tryActivateGifu(user)) {
-        this.raiseAlliesStages(this.getTeam(isPlayer), [user], STAGEABLE_ATTRIBUTES, stages);
-    }
+    // Gifu: share every raised attribute with allies
+    this.shareRaiseWithGifu(user, raised, stages);
 
     return effects;
 };
 
 // Freya's Tears: heals and refills megin for the whole team for a few turns
-// (applied each turn in endTurn). Not stackable while already active.
+// (applied each turn in endTurn). Casting it while active does not stack: it
+// restarts the countdown at the full duration.
 Combat.prototype.applyFreyasTears = function(isPlayer) {
     const teamFlag = isPlayer ? 'playerTeamFreyasTears' : 'enemyTeamFreyasTears';
     const teamName = isPlayer ? 'your team' : 'the enemy team';
-
-    if (this[teamFlag] > 0) {
-        this.addLog(`Freya's Tears are already active for ${teamName}.`, 'status');
-        return [];
-    }
+    const renewed = this[teamFlag] > 0;
 
     this[teamFlag] = GAME_CONFIG.FREYASTEARS_TURNS;
-    this.addLog(`Freya's Tears rain down, replenishing ${teamName}.`, 'buff');
+    this.addLog(renewed
+        ? `Freya's Tears are renewed for ${teamName}.`
+        : `Freya's Tears rain down, replenishing ${teamName}.`, 'buff');
     return [{ type: 'freyastears', team: isPlayer ? 'player' : 'enemy', turns: GAME_CONFIG.FREYASTEARS_TURNS }];
 };
 

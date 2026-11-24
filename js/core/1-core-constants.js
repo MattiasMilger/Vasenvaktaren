@@ -95,8 +95,6 @@ const GAME_CONFIG = {
     FREYASTEARS_MEGIN_MULTIPLIER: 2,    // Multiplier applied to Megin refill while Freya's Tears is active
     FREYASTEARS_HEALTH_REFILL_PERCENT: 0.025, // % of max health restored per turn while Freya's Tears is active
 
-    INITIAL_BONUS: 1,       // Extra attribute stages granted on the first use of an ally buff skill per side (Smithing, Skald's Mead, Thick Coat)
-
     // =============================================================================
     // HEALING
     // =============================================================================
@@ -209,9 +207,8 @@ const GAME_CONFIG = {
     RUNE_BIND_DAGAZ_THURS_SKILL: 'Basic Strike',      // Skill used (megin cost is not spent)
     // Dagaz + Uruz: gains megin when entering the battlefield
     RUNE_BIND_DAGAZ_URUZ_MEGIN_PERCENT: 0.10,         // Fraction of max megin gained
-    // Wynja + Thurs: when Wynja blocks a debuff, lowers different random opponent attributes
-    RUNE_BIND_WYNJA_THURS_DEBUFF_COUNT: 2,            // Number of different opponent attributes lowered
-    RUNE_BIND_WYNJA_THURS_DEBUFF_STAGES: 1,           // Stages each attribute is lowered by
+    // Wynja + Thurs: uses a free skill on the enemy when this väsen's Wynja blocks a debuff
+    RUNE_BIND_WYNJA_THURS_SKILL: 'Basic Strike',      // Skill used (megin cost is not spent)
     // Fehu + proc rune: chance to trigger the partner rune's effect when hit by a potent hit
     RUNE_BIND_FEHU_PROC_CHANCE: 0.30,
     // Naudiz + proc rune: chance to trigger the partner rune's effect when dealing a weak hit
