@@ -35,7 +35,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 ### Runes
 
 - 24 equippable runes with unique effects
-- One rune slot (two at level 20)
+- Two rune slots on every väsen from level 1 (wild väsen in the first zone carry one rune; from the second zone on, wild väsen and guardians carry two)
 - Strategic combinations for different builds
 - Bindrunes: any two equipped runes form a bindrune; most pairs grant a small health bonus, while certain pairs unlock a hidden combined effect
 
@@ -89,6 +89,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 ### Tips
 
 - New players are guided by tip boxes and glowing buttons until their first tame and first guardian
+- Once a party väsen has a free rune slot and you own a rune nobody wears (usually your first found rune), glows lead you through equipping it: Runes tab, the rune, Equip to Väsen, then a party väsen. It waits for the new-player and Lore Book tutorials to finish, and ends at your first equip
 - Confirmation dialogues show reminder tips, such as Interrogate costing a turn or Auto Heal using up taming items
 - Disable Tips (in Settings) hides all tips and tutorial glows; confirmation dialogues still appear
 

@@ -160,6 +160,7 @@ class GameState {
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
         this.loreBookTutorialShown = false;
+        this.runeEquipTutorialShown = false;
         this.firstTameMessageShown = false;
         this.guardianHintShown = false;
         this.minimizedTips = new Set(); // ids of tips the player collapsed (see getTipHTML)
@@ -447,6 +448,9 @@ class GameState {
         } else {
             placeRuneInFirstFreeSlot(vasen, runeId, maxRunes);
         }
+
+        // Any successful equip completes the rune equip tutorial
+        this.runeEquipTutorialShown = true;
 
         this.saveGame();
         return { success: true, message: `Rune equipped to ${vasen.getDisplayName()}.` };
@@ -867,7 +871,7 @@ class GameState {
         }
 
         const level = getRandomLevelForZone(this.currentZone);
-        const vasen = createWildVasen(speciesName, level);
+        const vasen = createWildVasen(speciesName, level, getWildRuneCountForZone(this.currentZone));
         return { type: 'vasen', vasen };
     }
 
@@ -1072,6 +1076,7 @@ class GameState {
             firstCombatTutorialShown: this.firstCombatTutorialShown,
             firstExploreTutorialShown: this.firstExploreTutorialShown,
             loreBookTutorialShown: this.loreBookTutorialShown,
+            runeEquipTutorialShown: this.runeEquipTutorialShown,
             firstTameMessageShown: this.firstTameMessageShown,
             guardianHintShown: this.guardianHintShown,
             minimizedTips: Array.from(this.minimizedTips),
@@ -1166,6 +1171,11 @@ class GameState {
             this.loreBookTutorialShown = data.loreBookTutorialShown !== undefined
                 ? data.loreBookTutorialShown
                 : (data.unlockedLoreEntries || []).length > LORE_STANDARD_KEYS.length + 1;
+            // Saves from before this flag existed: a väsen already wearing two
+            // runes shows the player knows how to equip them
+            this.runeEquipTutorialShown = data.runeEquipTutorialShown !== undefined
+                ? data.runeEquipTutorialShown
+                : this.vasenCollection.some(v => v.runes.filter(r => r !== null).length >= 2);
             this.firstTameMessageShown = data.firstTameMessageShown || false;
             this.guardianHintShown = data.guardianHintShown || false;
             this.minimizedTips = new Set(data.minimizedTips || []);
@@ -1302,6 +1312,7 @@ class GameState {
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
         this.loreBookTutorialShown = false;
+        this.runeEquipTutorialShown = false;
         this.firstTameMessageShown = false;
         this.guardianHintShown = false;
         this.minimizedTips = new Set();

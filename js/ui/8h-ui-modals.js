@@ -403,9 +403,12 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
 
             case 'rune': {
                 const rune = RUNES[result.runeId];
+                const runeTip = this.isRuneEquipTutorialActive()
+                    ? this.getTipHTML('Your väsen have a free rune slot. Open the <strong>Runes</strong> tab to equip this rune.')
+                    : '';
                 this.showDialogue(
                     'Rune Discovered!',
-                    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${rune.symbol}</span> ${rune.name}</p><p class="rune-effect">${rune.effect}</p>`,
+                    `<p>${result.dialogue}</p><p class="rune-reveal"><span class="rune-symbol large">${rune.symbol}</span> ${rune.name}</p><p class="rune-effect">${rune.effect}</p>${runeTip}`,
                     confirmOrNextButtons(),
                     false,
                     null,

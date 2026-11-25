@@ -24,7 +24,8 @@
         this.tipsDisabled = disabled;
         localStorage.setItem('disableBeginnerTutorial', disabled ? 'true' : 'false');
         this.updateExploreButton();
-        this.updateLoreButtonGlow();
+        this.updateLoreButtonGlow(); // also refreshes the Runes tab glow
+        this.refreshCurrentTab();    // tip boxes inside the open tab
     };
 
     UIController.prototype.areTipsEnabled = function() {
@@ -590,9 +591,6 @@ achievementsHtml += '</div></div>';
         setText('guide-exp-participated', `${Math.round(GAME_CONFIG.EXP_PARTICIPATED_ON_FIELD * 100)}%`);
         setText('guide-exp-party', `${Math.round(GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED * 100)}%`);
 
-        // Runes (max level for 2 runes)
-        setText('guide-max-level-runes', GAME_CONFIG.TWO_RUNE_LEVEL);
-
         // Power & Damage
         setText('guide-damage-variance', `${Math.round(GAME_CONFIG.DAMAGE_RANGE_VARIANCE * 100)}%`);
 
@@ -609,9 +607,9 @@ achievementsHtml += '</div></div>';
         setText('guide-endless-heal', `${Math.round(GAME_CONFIG.ENDLESS_TOWER_HEAL_PERCENT * 100)}%`);
     };
 
-    // Generate Level Milestones HTML from SKILL_LEARN_LEVELS, GAME_CONFIG.TWO_RUNE_LEVEL and GAME_CONFIG.MAX_LEVEL.
-    // Lists which skill slot is learned at each level in SKILL_LEARN_LEVELS, plus the level
-    // at which a second rune slot is unlocked and the max level, sorted ascending by level.
+    // Generate Level Milestones HTML from SKILL_LEARN_LEVELS and GAME_CONFIG.MAX_LEVEL.
+    // Lists which skill slot is learned at each level in SKILL_LEARN_LEVELS, plus the
+    // max level, sorted ascending by level.
     UIController.prototype.generateLevelMilestonesHTML = function() {
         const milestones = [];
 
@@ -619,7 +617,6 @@ achievementsHtml += '</div></div>';
             milestones.push({ level, text: `Skill ${index + 1} learned` });
         });
 
-        milestones.push({ level: GAME_CONFIG.TWO_RUNE_LEVEL, text: 'Second Rune Slot unlocked' });
         milestones.push({ level: GAME_CONFIG.MAX_LEVEL, text: 'Max level' });
 
         milestones.sort((a, b) => a.level - b.level);

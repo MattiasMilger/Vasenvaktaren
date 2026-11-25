@@ -21,8 +21,13 @@ UIController.prototype.showLore = function() {
 UIController.prototype.updateLoreButtonGlow = function() {
     const btn = document.getElementById('lore-btn');
     if (!btn) return;
-    btn.classList.toggle('tutorial-blink',
-        !gameState.loreBookTutorialShown && !!gameState.latestLoreEntry && this.areTipsEnabled());
+    btn.classList.toggle('tutorial-blink', this.isLoreBookTutorialActive());
+    // The rune equip tutorial waits for this one, so refresh it too
+    this.updateRuneTabGlow();
+};
+
+UIController.prototype.isLoreBookTutorialActive = function() {
+    return !gameState.loreBookTutorialShown && !!gameState.latestLoreEntry && this.areTipsEnabled();
 };
 
 // Hide the lore modal and clear search state

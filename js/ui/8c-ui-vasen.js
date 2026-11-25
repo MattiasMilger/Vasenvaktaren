@@ -695,12 +695,6 @@ UIController.prototype.renderRuneSlots = function(vasen) {
         }
     }
 
-    if (maxSlots < 2) {
-        html += `<div class="rune-slot locked">
-            <span class="rune-placeholder">Locked</span>
-        </div>`;
-    }
-
     return html;
 };
 

@@ -18,6 +18,7 @@ UIController.prototype.switchTab = function(tabName) {
         this.tabContents[tabName].classList.add('active');
 
         this.currentTab = tabName;
+        this.updateRuneTabGlow();
 
         // Show the details panel only on the väsen tab
         if (this.vasenDetailsPanel) {

@@ -80,6 +80,9 @@ UIController.prototype.renderParty = function() {
     this._ensureAutoRunesButton();
     this._ensureAutoHealButton();
     this._ensureAutoTeamButton();
+
+    // Party or rune changes can start or end the rune equip tutorial
+    this.updateRuneTabGlow();
 };
 
 // Get (or create) the shared row that holds the auto action buttons below the party slots
@@ -262,6 +265,9 @@ UIController.prototype.autoEquipRunes = function() {
         // Max health follows the generic bindrune, which the new runes may form or break
         vasen.recalculateMaxHealth();
     });
+
+    // Equipping runes this way also completes the rune equip tutorial
+    gameState.runeEquipTutorialShown = true;
 
     gameState.saveGame();
     this.renderParty();

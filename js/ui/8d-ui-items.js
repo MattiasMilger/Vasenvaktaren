@@ -208,10 +208,13 @@ UIController.prototype.showHealVasenModal = function(itemId) {
             const isCorrectItem = vasen.species.tamingItem === itemId;
             const healPercent = isCorrectItem ? GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT : 0.4;
 
+            const isInParty = gameState.party.some(p => p && p.id === vasen.id);
+
             const vasenBtn = document.createElement('button');
             vasenBtn.className = 'heal-vasen-btn';
             vasenBtn.innerHTML = `
                 ${this.createStandardVasenCardHTML(vasen, false)}
+                ${isInParty ? '<span class="add-vasen-in-party-badge">In Party</span>' : ''}
             `;
             vasenBtn.onclick = () => {
                 modal.classList.remove('active');

@@ -538,19 +538,6 @@
     transform: none;
 }
 
-.rune-slot.locked {
-    opacity: 0.5;
-    cursor: not-allowed;
-    border-color: var(--border-color);
-    box-shadow: none;
-    animation: none;
-}
-
-.rune-slot.locked:hover {
-    background: var(--bg-card);
-    transform: none;
-}
-
 /* Subtle pulse animation for empty rune slots */
 @keyframes runeSlotPulse {
     0%, 100% {

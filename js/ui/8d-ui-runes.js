@@ -2,6 +2,40 @@
 // 8d-ui-runes.js - Rune Inventory Management
 // =============================================================================
 
+// =============================================================================
+// Rune equip tutorial: shown once the player owns a rune that no väsen wears
+// while a party väsen has a free rune slot (typically the first rune found
+// after the starter's own). It waits until the new-player tutorials and the
+// Lore Book glow are done, so only one tutorial glows at a time, and ends on
+// the first successful equip (gameState.runeEquipTutorialShown).
+// Glow path: Runes tab -> an unequipped rune -> Equip to Väsen -> a party
+// väsen with a free slot.
+// =============================================================================
+UIController.prototype.isRuneEquipTutorialActive = function() {
+    if (gameState.runeEquipTutorialShown || !this.areTipsEnabled()) return false;
+    if (gameState.inCombat) return false;
+    if (!gameState.firstCombatTutorialShown || !gameState.firstExploreTutorialShown) return false;
+    if (this.isLoreBookTutorialActive()) return false;
+    return !!this.getRuneTutorialRune() && gameState.party.some(v => this.hasFreeRuneSlot(v));
+};
+
+UIController.prototype.hasFreeRuneSlot = function(vasen) {
+    return !!vasen && vasen.runes.filter(r => r !== null).length < vasen.getRuneSlotCount();
+};
+
+// The rune the tutorial points at: the first owned rune (Futhark order) that
+// no väsen wears
+UIController.prototype.getRuneTutorialRune = function() {
+    return RUNE_LIST.find(runeId => gameState.collectedRunes.has(runeId) && !this.findRuneEquippedTo(runeId)) || null;
+};
+
+// Glow on the Runes tab button while the tutorial is active and the tab is not open
+UIController.prototype.updateRuneTabGlow = function() {
+    const btn = document.getElementById('tab-runes');
+    if (!btn) return;
+    btn.classList.toggle('tutorial-blink', this.currentTab !== 'runes' && this.isRuneEquipTutorialActive());
+};
+
 UIController.prototype.renderRuneInventory = function() {
     const container = this.tabContents.runes;
     container.innerHTML = '';
@@ -53,6 +87,14 @@ UIController.prototype.renderRuneInventory = function() {
         return RUNE_LIST.indexOf(a) - RUNE_LIST.indexOf(b);
     });
 
+    // Rune equip tutorial: a tip above the grid and a glow on the rune to equip
+    const tutorialRune = this.isRuneEquipTutorialActive() ? this.getRuneTutorialRune() : null;
+    if (tutorialRune) {
+        const tip = document.createElement('div');
+        tip.innerHTML = this.getTipHTML('Each väsen can wear <strong>two runes</strong>, and together they form a bindrune. Click a rune that is not equipped, then choose <strong>Equip to Väsen</strong>.');
+        container.appendChild(tip.firstElementChild);
+    }
+
     const grid = document.createElement('div');
     grid.className = 'rune-grid';
 
@@ -62,7 +104,7 @@ UIController.prototype.renderRuneInventory = function() {
         const isFavorite = gameState.favoriteRunes.has(runeId);
 
         const card = document.createElement('div');
-        card.className = 'rune-card';
+        card.className = runeId === tutorialRune ? 'rune-card tutorial-blink' : 'rune-card';
         card.innerHTML = `
             <button class="favorite-toggle ${isFavorite ? 'active' : ''}">${isFavorite ? '★' : '☆'}</button>
             <span class="rune-card-symbol">${rune.symbol}</span>
@@ -110,6 +152,7 @@ UIController.prototype.showRuneOptions = function(runeId) {
         [
             {
                 text: `${uiIcon('equip')}Equip to Väsen`,
+                class: !equippedTo && this.isRuneEquipTutorialActive() ? 'btn-primary tutorial-blink' : undefined,
                 callback: () => this.showRuneEquipToVasenModal(runeId)
             },
             {
@@ -205,6 +248,12 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
         return bInParty - aInParty;
     });
 
+    // Rune equip tutorial: point at the first party väsen with a free slot
+    // (the list is sorted party-first)
+    const tutorialTarget = this.isRuneEquipTutorialActive()
+        ? eligibleVasen.find(v => this.hasFreeRuneSlot(v) && gameState.party.some(p => p && p.id === v.id))
+        : null;
+
     if (eligibleVasen.length === 0) {
         vasenList.innerHTML = '<p class="empty-message">No Väsen in your collection.</p>';
     } else {
@@ -218,13 +267,14 @@ UIController.prototype.showRuneEquipToVasenModal = function(runeId) {
             const isInParty = gameState.party.some(p => p && p.id === vasen.id);
 
             const vasenBtn = document.createElement('button');
-            vasenBtn.className = `rune-to-vasen-btn ${hasThisRune ? 'current-owner' : ''}`;
+            vasenBtn.className = `rune-to-vasen-btn ${hasThisRune ? 'current-owner' : ''}${vasen === tutorialTarget ? ' tutorial-blink' : ''}`;
             vasenBtn.disabled = hasThisRune;
             vasenBtn.innerHTML = `
                 ${this.createStandardVasenCardHTML(vasen, false)}
                 <div class="rune-status-overlay">
-                    <span class="rune-status">${equippedCount}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}${isInParty ? '' : ''}</span>
+                    <span class="rune-status">${equippedCount}/${maxRunes} runes${hasThisRune ? ' (Current)' : ''}</span>
                 </div>
+                ${isInParty ? '<span class="add-vasen-in-party-badge">In Party</span>' : ''}
             `;
             if (!hasThisRune) {
                 vasenBtn.onclick = () => {

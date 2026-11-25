@@ -36,7 +36,7 @@ class VasenInstance {
         this.level = Math.min(Math.max(1, level), maxLevel);
         this.temperamentKey = (temperamentKey && TEMPERAMENTS[temperamentKey]) ? temperamentKey : getRandomTemperament();
         this.temperament = TEMPERAMENTS[this.temperamentKey];
-        this.runes = runes.slice(0, getRuneSlotCount(this.level));
+        this.runes = runes.slice(0, getRuneSlotCount());
 
         this.experience = 0;
 
@@ -164,9 +164,9 @@ class VasenInstance {
         this.currentMegin = refill ? this.maxMegin : Math.min(this.currentMegin, this.maxMegin);
     }
 
-    // Number of rune slots at the current level
+    // Number of rune slots (the same at every level)
     getRuneSlotCount() {
-        return getRuneSlotCount(this.level);
+        return getRuneSlotCount();
     }
     
     // Get megin refill per turn
@@ -448,15 +448,17 @@ function getRandomTemperament() {
     return TEMPERAMENT_LIST[Math.floor(Math.random() * TEMPERAMENT_LIST.length)];
 }
 
-// Create a wild väsen for encounters
-function createWildVasen(speciesName, level) {
+// Create a wild väsen for encounters, carrying numRunes runes (capped at the
+// rune slot count; see getWildRuneCountForZone for zone-based counts).
+// excludeRunes: optional Set of rune ids it must not get (e.g. runes already
+// worn by its teammates, so an enemy team never shares a rune)
+function createWildVasen(speciesName, level, numRunes = getRuneSlotCount(), excludeRunes = null) {
     const vasen = new VasenInstance(speciesName, level, null, [], true); // Mark as enemy
-
-    // Determine how many rune slots this väsen has
-    const numRunes = getRuneSlotCount(level);
+    numRunes = Math.min(numRunes, getRuneSlotCount());
 
     // Get the valid rune pool for this väsen and shuffle it
-    const validRunes = getValidRunesForVasen(vasen).slice();
+    const validRunes = getValidRunesForVasen(vasen)
+        .filter(runeId => !excludeRunes || !excludeRunes.has(runeId));
     shuffleInPlace(validRunes);
 
     // Assign up to numRunes unique runes from the valid pool

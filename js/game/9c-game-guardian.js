@@ -183,6 +183,13 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
 
         message += `<p><strong>${nextZone.name}</strong> unlocked!</p>`;
 
+        // Leaving the one-rune zones: enemies carry two runes from here on
+        if (ui.areTipsEnabled() &&
+            GAME_CONFIG.ENEMY_ONE_RUNE_ZONES.includes(gameState.currentZone) &&
+            !GAME_CONFIG.ENEMY_ONE_RUNE_ZONES.includes(nextZoneId)) {
+            message += ui.getTipHTML('From here on, enemy väsen equip <strong>two runes</strong>, and their runes form a bindrune just like yours. Fill both rune slots on your party to keep up.');
+        }
+
         // Award taming items from the next zone (except when unlocking Ginnungagap)
         if (nextZoneId !== 'ZONE7') {
             const nextZoneItems = getItemsForZone(nextZoneId);

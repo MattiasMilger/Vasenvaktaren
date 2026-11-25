@@ -16,7 +16,8 @@ const GAME_CONFIG = {
     // LEVEL & PROGRESSION
     // =============================================================================
     MAX_LEVEL: 30,
-    TWO_RUNE_LEVEL: 20,             // Level at which a Väsen unlocks a second rune slot
+    RUNE_SLOTS: 2,                  // Rune slots every Väsen has, from level 1
+    ENEMY_ONE_RUNE_ZONES: ['ZONE1'], // Zones whose wild väsen carry only one rune (gentle start)
     ENEMY_MAX_LEVEL: 999,
     STARTER_LEVEL: 10,
     BASE_LEVEL_UP_EXP: 55,          // Linear coefficient in the exp-to-level formula: floor(BASE_LEVEL_UP_EXP * level + LEVEL_UP_ACCELERATION * level²)
@@ -659,9 +660,9 @@ const ZONES = {
         guardian: {
             name: 'Ragnar',
             team: [
-            { species: 'Nattramn', level: 10, temperament: 'STRENGTH_HEALTH', runes: ['HAGAL'] },
-            { species: 'Bjara', level: 10, temperament: 'DURABILITY_MEGIN', runes: ['BJARKA'] },
-            { species: 'Gloson', level: 10, temperament: 'HEALTH_WISDOM', runes: ['PERTHO'] }
+            { species: 'Nattramn', level: 10, temperament: 'STRENGTH_HEALTH', runes: ['HAGAL', 'NAUDIZ'] },
+            { species: 'Bjara', level: 10, temperament: 'DURABILITY_MEGIN', runes: ['BJARKA', 'ALGIZ'] },
+            { species: 'Gloson', level: 10, temperament: 'HEALTH_WISDOM', runes: ['PERTHO', 'EIHWAZ'] }
             ],
             dialogue: {
                 challenge: 'I am the defender of the quiet folk. Disturbance is not tolerated. Prepare to leave this village.',
@@ -681,9 +682,9 @@ const ZONES = {
         guardian: {
             name: 'Hjördis',
             team: [
-                { species: 'Svartalv', level: 15, temperament: 'DEFENSE_DURABILITY', runes: ['GIFU'] },
-                { species: 'Mara', level: 15, temperament: 'WISDOM_DEFENSE', runes: ['URUZ'] },
-                { species: 'Fafner', level: 15, temperament: 'DEFENSE_HEALTH', runes: ['ANSUZ'] }
+                { species: 'Svartalv', level: 15, temperament: 'DEFENSE_DURABILITY', runes: ['GIFU', 'EIHWAZ'] },
+                { species: 'Mara', level: 15, temperament: 'WISDOM_DEFENSE', runes: ['URUZ', 'DAGAZ'] },
+                { species: 'Fafner', level: 15, temperament: 'DEFENSE_HEALTH', runes: ['ANSUZ', 'KAUNAN'] }
             ],
             dialogue: {
                 challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
@@ -812,9 +813,14 @@ function shuffleInPlace(array) {
     return array;
 }
 
-// Number of rune slots a väsen of the given level has
-function getRuneSlotCount(level) {
-    return level >= GAME_CONFIG.TWO_RUNE_LEVEL ? 2 : 1;
+// Number of rune slots a väsen has (the same at every level)
+function getRuneSlotCount() {
+    return GAME_CONFIG.RUNE_SLOTS;
+}
+
+// Number of runes a wild väsen met in the given zone is generated with
+function getWildRuneCountForZone(zoneKey) {
+    return GAME_CONFIG.ENEMY_ONE_RUNE_ZONES.includes(zoneKey) ? 1 : getRuneSlotCount();
 }
 
 function getRequiredExpForLevel(level) {
