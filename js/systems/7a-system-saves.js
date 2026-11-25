@@ -133,6 +133,7 @@ function deserializeWildEncounter(data) {
         const vasen = new VasenInstance(data.speciesName, data.level, data.temperamentKey, [], true);
         vasen.runes = (data.runes || []).filter(r => RUNES[r]);
         if (vasen.hasRune('URUZ')) vasen.recalculateMaxMegin();
+        vasen.recalculateMaxHealth(); // two runes may form the generic bindrune
         vasen.currentMegin = vasen.maxMegin;
         return vasen;
     } catch (e) {

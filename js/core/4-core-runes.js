@@ -511,9 +511,7 @@ const BIND_RUNES = [
     {
         runes: ['FEHU', 'WYNJA'],
         type: 'health_threshold_buff_all',
-        get effectText() {
-            return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or less, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per combat)`;
-        },
+        get effectText() { return healthThresholdBuffAllText(); },
         symbols: `${RUNES.FEHU.symbol}${RUNES.WYNJA.symbol}`,
         names: `${RUNES.FEHU.name} ${RUNES.WYNJA.name}`
     },
@@ -538,9 +536,7 @@ const BIND_RUNES = [
     {
         runes: ['HAGAL', 'NAUDIZ'],
         type: 'enemy_health_threshold_debuff_all',
-        get effectText() {
-            return `This väsen lowers all of an enemy's attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} when their health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or less (once per combat).`;
-        },
+        get effectText() { return enemyHealthThresholdDebuffAllText(); },
         symbols: `${RUNES.HAGAL.symbol}${RUNES.NAUDIZ.symbol}`,
         names: `${RUNES.HAGAL.name} ${RUNES.NAUDIZ.name}`
     },
@@ -599,36 +595,144 @@ const BIND_RUNES = [
         names: `${RUNES.WYNJA.name} ${RUNES.THURS.name}`
     },
 
+    // ── HAGAL + INGUZ ─────────────────────────────────────────────────────────
+    // Same effect as Hagal + Naudiz (shares its type, constants and once-per-combat
+    // flag): Inguz and Naudiz are both the runes that weaken the enemy.
+    {
+        runes: ['HAGAL', 'INGUZ'],
+        type: 'enemy_health_threshold_debuff_all',
+        get effectText() { return enemyHealthThresholdDebuffAllText(); },
+        symbols: `${RUNES.HAGAL.symbol}${RUNES.INGUZ.symbol}`,
+        names: `${RUNES.HAGAL.name} ${RUNES.INGUZ.name}`
+    },
+
+    // ── ODAL + WYNJA ──────────────────────────────────────────────────────────
+    // Same effect as Fehu + Wynja (shares its type, constants and once-per-combat
+    // flag): Fehu and Odal are both the runes of property and protected holdings.
+    {
+        runes: ['ODAL', 'WYNJA'],
+        type: 'health_threshold_buff_all',
+        get effectText() { return healthThresholdBuffAllText(); },
+        symbols: `${RUNES.ODAL.symbol}${RUNES.WYNJA.symbol}`,
+        names: `${RUNES.ODAL.name} ${RUNES.WYNJA.name}`
+    },
+
+    // ── URUZ + ANSUZ / URUZ + RAIDO ───────────────────────────────────────────
+    // The attacks the partner rune converts (convertedType: the skill type it
+    // turns into the other attribute) cost RUNE_BIND_URUZ_CONVERTED_COST_INCREASE
+    // more megin and deal RUNE_BIND_URUZ_CONVERTED_DAMAGE_BOOST more damage. Uruz's
+    // larger megin pool pays for the extra cost. Attacks that are not converted
+    // (e.g. Basic Strike, which is mixed) are not affected.
+    {
+        runes: ['URUZ', 'ANSUZ'],
+        type: 'converted_attack_boost',
+        convertRune: 'ANSUZ',
+        convertedType: ATTACK_TYPES.STRENGTH,
+        get effectText() { return convertedAttackBoostText('ANSUZ'); },
+        symbols: `${RUNES.URUZ.symbol}${RUNES.ANSUZ.symbol}`,
+        names: `${RUNES.URUZ.name} ${RUNES.ANSUZ.name}`
+    },
+    {
+        runes: ['URUZ', 'RAIDO'],
+        type: 'converted_attack_boost',
+        convertRune: 'RAIDO',
+        convertedType: ATTACK_TYPES.WISDOM,
+        get effectText() { return convertedAttackBoostText('RAIDO'); },
+        symbols: `${RUNES.URUZ.symbol}${RUNES.RAIDO.symbol}`,
+        names: `${RUNES.URUZ.name} ${RUNES.RAIDO.name}`
+    },
+
+    // ── GIFU + HAGAL ──────────────────────────────────────────────────────────
+    // Ally-side mirror of Hagal: when this väsen is knocked out, each of its
+    // conscious allies gets a random attribute raised (each rolls its own). Once
+    // per combat, tracked via the gifuHagalTriggered flag.
+    {
+        runes: ['GIFU', 'HAGAL'],
+        type: 'knockout_ally_buff',
+        get effectText() {
+            return `When this väsen is knocked out, each ally gets a random attribute raised by ${GAME_CONFIG.RUNE_BIND_GIFU_HAGAL_BUFF_STAGES} stage (once per combat)`;
+        },
+        symbols: `${RUNES.GIFU.symbol}${RUNES.HAGAL.symbol}`,
+        names: `${RUNES.GIFU.name} ${RUNES.HAGAL.name}`
+    },
+
+    // ── NAUDIZ + ODAL ─────────────────────────────────────────────────────────
+    // Neutral and weak hits deal RUNE_BIND_NAUDIZ_ODAL_DAMAGE_BOOST more damage
+    // whatever their megin cost. A hit Odal already boosts (low cost) is not
+    // boosted twice, and potent hits only get Odal's own low-cost bonus.
+    {
+        runes: ['NAUDIZ', 'ODAL'],
+        type: 'non_potent_odal',
+        get effectText() {
+            return `This väsen's neutral and weak hits deal ${Math.round(GAME_CONFIG.RUNE_BIND_NAUDIZ_ODAL_DAMAGE_BOOST * 100)}% more damage regardless of megin cost (does not stack with Odal's own bonus)`;
+        },
+        symbols: `${RUNES.NAUDIZ.symbol}${RUNES.ODAL.symbol}`,
+        names: `${RUNES.NAUDIZ.name} ${RUNES.ODAL.name}`
+    },
+
     // ── FEHU + PROC RUNE ──────────────────────────────────────────────────────
     // When this väsen is hit by a potent hit (Thurs reflections included), it
-    // has a chance to trigger the partner rune's effect, regardless of element.
-    ...['SOL', 'ISAZ', 'EIHWAZ', 'EHWAZ', 'ALGIZ', 'JERA', 'INGUZ'].map(procRune =>
+    // has a chance to trigger the partner rune's effect.
+    ...['JERA', 'INGUZ'].map(procRune =>
         makeProcBindRune('FEHU', procRune, 'potent_hit_proc', 'is hit by a potent hit', 'RUNE_BIND_FEHU_PROC_CHANCE')
     ),
 
     // ── NAUDIZ + PROC RUNE ────────────────────────────────────────────────────
     // Mirror of the Fehu pairs: when this väsen deals a weak hit (Thurs
     // reflections included), it has a chance to trigger the partner rune's effect.
-    ...['SOL', 'ISAZ', 'EIHWAZ', 'EHWAZ', 'ALGIZ', 'JERA'].map(procRune =>
+    ...['JERA'].map(procRune =>
         makeProcBindRune('NAUDIZ', procRune, 'weak_hit_proc', 'deals a weak hit', 'RUNE_BIND_NAUDIZ_PROC_CHANCE')
+    ),
+
+    // ── MANNAZ + PROC RUNE ────────────────────────────────────────────────────
+    // When this väsen uses a utility skill, it has a chance to trigger the
+    // partner rune's effect. Ansuz and Raido are the mirrored conversion runes,
+    // so they share the effect: Ansuz raises the wisdom side, Raido the strength side.
+    ...['ANSUZ', 'RAIDO'].map(procRune =>
+        makeProcBindRune('MANNAZ', procRune, 'utility_skill_proc', 'uses a utility skill', 'RUNE_BIND_MANNAZ_PROC_CHANCE')
     )
 ];
 
-// What each proc rune does when a Fehu or Naudiz bind rune triggers it. The
-// buff runes raise the same attributes as their own element proc, the heal
-// runes heal, and Inguz lowers a random attribute of the opponent. Amounts
-// come from the RUNE_BIND_PROC_* constants.
+// What each proc rune does when a Fehu, Naudiz or Mannaz bind rune triggers it.
+// Jera heals, Inguz lowers a random attribute of the opponent, and Ansuz/Raido
+// raise the attacking and defending attribute of their own side (Ansuz: wisdom
+// and durability, Raido: strength and defense). Amounts come from the
+// RUNE_BIND_PROC_* constants.
 const BIND_RUNE_PROC_EFFECTS = {
-    SOL:    { kind: 'buff', attributes: ['strength', 'wisdom'] },
-    ISAZ:   { kind: 'buff', attributes: ['wisdom', 'strength'] },
-    EIHWAZ: { kind: 'buff', attributes: ['defense', 'durability'] },
-    EHWAZ:  { kind: 'buff', attributes: ['defense', 'durability'] },
-    ALGIZ:  { kind: 'heal' },
     JERA:   { kind: 'heal' },
-    INGUZ:  { kind: 'debuff' }
+    INGUZ:  { kind: 'debuff' },
+    ANSUZ:  { kind: 'buff', attributes: ['wisdom', 'durability'] },
+    RAIDO:  { kind: 'buff', attributes: ['strength', 'defense'] }
 };
 
-// Builds a Fehu/Naudiz-style bind rune: `triggerText` describes when it rolls,
+// ── GENERIC BIND RUNE ────────────────────────────────────────────────────────
+// Any two equipped runes that have no bindrune of their own form the generic
+// bindrune instead (see getActiveBindRunes), so every pair does something and
+// the defined bindrunes are the ones worth finding. It is not part of BIND_RUNES:
+// it never makes a rune eligible (getBindRuneEligibleRunes) and is never offered
+// as a pair by Auto Equip Runes.
+const GENERIC_BIND_RUNE = {
+    type: 'generic_health',
+    isGeneric: true,
+    get effectText() {
+        return `This väsen has ${Math.round(GAME_CONFIG.RUNE_BIND_GENERIC_HEALTH_BONUS * 100)}% more health`;
+    }
+};
+
+// Effect texts shared by bindrunes that have the same effect
+function enemyHealthThresholdDebuffAllText() {
+    return `This väsen lowers all of an enemy's attribute stages by ${GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES} when their health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD * 100)}% or less (once per combat).`;
+}
+
+function healthThresholdBuffAllText() {
+    return `When this väsen's health falls to ${Math.round(GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD * 100)}% or less, raises all attribute stages by ${GAME_CONFIG.RUNE_BIND_FEHU_WYNJA_BUFF_STAGES} (once per combat)`;
+}
+
+function convertedAttackBoostText(convertRune) {
+    return `This väsen's attacks converted by ${RUNES[convertRune].name} cost ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_CONVERTED_COST_INCREASE * 100)}% more megin and deal ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_CONVERTED_DAMAGE_BOOST * 100)}% more damage`;
+}
+
+// Builds a Fehu/Naudiz/Mannaz-style bind rune: `triggerText` describes when it rolls,
 // `chanceKey` names the GAME_CONFIG proc chance, and `procRune` decides what happens.
 function makeProcBindRune(triggerRune, procRune, type, triggerText, chanceKey) {
     return {
@@ -655,22 +759,52 @@ function makeProcBindRune(triggerRune, procRune, type, triggerText, chanceKey) {
 
 // Returns an array of active bind rune definitions for a given VasenInstance.
 // A bind rune is active only when the väsen has BOTH runes in the pair equipped.
+// Two equipped runes with no bindrune of their own form the generic bindrune
+// (GENERIC_BIND_RUNE) instead, so a väsen with two runes always has one.
 // The returned objects are shallow copies with `symbols` and `names` recomputed
 // to follow the order the runes actually appear in vasen.runes (i.e. the order
 // the player equipped them), rather than the fixed order baked into BIND_RUNES.
 function getActiveBindRunes(vasen) {
-    if (!vasen || !vasen.runes || vasen.runes.length < 2) return [];
-    return BIND_RUNES
-        .filter(br => br.runes.every(r => vasen.runes.includes(r)))
-        .map(br => {
-            // Order the pair's rune IDs the same way they appear in vasen.runes
-            const orderedIds = vasen.runes.filter(r => br.runes.includes(r));
-            return {
-                ...br,
-                symbols: orderedIds.map(id => RUNES[id].symbol).join(''),
-                names: orderedIds.map(id => RUNES[id].name).join(' ')
-            };
-        });
+    if (!vasen || !vasen.runes) return [];
+    // Empty slots are stored as null placeholders: only real runes count
+    const equipped = vasen.runes.filter(r => r && RUNES[r]);
+    if (equipped.length < 2) return [];
+
+    const withEquipOrder = br => {
+        // Order the pair's rune IDs the same way they appear in vasen.runes
+        const orderedIds = equipped.filter(r => br.runes.includes(r));
+        return {
+            ...br,
+            symbols: orderedIds.map(id => RUNES[id].symbol).join(''),
+            names: orderedIds.map(id => RUNES[id].name).join(' ')
+        };
+    };
+
+    const active = BIND_RUNES.filter(br => br.runes.every(r => equipped.includes(r)));
+    if (active.length === 0) {
+        return [withEquipOrder({ ...GENERIC_BIND_RUNE, runes: equipped.slice(0, 2) })];
+    }
+    return active.map(withEquipOrder);
+}
+
+// Returns the bindrune two runes form when equipped together: their defined
+// bindrune, or the generic one (with `runes` set) when they have none.
+function getBindRuneForPair(runeA, runeB) {
+    const br = BIND_RUNES.find(b => b.runes.includes(runeA) && b.runes.includes(runeB));
+    return br || { ...GENERIC_BIND_RUNE, runes: [runeA, runeB] };
+}
+
+// Returns true if the väsen's two runes form the generic bindrune (+max health).
+function hasGenericBindRune(vasen) {
+    return getActiveBindRunes(vasen).some(br => br.type === 'generic_health');
+}
+
+// Returns the active Uruz + Ansuz / Uruz + Raido bind rune if it applies to this
+// skill (the skill is one the partner rune converts), or null.
+function getConvertedAttackBindRune(vasen, skillName) {
+    const br = getActiveBindRuneOfType(vasen, 'converted_attack_boost');
+    const skill = ABILITIES[skillName];
+    return br && skill && skill.type === br.convertedType ? br : null;
 }
 
 // Returns the active elemental conversion bind rune for a given VasenInstance
@@ -700,7 +834,7 @@ function hasLowCostRandomBuffBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'low_cost_random_buff');
 }
 
-// Returns true if the väsen has the FEHU + WYNJA health_threshold_buff_all bind rune active.
+// Returns true if the väsen has the FEHU + WYNJA or ODAL + WYNJA health_threshold_buff_all bind rune active.
 function hasHealthThresholdBuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'health_threshold_buff_all');
 }
@@ -710,7 +844,7 @@ function hasThursMeginGainBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'thurs_megin_gain');
 }
 
-// Returns true if the väsen has the HAGAL + NAUDIZ enemy_health_threshold_debuff_all bind rune active.
+// Returns true if the väsen has the HAGAL + NAUDIZ or HAGAL + INGUZ enemy_health_threshold_debuff_all bind rune active.
 function hasEnemyHealthThresholdDebuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enemy_health_threshold_debuff_all');
 }
@@ -739,12 +873,16 @@ function getActiveBindRuneOfType(vasen, type) {
 //   - INGUZ + DAGAZ: always viable.
 //   - JERA + ODAL: väsen has at least one skill (including utility skills)
 //     costing RUNE_ODAL_COST_THRESHOLD megin or less.
-//   - FEHU + WYNJA: always viable.
+//   - FEHU + WYNJA, ODAL + WYNJA: always viable.
 //   - URUZ + THURS: always viable.
-//   - HAGAL + NAUDIZ: always viable.
+//   - HAGAL + NAUDIZ, HAGAL + INGUZ: always viable.
 //   - DAGAZ + JERA, DAGAZ + THURS, DAGAZ + URUZ, WYNJA + THURS: always viable.
-//   - FEHU + proc rune, NAUDIZ + proc rune: always viable (the proc ignores
-//     the partner rune's element).
+//   - FEHU + proc rune, NAUDIZ + proc rune: always viable.
+//   - MANNAZ + proc rune (ANSUZ, RAIDO): väsen has at least one utility skill.
+//   - URUZ + ANSUZ / URUZ + RAIDO: väsen has at least one attack the partner
+//     rune converts (Ansuz: a strength attack, Raido: a wisdom attack).
+//   - GIFU + HAGAL, NAUDIZ + ODAL: always viable.
+// The generic bindrune is not in BIND_RUNES and never makes a rune eligible.
 // =============================================================================
 function getBindRuneEligibleRunes(vasen) {
     const eligible = new Set();
@@ -753,10 +891,12 @@ function getBindRuneEligibleRunes(vasen) {
 
     const attackElements = new Set();
     attackElements.add(vasen.species.element); // Basic Strike always uses own element
+    const attackTypes = new Set(); // types of the väsen's attacks (strength, wisdom, mixed)
     availableSkills.forEach(skillName => {
         const skill = ABILITIES[skillName];
-        if (!skill) return;
-        if (skill.type !== ATTACK_TYPES.UTILITY && skill.element) {
+        if (!skill || skill.type === ATTACK_TYPES.UTILITY) return;
+        attackTypes.add(skill.type);
+        if (skill.element) {
             attackElements.add(skill.element);
         }
     });
@@ -790,19 +930,27 @@ function getBindRuneEligibleRunes(vasen) {
             case 'low_cost_random_buff': // JERA + ODAL
                 viable = hasLowCostSkill;
                 break;
-            case 'health_threshold_buff_all': // FEHU + WYNJA
+            case 'health_threshold_buff_all': // FEHU + WYNJA, ODAL + WYNJA
                 viable = true;
                 break;
             case 'thurs_megin_gain': // URUZ + THURS
                 viable = true;
                 break;
-            case 'enemy_health_threshold_debuff_all': // HAGAL + NAUDIZ
+            case 'utility_skill_proc': // MANNAZ + proc rune
+                viable = hasUtilitySkill;
+                break;
+            case 'converted_attack_boost': // URUZ + ANSUZ, URUZ + RAIDO
+                viable = attackTypes.has(br.convertedType);
+                break;
+            case 'enemy_health_threshold_debuff_all': // HAGAL + NAUDIZ, HAGAL + INGUZ
             case 'dagaz_extended':                    // DAGAZ + JERA
             case 'enter_battlefield_strike':          // DAGAZ + THURS
             case 'enter_battlefield_megin':           // DAGAZ + URUZ
             case 'wynja_block_strike':                // WYNJA + THURS
-            case 'potent_hit_proc':                   // FEHU + proc rune (any element)
-            case 'weak_hit_proc':                     // NAUDIZ + proc rune (any element)
+            case 'potent_hit_proc':                   // FEHU + proc rune
+            case 'weak_hit_proc':                     // NAUDIZ + proc rune
+            case 'knockout_ally_buff':                // GIFU + HAGAL
+            case 'non_potent_odal':                   // NAUDIZ + ODAL
                 viable = true;
                 break;
             default:

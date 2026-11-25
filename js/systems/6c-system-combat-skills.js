@@ -59,6 +59,7 @@ Combat.prototype.executeSkill = function(attacker, defender, skillName, isPlayer
         // procs: a Mannaz or Jera heal would otherwise bring it back
         if (!attacker.isKnockedOut()) {
             this.applyUtilityRuneEffects(attacker, skill, isPlayer, result);
+            this.tryUtilityProcBindRune(attacker);
         }
         this.tryTrollTheft(attacker, defender, isPlayer);
 
@@ -160,6 +161,10 @@ Combat.prototype.resolveKnockout = function(attacker, defender, isPlayer) {
             });
         }
     }
+
+    // Bind Rune - Gifu + Hagal: the fallen väsen's allies each get a random
+    // attribute raised (also triggers BEFORE the revive check, like Hagal)
+    this.tryGifuHagalAllyBuff(defender, !isPlayer);
 
     // Vålnad family passive: Deathless - attempt to revive
     const revived = this.applyFamilyPassive('onKnockout', { vasen: defender, isPlayer: !isPlayer });
@@ -363,6 +368,9 @@ Combat.prototype.calculateDamage = function(attacker, defender, skillName) {
         element: skillElement,
         bindRuneEleConverted: bindRuneEleConverted,
         bindRuneUseBestStat: bindRuneUseBestStat && (useStrength || useWisdom || skill.type === ATTACK_TYPES.MIXED),
+        // Uruz + Ansuz / Uruz + Raido and Naudiz + Odal changed this hit's damage
+        bindRuneConvertedAttack: getConvertedAttackBindRune(attacker, skillName) !== null,
+        bindRuneNaudizOdal: this.naudizOdalApplies(attacker, skillName, matchup),
         // Dagaz + Jera: the Dagaz bonus applied only because of the extra rounds
         bindRuneDagazExtended: attacker.hasRune('DAGAZ') && !attacker.combatFlags.isFirstRound && attacker.combatFlags.dagazBonusRoundsLeft > 0
     };
@@ -379,9 +387,18 @@ Combat.prototype.getDamageModifier = function(attacker, defender, skillName, ski
         damageMod += GAME_CONFIG.RUNE_ELEMENT_DAMAGE_BOOST;
     }
 
-    // Odal: low cost bonus
+    // Odal: low cost bonus. Naudiz + Odal: neutral and weak hits Odal alone
+    // would not boost get the bind rune's bonus instead (never both).
     if (attacker.hasRune('ODAL') && attacker.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
         damageMod += GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST;
+    } else if (this.naudizOdalApplies(attacker, skillName, matchup)) {
+        damageMod += GAME_CONFIG.RUNE_BIND_NAUDIZ_ODAL_DAMAGE_BOOST;
+    }
+
+    // Uruz + Ansuz / Uruz + Raido: attacks the partner rune converts hit harder
+    // (their higher megin cost is applied in VasenInstance.getSkillMeginCost)
+    if (getConvertedAttackBindRune(attacker, skillName)) {
+        damageMod += GAME_CONFIG.RUNE_BIND_URUZ_CONVERTED_DAMAGE_BOOST;
     }
 
     // Dagaz: first round bonus (Dagaz + Jera: lasts RUNE_BIND_DAGAZ_JERA_ROUNDS rounds)
@@ -400,6 +417,14 @@ Combat.prototype.getDamageModifier = function(attacker, defender, skillName, ski
     }
 
     return damageMod;
+};
+
+// Bind Rune - Naudiz + Odal: true if this hit gets the bind rune's bonus, i.e. it
+// is a neutral or weak hit that Odal's own low-cost bonus does not already cover
+Combat.prototype.naudizOdalApplies = function(attacker, skillName, matchup) {
+    return matchup !== 'POTENT'
+        && attacker.getSkillMeginCost(skillName) > GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD
+        && getActiveBindRuneOfType(attacker, 'non_potent_odal') !== null;
 };
 
 // Skill power for this hit, including the conditional bonuses of skills that

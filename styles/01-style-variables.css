@@ -68,6 +68,13 @@
     --font-size-2xl: 1.75rem;
     --font-size-3xl: 2.25rem;
 
+    /* Card chips: the väsen badges (element, rarity, family, In Party), the
+       Description chip and the rune pill all share one size, so they line up
+       on every card. Compact cards (party slots) override these three. */
+    --chip-height: 22px;
+    --chip-font-size: var(--font-size-xs);
+    --chip-padding-x: 8px;
+
     /* Font Weights */
     --font-weight-normal: 400;
     --font-weight-medium: 500;

@@ -112,6 +112,15 @@ Combat.prototype.tryHitProcBindRunes = function(hitter, target, matchup) {
     }
 };
 
+// Bind Rune - Mannaz + proc rune (Ansuz, Raido): after this väsen uses a utility
+// skill, roll its Mannaz pair ('utility_skill_proc'). Called only while the
+// user is still standing.
+Combat.prototype.tryUtilityProcBindRune = function(vasen) {
+    this.tryHitProcBindRune(vasen, null, 'utility_skill_proc', GAME_CONFIG.RUNE_BIND_MANNAZ_PROC_CHANCE);
+};
+
+// Rolls the proc bind rune of `type` on `vasen` and applies the partner rune's
+// effect (BIND_RUNE_PROC_EFFECTS). Shared by the Fehu, Naudiz and Mannaz pairs.
 Combat.prototype.tryHitProcBindRune = function(vasen, opponent, type, chance) {
     if (vasen.isKnockedOut()) return;
     const br = getActiveBindRuneOfType(vasen, type);
@@ -328,6 +337,41 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
             this.logBindRuneActivated(attacker, br);
         }
     }
+
+    // Bind Rune - Uruz + Ansuz / Uruz + Raido: a converted attack dealt more damage
+    if (damageResult.bindRuneConvertedAttack) {
+        const br = getActiveBindRuneOfType(attacker, 'converted_attack_boost');
+        if (br) {
+            this.logBindRuneActivated(attacker, br);
+        }
+    }
+
+    // Bind Rune - Naudiz + Odal: a neutral or weak hit got the bonus
+    if (damageResult.bindRuneNaudizOdal) {
+        const br = getActiveBindRuneOfType(attacker, 'non_potent_odal');
+        if (br) {
+            this.logBindRuneActivated(attacker, br);
+        }
+    }
+};
+
+// Bind Rune - Gifu + Hagal: when `vasen` is knocked out, each conscious ally on
+// its team gets its own random attribute raised (once per combat). Called from
+// resolveKnockout before the Deathless revive check, like Hagal itself.
+// vasenIsPlayer: whether the knocked out väsen is on the player's side.
+Combat.prototype.tryGifuHagalAllyBuff = function(vasen, vasenIsPlayer) {
+    const br = getActiveBindRuneOfType(vasen, 'knockout_ally_buff');
+    if (!br || vasen.combatFlags.gifuHagalTriggered) return;
+
+    const allies = this.getTeam(vasenIsPlayer).filter(ally => ally && ally !== vasen && !ally.isKnockedOut());
+    if (allies.length === 0) return; // no one left to receive the gift
+
+    vasen.combatFlags.gifuHagalTriggered = true;
+    this.logBindRuneActivated(vasen, br);
+    allies.forEach(ally => {
+        const stat = randomAttribute();
+        this.logStageChange(ally, stat, ally.modifyAttributeStage(stat, GAME_CONFIG.RUNE_BIND_GIFU_HAGAL_BUFF_STAGES).changed);
+    });
 };
 
 // =============================================================================

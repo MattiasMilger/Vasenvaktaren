@@ -356,13 +356,16 @@
 .rarity-badge,
 .party-badge,
 .family-badge {
-    display: inline-block;
-    padding: 2px 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--chip-height);    /* shared card chip size (01-style-variables.css) */
+    padding: 0 var(--chip-padding-x);
     border: 2px solid transparent; /* all badges reserve border space - rarity/family override color */
     border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-xs);
+    font-size: var(--chip-font-size);
     font-weight: 500;              /* consistent weight across all badge types */
-    line-height: 1.4;              /* explicit - prevents height variation from parent inheritance */
+    line-height: 1;                /* height comes from --chip-height, not the text */
     vertical-align: middle;        /* align consistently with surrounding text */
     white-space: nowrap;           /* never wrap badge text */
     box-sizing: border-box;
@@ -539,12 +542,15 @@
     align-items: center;
     gap: 4px;
     margin-left: var(--spacing-sm);
-    padding: 2px 10px;
+    height: var(--chip-height);    /* shared card chip size (01-style-variables.css) */
+    padding: 0 var(--chip-padding-x);
+    box-sizing: border-box;
+    line-height: 1;
     vertical-align: middle;
     border: 1px solid color-mix(in srgb, var(--color-white) 45%, transparent);
     border-radius: 999px;
     background: color-mix(in srgb, var(--color-white) 8%, var(--bg-tertiary));
-    font-size: var(--font-size-xs);
+    font-size: var(--chip-font-size);
     font-weight: 600;
     color: var(--text-primary);
     cursor: pointer;
@@ -557,57 +563,64 @@
     background: color-mix(in srgb, var(--color-white) 16%, var(--bg-tertiary));
 }
 
-/* Smaller on the compact party slot cards */
+/* Party slot cards: less space next to the level (size comes from the
+   compact chip variables on .party-vasen, 08-style-party.css) */
 .party-vasen-level .lore-chip {
     margin-left: var(--spacing-xs);
-    padding: 0 7px;
-    font-size: 0.65rem;
     gap: 3px;
 }
 
-/* Bindrune: one soft rounded pill holding its runes, ending in a gold-tinted
-   bindrune segment (see getRunesTextHTML), so the runes read as bound together.
-   Combat cards add chip styling on top (10-style-combat.css). */
-.bindrune-group {
+/* ── RUNE PILL ── a väsen's equipped runes on every card (party, collection,
+   combat, pickers): one rounded pill, one segment per rune, rune symbols in
+   gold. The whole pill is one button that opens toggleRunePillPopup (each rune,
+   plus the bindrune when there are two). See getRunesTextHTML. */
+.rune-pill {
     display: inline-flex;
     align-items: stretch;
     vertical-align: middle;
-    border: 1px solid color-mix(in srgb, var(--accent-gold) 35%, transparent);
+    height: var(--chip-height);    /* shared card chip size (01-style-variables.css) */
+    box-sizing: border-box;
+    line-height: 1;
+    border: 1px solid color-mix(in srgb, var(--accent-gold) 55%, transparent);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-gold) 5%, transparent);
+    background: var(--bg-tertiary);
     overflow: hidden;
+    font-size: var(--chip-font-size);
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s, background 0.2s;
 }
 
-.bindrune-group > * {
+.rune-pill:hover {
+    border-color: var(--accent-gold);
+    background: color-mix(in srgb, var(--accent-gold) 12%, var(--bg-tertiary));
+}
+
+.rune-pill-segment {
     display: inline-flex;
     align-items: center;
-    padding: 0 4px;
+    gap: 4px;
+    padding: 0 var(--chip-padding-x);
 }
 
-.bindrune-group > :first-child {
-    padding-left: 8px;
+.rune-pill-segment + .rune-pill-segment {
+    border-left: 1px solid color-mix(in srgb, var(--accent-gold) 40%, transparent);
 }
 
-.bindrune-group > :last-child {
-    padding-right: 8px;
-    margin-left: 2px;
-}
-
-.bindrune-symbol {
-    color: var(--text-secondary);
-    font-weight: var(--font-weight-bold);
-}
-
-.clickable-keyword.bindrune-keyword {
+/* Rune symbols are gold everywhere: pill, popup and the details panel slots */
+.rune-pill-symbol,
+.rune-popup-symbol {
     color: var(--accent-gold);
-    background: color-mix(in srgb, var(--accent-gold) 16%, transparent);
-    text-shadow: none;
 }
 
-.clickable-keyword.bindrune-keyword:hover {
-    color: var(--accent-gold);
-    background: color-mix(in srgb, var(--accent-gold) 28%, transparent);
-    text-shadow: none;
+/* Rune pill popup (toggleRunePillPopup): divider above the bindrune */
+.rune-popup-divider {
+    margin: 6px 0;
+    border: none;
+    border-top: 1px solid var(--border-color);
 }
 
 .clickable-temperament:hover,

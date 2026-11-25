@@ -583,46 +583,36 @@
     line-height: 1.3;
 }
 
-/* Bind rune effect text - shown under the second rune slot in inventory
-   and inside the second rune's collapsible body in combat cards.
-   White, same as a single rune's own effect text
-   (see .rune-slot .rune-effect). */
-/* Rune slots whose runes form an active bindrune: gold border, same as the
-   bindrune box below them */
-.rune-slot.filled.bound {
+/* Filled rune slots: same gold border as the rune pill on the cards
+   (.rune-pill, 12-style-badges.css), rune symbol in gold */
+.rune-slot.filled {
+    border-color: color-mix(in srgb, var(--accent-gold) 55%, transparent);
+}
+
+.rune-slot.filled:hover {
     border-color: var(--accent-gold);
 }
 
-/* Active bindrune: its own gold box under the rune slots */
+/* Bindrune of the two equipped runes, under the slots: same gold border as
+   the slots, worded like the rune pill popup ("ᚦᚨ Bindrune" + effect) */
 .rune-bind-effect {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     margin-top: var(--spacing-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
-    border: 2px solid var(--accent-gold);
+    border: 2px solid color-mix(in srgb, var(--accent-gold) 55%, transparent);
     border-radius: var(--border-radius-sm);
-    background: color-mix(in srgb, var(--accent-gold) 10%, var(--bg-card));
+    background: var(--bg-card);
     text-align: center;
     font-size: var(--font-size-xs);
     line-height: 1.3;
 }
 
-.rune-bind-header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    gap: 0 var(--spacing-sm);
-    margin-bottom: 2px;
-}
-
 .rune-bind-label {
-    color: var(--accent-gold);
+    color: var(--text-primary);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
-}
-
-.rune-bind-source {
-    color: var(--text-muted);
 }
 
 .rune-bind-desc {

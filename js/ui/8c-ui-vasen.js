@@ -673,17 +673,15 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     const maxSlots = vasen.getRuneSlotCount();
     let html = '';
 
-    // Runes that form an active bindrune get a gold border, matching the
-    // bindrune box under the slots, so the pair reads as bound together
-    const boundRunes = new Set(getActiveBindRunes(vasen).flatMap(br => br.runes));
-
+    // Filled slots use the rune pill's look (gold border and gold symbol), so a
+    // rune reads the same here as on every card
     for (let i = 0; i < maxSlots; i++) {
         const runeId = vasen.runes[i];
         if (runeId && RUNES[runeId]) {
             const rune = RUNES[runeId];
             html += `
-                <div class="rune-slot filled${boundRunes.has(runeId) ? ' bound' : ''}" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
-                    <span class="rune-symbol">${rune.symbol}</span>
+                <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
+                    <span class="rune-symbol rune-pill-symbol">${rune.symbol}</span>
                     <span class="rune-name">${rune.name}</span>
                     <span class="rune-effect">${rune.effect}</span>
                 </div>
@@ -706,16 +704,12 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     return html;
 };
 
-// Render the active bindrune(s) as a gold box below the rune slots (whose bound
-// runes get a matching gold border): bindrune symbols + name, the two runes it
-// is made of, and its effect.
+// Render the bindrune of the väsen's two runes below the rune slots, worded
+// like the bindrune part of the rune pill popup: "ᚦᚨ Bindrune" and its effect.
 UIController.prototype.renderBindRuneEffectText = function(vasen) {
     return getActiveBindRunes(vasen).map(br => `
         <div class="rune-bind-effect">
-            <div class="rune-bind-header">
-                <span class="rune-bind-label">${br.symbols} Bindrune</span>
-                <span class="rune-bind-source">${br.runes.filter(id => RUNES[id]).map(id => RUNES[id].name).join(' + ')}</span>
-            </div>
+            <span class="rune-bind-label"><span class="rune-pill-symbol">${br.symbols}</span> Bindrune</span>
             <span class="rune-bind-desc">${br.effectText}</span>
         </div>
     `).join('');

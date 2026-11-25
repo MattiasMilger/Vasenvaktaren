@@ -1235,11 +1235,12 @@ button,
         margin-top: var(--spacing-xs);
     }
 
-    .combatant-panel .element-badge,
-    .combatant-panel .rarity-badge,
-    .combatant-panel .family-badge {
-        font-size: 0.7rem;
-        padding: 0 5px;
+    /* Compact card chips on small combat cards: badges, Description chip and
+       rune pill shrink together */
+    .combatant-panel {
+        --chip-height: 20px;
+        --chip-font-size: 0.7rem;
+        --chip-padding-x: 5px;
     }
 
     .combatant-attributes {

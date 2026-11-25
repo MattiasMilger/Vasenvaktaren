@@ -134,6 +134,10 @@
     align-items: center;
     gap: var(--spacing-xs);
     padding: var(--spacing-xs);
+    /* Compact card chips: badges, Description chip and rune pill shrink together */
+    --chip-height: 20px;
+    --chip-font-size: 0.7rem;
+    --chip-padding-x: 7px;
 }
 
 .party-vasen-img {

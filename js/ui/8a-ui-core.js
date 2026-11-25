@@ -67,7 +67,7 @@ const UI_ICONS = {
     permadeath:  '<path d="m12.5 17-.5-1-.5 1h1z"/><path d="M15 22a1 1 0 0 0 1-1v-1a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20v1a1 1 0 0 0 1 1z"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="12" r="1"/>',
     weakHealing: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="m12 13-1-1 2-2-3-3 2-2"/>',
     lostRunes:   '<path d="M10 3v7"/><path d="M10 13v8"/><path d="m10 8 7-4.5"/><path d="m10 15 7-4.5"/><path d="m7 12 6-1"/>',
-    standard:    '<path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/>', // the world tree, standing (vs. Ragnarök's fire)
+    standard:    '<path d="M12 22V4M12 18c0 2-2.5 3.5-6 3.5M12 18c0 2 2.5 3.5 6 3.5M12 14c-2-1.5-4-2.5-6.5-2.5M12 14c2-1.5 4-2.5 6.5-2.5M12 10c-1-1.5-2.2-2.7-3.8-3.5M12 10c1-1.5 2.2-2.7 3.8-3.5"/><path d="M4.5 13a7.5 9 0 0 1 15 0"/>', // Yggdrasil: trunk, mirrored branches and roots under a crown, standing (vs. Ragnarök's fire)
     ragnarok:    '<path d="M12 22c4.5 0 7.5-3 7.5-7 0-3.5-2-6-4-8 0 2.5-1 4-2.5 4.5C13.5 7 12 4 9 2c.5 3-1 5.5-2.5 7.5S4.5 13 4.5 15c0 4 3 7 7.5 7z"/><path d="M12 22c-2 0-3.2-1.4-3.2-3.2 0-1.6 1.2-3 2.2-4 .3 1 .8 1.5 1.5 1.7.2-1.2.8-2.2 1.7-3 .9 1.3 1.3 2.6 1.3 4.2 0 2.5-1.5 4.3-3.5 4.3z"/>'
 };
 
@@ -668,43 +668,39 @@ UIController.prototype.getRuneTextHTML = function(runeId) {
     return `<span class="clickable-keyword rune-keyword" onclick="toggleRunePopup(this, event, '${runeId}')">${rune.symbol} ${rune.name}</span>`;
 };
 
-function toggleBindRunePopup(element, event, runeA, runeB) {
+// Popup for a väsen's rune pill: each equipped rune and its effect, and when it
+// has two runes, the bindrune they form (a defined one, or the generic one).
+function toggleRunePillPopup(element, event, runeA, runeB) {
     toggleBodyPopup(element, event, () => {
-        const br = BIND_RUNES.find(b => b.runes.includes(runeA) && b.runes.includes(runeB));
-        if (!br || !RUNES[runeA] || !RUNES[runeB]) return '';
-        const symbols = RUNES[runeA].symbol + RUNES[runeB].symbol;
-        return `<p><strong>${symbols} Bindrune</strong> (${RUNES[runeA].name} + ${RUNES[runeB].name})<br>${br.effectText}</p>`;
-    }, 260);
+        const ids = [runeA, runeB].filter(id => id && RUNES[id]);
+        if (ids.length === 0) return '';
+        const runeRows = ids.map(id => `<p><strong><span class="rune-popup-symbol">${RUNES[id].symbol}</span> ${RUNES[id].name}</strong><br>${RUNES[id].effect}</p>`).join('');
+        if (ids.length < 2) return runeRows;
+        const br = getBindRuneForPair(ids[0], ids[1]);
+        return `
+            ${runeRows}
+            <hr class="rune-popup-divider">
+            <p><strong><span class="rune-popup-symbol">${RUNES[ids[0]].symbol}${RUNES[ids[1]].symbol}</span> Bindrune</strong><br>${br.effectText}</p>
+        `;
+    }, 280);
 }
 
-// HTML for a väsen's equipped runes (+ active bindrunes) as clickable words.
-// A bindrune is shown as one segmented pill: its two runes as segments, joined
-// to a gold end segment for the bindrune itself,
-//   ( ᚢ Uruz | ᚷ Gebo | ᚢᚷ Bindrune )
-// so it reads as the two runes bound together, not as a third rune.
-// Runes that are not part of a bindrune are listed first, on their own.
-UIController.prototype.getRunesTextHTML = function(vasen, separator = ' ') {
-    if (!vasen || !vasen.runes || vasen.runes.length === 0) return '';
-    const runeHTML = id => {
-        const rune = RUNES[id];
-        return rune ? `<span class="clickable-keyword rune-keyword" onclick="toggleRunePopup(this, event, '${id}')">${rune.symbol} ${rune.name}</span>` : '';
-    };
+// HTML for a väsen's equipped runes: one pill, the same everywhere (party,
+// collection, combat and picker cards), holding one segment per rune:
+//   ( ᚹ Wynja )   or   ( ᚦ Thurs | ᚨ Ansuz )
+// Any two runes form a bindrune, so it is not labelled on the pill: clicking the
+// pill opens one popup with each rune and, for two runes, their bindrune
+// (toggleRunePillPopup).
+UIController.prototype.getRunesTextHTML = function(vasen) {
+    if (!vasen || !vasen.runes) return '';
+    const equipped = vasen.runes.filter(id => id && RUNES[id]);
+    if (equipped.length === 0) return '';
 
-    const bindRunes = getActiveBindRunes(vasen);
-    const shown = new Set(); // a rune in two bindrunes (3 slots) gets its chip only once
-    const groups = bindRunes.map(br => {
-        const ids = vasen.runes.filter(r => br.runes.includes(r));
-        const left = ids.map(id => {
-            if (shown.has(id)) return `<span class="bindrune-symbol">${RUNES[id].symbol}</span>`;
-            shown.add(id);
-            return runeHTML(id);
-        }).join('');
-        const bind = `<span class="clickable-keyword rune-keyword bindrune-keyword" onclick="toggleBindRunePopup(this, event, '${ids[0]}', '${ids[1]}')">${br.symbols} Bindrune</span>`;
-        return `<span class="bindrune-group">${left}${bind}</span>`;
-    });
-
-    const loose = vasen.runes.filter(id => !shown.has(id)).map(runeHTML).filter(Boolean);
-    return [...loose, ...groups].join(separator);
+    const segments = equipped.map(id =>
+        `<span class="rune-pill-segment"><span class="rune-pill-symbol">${RUNES[id].symbol}</span>${RUNES[id].name}</span>`
+    ).join('');
+    const args = equipped.map(id => `'${id}'`).join(', ');
+    return `<span class="rune-pill" onclick="toggleRunePillPopup(this, event, ${args})">${segments}</span>`;
 };
 
 // Skill element tag on combat skill buttons: shows what the skill's element is

@@ -830,7 +830,8 @@ UIController.prototype.showLocationsInfoModal = function() {
 // Runes technical info: every regular rune (symbol, name, effect) plus every
 // bind rune pair that exists and its effect. Runes not collected yet are shown
 // as greyed-out names; a bind rune is only listed once both of its runes are
-// collected (the Bind Runes category is left out until at least one is).
+// collected. The generic bindrune ("any other pair") is listed first once any
+// two runes are collected (the Bind Runes category is left out until then).
 UIController.prototype.showRunesInfoModal = function() {
     const runesHtml = RUNE_LIST.map(runeId => {
         const rune = RUNES[runeId];
@@ -847,14 +848,22 @@ UIController.prototype.showRunesInfoModal = function() {
 
     const discoveredBindRunes = BIND_RUNES.filter(br => this.isInfoUnlocked(gameState.isBindRuneDiscovered(br)));
 
-    const bindRunesHtml = discoveredBindRunes.map(br => `
+    const genericDiscovered = this.isInfoUnlocked(gameState.collectedRunes.size >= 2);
+    const genericHtml = genericDiscovered ? `
+        <div class="lore-info-bindrune-item">
+            <div class="lore-info-bindrune-header">Any other pair</div>
+            <div class="lore-info-bindrune-desc">${GENERIC_BIND_RUNE.effectText}</div>
+        </div>
+    ` : '';
+
+    const bindRunesHtml = genericHtml + discoveredBindRunes.map(br => `
         <div class="lore-info-bindrune-item">
             <div class="lore-info-bindrune-header">${br.symbols} ${br.names}</div>
             <div class="lore-info-bindrune-desc">${br.effectText}</div>
         </div>
     `).join('');
 
-    const bindRunesCategoryHtml = discoveredBindRunes.length > 0 ? `
+    const bindRunesCategoryHtml = genericDiscovered || discoveredBindRunes.length > 0 ? `
         <div class="lore-category">
             <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bind Runes</h4>
             <div class="lore-entry-list">

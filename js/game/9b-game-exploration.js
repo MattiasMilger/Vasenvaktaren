@@ -153,6 +153,7 @@ Game.prototype.handleCombatEnd = function(result) {
 
         // Tamed väsen join runeless, at full health and with no attribute changes
         newVasen.runes = [];
+        newVasen.recalculateMaxHealth(); // runes were cleared (in case they formed the generic bindrune)
         newVasen.currentHealth = newVasen.maxHealth;
         newVasen.recalculateMaxMegin(); // runes were cleared (in case it had Uruz)
         newVasen.resetCombatState();

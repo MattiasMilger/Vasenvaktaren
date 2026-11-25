@@ -61,6 +61,7 @@
 }
 
 .save-slot-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
@@ -146,6 +147,21 @@
 .save-slot-tag.ended-tag {
     color: var(--fallen-color);
     border-color: color-mix(in srgb, var(--fallen-color) 40%, transparent);
+}
+
+/* On a card, the tag sits on the top border (like a legend), so the top row
+   keeps room for the slot label and the mode badge on one line */
+.save-slot-card .save-slot-tag {
+    position: absolute;
+    top: 0;
+    left: var(--spacing-md);
+    transform: translateY(-50%);
+    background: var(--bg-card);
+    line-height: 1.4;
+}
+
+.save-slot-card.ended .save-slot-tag {
+    background: var(--bg-secondary);
 }
 
 .save-slot-modes {

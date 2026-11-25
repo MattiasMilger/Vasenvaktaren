@@ -193,12 +193,12 @@ const GAME_CONFIG = {
     // Jera + Odal: low cost skills have a chance to raise a random attribute (reuses RUNE_ODAL_COST_THRESHOLD)
     RUNE_BIND_JERA_ODAL_PROC_CHANCE: 0.30,            // % chance to trigger on a qualifying skill use
     RUNE_BIND_JERA_ODAL_BUFF_STAGES: 1,               // Stages the random attribute is raised by
-    // Fehu + Wynja: raises all attribute stages when health falls to the threshold or less (once per combat)
+    // Fehu + Wynja and Odal + Wynja (same effect): raises all attribute stages when health falls to the threshold or less (once per combat)
     RUNE_BIND_FEHU_WYNJA_HEALTH_THRESHOLD: 0.50,      // Health fraction at or below which the bind rune triggers
     RUNE_BIND_FEHU_WYNJA_BUFF_STAGES: 1,              // Stages each attribute is raised by
     // Uruz + Thurs: gain megin equal to a percentage of Thurs damage dealt
     RUNE_BIND_URUZ_THURS_MEGIN_PERCENT: 0.30,         // % of Thurs damage gained as megin
-    // Hagal + Naudiz: lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per combat)
+    // Hagal + Naudiz and Hagal + Inguz (same effect): lowers all of the enemy's attribute stages when their health falls to the threshold or less (once per combat)
     RUNE_BIND_HAGAL_NAUDIZ_HEALTH_THRESHOLD: 0.50,    // Enemy health fraction at or below which the bind rune triggers
     RUNE_BIND_HAGAL_NAUDIZ_DEBUFF_STAGES: 1,          // Stages each of the enemy's attributes is lowered by
     // Dagaz + Jera: Dagaz's damage bonus lasts for more rounds after entering the battlefield
@@ -209,15 +209,28 @@ const GAME_CONFIG = {
     RUNE_BIND_DAGAZ_URUZ_MEGIN_PERCENT: 0.10,         // Fraction of max megin gained
     // Wynja + Thurs: uses a free skill on the enemy when this väsen's Wynja blocks a debuff
     RUNE_BIND_WYNJA_THURS_SKILL: 'Basic Strike',      // Skill used (megin cost is not spent)
-    // Fehu + proc rune: chance to trigger the partner rune's effect when hit by a potent hit
+    // Fehu + proc rune (Jera, Inguz): chance to trigger the partner rune's effect when hit by a potent hit
     RUNE_BIND_FEHU_PROC_CHANCE: 0.30,
-    // Naudiz + proc rune: chance to trigger the partner rune's effect when dealing a weak hit
+    // Naudiz + proc rune (Jera): chance to trigger the partner rune's effect when dealing a weak hit
     RUNE_BIND_NAUDIZ_PROC_CHANCE: 0.30,
-    // Effects of the partner rune when a Fehu or Naudiz bind rune triggers
-    RUNE_BIND_PROC_BUFF_STAGES: 1,                    // Sol/Isaz/Eihwaz/Ehwaz: stages each of the rune's two attributes is raised by
-    RUNE_BIND_PROC_HEAL_PERCENT: 0.08,                // Algiz/Jera: fraction of max health healed
+    // Mannaz + proc rune (Ansuz, Raido): chance to trigger the partner rune's effect when using a utility skill
+    RUNE_BIND_MANNAZ_PROC_CHANCE: 0.30,
+    // Effects of the partner rune when a Fehu, Naudiz or Mannaz bind rune triggers
+    RUNE_BIND_PROC_BUFF_STAGES: 1,                    // Ansuz/Raido: stages each of the rune's two attributes is raised by
+    RUNE_BIND_PROC_HEAL_PERCENT: 0.08,                // Jera: fraction of max health healed
     RUNE_BIND_PROC_DEBUFF_STAGES: 1,                  // Inguz: stages the random enemy attribute is lowered by
-    
+    // Uruz + Ansuz / Uruz + Raido: the attacks the partner rune converts (Ansuz: strength attacks,
+    // Raido: wisdom attacks) cost more megin and deal more damage. The cost increase is applied
+    // after the same-element discount, so it also counts for Odal's and Jera's cost threshold.
+    RUNE_BIND_URUZ_CONVERTED_COST_INCREASE: 0.35,     // +% megin cost of converted attacks
+    RUNE_BIND_URUZ_CONVERTED_DAMAGE_BOOST: 0.12,      // +% damage of converted attacks
+    // Gifu + Hagal: when this väsen is knocked out, each conscious ally gets a random attribute raised (once per combat)
+    RUNE_BIND_GIFU_HAGAL_BUFF_STAGES: 1,              // Stages the random attribute of each ally is raised by
+    // Naudiz + Odal: neutral and weak hits get the Odal bonus regardless of megin cost (never stacks with Odal itself)
+    RUNE_BIND_NAUDIZ_ODAL_DAMAGE_BOOST: 0.18,         // +% damage of neutral and weak hits that Odal alone would not boost
+    // Generic bindrune: any two runes without a bindrune of their own
+    RUNE_BIND_GENERIC_HEALTH_BONUS: 0.05,             // +% max health
+
     // =============================================================================
     // ENEMY AI CONFIGURATION
     // =============================================================================

@@ -368,7 +368,7 @@
 }
 
 /* Rune row: one compact line of clickable rune chips under the stats.
-   Rune effects open in a popup (toggleRunePopup / toggleBindRunePopup). The
+   Rune effects open in a popup (toggleRunePillPopup). The
    Description chip (toggleVasenDescriptionPopup) lives in the header by the level. */
 .combatant-info-row {
     display: flex;
@@ -392,65 +392,7 @@
     gap: var(--spacing-xs);
 }
 
-.combatant-runes .rune-keyword {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    background: var(--bg-tertiary);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    color: var(--text-primary);
-    text-shadow: none;
-    cursor: pointer;
-    user-select: none;
-    transition: border-color 0.2s, background 0.2s;
-}
-
-.combatant-runes .rune-keyword {
-    border-color: color-mix(in srgb, var(--accent-gold) 55%, transparent);
-}
-
-.combatant-runes .rune-keyword:hover {
-    border-color: var(--accent-gold);
-    background: color-mix(in srgb, var(--accent-gold) 12%, var(--bg-tertiary));
-    text-shadow: none;
-}
-
-/* Inside a bindrune pill the rune chips become flat segments of one pill
-   (shared outer border from .bindrune-group, dividers between segments) */
-.combatant-runes .bindrune-group {
-    border-color: var(--accent-gold);
-    border-radius: 999px;
-    background: var(--bg-tertiary);
-}
-
-.combatant-runes .bindrune-group > .rune-keyword {
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    padding: 2px 8px;
-    margin-left: 0;
-}
-
-.combatant-runes .bindrune-group > * + * {
-    border-left: 1px solid color-mix(in srgb, var(--accent-gold) 40%, transparent);
-}
-
-.combatant-runes .bindrune-group > .rune-keyword:hover {
-    background: color-mix(in srgb, var(--accent-gold) 12%, transparent);
-}
-
-.combatant-runes .bindrune-group > .rune-keyword.bindrune-keyword {
-    color: var(--accent-gold);
-    background: color-mix(in srgb, var(--accent-gold) 18%, transparent);
-}
-
-.combatant-runes .bindrune-group > .rune-keyword.bindrune-keyword:hover {
-    background: color-mix(in srgb, var(--accent-gold) 30%, transparent);
-}
+/* The runes themselves use the shared rune pill (.rune-pill, 12-style-badges.css) */
 
 
 .combatant-runes .no-rune {

@@ -259,6 +259,8 @@ UIController.prototype.autoEquipRunes = function() {
         if (vasen.hasRune('URUZ')) {
             vasen.recalculateMaxMegin();
         }
+        // Max health follows the generic bindrune, which the new runes may form or break
+        vasen.recalculateMaxHealth();
     });
 
     gameState.saveGame();

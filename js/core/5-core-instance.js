@@ -11,6 +11,7 @@ const ONCE_PER_COMBAT_FLAGS = [
     'fehuWynjaPassiveTriggered',
     'hagalNaudizPassiveTriggered',
     'dagazThursStrikeTriggered',
+    'gifuHagalTriggered',
     // Family passives
     'andePassiveTriggered',
     'drakePassiveTriggered',
@@ -40,7 +41,7 @@ class VasenInstance {
         this.experience = 0;
 
         // Calculate max values
-        this.maxHealth = this.calculateAttribute('health');
+        this.maxHealth = this.calculateMaxHealth();
         this.maxMegin = this.calculateMaxMegin();
 
         // Current values
@@ -106,6 +107,27 @@ class VasenInstance {
         return Math.floor(baseValue * stageMod);
     }
     
+    // Calculate max health: the health attribute, plus the generic bindrune's bonus
+    // when the väsen's two runes have no bindrune of their own
+    calculateMaxHealth() {
+        let health = this.calculateAttribute('health');
+        if (hasGenericBindRune(this)) {
+            health = Math.floor(health * (1 + GAME_CONFIG.RUNE_BIND_GENERIC_HEALTH_BONUS));
+        }
+        return health;
+    }
+
+    // Recalculate max health after a rune change (which can form or break the
+    // generic bindrune). Current health keeps the same fraction of max health,
+    // rounded down, so swapping runes back and forth can never gain health.
+    recalculateMaxHealth() {
+        const oldMax = this.maxHealth;
+        this.maxHealth = this.calculateMaxHealth();
+        if (oldMax > 0 && oldMax !== this.maxHealth) {
+            this.currentHealth = Math.min(this.maxHealth, Math.floor(this.currentHealth * this.maxHealth / oldMax));
+        }
+    }
+
     // Calculate max Megin
     calculateMaxMegin() {
         let megin = GAME_CONFIG.BASE_MEGIN + ((this.level - 1) * GAME_CONFIG.MEGIN_PER_LEVEL);
@@ -193,6 +215,7 @@ class VasenInstance {
         if (runeId === 'URUZ') {
             this.recalculateMaxMegin();
         }
+        this.recalculateMaxHealth();
         return true;
     }
 
@@ -204,12 +227,18 @@ class VasenInstance {
         if (runeId === 'URUZ') {
             this.recalculateMaxMegin(false);
         }
+        this.recalculateMaxHealth();
         return true;
     }
-    
-    // Get megin cost for a skill
+
+    // Get megin cost for a skill. Uruz + Ansuz / Uruz + Raido raise the cost of
+    // the attacks the partner rune converts, after the same-element discount.
     getSkillMeginCost(skillName) {
-        return getSkillMeginCost(skillName, this.species.element);
+        const cost = getSkillMeginCost(skillName, this.species.element);
+        if (getConvertedAttackBindRune(this, skillName)) {
+            return Math.floor(cost * (1 + GAME_CONFIG.RUNE_BIND_URUZ_CONVERTED_COST_INCREASE));
+        }
+        return cost;
     }
 
     // Get the actual megin cost for a skill this turn.
@@ -333,9 +362,9 @@ class VasenInstance {
                 // Update max values
                 const oldMaxHealth = this.maxHealth;
                 const oldMaxMegin = this.maxMegin;
-                this.maxHealth = this.calculateAttribute('health');
+                this.maxHealth = this.calculateMaxHealth();
                 this.maxMegin = this.calculateMaxMegin();
-                
+
                 // Heal the difference
                 this.currentHealth += (this.maxHealth - oldMaxHealth);
                 this.currentMegin += (this.maxMegin - oldMaxMegin);
@@ -438,6 +467,7 @@ function createWildVasen(speciesName, level) {
     if (vasen.hasRune('URUZ')) {
         vasen.recalculateMaxMegin();
     }
+    vasen.recalculateMaxHealth(); // two runes may form the generic bindrune
 
     return vasen;
 }
