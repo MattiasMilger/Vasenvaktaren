@@ -171,6 +171,34 @@ mark.lore-highlight {
     display: none;
 }
 
+/* Secret category (Väsen Who Left the Realm): set apart at the bottom of the
+   book, dim and misty until opened */
+.lore-category-secret {
+    margin-top: var(--spacing-xl, 32px);
+}
+
+.lore-category-secret .lore-category-title {
+    color: var(--text-muted);
+    font-style: italic;
+    border-bottom-style: dashed;
+    opacity: 0.75;
+    transition: opacity var(--transition-base), color var(--transition-base);
+}
+
+.lore-category-secret .lore-category-title:hover,
+.lore-category-secret:not(.lore-category-collapsed) .lore-category-title {
+    color: var(--text-secondary);
+    opacity: 1;
+}
+
+.lore-category-desc {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
 /* =============================================================================
    LORE ENTRY LIST
    ============================================================================= */

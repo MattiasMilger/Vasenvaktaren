@@ -49,11 +49,12 @@ function toggleRagnarokPopup(element, event) {
     }, 280);
 }
 
-// Difficulty badge for a save's rules ('' for a normal save)
+// Difficulty badge for a save's rules (a plain "Standard" badge for a save
+// without Ragnarök rules)
 UIController.prototype.getRagnarokBadgeHTML = function(modes, options = {}) {
     const { clickable = true } = options;
     const tier = getRagnarokTier(modes);
-    if (!tier) return '';
+    if (!tier) return `<span class="ragnarok-badge mode-standard">${uiIcon('standard', 14)}Standard</span>`;
     const click = clickable
         ? ` onclick="toggleRagnarokPopup(this, event)" role="button" tabindex="0" data-rules="${getActiveModeIds(modes).join(',')}"`
         : '';
@@ -391,7 +392,7 @@ UIController.prototype.renderSettingsSaveInfo = function() {
     if (!el) return;
     const badge = this.getRagnarokBadgeHTML(gameState.modes);
     const started = gameState.createdAt ? `<span class="settings-save-started">Started ${formatShortDate(gameState.createdAt)}</span>` : '';
-    el.innerHTML = `<span class="settings-save-slot">Slot ${gameState.saveSlot + 1}</span>${badge || '<span class="settings-save-normal">Standard</span>'}${started}`;
+    el.innerHTML = `<span class="settings-save-slot">Slot ${gameState.saveSlot + 1}</span>${badge}${started}`;
 };
 
 // Another tab continued this save: this tab stops saving until reloaded

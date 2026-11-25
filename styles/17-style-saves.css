@@ -28,6 +28,8 @@
 .tier-1 { --tier-color: var(--tier-1); }
 .tier-2 { --tier-color: var(--tier-2); }
 .tier-3 { --tier-color: var(--tier-3); }
+/* Standard saves (no Ragnarök rules): a quiet, neutral badge */
+.mode-standard { --tier-color: var(--text-secondary); }
 
 /* =============================================================================
    MAIN MENU - save cards
@@ -883,8 +885,7 @@
     margin-bottom: var(--spacing-sm);
 }
 
-.settings-save-slot,
-.settings-save-normal {
+.settings-save-slot {
     font-size: var(--font-size-sm);
     color: var(--accent-gold);
     font-weight: var(--font-weight-semibold);

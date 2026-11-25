@@ -24,6 +24,7 @@
         this.tipsDisabled = disabled;
         localStorage.setItem('disableBeginnerTutorial', disabled ? 'true' : 'false');
         this.updateExploreButton();
+        this.updateLoreButtonGlow();
     };
 
     UIController.prototype.areTipsEnabled = function() {

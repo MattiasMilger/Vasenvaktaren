@@ -625,10 +625,10 @@ const LORE_ENTRIES = {
     },
     'inaccessible_askafroa': {
         key: 'inaccessible_askafroa',
-        name: 'Askafroa',
+        name: 'Askafroa / Askfru',
         category: 'vasen_inaccessible',
         family: 'Ande',
-        desc: 'Askafroa (also Askfrun, "ash-wife") is the tutelary spirit of the ash tree in southern Swedish folklore, especially recorded in Värend and Skåne. She is the living soul of a particular ash; harm to the tree brings sickness or worse upon the offender. On Ash Wednesday morning before sunrise, people poured water over the roots while saying "Nu offrar jag, så gör du oss ingen skada" ("Now I sacrifice, so that you do us no harm"). Breaking branches or fouling the roots risked joint-pain or disease. The ash was one of the most powerful trees in Nordic belief - Yggdrasil itself was an ash - and Askafroa embodies that ancient reverence and the danger of disrespecting it.',
+        desc: 'Askafroa (also Askfru, "ash-wife") is the tutelary spirit of the ash tree in southern Swedish folklore, especially recorded in Värend and Skåne. She is the living soul of a particular ash; harm to the tree brings sickness or worse upon the offender. On Ash Wednesday morning before sunrise, people poured water over the roots while saying "Nu offrar jag, så gör du oss ingen skada" ("Now I sacrifice, so that you do us no harm"). Breaking branches or fouling the roots risked joint-pain or disease. The ash was one of the most powerful trees in Nordic belief - Yggdrasil itself was an ash - and Askafroa embodies that ancient reverence and the danger of disrespecting it.',
         source: 'Swedish Folklore (Värend / Skåne) / Hyltén-Cavallius (Wärend och Wirdarne)',
         heritage: 'Swedish',
         unlockType: 'standard'
@@ -983,9 +983,14 @@ const LORE_CATEGORIES = {
         label: 'Väsen',
         order: 1
     },
+    // Secret section at the very bottom of the book: folklore väsen that are
+    // not in the game. Collapsed each time the game loads, left out of
+    // Collapse/Expand Categories and favorites, so it only opens on purpose.
     vasen_inaccessible: {
-        label: 'Väsen - Inaccessible',
-        order: 1.5
+        label: 'Väsen Who Left the Realm',
+        order: 99,
+        secret: true,
+        description: 'Not every väsen of Swedish folklore remains in the lands you wander. These once walked here, but have long since left the realm, beyond a Väktare\'s reach: they can never be met or tamed, but their tales are still told.'
     },
     items: {
         label: 'Items',

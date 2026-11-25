@@ -57,6 +57,8 @@ UIController.prototype.renderZones = function() {
     });
 
     this.updateExploreButton();
+    // Also refresh the Lore Book button tutorial glow (covers loading a save)
+    this.updateLoreButtonGlow();
 };
 
 

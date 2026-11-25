@@ -6,6 +6,23 @@
 UIController.prototype.showLore = function() {
     this.loreModal.classList.add('active');
     this.renderLore();
+    this._jumpToLatestLoreEntry();
+
+    // Opening the book after the first unlock completes the Lore Book tutorial
+    if (!gameState.loreBookTutorialShown && gameState.latestLoreEntry) {
+        gameState.loreBookTutorialShown = true;
+        gameState.saveGame();
+    }
+    this.updateLoreButtonGlow();
+};
+
+// Tutorial glow on the header Lore Book button: shown after the first lore
+// unlock until the player opens the book (hidden when Disable Tips is on)
+UIController.prototype.updateLoreButtonGlow = function() {
+    const btn = document.getElementById('lore-btn');
+    if (!btn) return;
+    btn.classList.toggle('tutorial-blink',
+        !gameState.loreBookTutorialShown && !!gameState.latestLoreEntry && this.areTipsEnabled());
 };
 
 // Hide the lore modal and clear search state
@@ -22,7 +39,9 @@ UIController.prototype.renderLore = function() {
     // Capture current UI state before re-render
     const collapsedCats   = new Set();
     const expandedEntries = new Set();
+    const renderedCats    = new Set();
     container.querySelectorAll('.lore-category[data-cat]').forEach(el => {
+        renderedCats.add(el.dataset.cat);
         if (el.classList.contains('lore-category-collapsed')) collapsedCats.add(el.dataset.cat);
     });
     container.querySelectorAll('.lore-entry-card.lore-entry-unlocked[data-key]').forEach(el => {
@@ -67,12 +86,14 @@ UIController.prototype.renderLore = function() {
     });
 
     // Render categories in defined order, with favorited categories brought
-    // to the front (preserving the regular order otherwise).
+    // to the front (preserving the regular order otherwise). Secret categories
+    // can't be favorited and always stay at the bottom.
     let sortedCategories = Object.keys(LORE_CATEGORIES).sort(
         (a, b) => LORE_CATEGORIES[a].order - LORE_CATEGORIES[b].order
     );
-    const favCategories  = sortedCategories.filter(c => gameState.favoriteLoreCategories.has(c));
-    const restCategories = sortedCategories.filter(c => !gameState.favoriteLoreCategories.has(c));
+    const isFavCat = c => !LORE_CATEGORIES[c].secret && gameState.favoriteLoreCategories.has(c);
+    const favCategories  = sortedCategories.filter(c => isFavCat(c));
+    const restCategories = sortedCategories.filter(c => !isFavCat(c));
     sortedCategories = [...favCategories, ...restCategories];
 
     sortedCategories.forEach(cat => {
@@ -89,10 +110,20 @@ UIController.prototype.renderLore = function() {
             ? `<button class="lore-info-btn" type="button" data-cat-info="${cat}">i</button>`
             : '';
 
+        // Secret category: own styling, no favorite star, and a short
+        // description at the top of its list
+        const isSecret = !!LORE_CATEGORIES[cat].secret;
+        const catFavBtnHtml = isSecret
+            ? ''
+            : `<button class="lore-favorite-btn ${isCatFavorite ? 'active' : ''}" type="button" data-cat-favorite="${cat}">${isCatFavorite ? '★' : '☆'}</button>`;
+
         // data-cat used to restore collapsed state after re-render
-        html += `<div class="lore-category" data-cat="${cat}">`;
-        html += `<h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${catLabel}<button class="lore-favorite-btn ${isCatFavorite ? 'active' : ''}" type="button" data-cat-favorite="${cat}">${isCatFavorite ? '★' : '☆'}</button>${catInfoBtnHtml}</h4>`;
+        html += `<div class="lore-category${isSecret ? ' lore-category-secret' : ''}" data-cat="${cat}">`;
+        html += `<h4 class="lore-category-title"><span class="lore-cat-chevron"></span>${catLabel}${catFavBtnHtml}${catInfoBtnHtml}</h4>`;
         html += `<div class="lore-entry-list">`;
+        if (isSecret && LORE_CATEGORIES[cat].description) {
+            html += `<p class="lore-category-desc">${LORE_CATEGORIES[cat].description}</p>`;
+        }
 
         grouped[cat].forEach(entry => {
             const isUnlocked = unlocked.has(entry.key);
@@ -118,7 +149,10 @@ UIController.prototype.renderLore = function() {
 
     // Restore UI state after re-render
     container.querySelectorAll('.lore-category[data-cat]').forEach(el => {
-        if (collapsedCats.has(el.dataset.cat)) el.classList.add('lore-category-collapsed');
+        const cat = el.dataset.cat;
+        // Secret categories start collapsed the first time they are rendered
+        const startCollapsed = LORE_CATEGORIES[cat] && LORE_CATEGORIES[cat].secret && !renderedCats.has(cat);
+        if (collapsedCats.has(cat) || startCollapsed) el.classList.add('lore-category-collapsed');
     });
     container.querySelectorAll('.lore-entry-card.lore-entry-unlocked[data-key]').forEach(el => {
         if (expandedEntries.has(el.dataset.key)) el.classList.add('lore-entry-expanded');
@@ -129,7 +163,8 @@ UIController.prototype.renderLore = function() {
     const collapseBtn = container.querySelector('.lore-collapse-btn');
     if (collapseBtn) {
         collapseBtn.addEventListener('click', () => {
-            const cats = container.querySelectorAll('.lore-category');
+            // The secret category is left alone: it only opens when clicked
+            const cats = container.querySelectorAll('.lore-category:not(.lore-category-secret)');
             const anyCatExpanded = [...cats].some(c => !c.classList.contains('lore-category-collapsed'));
             const shouldCollapse = anyCatExpanded;
             cats.forEach(c => c.classList.toggle('lore-category-collapsed', shouldCollapse));
@@ -212,6 +247,12 @@ UIController.prototype.renderLore = function() {
         const card = header.closest('.lore-entry-card');
         if (!card) return;
         card.classList.toggle('lore-entry-expanded');
+        // Opening the latest unlocked entry marks it as read and stops its glow
+        if (card.dataset.key === gameState.latestLoreEntry) {
+            gameState.latestLoreEntry = null;
+            card.classList.remove('tutorial-blink');
+            gameState.saveGame();
+        }
         // Re-apply search highlights after revealing new text
         if (this._loreSearchQuery) this._applyLoreSearch(container, this._loreSearchQuery);
     };
@@ -333,8 +374,11 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
         ? `<button class="lore-info-btn" type="button" data-entry-info="${entry.key}">i</button>`
         : '';
 
+    // The latest unlocked entry glows (tutorial green) until it is opened
+    const newClass = gameState.latestLoreEntry === entry.key ? ' tutorial-blink' : '';
+
     return `
-        <div class="lore-entry-card lore-entry-unlocked" data-key="${entry.key}">
+        <div class="lore-entry-card lore-entry-unlocked${newClass}" data-key="${entry.key}">
             <div class="lore-entry-header">
                 <span class="lore-entry-chevron"></span>
                 <span class="lore-entry-name">${name}</span>
@@ -360,6 +404,29 @@ UIController.prototype.showLoreUnlockMessage = function(entryKey) {
     const entry = LORE_ENTRIES[entryKey];
     if (!entry) return;
     this.showMessage(`Lore Entry unlocked: ${entry.name}`, 'success');
+
+    // Only the latest unlock glows in the Lore Book, until the player opens it
+    gameState.latestLoreEntry = entryKey;
+    gameState.saveGame();
+    this.updateLoreButtonGlow();
+};
+
+// Jump straight to the latest unlocked (unread) lore entry when the book opens:
+// make sure its category is expanded and scroll it into the middle of the list.
+UIController.prototype._jumpToLatestLoreEntry = function() {
+    const key = gameState.latestLoreEntry;
+    if (!key) return;
+    const container = document.getElementById('lore-content');
+    if (!container) return;
+    const card = container.querySelector(`.lore-entry-card.lore-entry-unlocked[data-key="${key}"]`);
+    if (!card) return;
+
+    const category = card.closest('.lore-category');
+    if (category) category.classList.remove('lore-category-collapsed');
+
+    const containerRect = container.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    container.scrollTop += (cardRect.top - containerRect.top) - (container.clientHeight - cardRect.height) / 2;
 };
 
 // =============================================================================

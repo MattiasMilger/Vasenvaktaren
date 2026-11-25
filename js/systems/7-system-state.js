@@ -133,6 +133,10 @@ class GameState {
         // Set of unlocked lore entry keys
         this.unlockedLoreEntries = new Set();
 
+        // Key of the most recently unlocked lore entry the player hasn't opened
+        // yet (glows in the Lore Book until expanded), or null
+        this.latestLoreEntry = null;
+
         // Set of discovered skill names (ABILITIES keys), found by having the
         // skill unlocked on a väsen. Gates the Lore Book "i" info for skills.
         this.discoveredSkills = new Set();
@@ -152,6 +156,7 @@ class GameState {
         this.runeMenuFirstOpen = false;
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
+        this.loreBookTutorialShown = false;
         this.firstTameMessageShown = false;
         this.guardianHintShown = false;
         this.minimizedTips = new Set(); // ids of tips the player collapsed (see getTipHTML)
@@ -1053,6 +1058,7 @@ class GameState {
             favoriteLoreCategories: Array.from(this.favoriteLoreCategories),
             favoriteLoreEntries: Array.from(this.favoriteLoreEntries),
             unlockedLoreEntries: Array.from(this.unlockedLoreEntries),
+            latestLoreEntry: this.latestLoreEntry,
             discoveredSkills: Array.from(this.discoveredSkills),
             discoveredItems: Array.from(this.discoveredItems),
             currentZone: this.currentZone,
@@ -1062,6 +1068,7 @@ class GameState {
             runeMenuFirstOpen: this.runeMenuFirstOpen,
             firstCombatTutorialShown: this.firstCombatTutorialShown,
             firstExploreTutorialShown: this.firstExploreTutorialShown,
+            loreBookTutorialShown: this.loreBookTutorialShown,
             firstTameMessageShown: this.firstTameMessageShown,
             guardianHintShown: this.guardianHintShown,
             minimizedTips: Array.from(this.minimizedTips),
@@ -1137,6 +1144,7 @@ class GameState {
             this.favoriteLoreCategories = new Set(data.favoriteLoreCategories || []);
             this.favoriteLoreEntries = new Set(data.favoriteLoreEntries || []);
             this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
+            this.latestLoreEntry = data.latestLoreEntry || null;
             // Default to empty for saves made before discoveries were tracked;
             // saveGame() fills them in from the collection and unlocked lore entries.
             // Ids that no longer exist are dropped so renamed or removed skills/items don't linger.
@@ -1150,6 +1158,11 @@ class GameState {
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
             this.firstCombatTutorialShown = data.firstCombatTutorialShown || false;
             this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
+            // Saves from before this flag existed: treat players who already
+            // unlocked lore beyond the starting entries as past the tutorial
+            this.loreBookTutorialShown = data.loreBookTutorialShown !== undefined
+                ? data.loreBookTutorialShown
+                : (data.unlockedLoreEntries || []).length > LORE_STANDARD_KEYS.length + 1;
             this.firstTameMessageShown = data.firstTameMessageShown || false;
             this.guardianHintShown = data.guardianHintShown || false;
             this.minimizedTips = new Set(data.minimizedTips || []);
@@ -1275,6 +1288,7 @@ class GameState {
         this.favoriteLoreCategories = new Set();
         this.favoriteLoreEntries = new Set();
         this.unlockedLoreEntries = new Set();
+        this.latestLoreEntry = null;
         this.discoveredSkills = new Set();
         this.discoveredItems = new Set();
         this.currentZone = 'ZONE1';
@@ -1284,6 +1298,7 @@ class GameState {
         this.runeMenuFirstOpen = false;
         this.firstCombatTutorialShown = false;
         this.firstExploreTutorialShown = false;
+        this.loreBookTutorialShown = false;
         this.firstTameMessageShown = false;
         this.guardianHintShown = false;
         this.minimizedTips = new Set();
