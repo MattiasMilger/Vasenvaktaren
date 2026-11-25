@@ -331,6 +331,32 @@
     display: inline-flex;
 }
 
+/* Phones: the header is a 4-column grid [Profile][Guide][Lore][Settings]
+   (14-style-responsive.css). The Profile cell keeps desktop order (first) and
+   the badge shrinks to a flame icon pinned to the Profile button's corner,
+   so it never takes a grid cell or squeezes the button. */
+@media (max-width: 600px) {
+    .header-center {
+        display: block;
+        position: relative;
+        order: 0;
+        min-width: 0;
+    }
+
+    .save-mode-badges {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        z-index: 1;
+    }
+
+    .save-mode-badges .ragnarok-badge {
+        font-size: 0;          /* hide the tier name, keep the icon */
+        gap: 0;
+        padding: 3px;
+    }
+}
+
 /* Rule list (popup, Profile, welcome dialogue) */
 .rule-list {
     display: flex;
