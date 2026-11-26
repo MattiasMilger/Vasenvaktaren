@@ -400,15 +400,15 @@ UIController.prototype.showFallenDialogue = function(fallen, lostRunes, next) {
 };
 
 // =============================================================================
-// Settings: the current save
+// Player Profile: the current save
 // =============================================================================
 
-UIController.prototype.renderSettingsSaveInfo = function() {
-    const el = document.getElementById('settings-save-info');
+UIController.prototype.renderProfileSaveInfo = function() {
+    const el = document.getElementById('profile-save-info');
     if (!el) return;
     const badge = this.getRagnarokBadgeHTML(gameState.modes);
-    const started = gameState.createdAt ? `<span class="settings-save-started">Started ${formatShortDate(gameState.createdAt)}</span>` : '';
-    el.innerHTML = `<span class="settings-save-slot">Slot ${gameState.saveSlot + 1}</span>${badge}${started}`;
+    const started = gameState.createdAt ? `<span class="profile-save-started">Started ${formatShortDate(gameState.createdAt)}</span>` : '';
+    el.innerHTML = `<span class="profile-save-slot">Slot ${gameState.saveSlot + 1}</span>${badge}${started}`;
 };
 
 // Another tab continued this save: this tab stops saving until reloaded
@@ -599,8 +599,21 @@ function buildSaveSummaryText(data, slot) {
     return '\uFEFF' + lines.join('\r\n') + '\r\n'; // BOM + Windows line endings so Notepad shows it right
 }
 
-// Settings > Main Menu
+// Settings > Main Menu, and the main menu's Settings button
 document.addEventListener('DOMContentLoaded', () => {
     const settingsMenuBtn = document.getElementById('settings-main-menu-btn');
-    if (settingsMenuBtn) settingsMenuBtn.addEventListener('click', () => game.returnToMainMenu());
+    if (settingsMenuBtn) settingsMenuBtn.addEventListener('click', () => {
+        // In-game: save and go back. Elsewhere (main menu, new game and starter
+        // screens) no save is loaded, so don't save anything; just reload to
+        // the menu (the flag stops the reload from continuing the last save).
+        const gameScreen = document.getElementById('game-screen');
+        if (gameScreen && gameScreen.classList.contains('active')) {
+            game.returnToMainMenu();
+        } else {
+            try { sessionStorage.setItem(SHOW_MENU_FLAG, '1'); } catch (e) { /* ignore */ }
+            location.reload();
+        }
+    });
+    const menuSettingsBtn = document.getElementById('menu-settings-btn');
+    if (menuSettingsBtn) menuSettingsBtn.addEventListener('click', () => ui.showSettings());
 });

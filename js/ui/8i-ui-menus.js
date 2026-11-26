@@ -3,8 +3,10 @@
 // =============================================================================
 
     // Settings methods
+    // Settings hold only browser-wide options and credits, so the window is
+    // the same from the main menu and in-game (the current save's info is in
+    // the Player Profile)
     UIController.prototype.showSettings = function() {
-        this.renderSettingsSaveInfo();
         this.settingsModal.classList.add('active');
     };
 
@@ -12,7 +14,7 @@
         this.settingsModal.classList.remove('active');
     };
 
-    // Toggle the Disable Tips setting (persisted via localStorage under the
+    // Toggle the Disable Tutorial setting (persisted via localStorage under the
     // 'disableBeginnerTutorial' key, so the choice carries over from saves made
     // when the setting was called Disable Beginner Tutorial).
     // Hides the guidance: tip boxes in dialogues (new-player hints and reminders
@@ -105,6 +107,7 @@
     UIController.prototype.showProfile = function() {
         this.profileModal.classList.add('active');
         this.renderProfile();
+        this.renderProfileSaveInfo();
     };
 
     UIController.prototype.hideProfile = function() {
@@ -366,6 +369,12 @@ achievementsHtml += '</div></div>';
 
         // Populate dynamic values from GAME_CONFIG
         this.populateGameGuideValues();
+
+        // Render Rarities
+        const raritiesContainer = document.getElementById('dynamic-rarities');
+        if (raritiesContainer) {
+            raritiesContainer.innerHTML = this.generateRaritiesHTML();
+        }
 
         // Render Element Matchups
         const elementMatchupsContainer = document.getElementById('dynamic-elements');
@@ -663,6 +672,32 @@ achievementsHtml += '</div></div>';
     };
 
     // Generate Families HTML from FAMILIES and FAMILY_DESCRIPTIONS constants
+    // Generate the Rarities section: what rarity affects (no exact numbers),
+    // the Mythical party limit, and one clickable badge per rarity whose popup
+    // shows its description (same popup as on väsen cards)
+    UIController.prototype.generateRaritiesHTML = function() {
+        const badges = Object.values(RARITIES).map(rarity => `
+            <div class="rarity-matchup-collapsible family-matchup-collapsible">
+                <span class="rarity-badge rarity-${rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${rarityIcon(rarity)}${rarity}</span>
+                <div class="rarity-description-popup">
+                    <p><strong>${rarityIcon(rarity)}${rarity}</strong><br>
+                    ${RARITY_DESCRIPTIONS[rarity] || ''}</p>
+                </div>
+            </div>
+        `).join('');
+
+        return `
+            <div class="guide-category" data-cat="rarities">
+                <h4 class="guide-category-title"><span class="guide-cat-chevron"></span>Rarities<button class="guide-favorite-btn" type="button">☆</button></h4>
+                <div class="guide-category-body">
+                    <p><strong>Rarity</strong><br>Each väsen has a rarity. The rarer a väsen, the less often it is encountered, the higher its base attributes, and the more experience it gives when defeated.</p>
+                    <p><strong>Mythical limit</strong><br>Only one mythical väsen can be in your active party at a time.</p>
+                    <div class="family-guide-list">${badges}</div>
+                </div>
+            </div>
+        `;
+    };
+
     UIController.prototype.generateFamiliesHTML = function() {
         let html = `
             <div class="guide-category" data-cat="families">

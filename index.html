@@ -339,6 +339,7 @@
                 <button id="new-game-btn" class="btn btn-primary">New Game</button>
                 <div class="menu-secondary-buttons">
                     <button id="menu-load-file-btn" class="btn btn-secondary"><i data-ui-icon="upload" data-size="14"></i>Load from File</button>
+                    <button id="menu-settings-btn" class="btn btn-secondary"><i data-ui-icon="settings" data-size="14"></i>Settings</button>
                 </div>
             </div>
             <input type="file" id="menu-load-file-input" accept=".json,.txt,application/json,text/plain" style="display: none;">
@@ -726,14 +727,16 @@
     <div class="modal-content modal-settings">
         <h3 class="modal-title"><i data-ui-icon="settings" data-size="20"></i>Settings</h3>
 
-        <!-- Gameplay toggles -->
+        <!-- Gameplay toggles (stored in the browser, shared by every save; the
+             window looks the same from the main menu and in-game) -->
         <div class="settings-section">
+            <p class="settings-note">These settings apply to all saves.</p>
             <label class="toggle-switch-row" for="disable-tips-toggle">
                 <span class="toggle-switch">
                     <input type="checkbox" id="disable-tips-toggle">
                     <span class="toggle-switch-slider"></span>
                 </span>
-                <span class="toggle-switch-label-text">Disable Tips</span>
+                <span class="toggle-switch-label-text">Disable Tutorial</span>
             </label>
             <p class="settings-note">Hides tips and tutorial glows.</p>
 
@@ -747,12 +750,9 @@
             <p class="settings-note">Shows all Lore Book details.</p>
         </div>
 
-        <!-- Save Management -->
+        <!-- Main Menu: saves and reloads to the main menu (on the main menu
+             itself it just reloads) -->
         <div class="settings-section">
-            <h4>Save</h4>
-            <p id="settings-save-info" class="settings-save-info"></p>
-            <p class="settings-note">The game saves automatically. Save to File, Load from File and Delete are on the main menu.</p>
-
             <button id="settings-main-menu-btn" class="btn btn-secondary settings-main-menu-btn"><i data-ui-icon="home" data-size="14"></i>Main Menu</button>
         </div>
 
@@ -780,6 +780,12 @@
             <h3 class="modal-title"><i data-ui-icon="profile" data-size="20"></i>Player Profile</h3>
             <div id="profile-content" class="profile-content">
                 <!-- Profile content rendered by JS -->
+            </div>
+            <!-- The current save (rendered by ui.renderProfileSaveInfo()) -->
+            <div class="profile-save-section">
+                <h4><i data-ui-icon="summary" data-size="14"></i>Save:</h4>
+                <p id="profile-save-info" class="profile-save-info"></p>
+                <p class="settings-note">The game saves automatically. Save to File, Load from File and Delete are on the main menu.</p>
             </div>
             <button id="change-name-btn" style="display: none;"></button>
             <button id="close-profile" class="btn btn-secondary">Close</button>
@@ -811,6 +817,9 @@
                         <p><strong>Tame</strong><br>Tame a väsen by offering it its desired item, and then defeating it. Find out the desired item by carefully reading the description or interrogating the väsen during combat. Offering is a free action. You can offer up to <span id="guide-max-offers"></span> items per combat, but once the väsen has its desired item it won't accept any more.</p>
                     </div>
                 </div>
+
+                <!-- Dynamic Rarities Section -->
+                <div id="dynamic-rarities"></div>
 
                 <!-- Dynamic Element Matchups Section -->
                 <div id="dynamic-elements"></div>

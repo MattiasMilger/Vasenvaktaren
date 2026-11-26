@@ -692,7 +692,7 @@ UIController.prototype.renderRuneSlots = function(vasen) {
         } else {
             html += `
                 <div class="rune-slot empty" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
-                    <span class="rune-slot-badge">+</span>
+                    <span class="rune-slot-badge"><svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true"><circle cx="14" cy="14" r="13.5" stroke-width="1" stroke-dasharray="3 2"/><path d="M14 9v10M9 14h10" stroke-width="2"/></svg></span>
                     <span class="rune-slot-text">
                         <span class="rune-placeholder">Equip Rune</span>
                     </span>

@@ -136,9 +136,10 @@ class GameState {
         // Set of unlocked lore entry keys
         this.unlockedLoreEntries = new Set();
 
-        // Key of the most recently unlocked lore entry the player hasn't opened
-        // yet (glows in the Lore Book until expanded), or null
-        this.latestLoreEntry = null;
+        // Lore Book tutorial: key of the first lore entry the player unlocked
+        // (glows in the Lore Book until expanded), or null. Only set before the
+        // book has been opened for the first time; later unlocks never glow.
+        this.tutorialLoreEntry = null;
 
         // Set of discovered skill names (ABILITIES keys), found by having the
         // skill unlocked on a väsen. Gates the Lore Book "i" info for skills.
@@ -1083,7 +1084,7 @@ class GameState {
             favoriteLoreCategories: Array.from(this.favoriteLoreCategories),
             favoriteLoreEntries: Array.from(this.favoriteLoreEntries),
             unlockedLoreEntries: Array.from(this.unlockedLoreEntries),
-            latestLoreEntry: this.latestLoreEntry,
+            tutorialLoreEntry: this.tutorialLoreEntry,
             discoveredSkills: Array.from(this.discoveredSkills),
             discoveredItems: Array.from(this.discoveredItems),
             currentZone: this.currentZone,
@@ -1171,7 +1172,13 @@ class GameState {
             this.favoriteLoreCategories = new Set(data.favoriteLoreCategories || []);
             this.favoriteLoreEntries = new Set(data.favoriteLoreEntries || []);
             this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
-            this.latestLoreEntry = data.latestLoreEntry || null;
+            // Older saves stored the latest unread entry (latestLoreEntry) instead;
+            // it only carries over while the Lore Book tutorial is still pending.
+            const tutorialKey = data.tutorialLoreEntry !== undefined
+                ? data.tutorialLoreEntry
+                : (data.loreBookTutorialShown ? null : data.latestLoreEntry);
+            this.tutorialLoreEntry = (tutorialKey && LORE_ENTRIES[tutorialKey] && this.unlockedLoreEntries.has(tutorialKey))
+                ? tutorialKey : null;
             // Default to empty for saves made before discoveries were tracked;
             // saveGame() fills them in from the collection and unlocked lore entries.
             // Ids that no longer exist are dropped so renamed or removed skills/items don't linger.
@@ -1322,7 +1329,7 @@ class GameState {
         this.favoriteLoreCategories = new Set();
         this.favoriteLoreEntries = new Set();
         this.unlockedLoreEntries = new Set();
-        this.latestLoreEntry = null;
+        this.tutorialLoreEntry = null;
         this.discoveredSkills = new Set();
         this.discoveredItems = new Set();
         this.currentZone = 'ZONE1';

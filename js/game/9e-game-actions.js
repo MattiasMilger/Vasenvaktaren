@@ -97,7 +97,7 @@ Game.prototype.handleInterrogate = function() {
     if (this.currentCombat.correctItemGiven) return;
 
     const isTutorialStep = this.getCombatTutorialStage(this.currentCombat) === 'interrogate';
-    // The turn cost is shown as a tip (hidden when Disable Tips is on); during the
+    // The turn cost is shown as a tip (hidden when Disable Tutorial is on); during the
     // tutorial step it explains the free turn instead.
     let message = '<p>Ask this väsen what it desires?</p>';
     if (isTutorialStep) {

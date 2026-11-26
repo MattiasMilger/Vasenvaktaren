@@ -8,25 +8,21 @@ UIController.prototype.showLore = function() {
     // The first opening (the Lore Book tutorial) explains the book in a tip,
     // kept until the book is closed
     this._loreIntroTip = this.isLoreBookTutorialActive();
-    // ...and points at the first unlocked entry in the book (usually the
-    // starter's family), not just the newest one, so the tour starts at the top
-    if (this._loreIntroTip) {
-        const firstKey = getLoreDisplayOrder().find(key => gameState.unlockedLoreEntries.has(key));
-        if (firstKey) gameState.latestLoreEntry = firstKey;
-    }
     this.renderLore();
-    this._jumpToLatestLoreEntry();
+    this._jumpToTutorialLoreEntry();
 
     // Opening the book after the first unlock completes the Lore Book tutorial
-    if (!gameState.loreBookTutorialShown && gameState.latestLoreEntry) {
+    if (!gameState.loreBookTutorialShown && gameState.tutorialLoreEntry) {
         gameState.loreBookTutorialShown = true;
         gameState.saveGame();
     }
     this.updateLoreButtonGlow();
 };
 
-// Tutorial glow on the header Lore Book button: shown after the first lore
-// unlock until the player opens the book (hidden when Disable Tips is on)
+// Tutorial glow on the header Lore Book button: shown only after the very first
+// lore unlock, until the player opens the book (hidden when Disable Tutorial is
+// on). Inside the book, that first entry glows until it is expanded. Later
+// unlocks only show their toast, so the glow doesn't get old over many saves.
 UIController.prototype.updateLoreButtonGlow = function() {
     const btn = document.getElementById('lore-btn');
     if (!btn) return;
@@ -36,7 +32,7 @@ UIController.prototype.updateLoreButtonGlow = function() {
 };
 
 UIController.prototype.isLoreBookTutorialActive = function() {
-    return !gameState.loreBookTutorialShown && !!gameState.latestLoreEntry && this.areTipsEnabled();
+    return !gameState.loreBookTutorialShown && !!gameState.tutorialLoreEntry && this.areTipsEnabled();
 };
 
 // Hide the lore modal and clear search state
@@ -82,7 +78,7 @@ UIController.prototype.renderLore = function() {
     </div>`;
 
     if (this._loreIntroTip) {
-        html += this.getTipHTML('This is your <strong>Lore Book</strong>. Taming väsen, defeating guardians and exploring unlock entries about the folklore behind the game. A new entry glows until you open it, and the <strong>i</strong> buttons show game details.');
+        html += this.getTipHTML('This is your <strong>Lore Book</strong>. Taming väsen, defeating guardians and exploring unlock entries about the folklore behind the game. Open the glowing entry to read your first one. The <strong>i</strong> buttons show game details.');
     }
 
     const { grouped, sortedCategories } = getLoreDisplayGroups();
@@ -238,9 +234,9 @@ UIController.prototype.renderLore = function() {
         const card = header.closest('.lore-entry-card');
         if (!card) return;
         card.classList.toggle('lore-entry-expanded');
-        // Opening the latest unlocked entry marks it as read and stops its glow
-        if (card.dataset.key === gameState.latestLoreEntry) {
-            gameState.latestLoreEntry = null;
+        // Opening the tutorial entry stops its glow
+        if (card.dataset.key === gameState.tutorialLoreEntry) {
+            gameState.tutorialLoreEntry = null;
             card.classList.remove('tutorial-blink');
             gameState.saveGame();
         }
@@ -365,8 +361,9 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
         ? `<button class="lore-info-btn" type="button" data-entry-info="${entry.key}">i</button>`
         : '';
 
-    // The latest unlocked entry glows (tutorial green) until it is opened
-    const newClass = gameState.latestLoreEntry === entry.key ? ' tutorial-blink' : '';
+    // Lore Book tutorial: the first unlocked entry glows until it is opened
+    // (hidden when Disable Tutorial is on)
+    const newClass = (gameState.tutorialLoreEntry === entry.key && this.areTipsEnabled()) ? ' tutorial-blink' : '';
 
     return `
         <div class="lore-entry-card lore-entry-unlocked${newClass}" data-key="${entry.key}">
@@ -434,27 +431,24 @@ UIController.prototype.showLoreUnlockMessage = function(entryKey) {
     if (!entry) return;
     this.showMessage(`Lore Entry unlocked: ${entry.name}`, 'success');
 
-    // Only the latest unlock glows in the Lore Book, until the player opens it.
-    // Several entries often unlock at once (a tame unlocks the väsen, its
-    // family, element, item and skills): then the one highest up in the book
-    // glows, so the book opens at the top of what is new.
-    if (!this._loreUnlockBatch) {
-        this._loreUnlockBatch = [];
-        setTimeout(() => { this._loreUnlockBatch = null; }, 0);
-    }
-    this._loreUnlockBatch.push(entryKey);
+    // Lore Book tutorial: until the book has been opened once, the entry to
+    // glow is the topmost of everything unlocked so far (a tame unlocks several
+    // at once: väsen, family, element, item, skills), so the tour starts at the top
+    if (gameState.loreBookTutorialShown) return;
+    const current = gameState.tutorialLoreEntry;
     const order = getLoreDisplayOrder();
-    gameState.latestLoreEntry = this._loreUnlockBatch.reduce((best, key) =>
-        order.indexOf(key) < order.indexOf(best) ? key : best);
+    if (!current || order.indexOf(entryKey) < order.indexOf(current)) {
+        gameState.tutorialLoreEntry = entryKey;
+    }
     gameState.saveGame();
     this.updateLoreButtonGlow();
 };
 
-// Jump straight to the latest unlocked (unread) lore entry when the book opens:
-// make sure its category is expanded and scroll it into the middle of the list.
-UIController.prototype._jumpToLatestLoreEntry = function() {
-    const key = gameState.latestLoreEntry;
-    if (!key) return;
+// Jump to the tutorial entry when the book opens: make sure its category is
+// expanded and scroll it into the middle of the list.
+UIController.prototype._jumpToTutorialLoreEntry = function() {
+    const key = gameState.tutorialLoreEntry;
+    if (!key || !this.areTipsEnabled()) return;
     const container = document.getElementById('lore-content');
     if (!container) return;
     const card = container.querySelector(`.lore-entry-card.lore-entry-unlocked[data-key="${key}"]`);

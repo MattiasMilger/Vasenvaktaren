@@ -437,11 +437,13 @@
 
 /* Profile section headings */
 .profile-collection-section,
+.profile-save-section,
 .achievements-section {
     margin-bottom: var(--spacing-md);
 }
 
 .profile-collection-section h4,
+.profile-save-section h4,
 .achievements-section h4 {
     font-size: var(--font-size-sm);
     font-weight: 600;

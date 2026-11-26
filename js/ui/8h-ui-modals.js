@@ -87,7 +87,7 @@ modal.classList.add('active');
 };
 
     // Short hint box for dialogues (styled by .tutorial-tip). Callers check
-    // areTipsEnabled() first, so tips stay hidden when Disable Tips is on.
+    // areTipsEnabled() first, so tips stay hidden when Disable Tutorial is on.
     // Clicking the "Tip" header minimizes the tip to a small pill; the choice
     // is kept per save (gameState.minimizedTips) and clicking again restores it.
     // tipId defaults to one derived from the text (tags and numbers ignored, so
@@ -156,7 +156,7 @@ modal.classList.add('active');
         const closeBtn = document.getElementById('close-offer-modal');
         itemList.innerHTML = '';
 
-        // Free-action tip, kept outside the scrolling list (hidden when Disable Tips is on)
+        // Free-action tip, kept outside the scrolling list (hidden when Disable Tutorial is on)
         const max = GAME_CONFIG.MAX_OFFERS_PER_COMBAT;
         document.getElementById('offer-modal-tip').innerHTML = this.areTipsEnabled()
             ? this.getTipHTML(`Offering is a free action. You can offer up to ${max} item${max === 1 ? '' : 's'} per combat, but once the väsen gets the item it desires, it won't take any more.`)

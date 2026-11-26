@@ -569,7 +569,7 @@ Game.prototype.describeLastFall = function(fallen) {
 // =============================================================================
 
 // Extra tips for the tower, flee and auto battle dialogues in
-// a save with Permadeath or Lost Runes (hidden by Disable Tips).
+// a save with Permadeath or Lost Runes (hidden by Disable Tutorial).
 Game.prototype.getModeWarningHTML = function(context) {
     const { permadeath, lostRunes } = gameState.modes;
     if ((!permadeath && !lostRunes) || !ui.areTipsEnabled()) return '';

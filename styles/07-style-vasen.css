@@ -593,11 +593,18 @@
     align-items: center;
 }
 
+/* The dashed ring and the "+" are drawn in one SVG so they always share a centre */
 .rune-slot.empty .rune-slot-badge {
-    border: 1px dashed var(--accent-primary);
+    width: 28px;
+    padding: 0;
+    border: none;
     color: var(--accent-primary);
     font-weight: var(--font-weight-bold);
     animation: runeSlotPulse 2s ease-in-out infinite;
+}
+
+.rune-slot.empty .rune-slot-badge svg {
+    display: block;
 }
 
 .rune-placeholder {

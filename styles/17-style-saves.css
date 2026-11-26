@@ -956,44 +956,44 @@
 }
 
 /* =============================================================================
-   SETTINGS - the current save
+   PLAYER PROFILE - the current save
    ============================================================================= */
-.settings-save-info {
+.profile-save-info {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: var(--spacing-xs);
     margin-bottom: var(--spacing-sm);
 }
 
-.settings-save-slot {
+.profile-save-slot {
     font-size: var(--font-size-sm);
     color: var(--accent-gold);
     font-weight: var(--font-weight-semibold);
 }
 
-.settings-save-slot::after,
-.settings-save-started::before {
+.profile-save-slot::after,
+.profile-save-started::before {
     content: '·';
     margin: 0 var(--spacing-xs);
     color: var(--text-muted);
 }
 
-.settings-save-slot::after {
+.profile-save-slot::after {
     margin-right: 0;
 }
 
-.settings-save-started {
+.profile-save-started {
     font-size: var(--font-size-sm);
     color: var(--text-muted);
 }
 
-.settings-save-started::before {
+.profile-save-started::before {
     margin-left: 0;
 }
 
-/* Settings > Main Menu: full width above the save file buttons */
+/* Settings > Main Menu: full width, gold */
 .modal-settings .settings-main-menu-btn {
     width: 100%;
     margin-bottom: var(--spacing-sm);

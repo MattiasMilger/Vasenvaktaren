@@ -388,7 +388,7 @@ UIController.prototype.renderSwapOptions = function(combat) {
     const modal = document.getElementById('swap-modal');
     const list = document.getElementById('swap-modal-list');
 
-    // Turn cost tip (hidden when Disable Tips is on), mirroring Interrogate's
+    // Turn cost tip (hidden when Disable Tutorial is on), mirroring Interrogate's
     list.innerHTML = ui.areTipsEnabled()
         ? ui.getTipHTML('Swapping costs a turn.')
         : '';
