@@ -342,8 +342,8 @@ UIController.prototype.createVasenCard = function(vasen, showActions = true) {
         </div>
         <div class="vasen-card-details">
             <span class="element-badge element-${vasen.species.element.toLowerCase()} clickable-element card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'element')">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
-            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'rarity')">${vasen.species.rarity}</span>
-            <span class="family-badge clickable-family card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'family')">${vasen.species.family}</span>
+            <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'rarity')" data-value="${vasen.species.rarity}">${rarityIcon(vasen.species.rarity)}${vasen.species.rarity}</span>
+            <span class="family-badge clickable-family card-badge-clickable" onclick="toggleCardBadgePopup(this, event, 'family')" data-value="${vasen.species.family}">${familyIcon(vasen.species.family)}${vasen.species.family}</span>
             ${isInParty ? '<span class="party-badge">In Party</span>' : ''}
         </div>
         <div class="vasen-card-health">
@@ -448,7 +448,7 @@ UIController.prototype.generateAttackingMatchupsHTML = function(element, showFla
     const flavor = ELEMENT_FLAVOR[element];
     let html = '<div class="matchup-details">';
     if (showFlavor && flavor) {
-        html += `<p class="element-flavor-text"><strong>${element}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
+        html += `<p class="element-flavor-text"><strong>${elementIcon(element)}${element}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
     }
     html += `<p class="matchup-section-label"><strong>Attacking:</strong></p>`;
     if (potent.length > 0) {
@@ -480,7 +480,7 @@ UIController.prototype.generateDefensiveMatchupsHTML = function(element, showFla
     const flavor = ELEMENT_FLAVOR[element];
     let html = '<div class="matchup-details">';
     if (showFlavor && flavor) {
-        html += `<p class="element-flavor-text"><strong>${element}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
+        html += `<p class="element-flavor-text"><strong>${elementIcon(element)}${element}</strong><br>${flavor}</p><hr style="margin: 6px 0; border: none; border-top: 1px solid var(--border-color);">`;
     }
     html += `<p class="matchup-section-label"><strong>Defending:</strong></p>`;
     if (vulnerable.length > 0) {
@@ -537,16 +537,16 @@ UIController.prototype.renderVasenDetails = function(vasen) {
                         ${this.generateDefensiveMatchupsHTML(vasen.species.element)}
                     </div>
                     <div class="rarity-matchup-collapsible family-matchup-collapsible">
-                        <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${vasen.species.rarity}</span>
+                        <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${rarityIcon(vasen.species.rarity)}${vasen.species.rarity}</span>
                         <div class="rarity-description-popup">
-                            <p><strong>${vasen.species.rarity}</strong><br>
+                            <p><strong>${rarityIcon(vasen.species.rarity)}${vasen.species.rarity}</strong><br>
                             ${RARITY_DESCRIPTIONS[vasen.species.rarity] || ''}</p>
                         </div>
                     </div>
                     <div class="family-matchup-collapsible">
-                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${familyIcon(vasen.species.family)}${vasen.species.family}</span>
                         <div class="family-description-popup">
-                            <p><strong>${vasen.species.family}</strong><br>
+                            <p><strong>${familyIcon(vasen.species.family)}${vasen.species.family}</strong><br>
                             ${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
                             
                             ${FAMILY_PASSIVES[vasen.species.family] ? `
@@ -575,8 +575,8 @@ UIController.prototype.renderVasenDetails = function(vasen) {
             <h4>${inlineIcon('runes')}Runes (${equippedRuneCount}/${runeSlots})</h4>
             <div class="rune-slots">
                 ${this.renderRuneSlots(vasen)}
+                ${this.renderBindRuneEffectText(vasen)}
             </div>
-            ${this.renderBindRuneEffectText(vasen)}
         </div>
 
         <div class="details-description">
@@ -668,28 +668,34 @@ UIController.prototype.renderVasenDetails = function(vasen) {
     }
 };
 
-// Render rune slots for details panel
+// Render rune slots for details panel: one rounded, gold-trimmed list with a
+// row per slot - the rune pill (12-style-badges.css) turned on its side, so
+// there is room for the effect text. Each row: gold symbol in a round badge,
+// then the rune's name and what it does.
 UIController.prototype.renderRuneSlots = function(vasen) {
     const maxSlots = vasen.getRuneSlotCount();
     let html = '';
 
-    // Filled slots use the rune pill's look (gold border and gold symbol), so a
-    // rune reads the same here as on every card
     for (let i = 0; i < maxSlots; i++) {
         const runeId = vasen.runes[i];
         if (runeId && RUNES[runeId]) {
             const rune = RUNES[runeId];
             html += `
                 <div class="rune-slot filled" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
-                    <span class="rune-symbol rune-pill-symbol">${rune.symbol}</span>
-                    <span class="rune-name">${rune.name}</span>
-                    <span class="rune-effect">${rune.effect}</span>
+                    <span class="rune-slot-badge rune-pill-symbol">${rune.symbol}</span>
+                    <span class="rune-slot-text">
+                        <span class="rune-name">${rune.name}</span>
+                        <span class="rune-effect">${rune.effect}</span>
+                    </span>
                 </div>
             `;
         } else {
             html += `
                 <div class="rune-slot empty" onclick="ui.showRuneEquipModal('${vasen.id}', ${i})">
-                    <span class="rune-placeholder">${inlineIcon('equip')}Equip Rune</span>
+                    <span class="rune-slot-badge">+</span>
+                    <span class="rune-slot-text">
+                        <span class="rune-placeholder">Equip Rune</span>
+                    </span>
                 </div>
             `;
         }
@@ -698,13 +704,17 @@ UIController.prototype.renderRuneSlots = function(vasen) {
     return html;
 };
 
-// Render the bindrune of the väsen's two runes below the rune slots, worded
-// like the bindrune part of the rune pill popup: "ᚦᚨ Bindrune" and its effect.
+// The bindrune of the väsen's two runes: the last row of the rune list,
+// worded like the bindrune part of the rune pill popup ("Bindrune Effect" +
+// effect), with both rune symbols in its badge.
 UIController.prototype.renderBindRuneEffectText = function(vasen) {
     return getActiveBindRunes(vasen).map(br => `
-        <div class="rune-bind-effect">
-            <span class="rune-bind-label"><span class="rune-pill-symbol">${br.symbols}</span> Bindrune</span>
-            <span class="rune-bind-desc">${br.effectText}</span>
+        <div class="rune-slot rune-bind-effect">
+            <span class="rune-slot-badge rune-pill-symbol">${br.symbols}</span>
+            <span class="rune-slot-text">
+                <span class="rune-name">Bindrune Effect</span>
+                <span class="rune-effect">${br.effectText}</span>
+            </span>
         </div>
     `).join('');
 };

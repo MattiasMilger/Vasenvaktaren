@@ -25,7 +25,10 @@
 
 .party-slot {
     position: relative;
+    /* flex: 1 (= 1 1 0%), not 1 1 0px: in the stacked phone column a 0px
+       basis collapses each card to zero height */
     flex: 1;
+    min-width: 0; /* never wider than its share: long names ellipsize instead */
     padding: var(--spacing-sm);
     background: var(--bg-card);
     border: 2px solid var(--border-color);

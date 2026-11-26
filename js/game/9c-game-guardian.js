@@ -13,7 +13,7 @@ Game.prototype.challengeGuardian = function() {
     const zone = ZONES[gameState.currentZone];
     if (!zone || !zone.guardian) return;
 
-    const guardian = zone.guardian;
+    const guardian = gameState.getGuardian(gameState.currentZone);
     const isRematch = gameState.defeatedGuardians.has(gameState.currentZone);
     const dialogueText = isRematch
         ? (guardian.dialogue.rematch || guardian.dialogue.challenge)
@@ -25,13 +25,13 @@ Game.prototype.challengeGuardian = function() {
     let tutorialHtml = '';
     if (ui.areTipsEnabled() && gameState.defeatedGuardians.size === 0) {
         tutorialHtml = ui.getTipHTML(
-            `Bring a full party of ${MAX_PARTY_SIZE} healthy väsen of matching level (<strong>Lvl ${guardian.team[0].level}</strong>).`
+            `Bring a full party of ${MAX_PARTY_SIZE} healthy väsen of matching level (<strong>Lvl ${guardian.level}</strong>).`
         );
     }
 
     ui.showDialogue(
         guardian.name,
-        `<p>${dialogueText}</p>${tutorialHtml}${this.getModeWarningHTML('guardian')}`,
+        `<p>${dialogueText}</p>${tutorialHtml}`,
         [
             {
                 text: `${uiIcon('swords')}Fight!`,

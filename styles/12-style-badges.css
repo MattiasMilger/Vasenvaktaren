@@ -137,6 +137,11 @@
     margin-bottom: var(--spacing-xs);
 }
 
+/* The flavor heading is already a block here, so the <br> after it would leave an empty line */
+.guide-matchup-section strong + br {
+    display: none;
+}
+
 .matchup-instruction {
     font-size: var(--font-size-sm);
     color: var(--text-muted);
@@ -898,13 +903,11 @@
 }
 
 /* Smooth transitions for interactive elements */
-.rune-slot,
 .attribute-item,
 .skill-item {
     transition: all var(--transition-base);
 }
 
-.rune-slot:hover,
 .attribute-item:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm);

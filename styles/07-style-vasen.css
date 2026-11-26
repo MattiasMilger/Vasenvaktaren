@@ -501,115 +501,118 @@
     color: var(--text-primary);
 }
 
-/* Rune Slots */
+/* Rune Slots (details panel): the rune pill (.rune-pill, 12-style-badges.css)
+   turned on its side. One rounded list with a thin gold trim, one row per slot
+   split by hairlines like the pill's segments, so the effect text has room:
+       (ᛃ)  Jera
+            This Väsen's skills that cost 30 megin...
+   The active bindrune is the last row of the same list. */
 .rune-slots {
     display: flex;
-    gap: var(--spacing-xs);
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--accent-gold) 55%, transparent);
+    border-radius: var(--border-radius);
+    background: var(--bg-card);
+    overflow: hidden;
 }
 
 .rune-slot {
-    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
     padding: var(--spacing-sm);
-    background: var(--bg-card);
-    border: 2px dashed var(--accent-primary);
-    border-radius: var(--border-radius-sm);
-    text-align: center;
+    text-align: left;
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 0 8px var(--accent-primary-glow-color);
-    animation: runeSlotPulse 2s ease-in-out infinite;
+    transition: background 0.2s;
+}
+
+.rune-slot + .rune-slot {
+    border-top: 1px solid color-mix(in srgb, var(--accent-gold) 30%, transparent);
 }
 
 .rune-slot:hover {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 12px var(--accent-primary-glow-strong-color);
-    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--accent-gold) 8%, var(--bg-card));
 }
 
-.rune-slot.filled {
-    border-style: solid;
-    border-color: var(--accent-primary);
-    box-shadow: none;
-    animation: none;
+/* Round symbol badge on the left, gold like the pill's symbols */
+.rune-slot-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    border: 1px solid color-mix(in srgb, var(--accent-gold) 55%, transparent);
+    border-radius: 999px;
+    background: var(--bg-tertiary);
+    font-size: var(--font-size-base);
+    line-height: 1;
 }
 
-.rune-slot.filled:hover {
-    transform: none;
-}
-
-/* Subtle pulse animation for empty rune slots */
-@keyframes runeSlotPulse {
-    0%, 100% {
-        box-shadow: 0 0 8px var(--accent-primary-glow-color);
-    }
-    50% {
-        box-shadow: 0 0 12px var(--accent-primary-glow-strong-color);
-    }
-}
-
-.rune-symbol {
-    font-size: var(--font-size-xl);
-    display: block;
-}
-
-.rune-symbol.large {
-    font-size: var(--font-size-2xl);
-}
-
-.rune-name {
-    font-size: var(--font-size-xs);
-    color: var(--text-primary);
-}
-
-.rune-slot .rune-effect {
-    display: block;
-    font-size: var(--font-size-xs);
-    color: var(--text-primary);
-    margin-top: var(--spacing-xs);
-    line-height: 1.3;
-}
-
-/* Filled rune slots: same gold border as the rune pill on the cards
-   (.rune-pill, 12-style-badges.css), rune symbol in gold */
-.rune-slot.filled {
-    border-color: color-mix(in srgb, var(--accent-gold) 55%, transparent);
-}
-
-.rune-slot.filled:hover {
-    border-color: var(--accent-gold);
-}
-
-/* Bindrune of the two equipped runes, under the slots: same gold border as
-   the slots, worded like the rune pill popup ("ᚦᚨ Bindrune" + effect) */
-.rune-bind-effect {
+.rune-slot-text {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-top: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border: 2px solid color-mix(in srgb, var(--accent-gold) 55%, transparent);
-    border-radius: var(--border-radius-sm);
-    background: var(--bg-card);
-    text-align: center;
-    font-size: var(--font-size-xs);
-    line-height: 1.3;
+    min-width: 0;
+    padding-top: 1px;
 }
 
-.rune-bind-label {
-    color: var(--text-primary);
+.rune-name {
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    line-height: 1.2;
 }
 
-.rune-bind-desc {
-    color: var(--text-primary);
+.rune-slot .rune-effect {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    line-height: 1.35;
+}
+
+/* Bindrune row: not clickable, badge holds both rune symbols, and a faint
+   gold tint plus the gold "Bindrune Effect" label set it apart */
+.rune-slot.rune-bind-effect {
+    cursor: default;
+    background: color-mix(in srgb, var(--accent-gold) 6%, var(--bg-card));
+}
+
+.rune-slot.rune-bind-effect .rune-slot-badge {
+    font-size: var(--font-size-sm);
+    letter-spacing: -1px;
+}
+
+.rune-slot.rune-bind-effect .rune-name {
+    color: var(--accent-gold);
+}
+
+/* Empty slot: sage-green dashed badge with a soft pulse, so a free slot
+   still invites a click (same accent as before) */
+.rune-slot.empty {
+    align-items: center;
+}
+
+.rune-slot.empty .rune-slot-badge {
+    border: 1px dashed var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: var(--font-weight-bold);
+    animation: runeSlotPulse 2s ease-in-out infinite;
 }
 
 .rune-placeholder {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     color: var(--accent-primary);
     font-weight: 600;
+}
+
+@keyframes runeSlotPulse {
+    0%, 100% {
+        box-shadow: 0 0 4px var(--accent-primary-glow-color);
+    }
+    50% {
+        box-shadow: 0 0 10px var(--accent-primary-glow-strong-color);
+    }
 }
 
 /* Experience Bar */

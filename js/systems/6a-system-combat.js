@@ -60,9 +60,6 @@ class Combat {
         this.onAttack = null;
         this.onKnockoutSwap = null;
         this.onEnd = null;
-        // Called with the väsen sent onto the field (Ragnarök saves remember it,
-        // so a reload mid-battle knows who covers the retreat)
-        this.onPlayerActiveChange = null;
         // Called once for each player väsen that is knocked out (after revives
         // had their chance), with (vasen, enemyActive). Used by Permadeath.
         this.onPlayerKnockout = null;
@@ -188,7 +185,6 @@ class Combat {
         if (isPlayer) {
             this.playerActive = vasen;
             this.playerActiveIndex = index;
-            if (this.onPlayerActiveChange) this.onPlayerActiveChange(vasen);
         } else {
             this.enemyActive = vasen;
             this.enemyActiveIndex = index;

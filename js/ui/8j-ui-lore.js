@@ -5,6 +5,15 @@
 // Show the lore modal and render its contents
 UIController.prototype.showLore = function() {
     this.loreModal.classList.add('active');
+    // The first opening (the Lore Book tutorial) explains the book in a tip,
+    // kept until the book is closed
+    this._loreIntroTip = this.isLoreBookTutorialActive();
+    // ...and points at the first unlocked entry in the book (usually the
+    // starter's family), not just the newest one, so the tour starts at the top
+    if (this._loreIntroTip) {
+        const firstKey = getLoreDisplayOrder().find(key => gameState.unlockedLoreEntries.has(key));
+        if (firstKey) gameState.latestLoreEntry = firstKey;
+    }
     this.renderLore();
     this._jumpToLatestLoreEntry();
 
@@ -34,6 +43,7 @@ UIController.prototype.isLoreBookTutorialActive = function() {
 UIController.prototype.hideLore = function() {
     this.loreModal.classList.remove('active');
     this._loreSearchQuery = '';
+    this._loreIntroTip = false;
 };
 
 // Render the full lore book contents into the modal
@@ -71,35 +81,11 @@ UIController.prototype.renderLore = function() {
         <input class="lore-search-input" type="text" placeholder="Search…" autocomplete="off">
     </div>`;
 
-    // Group entries by display category
-    const grouped = {};
-    LORE_ENTRY_KEYS.forEach(key => {
-        const entry = LORE_ENTRIES[key];
-        const displayCat = entry.unlockType === 'family' ? 'families' : entry.category;
-        if (!grouped[displayCat]) grouped[displayCat] = [];
-        grouped[displayCat].push(entry);
-    });
+    if (this._loreIntroTip) {
+        html += this.getTipHTML('This is your <strong>Lore Book</strong>. Taming väsen, defeating guardians and exploring unlock entries about the folklore behind the game. A new entry glows until you open it, and the <strong>i</strong> buttons show game details.');
+    }
 
-    // Sort each category's entries alphabetically, then bring favorited
-    // entries to the front (preserving the regular alphabetical order
-    // within each of the two groups).
-    Object.keys(grouped).forEach(cat => {
-        grouped[cat].sort((a, b) => a.name.localeCompare(b.name, 'sv'));
-        const favEntries  = grouped[cat].filter(e => gameState.favoriteLoreEntries.has(e.key));
-        const restEntries = grouped[cat].filter(e => !gameState.favoriteLoreEntries.has(e.key));
-        grouped[cat] = [...favEntries, ...restEntries];
-    });
-
-    // Render categories in defined order, with favorited categories brought
-    // to the front (preserving the regular order otherwise). Secret categories
-    // can't be favorited and always stay at the bottom.
-    let sortedCategories = Object.keys(LORE_CATEGORIES).sort(
-        (a, b) => LORE_CATEGORIES[a].order - LORE_CATEGORIES[b].order
-    );
-    const isFavCat = c => !LORE_CATEGORIES[c].secret && gameState.favoriteLoreCategories.has(c);
-    const favCategories  = sortedCategories.filter(c => isFavCat(c));
-    const restCategories = sortedCategories.filter(c => !isFavCat(c));
-    sortedCategories = [...favCategories, ...restCategories];
+    const { grouped, sortedCategories } = getLoreDisplayGroups();
 
     sortedCategories.forEach(cat => {
         if (!grouped[cat] || grouped[cat].length === 0) return;
@@ -359,7 +345,7 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     if (entry.unlockType === 'vasen' && entry.unlockKey && !entry.family) {
         const species = VASEN_SPECIES[entry.unlockKey];
         if (species && species.family) {
-            extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${species.family}</span>`;
+            extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${familyIcon(species.family)}${species.family}</span>`;
         }
     } else if (entry.unlockType === 'item' && entry.unlockKey) {
         const vasenEntry = Object.values(VASEN_SPECIES).find(s => s.tamingItem === entry.unlockKey);
@@ -368,7 +354,7 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
         }
     }
     if (entry.family) {
-        extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${entry.family}</span>`;
+        extraMeta += `<span class="lore-meta-sep">|</span><span class="lore-meta-label">${labelFamily}</span><span class="lore-meta-value">${familyIcon(entry.family)}${entry.family}</span>`;
     }
 
     if (!gameState.favoriteLoreEntries) gameState.favoriteLoreEntries = new Set();
@@ -404,14 +390,62 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     `;
 };
 
+// The Lore Book's layout: entries grouped by display category, each category
+// sorted alphabetically with favorited entries first, and the categories in
+// their defined order with favorited ones first (secret categories can't be
+// favorited and always stay at the bottom).
+function getLoreDisplayGroups() {
+    const favoriteEntries = gameState.favoriteLoreEntries || new Set();
+    const favoriteCategories = gameState.favoriteLoreCategories || new Set();
+
+    const grouped = {};
+    LORE_ENTRY_KEYS.forEach(key => {
+        const entry = LORE_ENTRIES[key];
+        const displayCat = entry.unlockType === 'family' ? 'families' : entry.category;
+        if (!grouped[displayCat]) grouped[displayCat] = [];
+        grouped[displayCat].push(entry);
+    });
+
+    Object.keys(grouped).forEach(cat => {
+        grouped[cat].sort((a, b) => a.name.localeCompare(b.name, 'sv'));
+        const favEntries  = grouped[cat].filter(e => favoriteEntries.has(e.key));
+        const restEntries = grouped[cat].filter(e => !favoriteEntries.has(e.key));
+        grouped[cat] = [...favEntries, ...restEntries];
+    });
+
+    const byOrder = Object.keys(LORE_CATEGORIES).sort(
+        (a, b) => LORE_CATEGORIES[a].order - LORE_CATEGORIES[b].order
+    );
+    const isFavCat = c => !LORE_CATEGORIES[c].secret && favoriteCategories.has(c);
+    const sortedCategories = [...byOrder.filter(isFavCat), ...byOrder.filter(c => !isFavCat(c))];
+
+    return { grouped, sortedCategories };
+}
+
+// Every lore entry key, top to bottom as the Lore Book lists them
+function getLoreDisplayOrder() {
+    const { grouped, sortedCategories } = getLoreDisplayGroups();
+    return sortedCategories.flatMap(cat => (grouped[cat] || []).map(entry => entry.key));
+}
+
 // Show a toast notification when a new lore entry is unlocked
 UIController.prototype.showLoreUnlockMessage = function(entryKey) {
     const entry = LORE_ENTRIES[entryKey];
     if (!entry) return;
     this.showMessage(`Lore Entry unlocked: ${entry.name}`, 'success');
 
-    // Only the latest unlock glows in the Lore Book, until the player opens it
-    gameState.latestLoreEntry = entryKey;
+    // Only the latest unlock glows in the Lore Book, until the player opens it.
+    // Several entries often unlock at once (a tame unlocks the väsen, its
+    // family, element, item and skills): then the one highest up in the book
+    // glows, so the book opens at the top of what is new.
+    if (!this._loreUnlockBatch) {
+        this._loreUnlockBatch = [];
+        setTimeout(() => { this._loreUnlockBatch = null; }, 0);
+    }
+    this._loreUnlockBatch.push(entryKey);
+    const order = getLoreDisplayOrder();
+    gameState.latestLoreEntry = this._loreUnlockBatch.reduce((best, key) =>
+        order.indexOf(key) < order.indexOf(best) ? key : best);
     gameState.saveGame();
     this.updateLoreButtonGlow();
 };
@@ -684,16 +718,16 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
                         ${this.generateDefensiveMatchupsHTML(species.element)}
                     </div>
                     <div class="rarity-matchup-collapsible family-matchup-collapsible">
-                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.rarity}</span>
+                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${rarityIcon(species.rarity)}${species.rarity}</span>
                         <div class="rarity-description-popup">
-                            <p><strong>${species.rarity}</strong><br>
+                            <p><strong>${rarityIcon(species.rarity)}${species.rarity}</strong><br>
                             ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
                         </div>
                     </div>
                     <div class="family-matchup-collapsible">
-                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.family}</span>
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${familyIcon(species.family)}${species.family}</span>
                         <div class="family-description-popup">
-                            <p><strong>${species.family}</strong><br>
+                            <p><strong>${familyIcon(species.family)}${species.family}</strong><br>
                             ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
 
                             ${FAMILY_PASSIVES[species.family] ? `
@@ -798,8 +832,9 @@ UIController.prototype.showLocationsInfoModal = function() {
             : zone.spawns.map(name => VASEN_SPECIES[name] ? VASEN_SPECIES[name].name : name).join(', ');
 
         let guardianValue;
-        if (zone.guardian) {
-            const teamList = zone.guardian.team.map(member => {
+        const guardian = gameState.getGuardian(zoneId);
+        if (guardian) {
+            const teamList = guardian.team.map(member => {
                 const memberSpecies = VASEN_SPECIES[member.species];
                 const memberName = memberSpecies ? memberSpecies.name : member.species;
                 const memberRunes = (member.runes || [])
@@ -810,7 +845,7 @@ UIController.prototype.showLocationsInfoModal = function() {
                     ? `${memberName} (Lvl ${member.level}) - ${memberRunes}`
                     : `${memberName} (Lvl ${member.level})`;
             }).join('; ');
-            guardianValue = `${zone.guardian.name} - ${teamList}`;
+            guardianValue = `${guardian.name} - ${teamList}`;
         } else if (zoneId === 'ZONE7') {
             guardianValue = 'None - hosts the Endless Tower';
         } else {

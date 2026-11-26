@@ -681,9 +681,9 @@ achievementsHtml += '</div></div>';
             
             html += `
                 <div class="family-guide-collapsible">
-                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${family}</span>
+                    <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${familyIcon(family)}${family}</span>
                     <div class="family-description-popup">
-                        <p><strong>${family}</strong><br>
+                        <p><strong>${familyIcon(family)}${family}</strong><br>
                         ${description}</p>
                         
                         ${passive ? `

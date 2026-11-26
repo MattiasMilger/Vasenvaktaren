@@ -151,6 +151,9 @@ class GameState {
         // Zone progression
         this.currentZone = 'ZONE1';
         this.defeatedGuardians = new Set();
+        // This save's guardians, rolled when the save is created (see
+        // generateGuardianRosters). null: an older save with the fixed guardians.
+        this.guardians = null;
         
         this.achievements = createDefaultAchievements();
         
@@ -680,6 +683,21 @@ class GameState {
         return bindRune.runes.every(runeId => this.collectedRunes.has(runeId));
     }
     
+    // The guardian of a zone in this save: { name, level, team, dialogue },
+    // each team member { species, level, temperament, runes }. Randomized saves
+    // use their own guardians; older saves use the fixed ones. null if none.
+    getGuardian(zoneId) {
+        const zoneGuardian = ZONES[zoneId] && ZONES[zoneId].guardian;
+        if (!zoneGuardian) return null;
+        const roster = (this.guardians && this.guardians[zoneId]) || zoneGuardian.legacy;
+        return {
+            name: roster.name,
+            level: zoneGuardian.level,
+            dialogue: zoneGuardian.dialogue,
+            team: roster.team.map(m => ({ ...m, level: zoneGuardian.level, runes: (m.runes || []).slice() }))
+        };
+    }
+
     // Defeat guardian (the next zone unlocks implicitly, see isZoneUnlocked)
     defeatGuardian(zoneId) {
         this.defeatedGuardians.add(zoneId);
@@ -1070,6 +1088,7 @@ class GameState {
             discoveredItems: Array.from(this.discoveredItems),
             currentZone: this.currentZone,
             defeatedGuardians: Array.from(this.defeatedGuardians),
+            guardians: this.guardians,
             achievements: this.achievements,
             gameStarted: this.gameStarted,
             runeMenuFirstOpen: this.runeMenuFirstOpen,
@@ -1160,6 +1179,8 @@ class GameState {
             this.discoveredItems = new Set((data.discoveredItems || []).filter(id => TAMING_ITEMS[id]));
             this.currentZone = data.currentZone || 'ZONE1';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
+            // Saves from before guardians were randomized keep the fixed ones
+            this.guardians = normalizeGuardianRosters(data.guardians);
 
             this.achievements = data.achievements || createDefaultAchievements();
             this.gameStarted = data.gameStarted || false;
@@ -1306,6 +1327,7 @@ class GameState {
         this.discoveredItems = new Set();
         this.currentZone = 'ZONE1';
         this.defeatedGuardians = new Set();
+        this.guardians = null;
         this.achievements = createDefaultAchievements();
         this.gameStarted = false;
         this.runeMenuFirstOpen = false;
@@ -1346,6 +1368,8 @@ class GameState {
         this.runId = generateRunId();
         this.createdAt = Date.now();
         this.saveCounter = 0;
+        // Every new save gets its own guardians
+        this.guardians = generateGuardianRosters();
     }
 }
 

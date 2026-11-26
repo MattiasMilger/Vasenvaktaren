@@ -50,11 +50,12 @@ UIController.prototype.showCombatUI = function() {
         requestAnimationFrame(() => this._sizeCombatLog());
 };
 
-// On phone layouts (single stacked column, see 14-style-responsive.css) scroll
-// the game screen so `target` is at the top, or to the very top when target is
-// null. Does nothing on tablet/desktop, where the panels are side by side.
+// On phone and tablet layouts (the page scrolls as a whole, see
+// 14-style-responsive.css) scroll the game screen so `target` is at the top,
+// or to the very top when target is null. Does nothing on the three-column
+// desktop layout (1280px+), where every panel fits the screen.
 UIController.prototype.scrollMobileGameView = function(target) {
-        if (!window.matchMedia || !window.matchMedia('(max-width: 768px)').matches) return;
+        if (!window.matchMedia || !window.matchMedia('(max-width: 1279px)').matches) return;
         requestAnimationFrame(() => {
                 const scroller = document.getElementById('game-screen');
                 if (target) {
@@ -235,9 +236,9 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
                 </span>
 
                 <div class="rarity-matchup-collapsible family-matchup-collapsible">
-                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${vasen.species.rarity}</span>
+                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event)">${rarityIcon(vasen.species.rarity)}${vasen.species.rarity}</span>
                     <div class="rarity-description-popup">
-                        <p><strong>${vasen.species.rarity}</strong><br>
+                        <p><strong>${rarityIcon(vasen.species.rarity)}${vasen.species.rarity}</strong><br>
                         ${RARITY_DESCRIPTIONS[vasen.species.rarity] || ''}</p>
                     </div>
                 </div>
@@ -246,9 +247,9 @@ UIController.prototype.renderCombatantPanel = function(side, vasen, combat) {
             </div>
 
                     <div class="family-matchup-collapsible">
-            <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${vasen.species.family}</span>
+            <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event)">${familyIcon(vasen.species.family)}${vasen.species.family}</span>
             <div class="family-description-popup">
-                <p><strong>${vasen.species.family}</strong><br>
+                <p><strong>${familyIcon(vasen.species.family)}${vasen.species.family}</strong><br>
                 ${FAMILY_DESCRIPTIONS[vasen.species.family] || 'No description available.'}</p>
 
                 ${FAMILY_PASSIVES[vasen.species.family] ? `
@@ -362,8 +363,8 @@ UIController.prototype.createStandardVasenCardHTML = function(vasen, showCombatI
                 </div>
                 <div class="standard-vasen-badges">
                     <span class="element-badge element-${vasen.species.element.toLowerCase()}">${elementIcon(vasen.species.element)}${vasen.species.element}</span>
-                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${vasen.species.rarity}</span>
-                    <span class="family-badge">${vasen.species.family}</span>
+                    <span class="rarity-badge rarity-${vasen.species.rarity.toLowerCase()}">${rarityIcon(vasen.species.rarity)}${vasen.species.rarity}</span>
+                    <span class="family-badge">${familyIcon(vasen.species.family)}${vasen.species.family}</span>
                 </div>
                 <div class="standard-vasen-bars">
                     <div class="combat-bar combat-bar-small health-bar">

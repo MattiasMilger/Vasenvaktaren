@@ -275,7 +275,6 @@ class Game {
         // Ragnarök rules run first; Permadeath may end the save instead
         // of the combat type's normal ending (see 9g-game-modes.js)
         combat.onPlayerKnockout = (vasen, killer) => this.handleModeKnockout(vasen, killer);
-        combat.onPlayerActiveChange = (vasen) => this.noteModeActiveVasen(vasen);
         combat.onEnd = (result) => {
             if (this.applyModeRulesOnCombatEnd(result)) return;
             onEnd(result);
@@ -361,7 +360,7 @@ class Game {
             this.pendingGuardianHint = false;
             const guardian = ZONES[gameState.currentZone]?.guardian;
             if (guardian && ui.areTipsEnabled() && gameState.defeatedGuardians.size === 0) {
-                const guardianLevel = guardian.team[0].level;
+                const guardianLevel = guardian.level;
                 ui.showDialogue(
                     'A Full Party',
                     `<p>Three väsen now walk beside you. The forest feels a little less hostile.</p>

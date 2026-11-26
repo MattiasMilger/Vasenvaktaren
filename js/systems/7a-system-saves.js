@@ -69,6 +69,8 @@ const RAGNAROK_TIERS = [
     { level: 3, minPoints: 3, name: 'Ragnarök',     line: 'The world burns. Few will see the dawn.' }
 ];
 const RAGNAROK_POINTS = RAGNAROK_TIERS[RAGNAROK_TIERS.length - 1].minPoints;
+// Points with every rule on: Ragnarök overflowing (a small extra effect only)
+const RAGNAROK_MAX_POINTS = GAME_MODE_LIST.reduce((sum, id) => sum + GAME_MODES[id].points, 0);
 
 function createDefaultModes() {
     const modes = {};
@@ -104,6 +106,11 @@ function getRagnarokTier(modes) {
     let tier = null;
     RAGNAROK_TIERS.forEach(t => { if (points >= t.minPoints) tier = t; });
     return tier;
+}
+
+// Every rule on: past Ragnarök's threshold (same tier, a little extra glow on the New Game screen)
+function isRagnarokOverflowing(modes) {
+    return getRagnarokPoints(modes) >= RAGNAROK_MAX_POINTS && RAGNAROK_MAX_POINTS > RAGNAROK_POINTS;
 }
 
 // How full the difficulty meter is (0 to 1; full from Ragnarök up)

@@ -49,7 +49,7 @@ UIController.prototype.renderZones = function() {
             const prevZone = this.getPreviousZone(zoneId);
             zoneBtn.innerHTML = `
                 <span class="zone-name">${zone.name}</span>
-                <span class="zone-status locked">${uiIcon('lock', 14)}Defeat ${prevZone ? ZONES[prevZone].guardian?.name || 'Guardian' : 'Guardian'} to unlock</span>
+                <span class="zone-status locked">${uiIcon('lock', 14)}Defeat ${(prevZone && gameState.getGuardian(prevZone)?.name) || 'Guardian'} to unlock</span>
             `;
         }
 
@@ -88,6 +88,7 @@ UIController.prototype.selectZone = function(zoneId) {
     // Update zone description
 UIController.prototype.updateZoneDescription = function() {
         const zone = ZONES[gameState.currentZone];
+        const guardian = gameState.getGuardian(gameState.currentZone);
         const expanded = !!this.zoneDescriptionExpanded;
 
         // The toggle row is only shown on phones (14-style-responsive.css),
@@ -105,7 +106,7 @@ UIController.prototype.updateZoneDescription = function() {
                 <p>${zone.description}</p>
                 <div class="zone-meta">
                     <span>Level Range: ${zone.levelRange[0]} - ${zone.levelRange[1]}</span>
-                    ${zone.guardian ? `<span>${inlineIcon('swords')}Guardian: ${zone.guardian.name} (Lvl ${zone.guardian.team[0].level})</span>` : ''}
+                    ${guardian ? `<span>${inlineIcon('swords')}Guardian: ${guardian.name} (Lvl ${guardian.level})</span>` : ''}
                 </div>
             </div>
         `;
@@ -141,7 +142,7 @@ UIController.prototype.updateExploreButton = function() {
             // Show/hide challenge button
             if (zone.guardian) {
                 this.challengeBtn.style.display = 'flex';
-                this.challengeBtn.innerHTML = `${uiIcon('swords', 18)}Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.team[0].level})</span>`;
+                this.challengeBtn.innerHTML = `${uiIcon('swords', 18)}Challenge Guardian <span class="btn-hint">(Lvl ${zone.guardian.level})</span>`;
                 this.challengeBtn.disabled = !hasParty || gameState.inCombat;
             } else if (gameState.currentZone === 'ZONE7') {
                 // Show Endless Tower button in Ginnungagap

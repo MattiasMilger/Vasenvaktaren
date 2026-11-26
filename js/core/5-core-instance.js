@@ -474,12 +474,13 @@ function createWildVasen(speciesName, level, numRunes = getRuneSlotCount(), excl
     return vasen;
 }
 
-// Create guardian team
+// Create guardian team. guardianData is a resolved guardian (see
+// GameState.getGuardian): { name, level, team: [{ species, temperament, runes }] }
 function createGuardianTeam(guardianData) {
     return guardianData.team.map(memberData => {
         const vasen = new VasenInstance(
             memberData.species,
-            memberData.level,
+            memberData.level || guardianData.level,
             memberData.temperament,
             memberData.runes || []
         );
@@ -488,4 +489,120 @@ function createGuardianTeam(guardianData) {
         }
         return vasen;
     });
+}
+
+// =============================================================================
+// Randomized guardians
+// Every new save rolls its own guardians once, when the save is created
+// (GameState.startRun), and keeps them for the whole save:
+//   - a name from GUARDIAN_NAMES, never the same name twice in one save
+//   - three different väsen from the zone's spawns
+//   - a random temperament for each
+//   - runes as wild väsen of that zone carry them (1 in the first zone, 2 after),
+//     never the same rune twice within one guardian's team
+// The level and dialogue come from the zone (ZONES[zoneId].guardian).
+// Saves made before this keep the old fixed guardians (guardian.legacy).
+// =============================================================================
+
+const GUARDIAN_TEAM_SIZE = 3;
+
+// Pick `count` random runes worth wearing for this väsen, leaving out the ids
+// in `excluded`. Runes only useful as half of a bindrune are only picked
+// together with their partner (same approach as Auto Runes).
+function pickGuardianRunes(vasen, count, excluded) {
+    const free = runeId => !excluded.has(runeId);
+    const solo = getSoloValidRunesForVasen(vasen).filter(free);
+    const candidates = solo.map(runeId => [runeId]);
+    if (count >= 2) {
+        const valid = getValidRunesForVasen(vasen);
+        const eligible = getBindRuneEligibleRunes(vasen);
+        BIND_RUNES.forEach(br => {
+            if (br.runes.every(r => eligible.has(r) && valid.includes(r) && free(r))) {
+                candidates.push(br.runes.slice());
+            }
+        });
+    }
+    shuffleInPlace(candidates);
+
+    const picked = [];
+    for (const runes of candidates) {
+        if (picked.length >= count) break;
+        if (picked.length + runes.length > count) continue;
+        if (runes.some(r => picked.includes(r))) continue;
+        picked.push(...runes);
+    }
+    return picked;
+}
+
+// One random guardian for a zone. usedNames: names already taken in this save.
+function generateGuardianRoster(zoneId, usedNames = new Set()) {
+    const zone = ZONES[zoneId];
+    if (!zone || !zone.guardian) return null;
+
+    const freeNames = GUARDIAN_NAMES.filter(n => !usedNames.has(n));
+    const namePool = freeNames.length > 0 ? freeNames : GUARDIAN_NAMES;
+    const name = namePool[Math.floor(Math.random() * namePool.length)];
+
+    const speciesPool = zone.spawns.filter(s => VASEN_SPECIES[s]);
+    shuffleInPlace(speciesPool);
+    const runeCount = Math.min(getWildRuneCountForZone(zoneId), getRuneSlotCount());
+    const teamRunes = new Set();
+
+    const team = speciesPool.slice(0, GUARDIAN_TEAM_SIZE).map(species => {
+        const temperament = getRandomTemperament();
+        // Rune usefulness depends on the skills known at the guardian's level
+        const probe = new VasenInstance(species, zone.guardian.level, temperament, [], true);
+        const runes = pickGuardianRunes(probe, runeCount, teamRunes);
+        runes.forEach(r => teamRunes.add(r));
+        return { species, temperament, runes };
+    });
+
+    return { name, team };
+}
+
+// Guardians for every zone that has one, as stored in a save: { ZONE1: {...}, ... }
+function generateGuardianRosters() {
+    const rosters = {};
+    const usedNames = new Set();
+    ZONE_ORDER.forEach(zoneId => {
+        const roster = generateGuardianRoster(zoneId, usedNames);
+        if (!roster) return;
+        usedNames.add(roster.name);
+        rosters[zoneId] = roster;
+    });
+    return rosters;
+}
+
+// Is a stored guardian still usable with the current game data (species,
+// temperaments and runes may be renamed or removed in later versions)?
+function isValidGuardianRoster(zoneId, roster) {
+    const zone = ZONES[zoneId];
+    if (!zone || !zone.guardian || !roster || typeof roster.name !== 'string' || !Array.isArray(roster.team)) return false;
+    if (roster.team.length === 0) return false;
+    return roster.team.every(m =>
+        m && VASEN_SPECIES[m.species] && TEMPERAMENTS[m.temperament] &&
+        Array.isArray(m.runes) && m.runes.every(r => RUNES[r])
+    );
+}
+
+// Read stored guardians. Returns null for saves made before guardians were
+// randomized (they keep the fixed guardians). A stored guardian that no
+// longer fits the game data is rolled again, keeping the save's other names.
+function normalizeGuardianRosters(stored) {
+    if (!stored || typeof stored !== 'object') return null;
+    const rosters = {};
+    const usedNames = new Set();
+    ZONE_ORDER.forEach(zoneId => {
+        if (isValidGuardianRoster(zoneId, stored[zoneId])) {
+            rosters[zoneId] = stored[zoneId];
+            usedNames.add(stored[zoneId].name);
+        }
+    });
+    ZONE_ORDER.forEach(zoneId => {
+        if (rosters[zoneId] || !ZONES[zoneId].guardian) return;
+        const roster = generateGuardianRoster(zoneId, usedNames);
+        usedNames.add(roster.name);
+        rosters[zoneId] = roster;
+    });
+    return rosters;
 }

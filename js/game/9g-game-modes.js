@@ -15,10 +15,11 @@
 //
 // Reloading the page can't undo a death or a lost rune. When a combat starts
 // in a Ragnarök save it is written down as pending, and every loss is saved
-// the moment it happens. A combat still pending on the next page load counts as
-// fleeing: the väsen that was on the field stays behind (knocked out).
-// A rolled wild encounter is kept until it is fought. Normal saves skip all
-// of this and behave exactly as before.
+// the moment it happens. A combat still pending on the next page load is
+// abandoned: losses already taken stand and the party is left at low health,
+// but nobody is lost for the reload itself (closing the browser by accident
+// shouldn't cost a väsen). A rolled wild encounter is kept until it is fought.
+// Normal saves skip all of this and behave exactly as before.
 
 // =============================================================================
 // Main menu and save slots
@@ -258,21 +259,14 @@ Game.prototype.resumeModesAfterLoad = function() {
     }
 };
 
-// A Ragnarök combat was still going when the page closed: it counts as a
-// fled battle: the väsen that was on the field stays behind to cover the
-// retreat (knocked out), and losses already taken stand.
+// A Ragnarök combat was still going when the page closed: the battle is
+// abandoned. Losses already taken in it stand and the party is left at low
+// health, but the reload itself costs nothing more.
 Game.prototype.resolveInterruptedCombat = function(pending) {
     gameState.pendingCombat = null;
     gameState.pendingEncounter = null;
 
     const isTower = pending.type === COMBAT_TYPES.ENDLESS_TOWER;
-
-    // The väsen on the field covers the retreat, as if the player had fled
-    const rearguard = isTower ? null : gameState.vasenCollection.find(v => v.id === pending.activeId);
-    const alreadyLost = id => (pending.fallen || []).some(r => r.id === id) || (pending.lostRunes || []).some(r => r.id === id);
-    if (rearguard && !alreadyLost(rearguard.id)) {
-        this.addModeLoss(pending, rearguard, pending.opponent || 'your foe', true);
-    }
 
     const fallen = gameState.modes.permadeath ? this.commitFallen(pending.fallen || []) : [];
     const lostRunes = this.commitLostRunes(pending.lostRunes || []);
@@ -296,7 +290,7 @@ Game.prototype.resolveInterruptedCombat = function(pending) {
     ui.showDialogue(
         'Battle Abandoned',
         `<p>The page was closed or reloaded during ${what}.</p>
-         <p>In Ragnarök Mode that counts as fleeing: the väsen on the field stayed behind to cover the retreat, and the rest of your party withdrew. Losses from the battle still stand.</p>
+         <p>${isTower ? 'The run has ended and your party has been restored.' : 'Your party withdrew and is left at low health.'}${fallen.length > 0 || lostRunes.length > 0 ? ' Losses taken during the battle still stand.' : ''}</p>
          ${fallen.length > 0 ? ui.getFallenListHTML(fallen) : ''}
          ${lostRunes.length > 0 ? ui.getLostRunesListHTML(lostRunes) : ''}`,
         [{ text: 'Continue', callback: null }],
@@ -311,7 +305,7 @@ Game.prototype.resolveInterruptedCombat = function(pending) {
 // =============================================================================
 
 // Called when any combat starts (attachCombatCallbacks): note it as pending
-// so that reloading the page mid-fight counts as fleeing.
+// so that reloading the page mid-fight can't undo losses already taken.
 Game.prototype.beginModeCombat = function() {
     if (!gameState.hasModes() || !this.currentCombat) return;
     const combat = this.currentCombat;
@@ -321,7 +315,6 @@ Game.prototype.beginModeCombat = function() {
         opponent: this.describeOpponent(combat),
         zone: gameState.currentZone,
         floor: combat.currentFloor || null,
-        activeId: combat.playerActive ? combat.playerActive.id : null,
         startedAt: Date.now(),
         fallen: [],
         lostRunes: []
@@ -388,15 +381,6 @@ Game.prototype.addModeLoss = function(pending, vasen, killer, retreat) {
         return record;
     }
     return null;
-};
-
-// Ragnarök saves remember the väsen on the field, so a reload mid-battle
-// knows who stays behind to cover the retreat
-Game.prototype.noteModeActiveVasen = function(vasen) {
-    if (!gameState.hasModes() || !gameState.pendingCombat || !vasen) return;
-    if (gameState.pendingCombat.activeId === vasen.id) return;
-    gameState.pendingCombat.activeId = vasen.id;
-    gameState.writeSave();
 };
 
 // Flee confirmation: what the väsen covering the retreat will lose in this save
@@ -584,14 +568,12 @@ Game.prototype.describeLastFall = function(fallen) {
 // Rule tips in dialogues
 // =============================================================================
 
-// Extra tips for the guardian, tower, flee and auto battle dialogues in
+// Extra tips for the tower, flee and auto battle dialogues in
 // a save with Permadeath or Lost Runes (hidden by Disable Tips).
 Game.prototype.getModeWarningHTML = function(context) {
     const { permadeath, lostRunes } = gameState.modes;
     if ((!permadeath && !lostRunes) || !ui.areTipsEnabled()) return '';
     switch (context) {
-        case 'guardian':
-            return ui.getTipHTML(`Väsen knocked out in this fight ${permadeath ? 'are lost for good' : 'lose their runes'}.`);
         case 'tower':
             return ui.getTipHTML('<strong>Permadeath-free zone</strong>: Idunn\'s apples keep every väsen, and its runes, safe within the tower. Väsen that fall here are restored when the run ends.');
         case 'surrender':

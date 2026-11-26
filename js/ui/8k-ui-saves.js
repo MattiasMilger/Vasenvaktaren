@@ -229,7 +229,7 @@ UIController.prototype.renderNewJourney = function(replacing, onBegin, onBack, i
     const refreshBegin = () => {
         const blocked = ragnarokChosen && getActiveModeIds(modes).length === 0;
         beginBtn.disabled = blocked;
-        beginBtn.title = blocked ? 'Turn on at least one rule, or choose Standard.' : '';
+        beginBtn.title = blocked ? 'Turn on at least one rule, or choose Standard Mode.' : '';
     };
     const setChoice = (ragnarok) => {
         ragnarokChosen = ragnarok;
@@ -279,6 +279,8 @@ UIController.prototype.renderNewJourney = function(replacing, onBegin, onBack, i
         refreshBegin();
     };
 
+    // No bump for the first render of the screen
+    delete document.getElementById('ragnarok-panel').dataset.points;
     list.querySelectorAll('input[data-mode]').forEach(input => {
         input.onchange = () => {
             modes[input.dataset.mode] = input.checked;
@@ -299,10 +301,12 @@ UIController.prototype.renderNewJourney = function(replacing, onBegin, onBack, i
 };
 
 // The difficulty meter: fills with the hidden points, names the tier, and
-// burns when every rule is on
+// burns from Ragnarök up. With every rule on it gives a single "oomph" and
+// glows a little more (still the Ragnarök tier).
 UIController.prototype.renderRagnarokMeter = function(modes) {
     const fraction = getRagnarokFill(modes);
     const tier = getRagnarokTier(modes);
+    const overflowing = !!tier && isRagnarokOverflowing(modes);
 
     const fill = document.getElementById('ragnarok-meter-fill');
     fill.style.width = `${fraction * 100}%`;
@@ -316,6 +320,18 @@ UIController.prototype.renderRagnarokMeter = function(modes) {
     panel.classList.remove(...RAGNAROK_TIERS.map(t => `tier-${t.level}`));
     if (tier) panel.classList.add(`tier-${tier.level}`);
     panel.classList.toggle('is-ragnarok', !!tier && tier.level === RAGNAROK_TIERS.length);
+    panel.classList.toggle('is-overflowing', overflowing);
+
+    // A small bump whenever the rules change, up or down (not on the first
+    // render). Reaching every rule has its own, bigger bump in the stylesheet.
+    const points = String(getRagnarokPoints(modes));
+    const changed = panel.dataset.points !== undefined && panel.dataset.points !== points;
+    panel.dataset.points = points;
+    panel.classList.remove('tier-bump');
+    if (changed && !overflowing) {
+        void panel.offsetWidth; // restart the animation when changing quickly
+        panel.classList.add('tier-bump');
+    }
 };
 
 // =============================================================================
@@ -542,7 +558,7 @@ function buildSaveSummaryText(data, slot) {
     row('Status', record.ended ? `Over (${formatShortDate(record.ended.date)}). ${record.ended.cause}` : 'In progress');
 
     const tier = getRagnarokTier(record.modes);
-    row('Ragnarök Mode', tier ? `${tier.name} - ${getActiveModeIds(record.modes).map(id => GAME_MODES[id].name).join(', ')}` : 'Off (Standard)');
+    row('Ragnarök Mode', tier ? `${tier.name} - ${getActiveModeIds(record.modes).map(id => GAME_MODES[id].name).join(', ')}` : 'Off (Standard Mode)');
 
     rule('Progress');
     row('Current zone', record.zoneName || '-');

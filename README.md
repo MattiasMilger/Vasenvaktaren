@@ -45,6 +45,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 - Click "Explore" to search the zone
 - Find items, runes, and väsen
 - Click "Challenge Guardian" to face the zone boss
+- Every save meets its own guardians: when a new game starts, each zone's guardian gets a random name and three different väsen from that zone, each with a random temperament and runes (one rune in the first zone, two after). Saves from before this keep the original guardians
 - Click "Challenge Endless Tower" for endgame challenge
 
 ### Combat System & Taming
@@ -102,7 +103,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 
 ## Ragnarök Mode
 
-Optional rules for a harder journey. On the New Game screen, choose **Standard** (the default) or **Ragnarök Mode**, which opens the rules so you can switch on the ones you want. Any combination works, and the rules can never be changed once the game has started.
+Optional rules for a harder journey. On the New Game screen, choose **Standard Mode** (the default) or **Ragnarök Mode**, which opens the rules so you can switch on the ones you want. Any combination works, and the rules can never be changed once the game has started.
 
 | Rule | Effect |
 | :--- | :--- |
@@ -112,18 +113,18 @@ Optional rules for a harder journey. On the New Game screen, choose **Standard**
 | **More Fights** | Wild väsen are met far more often while exploring, so items, Sacred Wells and runes turn up less. Measured over many explorations, including the guaranteed-find rules: about 57% of explorations become fights instead of 39%, with about half as many items and Sacred Wells per fight |
 
 - **Fleeing** knocks out the väsen on the field: it stays behind to cover the retreat. In a normal game that changes nothing (the party is left at 5% health anyway), but with Permadeath it dies and with Lost Runes it loses its runes. Swap in another väsen first to choose who stays behind
-- Every rule counts the same. A meter fills as rules are added and names the difficulty after the events before the end of the world: one rule is **Fimbulvinter**, two are **Gjallarhorn**, and any three (all but one) reach **Ragnarök**
+- Every rule counts the same. A meter fills as rules are added and names the difficulty after the events before the end of the world: one rule is **Fimbulvinter**, two are **Gjallarhorn**, and any three (all but one) reach **Ragnarök**. With all four on it is still Ragnarök, with a small "oomph" as the last rule goes on and a little more glow
 - **Permadeath-free zone:** Idunn's apples keep every väsen, and its runes, safe within the Endless Tower. Even with Permadeath or Lost Runes, väsen that fall in the tower are restored when the run ends
 - When a väsen dies or loses its runes, a popup and a combat log line say so at once, and a summary follows the fight
 - The difficulty is shown next to the Player Profile button (click it for the rules), in Settings (with the save slot and start date) and on the main menu save cards
 - A Permadeath save that is over stays in its slot, marked as fallen, so it can be viewed (cause, party, fallen väsen) and deleted
-- **Closing or reloading the page during a battle counts as fleeing**, so a reload can't undo a death or a lost rune: the väsen that was on the field stays behind. On the next start, a "Battle Abandoned" message explains what happened, and any losses from the battle stand. A rolled wild encounter also comes back after a reload instead of being skipped. Normal saves behave as before
+- **Closing or reloading the page during a battle abandons it.** A reload can't undo a death or a lost rune that already happened, but the reload itself costs nothing more: the väsen on the field is spared and the party is left at low health (an Endless Tower run ends and the party is restored). On the next start, a "Battle Abandoned" message explains what happened. A rolled wild encounter also comes back after a reload instead of being skipped. Normal saves behave as before
 - Runes and väsen types in the Player Profile count everything ever collected, so they never go down when a väsen dies or is released, or a rune is lost
 
 ## Starting a New Game
 
 1. **New Game** on the main menu (uses the first empty slot, or asks which save to replace when all three are in use)
-2. Keep **Standard**, or choose **Ragnarök Mode** and pick rules
+2. Keep **Standard Mode**, or choose **Ragnarök Mode** and pick rules
 3. Choose a starter. **Back** returns to the previous step with your rules kept
 
 ## Save System

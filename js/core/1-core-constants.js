@@ -636,12 +636,16 @@ const ZONES = {
         levelRange: [1, 4],
         spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv', 'Jarnvidja', 'Huldra'],
         guardian: {
-            name: 'Åsa',
-            team: [
-                { species: 'Alva', level: 5, temperament: 'DEFENSE_STRENGTH', runes: ['NAUDIZ'] },
-                { species: 'Skogsra', level: 5, temperament: 'WISDOM_MEGIN', runes: ['URUZ'] },
-                { species: 'Lindorm', level: 5, temperament: 'DURABILITY_DEFENSE', runes: ['WYNJA'] }
-            ],
+            level: 5,
+            // Fixed roster for saves made before guardians were randomized
+            legacy: {
+                name: 'Åsa',
+                team: [
+                    { species: 'Alva', temperament: 'DEFENSE_STRENGTH', runes: ['NAUDIZ'] },
+                    { species: 'Skogsra', temperament: 'WISDOM_MEGIN', runes: ['URUZ'] },
+                    { species: 'Lindorm', temperament: 'DURABILITY_DEFENSE', runes: ['WYNJA'] }
+                ]
+            },
             dialogue: {
                 challenge: 'The forest tests all who enter. Show me your strength, little one.',
                 lose: 'You lack the true spirit of the woods. Train more, and perhaps this enchanted realm will accept you.',
@@ -658,12 +662,16 @@ const ZONES = {
         levelRange: [5, 9],
         spawns: ['Gardstomte', 'Hustomte', 'Brunnsgubbe', 'Nattramn', 'Bortbyting', 'Gloson', 'Bjara', 'Pyssling'],
         guardian: {
-            name: 'Ragnar',
-            team: [
-            { species: 'Nattramn', level: 10, temperament: 'STRENGTH_HEALTH', runes: ['HAGAL', 'NAUDIZ'] },
-            { species: 'Bjara', level: 10, temperament: 'DURABILITY_MEGIN', runes: ['BJARKA', 'ALGIZ'] },
-            { species: 'Gloson', level: 10, temperament: 'HEALTH_WISDOM', runes: ['PERTHO', 'EIHWAZ'] }
-            ],
+            level: 10,
+            // Fixed roster for saves made before guardians were randomized
+            legacy: {
+                name: 'Ragnar',
+                team: [
+                    { species: 'Nattramn', temperament: 'STRENGTH_HEALTH', runes: ['HAGAL', 'NAUDIZ'] },
+                    { species: 'Bjara', temperament: 'DURABILITY_MEGIN', runes: ['BJARKA', 'ALGIZ'] },
+                    { species: 'Gloson', temperament: 'HEALTH_WISDOM', runes: ['PERTHO', 'EIHWAZ'] }
+                ]
+            },
             dialogue: {
                 challenge: 'I am the defender of the quiet folk. Disturbance is not tolerated. Prepare to leave this village.',
                 lose: 'Go home, trespasser. The spirits of the hearth demand respect, not defeat. Do not return until you are ready.',
@@ -680,12 +688,16 @@ const ZONES = {
         levelRange: [10, 14],
         spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner', 'Mara', 'Dvarg'],
         guardian: {
-            name: 'Hjördis',
-            team: [
-                { species: 'Svartalv', level: 15, temperament: 'DEFENSE_DURABILITY', runes: ['GIFU', 'EIHWAZ'] },
-                { species: 'Mara', level: 15, temperament: 'WISDOM_DEFENSE', runes: ['URUZ', 'DAGAZ'] },
-                { species: 'Fafner', level: 15, temperament: 'DEFENSE_HEALTH', runes: ['ANSUZ', 'KAUNAN'] }
-            ],
+            level: 15,
+            // Fixed roster for saves made before guardians were randomized
+            legacy: {
+                name: 'Hjördis',
+                team: [
+                    { species: 'Svartalv', temperament: 'DEFENSE_DURABILITY', runes: ['GIFU', 'EIHWAZ'] },
+                    { species: 'Mara', temperament: 'WISDOM_DEFENSE', runes: ['URUZ', 'DAGAZ'] },
+                    { species: 'Fafner', temperament: 'DEFENSE_HEALTH', runes: ['ANSUZ', 'KAUNAN'] }
+                ]
+            },
             dialogue: {
                 challenge: 'The earth\'s treasures are mine to guard. You must be strong enough to face the pressure of the deep rock.',
                 lose: 'The mine is unforgiving. Your resolve turned to dust. Go back to the light and gather more wisdom.',
@@ -702,12 +714,16 @@ const ZONES = {
         levelRange: [15, 19],
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna', 'Dimalva', 'Backatroll'],
         guardian: {
-            name: 'Sigurd',
-            team: [
-                { species: 'Norna', level: 20, temperament: 'WISDOM_STRENGTH', runes: ['GIFU', 'MANNAZ'] },
-                { species: 'Irrbloss', level: 20, temperament: 'DURABILITY_STRENGTH', runes: ['ODAL', 'HAGAL'] },
-                { species: 'Nacken', level: 20, temperament: 'HEALTH_DEFENSE', runes: ['INGUZ', 'DAGAZ'] }
-            ],
+            level: 20,
+            // Fixed roster for saves made before guardians were randomized
+            legacy: {
+                name: 'Sigurd',
+                team: [
+                    { species: 'Norna', temperament: 'WISDOM_STRENGTH', runes: ['GIFU', 'MANNAZ'] },
+                    { species: 'Irrbloss', temperament: 'DURABILITY_STRENGTH', runes: ['ODAL', 'HAGAL'] },
+                    { species: 'Nacken', temperament: 'HEALTH_DEFENSE', runes: ['INGUZ', 'DAGAZ'] }
+                ]
+            },
             dialogue: {
                 challenge: 'The currents of the deep are treacherous, and I am the tide. Let us see if you sink or swim.',
                 lose: 'The depths claimed you. Your spirit is not yet strong enough to master the water\'s fury.',
@@ -724,12 +740,16 @@ const ZONES = {
         levelRange: [20, 24],
         spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Gryningstroll', 'Vitorm', 'Stormturs'],
         guardian: {
-            name: 'Brynhild',
-            team: [
-                { species: 'Vitorm', level: 25, temperament: 'HEALTH_DURABILITY', runes: ['GIFU', 'TYR'] },
-                { species: 'Bergatroll', level: 25, temperament: 'STRENGTH_DEFENSE', runes: ['PERTHO', 'EIHWAZ']},
-                { species: 'Eldturs', level: 25, temperament: 'STRENGTH_MEGIN', runes: ['MANNAZ', 'KAUNAN'] }
-            ],
+            level: 25,
+            // Fixed roster for saves made before guardians were randomized
+            legacy: {
+                name: 'Brynhild',
+                team: [
+                    { species: 'Vitorm', temperament: 'HEALTH_DURABILITY', runes: ['GIFU', 'TYR'] },
+                    { species: 'Bergatroll', temperament: 'STRENGTH_DEFENSE', runes: ['PERTHO', 'EIHWAZ'] },
+                    { species: 'Eldturs', temperament: 'STRENGTH_MEGIN', runes: ['MANNAZ', 'KAUNAN'] }
+                ]
+            },
             dialogue: {
                 challenge: 'We are the forces of chaos, the ancient strength of the raw elements. Face your doom!',
                 lose: 'You are just dust beneath the mountains. The giants will not be bested by such weakness.',
@@ -746,12 +766,16 @@ const ZONES = {
         levelRange: [25, 29],
         spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg', 'Draug', 'Fylgja'],
         guardian: {
-            name: 'Gylfe',
-            team: [
-                { species: 'Draug', level: 30, temperament: 'DURABILITY_MEGIN', runes: ['GIFU', 'HAGAL'] },
-                { species: 'Valkyria', level: 30, temperament: 'HEALTH_WISDOM', runes: ['FEHU', 'WYNJA'] },
-                { species: 'Fenrir', level: 30, temperament: 'STRENGTH_WISDOM', runes: ['ODAL', 'JERA'] }
-            ],
+            level: 30,
+            // Fixed roster for saves made before guardians were randomized
+            legacy: {
+                name: 'Gylfe',
+                team: [
+                    { species: 'Draug', temperament: 'DURABILITY_MEGIN', runes: ['GIFU', 'HAGAL'] },
+                    { species: 'Valkyria', temperament: 'HEALTH_WISDOM', runes: ['FEHU', 'WYNJA'] },
+                    { species: 'Fenrir', temperament: 'STRENGTH_WISDOM', runes: ['ODAL', 'JERA'] }
+                ]
+            },
             dialogue: {
                 challenge: 'This is where destiny is decided. The heroes of Valhalla and their enemies await the end. Prove your fate.',
                 lose: 'Ragnarök is not for the weak. You must return, prepared to face the true end of all things.',
@@ -773,6 +797,15 @@ const ZONES = {
 };
 
 const ZONE_ORDER = ['ZONE1', 'ZONE2', 'ZONE3', 'ZONE4', 'ZONE5', 'ZONE6', 'ZONE7'];
+
+// Names a zone guardian can be given. Each new save draws one per zone, with
+// no name used twice (see generateGuardianRosters in 5-core-instance.js).
+// Keep at least as many names as there are guardians.
+const GUARDIAN_NAMES = [
+    'Åsa', 'Ragnar', 'Hjördis', 'Sigurd', 'Brynhild', 'Gylfe',
+    'Astrid', 'Gunnar', 'Ingrid', 'Torsten', 'Sigrid', 'Halvdan',
+    'Ylva', 'Arvid', 'Solveig', 'Ulf', 'Estrid', 'Ivar'
+];
 
 const ACHIEVEMENTS = {
     CHAMPION: { id: 'champion', name: 'Champion', description: 'Defeat all the zone guardians' },

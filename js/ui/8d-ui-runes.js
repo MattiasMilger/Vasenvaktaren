@@ -91,7 +91,7 @@ UIController.prototype.renderRuneInventory = function() {
     const tutorialRune = this.isRuneEquipTutorialActive() ? this.getRuneTutorialRune() : null;
     if (tutorialRune) {
         const tip = document.createElement('div');
-        tip.innerHTML = this.getTipHTML('Each väsen can wear <strong>two runes</strong>, and together they form a bindrune. Click a rune that is not equipped, then choose <strong>Equip to Väsen</strong>.');
+        tip.innerHTML = this.getTipHTML('<strong>Runes</strong> give the väsen wearing them extra effects in combat. Each väsen can wear <strong>two runes</strong>, and together they form a bindrune. Click a rune that is not equipped, then choose <strong>Equip to Väsen</strong>.');
         container.appendChild(tip.firstElementChild);
     }
 

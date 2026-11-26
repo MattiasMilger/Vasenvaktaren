@@ -99,16 +99,16 @@ UIController.prototype.renderStarterSelection = function(starters, onSelect, onC
                         ${ui.generateDefensiveMatchupsHTML(species.element)}
                     </div>
                     <div class="rarity-matchup-collapsible family-matchup-collapsible">
-                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.rarity}</span>
+                        <span class="rarity-badge rarity-${species.rarity.toLowerCase()} clickable-rarity" onclick="toggleRarityDescription(this, event); ui.scrollGuidePopupIntoView(this)">${rarityIcon(species.rarity)}${species.rarity}</span>
                         <div class="rarity-description-popup">
-                            <p><strong>${species.rarity}</strong><br>
+                            <p><strong>${rarityIcon(species.rarity)}${species.rarity}</strong><br>
                             ${RARITY_DESCRIPTIONS[species.rarity] || ''}</p>
                         </div>
                     </div>
                     <div class="family-matchup-collapsible">
-                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${species.family}</span>
+                        <span class="family-badge clickable-family" onclick="toggleFamilyDescription(this, event); ui.scrollGuidePopupIntoView(this)">${familyIcon(species.family)}${species.family}</span>
                         <div class="family-description-popup">
-                            <p><strong>${species.family}</strong><br>
+                            <p><strong>${familyIcon(species.family)}${species.family}</strong><br>
                             ${FAMILY_DESCRIPTIONS[species.family] || 'No description available.'}</p>
                             ${FAMILY_PASSIVES[species.family] ? `
                                 <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">

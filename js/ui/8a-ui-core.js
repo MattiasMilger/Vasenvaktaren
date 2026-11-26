@@ -43,6 +43,33 @@ const UI_ICONS = {
     fire:   '<path d="M12 22c4.5 0 7.5-3 7.5-7 0-3.5-2-6-4-8 0 2.5-1 4-2.5 4.5C13.5 7 12 4 9 2c.5 3-1 5.5-2.5 7.5S4.5 13 4.5 15c0 4 3 7 7.5 7z"/><path d="M12 22c-2 0-3.2-1.4-3.2-3.2 0-1.6 1.2-3 2.2-4 .3 1 .8 1.5 1.5 1.7.2-1.2.8-2.2 1.7-3 .9 1.3 1.3 2.6 1.3 4.2 0 2.5-1.5 4.3-3.5 4.3z"/>',
     wind:   '<path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/>',
 
+    // Families (see FAMILY_ICONS / familyIcon):
+    // oknytt - tiny footprints: little tracks in the snow
+    // valnad - rune-carved gravestone
+    // odjur  - beast's paw print
+    // troll  - shaggy face: wild hair and a big nose
+    // ra     - mask: a fair face hiding the tell-tale flaw
+    // alv    - anvil: the dark elves' smithcraft
+    // ande   - soul bird (fylgja) in flight
+    // jatte  - giant's footprint
+    // drake  - dragon eye: slit pupil under a spiked brow
+    familyOknytt: '<path d="M7.5 3c1.8 0 2.4 1.8 2.4 3.6S9.3 10 7.5 10 5.1 8.4 5.1 6.6 5.7 3 7.5 3z"/><path d="M5.8 12h3.4v1.6a1.7 1.7 0 0 1-3.4 0z"/><path d="M16.5 9c1.8 0 2.4 1.8 2.4 3.6s-.6 3.4-2.4 3.4-2.4-1.6-2.4-3.4.6-3.6 2.4-3.6z"/><path d="M14.8 18h3.4v1.6a1.7 1.7 0 0 1-3.4 0z"/>',
+    familyValnad: '<path d="M6 21V9a6 6 0 0 1 12 0v12"/><path d="M4 21h16"/><path d="M12 8v8"/><path d="M12 11l2.5-2.5"/><path d="M12 13l-2.5-2.5"/>',
+    familyOdjur:  '<path d="M12 13c-3 0-5 3-5 5 0 1.5 1.2 2.5 2.7 2.5.9 0 1.5-.5 2.3-.5s1.4.5 2.3.5c1.5 0 2.7-1 2.7-2.5 0-2-2-5-5-5z"/><circle cx="5.5" cy="10.5" r="1.7"/><circle cx="9" cy="6" r="1.8"/><circle cx="15" cy="6" r="1.8"/><circle cx="18.5" cy="10.5" r="1.7"/>',
+    familyTroll:  '<path d="M5 10l1.5-4 2 2 1.5-4 2 3 2-3 1.5 4 2-2 1.5 4"/><path d="M5 10c0 6 3 11 7 11s7-5 7-11"/><path d="M12 12c-1.5 1-1.5 4 0 4.5 1.5-.5 1.5-3.5 0-4.5z"/><path d="M9 11v.01"/><path d="M15 11v.01"/>',
+    familyRa:     '<path d="M3 8c3-2 6-2 9 0 3-2 6-2 9 0 0 5.5-2 9-5 9-2 0-3-1.5-4-3-1 1.5-2 3-4 3-3 0-5-3.5-5-9z"/><path d="M6.5 11h3"/><path d="M14.5 11h3"/>',
+    familyAlv:    '<path d="M3 8h13c0 2 2 3 5 3v1h-6l-1 3h2v3H6v-3h2l-1-3C4.5 12 3 10.5 3 8z"/>',
+    familyAnde:   '<path d="M2 9c4-1 7 1 10 5 3-4 6-6 10-5"/><path d="M8 12.5c1.5 2.5 2.5 5 4 7 1.5-2 2.5-4.5 4-7"/>',
+    familyJatte:  '<path d="M10 22c-3 0-4-2.5-3.5-6S8 9 11 8.5s4.5 1.5 4 4.5-1.5 4-1.5 6-1 3-3.5 3z"/><circle cx="8.3" cy="5.4" r="1.3"/><circle cx="11.5" cy="4" r="1.4"/><circle cx="14.6" cy="4.6" r="1.2"/><circle cx="16.9" cy="6.6" r="1"/>',
+    familyDrake:  '<path d="M2 13c3-5 6.5-7 10-7s7 2 10 7c-3 5-6.5 7-10 7s-7-2-10-7z"/><path d="M12 8.5c-1.2 1.5-1.2 7.5 0 9 1.2-1.5 1.2-7.5 0-9z"/><path d="M6 6.5 5 3"/><path d="M10 5l-.5-3"/><path d="M14 5l.5-3"/><path d="M18 6.5 19 3"/>',
+
+    // Rarities (see RARITY_ICONS / rarityIcon): the shape grows with the tier
+    // common - plain ring; uncommon - diamond; rare - faceted crystal; mythical - star
+    rarityCommon:   '<circle cx="12" cy="12" r="6"/>',
+    rarityUncommon: '<path d="M12 3l7.5 9-7.5 9-7.5-9z"/>',
+    rarityRare:     '<path d="M12 2l8 5v10l-8 5-8-5V7z"/><path d="M4 7l8 5 8-5"/><path d="M12 12v10"/>',
+    rarityMythical: '<path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7.1L12 17.3 5.8 21l1.6-7.1L2 9.2l7.1-.6z"/>',
+
     // Statuses
     preparing: '<path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/>',
 
@@ -144,6 +171,35 @@ function skillTypeIcon(skill) {
 // element: an ELEMENTS value ('Earth', 'Fire', ...)
 function elementIcon(element) {
     return element ? inlineIcon(String(element).toLowerCase()) : '';
+}
+
+// family: a FAMILIES value ('Oknytt', 'Vålnad', ...)
+const FAMILY_ICONS = {
+    [FAMILIES.OKNYTT]: 'familyOknytt',
+    [FAMILIES.VALNAD]: 'familyValnad',
+    [FAMILIES.ODJUR]:  'familyOdjur',
+    [FAMILIES.TROLL]:  'familyTroll',
+    [FAMILIES.RA]:     'familyRa',
+    [FAMILIES.ALV]:    'familyAlv',
+    [FAMILIES.ANDE]:   'familyAnde',
+    [FAMILIES.JATTE]:  'familyJatte',
+    [FAMILIES.DRAKE]:  'familyDrake'
+};
+
+function familyIcon(family) {
+    return FAMILY_ICONS[family] ? inlineIcon(FAMILY_ICONS[family]) : '';
+}
+
+// rarity: a RARITIES value ('Common', 'Uncommon', ...)
+const RARITY_ICONS = {
+    [RARITIES.COMMON]:   'rarityCommon',
+    [RARITIES.UNCOMMON]: 'rarityUncommon',
+    [RARITIES.RARE]:     'rarityRare',
+    [RARITIES.MYTHICAL]: 'rarityMythical'
+};
+
+function rarityIcon(rarity) {
+    return RARITY_ICONS[rarity] ? inlineIcon(RARITY_ICONS[rarity]) : '';
 }
 
 // Static markup in index.html uses <i data-ui-icon="name" data-size="16"></i>
@@ -680,7 +736,7 @@ function toggleRunePillPopup(element, event, runeA, runeB) {
         return `
             ${runeRows}
             <hr class="rune-popup-divider">
-            <p><strong><span class="rune-popup-symbol">${RUNES[ids[0]].symbol}${RUNES[ids[1]].symbol}</span> Bindrune</strong><br>${br.effectText}</p>
+            <p><strong><span class="rune-popup-symbol">${RUNES[ids[0]].symbol}${RUNES[ids[1]].symbol}</span> Bindrune Effect</strong><br>${br.effectText}</p>
         `;
     }, 280);
 }
@@ -765,18 +821,19 @@ function statPopupAttrs(attr, baseValue, capped) {
 // (CSS transform), which would trap a fixed-position popup inside them, so these
 // use the same body-level popup as temperaments.
 function toggleCardBadgePopup(element, event, kind) {
-    const value = element.textContent.trim();
+    // data-value holds the plain name; textContent is the fallback for badges without it
+    const value = element.dataset.value || element.textContent.trim();
     toggleBodyPopup(element, event, () => {
         const hr = '<hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">';
         if (kind === 'element') {
             return ui.generateDefensiveMatchupsHTML(value);
         }
         if (kind === 'rarity') {
-            return `<p><strong>${value}</strong><br>${RARITY_DESCRIPTIONS[value] || ''}</p>`;
+            return `<p><strong>${rarityIcon(value)}${value}</strong><br>${RARITY_DESCRIPTIONS[value] || ''}</p>`;
         }
         if (kind === 'family') {
             const passive = FAMILY_PASSIVES[value];
-            return `<p><strong>${value}</strong><br>${FAMILY_DESCRIPTIONS[value] || 'No description available.'}</p>`
+            return `<p><strong>${familyIcon(value)}${value}</strong><br>${FAMILY_DESCRIPTIONS[value] || 'No description available.'}</p>`
                 + (passive ? `${hr}<p><strong>Trait: ${passive.name}</strong><br>${passive.description}</p>` : '');
         }
         return '';
