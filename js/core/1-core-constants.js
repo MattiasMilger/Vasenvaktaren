@@ -480,7 +480,7 @@ const FAMILY_DESCRIPTIONS = {
     [FAMILIES.RA]: 'Seductive, wilderness-bound wardens with the power to beguile and entrap humans. Their true nature is often betrayed by a tell-tale physical flaw.',
     [FAMILIES.ALV]: 'Humanoid beings steeped in seiðr, divided between the light and the dark. They possess uncanny skill in craft, smithing, or weaving illusions.',
     [FAMILIES.ANDE]: 'Spirits of an otherworldly or semi-divine nature, serving greater powers or guarding sacred places.',
-    [FAMILIES.JATTE]: 'Ancient giants of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Asir gods.',
+    [FAMILIES.JATTE]: 'Ancient giants of immense power, often representing the elemental forces and chaos. They are the sworn enemies of the Aesir gods.',
     [FAMILIES.DRAKE]: 'Terrifying serpents of immense, ancient might, often linked to cosmic forces and primordial greed.'
 };
 
