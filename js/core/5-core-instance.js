@@ -501,7 +501,16 @@ function createGuardianTeam(guardianData) {
 //   - runes as wild väsen of that zone carry them (1 in the first zone, 2 after),
 //     never the same rune twice within one guardian's team
 // The level and dialogue come from the zone (ZONES[zoneId].guardian).
-// Saves made before this keep the old fixed guardians (guardian.legacy).
+//
+// SAVE MIGRATION (fixed guardians)
+// Saves made before guardians were randomized have no `guardians` stored. They
+// keep the old fixed guardians: normalizeGuardianRosters() returns null for
+// them, and GameState.getGuardian() then falls back to ZONES[zone].guardian.legacy.
+// HOW TO REMOVE: search for "SAVE MIGRATION (fixed guardians)", then
+//   1. delete the `legacy: {...}` roster from each zone in 1-core-constants.js
+//   2. in normalizeGuardianRosters(), drop the early `return null` and treat a
+//      missing value as {} (old saves then roll new guardians like new saves)
+//   3. in GameState.getGuardian(), use this.guardians[zoneId] only
 // =============================================================================
 
 const GUARDIAN_TEAM_SIZE = 3;
@@ -589,6 +598,7 @@ function isValidGuardianRoster(zoneId, roster) {
 // randomized (they keep the fixed guardians). A stored guardian that no
 // longer fits the game data is rolled again, keeping the save's other names.
 function normalizeGuardianRosters(stored) {
+    // SAVE MIGRATION (fixed guardians): null keeps the save on the fixed rosters
     if (!stored || typeof stored !== 'object') return null;
     const rosters = {};
     const usedNames = new Set();

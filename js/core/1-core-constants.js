@@ -637,7 +637,8 @@ const ZONES = {
         spawns: ['Skogstroll', 'Skogsra', 'Hyllemor', 'Alva', 'Lindorm', 'Ljusalv', 'Jarnvidja', 'Huldra'],
         guardian: {
             level: 5,
-            // Fixed roster for saves made before guardians were randomized
+            // SAVE MIGRATION (fixed guardians): the fixed roster used by saves
+            // made before guardians were randomized. See 5-core-instance.js.
             legacy: {
                 name: 'Åsa',
                 team: [
@@ -663,7 +664,8 @@ const ZONES = {
         spawns: ['Gardstomte', 'Hustomte', 'Brunnsgubbe', 'Nattramn', 'Bortbyting', 'Gloson', 'Bjara', 'Pyssling'],
         guardian: {
             level: 10,
-            // Fixed roster for saves made before guardians were randomized
+            // SAVE MIGRATION (fixed guardians): the fixed roster used by saves
+            // made before guardians were randomized. See 5-core-instance.js.
             legacy: {
                 name: 'Ragnar',
                 team: [
@@ -689,7 +691,8 @@ const ZONES = {
         spawns: ['Landvatte', 'Myling', 'Gruvra', 'Svartalv', 'Fafner', 'Mara', 'Dvarg'],
         guardian: {
             level: 15,
-            // Fixed roster for saves made before guardians were randomized
+            // SAVE MIGRATION (fixed guardians): the fixed roster used by saves
+            // made before guardians were randomized. See 5-core-instance.js.
             legacy: {
                 name: 'Hjördis',
                 team: [
@@ -715,7 +718,8 @@ const ZONES = {
         spawns: ['Irrbloss', 'Strandvaskare', 'Backahast', 'Nacken', 'Jormungandr', 'Norna', 'Dimalva', 'Backatroll'],
         guardian: {
             level: 20,
-            // Fixed roster for saves made before guardians were randomized
+            // SAVE MIGRATION (fixed guardians): the fixed roster used by saves
+            // made before guardians were randomized. See 5-core-instance.js.
             legacy: {
                 name: 'Sigurd',
                 team: [
@@ -741,7 +745,8 @@ const ZONES = {
         spawns: ['Bergatroll', 'Jotun', 'Eldturs', 'Rimturs', 'Gryningstroll', 'Vitorm', 'Stormturs'],
         guardian: {
             level: 25,
-            // Fixed roster for saves made before guardians were randomized
+            // SAVE MIGRATION (fixed guardians): the fixed roster used by saves
+            // made before guardians were randomized. See 5-core-instance.js.
             legacy: {
                 name: 'Brynhild',
                 team: [
@@ -767,7 +772,8 @@ const ZONES = {
         spawns: ['Einharje', 'Valkyria', 'Rasvelg', 'Fenrir', 'Nidhogg', 'Draug', 'Fylgja'],
         guardian: {
             level: 30,
-            // Fixed roster for saves made before guardians were randomized
+            // SAVE MIGRATION (fixed guardians): the fixed roster used by saves
+            // made before guardians were randomized. See 5-core-instance.js.
             legacy: {
                 name: 'Gylfe',
                 team: [

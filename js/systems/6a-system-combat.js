@@ -492,7 +492,8 @@ class Combat {
     }
     
     // Player action: offer item
-    offerItem(itemName) {
+    offerItem(itemId) {
+        const itemName = TAMING_ITEMS[itemId] ? TAMING_ITEMS[itemId].name : itemId;
         if (!this.canTame) {
             this.addLog('This Väsen can not be tamed!', 'error');
             if (this.onUpdate) this.onUpdate();
@@ -510,7 +511,7 @@ class Combat {
         this.giftsGiven++;
         this.addLog(`<span class="taming-item">${itemName}</span> was offered to ${this.enemyActive.getDisplayName()}.`, 'gift');
         
-        const isCorrect = isCorrectTamingItem(itemName, this.enemyActive.speciesName);
+        const isCorrect = isCorrectTamingItem(itemId, this.enemyActive.speciesName);
         const enemyName = this.enemyActive.getDisplayName(); // Get the name for the dialogue
         
         if (isCorrect) {
@@ -536,7 +537,7 @@ class Combat {
         // 1. Get correct names
         const playerName = typeof gameState !== 'undefined' ? (gameState.playerName || "Väktare") : "Väktare";
         const enemyName = this.enemyActive.getDisplayName();
-        const tamingItem = this.enemyActive.species.tamingItem;
+        const tamingItem = TAMING_ITEMS[this.enemyActive.species.tamingItem]?.name;
 
         // 2. Enemy acts (player passes), unless this is the tutorial's free turn
         const results = { player: { action: 'interrogate' }, enemy: null };

@@ -35,9 +35,14 @@ UIController.prototype.isLoreBookTutorialActive = function() {
     return !gameState.loreBookTutorialShown && !!gameState.tutorialLoreEntry && this.areTipsEnabled();
 };
 
-// Hide the lore modal and clear search state
+// Hide the lore modal and clear search state. Open entries are collapsed so
+// the book reopens tidy (categories keep their collapsed state).
 UIController.prototype.hideLore = function() {
     this.loreModal.classList.remove('active');
+    const container = document.getElementById('lore-content');
+    if (container) {
+        container.querySelectorAll('.lore-entry-expanded').forEach(el => el.classList.remove('lore-entry-expanded'));
+    }
     this._loreSearchQuery = '';
     this._loreIntroTip = false;
 };
@@ -78,7 +83,7 @@ UIController.prototype.renderLore = function() {
     </div>`;
 
     if (this._loreIntroTip) {
-        html += this.getTipHTML('This is your <strong>Lore Book</strong>. Taming väsen, defeating guardians and exploring unlock entries about the folklore behind the game. Open the glowing entry to read your first one. The <strong>i</strong> buttons show game details.');
+        html += this.getTipHTML('This is your <strong>Lore Book</strong>. Taming väsen, defeating guardians and exploring unlock entries about the folklore behind the game. Open the glowing entry to read your first one. Entries you haven\'t opened yet are marked with a small <span class="lore-unread-mark lore-unread-mark-inline"></span>. The <strong>i</strong> buttons show game details.');
     }
 
     const { grouped, sortedCategories } = getLoreDisplayGroups();
@@ -234,12 +239,21 @@ UIController.prototype.renderLore = function() {
         const card = header.closest('.lore-entry-card');
         if (!card) return;
         card.classList.toggle('lore-entry-expanded');
+        const key = card.dataset.key;
+        let changed = false;
+        // Opening an entry for the first time clears its unread marker
+        if (!gameState.readLoreEntries.has(key)) {
+            gameState.readLoreEntries.add(key);
+            card.classList.remove('lore-entry-unread');
+            changed = true;
+        }
         // Opening the tutorial entry stops its glow
-        if (card.dataset.key === gameState.tutorialLoreEntry) {
+        if (key === gameState.tutorialLoreEntry) {
             gameState.tutorialLoreEntry = null;
             card.classList.remove('tutorial-blink');
-            gameState.saveGame();
+            changed = true;
         }
+        if (changed) gameState.saveGame();
         // Re-apply search highlights after revealing new text
         if (this._loreSearchQuery) this._applyLoreSearch(container, this._loreSearchQuery);
     };
@@ -364,12 +378,14 @@ UIController.prototype.renderLoreEntryCard = function(entry) {
     // Lore Book tutorial: the first unlocked entry glows until it is opened
     // (hidden when Disable Tutorial is on)
     const newClass = (gameState.tutorialLoreEntry === entry.key && this.areTipsEnabled()) ? ' tutorial-blink' : '';
+    // Unread marker: a small twinkling gold sparkle after the name until first opened
+    const unreadClass = gameState.readLoreEntries.has(entry.key) ? '' : ' lore-entry-unread';
 
     return `
-        <div class="lore-entry-card lore-entry-unlocked${newClass}" data-key="${entry.key}">
+        <div class="lore-entry-card lore-entry-unlocked${newClass}${unreadClass}" data-key="${entry.key}">
             <div class="lore-entry-header">
                 <span class="lore-entry-chevron"></span>
-                <span class="lore-entry-name">${name}</span>
+                <span class="lore-entry-name">${name}<span class="lore-unread-mark" aria-label="Unread"></span></span>
                 <button class="lore-favorite-btn ${isFavorite ? 'active' : ''}" type="button" data-entry-favorite="${entry.key}">${isFavorite ? '★' : '☆'}</button>
                 ${infoBtnHtml}
             </div>
@@ -734,7 +750,7 @@ UIController.prototype.showVasenInfoModal = function(speciesName) {
                 </div>
             </div>
             <p class="lore-info-description">${species.description}</p>
-            <div class="lore-info-row"><span class="lore-info-label">Taming Item:</span> <span class="lore-info-value">${species.tamingItem}</span></div>
+            <div class="lore-info-row"><span class="lore-info-label">Taming Item:</span> <span class="lore-info-value">${TAMING_ITEMS[species.tamingItem]?.name || '-'}</span></div>
             <div class="lore-info-row"><span class="lore-info-label">Zones:</span> <span class="lore-info-value">${zoneNames.join(', ')}</span></div>
             <h4 class="lore-info-subheading">Base Attributes (Level 1)</h4>
             <div class="attribute-grid">${buildAttrGridHtml(1)}</div>

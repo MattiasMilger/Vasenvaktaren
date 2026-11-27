@@ -280,6 +280,54 @@ mark.lore-highlight {
     flex: 1;
 }
 
+/* Unread marker: a small twinkling gold sparkle after the name of an entry
+   that has never been opened. Hidden once read. */
+.lore-unread-mark {
+    display: none;
+    margin-left: 6px;
+    font-size: 0.8em;
+    line-height: 1;
+    font-weight: normal;
+    color: var(--accent-warning);
+    animation: lore-unread-twinkle 2.4s ease-in-out infinite;
+}
+
+.lore-unread-mark::before {
+    content: '\2726'; /* ✦ */
+}
+
+.lore-entry-unread .lore-unread-mark,
+.lore-unread-mark-inline {
+    display: inline-block;
+}
+
+/* The marker shown inside the Lore Book tip text */
+.lore-unread-mark-inline {
+    margin: 0 2px;
+}
+
+@keyframes lore-unread-twinkle {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(0.85) rotate(0deg);
+        text-shadow: 0 0 2px var(--accent-gold-glow-soft);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1) rotate(45deg);
+        text-shadow: 0 0 6px var(--accent-gold-shimmer-strong),
+                     0 0 10px var(--accent-gold-glow);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lore-unread-mark {
+        animation: none;
+        opacity: 1;
+        text-shadow: 0 0 5px var(--accent-gold-glow);
+    }
+}
+
 /* Description text - hidden when collapsed */
 .lore-entry-body {
     display: none;

@@ -6,250 +6,264 @@ const ITEM_TYPES = {
     TAMING: 'Taming Item'
 };
 
+// Taming items, keyed by the species key of the väsen each one tames (a
+// VASEN_SPECIES key). The key is the item's id: it is what saves store, so it
+// must never change. `name` is display text only and can be changed freely.
+// Always show an item with TAMING_ITEMS[id].name, never the id itself.
 const TAMING_ITEMS = {
     // Oknytt (Prankster)
-    'Sturdy Spade': {
+    Landvatte: {
         name: 'Sturdy Spade',
-        description: 'A sturdy spade. Its well-worn blade looks perfect for turning earth, a fitting offering for an unseen land prankster.',
-        tamingTarget: 'Landvatte'
+        description: 'A sturdy spade. Its well-worn blade looks perfect for turning earth, a fitting offering for an unseen land prankster.'
     },
-    'Garden Rake': {
+    Gardstomte: {
         name: 'Garden Rake',
-        description: 'A weathered garden rake. It seems useful for tending to a farm, perhaps attracting a careful garden prankster.',
-        tamingTarget: 'Gardstomte'
+        description: 'A weathered garden rake. It seems useful for tending to a farm, perhaps attracting a careful garden prankster.'
     },
-    'Warm Tomtegrot': {
+    Hustomte: {
         name: 'Warm Tomtegröt',
-        description: 'A bowl of warm tomtegröt. The sweet smell might attract a watchful house prankster who loves this offering.',
-        tamingTarget: 'Hustomte'
+        description: 'A bowl of warm tomtegröt. The sweet smell might attract a watchful house prankster who loves this offering.'
     },
-    'Water Bucket': {
+    Brunnsgubbe: {
         name: 'Water Bucket',
-        description: 'A heavy water bucket reinforced with iron. It might coax a well prankster to emerge from the dark.',
-        tamingTarget: 'Brunnsgubbe'
+        description: 'A heavy water bucket reinforced with iron. It might coax a well prankster to emerge from the dark.'
     },
-    'Attic Key': {
+    Pyssling: {
         name: 'Attic Key',
-        description: 'A rusted attic key. It feels unusually cold to the touch; a perfect token to entice a loft prankster from the high beams.',
-        tamingTarget: 'Pyssling'
+        description: 'A rusted attic key. It feels unusually cold to the touch; a perfect token to entice a loft prankster from the high beams.'
     },
 
     // Vålnad (Phantom)
-    'Black Feather': {
+    Nattramn: {
         name: 'Black Feather',
-        description: 'A black feather. It carries an eerie silence, likely shed by a raven phantom haunting the night sky.',
-        tamingTarget: 'Nattramn'
+        description: 'A black feather. It carries an eerie silence, likely shed by a raven phantom haunting the night sky.'
     },
-    'Burial Flowers': {
+    Myling: {
         name: 'Burial Flowers',
-        description: 'A small bouquet of burial flowers. Their scent is mournful, calling out to a wailing grave phantom.',
-        tamingTarget: 'Myling'
+        description: 'A small bouquet of burial flowers. Their scent is mournful, calling out to a wailing grave phantom.'
     },
-    'Ghastly Lantern': {
+    Irrbloss: {
         name: 'Ghastly Lantern',
-        description: 'A sputtering ghastly lantern. Its light is faint and misleading, a lure for a wandering bog phantom.',
-        tamingTarget: 'Irrbloss'
+        description: 'A sputtering ghastly lantern. Its light is faint and misleading, a lure for a wandering bog phantom.'
     },
-    'Damp Seaweed': {
+    Strandvaskare: {
         name: 'Damp Seaweed',
-        description: 'A clump of damp seaweed. It smells strongly of the sea, a sign of a shore phantom\'s haunting cry.',
-        tamingTarget: 'Strandvaskare'
+        description: 'A clump of damp seaweed. It smells strongly of the sea, a sign of a shore phantom\'s haunting cry.'
     },
-    'Mound Root': {
+    Draug: {
         name: 'Mound Root',
-        description: 'A gnarled mound root. It smells of ancient earth and decay, a grim souvenir that might appease a mound phantom who refuses to rest.',
-        tamingTarget: 'Draug'
+        description: 'A gnarled mound root. It smells of ancient earth and decay, a grim souvenir that might appease a mound phantom who refuses to rest.'
     },
 
     // Odjur (Beast)
-    'Drenched Saddle': {
+    Backahast: {
         name: 'Drenched Saddle',
-        description: 'A glistening drenched saddle. Be cautious; a deceptive river beast might be nearby, looking for a rider.',
-        tamingTarget: 'Backahast'
+        description: 'A glistening drenched saddle. Be cautious; a deceptive river beast might be nearby, looking for a rider.'
     },
-    'Delicate Truffle': {
+    Gloson: {
         name: 'Delicate Truffle',
-        description: 'A delicate truffle. Its rich aroma is a highly prized delicacy that makes a nocturnal beast drop its guard and follow its nose.',
-        tamingTarget: 'Gloson'
+        description: 'A delicate truffle. Its rich aroma is a highly prized delicacy that makes a nocturnal beast drop its guard and follow its nose.'
     },
-    'Cursed Yarn': {
+    Bjara: {
         name: 'Cursed Yarn',
-        description: 'A spool of blood-stained cursed yarn. This tangled mess of wool and wood might entice a thieving beast that stalks the farmsteads.',
-        tamingTarget: 'Bjara'
+        description: 'A spool of blood-stained cursed yarn. This tangled mess of wool and wood might entice a thieving beast that stalks the farmsteads.'
     },
-    'Broken Chain': {
+    Fenrir: {
         name: 'Broken Chain',
-        description: 'A piece of a mighty broken chain. The metal pulses with immense, restrained power - a sign of the great wolf beast.',
-        tamingTarget: 'Fenrir'
+        description: 'A piece of a mighty broken chain. The metal pulses with immense, restrained power - a sign of the great wolf beast.'
     },
-    'Eagle Quill': {
+    Rasvelg: {
         name: 'Eagle Quill',
-        description: 'A massive eagle quill. It feels impossibly light; a feather from the sky beast that creates the world\'s winds.',
-        tamingTarget: 'Rasvelg'
+        description: 'A massive eagle quill. It feels impossibly light; a feather from the sky beast that creates the world\'s winds.'
     },
 
     // Troll
-    'Silver Necklace': {
+    Bergatroll: {
         name: 'Silver Necklace',
-        description: 'A dazzling silver necklace. Perhaps a greedy mountain troll dropped it while passing through.',
-        tamingTarget: 'Bergatroll'
+        description: 'A dazzling silver necklace. Perhaps a greedy mountain troll dropped it while passing through.'
     },
-    'Mossy Bark': {
+    Skogstroll: {
         name: 'Mossy Bark',
-        description: 'A thick piece of mossy bark. It\'s the perfect camouflage for a cunning forest troll.',
-        tamingTarget: 'Skogstroll'
+        description: 'A thick piece of mossy bark. It\'s the perfect camouflage for a cunning forest troll.'
     },
-    'Trollmilk Bottle': {
+    Bortbyting: {
         name: 'Trollmilk Bottle',
-        description: 'A strange, small trollmilk bottle. It seems to have been left by a sickly, irritable cradle troll.',
-        tamingTarget: 'Bortbyting'
+        description: 'A strange, small trollmilk bottle. It seems to have been left by a sickly, irritable cradle troll.'
     },
-    'Cooling Grease': {
+    Gryningstroll: {
         name: 'Cooling Grease',
-        description: 'A jar of cooling grease, used by smiths to quench blazing metal. A fitting offering for a petrified troll whose core never cools.',
-        tamingTarget: 'Gryningstroll'
+        description: 'A jar of cooling grease, used by smiths to quench blazing metal. A fitting offering for a petrified troll whose core never cools.'
     },
-    'Bridge Keystone': {
+    Backatroll: {
         name: 'Bridge Keystone',
-        description: 'A heavy, moss-covered bridge keystone. It feels ancient and important, a fitting tribute to a bridge troll.',
-        tamingTarget: 'Backatroll'
+        description: 'A heavy, moss-covered bridge keystone. It feels ancient and important, a fitting tribute to a bridge troll.'
     },
 
     // Rå (Warden)
-    'Mine Lantern': {
+    Gruvra: {
         name: 'Mine Lantern',
-        description: 'A sturdy mine lantern. The light might please a veiled mine warden.',
-        tamingTarget: 'Gruvra'
+        description: 'A sturdy mine lantern. The light might please a veiled mine warden.'
     },
-    'Shed Antlers': {
-        name: 'Shed Antlers',
-        description: 'A set of shed antlers. They whisper of the deep woods and an alluring forest warden.',
-        tamingTarget: 'Skogsra'
+    Skogsra: {
+        name: 'Broken Antlers',
+        description: 'A set of antlers, broken off at the base. They whisper of the deep woods and an alluring forest warden.'
     },
-    'Waterlogged Violin': {
+    Nacken: {
         name: 'Waterlogged Violin',
-        description: 'A waterlogged violin. Its silent strings recall the melancholic, luring music of a river warden.',
-        tamingTarget: 'Nacken'
+        description: 'A waterlogged violin. Its silent strings recall the melancholic, luring music of a river warden.'
     },
-    'Heavy Pillow': {
+    Mara: {
         name: 'Heavy Pillow',
-        description: 'A heavy pillow, grown unnaturally dense from the nightly visits of a dream warden.',
-        tamingTarget: 'Mara'
+        description: 'A heavy pillow, grown unnaturally dense from the nightly visits of a dream warden.'
     },
-    'Brass Cowbell': {
+    Huldra: {
         name: 'Brass Cowbell',
-        description: 'A worn brass cowbell. Its hollow ringing might attract a charred warden, who longs for the memory of a living forest.',
-        tamingTarget: 'Huldra'
+        description: 'A worn brass cowbell. Its hollow ringing might attract a charred warden, who longs for the memory of a living forest.'
     },
 
     // Alv (Elf)
-    'Flicker Dust': {
+    Alva: {
         name: 'Flicker Dust',
-        description: 'A pinch of shimmering flicker dust. It might catch the attention of a capricious twilight elf.',
-        tamingTarget: 'Alva'
+        description: 'A pinch of shimmering flicker dust. It might catch the attention of a capricious twilight elf.'
     },
-    'Morning Dew': {
+    Dimalva: {
         name: 'Morning Dew',
-        description: 'A jar containing shimmering morning dew. This ethereal substance attracts a tiny water elf.',
-        tamingTarget: 'Dimalva'
+        description: 'A jar containing shimmering morning dew. This ethereal substance attracts a tiny water elf.'
     },
-    'Shiny Trinket': {
+    Svartalv: {
         name: 'Shiny Trinket',
-        description: 'A small, intricately carved shiny trinket. Its metallic sheen hints that it was crafted by an underground elf.',
-        tamingTarget: 'Svartalv'
+        description: 'A small, intricately carved shiny trinket. Its metallic sheen hints that it was crafted by an underground elf.'
     },
-    'Anvil Shard': {
+    Dvarg: {
         name: 'Anvil Shard',
-        description: 'A jagged anvil shard of glittering metal that hums with power. An ideal offering for a forge elf who crafts legendary weapons.',
-        tamingTarget: 'Dvarg'
+        description: 'A jagged anvil shard of glittering metal that hums with power. An ideal offering for a forge elf who crafts legendary weapons.'
     },
-    'Festive Midsommarkrans': {
+    Ljusalv: {
         name: 'Festive Midsommarkrans',
-        description: 'A festive midsommarkrans. Its radiance attracts a beautiful, radiant light elf.',
-        tamingTarget: 'Ljusalv'
+        description: 'A festive midsommarkrans. Its radiance attracts a beautiful, radiant light elf.'
     },
 
     // Ande (Spirit)
-    'Elderflower Sprig': {
+    Hyllemor: {
         name: 'Elderflower Sprig',
-        description: 'A fragrant elderflower sprig. Its scent is protective, a necessary offering for a fierce elder tree spirit.',
-        tamingTarget: 'Hyllemor'
+        description: 'A fragrant elderflower sprig. Its scent is protective, a necessary offering for a fierce elder tree spirit.'
     },
-    'Valhallan Pork': {
+    Einharje: {
         name: 'Valhallan Pork',
-        description: 'A tempting piece of valhallan pork. The scent of victory and feasting lingers, attracting a warrior spirit from the great hall.',
-        tamingTarget: 'Einharje'
+        description: 'A tempting piece of valhallan pork. The scent of victory and feasting lingers, attracting a warrior spirit from the great hall.'
     },
-    'Shield Fragment': {
+    Valkyria: {
         name: 'Shield Fragment',
-        description: 'A polished shield fragment. It has the mark of a powerful, winged spirit who chooses the worthy slain.',
-        tamingTarget: 'Valkyria'
+        description: 'A polished shield fragment. It has the mark of a powerful, winged spirit who chooses the worthy slain.'
     },
-    'Soul Flame': {
+    Fylgja: {
         name: 'Soul Flame',
-        description: 'A flickering soul flame, drawn from the depths of an ancient fire. Its warmth feels almost alive, a fitting tribute for a flame spirit.',
-        tamingTarget: 'Fylgja'
+        description: 'A flickering soul flame, drawn from the depths of an ancient fire. Its warmth feels almost alive, a fitting tribute for a flame spirit.'
     },
-    'Fate Thread': {
+    Norna: {
         name: 'Fate Thread',
-        description: 'A shimmering fate thread humming with power drawn from the well beneath Yggdrasil. A fitting offering for a fate-weaving spirit.',
-        tamingTarget: 'Norna'
+        description: 'A shimmering fate thread humming with power drawn from the well beneath Yggdrasil. A fitting offering for a fate-weaving spirit.'
     },
 
     // Jätte (Giant)
-    'Giant Rock': {
+    Jotun: {
         name: 'Giant Rock',
-        description: 'A surprisingly smooth giant rock. A piece of the raw, immense power of a primordial giant.',
-        tamingTarget: 'Jotun'
+        description: 'A surprisingly smooth giant rock. A piece of the raw, immense power of a primordial giant.'
     },
-    'Glowing Coal': {
+    Eldturs: {
         name: 'Glowing Coal',
-        description: 'A searing glowing coal. It burns with the endless fire of Muspelheim, attracting a fire giant.',
-        tamingTarget: 'Eldturs'
+        description: 'A searing glowing coal. It burns with the endless fire of Muspelheim, attracting a fire giant.'
     },
-    'Ice Crystal': {
+    Rimturs: {
         name: 'Ice Crystal',
-        description: 'A razor-sharp ice crystal. It is bone-chillingly cold, a remnant of a frost giant of Niflheim.',
-        tamingTarget: 'Rimturs'
+        description: 'A razor-sharp ice crystal. It is bone-chillingly cold, a remnant of a frost giant of Niflheim.'
     },
-    'Ancient Log': {
+    Jarnvidja: {
         name: 'Ancient Log',
-        description: 'A section of ancient log whose bark is black as iron and warm to the touch. A fitting tribute for an iron forest giant.',
-        tamingTarget: 'Jarnvidja'
+        description: 'A section of ancient log whose bark is black as iron and warm to the touch. A fitting tribute for an iron forest giant.'
     },
-    'Shattered Pillar': {
+    Stormturs: {
         name: 'Shattered Pillar',
-        description: 'A jagged shattered pillar. Its fractured face bears the imprint of a colossal heel. A storm giant would appreciate it.',
-        tamingTarget: 'Stormturs'
+        description: 'A jagged shattered pillar. Its fractured face bears the imprint of a colossal heel. A storm giant would appreciate it.'
     },
 
     // Drake (Serpent)
-    'Shedded Scale': {
+    Lindorm: {
         name: 'Shedded Scale',
-        description: 'A large, heavy shedded scale. It belonged to a massive slithering serpent of the forgotten lands.',
-        tamingTarget: 'Lindorm'
+        description: 'A large, heavy shedded scale. It belonged to a massive slithering serpent of the forgotten lands.'
     },
-    'Gold Coin': {
+    Fafner: {
         name: 'Gold Coin',
-        description: 'A flawless gold coin, often found in the colossal hoards of the greedy hoard serpent.',
-        tamingTarget: 'Fafner'
+        description: 'A flawless gold coin, often found in the colossal hoards of the greedy hoard serpent.'
     },
-    'White Scales': {
+    Vitorm: {
         name: 'White Scales',
-        description: 'A handful of shimmering white scales. They radiate a faint, ancient hum; an offering befitting a white serpent.',
-        tamingTarget: 'Vitorm'
+        description: 'A handful of shimmering white scales. They radiate a faint, ancient hum; an offering befitting a white serpent.'
     },
-    'Fishing Hook': {
+    Jormungandr: {
         name: 'Fishing Hook',
-        description: 'A colossal fishing hook. Only the one who tried to catch the world serpent could have used this.',
-        tamingTarget: 'Jormungandr'
+        description: 'A colossal fishing hook. Only the one who tried to catch the world serpent could have used this.'
     },
-    'Yggdrasil Root': {
+    Nidhogg: {
         name: 'Yggdrasil Root',
-        description: 'A fragment of Yggdrasil root. It is gnawed and ancient, a piece of the world tree itself, sought by the gnawing serpent.',
-        tamingTarget: 'Nidhogg'
+        description: 'A fragment of Yggdrasil root. It is gnawed and ancient, a piece of the world tree itself, sought by the gnawing serpent.'
     }
 };
+
+// Link each item and its väsen. Both directions come from the item's key, so
+// the link is written in one place only:
+//   TAMING_ITEMS[id].tamingTarget  - the väsen the item tames (= id)
+//   VASEN_SPECIES[id].tamingItem   - that väsen's item id (= id)
+Object.keys(TAMING_ITEMS).forEach(id => {
+    TAMING_ITEMS[id].tamingTarget = id;
+    VASEN_SPECIES[id].tamingItem = id;
+});
+
+// =============================================================================
+// SAVE MIGRATION (legacy item ids)
+// -----------------------------------------------------------------------------
+// Items used to be keyed by their display name ('Broken Chain'), and saves
+// stored those names in itemInventory, favoriteItems and discoveredItems.
+// Items are now keyed by väsen ('Fenrir'). When a save
+// is loaded, normalizeItemId() converts the old ids. The next save is written
+// with the new ids, so each save only needs this once.
+//
+// The map is frozen: never add to it when items are renamed or added (names
+// are display text now and are not stored in saves).
+//
+// HOW TO REMOVE: when saves from before this change no longer need to load (a new
+// version that resets saves, or a rebuild of the game), search for
+// "SAVE MIGRATION (legacy item ids)", delete this block, and in each place the
+// search finds in GameState.deserialize (7-system-state.js) replace
+// `.map(normalizeItemId)` / `normalizeItemId(id)` with the plain id.
+// =============================================================================
+const LEGACY_ITEM_IDS = {
+    'Sturdy Spade': 'Landvatte', 'Garden Rake': 'Gardstomte', 'Warm Tomtegrot': 'Hustomte',
+    'Water Bucket': 'Brunnsgubbe', 'Attic Key': 'Pyssling',
+    'Black Feather': 'Nattramn', 'Burial Flowers': 'Myling', 'Ghastly Lantern': 'Irrbloss',
+    'Damp Seaweed': 'Strandvaskare', 'Mound Root': 'Draug',
+    'Drenched Saddle': 'Backahast', 'Delicate Truffle': 'Gloson', 'Cursed Yarn': 'Bjara',
+    'Broken Chain': 'Fenrir', 'Eagle Quill': 'Rasvelg',
+    'Silver Necklace': 'Bergatroll', 'Mossy Bark': 'Skogstroll', 'Trollmilk Bottle': 'Bortbyting',
+    'Cooling Grease': 'Gryningstroll', 'Bridge Keystone': 'Backatroll',
+    'Mine Lantern': 'Gruvra', 'Shed Antlers': 'Skogsra', 'Broken Antlers': 'Skogsra',
+    'Waterlogged Violin': 'Nacken', 'Heavy Pillow': 'Mara', 'Brass Cowbell': 'Huldra',
+    'Flicker Dust': 'Alva', 'Morning Dew': 'Dimalva', 'Shiny Trinket': 'Svartalv',
+    'Anvil Shard': 'Dvarg', 'Festive Midsommarkrans': 'Ljusalv',
+    'Elderflower Sprig': 'Hyllemor', 'Valhallan Pork': 'Einharje', 'Shield Fragment': 'Valkyria',
+    'Soul Flame': 'Fylgja', 'Fate Thread': 'Norna',
+    'Giant Rock': 'Jotun', 'Glowing Coal': 'Eldturs', 'Ice Crystal': 'Rimturs',
+    'Ancient Log': 'Jarnvidja', 'Shattered Pillar': 'Stormturs',
+    'Shedded Scale': 'Lindorm', 'Gold Coin': 'Fafner', 'White Scales': 'Vitorm',
+    'Fishing Hook': 'Jormungandr', 'Yggdrasil Root': 'Nidhogg'
+};
+
+// SAVE MIGRATION (legacy item ids): an item id read from a save, with an
+// old name-based id converted to its current key
+function normalizeItemId(id) {
+    return LEGACY_ITEM_IDS[id] || id;
+}
+// ============================ END SAVE MIGRATION =============================
 
 // Helper to get all items for a zone
 function getItemsForZone(zoneKey) {
@@ -282,7 +296,6 @@ function getRandomItemFromZone(zoneKey) {
 }
 
 // Check if item is correct for a species
-function isCorrectTamingItem(itemName, speciesName) {
-    const item = TAMING_ITEMS[itemName];
-    return item && item.tamingTarget === speciesName;
+function isCorrectTamingItem(itemId, speciesName) {
+    return !!TAMING_ITEMS[itemId] && itemId === speciesName;
 }

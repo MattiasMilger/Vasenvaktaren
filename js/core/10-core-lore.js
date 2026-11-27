@@ -666,7 +666,7 @@ const LORE_ENTRIES = {
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'item',
-        unlockKey: 'Broken Chain'
+        unlockKey: 'Fenrir'
     },
     'item_festive_midsommarkrans': {
         key: 'item_festive_midsommarkrans',
@@ -676,7 +676,7 @@ const LORE_ENTRIES = {
         source: 'Swedish Folk Tradition',
         heritage: 'Swedish',
         unlockType: 'item',
-        unlockKey: 'Festive Midsommarkrans'
+        unlockKey: 'Ljusalv'
     },
     'item_fishing_hook': {
         key: 'item_fishing_hook',
@@ -686,7 +686,7 @@ const LORE_ENTRIES = {
         source: 'Poetic Edda (Kvädet om Hymer)',
         heritage: 'Norse',
         unlockType: 'item',
-        unlockKey: 'Fishing Hook'
+        unlockKey: 'Jormungandr'
     },
     'item_warm_tomtegrot': {
         key: 'item_warm_tomtegrot',
@@ -696,7 +696,7 @@ const LORE_ENTRIES = {
         source: 'Swedish Folk Tradition',
         heritage: 'Swedish',
         unlockType: 'item',
-        unlockKey: 'Warm Tomtegrot'
+        unlockKey: 'Hustomte'
     },
     'item_valhallan_pork': {
         key: 'item_valhallan_pork',
@@ -706,7 +706,7 @@ const LORE_ENTRIES = {
         source: 'Prose Edda (Snorri Sturluson)',
         heritage: 'Norse',
         unlockType: 'item',
-        unlockKey: 'Valhallan Pork'
+        unlockKey: 'Einharje'
     },
     'item_burial_flowers': {
         key: 'item_burial_flowers',
@@ -716,7 +716,7 @@ const LORE_ENTRIES = {
         source: 'Swedish Folklore / Hyltén-Cavallius (Svenska Folkets Sagohäfder)',
         heritage: 'Swedish',
         unlockType: 'item',
-        unlockKey: 'Burial Flowers'
+        unlockKey: 'Myling'
     },
     'item_yggdrasil_root': {
         key: 'item_yggdrasil_root',
@@ -726,7 +726,7 @@ const LORE_ENTRIES = {
         source: 'Prose Edda / Poetic Edda',
         heritage: 'Norse',
         unlockType: 'item',
-        unlockKey: 'Yggdrasil Root'
+        unlockKey: 'Nidhogg'
     },
     'item_morning_dew': {
         key: 'item_morning_dew',
@@ -736,7 +736,7 @@ const LORE_ENTRIES = {
         source: 'Swedish Folk Tradition',
         heritage: 'Swedish',
         unlockType: 'item',
-        unlockKey: 'Morning Dew'
+        unlockKey: 'Dimalva'
     },
     'item_brass_cowbell': {
         key: 'item_brass_cowbell',
@@ -746,7 +746,7 @@ const LORE_ENTRIES = {
         source: 'Scandinavian Folk Tradition',
         heritage: 'Scandinavian',
         unlockType: 'item',
-        unlockKey: 'Brass Cowbell'
+        unlockKey: 'Huldra'
     },
 
     // =========================================================================

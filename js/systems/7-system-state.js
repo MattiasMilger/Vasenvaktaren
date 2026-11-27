@@ -136,6 +136,10 @@ class GameState {
         // Set of unlocked lore entry keys
         this.unlockedLoreEntries = new Set();
 
+        // Set of lore entry keys the player has opened at least once
+        // (unopened unlocked entries get a small marker in the Lore Book)
+        this.readLoreEntries = new Set();
+
         // Lore Book tutorial: key of the first lore entry the player unlocked
         // (glows in the Lore Book until expanded), or null. Only set before the
         // book has been opened for the first time; later unlocks never glow.
@@ -690,6 +694,7 @@ class GameState {
     getGuardian(zoneId) {
         const zoneGuardian = ZONES[zoneId] && ZONES[zoneId].guardian;
         if (!zoneGuardian) return null;
+        // SAVE MIGRATION (fixed guardians): saves without guardians use the fixed roster
         const roster = (this.guardians && this.guardians[zoneId]) || zoneGuardian.legacy;
         return {
             name: roster.name,
@@ -1084,6 +1089,7 @@ class GameState {
             favoriteLoreCategories: Array.from(this.favoriteLoreCategories),
             favoriteLoreEntries: Array.from(this.favoriteLoreEntries),
             unlockedLoreEntries: Array.from(this.unlockedLoreEntries),
+            readLoreEntries: Array.from(this.readLoreEntries),
             tutorialLoreEntry: this.tutorialLoreEntry,
             discoveredSkills: Array.from(this.discoveredSkills),
             discoveredItems: Array.from(this.discoveredItems),
@@ -1127,7 +1133,20 @@ class GameState {
         };
     }
 
-    // Deserialize game state from save data
+    // Deserialize game state from save data.
+    //
+    // SAVE MIGRATIONS - code that exists only so saves made by older versions
+    // still load. Each one is tagged "SAVE MIGRATION (<name>)" at every place
+    // it touches, with removal steps next to it. When a new version or rebuild
+    // no longer needs to load those saves, search for the tag and remove it.
+    //   (legacy item ids)        items stored by name -> 4-core-items.js
+    //   (fixed guardians)        pre-randomized guardians -> 5-core-instance.js
+    //   (read lore entries)      unread lore markers, below
+    //   (latestLoreEntry)        old Lore Book tutorial field, below
+    //   (loreBookTutorialShown)  flag inferred for old saves, below
+    //   (runeEquipTutorialShown) flag inferred for old saves, below
+    // Plain defaults for missing fields (`data.x || 0`) are not migrations:
+    // they keep loading safe and should stay.
     deserialize(data) {
         if (!data || data.version !== SAVE_VERSION) {
             console.warn('Save version mismatch or invalid data');
@@ -1163,17 +1182,32 @@ class GameState {
                 return this.vasenCollection.find(v => v.id === vData.id) || null;
             });
             
-            this.itemInventory = data.itemInventory || {};
+            // Unknown item ids are dropped.
+            // SAVE MIGRATION (legacy item ids): normalizeItemId converts old
+            // name-based ids, see 4-core-items.js. Remove with that block.
+            this.itemInventory = {};
+            Object.entries(data.itemInventory || {}).forEach(([id, count]) => {
+                const itemId = normalizeItemId(id);
+                if (!TAMING_ITEMS[itemId] || !(count > 0)) return;
+                this.itemInventory[itemId] = Math.min((this.itemInventory[itemId] || 0) + count, GAME_CONFIG.MAX_ITEM_STACK);
+            });
             this.collectedRunes = new Set(data.collectedRunes || []);
             this.favoriteVasen = new Set(data.favoriteVasen || []);
-            this.favoriteItems = new Set(data.favoriteItems || []);
+            // SAVE MIGRATION (legacy item ids)
+            this.favoriteItems = new Set((data.favoriteItems || []).map(normalizeItemId).filter(id => TAMING_ITEMS[id]));
             this.favoriteRunes = new Set(data.favoriteRunes || []);
             this.favoriteGuideCategories = new Set(data.favoriteGuideCategories || []);
             this.favoriteLoreCategories = new Set(data.favoriteLoreCategories || []);
             this.favoriteLoreEntries = new Set(data.favoriteLoreEntries || []);
             this.unlockedLoreEntries = new Set(data.unlockedLoreEntries || []);
-            // Older saves stored the latest unread entry (latestLoreEntry) instead;
-            // it only carries over while the Lore Book tutorial is still pending.
+            // SAVE MIGRATION (read lore entries): saves from before read tracking
+            // count everything already unlocked as read, so the whole book
+            // doesn't light up. To remove: new Set(data.readLoreEntries || [])
+            this.readLoreEntries = new Set(data.readLoreEntries || data.unlockedLoreEntries || []);
+            // SAVE MIGRATION (latestLoreEntry): older saves stored the latest
+            // unread entry (latestLoreEntry) instead; it only carries over while
+            // the Lore Book tutorial is still pending.
+            // To remove: const tutorialKey = data.tutorialLoreEntry;
             const tutorialKey = data.tutorialLoreEntry !== undefined
                 ? data.tutorialLoreEntry
                 : (data.loreBookTutorialShown ? null : data.latestLoreEntry);
@@ -1183,10 +1217,12 @@ class GameState {
             // saveGame() fills them in from the collection and unlocked lore entries.
             // Ids that no longer exist are dropped so renamed or removed skills/items don't linger.
             this.discoveredSkills = new Set((data.discoveredSkills || []).filter(id => ABILITIES[id]));
-            this.discoveredItems = new Set((data.discoveredItems || []).filter(id => TAMING_ITEMS[id]));
+            // SAVE MIGRATION (legacy item ids)
+            this.discoveredItems = new Set((data.discoveredItems || []).map(normalizeItemId).filter(id => TAMING_ITEMS[id]));
             this.currentZone = data.currentZone || 'ZONE1';
             this.defeatedGuardians = new Set(data.defeatedGuardians || []);
-            // Saves from before guardians were randomized keep the fixed ones
+            // SAVE MIGRATION (fixed guardians): null for saves from before
+            // guardians were randomized (they keep the fixed ones)
             this.guardians = normalizeGuardianRosters(data.guardians);
 
             this.achievements = data.achievements || createDefaultAchievements();
@@ -1194,13 +1230,17 @@ class GameState {
             this.runeMenuFirstOpen = data.runeMenuFirstOpen || false;
             this.firstCombatTutorialShown = data.firstCombatTutorialShown || false;
             this.firstExploreTutorialShown = data.firstExploreTutorialShown || false;
-            // Saves from before this flag existed: treat players who already
-            // unlocked lore beyond the starting entries as past the tutorial
+            // SAVE MIGRATION (loreBookTutorialShown): saves from before this flag
+            // existed treat players who already unlocked lore beyond the
+            // starting entries as past the tutorial.
+            // To remove: this.loreBookTutorialShown = data.loreBookTutorialShown || false;
             this.loreBookTutorialShown = data.loreBookTutorialShown !== undefined
                 ? data.loreBookTutorialShown
                 : (data.unlockedLoreEntries || []).length > LORE_STANDARD_KEYS.length + 1;
-            // Saves from before this flag existed: a väsen already wearing two
-            // runes shows the player knows how to equip them
+            // SAVE MIGRATION (runeEquipTutorialShown): saves from before this
+            // flag existed treat a väsen already wearing two runes as proof the
+            // player knows how to equip them.
+            // To remove: this.runeEquipTutorialShown = data.runeEquipTutorialShown || false;
             this.runeEquipTutorialShown = data.runeEquipTutorialShown !== undefined
                 ? data.runeEquipTutorialShown
                 : this.vasenCollection.some(v => v.runes.filter(r => r !== null).length >= 2);
@@ -1329,6 +1369,7 @@ class GameState {
         this.favoriteLoreCategories = new Set();
         this.favoriteLoreEntries = new Set();
         this.unlockedLoreEntries = new Set();
+        this.readLoreEntries = new Set();
         this.tutorialLoreEntry = null;
         this.discoveredSkills = new Set();
         this.discoveredItems = new Set();

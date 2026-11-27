@@ -286,11 +286,13 @@ Game.prototype.resolveInterruptedCombat = function(pending) {
 
     gameState.saveGame();
     this.refreshUI();
-    const what = isTower ? 'your Endless Tower run' : `your battle against ${pending.opponent || 'your foe'}`;
+    const story = isTower
+        ? 'Your climb through the Endless Tower was cut short, and you find yourself back at its foot.'
+        : `You broke away from your battle against ${pending.opponent || 'your foe'} before it could be decided.`;
     ui.showDialogue(
         'Battle Abandoned',
-        `<p>The page was closed or reloaded during ${what}.</p>
-         <p>${isTower ? 'The run has ended and your party has been restored.' : 'Your party withdrew and is left at low health.'}${fallen.length > 0 || lostRunes.length > 0 ? ' Losses taken during the battle still stand.' : ''}</p>
+        `<p>${story}</p>
+         <p>${isTower ? 'The run has ended and your party has been restored.' : 'Your party withdrew, battered and weary, and is left at low health.'}${fallen.length > 0 || lostRunes.length > 0 ? ' What was lost in the fighting cannot be regained.' : ''}</p>
          ${fallen.length > 0 ? ui.getFallenListHTML(fallen) : ''}
          ${lostRunes.length > 0 ? ui.getLostRunesListHTML(lostRunes) : ''}`,
         [{ text: 'Continue', callback: null }],
