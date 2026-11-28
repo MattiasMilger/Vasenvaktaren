@@ -330,7 +330,7 @@ UIController.prototype._applyLoreSearch = function(container, query) {
 
 // Whether a lore entry has an Additional Info popup ("i" button) - only for
 // väsen entries, family entries, the Runes concept entry (which opens the full
-// runes and bind runes list instead of per-rune entries, since individual runes
+// runes and bindrunes list instead of per-rune entries, since individual runes
 // have no lore entries of their own), Idunn's Apples, and Sacred Wells.
 UIController.prototype.loreEntryHasInfo = function(entry) {
     return entry.unlockType === 'vasen' || entry.unlockType === 'family' ||
@@ -513,7 +513,7 @@ UIController.prototype.showLoreInfoModal = function(title, bodyHtml) {
     modal.classList.add('active');
 
     // Delegated click handler for collapsible category titles within this
-    // modal (e.g. Runes / Bind Runes). Reuses the same lore-category /
+    // modal (e.g. Runes / Bindrunes). Reuses the same lore-category /
     // lore-category-title / lore-cat-chevron pattern as the main Lore Book
     // (see renderLore()) - no "Collapse Categories" button here, each title
     // toggles independently.
@@ -878,10 +878,10 @@ UIController.prototype.showLocationsInfoModal = function() {
 };
 
 // Runes technical info: every regular rune (symbol, name, effect) plus every
-// bind rune pair that exists and its effect. Runes not collected yet are shown
-// as greyed-out names; a bind rune is only listed once both of its runes are
+// bindrune pair that exists and its effect. Runes not collected yet are shown
+// as greyed-out names; a bindrune is only listed once both of its runes are
 // collected. The generic bindrune ("any other pair") is listed first once any
-// two runes are collected (the Bind Runes category is left out until then).
+// two runes are collected (the Bindrunes category is left out until then).
 UIController.prototype.showRunesInfoModal = function() {
     const runesHtml = RUNE_LIST.map(runeId => {
         const rune = RUNES[runeId];
@@ -898,8 +898,8 @@ UIController.prototype.showRunesInfoModal = function() {
 
     const discoveredBindRunes = BIND_RUNES.filter(br => this.isInfoUnlocked(gameState.isBindRuneDiscovered(br)));
 
-    // Any other pair: the bonus follows the ætt of each rune. Lists each ætt's
-    // runes, then the bonus of every ætt combination.
+    // Any other pair: the bonus follows the ätt of each rune. Lists each ätt's
+    // runes, then the bonus of every ätt combination.
     const genericDiscovered = this.isInfoUnlocked(gameState.collectedRunes.size >= 2);
     const aettirHtml = RUNE_AETT_LIST.map(key => {
         const aett = RUNE_AETTIR[key];
@@ -924,7 +924,7 @@ UIController.prototype.showRunesInfoModal = function() {
         `;
     }).join('');
     const genericHtml = genericDiscovered ? `
-        <p class="lore-info-description">Two runes without a bindrune of their own still form one. Its bonus depends on the ætt (family of eight runes) each rune belongs to.</p>
+        <p class="lore-info-description">Two runes without a bindrune of their own still form one. Its bonus depends on the ätt (family of eight runes) each rune belongs to.</p>
         ${aettirHtml}
         ${aettBonusesHtml}
     ` : '';
@@ -938,7 +938,7 @@ UIController.prototype.showRunesInfoModal = function() {
 
     const bindRunesCategoryHtml = genericDiscovered || discoveredBindRunes.length > 0 ? `
         <div class="lore-category">
-            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bind Runes</h4>
+            <h4 class="lore-category-title"><span class="lore-cat-chevron"></span>Bindrunes</h4>
             <div class="lore-entry-list">
                 <p class="lore-info-description">Order does not matter.</p>
                 <div class="lore-info-bindrune-list">${bindRunesHtml}</div>

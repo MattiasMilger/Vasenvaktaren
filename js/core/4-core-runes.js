@@ -242,7 +242,7 @@ const RUNES = {
 const RUNE_LIST = Object.keys(RUNES);
 
 // =============================================================================
-// BIND RUNES
+// BINDRUNES
 // Each entry defines a pair of runes that, when equipped together, produce a
 // combined effect beyond what either rune does individually.
 // runes:      [runeA, runeB] - order does not matter
@@ -252,7 +252,7 @@ const RUNE_LIST = Object.keys(RUNES);
 // names:      combined name string for the combat log
 // =============================================================================
 const BIND_RUNES = [
-    // ── ELEMENTAL CONVERSION BIND RUNES ──────────────────────────────────────
+    // ── ELEMENTAL CONVERSION BINDRUNES ──────────────────────────────────────
     // SOURCE rune defines which element gets converted; CONVERSION rune defines
     // the target element. Only hits that originally match the source element are
     // affected.  sourceElement → convertedElement for matchup and damage.
@@ -693,7 +693,7 @@ const BIND_RUNES = [
     )
 ];
 
-// What each proc rune does when a Fehu, Naudiz or Mannaz bind rune triggers it.
+// What each proc rune does when a Fehu, Naudiz or Mannaz bindrune triggers it.
 // Jera heals, Inguz lowers a random attribute of the opponent, and Ansuz/Raido
 // raise the attacking and defending attribute of their own side (Ansuz: wisdom
 // and durability, Raido: strength and defense). Amounts come from the
@@ -705,21 +705,21 @@ const BIND_RUNE_PROC_EFFECTS = {
     RAIDO:  { kind: 'buff', attributes: ['strength', 'defense'] }
 };
 
-// ── GENERIC BIND RUNE ────────────────────────────────────────────────────────
+// ── GENERIC BINDRUNE ────────────────────────────────────────────────────────
 // Any two equipped runes that have no bindrune of their own form the generic
 // bindrune instead (see getActiveBindRunes), so every pair does something and
 // the defined bindrunes are the ones worth finding. It is not part of BIND_RUNES:
 // it never makes a rune eligible (getBindRuneEligibleRunes) and is never offered
 // as a pair by Auto Equip Runes.
 //
-// Its bonus depends on the ætt of each rune. The Elder Futhark is divided into
-// three ættir ("families") of eight runes, named after their first rune, and
-// RUNE_LIST is already in futhark order. The two ættir of the pair pick one of
+// Its bonus depends on the ätt of each rune. The Elder Futhark is divided into
+// three ätter ("families") of eight runes, named after their first rune, and
+// RUNE_LIST is already in futhark order. The two ätter of the pair pick one of
 // six bonuses (order does not matter).
 const RUNE_AETTIR = {
-    FREYR: { name: 'Freyr\'s ætt', runes: ['FEHU', 'URUZ', 'THURS', 'ANSUZ', 'RAIDO', 'KAUNAN', 'GIFU', 'WYNJA'] },
-    HAGAL: { name: 'Hagal\'s ætt', runes: ['HAGAL', 'NAUDIZ', 'ISAZ', 'JERA', 'EIHWAZ', 'PERTHO', 'ALGIZ', 'SOL'] },
-    TYR:   { name: 'Tyr\'s ætt',   runes: ['TYR', 'BJARKA', 'EHWAZ', 'MANNAZ', 'LAGUZ', 'INGUZ', 'DAGAZ', 'ODAL'] }
+    FREYR: { name: 'Freyr\'s ätt', runes: ['FEHU', 'URUZ', 'THURS', 'ANSUZ', 'RAIDO', 'KAUNAN', 'GIFU', 'WYNJA'] },
+    HAGAL: { name: 'Hagal\'s ätt', runes: ['HAGAL', 'NAUDIZ', 'ISAZ', 'JERA', 'EIHWAZ', 'PERTHO', 'ALGIZ', 'SOL'] },
+    TYR:   { name: 'Tyr\'s ätt',   runes: ['TYR', 'BJARKA', 'EHWAZ', 'MANNAZ', 'LAGUZ', 'INGUZ', 'DAGAZ', 'ODAL'] }
 };
 const RUNE_AETT_LIST = Object.keys(RUNE_AETTIR);
 
@@ -734,12 +734,12 @@ const GENERIC_BIND_RUNE_BONUSES = [
     { aettir: ['HAGAL', 'TYR'],   attribute: 'wisdom',     bonusKey: 'RUNE_BIND_GENERIC_ATTRIBUTE_BONUS' }
 ];
 
-// The ætt key (FREYR, HAGAL or TYR) a rune belongs to, or null
+// The ätt key (FREYR, HAGAL or TYR) a rune belongs to, or null
 function getRuneAett(runeId) {
     return RUNE_AETT_LIST.find(key => RUNE_AETTIR[key].runes.includes(runeId)) || null;
 }
 
-// The GENERIC_BIND_RUNE_BONUSES entry for two runes' ættir, or null
+// The GENERIC_BIND_RUNE_BONUSES entry for two runes' ätter, or null
 function getGenericBindRuneBonusEntry(runeA, runeB) {
     const a = getRuneAett(runeA);
     const b = getRuneAett(runeB);
@@ -797,7 +797,7 @@ function convertedAttackBoostText(convertRune) {
     return `This väsen's attacks converted by ${RUNES[convertRune].name} cost ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_CONVERTED_COST_INCREASE * 100)}% more megin and deal ${Math.round(GAME_CONFIG.RUNE_BIND_URUZ_CONVERTED_DAMAGE_BOOST * 100)}% more damage`;
 }
 
-// Builds a Fehu/Naudiz/Mannaz-style bind rune: `triggerText` describes when it rolls,
+// Builds a Fehu/Naudiz/Mannaz-style bindrune: `triggerText` describes when it rolls,
 // `chanceKey` names the GAME_CONFIG proc chance, and `procRune` decides what happens.
 function makeProcBindRune(triggerRune, procRune, type, triggerText, chanceKey) {
     return {
@@ -822,8 +822,8 @@ function makeProcBindRune(triggerRune, procRune, type, triggerText, chanceKey) {
     };
 }
 
-// Returns an array of active bind rune definitions for a given VasenInstance.
-// A bind rune is active only when the väsen has BOTH runes in the pair equipped.
+// Returns an array of active bindrune definitions for a given VasenInstance.
+// A bindrune is active only when the väsen has BOTH runes in the pair equipped.
 // Two equipped runes with no bindrune of their own form the generic bindrune
 // (makeGenericBindRune) instead, so a väsen with two runes always has one.
 // The returned objects are shallow copies with `symbols` and `names` recomputed
@@ -859,7 +859,7 @@ function getBindRuneForPair(runeA, runeB) {
     return br || makeGenericBindRune(runeA, runeB);
 }
 
-// Returns the active Uruz + Ansuz / Uruz + Raido bind rune if it applies to this
+// Returns the active Uruz + Ansuz / Uruz + Raido bindrune if it applies to this
 // skill (the skill is one the partner rune converts), or null.
 function getConvertedAttackBindRune(vasen, skillName) {
     const br = getActiveBindRuneOfType(vasen, 'converted_attack_boost');
@@ -867,56 +867,56 @@ function getConvertedAttackBindRune(vasen, skillName) {
     return br && skill && skill.type === br.convertedType ? br : null;
 }
 
-// Returns the active elemental conversion bind rune for a given VasenInstance
+// Returns the active elemental conversion bindrune for a given VasenInstance
 // (if any), or null. Only the first match is returned since a väsen can only
 // equip two runes and therefore only one elemental conversion pair at a time.
 function getElementConversionBindRune(vasen) {
     return getActiveBindRunes(vasen).find(br => br.type === 'element_conversion') || null;
 }
 
-// Returns true if the väsen has the ANSUZ + RAIDO use_best_stat bind rune active.
+// Returns true if the väsen has the ANSUZ + RAIDO use_best_stat bindrune active.
 function hasUseBestStatBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'use_best_stat');
 }
 
-// Returns true if the väsen has the GIFU + MANNAZ mannaz_team_heal bind rune active.
+// Returns true if the väsen has the GIFU + MANNAZ mannaz_team_heal bindrune active.
 function hasMannazTeamHealBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'mannaz_team_heal');
 }
 
-// Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bind rune active.
+// Returns true if the väsen has the INGUZ + DAGAZ enter_battlefield_debuff bindrune active.
 function hasEnterBattlefieldDebuffBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enter_battlefield_debuff');
 }
 
-// Returns true if the väsen has the JERA + ODAL low_cost_random_buff bind rune active.
+// Returns true if the väsen has the JERA + ODAL low_cost_random_buff bindrune active.
 function hasLowCostRandomBuffBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'low_cost_random_buff');
 }
 
-// Returns true if the väsen has the FEHU + WYNJA or ODAL + WYNJA health_threshold_buff_all bind rune active.
+// Returns true if the väsen has the FEHU + WYNJA or ODAL + WYNJA health_threshold_buff_all bindrune active.
 function hasHealthThresholdBuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'health_threshold_buff_all');
 }
 
-// Returns true if the väsen has the URUZ + THURS thurs_megin_gain bind rune active.
+// Returns true if the väsen has the URUZ + THURS thurs_megin_gain bindrune active.
 function hasThursMeginGainBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'thurs_megin_gain');
 }
 
-// Returns true if the väsen has the HAGAL + NAUDIZ or HAGAL + INGUZ enemy_health_threshold_debuff_all bind rune active.
+// Returns true if the väsen has the HAGAL + NAUDIZ or HAGAL + INGUZ enemy_health_threshold_debuff_all bindrune active.
 function hasEnemyHealthThresholdDebuffAllBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'enemy_health_threshold_debuff_all');
 }
 
-// Returns true if the väsen has the DAGAZ + JERA dagaz_extended bind rune active.
+// Returns true if the väsen has the DAGAZ + JERA dagaz_extended bindrune active.
 function hasDagazExtendedBindRune(vasen) {
     return getActiveBindRunes(vasen).some(br => br.type === 'dagaz_extended');
 }
 
-// Returns the active bind rune of the given type for a väsen (e.g.
+// Returns the active bindrune of the given type for a väsen (e.g.
 // 'wynja_block_strike', 'potent_hit_proc'), or null. A väsen holds two runes,
-// so at most one bind rune is active.
+// so at most one bindrune is active.
 function getActiveBindRuneOfType(vasen, type) {
     return getActiveBindRunes(vasen).find(br => br.type === type) || null;
 }

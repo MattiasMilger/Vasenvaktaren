@@ -4,7 +4,7 @@
 
 // Combat flags for rune and family passive effects that trigger at most once per combat
 const ONCE_PER_COMBAT_FLAGS = [
-    // Runes and bind runes
+    // Runes and bindrunes
     'gifuTriggered',
     'wynjaTriggered',
     'mannazTeamHealTriggered',
@@ -96,7 +96,7 @@ class VasenInstance {
             base -= this.temperament.modifier;
         }
 
-        // Generic bindrune: some ætt pairs raise one attribute by a small
+        // Generic bindrune: some ätt pairs raise one attribute by a small
         // percentage (health is handled in calculateMaxHealth instead)
         if (attrName !== 'health') {
             const bindRuneBonus = getGenericBindRuneBonus(this, attrName);
@@ -117,7 +117,7 @@ class VasenInstance {
     }
     
     // Calculate max health: the health attribute, plus the generic bindrune's bonus
-    // when the väsen's two runes have no bindrune of their own and their ættir
+    // when the väsen's two runes have no bindrune of their own and their ätter
     // give health
     calculateMaxHealth() {
         let health = this.calculateAttribute('health');
@@ -175,7 +175,7 @@ class VasenInstance {
         megin = Math.min(megin, GAME_CONFIG.MAX_MEGIN_CAP);
         
         // Rune bonuses add together: Uruz, and the generic bindrune when its
-        // ættir give Megin
+        // ätter give Megin
         let runeBonus = getGenericBindRuneBonus(this, 'megin');
         if (this.hasRune('URUZ')) {
             runeBonus += GAME_CONFIG.RUNE_URUZ_MEGIN_BONUS;

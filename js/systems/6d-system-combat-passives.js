@@ -2,9 +2,9 @@
 // 6d-system-combat-passives.js - Rune Effects and Family Passives in Combat
 // =============================================================================
 //
-// Extends the Combat class (6a-system-combat.js) with the runes, bind runes and
+// Extends the Combat class (6a-system-combat.js) with the runes, bindrunes and
 // family passives that react to what happens in a fight. Rune definitions and
-// bind rune lookups live in 4-core-runes.js; the tuning values live in
+// bindrune lookups live in 4-core-runes.js; the tuning values live in
 // GAME_CONFIG and FAMILY_PASSIVE_CONFIG (1-core-constants.js).
 // =============================================================================
 
@@ -17,7 +17,7 @@ const ELEMENT_BUFF_RUNES = {
 };
 
 // Trigger point -> Combat methods that react to it, in resolution order. Each
-// handler checks for itself whether it applies (family, bind rune, once-per-combat
+// handler checks for itself whether it applies (family, bindrune, once-per-combat
 // flag). Jätte (Jotun's Fury) and Alv (Elven Craftsmanship) are not listed: they
 // modify a hit or a buff while it is calculated, so they are called from there.
 const COMBAT_PASSIVE_HANDLERS = {
@@ -82,7 +82,7 @@ Combat.prototype.tryWynjaBlock = function(target) {
     return true;
 };
 
-// Bind Rune - Wynja + Thurs: after Wynja blocks a debuff, this väsen uses a free
+// Bindrune - Wynja + Thurs: after Wynja blocks a debuff, this väsen uses a free
 // Basic Strike (RUNE_BIND_WYNJA_THURS_SKILL) on the opponent currently on the
 // battlefield. It resolves as a normal hit (runes, passives, Thurs reflection),
 // like the Dagaz + Thurs entry strike. Wynja blocks only once per combat, so this
@@ -100,7 +100,7 @@ Combat.prototype.tryWynjaThursStrike = function(vasen) {
     this.executeSkill(vasen, opponent, GAME_CONFIG.RUNE_BIND_WYNJA_THURS_SKILL, isPlayer, null, true);
 };
 
-// Bind Rune - Fehu / Naudiz + proc rune: after `hitter` lands a hit on `target`,
+// Bindrune - Fehu / Naudiz + proc rune: after `hitter` lands a hit on `target`,
 // a potent hit rolls the target's Fehu pair ('potent_hit_proc') and a weak hit
 // rolls the hitter's Naudiz pair ('weak_hit_proc'). The partner rune's effect
 // ignores its element. Thurs reflections count as hits too.
@@ -112,14 +112,14 @@ Combat.prototype.tryHitProcBindRunes = function(hitter, target, matchup) {
     }
 };
 
-// Bind Rune - Mannaz + proc rune (Ansuz, Raido): after this väsen uses a utility
+// Bindrune - Mannaz + proc rune (Ansuz, Raido): after this väsen uses a utility
 // skill, roll its Mannaz pair ('utility_skill_proc'). Called only while the
 // user is still standing.
 Combat.prototype.tryUtilityProcBindRune = function(vasen) {
     this.tryHitProcBindRune(vasen, null, 'utility_skill_proc', GAME_CONFIG.RUNE_BIND_MANNAZ_PROC_CHANCE);
 };
 
-// Rolls the proc bind rune of `type` on `vasen` and applies the partner rune's
+// Rolls the proc bindrune of `type` on `vasen` and applies the partner rune's
 // effect (BIND_RUNE_PROC_EFFECTS). Shared by the Fehu, Naudiz and Mannaz pairs.
 Combat.prototype.tryHitProcBindRune = function(vasen, opponent, type, chance) {
     if (vasen.isKnockedOut()) return;
@@ -167,7 +167,7 @@ Combat.prototype.tryJeraHeal = function(attacker, skillName, result) {
     }
 };
 
-// Bind Rune - Jera + Odal: chance to raise a random attribute when using a low-cost skill
+// Bindrune - Jera + Odal: chance to raise a random attribute when using a low-cost skill
 Combat.prototype.tryJeraOdalBuff = function(attacker, skillName) {
     if (!hasLowCostRandomBuffBindRune(attacker) || attacker.getSkillMeginCost(skillName) > GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) return;
     if (Math.random() >= GAME_CONFIG.RUNE_BIND_JERA_ODAL_PROC_CHANCE) return;
@@ -221,7 +221,7 @@ Combat.prototype.applyUtilityRuneEffects = function(attacker, skill, isPlayer, r
             this.logHealthGained(attacker, healAmount);
         }
 
-        // Bind Rune - GIFU + MANNAZ: the first time this väsen's Mannaz heal
+        // Bindrune - GIFU + MANNAZ: the first time this väsen's Mannaz heal
         // triggers this combat, also heal all allies by the same Mannaz heal
         // percent. Uses its own dedicated flag (not gifuTriggered) so it fires
         // independently of any other Gifu-shared buff that may have already
@@ -253,7 +253,7 @@ Combat.prototype.applyUtilityRuneEffects = function(attacker, skill, isPlayer, r
 // Rune effects that trigger when an attack skill hits
 Combat.prototype.applyHitRuneEffects = function(attacker, defender, damageResult, result, isPlayer) {
     // Skill-use rune procs, keyed on the skill's own element: an elemental
-    // conversion bind rune changes the hit, not the skill, so the source rune
+    // conversion bindrune changes the hit, not the skill, so the source rune
     // (e.g. Sol in Sol + Pertho) still procs on its element's skills
     const skillElement = getSkillElement(result.skill, attacker.species.element);
     this.tryElementBuffRune(attacker, skillElement, result);
@@ -288,7 +288,7 @@ Combat.prototype.applyHitRuneEffects = function(attacker, defender, damageResult
     }
 };
 
-// Bind Rune - Hagal + Naudiz: when the enemy's (defender's) health falls to the
+// Bindrune - Hagal + Naudiz: when the enemy's (defender's) health falls to the
 // configured threshold or less, lower all of their attribute stages by the
 // configured amount. Triggered from the attacker's side (the rune belongs to
 // the attacker), tracked once per combat via a flag on the attacker.
@@ -301,7 +301,7 @@ Combat.prototype.tryHagalNaudizDebuff = function(attacker, defender) {
     const hagalNaudizBR = getActiveBindRunes(attacker).find(b => b.type === 'enemy_health_threshold_debuff_all');
     this.logBindRuneActivated(attacker, hagalNaudizBR);
 
-    // Wynja on the defender blocks the whole debuff (the bind rune is still spent)
+    // Wynja on the defender blocks the whole debuff (the bindrune is still spent)
     if (this.tryWynjaBlock(defender)) return;
 
     STAGEABLE_ATTRIBUTES.forEach(stat => {
@@ -312,9 +312,9 @@ Combat.prototype.tryHagalNaudizDebuff = function(attacker, defender) {
     });
 };
 
-// Logs the bind runes that changed how a hit was calculated (see calculateDamage)
+// Logs the bindrunes that changed how a hit was calculated (see calculateDamage)
 Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
-    // Bind Rune - Elemental Conversion: the skill's element was converted
+    // Bindrune - Elemental Conversion: the skill's element was converted
     if (damageResult.bindRuneEleConverted) {
         const br = getElementConversionBindRune(attacker);
         if (br) {
@@ -322,7 +322,7 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
         }
     }
 
-    // Bind Rune - Use Best Stat (Ansuz + Raido): the higher of Strength/Wisdom was used
+    // Bindrune - Use Best Stat (Ansuz + Raido): the higher of Strength/Wisdom was used
     if (damageResult.bindRuneUseBestStat) {
         const br = getActiveBindRunes(attacker).find(b => b.type === 'use_best_stat');
         if (br) {
@@ -330,7 +330,7 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
         }
     }
 
-    // Bind Rune - Dagaz + Jera: the Dagaz bonus applied in its extra round
+    // Bindrune - Dagaz + Jera: the Dagaz bonus applied in its extra round
     if (damageResult.bindRuneDagazExtended) {
         const br = getActiveBindRunes(attacker).find(b => b.type === 'dagaz_extended');
         if (br) {
@@ -338,7 +338,7 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
         }
     }
 
-    // Bind Rune - Uruz + Ansuz / Uruz + Raido: a converted attack dealt more damage
+    // Bindrune - Uruz + Ansuz / Uruz + Raido: a converted attack dealt more damage
     if (damageResult.bindRuneConvertedAttack) {
         const br = getActiveBindRuneOfType(attacker, 'converted_attack_boost');
         if (br) {
@@ -346,7 +346,7 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
         }
     }
 
-    // Bind Rune - Naudiz + Odal: a neutral or weak hit got the bonus
+    // Bindrune - Naudiz + Odal: a neutral or weak hit got the bonus
     if (damageResult.bindRuneNaudizOdal) {
         const br = getActiveBindRuneOfType(attacker, 'non_potent_odal');
         if (br) {
@@ -355,7 +355,7 @@ Combat.prototype.logDamageBindRunes = function(attacker, damageResult) {
     }
 };
 
-// Bind Rune - Gifu + Hagal: when `vasen` is knocked out, each conscious ally on
+// Bindrune - Gifu + Hagal: when `vasen` is knocked out, each conscious ally on
 // its team gets its own random attribute raised (once per combat). Called from
 // resolveKnockout before the Deathless revive check, like Hagal itself.
 // vasenIsPlayer: whether the knocked out väsen is on the player's side.
@@ -506,7 +506,7 @@ Combat.prototype.passiveDraconicResilience = function({ vasen, isPlayer }) {
     this.shareRaiseWithGifu(vasen, raised, stages);
 };
 
-// --- BIND RUNE: FEHU + WYNJA (health threshold all-attribute buff) ---
+// --- BINDRUNE: FEHU + WYNJA (health threshold all-attribute buff) ---
 // When this väsen's health falls to the configured threshold or lower,
 // raise all four attribute stages. Triggers once per combat, at
 // the same onHealthThreshold point used by Drake's family passive
@@ -584,7 +584,7 @@ Combat.prototype.passiveDeathless = function({ vasen }) {
     return true;
 };
 
-// --- BIND RUNE: INGUZ + DAGAZ (enter battlefield debuff) ---
+// --- BINDRUNE: INGUZ + DAGAZ (enter battlefield debuff) ---
 // Lowers a random enemy attribute whenever this väsen enters the
 // battlefield (combat start or any swap-in), re-triggering on every
 // entry just like Dagaz's own first-round damage bonus. Can be
@@ -603,7 +603,7 @@ Combat.prototype.bindRuneEntryDebuff = function({ vasen, isPlayer }) {
     }
 };
 
-// --- BIND RUNE: DAGAZ + URUZ (enter battlefield megin) ---
+// --- BINDRUNE: DAGAZ + URUZ (enter battlefield megin) ---
 // Gains a fraction of max megin whenever this väsen enters the battlefield.
 Combat.prototype.bindRuneEntryMegin = function({ vasen }) {
     const br = getActiveBindRuneOfType(vasen, 'enter_battlefield_megin');
@@ -614,7 +614,7 @@ Combat.prototype.bindRuneEntryMegin = function({ vasen }) {
     this.addLog(`${vasen.getDisplayName()} gained ${gained} Megin!`, 'megin');
 };
 
-// --- BIND RUNE: DAGAZ + THURS (enter battlefield strike) ---
+// --- BINDRUNE: DAGAZ + THURS (enter battlefield strike) ---
 // The first time this väsen enters the battlefield each combat, it uses a free
 // Basic Strike (RUNE_BIND_DAGAZ_THURS_SKILL) on the opponent. It resolves as a
 // normal hit (runes, passives, Thurs reflection). Knockouts it causes outside

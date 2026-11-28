@@ -162,7 +162,7 @@ Combat.prototype.resolveKnockout = function(attacker, defender, isPlayer) {
         }
     }
 
-    // Bind Rune - Gifu + Hagal: the fallen väsen's allies each get a random
+    // Bindrune - Gifu + Hagal: the fallen väsen's allies each get a random
     // attribute raised (also triggers BEFORE the revive check, like Hagal)
     this.tryGifuHagalAllyBuff(defender, !isPlayer);
 
@@ -192,7 +192,7 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result, isP
     this.addLog(`${attacker.getDisplayName()} took ${reflectResult.damage} damage!`, 'damage');
     result.runeEffects.push({ rune: 'THURS', effect: `reflected ${reflectResult.damage}` });
 
-    // Bind Rune - Uruz + Thurs: the Thurs user gains part of the reflected damage as megin
+    // Bindrune - Uruz + Thurs: the Thurs user gains part of the reflected damage as megin
     const uruzThursBR = getActiveBindRuneOfType(defender, 'thurs_megin_gain');
     if (uruzThursBR && !defender.isKnockedOut()) {
         const meginGained = defender.gainMegin(Math.floor(reflectedDamage * GAME_CONFIG.RUNE_BIND_URUZ_THURS_MEGIN_PERCENT));
@@ -228,7 +228,7 @@ Combat.prototype.applyThursReflection = function(attacker, defender, result, isP
         }
     }
 
-    // Fehu / Naudiz bind runes: the reflection is a hit from the Thurs user
+    // Fehu / Naudiz bindrunes: the reflection is a hit from the Thurs user
     this.tryHitProcBindRunes(defender, attacker, reflectResult.matchup);
 
     // The reflection knocked out the original attacker: resolve it like any
@@ -254,13 +254,13 @@ Combat.prototype.consumeInitialBonus = function(skill, isPlayer) {
 // =============================================================================
 
 // Calculate the damage of an attack skill, along with the matchup and any
-// bind rune conversions that applied (used for logging)
+// bindrune conversions that applied (used for logging)
 Combat.prototype.calculateDamage = function(attacker, defender, skillName) {
     const skill = ABILITIES[skillName];
     let skillElement = getSkillElement(skillName, attacker.species.element);
 
-    // Bind Rune - Elemental Conversion: if the attacker has an active elemental
-    // conversion bind rune and this skill's element matches the source element,
+    // Bindrune - Elemental Conversion: if the attacker has an active elemental
+    // conversion bindrune and this skill's element matches the source element,
     // override skillElement to the converted element for matchup and damage.
     const eleConversionBR = getElementConversionBindRune(attacker);
     let bindRuneEleConverted = false;
@@ -291,7 +291,7 @@ Combat.prototype.calculateDamage = function(attacker, defender, skillName) {
         useWisdom = false;
     }
 
-    // Bind Rune - Use Best Stat (Ansuz + Raido): all attacks use whichever of
+    // Bindrune - Use Best Stat (Ansuz + Raido): all attacks use whichever of
     // the attacker's Strength or Wisdom (with stage modifiers) is currently higher.
     const bindRuneUseBestStat = hasUseBestStatBindRune(attacker);
 
@@ -388,7 +388,7 @@ Combat.prototype.getDamageModifier = function(attacker, defender, skillName, ski
     }
 
     // Odal: low cost bonus. Naudiz + Odal: neutral and weak hits Odal alone
-    // would not boost get the bind rune's bonus instead (never both).
+    // would not boost get the bindrune's bonus instead (never both).
     if (attacker.hasRune('ODAL') && attacker.getSkillMeginCost(skillName) <= GAME_CONFIG.RUNE_ODAL_COST_THRESHOLD) {
         damageMod += GAME_CONFIG.RUNE_ODAL_DAMAGE_BOOST;
     } else if (this.naudizOdalApplies(attacker, skillName, matchup)) {
@@ -419,7 +419,7 @@ Combat.prototype.getDamageModifier = function(attacker, defender, skillName, ski
     return damageMod;
 };
 
-// Bind Rune - Naudiz + Odal: true if this hit gets the bind rune's bonus, i.e. it
+// Bindrune - Naudiz + Odal: true if this hit gets the bindrune's bonus, i.e. it
 // is a neutral or weak hit that Odal's own low-cost bonus does not already cover
 Combat.prototype.naudizOdalApplies = function(attacker, skillName, matchup) {
     return matchup !== 'POTENT'

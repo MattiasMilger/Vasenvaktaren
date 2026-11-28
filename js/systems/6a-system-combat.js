@@ -168,7 +168,7 @@ class Combat {
     // Set player's active Väsen.
     // isSwap: a voluntary swap (Oknytt Tag Team, swap sickness).
     // entersBattlefield: run the "entering the battlefield" effects (Ande,
-    // Dagaz bind runes). True for swaps and knockout replacements; false only
+    // Dagaz bindrunes). True for swaps and knockout replacements; false only
     // for the initial setup, whose entry effects the constructor runs once the
     // UI is ready.
     setPlayerActive(index, isSwap = false, entersBattlefield = isSwap) {

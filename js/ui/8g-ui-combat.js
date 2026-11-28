@@ -433,7 +433,7 @@ UIController.prototype.renderSwapOptions = function(combat) {
 
 // Determine the potency shine class for an attack skill button - 'potency-potent',
 // 'potency-weak', or '' for neutral/utility skills. Accounts for active elemental
-// conversion bind runes (e.g. Eihwaz+Kaunan) by converting the skill's element
+// conversion bindrunes (e.g. Eihwaz+Kaunan) by converting the skill's element
 // before checking the matchup, mirroring the same conversion Combat.calculateDamage
 // applies when actually resolving damage.
 UIController.prototype.getSkillPotencyClass = function(skill, skillElement, attacker, defender) {

@@ -631,7 +631,7 @@ class GameState {
         return this.collectedRunes.has(runeId) || this.foundRunes.has(runeId);
     }
 
-    // A bind rune is discovered once both runes of its pair are collected
+    // A bindrune is discovered once both runes of its pair are collected
     isBindRuneDiscovered(bindRune) {
         return bindRune.runes.every(runeId => this.collectedRunes.has(runeId));
     }
