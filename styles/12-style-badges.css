@@ -187,6 +187,15 @@
     display: inline-block;
 }
 
+/* Game Guide rarity popups: anchor to the badge's left edge like the family
+   popups above. The default centered popup (index.html) overflows past the
+   guide's scroll container for the leftmost badge (Common) and gets clipped. */
+.guide-category-body .rarity-matchup-collapsible .rarity-description-popup {
+    left: 0;
+    transform: none;
+    max-width: min(320px, calc(100vw - 32px));
+}
+
 /* Family description collapsible popup (for details panel and combatant cards) */
 .family-matchup-collapsible {
     position: relative;
