@@ -34,9 +34,9 @@ const GAME_CONFIG = {
     BASE_EXP_YIELD: 50,
     
     // Experience percentages awarded based on participation level
-    EXP_KILLING_BLOW: 1.0,              // Full exp share - dealt the final blow that knocked out the enemy
-    EXP_PARTICIPATED_ON_FIELD: 0.7,     // Reduced exp share - spent at least one turn actively on the battlefield
-    EXP_IN_PARTY_NOT_FIELDED: 0.5,      // Minimal exp share - in the party but never entered the battlefield
+    EXP_KILLING_BLOW: 1.0,              // Full exp share - the väsen on the battlefield when the combat is won
+    EXP_PARTICIPATED_ON_FIELD: 0.8,     // Reduced exp share - spent at least one turn actively on the battlefield
+    EXP_IN_PARTY_NOT_FIELDED: 0.6,      // Minimal exp share - in the party but never entered the battlefield
     
     // =============================================================================
     // MEGIN (ENERGY SYSTEM)
@@ -229,8 +229,12 @@ const GAME_CONFIG = {
     RUNE_BIND_GIFU_HAGAL_BUFF_STAGES: 1,              // Stages the random attribute of each ally is raised by
     // Naudiz + Odal: neutral and weak hits get the Odal bonus regardless of megin cost (never stacks with Odal itself)
     RUNE_BIND_NAUDIZ_ODAL_DAMAGE_BOOST: 0.18,         // +% damage of neutral and weak hits that Odal alone would not boost
-    // Generic bindrune: any two runes without a bindrune of their own
+    // Generic bindrune: any two runes without a bindrune of their own. The ætt
+    // (family of eight runes) of each rune decides which bonus the pair gives;
+    // see GENERIC_BIND_RUNE_BONUSES in 4-core-runes.js
     RUNE_BIND_GENERIC_HEALTH_BONUS: 0.05,             // +% max health
+    RUNE_BIND_GENERIC_MEGIN_BONUS: 0.05,              // +% max megin
+    RUNE_BIND_GENERIC_ATTRIBUTE_BONUS: 0.02,          // +% strength, wisdom, defense or durability
 
     // =============================================================================
     // ENEMY AI CONFIGURATION

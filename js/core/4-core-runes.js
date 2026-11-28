@@ -711,13 +711,78 @@ const BIND_RUNE_PROC_EFFECTS = {
 // the defined bindrunes are the ones worth finding. It is not part of BIND_RUNES:
 // it never makes a rune eligible (getBindRuneEligibleRunes) and is never offered
 // as a pair by Auto Equip Runes.
-const GENERIC_BIND_RUNE = {
-    type: 'generic_health',
-    isGeneric: true,
-    get effectText() {
-        return `This väsen has ${Math.round(GAME_CONFIG.RUNE_BIND_GENERIC_HEALTH_BONUS * 100)}% more health`;
-    }
+//
+// Its bonus depends on the ætt of each rune. The Elder Futhark is divided into
+// three ættir ("families") of eight runes, named after their first rune, and
+// RUNE_LIST is already in futhark order. The two ættir of the pair pick one of
+// six bonuses (order does not matter).
+const RUNE_AETTIR = {
+    FREYR: { name: 'Freyr\'s ætt', runes: ['FEHU', 'URUZ', 'THURS', 'ANSUZ', 'RAIDO', 'KAUNAN', 'GIFU', 'WYNJA'] },
+    HAGAL: { name: 'Hagal\'s ætt', runes: ['HAGAL', 'NAUDIZ', 'ISAZ', 'JERA', 'EIHWAZ', 'PERTHO', 'ALGIZ', 'SOL'] },
+    TYR:   { name: 'Tyr\'s ætt',   runes: ['TYR', 'BJARKA', 'EHWAZ', 'MANNAZ', 'LAGUZ', 'INGUZ', 'DAGAZ', 'ODAL'] }
 };
+const RUNE_AETT_LIST = Object.keys(RUNE_AETTIR);
+
+// attribute: 'health' and 'megin' raise the maximum, the other four raise the
+// attribute itself (before attribute stages). bonusKey names the GAME_CONFIG amount.
+const GENERIC_BIND_RUNE_BONUSES = [
+    { aettir: ['FREYR', 'FREYR'], attribute: 'health',     bonusKey: 'RUNE_BIND_GENERIC_HEALTH_BONUS' },
+    { aettir: ['HAGAL', 'HAGAL'], attribute: 'defense',    bonusKey: 'RUNE_BIND_GENERIC_ATTRIBUTE_BONUS' },
+    { aettir: ['TYR',   'TYR'],   attribute: 'strength',   bonusKey: 'RUNE_BIND_GENERIC_ATTRIBUTE_BONUS' },
+    { aettir: ['FREYR', 'HAGAL'], attribute: 'megin',      bonusKey: 'RUNE_BIND_GENERIC_MEGIN_BONUS' },
+    { aettir: ['FREYR', 'TYR'],   attribute: 'durability', bonusKey: 'RUNE_BIND_GENERIC_ATTRIBUTE_BONUS' },
+    { aettir: ['HAGAL', 'TYR'],   attribute: 'wisdom',     bonusKey: 'RUNE_BIND_GENERIC_ATTRIBUTE_BONUS' }
+];
+
+// The ætt key (FREYR, HAGAL or TYR) a rune belongs to, or null
+function getRuneAett(runeId) {
+    return RUNE_AETT_LIST.find(key => RUNE_AETTIR[key].runes.includes(runeId)) || null;
+}
+
+// The GENERIC_BIND_RUNE_BONUSES entry for two runes' ættir, or null
+function getGenericBindRuneBonusEntry(runeA, runeB) {
+    const a = getRuneAett(runeA);
+    const b = getRuneAett(runeB);
+    if (!a || !b) return null;
+    return GENERIC_BIND_RUNE_BONUSES.find(entry =>
+        (entry.aettir[0] === a && entry.aettir[1] === b) ||
+        (entry.aettir[0] === b && entry.aettir[1] === a)
+    ) || null;
+}
+
+// Player-facing text for a generic bindrune bonus entry
+function getGenericBindRuneEffectText(entry) {
+    if (!entry) return '';
+    return `This väsen has ${Math.round(GAME_CONFIG[entry.bonusKey] * 100)}% more ${entry.attribute}`;
+}
+
+// The generic bindrune two runes form (only meaningful when they have no
+// bindrune of their own)
+function makeGenericBindRune(runeA, runeB) {
+    const entry = getGenericBindRuneBonusEntry(runeA, runeB);
+    return {
+        type: 'generic',
+        isGeneric: true,
+        runes: [runeA, runeB],
+        attribute: entry ? entry.attribute : null,
+        amount: entry ? GAME_CONFIG[entry.bonusKey] : 0,
+        effectText: getGenericBindRuneEffectText(entry)
+    };
+}
+
+// Fraction the väsen's generic bindrune adds to `attribute` ('health', 'megin',
+// 'strength', 'wisdom', 'defense' or 'durability'); 0 when it has no generic
+// bindrune or the bindrune raises something else. Kept light (no object
+// building) because attribute calculation calls it often.
+function getGenericBindRuneBonus(vasen, attribute) {
+    if (!vasen || !vasen.runes) return 0;
+    const equipped = vasen.runes.filter(r => r && RUNES[r]);
+    if (equipped.length < 2) return 0;
+    const [runeA, runeB] = equipped;
+    if (BIND_RUNES.some(br => br.runes.includes(runeA) && br.runes.includes(runeB))) return 0;
+    const entry = getGenericBindRuneBonusEntry(runeA, runeB);
+    return entry && entry.attribute === attribute ? GAME_CONFIG[entry.bonusKey] : 0;
+}
 
 // Effect texts shared by bindrunes that have the same effect
 function enemyHealthThresholdDebuffAllText() {
@@ -760,7 +825,7 @@ function makeProcBindRune(triggerRune, procRune, type, triggerText, chanceKey) {
 // Returns an array of active bind rune definitions for a given VasenInstance.
 // A bind rune is active only when the väsen has BOTH runes in the pair equipped.
 // Two equipped runes with no bindrune of their own form the generic bindrune
-// (GENERIC_BIND_RUNE) instead, so a väsen with two runes always has one.
+// (makeGenericBindRune) instead, so a väsen with two runes always has one.
 // The returned objects are shallow copies with `symbols` and `names` recomputed
 // to follow the order the runes actually appear in vasen.runes (i.e. the order
 // the player equipped them), rather than the fixed order baked into BIND_RUNES.
@@ -782,7 +847,7 @@ function getActiveBindRunes(vasen) {
 
     const active = BIND_RUNES.filter(br => br.runes.every(r => equipped.includes(r)));
     if (active.length === 0) {
-        return [withEquipOrder({ ...GENERIC_BIND_RUNE, runes: equipped.slice(0, 2) })];
+        return [withEquipOrder(makeGenericBindRune(equipped[0], equipped[1]))];
     }
     return active.map(withEquipOrder);
 }
@@ -791,12 +856,7 @@ function getActiveBindRunes(vasen) {
 // bindrune, or the generic one (with `runes` set) when they have none.
 function getBindRuneForPair(runeA, runeB) {
     const br = BIND_RUNES.find(b => b.runes.includes(runeA) && b.runes.includes(runeB));
-    return br || { ...GENERIC_BIND_RUNE, runes: [runeA, runeB] };
-}
-
-// Returns true if the väsen's two runes form the generic bindrune (+max health).
-function hasGenericBindRune(vasen) {
-    return getActiveBindRunes(vasen).some(br => br.type === 'generic_health');
+    return br || makeGenericBindRune(runeA, runeB);
 }
 
 // Returns the active Uruz + Ansuz / Uruz + Raido bind rune if it applies to this

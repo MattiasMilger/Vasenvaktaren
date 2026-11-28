@@ -116,8 +116,11 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         this.currentCombat.playerTeam.forEach((vasen, index) => {
             if (vasen.isKnockedOut()) return;
 
-            let expMultiplier = 0.6; // In the party
-            if (vasen.combatFlags.turnsOnField > 0) expMultiplier = 0.8; // Spent at least one turn on the field
+            // Same shares as a wild combat: the väsen on the field when the
+            // guardian's last väsen fell gets the killing-blow share
+            let expMultiplier = GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED; // In the party
+            if (vasen.combatFlags.turnsOnField > 0) expMultiplier = GAME_CONFIG.EXP_PARTICIPATED_ON_FIELD; // Spent at least one turn on the field
+            if (index === this.currentCombat.playerActiveIndex) expMultiplier = GAME_CONFIG.EXP_KILLING_BLOW; // On the field when the combat was won
 
             const expAmount = Math.floor(expYield * expMultiplier);
             // Check if väsen is at max level

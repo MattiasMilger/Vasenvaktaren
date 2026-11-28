@@ -37,7 +37,18 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 - 24 equippable runes with unique effects
 - Two rune slots on every väsen from level 1 (wild väsen in the first zone carry one rune; from the second zone on, wild väsen and guardians carry two)
 - Strategic combinations for different builds
-- Bindrunes: any two equipped runes form a bindrune; most pairs grant a small health bonus, while certain pairs unlock a hidden combined effect
+- Bindrunes: any two equipped runes form a bindrune; certain pairs unlock a hidden combined effect, while the rest grant a small bonus decided by the ætt (family of eight runes) of each rune:
+
+| Pair | Bonus |
+| :--- | :--- |
+| Freyr's ætt + Freyr's ætt | +5% health |
+| Hagal's ætt + Hagal's ætt | +2% defense |
+| Tyr's ætt + Tyr's ætt | +2% strength |
+| Freyr's ætt + Hagal's ætt | +5% megin |
+| Freyr's ætt + Tyr's ætt | +2% durability |
+| Hagal's ætt + Tyr's ætt | +2% wisdom |
+
+  Freyr's ætt: Fehu, Uruz, Thurs, Ansuz, Raido, Kaunan, Gifu, Wynja. Hagal's ætt: Hagal, Naudiz, Isaz, Jera, Eihwaz, Pertho, Algiz, Sol. Tyr's ætt: Tyr, Bjarka, Ehwaz, Mannaz, Laguz, Inguz, Dagaz, Odal
 
 ### Exploration
 

@@ -898,12 +898,35 @@ UIController.prototype.showRunesInfoModal = function() {
 
     const discoveredBindRunes = BIND_RUNES.filter(br => this.isInfoUnlocked(gameState.isBindRuneDiscovered(br)));
 
+    // Any other pair: the bonus follows the ætt of each rune. Lists each ætt's
+    // runes, then the bonus of every ætt combination.
     const genericDiscovered = this.isInfoUnlocked(gameState.collectedRunes.size >= 2);
+    const aettirHtml = RUNE_AETT_LIST.map(key => {
+        const aett = RUNE_AETTIR[key];
+        const members = aett.runes.map(id => `${RUNES[id].symbol} ${RUNES[id].name}`).join(', ');
+        return `
+            <div class="lore-info-bindrune-item">
+                <div class="lore-info-bindrune-header">${aett.name}</div>
+                <div class="lore-info-bindrune-desc">${members}</div>
+            </div>
+        `;
+    }).join('');
+    const aettBonusesHtml = GENERIC_BIND_RUNE_BONUSES.map(entry => {
+        const [a, b] = entry.aettir;
+        const header = a === b
+            ? `Any other pair within ${RUNE_AETTIR[a].name}`
+            : `Any other pair from ${RUNE_AETTIR[a].name} and ${RUNE_AETTIR[b].name}`;
+        return `
+            <div class="lore-info-bindrune-item">
+                <div class="lore-info-bindrune-header">${header}</div>
+                <div class="lore-info-bindrune-desc">${getGenericBindRuneEffectText(entry)}</div>
+            </div>
+        `;
+    }).join('');
     const genericHtml = genericDiscovered ? `
-        <div class="lore-info-bindrune-item">
-            <div class="lore-info-bindrune-header">Any other pair</div>
-            <div class="lore-info-bindrune-desc">${GENERIC_BIND_RUNE.effectText}</div>
-        </div>
+        <p class="lore-info-description">Two runes without a bindrune of their own still form one. Its bonus depends on the ætt (family of eight runes) each rune belongs to.</p>
+        ${aettirHtml}
+        ${aettBonusesHtml}
     ` : '';
 
     const bindRunesHtml = genericHtml + discoveredBindRunes.map(br => `

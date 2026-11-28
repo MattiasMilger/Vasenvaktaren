@@ -22,14 +22,11 @@ function trimTrailingEmptyRuneSlots(vasen) {
     }
 }
 
-// Keep max Megin in sync when Uruz is equipped (refill) or removed (cap), and
-// max health in sync with the generic bindrune (any rune change can form or
-// break it)
-function syncMeginForRuneChange(vasen, addedRune, removedRune) {
-    if (addedRune === 'URUZ' || removedRune === 'URUZ') {
-        vasen.recalculateMaxMegin(addedRune === 'URUZ');
-    }
-    vasen.recalculateMaxHealth();
+// Keep max Megin and max health in sync after a rune change: Uruz and the
+// generic bindrune (any rune change can form or break it) affect them. Megin
+// refills when its maximum rises and is capped when it falls.
+function syncMeginForRuneChange(vasen) {
+    vasen.syncStatsForRuneChange();
 }
 
 // Move a rune already equipped on this väsen into another of its slots. Whatever

@@ -95,7 +95,16 @@ class VasenInstance {
         if (this.temperament.negative === attrName) {
             base -= this.temperament.modifier;
         }
-        
+
+        // Generic bindrune: some ætt pairs raise one attribute by a small
+        // percentage (health is handled in calculateMaxHealth instead)
+        if (attrName !== 'health') {
+            const bindRuneBonus = getGenericBindRuneBonus(this, attrName);
+            if (bindRuneBonus > 0) {
+                base = base * (1 + bindRuneBonus);
+            }
+        }
+
         return Math.floor(base);
     }
     
@@ -108,13 +117,28 @@ class VasenInstance {
     }
     
     // Calculate max health: the health attribute, plus the generic bindrune's bonus
-    // when the väsen's two runes have no bindrune of their own
+    // when the väsen's two runes have no bindrune of their own and their ættir
+    // give health
     calculateMaxHealth() {
         let health = this.calculateAttribute('health');
-        if (hasGenericBindRune(this)) {
-            health = Math.floor(health * (1 + GAME_CONFIG.RUNE_BIND_GENERIC_HEALTH_BONUS));
+        const bindRuneBonus = getGenericBindRuneBonus(this, 'health');
+        if (bindRuneBonus > 0) {
+            health = Math.floor(health * (1 + bindRuneBonus));
         }
         return health;
+    }
+
+    // Keep max health and max Megin in sync after any rune change: Uruz and the
+    // generic bindrune (which any rune change can form or break) both affect them.
+    // Megin is refilled when its maximum rises (e.g. Uruz equipped) and only
+    // capped when it falls.
+    syncStatsForRuneChange() {
+        const oldMaxMegin = this.maxMegin;
+        this.recalculateMaxMegin(false);
+        if (this.maxMegin > oldMaxMegin) {
+            this.currentMegin = this.maxMegin;
+        }
+        this.recalculateMaxHealth();
     }
 
     // Recalculate max health after a rune change (which can form or break the
@@ -150,8 +174,14 @@ class VasenInstance {
         // relevant for enemies in Endless Tower, whose level has no cap.
         megin = Math.min(megin, GAME_CONFIG.MAX_MEGIN_CAP);
         
+        // Rune bonuses add together: Uruz, and the generic bindrune when its
+        // ættir give Megin
+        let runeBonus = getGenericBindRuneBonus(this, 'megin');
         if (this.hasRune('URUZ')) {
-            megin = Math.floor(megin * (1 + GAME_CONFIG.RUNE_URUZ_MEGIN_BONUS));
+            runeBonus += GAME_CONFIG.RUNE_URUZ_MEGIN_BONUS;
+        }
+        if (runeBonus > 0) {
+            megin = Math.floor(megin * (1 + runeBonus));
         }
 
         return megin;
@@ -212,10 +242,7 @@ class VasenInstance {
             return false;
         }
         this.runes.push(runeId);
-        if (runeId === 'URUZ') {
-            this.recalculateMaxMegin();
-        }
-        this.recalculateMaxHealth();
+        this.syncStatsForRuneChange();
         return true;
     }
 
@@ -224,10 +251,7 @@ class VasenInstance {
         const index = this.runes.indexOf(runeId);
         if (index === -1) return false;
         this.runes.splice(index, 1);
-        if (runeId === 'URUZ') {
-            this.recalculateMaxMegin(false);
-        }
-        this.recalculateMaxHealth();
+        this.syncStatsForRuneChange();
         return true;
     }
 
@@ -431,7 +455,11 @@ class VasenInstance {
             instance.id = data.id;
         }
         instance.experience = data.experience || 0;
-        instance.currentHealth = data.currentHealth !== undefined ? data.currentHealth : instance.maxHealth;
+        // Capped at max health, which can be lower than when the save was made
+        // (e.g. a rune pair that used to give health now gives another bonus)
+        instance.currentHealth = data.currentHealth !== undefined
+            ? Math.min(data.currentHealth, instance.maxHealth)
+            : instance.maxHealth;
         // Megin is always fully restored outside of an active combat session.
         // Always recalculate from current maxMegin so constant changes take effect immediately.
         instance.currentMegin = instance.maxMegin;
@@ -466,10 +494,7 @@ function createWildVasen(speciesName, level, numRunes = getRuneSlotCount(), excl
         vasen.runes.push(validRunes[i]);
     }
 
-    if (vasen.hasRune('URUZ')) {
-        vasen.recalculateMaxMegin();
-    }
-    vasen.recalculateMaxHealth(); // two runes may form the generic bindrune
+    vasen.syncStatsForRuneChange(); // Uruz, or two runes forming the generic bindrune
 
     return vasen;
 }

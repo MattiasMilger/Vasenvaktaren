@@ -114,12 +114,12 @@ Game.prototype.handleCombatEnd = function(result) {
     this.currentCombat.playerTeam.forEach((vasen, index) => {
         if (vasen.isKnockedOut()) return;
 
-        let expMultiplier = 0.6; // In the party
+        let expMultiplier = GAME_CONFIG.EXP_IN_PARTY_NOT_FIELDED; // In the party
         if (vasen.combatFlags.turnsOnField > 0) {
-            expMultiplier = 0.8; // Spent at least one turn on the field
+            expMultiplier = GAME_CONFIG.EXP_PARTICIPATED_ON_FIELD; // Spent at least one turn on the field
         }
         if (index === this.currentCombat.playerActiveIndex) {
-            expMultiplier = 1.0; // Dealt killing blow
+            expMultiplier = GAME_CONFIG.EXP_KILLING_BLOW; // On the field when the combat was won
         }
 
         const expAmount = Math.floor(expYield * expMultiplier);

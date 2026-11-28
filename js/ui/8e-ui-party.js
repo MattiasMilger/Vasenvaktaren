@@ -175,9 +175,9 @@ UIController.prototype.autoEquipRunes = function() {
         const oldRunes = vasen.runes.slice();
         vasen.runes = [];
 
-        // Recalculate megin in case Uruz was removed
-        if (oldRunes.includes('URUZ')) {
-            vasen.recalculateMaxMegin(false);
+        // Recalculate megin and health in case Uruz or the generic bindrune was removed
+        if (oldRunes.length > 0) {
+            vasen.syncStatsForRuneChange();
         }
 
         const maxRunes = vasen.getRuneSlotCount();
@@ -258,12 +258,9 @@ UIController.prototype.autoEquipRunes = function() {
             });
         });
 
-        // Recalculate megin if Uruz was newly assigned
-        if (vasen.hasRune('URUZ')) {
-            vasen.recalculateMaxMegin();
-        }
-        // Max health follows the generic bindrune, which the new runes may form or break
-        vasen.recalculateMaxHealth();
+        // Max megin and health follow Uruz and the generic bindrune, which the
+        // new runes may form or break
+        vasen.syncStatsForRuneChange();
     });
 
     // Equipping runes this way also completes the rune equip tutorial
