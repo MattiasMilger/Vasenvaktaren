@@ -13,7 +13,9 @@ Game.prototype.challengeGuardian = function() {
     const zone = ZONES[gameState.currentZone];
     if (!zone || !zone.guardian) return;
 
-    const guardian = gameState.getGuardian(gameState.currentZone);
+    const zoneId = gameState.currentZone;
+    const guardian = gameState.getGuardian(zoneId);
+    guardian.zoneId = zoneId; // The fight's result always belongs to this zone
     const isRematch = gameState.defeatedGuardians.has(gameState.currentZone);
     const dialogueText = isRematch
         ? (guardian.dialogue.rematch || guardian.dialogue.challenge)
@@ -84,6 +86,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
 
     if (!result.victory) {
         this.leavePartyAtLowHealth();
+        gameState.writeSave(); // Closing the tab on the result dialogue keeps this
         ui.showDialogue(
             result.tie ? 'Tie' : 'Defeat',
             `<p>${result.tie ? result.message : guardian.dialogue.lose}</p>`,
@@ -95,14 +98,15 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         return;
     }
 
-    // Victory!
-    const wasFirstClear = !gameState.defeatedGuardians.has(gameState.currentZone);
+    // Victory! The zone the fight was started in (not whatever is selected now)
+    const zoneId = guardian.zoneId || gameState.currentZone;
+    const wasFirstClear = !gameState.defeatedGuardians.has(zoneId);
 
     // Mark zone as cleared (this also unlocks the next zone via isZoneUnlocked check)
-    gameState.defeatedGuardians.add(gameState.currentZone);
+    gameState.defeatedGuardians.add(zoneId);
 
     // Get current zone index for messages
-    const currentIndex = ZONE_ORDER.indexOf(gameState.currentZone);
+    const currentIndex = ZONE_ORDER.indexOf(zoneId);
 
     // Calculate experience
     const combatResult = {
@@ -170,7 +174,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
     // Unlock lore entries on first guardian clear
     if (wasFirstClear) {
         // Guardian's own lore entry, then the next zone's
-        this.unlockLoreWithMessage(findLoreEntryKey('guardian', gameState.currentZone));
+        this.unlockLoreWithMessage(findLoreEntryKey('guardian', zoneId));
         if (currentIndex < ZONE_ORDER.length - 1) {
             this.unlockLoreWithMessage(findLoreEntryKey('zone', ZONE_ORDER[currentIndex + 1]));
         }
@@ -188,7 +192,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
 
         // Leaving the one-rune zones: enemies carry two runes from here on
         if (ui.areTipsEnabled() &&
-            GAME_CONFIG.ENEMY_ONE_RUNE_ZONES.includes(gameState.currentZone) &&
+            GAME_CONFIG.ENEMY_ONE_RUNE_ZONES.includes(zoneId) &&
             !GAME_CONFIG.ENEMY_ONE_RUNE_ZONES.includes(nextZoneId)) {
             message += ui.getTipHTML('From here on, enemy väsen equip <strong>two runes</strong>, and their runes form a bindrune just like yours. Fill both rune slots on your party to keep up.');
         }
@@ -197,7 +201,7 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         if (nextZoneId !== 'ZONE7') {
             const nextZoneItems = getItemsForZone(nextZoneId);
             if (nextZoneItems.length > 0) {
-                const shuffled = [...nextZoneItems].sort(() => Math.random() - 0.5);
+                const shuffled = shuffleInPlace([...nextZoneItems]);
                 const itemsToGive = shuffled.slice(0, GAME_CONFIG.NEW_ZONE_ITEMS_AMOUNT);
                 itemsToGive.forEach(itemId => {
                     gameState.addItem(itemId, 1);
@@ -213,7 +217,9 @@ Game.prototype.handleGuardianCombatEnd = function(result, guardian) {
         };
     }
 
-    ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: callback }], false, null, 'swords');
+    // Save the win now: saveGame() is skipped while inCombat is set (until
+    // Continue), so closing the tab on this dialogue would otherwise lose it
+    gameState.writeSave();
 
-    gameState.saveGame();
+    ui.showDialogue('Victory!', message, [{ text: 'Continue', callback: callback }], false, null, 'swords');
 };

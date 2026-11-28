@@ -72,6 +72,7 @@ Have thoughts on the game, balance ideas, or found a bug? Leave feedback and joi
 | **Basic Strike** | Free attack using your element |
 | **Swap** | Change active Väsen (causes Swap Sickness) |
 | **Offer Item** | Offer taming items to wild Väsen (free action, up to 3 per combat). Once the desired item is given, no more can be offered |
+| **Collection limit** | Up to 199 väsen. Release some to tame more |
 | **Interrogate** | Learn what item the Väsen wants |
 | **Pass** | Skip your turn |
 | **Flee** | Exit combat. The väsen on the field stays behind to cover the retreat and is knocked out; the party is left at 5% health |
@@ -125,11 +126,11 @@ Optional rules for a harder journey. On the New Game screen, choose **Standard M
 
 - **Fleeing** knocks out the väsen on the field: it stays behind to cover the retreat. In a normal game that changes nothing (the party is left at 5% health anyway), but with Permadeath it dies and with Lost Runes it loses its runes. Swap in another väsen first to choose who stays behind
 - Every rule counts the same. A meter fills as rules are added and names the difficulty after the events before the end of the world: one rule is **Fimbulvinter**, two are **Gjallarhorn**, and any three (all but one) reach **Ragnarök**. With all four on it is still Ragnarök, with a small "oomph" as the last rule goes on and a little more glow
-- **Permadeath-free zone:** Idunn's apples keep every väsen, and its runes, safe within the Endless Tower. Even with Permadeath or Lost Runes, väsen that fall in the tower are restored when the run ends
+- **Permadeath-free zone:** Idunn's apples keep every väsen, and its runes, safe within the Endless Tower. Even with Permadeath or Lost Runes, väsen that fall in the tower return when the run ends. The party leaves the tower at the health it had before the climb (with full Megin), so the tower is never a free heal
 - When a väsen dies or loses its runes, a popup and a combat log line say so at once, and a summary follows the fight
 - The difficulty is shown next to the Player Profile button (click it for the rules), in Settings (with the save slot and start date) and on the main menu save cards
 - A Permadeath save that is over stays in its slot, marked as fallen, so it can be viewed (cause, party, fallen väsen) and deleted
-- **Closing or reloading the page during a battle abandons it.** A reload can't undo a death or a lost rune that already happened, but the reload itself costs nothing more: the väsen on the field is spared and the party is left at low health (an Endless Tower run ends and the party is restored). On the next start, a "Battle Abandoned" message explains what happened. A rolled wild encounter also comes back after a reload instead of being skipped. Normal saves behave as before
+- **Closing or reloading the page during a battle abandons it.** A reload can't undo a death or a lost rune that already happened, but the reload itself costs nothing more: the väsen on the field is spared and the party is left at low health (an Endless Tower run ends and the party returns to its health from before the climb). On the next start, a "Battle Abandoned" message explains what happened. A rolled wild encounter also comes back after a reload instead of being skipped. Normal saves behave as before
 - Runes and väsen types in the Player Profile count everything ever collected, so they never go down when a väsen dies or is released, or a rune is lost
 
 ## Starting a New Game

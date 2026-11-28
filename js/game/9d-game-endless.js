@@ -42,6 +42,9 @@ Game.prototype.challengeEndlessTower = function() {
 // Start Endless Tower run
 Game.prototype.startEndlessTowerRun = function() {
     this.endlessTowerCurrentFloor = 1;
+    // Health before the climb: the party returns to it when the run ends, so
+    // the tower is safe but never a free full heal
+    this.towerStartHealth = getPartyHealthSnapshot();
     this.startEndlessTowerCombat();
 };
 
@@ -204,15 +207,37 @@ Game.prototype.applyIdunnApples = function() {
     ui.addCombatLog(`<span style="color: var(--color-positive-soft); font-weight: 700;">Passives and runes have been renewed.</span>`, 'heal');
 };
 
-// End a tower run: the party is always fully restored, then the record is updated
-// with the highest floor completed. Returns true if that set a new record.
+// Health of each party väsen by id ({ id: health }), for restoring after a tower run
+function getPartyHealthSnapshot() {
+    const snapshot = {};
+    gameState.party.forEach(v => { if (v) snapshot[v.id] = v.currentHealth; });
+    return snapshot;
+}
+
+// After a tower run: every party väsen (also those that fell in the tower)
+// returns to the health it had before the climb, with full Megin. Väsen
+// missing from the snapshot are restored fully.
+Game.prototype.restorePartyAfterTower = function(snapshot) {
+    gameState.party.forEach(v => {
+        if (!v) return;
+        const before = snapshot && typeof snapshot[v.id] === 'number' ? snapshot[v.id] : v.maxHealth;
+        v.restoreFully();
+        v.currentHealth = Math.max(1, Math.min(v.maxHealth, before));
+    });
+};
+
+// End a tower run: the party returns to its health from before the climb, then
+// the record is updated with the highest floor completed. Returns true if that
+// set a new record.
 Game.prototype.finishEndlessTowerRun = function(floorsCompleted, restoreLogMessage) {
     gameState.inCombat = false;
 
-    this.restorePartyFully();
+    this.restorePartyAfterTower(this.towerStartHealth);
+    this.towerStartHealth = null;
+    this.currentCombat = null; // The run is over; nothing may act on it any more
     gameState.saveGame();
     ui.addCombatLog(restoreLogMessage, 'heal');
-    ui.showMessage('Your party was healed to full!', 'success');
+    ui.showMessage('Your party recovered from the climb.', 'success');
 
     const playerTeam = gameState.party.filter(p => p !== null);
     return gameState.updateEndlessTowerRecord(floorsCompleted, playerTeam);
@@ -257,7 +282,7 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
     if (result.surrendered) {
         // The current floor was not completed
         const reachedFloor = floor - 1;
-        const isNewRecord = this.finishEndlessTowerRun(reachedFloor, 'Your party has been fully restored after the tower challenge!');
+        const isNewRecord = this.finishEndlessTowerRun(reachedFloor, 'Your party leaves the tower as it entered: health from before the climb, Megin full.');
 
         this.showEndlessTowerRunDialogue(
             'Tower Run Ended',
@@ -270,7 +295,7 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
     if (result.victory) {
         // Reached the top floor
         if (floor >= GAME_CONFIG.ENDLESS_TOWER_MAX_FLOOR) {
-            this.finishEndlessTowerRun(floor, 'Your party has been fully restored after conquering the tower!');
+            this.finishEndlessTowerRun(floor, 'Your party leaves the conquered tower as it entered: health from before the climb, Megin full.');
 
             this.showEndlessTowerRunDialogue(
                 'Tower Conquered!',
@@ -326,14 +351,18 @@ Game.prototype.handleEndlessTowerCombatEnd = function(result) {
             });
         }
 
-        // Short pause so the log can be read before the next floor
+        // Short pause so the log can be read before the next floor. The run
+        // can't end during it (Flee is refused while the floor is over), but
+        // check anyway so a finished run can never start another floor.
+        const towerCombat = this.currentCombat;
         setTimeout(() => {
+            if (!gameState.inCombat || this.currentCombat !== towerCombat) return;
             this.startEndlessTowerCombat();
         }, 1500);
     } else {
         // Entire team was defeated; the current floor was not completed
         const reachedFloor = floor - 1;
-        const isNewRecord = this.finishEndlessTowerRun(reachedFloor, 'Your party has been fully restored after the tower challenge!');
+        const isNewRecord = this.finishEndlessTowerRun(reachedFloor, 'Your party leaves the tower as it entered: health from before the climb, Megin full.');
 
         this.showEndlessTowerRunDialogue(
             'Tower Run Ended',

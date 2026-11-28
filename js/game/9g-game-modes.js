@@ -272,8 +272,9 @@ Game.prototype.resolveInterruptedCombat = function(pending) {
     const lostRunes = this.commitLostRunes(pending.lostRunes || []);
 
     if (isTower) {
-        // A tower run that ends always restores the party (see finishEndlessTowerRun)
-        this.restorePartyFully();
+        // A tower run that ends returns the party to its health from before
+        // the climb (see finishEndlessTowerRun)
+        this.restorePartyAfterTower(pending.towerStartHealth);
         gameState.updateEndlessTowerRecord(Math.max(0, (pending.floor || 1) - 1), gameState.getActiveParty());
     } else {
         this.leavePartyAtLowHealth();
@@ -292,7 +293,7 @@ Game.prototype.resolveInterruptedCombat = function(pending) {
     ui.showDialogue(
         'Battle Abandoned',
         `<p>${story}</p>
-         <p>${isTower ? 'The run has ended and your party has been restored.' : 'Your party withdrew, battered and weary, and is left at low health.'}${fallen.length > 0 || lostRunes.length > 0 ? ' What was lost in the fighting cannot be regained.' : ''}</p>
+         <p>${isTower ? 'The run has ended and your party is back at its health from before the climb.' : 'Your party withdrew, battered and weary, and is left at low health.'}${fallen.length > 0 || lostRunes.length > 0 ? ' What was lost in the fighting cannot be regained.' : ''}</p>
          ${fallen.length > 0 ? ui.getFallenListHTML(fallen) : ''}
          ${lostRunes.length > 0 ? ui.getLostRunesListHTML(lostRunes) : ''}`,
         [{ text: 'Continue', callback: null }],
@@ -317,6 +318,8 @@ Game.prototype.beginModeCombat = function() {
         opponent: this.describeOpponent(combat),
         zone: gameState.currentZone,
         floor: combat.currentFloor || null,
+        // Endless Tower: party health before the climb, restored when the run ends
+        towerStartHealth: combat.combatType === COMBAT_TYPES.ENDLESS_TOWER ? (this.towerStartHealth || null) : null,
         startedAt: Date.now(),
         fallen: [],
         lostRunes: []
@@ -328,7 +331,7 @@ Game.prototype.beginModeCombat = function() {
 // loses its runes. The loss is saved right away so a reload can't undo it,
 // and announced in the log and a popup. It takes effect when the combat ends.
 // The Endless Tower is a safe zone: Idunn's apples keep every väsen and its
-// runes, and the party is restored when the run ends.
+// runes, and the party returns to its health from before the climb when the run ends.
 Game.prototype.handleModeKnockout = function(vasen, killer) {
     const { permadeath, lostRunes } = gameState.modes;
     const runes = (vasen.runes || []).filter(Boolean);
@@ -577,7 +580,7 @@ Game.prototype.getModeWarningHTML = function(context) {
     if ((!permadeath && !lostRunes) || !ui.areTipsEnabled()) return '';
     switch (context) {
         case 'tower':
-            return ui.getTipHTML('<strong>Permadeath-free zone</strong>: Idunn\'s apples keep every väsen, and its runes, safe within the tower. Väsen that fall here are restored when the run ends.');
+            return ui.getTipHTML('<strong>Permadeath-free zone</strong>: Idunn\'s apples keep every väsen, and its runes, safe within the tower. Väsen that fall here return, at their health from before the climb, when the run ends.');
         case 'surrender':
             return ui.getTipHTML('Swap in another väsen first to choose who stays behind. Swapping costs a turn.');
         case 'autoBattle':

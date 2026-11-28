@@ -137,7 +137,7 @@ class Game {
         const zone1Items = getItemsForZone('ZONE1');
 
         // Copy + shuffle
-        const shuffledZone1Items = [...zone1Items].sort(() => Math.random() - 0.5);
+        const shuffledZone1Items = shuffleInPlace([...zone1Items]);
 
         // Guarantee one item desired by a common Nature väsen of Zone 1: the
         // first wild fights are Nature-only and the tutorial spawns väsen whose

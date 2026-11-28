@@ -456,9 +456,11 @@ class VasenInstance {
         }
         instance.experience = data.experience || 0;
         // Capped at max health, which can be lower than when the save was made
-        // (e.g. a rune pair that used to give health now gives another bonus)
+        // (e.g. a rune pair that used to give health now gives another bonus).
+        // At least 1: a save written during combat can hold knocked-out väsen,
+        // and a väsen at 0 health outside combat can't be sent into a fight.
         instance.currentHealth = data.currentHealth !== undefined
-            ? Math.min(data.currentHealth, instance.maxHealth)
+            ? Math.max(1, Math.min(data.currentHealth, instance.maxHealth))
             : instance.maxHealth;
         // Megin is always fully restored outside of an active combat session.
         // Always recalculate from current maxMegin so constant changes take effect immediately.

@@ -70,6 +70,13 @@ UIController.prototype.getPreviousZone = function(zoneId) {
 
     // Select zone
 UIController.prototype.selectZone = function(zoneId) {
+        // The zone list stays visible during combat on wide screens. Changing
+        // zone mid-fight would let a guardian win count for another zone.
+        if (gameState.inCombat) {
+            this.showMessage('You can\'t change zone in the middle of a battle.', 'error');
+            return;
+        }
+        if (!gameState.isZoneUnlocked(zoneId)) return;
         gameState.currentZone = zoneId;
 
         // Update selection class without full re-render to avoid flash

@@ -40,6 +40,13 @@ Game.prototype.startCombat = function(enemyVasen) {
     ui.showCombatUI();
     ui.renderCombat(this.currentCombat);
     ui.addCombatLog(`A wild ${enemyVasen.getDisplayName()} appears!`, 'encounter');
+
+    // Full collection: the väsen can still be fought, but not tamed
+    if (gameState.isCollectionFull()) {
+        this.currentCombat.canTame = false;
+        ui.addCombatLog(`Your collection is full (${MAX_VASEN_COLLECTION}/${MAX_VASEN_COLLECTION}). Release a väsen to tame more.`, 'error');
+        ui.renderCombat(this.currentCombat);
+    }
 };
 
 // Unlock all lore entries triggered by taming a specific väsen
@@ -83,6 +90,7 @@ Game.prototype.handleCombatEnd = function(result) {
 
     if (!result.victory) {
         this.leavePartyAtLowHealth();
+        gameState.writeSave(); // Closing the tab on the result dialogue keeps this
         const defeatTip = tutorialActive
             ? ui.getTipHTML('Your väsen are weakened. Keep exploring: a <strong>Sacred Well</strong> will heal them.')
             : '';
@@ -172,6 +180,11 @@ Game.prototype.handleCombatEnd = function(result) {
         gameState.checkAchievements();
         this.unlockTamingLoreEntries(newVasen);
 
+        if (gameState.isCollectionFull()) {
+            ui.addCombatLog(`Your collection is now full (${MAX_VASEN_COLLECTION}/${MAX_VASEN_COLLECTION}). Release a väsen to tame more.`, 'error');
+            ui.showMessage(`Your väsen collection is full (${MAX_VASEN_COLLECTION}). Release some to tame more.`, 'info');
+        }
+
         // Show a one-time guidance popup the first time the player successfully
         // tames a väsen, once the combat result dialogue has been dismissed.
         // Flagged here and shown in endCombat() so it appears after the normal
@@ -200,5 +213,9 @@ Game.prototype.handleCombatEnd = function(result) {
     }
 
     this.applyVictoryHeal();
+    // Save the tame and experience now: saveGame() is skipped while inCombat is
+    // set, which lasts until Continue is clicked, so closing the tab on the
+    // result dialogue would otherwise lose them
+    gameState.writeSave();
     ui.showCombatResult(combatResult);
 };

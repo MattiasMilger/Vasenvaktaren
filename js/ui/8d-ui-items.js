@@ -139,6 +139,7 @@ UIController.prototype.showItemOptions = function(itemId) {
     const canGift = gameState.inCombat &&
                     game.currentCombat &&
                     game.currentCombat.isWildEncounter &&
+                    game.currentCombat.canTame &&
                     game.currentCombat.waitingForPlayerAction &&
                     game.currentCombat.offersGiven <= GAME_CONFIG.MAX_OFFERS_PER_COMBAT &&
                     !game.currentCombat.correctItemGiven;
@@ -204,10 +205,6 @@ UIController.prototype.showHealVasenModal = function(itemId) {
         vasenList.innerHTML = '<p class="empty-message">No Väsen need healing, or all are in active combat.</p>';
     } else {
         healableVasen.forEach(vasen => {
-            const item = TAMING_ITEMS[itemId];
-            const isCorrectItem = vasen.species.tamingItem === itemId;
-            const healPercent = isCorrectItem ? GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT : 0.4;
-
             const isInParty = gameState.party.some(p => p && p.id === vasen.id);
 
             const vasenBtn = document.createElement('button');

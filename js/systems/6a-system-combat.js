@@ -70,8 +70,9 @@ class Combat {
         this.turnInProgress = false;        // Between startTurn and the end of endTurn
         this.awaitingKnockoutSwap = false;  // Knockout swap prompt is open
         
-        // Initialize active Väsen
-        this.setPlayerActive(0);
+        // Initialize active Väsen (the first one still standing, so a knocked-out
+        // lead can never leave the combat without an active väsen)
+        this.setPlayerActive(Math.max(0, playerTeam.findIndex(v => !v.isKnockedOut())));
         this.setEnemyActive(0);
 
         // Defer initial passives to allow UI to set up loggers
@@ -99,7 +100,8 @@ class Combat {
     // Execute player action (dispatcher method)
     executePlayerAction(action) {
         if (!action || !action.type) return null;
-        
+        if (!this.canTakePlayerAction(action.type)) return null;
+
         // Disable player input immediately
         this.waitingForPlayerAction = false;
         
@@ -151,6 +153,18 @@ class Combat {
         return result;
     }
     
+    // Whether the player may act right now. Buttons are disabled at other times,
+    // but this is checked here too so no route (keyboard focus behind a modal,
+    // a dialogue confirmed late) can act on a finished fight, during the
+    // knockout swap prompt, or with a knocked-out väsen.
+    // Fleeing is allowed between turns as well (it needs no input delay), but
+    // never once the fight is over (e.g. the pause between tower floors).
+    canTakePlayerAction(type) {
+        if (this.isOver || this.awaitingKnockoutSwap) return false;
+        if (type === 'surrender') return true;
+        return this.waitingForPlayerAction && !!this.playerActive && !this.playerActive.isKnockedOut();
+    }
+
     // Set player's active Väsen.
     // isSwap: a voluntary swap (Oknytt Tag Team, swap sickness).
     // entersBattlefield: run the "entering the battlefield" effects (Ande,
@@ -535,7 +549,8 @@ class Combat {
         this.startTurn();
 
         // 1. Get correct names
-        const playerName = typeof gameState !== 'undefined' ? (gameState.playerName || "Väktare") : "Väktare";
+        // Escaped: the log is HTML, and names come from the player or a loaded save file
+        const playerName = escapeAttr(typeof gameState !== 'undefined' ? (gameState.playerName || "Väktare") : "Väktare");
         const enemyName = this.enemyActive.getDisplayName();
         const tamingItem = TAMING_ITEMS[this.enemyActive.species.tamingItem]?.name;
 
@@ -571,6 +586,7 @@ class Combat {
     // normal game that changes nothing (the party is left at low health after
     // fleeing anyway); Ragnarök Mode rules apply to it like any knockout.
     surrender() {
+        if (this.isOver) return null;
         this.isOver = true;
         this.winner = 'enemy';
         this.fleeing = true;

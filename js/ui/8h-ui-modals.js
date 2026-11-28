@@ -34,7 +34,6 @@ UIController.prototype.showDialogue = function(title, message, buttons = [{ text
     if (icon) titleEl.insertAdjacentHTML('afterbegin', uiIcon(icon, 20));
     document.getElementById('dialogue-message').innerHTML = message;
 
-    gameState.uiLocked = true;
     modal.dataset.dismissible = dismissible ? 'true' : 'false';
 
     const btnContainer = document.getElementById('dialogue-buttons');
@@ -54,7 +53,6 @@ UIController.prototype.showDialogue = function(title, message, buttons = [{ text
         button.onclick = () => {
             modal.classList.remove('active');
             if (extraClass) modal.classList.remove(extraClass);
-            gameState.uiLocked = false;
             ui.checkAndHideOverlay();
 
             const exploreBtn = document.getElementById('explore-btn');
@@ -298,7 +296,6 @@ modal.classList.add('active');
 
     // Show knockout swap modal
 UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
-    GameState.uiLocked = true;
 
     const modal = document.getElementById('knockout-swap-modal');
     modal.dataset.dismissible = 'false'; // cannot skip
@@ -313,7 +310,6 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     // No available allies -> combat ends or whatever your logic is
     if (availableVasen.length === 0) {
         modal.classList.remove('active');
-        GameState.uiLocked = false;
         ui.checkAndHideOverlay();
         callback(null);
         return;
@@ -323,7 +319,6 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
     if (availableVasen.length === 1) {
         const actualIndex = combat.playerTeam.indexOf(availableVasen[0]);
         modal.classList.remove('active');
-        GameState.uiLocked = false;
         ui.checkAndHideOverlay();
         callback(actualIndex);
         return;
@@ -340,7 +335,6 @@ UIController.prototype.showKnockoutSwapModal = function(combat, callback) {
         // Click handler
         vasenBtn.onclick = () => {
             modal.classList.remove('active');
-            GameState.uiLocked = false;
             ui.checkAndHideOverlay();
             callback(actualIndex);
         };

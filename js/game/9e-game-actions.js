@@ -64,8 +64,11 @@ Game.prototype.getCombatTutorialStage = function(combat = this.currentCombat) {
 
 // Handle offer item
 Game.prototype.handleOfferItem = function(itemId) {
-    if (!this.currentCombat || !this.currentCombat.waitingForPlayerAction) return;
-    if (!this.currentCombat.isWildEncounter) return;
+    const combat = this.currentCombat;
+    if (!combat || !combat.canTakePlayerAction('offer')) return;
+    if (!combat.isWildEncounter || !combat.canTame) return;
+    // The offer would be refused: keep the item
+    if (combat.correctItemGiven || combat.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT) return;
 
     // Use item from inventory
     if (!gameState.removeItem(itemId, 1)) {
@@ -179,7 +182,8 @@ Game.prototype.handlePass = function() {
 
 // Handle fleeing (the "surrender" action, shown to the player as Flee)
 Game.prototype.handleSurrender = function() {
-    if (!this.currentCombat) return;
+    if (!this.currentCombat || !this.currentCombat.canTakePlayerAction('surrender')) return;
+    const fleeingFrom = this.currentCombat;
 
     ui.showDialogue(
         'Flee?',
@@ -189,7 +193,11 @@ Game.prototype.handleSurrender = function() {
                 text: `${uiIcon('surrender')}Flee`,
                 class: 'btn-danger',
                 callback: () => {
-                    this.currentCombat.executePlayerAction({ type: 'surrender' });
+                    // The fight may have ended (or moved to the next tower
+                    // floor's pause) while the dialogue was open
+                    const combat = this.currentCombat;
+                    if (!combat || combat !== fleeingFrom || !combat.canTakePlayerAction('surrender')) return;
+                    combat.executePlayerAction({ type: 'surrender' });
                 }
             },
             {

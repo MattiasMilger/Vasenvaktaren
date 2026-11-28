@@ -22,6 +22,17 @@
     white-space: nowrap;
 }
 
+.vasen-collection-count {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.vasen-collection-count.full {
+    color: var(--color-negative-soft);
+    font-weight: 700;
+}
+
 .vasen-sort-select {
     flex: 1;
     padding: var(--spacing-xs) var(--spacing-sm);

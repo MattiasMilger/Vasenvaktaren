@@ -335,6 +335,10 @@ UIController.prototype.handlePartySlotClick = function(slotIndex) {
 };
 
 UIController.prototype.moveInParty = function(fromSlot, toSlot) {
+        if (gameState.inCombat) {
+            this.showMessage('Cannot change party during combat.', 'error');
+            return;
+        }
         const temp = gameState.party[toSlot];
         gameState.party[toSlot] = gameState.party[fromSlot];
         gameState.party[fromSlot] = temp;

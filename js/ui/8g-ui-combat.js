@@ -518,7 +518,7 @@ UIController.prototype.renderActionButtons = function(combat) {
 
     const offerBtn = document.getElementById('btn-offer');
     offerBtn.disabled =
-        !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower ||
+        !combat.waitingForPlayerAction || !combat.isWildEncounter || combat.isEndlessTower || !combat.canTame ||
         combat.giftsGiven >= GAME_CONFIG.MAX_OFFERS_PER_COMBAT || combat.correctItemGiven || combat.isAutoBattle;
 
     const interrogateBtn = document.getElementById('btn-interrogate');
@@ -532,7 +532,7 @@ UIController.prototype.renderActionButtons = function(combat) {
     interrogateBtn.classList.toggle('tutorial-blink', tutorialStage === 'interrogate' && !interrogateBtn.disabled);
     offerBtn.classList.toggle('tutorial-blink', tutorialStage === 'offer' && !offerBtn.disabled);
     document.getElementById('btn-pass').disabled = !combat.waitingForPlayerAction || combat.isAutoBattle;
-    document.getElementById('btn-surrender').disabled = combat.isAutoBattle;
+    document.getElementById('btn-surrender').disabled = combat.isAutoBattle || !combat.canTakePlayerAction('surrender');
 
     // Auto Battle button
     const autoBattleBtn = document.getElementById('btn-auto-combat');

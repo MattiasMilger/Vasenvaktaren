@@ -177,8 +177,6 @@ class GameState {
         this.currentEncounter = null;
         this.inCombat = false;
 
-        // UI lock (not saved)
-        this.uiLocked = false;
         
         // Exploration pity counters (anti-grief system)
         this.combatCounter = 0;      // Increments on non-combat, resets on combat
@@ -291,23 +289,6 @@ class GameState {
     // Check if a väsen is favorited
     isFavorite(vasenId) {
         return this.favoriteVasen.has(vasenId);
-    }
-    
-    // Add a Vasen to collection
-    addVasenToCollection(vasenInstance) {
-        if (this.vasenCollection.length >= GAME_CONFIG.MAX_INVENTORY_SIZE) {
-            return { success: false, message: 'Collection full. You cannot tame more Väsen.' };
-        }
-
-        // Heal to full before adding
-        vasenInstance.currentHealth = vasenInstance.maxHealth;
-        vasenInstance.currentMegin = vasenInstance.maxMegin;
-        
-        this.vasenCollection.push(vasenInstance);
-        this.checkAchievements();
-        this.saveGame();
-        
-        return { success: true, message: `${vasenInstance.displayName} has joined you.` };
     }
     
     // Add Vasen to party slot
@@ -527,36 +508,6 @@ class GameState {
         return this.itemInventory[itemId] || 0;
     }
     
-    // Collect a rune
-    collectRune(runeId) {
-        if (this.collectedRunes.has(runeId)) {
-            return { success: false, message: 'You already have this rune.' };
-        }
-        
-        this.collectedRunes.add(runeId);
-        
-        // Auto-equip to first party väsen that has an empty rune slot
-        for (let i = 0; i < GAME_CONFIG.MAX_TEAM_SIZE; i++) {
-            const vasen = this.party[i];
-            if (vasen) {
-                if (vasen.runes.length < vasen.getRuneSlotCount()) {
-                    vasen.equipRune(runeId);
-                    break;
-                }
-            }
-        }
-        
-        this.checkAchievements();
-        this.saveGame();
-        
-        const rune = RUNES[runeId];
-        return { 
-            success: true, 
-            message: `You discovered ${rune.symbol} ${rune.name}.`,
-            rune: rune
-        };
-    }
-    
     // Check if all runes collected
     hasAllRunes() {
         return this.getFoundRuneCount() >= Object.keys(RUNES).length;
@@ -708,6 +659,11 @@ class GameState {
         this.saveGame();
     }
     
+    // The collection holds at most MAX_VASEN_COLLECTION väsen (keeps the menus manageable)
+    isCollectionFull() {
+        return this.vasenCollection.length >= MAX_VASEN_COLLECTION;
+    }
+
     // Check if zone is unlocked
     isZoneUnlocked(zoneId) {
         const zoneKeys = Object.keys(ZONES);
@@ -929,6 +885,7 @@ class GameState {
 
         const randomRune = uncollectedRunes[Math.floor(Math.random() * uncollectedRunes.length)];
         this.collectedRunes.add(randomRune);
+        this.checkAchievements(); // the last rune earns Rune Master right away
 
         const runeData = RUNES[randomRune];
         const dialogue = `The wind carries a whisper of old galdr. Another rune has chosen to reveal itself to you. You discovered ${runeData.symbol} ${runeData.name}.`;
@@ -987,7 +944,7 @@ class GameState {
         }
 
         const isCorrectItem = vasenInstance.species.tamingItem === itemId;
-        const healPercent = (isCorrectItem ? 1.0 : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT) * this.getHealMultiplier();
+        const healPercent = (isCorrectItem ? GAME_CONFIG.CORRECT_ITEM_HEAL_PERCENT : GAME_CONFIG.WRONG_ITEM_HEAL_PERCENT) * this.getHealMultiplier();
 
         const calculatedHealAmount = Math.floor(vasenInstance.maxHealth * healPercent);
         
@@ -1188,7 +1145,9 @@ class GameState {
                 if (!TAMING_ITEMS[itemId] || !(count > 0)) return;
                 this.itemInventory[itemId] = Math.min((this.itemInventory[itemId] || 0) + count, GAME_CONFIG.MAX_ITEM_STACK);
             });
-            this.collectedRunes = new Set(data.collectedRunes || []);
+            // Ids of runes that no longer exist are dropped (they would count towards
+            // "every rune collected" and stop the remaining runes being found)
+            this.collectedRunes = new Set((data.collectedRunes || []).filter(id => RUNES[id]));
             this.favoriteVasen = new Set(data.favoriteVasen || []);
             // SAVE MIGRATION (legacy item ids)
             this.favoriteItems = new Set((data.favoriteItems || []).map(normalizeItemId).filter(id => TAMING_ITEMS[id]));
@@ -1314,6 +1273,12 @@ class GameState {
             return true;
         } catch (e) {
             console.error('Error saving game:', e);
+            // Tell the player once per page load (e.g. browser storage full or
+            // blocked), so progress is never lost without them knowing
+            if (!this.saveErrorShown && typeof ui !== 'undefined' && ui.showMessage) {
+                this.saveErrorShown = true;
+                ui.showMessage('The game could not be saved. Your browser storage may be full or blocked. Use Save File on the main menu to keep a backup.', 'error');
+            }
             return false;
         }
     }

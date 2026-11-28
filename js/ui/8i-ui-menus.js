@@ -170,7 +170,7 @@ achievementsHtml += '</div></div>';
                     <div class="profile-name-fields">
                         <label for="profile-name-input">Player Name:</label>
                         <div class="profile-name-input-wrapper">
-                            <input type="text" id="profile-name-input" value="${gameState.playerName || ''}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off" title="Click to change your name">                            <span id="profile-name-saved" class="profile-name-saved">Saved</span>
+                            <input type="text" id="profile-name-input" value="${escapeAttr(gameState.playerName || '')}" placeholder="Väktare" maxlength="20" spellcheck="false" autocomplete="off" title="Click to change your name">                            <span id="profile-name-saved" class="profile-name-saved">Saved</span>
                         </div>
                     </div>
                 </div>
@@ -581,6 +581,7 @@ achievementsHtml += '</div></div>';
 
         // Taming
         setText('guide-max-offers', GAME_CONFIG.MAX_OFFERS_PER_COMBAT);
+        setText('guide-max-collection', MAX_VASEN_COLLECTION);
 
         // Resource Management: megin refill/discount
         setText('guide-megin-refill', `${Math.round(GAME_CONFIG.MEGIN_REFILL_RATE * 100)}%`);

@@ -179,6 +179,7 @@ UIController.prototype.renderVasenInventory = function() {
             <option value="temperament" ${this.vasenSortBy === 'temperament' ? 'selected' : ''}>Temperament</option>
             <option value="family" ${this.vasenSortBy === 'family' ? 'selected' : ''}>Family</option>
         </select>
+        <span class="vasen-collection-count${gameState.isCollectionFull() ? ' full' : ''}" title="Väsen in your collection">${gameState.vasenCollection.length}/${MAX_VASEN_COLLECTION}</span>
     `;
     container.appendChild(sortControls);
 

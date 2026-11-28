@@ -9,17 +9,20 @@ const game = new Game();
 document.addEventListener('DOMContentLoaded', () => {
     game.init();
 
-    // Global UI Lock
+    // Global UI lock: while any modal is open, nothing behind it can be used.
+    // Runs in the capture phase, before the buttons' own handlers, so it also
+    // stops a keyboard press on a button focused behind the modal (Tab + Enter),
+    // which would otherwise skip a wild encounter or act during the knockout
+    // swap prompt. Based on what is on screen rather than a flag, so a modal
+    // closed by its backdrop can never leave the game locked.
     document.addEventListener('click', (e) => {
-        if (gameState.uiLocked) {
-            // Allow clicks inside any modal
-            if (e.target.closest('.modal')) return;
-
-            // Block everything else
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    });
+        if (!e.isTrusted) return; // the game's own clicks (e.g. a download link)
+        if (!document.querySelector('.modal.active')) return;
+        // Allowed: the open modal, its backdrop, info popups and messages
+        if (e.target.closest('.modal.active, #modal-overlay, .temperament-popup, #message-container')) return;
+        e.stopPropagation();
+        e.preventDefault();
+    }, true);
 
     // Global click listener to close element and family popups when clicking outside
     document.addEventListener('click', (e) => {
